@@ -1,0 +1,31 @@
+#!/usr/bin/env Rscript
+
+library("optparse")
+library("piecepack")
+
+parser <- OptionParser("Program to make piecepack images")
+opts <- parse_args(parser)
+
+directories <- get_directories()
+
+collections <- unique(get_collection(directories))
+
+if (dir.exists("collections")) { unlink("collections", recursive=TRUE) }
+dir.create("collections")
+
+if (dir.exists("previews")) { unlink("previews", recursive=TRUE) }
+dir.create("previews")
+
+if (dir.exists("pdf")) { unlink("pdf", recursive=TRUE) }
+dir.create("pdf")
+
+cl <- parallel::makeCluster(mc <- getOption("cl.cores", parallel::detectCores()))
+
+.po1 <- parallel::parLapply(cl, directories, make_set)
+
+.po2 <- parallel::parLapply(cl, collections, make_logo2)
+
+# parallel::parLapply(cl, collections, make_collection)
+lapply(collections, make_collection)
+
+invisible(NULL)

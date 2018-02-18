@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: piecepack
 Type: Package
-Title: Functions and scripts to build piecepack decks
+Title: Functions and Rscripts to Build Piecepack Decks
 Version: 0.1.0-0
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
@@ -10,10 +10,15 @@ License: GPL-3
 URL: https://github.com/trevorld/piecepack
 BugReports: https://github.com/trevorld/piecepack/issues
 LazyLoad: yes
-Imports:
+Depends:
     grid,
     gridExtra,
-    png
+    grImport2,
+    optparse,
+    parallel,
+    png,
+    rjson
+Imports:
 Suggests:
-    optparse
+SystemRequirements: pdfsam
 RoxygenNote: 6.0.1
