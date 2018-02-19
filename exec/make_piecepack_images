@@ -1,40 +1,89 @@
 #!/usr/bin/env Rscript
 
-suppressPackageStartupMessages(library("piecepack"))
-# library("optparse")
+options(error = quote(dump.frames("last.dump", TRUE)))
 
-split <- function(x) { strsplit(x, "")[[1]] } 
+suppressPackageStartupMessages(library("piecepack"))
+
+split <- function(x, sep=",") { strsplit(x, sep)[[1]] } 
 
 parser <- OptionParser("Program to make piecepack images")
+parser <- add_option(parser, "--set_label", default="label")
 parser <- add_option(parser, "--set_name")
 parser <- add_option(parser, "--suit_family")
-parser <- add_option(parser, "--suit_symbols")
-parser <- add_option(parser, "--rank_symbols")
-parser <- add_option(parser, "--standardish", action="store_true")
+parser <- add_option(parser, "--suit_colors", default="black,darkred,darkgreen,darkblue")
+parser <- add_option(parser, "--suit_symbols", default="♠,♥,♣,♦")
+parser <- add_option(parser, "--rank_symbols", default="NA2345")
+parser <- add_option(parser, "--joker_symbol", default="★")
+parser <- add_option(parser, "--standardish", action="store_true", default=FALSE)
+parser <- add_option(parser, "--inverted", action="store_true", default=FALSE)
 opts <- parse_args(parser)
 
-
 opts$parallel <- FALSE
-opts$fast <- FALSE
+opts$fast <- TRUE
 opts$add_checkers <- FALSE
 opts$add_bleed_lines <- FALSE
-opts$background <- "seashell3"
-# opts$background <- "brown"
+# opts$background <- "seashell3"
+opts$background <- "tan"
 # opts$background <- "white"
 # opts$neutral_col1 <- "grey"
 opts$neutral_col1 <- "grey60"
 opts$neutral_col2 <- "yellow"
 opts$rank_names <- c("n", "a", "2", "3", "4", "5")
 
-opts$copyright <- "© 2017 Trevor L Davis. Some Rights Reserved."
+opts$copyright <- "© 2017-2018 Trevor L Davis. Some Rights Reserved."
 opts$license1 <- "This work is licensed under a CC BY-SA 4.0 license:"
 opts$license2 <- "https://creativecommons.org/licenses/by-sa/4.0/"
 opts$suit_names <- c("s1", "s2", "s3", "s4")
 
 opts$rank_symbols <- split(opts$rank_symbols)
+opts$suit_colors <- split(opts$suit_colors)
 opts$suit_symbols <- split(opts$suit_symbols)
 
-# do.call(make_images_schemes, opts)
-make_images_schemes(opts)
+# opts$suit_colors <- c("dimgrey", "hotpink2", "darkolivegreen3", "lightblue2")
+# opts$suit_colors <- c("white", "orange2", "yellow", "purple")
+# opts$suit_colors <- rep(c("black", "darkred"), 2)
+# opts$suit_colors <- rep(c("dimgrey", "hotpink2"), 2)
+# opts$suit_colors <- rep(c("white", "orange2"), 2)
+# opts$suit_colors <- rep(c("black"), 4)
+# opts$suit_colors <- rep(c("dimgrey"), 4)
+# opts$suit_colors <- rep(c("white"), 4)
+# opts$suit_colors <- c("black", "darkred", "darkgreen", "darkblue")
+# opts$suit_colors <- c("dimgrey", "hotpink2", "darkolivegreen3", "lightblue2")
+# opts$suit_colors <- c("white", "orange2", "yellow", "purple")
+# opts$suit_colors <- rep(c("black", "darkred"), 2)
+# opts$suit_colors <- rep(c("dimgrey", "hotpink2"), 2)
+# opts$suit_colors <- rep(c("white", "orange2"), 2)
+# opts$suit_colors <- rep(c("black"), 4)
+# opts$suit_colors <- rep(c("dimgrey"), 4)
+# opts$suit_colors <- rep(c("white"), 4)
+#
+
+opts$color_scheme <- "01RGBB"
+# opts$color_scheme <- "02PGBG"
+# opts$color_scheme <- "03POWY"
+# opts$color_scheme <- "04RB"
+# opts$color_scheme <- "05PG"
+# opts$color_scheme <- "06OW"
+# opts$color_scheme <- "07B"
+# opts$color_scheme <- "08G"
+# opts$color_scheme <- "09W"
+# opts$color_scheme <- "10RGBB"
+# opts$color_scheme <- "11PGBG"
+# opts$color_scheme <- "12POWY"
+# opts$color_scheme <- "13RB"
+# opts$color_scheme <- "14PG"
+# opts$color_scheme <- "15OW"
+# opts$color_scheme <- "16B"
+# opts$color_scheme <- "17G"
+# opts$color_scheme <- "18W"
+
+opts$neutral_grey <- TRUE
+               
+sublist <- opts[c("set_name", "copyright", "license1", "license2")]
+cfilename <- collection_filename(opts)
+
+writeLines(rjson::toJSON(sublist), cfilename)
+
+make_images(opts)
 
 invisible(NULL)

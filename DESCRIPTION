@@ -6,7 +6,7 @@ Version: 0.1.0-0
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: 
-License: GPL-3
+License: file LICENSE
 URL: https://github.com/trevorld/piecepack
 BugReports: https://github.com/trevorld/piecepack/issues
 LazyLoad: yes

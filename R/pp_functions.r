@@ -58,7 +58,7 @@
 }
 
 #' @export
-get_collection <- function(dir) { gsub("(.*_.*_.*)_.*_.*_.*", "\\1", dir)}
+get_collection <- function(dir) { gsub("(.*)_.*_.*_.*_.*_.*_.*", "\\1", dir)}
 
 # uglier, smaller file size
 # cc_file <- .png_to_grid(.to_png(system.file("extdata/cc_license_88x31.png", package="piecepack")))
@@ -94,8 +94,8 @@ get_directories <- function() {
 }
 
 #' @export
-make_logo2 <- function(collection) {
-    library('piecepack')
+make_preview <- function(collection) {
+    suppressPackageStartupMessages(library('piecepack'))
     directories <- get_directories()
     dirs <- grep(collection, directories, value=TRUE)   
     fp <- paste0("previews/", collection, ".pdf") 
@@ -104,7 +104,15 @@ make_logo2 <- function(collection) {
     for (ii in 1:(length(dirs) / 6)) {
 
         jj <- (ii - 1) * 6 + 1
-        l_logos <- lapply(dirs[jj:(jj+5)], function(x) { .png_to_grid(.to_png(file.path("png", x, "logo.png")))})
+
+        l_logos <- list()
+        for(kk in 0:5) {
+            dir <- dirs[jj+kk]
+            if(is.na(dir))
+                l_logos[[kk+1]] <- nullGrob()
+            else
+                l_logos[[kk+1]] <- .png_to_grid(.to_png(file.path("png", dir, "logo.png")))
+        }
         l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey")) })
         grid.newpage()
         vp <- viewport(x=unit(4.25, "in"), y=unit(5.0, "in"), width=unit(8, "in"), height=unit(8, "in")) 
@@ -121,7 +129,7 @@ make_logo2 <- function(collection) {
 
 #' @export
 make_set <- function(dir) {
-    library('piecepack')
+    suppressPackageStartupMessages(library('piecepack'))
     x_c <- 0.5 + 0.5*cos(seq(0, 2*pi, length.out=100))
     y_c <- 0.5 + 0.5*sin(seq(0, 2*pi, length.out=100))
     x_r <- c(1, 1, 0, 0, 1, 1)
@@ -269,7 +277,9 @@ make_set <- function(dir) {
     # combined suit/rank die
     l_die <- lapply(1:12, function(x) {nullGrob()})
     l_die[[9]] <- raster_grobs[[paste0("s_rank_die_", "_n.png")]]
-    l_die[[10]] <- raster_grobs[[paste0("s_suit_die_joker_.png")]]
+    # l_die[[10]] <- raster_grobs[[paste0("s_suit_die_joker_.png")]]
+    # l_die[[10]] <- raster_grobs[[paste0("s_rank_die_", "_a.png")]]
+    l_die[[10]] <- raster_grobs[[paste0("s_suit_die_ace_.png")]]
     l_die[[6]] <- raster_grobs[[paste0("s_die_", suits[4], "_2.png")]]
     l_die[[7]] <- raster_grobs[[paste0("s_die_", suits[3], "_3.png")]]
     l_die[[3]] <- raster_grobs[[paste0("s_die_", suits[2], "_4.png")]]
@@ -326,6 +336,14 @@ make_set <- function(dir) {
         upViewport()
         # popViewport(vp)
     }
+
+    # #### experiment
+    # vp <- viewport(y=unit(die_y[ii], "in"), x=unit(die_x[ii]+1.5, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
+    # pushViewport(vp)
+    # grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
+    # grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+    # upViewport()
+
     grid.text("additional piecepack dice", x=unit(0.8, "in"), y=unit((ydm+ydl)/2, "in"), rot=90)
     grid.text('chips', x=unit(0.4, "in"), y=unit(2, "in"), rot=90)
     make_header(get_collection(dir))
@@ -335,11 +353,25 @@ make_set <- function(dir) {
 
 }
 
+make_bookmarks_txt <- function(n_sets) {
+    n_preview <- ceiling(n_sets / 6)
+    txt <- "[/Page 1 /View [/XYZ null null null] /Title (Piecepack Sets Preview) /OUT pdfmark"
+    next_page <- n_preview + 1
+    pages_per_pp <- 5
+    for(ii in 1:n_sets) {
+        new_txt <- sprintf("[/Page %s /View [/XYZ null null null] /Title (Piecepack Set #%s) /OUT pdfmark", next_page, ii)
+        txt <- append(txt, new_txt)
+        next_page <- next_page + pages_per_pp
+    }
+    writeLines(txt, "bookmarks.txt")
+}
+
 #' @export
 make_collection <- function(collection) {
-    library("piecepack")
+    suppressPackageStartupMessages(library("piecepack"))
     arg <- rjson::fromJSON(file=file.path("png", paste0(collection, ".json")))
     sets <- list.files("pdf", pattern=collection, full.names=TRUE)
+    n_sets <- length(sets)
     fp <- shQuote(file.path("previews", paste0(collection, ".pdf")))
     of <- shQuote(file.path("collections", paste0(collection, "_o.pdf")))
     bf <- shQuote(file.path("collections", paste0(collection, ".pdf")))
@@ -347,11 +379,10 @@ make_collection <- function(collection) {
     cat(command, "\n")
     system(command)
 
-    # # add bookmarks
-    # if (length(sets) / 6 == 2) {
-    #     bcommand <- paste("gs -o", bf, "-sDEVICE=pdfwrite", "bookmarks.txt", "-f", of)
-    #     cat(bcommand, "\n")
-    #     system(bcommand)
-    #     unlink(of)
-    # } 
+    # add bookmarks
+    make_bookmarks_txt(n_sets)
+    bcommand <- paste("gs -o", bf, "-sDEVICE=pdfwrite", "bookmarks.txt", "-f", of)
+    cat(bcommand, "\n")
+    system(bcommand)
+    unlink(of)
 }
