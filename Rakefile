@@ -29,12 +29,13 @@ task :dual do
     # alt_scheme = " --suit_colors=white,orange2,yellow,purple"
 
     sh "killall evince | true"
-    set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4)'"
+    # set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4)'"
+    set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4, more printer-friendly)'"
     suit_family = " --suit_family=1piecepack"
     suit_symbols = " --suit_symbols=🌜,🌞,👑,⚜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     # extra_flags = " --standardish"
-    extra_flags = " --joker_symbol=꩜ --standardish --background=tan"
+    extra_flags = " --joker_symbol=꩜ --standardish --background=white"
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Standardish Piecepack, Elements Suits (v0.1)'"
@@ -44,19 +45,19 @@ task :dual do
     suit_family = " --suit_family=2latin"
     suit_symbols = " --suit_symbols=🗡️,🏆,⚕️,𐇛"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    extra_flags = "  --joker_symbol=꩜ --inverted --standardish --background=tan"
+    extra_flags = "  --joker_symbol=꩜ --inverted --standardish --background=white"
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
     suit_family = " --suit_family=3french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
-    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=seashell3"
+    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white"
     extra_flags = " "
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
     light_scheme = " --suit_colors=dimgrey,hotpink2,palegreen,lightblue2"
     suit_family = " --suit_family=4french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
-    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=seashell3"
+    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white"
     extra_flags = " " + light_scheme
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 

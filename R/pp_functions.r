@@ -374,7 +374,7 @@ make_collection <- function(collection) {
     n_sets <- length(sets)
     fp <- shQuote(file.path("previews", paste0(collection, ".pdf")))
     of_un <- file.path("collections", paste0(collection, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
-    of <- shQuote(of_non)
+    of <- shQuote(of_un)
     bf <- shQuote(file.path("collections", paste0(collection, ".pdf")))
     command <- paste("pdfjoin -o", of, "--pdftitle", shQuote(arg$set_name), "--pdfauthor", shQuote("Trevor L Davis"), "--pdfkeywords", shQuote("piecepack"), fp, paste(shQuote(sets), collapse=" "))
     cat(command, "\n")
