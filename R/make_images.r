@@ -77,7 +77,8 @@ make_logo <- function(dir) {
 
 #' @export
 make_images <- function(arg) {
-    arg$directory <- directory_name(arg)
+    arg$directory <- sprintf("png/%s", arg$suit_family)
+    cat(arg$directory,"\n")
     if (dir.exists(arg$directory)) { unlink(arg$directory, recursive=TRUE) }
     dir.create(arg$directory)
     make_tiles(arg)
@@ -85,35 +86,6 @@ make_images <- function(arg) {
     make_pawns(arg)
     make_logo(arg$directory)
     invisible(NULL)
-}
-
-#' @export
-collection_filename <- function(arg) {
-    set_label <- arg$set_label
-    suit_family <- arg$suit_family
-    ranks <- arg$rank_symbols
-    color_scheme <- arg$color_scheme
-    background <- arg$background
-    inverted <- arg$inverted
-    standardish <- arg$standardish
-    ranks <- ifelse(length(ranks) > 1, paste(ranks, collapse=""), ranks)
-    name <- sprintf("png/%s.json", set_label)
-    # name <- sprintf("png/%s_%s_%s.json", suit_family, ranks, ifelse(standardish, "standardish", "reform"))
-    name
-}
-
-directory_name <- function(arg) {
-    set_label <- arg$set_label
-    suit_family <- arg$suit_family
-    ranks <- arg$rank_symbols
-    color_scheme <- arg$color_scheme
-    background <- arg$background
-    inverted <- arg$inverted
-    standardish <- arg$standardish
-    ranks <- ifelse(length(ranks) > 1, paste(ranks, collapse=""), ranks)
-    name <- sprintf("png/%s_%s_%s_%s_%s_%s_%s", set_label, suit_family, ranks, ifelse(standardish, "standardish", "reform"), color_scheme, background, ifelse(inverted, "inverted", "normal"))
-    if (!dir.exists(name)) { dir.create(name) }
-        name
 }
 
 sticker_filename <- function(component, suit_name, rank_name) {
@@ -236,11 +208,7 @@ make_pawns <- function(arg) {
 
 
 make_tiles <- function(arg) {
-    if (arg$neutral_grey) {
-        o_neutral_col <- arg$neutral_col1
-    } else {
-        o_neutral_col <- arg$suit_colors[1]
-    }
+    o_neutral_col <- arg$neutral_col1
     fs_tr <- 110
     fs_ts <- 60
     #### Joker tile
@@ -333,7 +301,7 @@ make_tiles <- function(arg) {
             rank_name <- arg$rank_names[i_r]
             suit_symbol <- arg$suit_symbols[i_s]
             suit_color <- arg$suit_colors[i_s]
-            if (rank_name == "a" && arg$standardish)
+            if (rank_name == "a" && arg$use_suit_as_ace)
                 rank_symbol <- suit_symbol
             else
                 rank_symbol <- arg$rank_symbols[i_r]
@@ -388,34 +356,23 @@ make_tiles <- function(arg) {
     }
 }
 
-suit <- 5
-rank <- 3
-standardish <- FALSE
-
 add_directional_marker <- function(arg, back=TRUE) {
-    if (arg$neutral_grey) {
-        o_neutral_col <- arg$neutral_col1
-    } else {
-        if (arg$inverted) {
-            if (back) {
-                o_neutral_col <- arg$background
-            } else {
-                # o_neutral_col <- arg$neutral_col1
-                o_neutral_col <- arg$suit_colors[1]
-            }
-        } else {
-            o_neutral_col <- arg$suit_colors[1]
-        }
-    }
+    o_neutral_col <- arg$neutral_col1
+    # if (arg$inverted) {
+    #     if (back) {
+    #         o_neutral_col <- arg$background
+    #         } else {
+    #             o_neutral_col <- arg$suit_colors[1]
+    #         }
+    #     } else {
+    #         o_neutral_col <- arg$suit_colors[1]
+    #     }
+    # }
     grid.lines(x=c(0.75, 1), y=c(0.75, 1), gp=gpar(col=o_neutral_col, lwd=10))
 }
 
 make_stickers <- function(arg) {
-    if (arg$neutral_grey) {
-        o_neutral_col <- arg$neutral_col1
-    } else {
-        o_neutral_col <- arg$suit_colors[1]
-    }
+    o_neutral_col <- arg$neutral_col1
 
     circle_lwd <- 22
     cr <- 0.45
@@ -427,7 +384,7 @@ make_stickers <- function(arg) {
             suit_symbol <- arg$suit_symbols[i_s]
             suit_color <- arg$suit_colors[i_s]
             rank_symbol <- arg$rank_symbols[i_r]
-            if (rank_name == "a" && arg$standardish)
+            if (rank_name == "a" && arg$use_suit_as_ace)
                 ace_symbol <- suit_symbol
             else
                 ace_symbol <- rank_symbol
@@ -662,7 +619,7 @@ make_stickers <- function(arg) {
     for (i_r in seq(along=arg$rank_symbols)) {
         rank_symbol <- arg$rank_symbols[i_r]
         rank_name <- arg$rank_names[i_r]
-        if (rank_name == "a" && arg$standardish)
+        if (rank_name == "a" && arg$use_suit_as_ace)
             rank_symbol <- arg$joker_symbol
         filename <- file.path(arg$directory, sticker_filename("rank_die", "", rank_name))
         sticker_png(filename)

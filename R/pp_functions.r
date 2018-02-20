@@ -57,8 +57,8 @@
     png
 }
 
-#' @export
-get_collection <- function(dir) { gsub("(.*)_.*_.*_.*_.*_.*_.*", "\\1", dir)}
+# #' @export
+# get_collection <- function(dir) { gsub("(.*)_.*_.*_.*_.*_.*_.*", "\\1", dir)}
 
 # uglier, smaller file size
 # cc_file <- .png_to_grid(.to_png(system.file("extdata/cc_license_88x31.png", package="piecepack")))
@@ -96,8 +96,8 @@ get_directories <- function() {
 #' @export
 make_preview <- function(collection) {
     suppressPackageStartupMessages(library('piecepack'))
-    directories <- get_directories()
-    dirs <- grep(collection, directories, value=TRUE)   
+    dirs <- get_directories()
+    # dirs <- grep(collection, dirs, value=TRUE)   
     fp <- paste0("previews/", collection, ".pdf") 
     pdf(fp, onefile=TRUE, width=8.5, height=11)
 
@@ -226,7 +226,7 @@ make_set <- function(dir) {
         grid.text("pawn belt", x=unit(3.25, "in"), y=unit(ybelt+0.4, "in"))
 
 
-        make_header(get_collection(dir))
+        make_header(get_collection())
     
     }
 
@@ -346,7 +346,7 @@ make_set <- function(dir) {
 
     grid.text("additional piecepack dice", x=unit(0.8, "in"), y=unit((ydm+ydl)/2, "in"), rot=90)
     grid.text('chips', x=unit(0.4, "in"), y=unit(2, "in"), rot=90)
-    make_header(get_collection(dir))
+    make_header(get_collection())
 
     dev.off()
     invisible(NULL)
@@ -370,7 +370,7 @@ make_bookmarks_txt <- function(n_sets) {
 make_collection <- function(collection) {
     suppressPackageStartupMessages(library("piecepack"))
     arg <- rjson::fromJSON(file=file.path("png", paste0(collection, ".json")))
-    sets <- list.files("pdf", pattern=collection, full.names=TRUE)
+    sets <- list.files("pdf", full.names=TRUE)
     n_sets <- length(sets)
     fp <- shQuote(file.path("previews", paste0(collection, ".pdf")))
     of_un <- file.path("collections", paste0(collection, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
@@ -386,4 +386,9 @@ make_collection <- function(collection) {
     cat(bcommand, "\n")
     system(bcommand)
     unlink(of_un)
+}
+
+#' @export
+get_collection <- function() {
+    sub(".json$", "", list.files("png", pattern=".json$"))
 }

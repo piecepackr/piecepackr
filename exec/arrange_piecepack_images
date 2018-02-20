@@ -1,13 +1,18 @@
 #!/usr/bin/env Rscript
 
+options(error = quote(dump.frames("last.dump", TRUE)))
+
 suppressPackageStartupMessages(library("piecepack"))
 
 parser <- OptionParser("Program to make piecepack images")
+# parser <- add_option(parser, "--set_label", default="label")
 opts <- parse_args(parser)
 
 directories <- get_directories()
 
-collections <- unique(get_collection(directories))
+collections <- get_collection()
+# collections <- unique(get_collection(directories))
+
 
 if (dir.exists("collections")) { unlink("collections", recursive=TRUE) }
 dir.create("collections")
@@ -26,7 +31,7 @@ cl <- parallel::makeCluster(mc <- getOption("cl.cores", parallel::detectCores())
 # .po2 <- parallel::parLapply(cl, collections, make_preview)
 .po2 <- lapply(collections, make_preview)
 
-# # parallel::parLapply(cl, collections, make_collection)
-lapply(collections, make_collection)
+# .po3 # parallel::parLapply(cl, collections, make_collection)
+.p03 <- lapply(collections, make_collection)
 
 invisible(NULL)

@@ -27,6 +27,7 @@ task :dual => :clean
 task :dual do
     # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue"
     # alt_scheme = " --suit_colors=white,orange2,yellow,purple"
+    set_label = " --set_label=dual_piecepacks_proof_of_concept_printer_friendly"
 
     sh "killall evince | true"
     # set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4)'"
@@ -36,7 +37,7 @@ task :dual do
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     # extra_flags = " --standardish"
     extra_flags = " --joker_symbol=꩜ --standardish --background=white"
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Standardish Piecepack, Elements Suits (v0.1)'"
     # suit_family  = " --suit_family=elements"
@@ -46,33 +47,33 @@ task :dual do
     suit_symbols = " --suit_symbols=🗡️,🏆,⚕️,𐇛"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     extra_flags = "  --joker_symbol=꩜ --inverted --standardish --background=white"
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
     suit_family = " --suit_family=3french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white"
     extra_flags = " "
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
     light_scheme = " --suit_colors=dimgrey,hotpink2,palegreen,lightblue2"
     suit_family = " --suit_family=4french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white"
     extra_flags = " " + light_scheme
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
     suit_family = " --suit_family=5swiss"
     suit_symbols = " --suit_symbols=⛊,🌹,🌰,🔔"
     rank_symbols = " --rank_symbols=' ,꩜,2,3,4,5'"
     black_scheme = " --suit_colors=black,black,black,black --background=grey70 --neutral_col=grey40"
     extra_flags = " --standardish --inverted"
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags + black_scheme
+    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags + black_scheme
 
     suit_family = " --suit_family=6swiss"
     suit_symbols = " --suit_symbols=⛊,🌹,🌰,🔔"
     white_scheme = " --suit_colors=white,white,white,white --background=grey70 --neutral_col=grey40"
     extra_flags = " --standardish --inverted"
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags + white_scheme
+    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags + white_scheme
 
     Rake::Task[:arrange].invoke()
      
@@ -96,7 +97,7 @@ task :test do
     suit_symbols = " --suit_symbols=🌜,🌞,👑,⚜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     # extra_flags = " --standardish"
-    extra_flags = " --joker_symbol=꩜ --standardish"
+    extra_flags = " --joker_symbol=꩜ --standardish --use_suit_as_ace --neutral_col1=black"
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Standardish Piecepack, Elements Suits (v0.1)'"
@@ -126,7 +127,7 @@ task :test do
     suit_family = " --suit_family=4french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = " " + light_scheme
+    extra_flags = " --add_hex_lines" + light_scheme
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
     # 
