@@ -35,7 +35,7 @@ opts$add_bleed_lines <- FALSE
 opts$neutral_col2 <- "yellow"
 opts$rank_names <- c("n", "a", "2", "3", "4", "5")
 
-opts$copyright <- "© 2017-2018 Trevor L Davis. Some Rights Reserved."
+opts$copyright <- "© 2016-2018 Trevor L Davis. Some Rights Reserved."
 opts$license1 <- "This work is licensed under a CC BY-SA 4.0 license:"
 opts$license2 <- "https://creativecommons.org/licenses/by-sa/4.0/"
 opts$suit_names <- c("s1", "s2", "s3", "s4")
