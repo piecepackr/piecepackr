@@ -126,20 +126,6 @@ make_collection_preview <- function(collection) {
 
 }
 
-tile_front_helper <- function(i_s, i_r, x, opts, width=0.25) {
-    pushViewport(viewport(x=x, width=width))
-    draw_tile_front(i_s, i_r, opts)
-    grid.rect(gp=gpar(col="grey", fill=NA))
-    upViewport()
-}
-
-tile_back_helper <- function(opts) {
-    draw_tile_back(opts)
-    grid.rect(gp=gpar(col="grey", fill=NA))
-    # grid.draw(raster_grobs[["t_back__.png"]])
-    upViewport()
-}
-
 #' @export
 make_set <- function(opts) {
     dir <- opts$suit_family
@@ -181,41 +167,54 @@ make_set <- function(opts) {
         suit <- suits[ii]
 
         grid.newpage()
-        vp <- viewport(y=unit(5.25, "in"), width=unit(8, "in"), height=unit(2, "in"))
-        pushViewport(vp)
-        tile_front_helper(ii, 5, 0.125, opts)
-        pushViewport(viewport(x=0.375, width=0.25))
-        tile_back_helper(opts)
-        tile_front_helper(ii, 6, 0.625, opts)
-        pushViewport(viewport(x=0.875, width=0.25))
-        tile_back_helper(opts)
-        upViewport()
-        vp <- viewport(y=unit(3.25, "in"), width=unit(8, "in"), height=unit(2, "in"))
-        pushViewport(vp)
-        tile_front_helper(ii, 3, 0.125, opts)
-        pushViewport(viewport(x=0.375, width=0.25))
-        tile_back_helper(opts)
-        tile_front_helper(ii, 4, 0.625, opts)
-        pushViewport(viewport(x=0.875, width=0.25))
-        tile_back_helper(opts)
-        upViewport()
-        vp <- viewport(y=unit(1.25, "in"), width=unit(8, "in"), height=unit(2, "in"))
-        pushViewport(vp)
-        tile_front_helper(ii, 1, 0.125, opts)
-        pushViewport(viewport(x=0.375, width=0.25))
-        tile_back_helper(opts)
-        tile_front_helper(ii, 2, 0.625, opts)
-        pushViewport(viewport(x=0.875, width=0.25))
-        tile_back_helper(opts)
-        upViewport()
+
+        # Build viewports
+        pushViewport(viewport(name="main"))
+        addViewport(y=unit(5.25, "in"), width=unit(8, "in"), height=unit(2, "in"), name="tilerow.1")
+        downViewport("tilerow.1")
+        addViewport(x=0.125, width=0.25, name="tile.front.1")
+        addViewport(x=0.375, width=0.25, name="tile.back.1")
+        addViewport(x=0.625, width=0.25, name="tile.front.2")
+        addViewport(x=0.875, width=0.25, name="tile.back.2")
+        seekViewport("main")
+        addViewport(y=unit(3.25, "in"), width=unit(8, "in"), height=unit(2, "in"), name="tilerow.2")
+        downViewport("tilerow.2")
+        addViewport(x=0.125, width=0.25, name="tile.front.3")
+        addViewport(x=0.375, width=0.25, name="tile.back.3")
+        addViewport(x=0.625, width=0.25, name="tile.front.4")
+        addViewport(x=0.875, width=0.25, name="tile.back.4")
+        seekViewport("main")
+        addViewport(y=unit(1.25, "in"), width=unit(8, "in"), height=unit(2, "in"), name="tilerow.3")
+        downViewport("tilerow.3")
+        addViewport(x=0.125, width=0.25, name="tile.front.5")
+        addViewport(x=0.375, width=0.25, name="tile.back.5")
+        addViewport(x=0.625, width=0.25, name="tile.front.6")
+        addViewport(x=0.875, width=0.25, name="tile.back.6")
+        seekViewport("main")
+
+        # Draw components
+        for (i_r in 1:6) {
+            seekViewport(paste0("tile.front.", i_r))
+            draw_tile_front(ii, i_r, opts)
+            grid.rect(gp=gpar(col="grey", fill=NA))
+            seekViewport(paste0("tile.back.", i_r))
+            draw_tile_back(opts)
+            grid.rect(gp=gpar(col="grey", fill=NA))
+        }
+        seekViewport("main")
         grid.text("tiles", y=unit( 6.4, "in"))
 
         # coins
         l_coins <- list()
-        for (ss in grep("s_coin_value", files, value=TRUE)) {
-            l_coins[[ss]] <- raster_grobs[[ss]]
-            l_coins[[paste0(ss, "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
+        l_coins[[paste0('n')]] <- raster_grobs[[paste0("s_coin_value__n.png")]]
+        l_coins[[paste0('n', "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
+        l_coins[[paste0('a')]] <- raster_grobs[[paste0("s_coin_value__a.png")]]
+        l_coins[[paste0('a', "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
+        for(jj in 2:5) {
+            l_coins[[paste0(jj)]] <- raster_grobs[[paste0("s_coin_value__", jj, ".png")]]
+            l_coins[[paste0(jj, "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
         }
+        
         vp <- viewport(y=unit(7.0, "in"), width=unit(7.5, "in"), height=unit(0.625, "in"))
         pushViewport(vp)
         grid.arrange(grobs=l_coins, nrow=1, newpage=FALSE, padding=0)
@@ -263,19 +262,25 @@ make_set <- function(opts) {
     
     }
 
-    # joker tile
     grid.newpage()
-    vp <- viewport(y=unit(8.5, "in"), x=unit(3.0, "in"), width=unit(4, "in"), height=unit(2, "in"))
-    pushViewport(vp)
-    pushViewport(viewport(x=0.25, width=0.5))
+
+    # Build viewports
+    pushViewport(viewport(name="main"))
+    addViewport(y=unit(8.5, "in"), x=unit(3.0, "in"), width=unit(4, "in"), height=unit(2, "in"), name="joker.tiles")
+    downViewport("joker.tiles")
+    addViewport(x=0.25, width=0.5, name="joker.tile.face")
+    addViewport(x=0.75, width=0.5, name="joker.tile.back")
+    seekViewport("main")
+
+    # Draw components
+    seekViewport("joker.tile.face")
     draw_joker_tile_face(opts)
     grid.rect(gp=gpar(col="grey", fill=NA))
-    upViewport()
-    pushViewport(viewport(x=0.75, width=0.5))
-    tile_back_helper(opts) # does an upViewport()
-    upViewport()
+    seekViewport("joker.tile.back")
+    draw_tile_back(opts)
+    grid.rect(gp=gpar(col="grey", fill=NA))
+    seekViewport("main")
     grid.text("joker tile", x=unit(0.8, "in"), y=unit(8.5, "in"), rot=90)
-    # grid.text(x=unit(1, "in"), y=unit(8, "in")
 
     ydh <- 8.20
     ydm <- 6.60
