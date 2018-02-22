@@ -35,30 +35,30 @@ task :dual do
     suit_family = " --suit_family=1piecepack"
     suit_symbols = " --suit_symbols=🌜,🌞,👑,⚜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    # extra_flags = " --standardish"
-    extra_flags = " --joker_symbol=꩜ --standardish --background=white"
+    # extra_flags = " "
+    extra_flags = " --joker_symbol=꩜ --use_suit_as_ace --background=white"
     sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
-    # set_name = " --set_name='TLD Standardish Piecepack, Elements Suits (v0.1)'"
+    # set_name = " --set_name='TLD Piecepack, Elements Suits (v0.1)'"
     # suit_family  = " --suit_family=elements"
     # suit_symbols = " --suit_symbols=🌪️ ,🔥,⛰️,🌊"
     # 
     suit_family = " --suit_family=2latin"
     suit_symbols = " --suit_symbols=🗡️,🏆,⚕️,𐇛"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    extra_flags = "  --joker_symbol=꩜ --inverted --standardish --background=white"
+    extra_flags = "  --joker_symbol=꩜ --inverted --use_suit_as_ace --background=white"
     sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
     suit_family = " --suit_family=3french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
-    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white"
+    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --add_hex_lines"
     extra_flags = " "
     sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
     light_scheme = " --suit_colors=dimgrey,hotpink2,palegreen,lightblue2"
     suit_family = " --suit_family=4french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
-    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white"
+    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --add_hex_lines"
     extra_flags = " " + light_scheme
     sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
 
@@ -66,13 +66,13 @@ task :dual do
     suit_symbols = " --suit_symbols=⛊,🌹,🌰,🔔"
     rank_symbols = " --rank_symbols=' ,꩜,2,3,4,5'"
     black_scheme = " --suit_colors=black,black,black,black --background=grey70 --neutral_col=grey40"
-    extra_flags = " --standardish --inverted"
+    extra_flags = " --inverted --use_suit_as_ace"
     sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags + black_scheme
 
     suit_family = " --suit_family=6swiss"
     suit_symbols = " --suit_symbols=⛊,🌹,🌰,🔔"
     white_scheme = " --suit_colors=white,white,white,white --background=grey70 --neutral_col=grey40"
-    extra_flags = " --standardish --inverted"
+    extra_flags = " --inverted --use_suit_as_ace"
     sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags + white_scheme
 
     Rake::Task[:arrange].invoke()
@@ -88,7 +88,6 @@ task :test do
     # opts$joker_symbol <- "★"
     # opts$joker_symbol <- "♙"
     # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue"
-    light_scheme = " --suit_colors=dimgrey,hotpink2,darkolivegreen3,lightblue2"
     # alt_scheme = " --suit_colors=white,orange2,yellow,purple"
 
     sh "killall evince | true"
@@ -96,26 +95,26 @@ task :test do
     suit_family = " --suit_family=1piecepack"
     suit_symbols = " --suit_symbols=🌜,🌞,👑,⚜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    # extra_flags = " --standardish"
-    extra_flags = " --joker_symbol=꩜ --standardish --use_suit_as_ace --neutral_col1=black"
+    # extra_flags = " "
+    extra_flags = " --joker_symbol=꩜ --use_suit_as_ace --neutral_col1=black"
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
-    # set_name = " --set_name='TLD Standardish Piecepack, Elements Suits (v0.1)'"
+    # set_name = " --set_name='TLD Piecepack, Elements Suits (v0.1)'"
     # suit_family  = " --suit_family=elements"
     # suit_symbols = " --suit_symbols=🌪️ ,🔥,⛰️,🌊"
     # 
-    # set_name = " --set_name='TLD Standardish Piecepack, Swiss Suits (v0.1)'"
+    # set_name = " --set_name='TLD Piecepack, Swiss Suits (v0.1)'"
     # suit_family  = " --suit_family=swiss"
     # suit_symbols = " --suit_symbols=🛡 ,🌹,🌰,🔔"
     # 
-    # set_name = " --set_name='TLD Standardish Piecepack, Latin Suits (v0.1)'"
+    # set_name = " --set_name='TLD Piecepack, Latin Suits (v0.1)'"
     # suit_family  = " --suit_family=latin"
     # suit_symbols = " --suit_symbols=🗡️,🏆,⚕️,𐇛"
     # 
     suit_family = " --suit_family=2latin"
     suit_symbols = " --suit_symbols=🗡️,🏆,⚕️,𐇛"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = "  --joker_symbol=꩜ --inverted --standardish"
+    extra_flags = "  --joker_symbol=꩜ --inverted "
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
     suit_family = " --suit_family=3french"
@@ -124,6 +123,8 @@ task :test do
     extra_flags = " "
     sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
 
+    # light_scheme = " --suit_colors=dimgrey,hotpink2,darkolivegreen3,lightblue2"
+    light_scheme = " --suit_colors=dimgrey,hotpink2,darkolivegreen3,#AE45BD"
     suit_family = " --suit_family=4french"
     suit_symbols = " --suit_symbols=♠,♥,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"

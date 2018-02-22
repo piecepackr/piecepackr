@@ -8,8 +8,6 @@ parser <- OptionParser("Program to make piecepack images")
 # parser <- add_option(parser, "--set_label", default="label")
 opts <- parse_args(parser)
 
-directories <- get_directories()
-
 collections <- get_collection()
 # collections <- unique(get_collection(directories))
 
@@ -20,13 +18,7 @@ dir.create("collections")
 if (dir.exists("previews")) { unlink("previews", recursive=TRUE) }
 dir.create("previews")
 
-if (dir.exists("pdf")) { unlink("pdf", recursive=TRUE) }
-dir.create("pdf")
-
 cl <- parallel::makeCluster(mc <- getOption("cl.cores", parallel::detectCores()))
-
-# .po1 <- parallel::parLapply(cl, directories, make_set)
-.po1 <- lapply(directories, make_set)
 
 # .po2 <- parallel::parLapply(cl, collections, make_preview)
 .po2 <- lapply(collections, make_preview)

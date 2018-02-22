@@ -68,6 +68,10 @@ cfilename <- sprintf("png/%s.json", opts$set_label)
 
 writeLines(rjson::toJSON(sublist), cfilename)
 
+opts$directory <- sprintf("png/%s", opts$suit_family)
+
 make_images(opts)
+
+make_set(opts)
 
 invisible(NULL)

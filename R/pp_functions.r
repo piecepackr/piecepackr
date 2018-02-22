@@ -9,7 +9,6 @@
 # 2" by 2" tiles require 1/8" bleed on each side 0.0625 in normalized units, extra 1/8" for safe zone
 # 0.5" by 0.5" stickers require about 1/8 of sticker for bleed, extra 0.125 for safe zone, 20 pixels (about 0.106383)
 
-
 # png <- to_png("templates/dice-sticker.png")
 # png <- to_png("templates/small-square-tile.png")
 # grid.newpage()
@@ -99,7 +98,7 @@ make_preview <- function(collection) {
     dirs <- get_directories()
     # dirs <- grep(collection, dirs, value=TRUE)   
     fp <- paste0("previews/", collection, ".pdf") 
-    pdf(fp, onefile=TRUE, width=8.5, height=11)
+    cairo_pdf(fp, onefile=TRUE, width=8.5, height=11)
 
     for (ii in 1:(length(dirs) / 6)) {
 
@@ -113,7 +112,7 @@ make_preview <- function(collection) {
             else
                 l_logos[[kk+1]] <- .png_to_grid(.to_png(file.path("png", dir, "logo.png")))
         }
-        l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey")) })
+        l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey", fill=NA)) })
         grid.newpage()
         vp <- viewport(x=unit(4.25, "in"), y=unit(5.0, "in"), width=unit(8, "in"), height=unit(8, "in")) 
         pushViewport(vp)
@@ -127,8 +126,26 @@ make_preview <- function(collection) {
 
 }
 
+tile_front_helper <- function(i_s, i_r, x, opts, width=0.25) {
+    pushViewport(viewport(x=x, width=width))
+    draw_tile_front(i_s, i_r, opts)
+    grid.rect(gp=gpar(col="grey", fill=NA))
+    upViewport()
+}
+
+tile_back_helper <- function(opts) {
+    draw_tile_back(opts)
+    grid.rect(gp=gpar(col="grey", fill=NA))
+    # grid.draw(raster_grobs[["t_back__.png"]])
+    upViewport()
+}
+
 #' @export
-make_set <- function(dir) {
+make_set <- function(opts) {
+    dir <- opts$suit_family
+    pdf_file <- paste0("pdf/", dir, ".pdf")
+    unlink(pdf_file)
+
     suppressPackageStartupMessages(library('piecepack'))
     x_c <- 0.5 + 0.5*cos(seq(0, 2*pi, length.out=100))
     y_c <- 0.5 + 0.5*sin(seq(0, 2*pi, length.out=100))
@@ -136,7 +153,7 @@ make_set <- function(dir) {
     y_r <- c(0.5, 0, 0, 1, 1, 0.5)
     l_circles <- lapply(1:12, function(x) { circleGrob(gp=gpar(col="grey", fill=NA))})
     l_inverse_circles <- lapply(1:12, function(x) { polygonGrob(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white")) })
-    l_squares <- lapply(1:12, function(x) { rectGrob(gp=gpar(col="grey")) })
+    l_squares <- lapply(1:12, function(x) { rectGrob(gp=gpar(col="grey", fill=NA)) })
 
     l_die_squares <- lapply(1:12, function(x) { nullGrob() })
     l_die_squares[[9]] <- rectGrob(gp=gpar(col="grey"))
@@ -157,23 +174,39 @@ make_set <- function(dir) {
     suits <- unique(gsub("s_die_(.*)_.*.png", "\\1", grep("s_die_", files, value=TRUE)))
     ranks <- unique(gsub("s_die_.*_(.*).png", "\\1", grep("s_die_", files, value=TRUE)))
 
-    pdf(paste0("pdf/", dir, ".pdf"), onefile=TRUE, width=8.5, height=11)
+    cairo_pdf(pdf_file, onefile=TRUE, width=8.5, height=11, family="Symbola")
 
     l_piecepack_die <- list()
     for (ii in seq(along=suits)) {
         suit <- suits[ii]
 
-        # tiles
-        l_tiles <- list()
-        for (tt in grep(paste0("t_front_", suit), files, value=TRUE)) {
-            l_tiles[[tt]] <- raster_grobs[[tt]]
-            l_tiles[[paste0(tt, "_back")]] <- raster_grobs[["t_back__.png"]]
-        }
         grid.newpage()
-        vp <- viewport(y=unit(3.25, "in"), width=unit(8, "in"), height=unit(6, "in"))
+        vp <- viewport(y=unit(5.25, "in"), width=unit(8, "in"), height=unit(2, "in"))
         pushViewport(vp)
-        grid.arrange(grobs=l_tiles, ncol=4, newpage=FALSE, padding=0)
-        grid.arrange(grobs=l_squares, ncol=4, newpage=FALSE, padding=0)
+        tile_front_helper(ii, 5, 0.125, opts)
+        pushViewport(viewport(x=0.375, width=0.25))
+        tile_back_helper(opts)
+        tile_front_helper(ii, 6, 0.625, opts)
+        pushViewport(viewport(x=0.875, width=0.25))
+        tile_back_helper(opts)
+        upViewport()
+        vp <- viewport(y=unit(3.25, "in"), width=unit(8, "in"), height=unit(2, "in"))
+        pushViewport(vp)
+        tile_front_helper(ii, 3, 0.125, opts)
+        pushViewport(viewport(x=0.375, width=0.25))
+        tile_back_helper(opts)
+        tile_front_helper(ii, 4, 0.625, opts)
+        pushViewport(viewport(x=0.875, width=0.25))
+        tile_back_helper(opts)
+        upViewport()
+        vp <- viewport(y=unit(1.25, "in"), width=unit(8, "in"), height=unit(2, "in"))
+        pushViewport(vp)
+        tile_front_helper(ii, 1, 0.125, opts)
+        pushViewport(viewport(x=0.375, width=0.25))
+        tile_back_helper(opts)
+        tile_front_helper(ii, 2, 0.625, opts)
+        pushViewport(viewport(x=0.875, width=0.25))
+        tile_back_helper(opts)
         upViewport()
         grid.text("tiles", y=unit( 6.4, "in"))
 
@@ -204,8 +237,8 @@ make_set <- function(dir) {
         ydie <- 8.5
         vp <- viewport(x=unit(xdie, "in") , y=unit(ydie, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
         pushViewport(vp)
-        grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
         grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+        grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
         upViewport()
         grid.text("die", x=unit(xdie+0.5, "in"), y=unit(ydie+0.9, "in"))
 
@@ -234,8 +267,12 @@ make_set <- function(dir) {
     grid.newpage()
     vp <- viewport(y=unit(8.5, "in"), x=unit(3.0, "in"), width=unit(4, "in"), height=unit(2, "in"))
     pushViewport(vp)
-    grid.arrange(grobs=list(raster_grobs[["t_front_joker_.png"]], raster_grobs[["t_back__.png"]]), ncol=2, newpage=FALSE, padding=0)
-    grid.arrange(grobs=list(rectGrob(gp=gpar(col="grey")), rectGrob(gp=gpar(col="grey"))), ncol=2, newpage=FALSE, padding=0)
+    pushViewport(viewport(x=0.25, width=0.5))
+    draw_joker_tile_face(opts)
+    grid.rect(gp=gpar(col="grey", fill=NA))
+    upViewport()
+    pushViewport(viewport(x=0.75, width=0.5))
+    tile_back_helper(opts) # does an upViewport()
     upViewport()
     grid.text("joker tile", x=unit(0.8, "in"), y=unit(8.5, "in"), rot=90)
     # grid.text(x=unit(1, "in"), y=unit(8, "in")
@@ -254,8 +291,8 @@ make_set <- function(dir) {
     l_die[[4]] <- raster_grobs[[paste0("s_suit_die_", suits[1], "_1.png")]]
     vp <- viewport(y=unit(ydh, "in"), x=unit(7, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     pushViewport(vp)
-    grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
     grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+    grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
     upViewport()
     grid.text("suit die", x=unit(5.8, "in"), y=unit(ydh-0.3, "in"), rot=90)
 
@@ -269,8 +306,8 @@ make_set <- function(dir) {
     l_die[[4]] <- raster_grobs[[paste0("s_rank_die_", "_5.png")]]
     vp <- viewport(y=unit(ydm, "in"), x=unit(7, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     pushViewport(vp)
-    grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
     grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+    grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
     upViewport()
     grid.text("rank die", x=unit(5.8, "in"), y=unit(ydm-0.3, "in"), rot=90)
 
@@ -286,8 +323,8 @@ make_set <- function(dir) {
     l_die[[4]] <- raster_grobs[[paste0("s_die_", suits[1], "_5.png")]]
     vp <- viewport(y=unit(ydl, "in"), x=unit(7, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     pushViewport(vp)
-    grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
     grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+    grid.arrange(grobs=l_die, ncol=4, newpage=FALSE, padding=0)
     upViewport()
     grid.text("suit/rank die", x=unit(5.8, "in"), y=unit(ydl-0.3, "in"), rot=90)
 
@@ -317,8 +354,8 @@ make_set <- function(dir) {
         # additional die
         vp <- viewport(y=unit(die_y[ii], "in"), x=unit(die_x[ii], "in"), width=unit(2, "in"), height=unit(1.5, "in"))
         pushViewport(vp)
-        grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
         grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+        grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
         upViewport()
 
         # suit chips
@@ -340,8 +377,8 @@ make_set <- function(dir) {
     # #### experiment
     # vp <- viewport(y=unit(die_y[ii], "in"), x=unit(die_x[ii]+1.5, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     # pushViewport(vp)
-    # grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
     # grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
+    # grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
     # upViewport()
 
     grid.text("additional piecepack dice", x=unit(0.8, "in"), y=unit((ydm+ydl)/2, "in"), rot=90)
@@ -383,6 +420,8 @@ make_collection <- function(collection) {
     # add bookmarks
     make_bookmarks_txt(n_sets)
     bcommand <- paste("gs -o", bf, "-sDEVICE=pdfwrite", "bookmarks.txt", "-f", of)
+    # embed fonts gs -q -dNOPAUSE -dBATCH -dPDFSETTINGS=/prepress -sDEVICE=pdfwrite -sOutputFile=output.pdf input.pdf
+    # pdftocairo -pdf input.pdf output.pdf
     cat(bcommand, "\n")
     system(bcommand)
     unlink(of_un)
