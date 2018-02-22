@@ -1,1 +1,11 @@
 *.swp
+*by-sa*
+*.rda
+*png
+collections
+png
+pdf
+previews
+tmp
+TODO.rst
+bookmarks.txt
