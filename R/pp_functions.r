@@ -93,7 +93,7 @@ get_directories <- function() {
 }
 
 #' @export
-make_preview <- function(collection) {
+make_collection_preview <- function(collection) {
     suppressPackageStartupMessages(library('piecepack'))
     dirs <- get_directories()
     # dirs <- grep(collection, dirs, value=TRUE)   
@@ -110,7 +110,7 @@ make_preview <- function(collection) {
             if(is.na(dir))
                 l_logos[[kk+1]] <- nullGrob()
             else
-                l_logos[[kk+1]] <- .png_to_grid(.to_png(file.path("png", dir, "logo.png")))
+                l_logos[[kk+1]] <- .png_to_grid(.to_png(file.path("png", dir, "preview.png")))
         }
         l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey", fill=NA)) })
         grid.newpage()

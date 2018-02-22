@@ -34,44 +34,57 @@ sticker_png <- function(filename) {
     ppng(filename, width=sticker_px, height=sticker_px)
 }
 
-make_logo <- function(arg) {
-    dir <- arg$directory
+addViewport <- function(...) { 
+    pushViewport(viewport(...)) 
+    upViewport()
+}
+
+grid.inversecircle <- function() {
     x_c <- 0.5 + 0.5*cos(seq(0, 2*pi, length.out=100))
     y_c <- 0.5 + 0.5*sin(seq(0, 2*pi, length.out=100))
     x_r <- c(1, 1, 0, 0, 1, 1)
     y_r <- c(0.5, 0, 0, 1, 1, 0.5)
-    l_coins <- list()
-    l_coins[[1]] <- .png_to_grid(.to_png_simple(file.path(dir, "s_coin_value__n.png"))) 
-    l_coins[[2]] <- .png_to_grid(.to_png_simple(file.path(dir, "s_coin_value__a.png"))) 
-    l_coins[[3]] <- .png_to_grid(.to_png_simple(file.path(dir, "s_coin_suit_s4_.png"))) 
-    l_coins[[4]] <- .png_to_grid(.to_png_simple(file.path(dir, "s_coin_value__3.png"))) 
-    l_coins[[5]] <- .png_to_grid(.to_png_simple(file.path(dir, "s_coin_suit_s2_.png"))) 
-    l_coins[[6]] <- .png_to_grid(.to_png_simple(file.path(dir, "s_coin_suit_s1_.png"))) 
-    l_inverse_circles <- lapply(1:6, function(x) { polygonGrob(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white")) })
-    l_circles <- lapply(1:6, function(x) { circleGrob(gp=gpar(col="grey", fill=NA)) })
+    grid.polygon(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white"))
+}
 
-    ppng(file.path(dir, "logo.png"), width=4, height=4.67, unit="in")
+make_preview <- function(arg) {
+    dir <- arg$directory
+    coin_files <- c("s_coin_value__n.png", "s_coin_value__a.png", "s_coin_suit_s4_.png",
+        "s_coin_value__3.png", "s_coin_suit_s2_.png", "s_coin_suit_s1_.png")
+
+    ppng(file.path(dir, "preview.png"), width=4, height=4.67, unit="in")
     # dev.new(width=4, height=4.67, unit="in")
     grid.newpage()
-    vp <- viewport(y=unit(2.67, "in"), width=unit(4, "in"), height=unit(4, "in"))
-    pushViewport(vp)
-    pushViewport(viewport(y=0.75, height=0.5))
-    tile_front_helper(1, 2, 0.25, arg, width=0.5)
-    tile_front_helper(2, 2, 0.75, arg, width=0.5)
-    upViewport()
-    pushViewport(viewport(y=0.25, height=0.5))
-    tile_front_helper(3, 2, 0.25, arg, width=0.5)
-    tile_front_helper(4, 2, 0.75, arg, width=0.5)
-    upViewport()
-    upViewport()
-    vp <- viewport(y=unit(0.335, "in"), width=unit(4, "in"), height=unit(0.67, "in"))
-    pushViewport(vp)
-    grid.arrange(grobs=l_coins, nrow=1, newpage=FALSE, padding=0)
-    grid.arrange(grobs=l_inverse_circles, nrow=1, newpage=FALSE, padding=0)
-    grid.arrange(grobs=l_circles, nrow=1, newpage=FALSE, padding=0)
-    upViewport()
-    dev.off()
 
+    # Build viewports
+    pushViewport(viewport(name="main"))
+    addViewport(y=unit(2.67, "in"), width=unit(4, "in"), height=unit(4, "in"), name="tiles")
+    downViewport("tiles")
+    addViewport(x=0.25, y=0.75, width=0.5, height=0.5, name="tile.1")
+    addViewport(x=0.75, y=0.75, width=0.5, height=0.5, name="tile.2")
+    addViewport(x=0.75, y=0.25, width=0.5, height=0.5, name="tile.3")
+    addViewport(x=0.25, y=0.25, width=0.5, height=0.5, name="tile.4")
+    seekViewport("main")
+    addViewport(y=unit(0.335, "in"), width=unit(4, "in"), height=unit(0.67, "in"), name="coins")
+    downViewport("coins")
+    for (ii in 1:6) {
+        addViewport(x=ii/6-1/12, width=1/6, name=paste0("coin.", ii))
+    }
+
+    # Draw components
+    for (ii in 1:4) {
+        seekViewport(paste0("tile.", ii))
+        draw_tile_front(ii, 2, opts)
+        grid.rect(gp=gpar(col="grey", fill=NA))
+    }
+
+    for (ii in 1:6) {
+        seekViewport(paste0("coin.", ii))
+        grid.draw(.png_to_grid(.to_png_simple(file.path(dir, coin_files[ii])))) 
+        grid.inversecircle()
+        grid.circle(gp=gpar(col="grey", fill=NA))
+    }
+    dev.off()
 }
 
 .to_png_simple <- function(f) { png <- png::readPNG(f) }
@@ -83,7 +96,7 @@ make_images <- function(arg) {
     make_tiles(arg)
     make_stickers(arg)
     make_pawns(arg)
-    make_logo(arg)
+    make_preview(arg)
     invisible(NULL)
 }
 

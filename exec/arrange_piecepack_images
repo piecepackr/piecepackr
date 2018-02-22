@@ -21,7 +21,7 @@ dir.create("previews")
 cl <- parallel::makeCluster(mc <- getOption("cl.cores", parallel::detectCores()))
 
 # .po2 <- parallel::parLapply(cl, collections, make_preview)
-.po2 <- lapply(collections, make_preview)
+.po2 <- lapply(collections, make_collection_preview)
 
 # .po3 # parallel::parLapply(cl, collections, make_collection)
 .p03 <- lapply(collections, make_collection)
