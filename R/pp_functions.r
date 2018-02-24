@@ -175,8 +175,8 @@ make_set <- function(opts) {
         addViewport(y=unit(7.0, "in"), width=unit(7.5, "in"), height=unit(0.625, "in"), name="coinrow")
         downViewport("coinrow")
         for (i_r in 1:6) {
-            addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0("coin.value.", i_r))
-            addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0("coin.suit.", i_r))
+            addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0("coin.suit.", i_r))
+            addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0("coin.value.", i_r))
         }
         seekViewport("main")
         ypawn <- 8.8
@@ -187,9 +187,9 @@ make_set <- function(opts) {
         # Draw components
         for (i_r in 1:6) {
             seekViewport(paste0("tile.front.", i_r))
-            draw_tile_front(i_s, i_r, opts, draw_border=TRUE)
+            draw_tile_front(i_s, i_r, opts)
             seekViewport(paste0("tile.back.", i_r))
-            draw_tile_back(opts, draw_border=TRUE)
+            draw_tile_back(opts)
         }
         seekViewport("main")
         grid.text("tiles", y=unit( 6.4, "in"))
@@ -197,13 +197,11 @@ make_set <- function(opts) {
         # coins
         l_coins <- list()
         for(i_r in 1:6) {
-            l_coins[[paste0(i_r)]] <- raster_grobs[[paste0("s_coin_value__", i_r, ".png")]]
-            l_coins[[paste0(i_r, "_", i_s)]] <- raster_grobs[[paste0("s_coin_suit_", i_s, "_.png")]] 
+            seekViewport(paste0("coin.suit.", i_r))
+            draw_coin_suit(i_s, opts)
+            seekViewport(paste0("coin.value.", i_r))
+            draw_coin_value(i_r, opts)
         }
-        seekViewport("coinrow")
-        grid.arrange(grobs=l_coins, nrow=1, newpage=FALSE, padding=0)
-        grid.arrange(grobs=l_inverse_circles, nrow=1, newpage=FALSE, padding=0)
-        grid.arrange(grobs=l_circles, nrow=1, newpage=FALSE, padding=0)
         seekViewport("main")
         grid.text("coins", y=unit( 7.4, "in"))
 
@@ -249,9 +247,9 @@ make_set <- function(opts) {
 
     # Draw components
     seekViewport("joker.tile.face")
-    draw_joker_tile_face(opts, draw_border=TRUE)
+    draw_joker_tile_face(opts)
     seekViewport("joker.tile.back")
-    draw_tile_back(opts, draw_border=TRUE)
+    draw_tile_back(opts)
     seekViewport("main")
     grid.text("joker tile", x=unit(0.8, "in"), y=unit(8.5, "in"), rot=90)
 
