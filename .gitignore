@@ -3,9 +3,9 @@
 *.rda
 *png
 collections
-png
 pdf
 previews
+svg
 tmp
 TODO.rst
 bookmarks.txt

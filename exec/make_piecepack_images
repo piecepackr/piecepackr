@@ -10,16 +10,13 @@ parser <- OptionParser("Program to make piecepack images")
 parser <- add_option(parser, "--set_label", default="collection")
 parser <- add_option(parser, "--set_name", default="set")
 parser <- add_option(parser, "--deck_label", default="deck")
-parser <- add_option(parser, "--suit_colors", default="darkred,black,darkgreen,darkblue")
+parser <- add_option(parser, "--suit_colors", default="darkred,black,darkgreen,darkblue,grey")
 # parser <- add_option(parser, "--background", default="seashell3")
 parser <- add_option(parser, "--background", default="white")
-parser <- add_option(parser, "--neutral_col1", default="grey60")
-parser <- add_option(parser, "--suit_symbols", default="♠,♥,♣,♦")
+parser <- add_option(parser, "--suit_symbols", default="♠,♥,♣,♦,★")
 parser <- add_option(parser, "--rank_symbols", default="NA2345")
-parser <- add_option(parser, "--joker_symbol", default="★")
 parser <- add_option(parser, "--add_hex_lines", action="store_true", default=FALSE)
 parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=FALSE)
-parser <- add_option(parser, "--standardish", action="store_true", default=FALSE)
 parser <- add_option(parser, "--inverted", action="store_true", default=FALSE)
 opts <- parse_args(parser)
 
@@ -30,9 +27,6 @@ opts$add_bleed_lines <- FALSE
 # opts$background <- "seashell3"
 # opts$background <- "tan"
 # opts$background <- "white"
-# opts$neutral_col1 <- "grey"
-# opts$neutral_col1 <- "grey60"
-opts$neutral_col2 <- "yellow"
 opts$rank_names <- c("n", "a", "2", "3", "4", "5")
 
 opts$copyright <- "© 2016-2018 Trevor L Davis. Some Rights Reserved."
@@ -64,11 +58,11 @@ opts$suit_symbols <- split(opts$suit_symbols)
 #
                
 sublist <- opts[c("set_name", "copyright", "license1", "license2")]
-cfilename <- sprintf("png/%s.json", opts$set_label)
+cfilename <- sprintf("svg/%s.json", opts$set_label)
 
 writeLines(rjson::toJSON(sublist), cfilename)
 
-opts$directory <- sprintf("png/%s", opts$deck_label)
+opts$directory <- sprintf("svg/%s", opts$deck_label)
 
 make_images(opts)
 
