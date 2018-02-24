@@ -39,20 +39,6 @@
         to_crop <- 40
         png <- png[(1 + to_crop):(675-to_crop),(1 + to_crop):(675-to_crop),]
     }
-    if (grepl("s_coin_suit", bf))
-        png <- .rotate(.rotate(.rotate(png)))
-    if (grepl("s_chip_suit", bf))
-        png <- .rotate(.rotate(.rotate(png)))
-    if (grepl("s_.*die_.*_n.png", bf))
-        png <- .rotate(png)
-    if (grepl("s_.*die_.*_2.png", bf))
-        png <- .rotate(png)
-    if (grepl("s_.*die_.*_4.png", bf))
-        png <- .rotate(png)
-    if (grepl("s_saucer_hidden", bf))
-        png <- .rotate(.rotate(.rotate(png)))
-    if (grepl("p_pawn", bf))
-        png <- .rotate(png)
     png
 }
 
@@ -128,7 +114,7 @@ make_collection_preview <- function(collection) {
 
 #' @export
 make_set <- function(opts) {
-    dir <- opts$suit_family
+    dir <- opts$deck_label
     pdf_file <- paste0("pdf/", dir, ".pdf")
     unlink(pdf_file)
 
@@ -156,15 +142,10 @@ make_set <- function(opts) {
     raster_grobs <- lapply(pngs, .png_to_grid)
     names(raster_grobs) <- files
 
-
-    suits <- unique(gsub("s_die_(.*)_.*.png", "\\1", grep("s_die_", files, value=TRUE)))
-    ranks <- unique(gsub("s_die_.*_(.*).png", "\\1", grep("s_die_", files, value=TRUE)))
-
     cairo_pdf(pdf_file, onefile=TRUE, width=8.5, height=11, family="Symbola")
 
     l_piecepack_die <- list()
-    for (ii in seq(along=suits)) {
-        suit <- suits[ii]
+    for (i_s in 1:4) {
 
         grid.newpage()
 
@@ -191,47 +172,50 @@ make_set <- function(opts) {
         addViewport(x=0.625, width=0.25, name="tile.front.6")
         addViewport(x=0.875, width=0.25, name="tile.back.6")
         seekViewport("main")
+        addViewport(y=unit(7.0, "in"), width=unit(7.5, "in"), height=unit(0.625, "in"), name="coinrow")
+        downViewport("coinrow")
+        for (i_r in 1:6) {
+            addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0("coin.value.", i_r))
+            addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0("coin.suit.", i_r))
+        }
+        seekViewport("main")
+        ypawn <- 8.8
+        addViewport(x=unit(3.25, "in"), y=unit(ypawn, "in"), width=unit(0.75, "in"), height=unit(4.5, "in"), angle=90, name="pawn")
+        ybelt <- 7.8
+        addViewport(x=unit(3.25, "in"), y=unit(ybelt, "in"), width=unit(1.5, "in"), height=unit(0.5, "in"), name="pawnbelt")
 
         # Draw components
         for (i_r in 1:6) {
             seekViewport(paste0("tile.front.", i_r))
-            draw_tile_front(ii, i_r, opts)
-            grid.rect(gp=gpar(col="grey", fill=NA))
+            draw_tile_front(i_s, i_r, opts, draw_border=TRUE)
             seekViewport(paste0("tile.back.", i_r))
-            draw_tile_back(opts)
-            grid.rect(gp=gpar(col="grey", fill=NA))
+            draw_tile_back(opts, draw_border=TRUE)
         }
         seekViewport("main")
         grid.text("tiles", y=unit( 6.4, "in"))
 
         # coins
         l_coins <- list()
-        l_coins[[paste0('n')]] <- raster_grobs[[paste0("s_coin_value__n.png")]]
-        l_coins[[paste0('n', "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
-        l_coins[[paste0('a')]] <- raster_grobs[[paste0("s_coin_value__a.png")]]
-        l_coins[[paste0('a', "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
-        for(jj in 2:5) {
-            l_coins[[paste0(jj)]] <- raster_grobs[[paste0("s_coin_value__", jj, ".png")]]
-            l_coins[[paste0(jj, "_", suit)]] <- raster_grobs[[paste0("s_coin_suit_", suit, "_.png")]] 
+        for(i_r in 1:6) {
+            l_coins[[paste0(i_r)]] <- raster_grobs[[paste0("s_coin_value__", i_r, ".png")]]
+            l_coins[[paste0(i_r, "_", i_s)]] <- raster_grobs[[paste0("s_coin_suit_", i_s, "_.png")]] 
         }
-        
-        vp <- viewport(y=unit(7.0, "in"), width=unit(7.5, "in"), height=unit(0.625, "in"))
-        pushViewport(vp)
+        seekViewport("coinrow")
         grid.arrange(grobs=l_coins, nrow=1, newpage=FALSE, padding=0)
         grid.arrange(grobs=l_inverse_circles, nrow=1, newpage=FALSE, padding=0)
         grid.arrange(grobs=l_circles, nrow=1, newpage=FALSE, padding=0)
-        upViewport()
+        seekViewport("main")
         grid.text("coins", y=unit( 7.4, "in"))
 
         # die
         l_die <- lapply(1:12, function(x) {nullGrob()})
-        l_die[[9]] <- raster_grobs[[paste0("s_die_", suit, "_n.png")]]
-        l_die[[10]] <- raster_grobs[[paste0("s_die_", suit, "_a.png")]]
-        l_die[[6]] <- raster_grobs[[paste0("s_die_", suit, "_2.png")]]
-        l_die[[7]] <- raster_grobs[[paste0("s_die_", suit, "_3.png")]]
-        l_die[[3]] <- raster_grobs[[paste0("s_die_", suit, "_4.png")]]
-        l_die[[4]] <- raster_grobs[[paste0("s_die_", suit, "_5.png")]]
-        l_piecepack_die[[ii]] <- l_die
+        l_die[[9]] <- raster_grobs[[paste0("s_die_", i_s, "_1.png")]]
+        l_die[[10]] <- raster_grobs[[paste0("s_die_", i_s, "_2.png")]]
+        l_die[[6]] <- raster_grobs[[paste0("s_die_", i_s, "_3.png")]]
+        l_die[[7]] <- raster_grobs[[paste0("s_die_", i_s, "_4.png")]]
+        l_die[[3]] <- raster_grobs[[paste0("s_die_", i_s, "_5.png")]]
+        l_die[[4]] <- raster_grobs[[paste0("s_die_", i_s, "_6.png")]]
+        l_piecepack_die[[i_s]] <- l_die
         xdie <- 7.0
         ydie <- 8.5
         vp <- viewport(x=unit(xdie, "in") , y=unit(ydie, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
@@ -241,25 +225,16 @@ make_set <- function(opts) {
         upViewport()
         grid.text("die", x=unit(xdie+0.5, "in"), y=unit(ydie+0.9, "in"))
 
-        # pawn
-        ypawn <- 8.8
-        vp <- viewport(x=unit(3.25, "in"), y=unit(ypawn, "in"), width=unit(4.5, "in"), height=unit(0.75, "in"))
-        pushViewport(vp)
-        grid.draw(raster_grobs[[paste0("p_pawn_", suit, "_.png")]])
-        upViewport()
+        # pawn and belt
+        seekViewport("pawn")
+        draw_pawn(i_s, opts)
+        seekViewport("pawnbelt")
+        draw_pawn_belt(i_s, opts)
+        seekViewport("main")
         grid.text("pawn", x=unit(3.25, "in"), y=unit(ypawn+0.5, "in"))
-
-        # pawn belt
-        ybelt <- 7.8
-        vp <- viewport(x=unit(3.25, "in"), y=unit(ybelt, "in"), width=unit(1.5, "in"), height=unit(0.5, "in"))
-        pushViewport(vp)
-        grid.draw(raster_grobs[[paste0("p_belt_", suit, "_.png")]])
-        upViewport()
         grid.text("pawn belt", x=unit(3.25, "in"), y=unit(ybelt+0.4, "in"))
 
-
         make_header(get_collection())
-    
     }
 
     grid.newpage()
@@ -274,11 +249,9 @@ make_set <- function(opts) {
 
     # Draw components
     seekViewport("joker.tile.face")
-    draw_joker_tile_face(opts)
-    grid.rect(gp=gpar(col="grey", fill=NA))
+    draw_joker_tile_face(opts, draw_border=TRUE)
     seekViewport("joker.tile.back")
-    draw_tile_back(opts)
-    grid.rect(gp=gpar(col="grey", fill=NA))
+    draw_tile_back(opts, draw_border=TRUE)
     seekViewport("main")
     grid.text("joker tile", x=unit(0.8, "in"), y=unit(8.5, "in"), rot=90)
 
@@ -290,10 +263,10 @@ make_set <- function(opts) {
     l_die <- lapply(1:12, function(x) {nullGrob()})
     l_die[[9]] <- raster_grobs[[paste0("s_suit_die_null_.png")]]
     l_die[[10]] <- raster_grobs[[paste0("s_suit_die_joker_.png")]]
-    l_die[[6]] <- raster_grobs[[paste0("s_suit_die_", suits[4], "_4.png")]]
-    l_die[[7]] <- raster_grobs[[paste0("s_suit_die_", suits[3], "_3.png")]]
-    l_die[[3]] <- raster_grobs[[paste0("s_suit_die_", suits[2], "_2.png")]]
-    l_die[[4]] <- raster_grobs[[paste0("s_suit_die_", suits[1], "_1.png")]]
+    l_die[[6]] <- raster_grobs[[paste0("s_suit_die_", 4, "_.png")]]
+    l_die[[7]] <- raster_grobs[[paste0("s_suit_die_", 3, "_.png")]]
+    l_die[[3]] <- raster_grobs[[paste0("s_suit_die_", 2, "_.png")]]
+    l_die[[4]] <- raster_grobs[[paste0("s_suit_die_", 1, "_.png")]]
     vp <- viewport(y=unit(ydh, "in"), x=unit(7, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     pushViewport(vp)
     grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
@@ -303,12 +276,12 @@ make_set <- function(opts) {
 
     # rank die
     l_die <- lapply(1:12, function(x) {nullGrob()})
-    l_die[[9]] <- raster_grobs[[paste0("s_rank_die_", "_n.png")]]
-    l_die[[10]] <- raster_grobs[[paste0("s_rank_die_", "_a.png")]]
-    l_die[[6]] <- raster_grobs[[paste0("s_rank_die_", "_2.png")]]
-    l_die[[7]] <- raster_grobs[[paste0("s_rank_die_", "_3.png")]]
-    l_die[[3]] <- raster_grobs[[paste0("s_rank_die_", "_4.png")]]
-    l_die[[4]] <- raster_grobs[[paste0("s_rank_die_", "_5.png")]]
+    l_die[[9]] <- raster_grobs[[paste0("s_rank_die_", "_1.png")]]
+    l_die[[10]] <- raster_grobs[[paste0("s_rank_die_", "_2.png")]]
+    l_die[[6]] <- raster_grobs[[paste0("s_rank_die_", "_3.png")]]
+    l_die[[7]] <- raster_grobs[[paste0("s_rank_die_", "_4.png")]]
+    l_die[[3]] <- raster_grobs[[paste0("s_rank_die_", "_5.png")]]
+    l_die[[4]] <- raster_grobs[[paste0("s_rank_die_", "_6.png")]]
     vp <- viewport(y=unit(ydm, "in"), x=unit(7, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     pushViewport(vp)
     grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
@@ -318,14 +291,14 @@ make_set <- function(opts) {
 
     # combined suit/rank die
     l_die <- lapply(1:12, function(x) {nullGrob()})
-    l_die[[9]] <- raster_grobs[[paste0("s_rank_die_", "_n.png")]]
+    l_die[[9]] <- raster_grobs[[paste0("s_rank_die_", "_1.png")]]
     # l_die[[10]] <- raster_grobs[[paste0("s_suit_die_joker_.png")]]
     # l_die[[10]] <- raster_grobs[[paste0("s_rank_die_", "_a.png")]]
     l_die[[10]] <- raster_grobs[[paste0("s_suit_die_ace_.png")]]
-    l_die[[6]] <- raster_grobs[[paste0("s_die_", suits[4], "_2.png")]]
-    l_die[[7]] <- raster_grobs[[paste0("s_die_", suits[3], "_3.png")]]
-    l_die[[3]] <- raster_grobs[[paste0("s_die_", suits[2], "_4.png")]]
-    l_die[[4]] <- raster_grobs[[paste0("s_die_", suits[1], "_5.png")]]
+    l_die[[6]] <- raster_grobs[[paste0("s_die_", 4, "_3.png")]]
+    l_die[[7]] <- raster_grobs[[paste0("s_die_", 3, "_4.png")]]
+    l_die[[3]] <- raster_grobs[[paste0("s_die_", 2, "_6.png")]]
+    l_die[[4]] <- raster_grobs[[paste0("s_die_", 1, "_6.png")]]
     vp <- viewport(y=unit(ydl, "in"), x=unit(7, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     pushViewport(vp)
     grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
@@ -335,13 +308,13 @@ make_set <- function(opts) {
 
     # pawn saucers
     l_saucers <- list()
-    l_saucers[[1]] <- raster_grobs[[paste0("s_saucer_suit_", suits[1], "_.png")]]
+    l_saucers[[1]] <- raster_grobs[[paste0("s_saucer_suit_", 1, "_.png")]]
     l_saucers[[2]] <- raster_grobs[[paste0("s_saucer_hidden__.png")]]
-    l_saucers[[3]] <- raster_grobs[[paste0("s_saucer_suit_", suits[2], "_.png")]]
+    l_saucers[[3]] <- raster_grobs[[paste0("s_saucer_suit_", 2, "_.png")]]
     l_saucers[[4]] <- raster_grobs[[paste0("s_saucer_hidden__.png")]]
-    l_saucers[[5]] <- raster_grobs[[paste0("s_saucer_suit_", suits[3], "_.png")]]
+    l_saucers[[5]] <- raster_grobs[[paste0("s_saucer_suit_", 3, "_.png")]]
     l_saucers[[6]] <- raster_grobs[[paste0("s_saucer_hidden__.png")]]
-    l_saucers[[7]] <- raster_grobs[[paste0("s_saucer_suit_", suits[4], "_.png")]]
+    l_saucers[[7]] <- raster_grobs[[paste0("s_saucer_suit_", 4, "_.png")]]
     l_saucers[[8]] <- raster_grobs[[paste0("s_saucer_hidden__.png")]]
     vp <- viewport(y=unit(3.8, "in"),width=unit(6, "in"), height=unit(0.75, "in"))
     pushViewport(vp)
@@ -353,24 +326,23 @@ make_set <- function(opts) {
 
     die_x <- c(2, 4.5, 4.5, 2)
     die_y <- c(ydl, ydl, ydm, ydm)
-    for (ii in seq(along=suits)) {
-        suit <- suits[ii]
+    for (i_s in 1:4) {
 
         # additional die
-        vp <- viewport(y=unit(die_y[ii], "in"), x=unit(die_x[ii], "in"), width=unit(2, "in"), height=unit(1.5, "in"))
+        vp <- viewport(y=unit(die_y[i_s], "in"), x=unit(die_x[i_s], "in"), width=unit(2, "in"), height=unit(1.5, "in"))
         pushViewport(vp)
         grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
-        grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
+        grid.arrange(grobs=l_piecepack_die[[i_s]], ncol=4, newpage=FALSE, padding=0)
         upViewport()
 
         # suit chips
         l_chips <- list()
-        for (cc in grep(paste0("s_chip_value_", suit), files, value=TRUE)) {
+        for (cc in grep(paste0("s_chip_value_", i_s), files, value=TRUE)) {
             l_chips[[cc]] <- raster_grobs[[cc]]
-            l_chips[[paste0(cc, "_", suit)]] <- raster_grobs[[paste0("s_chip_suit_", suit, "_.png")]]
+            l_chips[[paste0(cc, "_", i_s)]] <- raster_grobs[[paste0("s_chip_suit_", i_s, "_.png")]]
         }
 
-        vp <- viewport(y=unit(0.2 + ii * 0.715, "in"), width=unit(7.5, "in"), height=unit(0.625, "in"))
+        vp <- viewport(y=unit(0.2 + i_s * 0.715, "in"), width=unit(7.5, "in"), height=unit(0.625, "in"))
         pushViewport(vp)
         grid.arrange(grobs=l_chips, nrow=1, newpage=FALSE, padding=0)
         grid.arrange(grobs=l_inverse_circles, nrow=1, newpage=FALSE, padding=0)
@@ -380,10 +352,10 @@ make_set <- function(opts) {
     }
 
     # #### experiment
-    # vp <- viewport(y=unit(die_y[ii], "in"), x=unit(die_x[ii]+1.5, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
+    # vp <- viewport(y=unit(die_y[i_s], "in"), x=unit(die_x[i_s]+1.5, "in"), width=unit(2, "in"), height=unit(1.5, "in"))
     # pushViewport(vp)
     # grid.arrange(grobs=l_die_squares, ncol=4, newpage=FALSE, padding=0)
-    # grid.arrange(grobs=l_piecepack_die[[ii]], ncol=4, newpage=FALSE, padding=0)
+    # grid.arrange(grobs=l_piecepack_die[[i_s]], ncol=4, newpage=FALSE, padding=0)
     # upViewport()
 
     grid.text("additional piecepack dice", x=unit(0.8, "in"), y=unit((ydm+ydl)/2, "in"), rot=90)

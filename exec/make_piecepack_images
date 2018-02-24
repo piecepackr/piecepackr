@@ -7,9 +7,9 @@ suppressPackageStartupMessages(library("piecepack"))
 split <- function(x, sep=",") { strsplit(x, sep)[[1]] } 
 
 parser <- OptionParser("Program to make piecepack images")
-parser <- add_option(parser, "--set_label", default="label")
+parser <- add_option(parser, "--set_label", default="collection")
 parser <- add_option(parser, "--set_name", default="set")
-parser <- add_option(parser, "--suit_family", default="suit")
+parser <- add_option(parser, "--deck_label", default="deck")
 parser <- add_option(parser, "--suit_colors", default="darkred,black,darkgreen,darkblue")
 # parser <- add_option(parser, "--background", default="seashell3")
 parser <- add_option(parser, "--background", default="white")
@@ -68,7 +68,7 @@ cfilename <- sprintf("png/%s.json", opts$set_label)
 
 writeLines(rjson::toJSON(sublist), cfilename)
 
-opts$directory <- sprintf("png/%s", opts$suit_family)
+opts$directory <- sprintf("png/%s", opts$deck_label)
 
 make_images(opts)
 

@@ -13,7 +13,7 @@ end
 desc "Install"
 task :install do
     sh 'sudo Rscript -e "devtools::document()"'
-    sh 'sudo Rscript -e "devtools::install(quiet=TRUE)"'
+    sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
 end
 
 desc "Arrange"
@@ -32,44 +32,44 @@ task :dual do
     sh "killall evince | true"
     # set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4)'"
     set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4, more printer-friendly)'"
-    suit_family = " --suit_family=1piecepack"
+    deck_label = " --deck_label=1piecepack"
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     # extra_flags = " "
     extra_flags = " --joker_symbol=꩜ --use_suit_as_ace --background=white"
-    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
-    suit_family = " --suit_family=2latin"
+    deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     extra_flags = "  --joker_symbol=꩜ --inverted --use_suit_as_ace --background=white"
-    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
-    suit_family = " --suit_family=3french"
+    deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --add_hex_lines"
     extra_flags = " "
-    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,palegreen,lightblue2"
-    suit_family = " --suit_family=4french"
+    deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --add_hex_lines"
     extra_flags = " " + light_scheme
-    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
-    suit_family = " --suit_family=5swiss"
+    deck_label = " --deck_label=5swiss"
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔"
     rank_symbols = " --rank_symbols=' ,꩜,2,3,4,5'"
     black_scheme = " --suit_colors=black,black,black,black --background=grey70 --neutral_col=grey40"
     extra_flags = " --inverted --use_suit_as_ace"
-    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags + black_scheme
+    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + black_scheme
 
-    suit_family = " --suit_family=6swiss"
+    deck_label = " --deck_label=6swiss"
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔"
     white_scheme = " --suit_colors=white,white,white,white --background=grey70 --neutral_col=grey40"
     extra_flags = " --inverted --use_suit_as_ace"
-    sh "exec/make_piecepack_images" + set_name + set_label + suit_family + suit_symbols + rank_symbols + extra_flags + white_scheme
+    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + white_scheme
 
     Rake::Task[:arrange].invoke()
      
@@ -88,44 +88,44 @@ task :test do
 
     sh "killall evince | true"
     set_name = " --set_name='\"Dual piecepacks\" prototypes'"
-    suit_family = " --suit_family=1piecepack"
+    deck_label = " --deck_label=1piecepack"
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     # extra_flags = " "
     extra_flags = " --joker_symbol=꩜ --use_suit_as_ace --neutral_col1=black"
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Piecepack, Elements Suits (v0.1)'"
-    # suit_family  = " --suit_family=elements"
+    # deck_label  = " --deck_label=elements"
     # suit_symbols = " --suit_symbols=🔥,🌪️,⛰️,🌊"
       
-    suit_family = " --suit_family=2latin"
+    deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
     extra_flags = "  --joker_symbol=꩜ --inverted "
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
-    suit_family = " --suit_family=3french"
+    deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
     extra_flags = " "
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     # light_scheme = " --suit_colors=dimgrey,hotpink2,darkolivegreen3,lightblue2"
     light_scheme = " --suit_colors=hotpink2,dimgrey,darkolivegreen3,#AE45BD"
-    suit_family = " --suit_family=4french"
+    deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
     extra_flags = " --add_hex_lines" + light_scheme
-    sh "exec/make_piecepack_images" + set_name + suit_family + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Euchre Piecepack, French Suits (v0.1)'"
-    # suit_family = " --suit_family=french"
+    # deck_label = " --deck_label=french"
     # suit_symbols = " --suit_symbols=♥,♠,♣,♦"
     # rank_symbols = " --rank_symbols=9,10,J,Q,K,A"
       
     # set_name = " --set_name='TLD Chess Piecepack (v0.1)'"
-    # suit_family = " --suit_family=chess"
+    # deck_label = " --deck_label=chess"
     # # suit_symbols = " --suit_symbols=♟,♟,♙,♙"
     # suit_symbols = " --suit_symbols=♙,♙,♙,♙"
     # # ♞ ♟ ♝ ♜ ♛ ♚ ♘ ♙ ♗ ♖ ♕ ♔
@@ -134,7 +134,7 @@ task :test do
     # # add_checkers = TRUE
       
     # set_name = " --set_name='TLD Alchemical Piecepack, Elemental Suits (v0.1)'"
-    # suit_family = " --suit_family=alchemical"
+    # deck_label = " --deck_label=alchemical"
     # suit_symbols = " --suit_symbols=🜁,🜂,🜃,🜄"
     # # rank_symbols = "  --rank_symbols=' ,𝍩,𝍪,𝍫,𝍬,𝍭'"
     # # rank_symbols = " --rank_symbols=' ,🝔,:,∴,⸪,⁙"
