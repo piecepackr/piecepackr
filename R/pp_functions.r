@@ -26,6 +26,8 @@ get_directories <- function() {
 
 }
 
+seekViewport <- function(...) { suppressWarnings(grid::seekViewport(...)) }
+
 #' @export
 make_collection_preview <- function(collection) {
     suppressPackageStartupMessages(library('piecepack'))
@@ -44,7 +46,7 @@ make_collection_preview <- function(collection) {
             if(is.na(dir))
                 l_logos[[kk+1]] <- nullGrob()
             else
-                l_logos[[kk+1]] <- pictureGrob(readPicture(file.path("svg", dir, "preview.svg")))
+                l_logos[[kk+1]] <- pictureGrob(readPicture(file.path("svg", dir, "preview.svg"), warn=FALSE))
         }
         l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey", fill=NA)) })
         grid.newpage()
@@ -322,13 +324,13 @@ make_collection <- function(collection) {
     of_un <- file.path("collections", paste0(collection, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
     of <- shQuote(of_un)
     bf <- shQuote(file.path("collections", paste0(collection, ".pdf")))
-    command <- paste("pdfjoin -o", of, "--pdftitle", shQuote(arg$set_name), "--pdfauthor", shQuote("Trevor L Davis"), "--pdfkeywords", shQuote("piecepack"), fp, paste(shQuote(sets), collapse=" "))
+    command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(arg$set_name), "--pdfauthor", shQuote("Trevor L Davis"), "--pdfkeywords", shQuote("piecepack"), fp, paste(shQuote(sets), collapse=" "))
     cat(command, "\n")
     system(command)
 
     # add bookmarks
     make_bookmarks_txt(n_sets)
-    bcommand <- paste("gs -o", bf, "-sDEVICE=pdfwrite", "bookmarks.txt", "-f", of)
+    bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", "bookmarks.txt", "-f", of)
     # embed fonts gs -q -dNOPAUSE -dBATCH -dPDFSETTINGS=/prepress -sDEVICE=pdfwrite -sOutputFile=output.pdf input.pdf
     # pdftocairo -pdf input.pdf output.pdf
     cat(bcommand, "\n")

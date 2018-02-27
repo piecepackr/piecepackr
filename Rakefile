@@ -13,7 +13,7 @@ end
 
 desc "Install"
 task :install do
-    sh 'sudo Rscript -e "devtools::document()"'
+    sh 'sudo Rscript -e "suppressMessages(devtools::document())"'
     sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
 end
 

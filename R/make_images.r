@@ -12,7 +12,7 @@ curve <- function(x, y, xend, yend, color="black", size=1, curvature=0.5, ...) {
 ppsvg <- function(...) { svg(..., family=c("Symbola")) }
 
 addViewport <- function(...) { 
-    pushViewport(viewport(..., clip="on")) 
+    suppressWarnings(pushViewport(viewport(..., clip="on")))
     upViewport()
 }
 

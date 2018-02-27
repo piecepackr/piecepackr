@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-options(error = quote(dump.frames("last.dump", TRUE)))
+options(error = quote(dump.frames("last.dump", TRUE)), warn=2)
 
 suppressPackageStartupMessages(library("piecepack"))
 
