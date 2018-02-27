@@ -4,9 +4,7 @@ options(error = quote(dump.frames("last.dump", TRUE)))
 
 suppressPackageStartupMessages(library("piecepack"))
 
-parser <- OptionParser("Program to make piecepack images")
-# parser <- add_option(parser, "--set_label", default="label")
-opts <- parse_args(parser)
+opts <- get_options()
 
 collections <- get_collection()
 # collections <- unique(get_collection(directories))

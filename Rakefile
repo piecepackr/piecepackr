@@ -35,7 +35,6 @@ task :dual do
     deck_label = " --deck_label=1piecepack"
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    # extra_flags = " "
     extra_flags = " --use_suit_as_ace --background=white"
     sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
@@ -87,8 +86,7 @@ task :test do
     deck_label = " --deck_label=1piecepack"
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    # extra_flags = " "
-    extra_flags = " --use_suit_as_ace --suit_colors=darkred,black,darkgreen,darkblue,black"
+    extra_flags = " --use_suit_as_ace --suit_colors=darkred,black,darkgreen,darkblue,black --chip_rank_symbols='A,B,C,D,E,F'"
     sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Piecepack, Elements Suits (v0.1)'"

@@ -2,6 +2,7 @@
 
 export(get_collection)
 export(get_directories)
+export(get_options)
 export(make_collection)
 export(make_collection_preview)
 export(make_images)

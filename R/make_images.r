@@ -472,7 +472,7 @@ draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
 draw_chip_value <- function(i_s, i_r, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
-    rank_symbol <- arg$rank_symbols[i_r] # don't use ``use_suit_as_ace``
+    rank_symbol <- arg$chip_rank_symbols[i_r] # don't use ``use_suit_as_ace``
 
     if (arg$inverted) {
         bcol <- suit_color
