@@ -12,9 +12,10 @@ make_header <- function(collection) {
     
     upViewport()
     grid.text(arg$set_name, x=0.5, y=0.9, just="center", gp=gpar(fontsize=20))
-    grid.text(arg$copyright, x=0.4, y=0.5, just="left")
-    grid.text(arg$license1, x=0.4, y=0.3, just="left")
-    grid.text(arg$license2, x=0.4, y=0.1, just="left")
+    grid.text(arg$program, x=0.4, y=0.6, just="left")
+    grid.text(arg$copyright, x=0.4, y=0.4, just="left")
+    grid.text(arg$license1, x=0.4, y=0.2, just="left")
+    grid.text(arg$license2, x=0.4, y=0.0, just="left")
     upViewport()
 }
 
