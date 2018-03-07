@@ -46,14 +46,14 @@ task :dual do
 
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
-    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --add_hex_lines"
+    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --style=simple_hex"
     extra_flags = " "
     sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,palegreen,lightblue2,grey"
     deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
-    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --add_hex_lines"
+    rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --style=simple_hex"
     extra_flags = " " + light_scheme
     sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
 
@@ -96,20 +96,20 @@ task :test do
     deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = "  --inverted"
+    extra_flags = "  --inverted --directional_marker_style=matching"
     sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = " "
+    extra_flags = " --directional_marker_style=none"
     sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,darkolivegreen3,lightblue2,grey"
     deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = light_scheme + " --add_hex_lines"
+    extra_flags = light_scheme + " --style=simple_hex --directional_marker_style=matching"
     sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
 
     # set_name = " --set_name='TLD Euchre Piecepack, French Suits (v0.1)'"

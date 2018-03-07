@@ -49,20 +49,20 @@ make_preview <- function(arg) {
     # Draw components
     for (ii in 1:4) {
         seekViewport(paste0("tile.", ii))
-        draw_tile_front(ii, 2, opts)
+        draw_tile_front(ii, 2, arg)
     }
     seekViewport(paste0("coin.1"))
-    draw_coin_value(1, opts)
+    draw_coin_value(1, arg)
     seekViewport(paste0("coin.2"))
-    draw_coin_value(2, opts)
+    draw_coin_value(2, arg)
     seekViewport(paste0("coin.3"))
-    draw_coin_suit(4, opts)
+    draw_coin_suit(4, arg)
     seekViewport(paste0("coin.4"))
-    draw_coin_value(3, opts)
+    draw_coin_value(3, arg)
     seekViewport(paste0("coin.5"))
-    draw_coin_suit(2, opts)
+    draw_coin_suit(2, arg)
     seekViewport(paste0("coin.6"))
-    draw_coin_suit(1, opts)
+    draw_coin_suit(1, arg)
 
     dev.off()
 }
@@ -228,12 +228,11 @@ draw_joker_tile_face <- function(arg, draw_border = TRUE) {
     if (arg$add_bleed_lines) {
         add_bleed_lines(arg, "tile")
     }
-    if (arg$add_hex_lines) {
+    if (arg$style == "simple_hex") {
         if (arg$inverted) 
             add_hexlines(arg, hl_col=arg$background)
         else 
             add_hexlines(arg)
-         
     }
     gp_tr <- gpar(col=scol, fontsize=fs_ts)
     grid.text(symbol.1, x=0.25, y=.75, gp=gp_tr)
@@ -259,7 +258,7 @@ draw_tile_back <- function(arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "tile")
     gp_gl <- gpar(col=arg$suit_colors[5], lwd=8, lineend="square")
-    if (arg$add_hex_lines)
+    if (arg$style == "simple_hex") 
         add_hexlines(arg)
     # width <- c(0.02, 0.98) # avoid bleading over the edge
     # grid.lines(x=0.5, y=width, gp=gp_gl)
@@ -293,7 +292,7 @@ draw_tile_front <- function(i_s, i_r, arg, draw_border = TRUE) {
         grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
         grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
     }
-    if (arg$add_hex_lines) {
+    if (arg$style == "simple_hex") {
         add_hexlines(arg)
         gp_tr <- gpar(col=scol, fontsize=fs_tr)
         grid.text(rank_symbol, gp=gp_tr)
@@ -347,18 +346,17 @@ make_tiles <- function(arg) {
     }
 }
 
-add_directional_marker <- function(arg, back=TRUE) {
-    # if (arg$inverted) {
-    #     if (back) {
-    #         o_neutral_col <- arg$background
-    #         } else {
-    #             o_neutral_col <- arg$suit_colors[1]
-    #         }
-    #     } else {
-    #         o_neutral_col <- arg$suit_colors[1]
-    #     }
-    # }
-    grid.lines(x=c(0.5, 0.5), y=c(0.90, 0.95), gp=gpar(col=arg$suit_colors[5], lwd=10))
+add_directional_marker <- function(i_s, arg, suit_side=TRUE) {
+    if (arg$directional_marker_style == "none") {
+        dcol <- NA
+    } else if (!suit_side || arg$directional_marker_style == "neutral") {
+        dcol <- arg$suit_colors[5]
+    } else if (arg$inverted) {
+        dcol <- arg$background
+    } else {
+        dcol <- arg$suit_colors[i_s]
+    }
+    grid.lines(x=c(0.5, 0.5), y=c(0.90, 0.95), gp=gpar(col=dcol, lwd=10))
 }
 
 od_fontsize <- 30 # orthodox die font size
@@ -397,7 +395,7 @@ draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(arg, back=TRUE)
+    add_directional_marker(i_s, arg, suit_side=i_s < 5)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
@@ -435,7 +433,7 @@ draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(rank_symbol, gp = gpar(col=arg$suit_colors[5], fontsize=oc_fontsize) )
-    add_directional_marker(arg, back=FALSE)
+    add_directional_marker(5, arg, suit_side=FALSE)
     if (draw_border) {
         grid.circle(gp=gpar(col="grey", fill=NA))
     }
@@ -486,7 +484,7 @@ draw_chip_value <- function(i_s, i_r, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(rank_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(arg, back=FALSE)
+    add_directional_marker(i_s, arg, suit_side=TRUE)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
@@ -507,7 +505,7 @@ draw_coin_suit <- function(i_s, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(arg, back=TRUE)
+    add_directional_marker(i_s, arg, suit_side=TRUE)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
@@ -528,7 +526,7 @@ draw_chip_suit <- function(i_s, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize))
-    add_directional_marker(arg, back=TRUE)
+    add_directional_marker(i_s, arg, suit_side=TRUE)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
