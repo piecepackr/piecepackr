@@ -19,7 +19,7 @@ end
 
 desc "Arrange"
 task :arrange do
-    sh 'exec/arrange_piecepack_images'
+    sh 'exec/arrange_piecepacks'
     sh "xdg-open collections/*pdf"
 end
 
@@ -36,39 +36,39 @@ task :dual do
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     extra_flags = " --use_suit_as_ace --background=white"
-    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     extra_flags = "   --inverted --use_suit_as_ace --background=white"
-    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --style=simple_hex"
     extra_flags = " "
-    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,palegreen,lightblue2,grey"
     deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --style=simple_hex"
     extra_flags = " " + light_scheme
-    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     deck_label = " --deck_label=5swiss"
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔,★"
     rank_symbols = " --rank_symbols=' ,꩜,2,3,4,5'"
     black_scheme = " --suit_colors=black,black,black,black,grey40 --background=grey70"
     extra_flags = " --inverted --use_suit_as_ace" + black_scheme
-    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags 
+    sh "exec/make_options" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags  + ' | exec/make_piecepacks'
 
     deck_label = " --deck_label=6swiss"
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔,★"
     white_scheme = " --suit_colors=white,white,white,white,grey40 --background=grey70"
     extra_flags = " --inverted --use_suit_as_ace" + white_scheme
-    sh "exec/make_piecepack_images" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     Rake::Task[:arrange].invoke()
      
@@ -87,7 +87,7 @@ task :test do
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     extra_flags = " --use_suit_as_ace --suit_colors=darkred,black,darkgreen,darkblue,black --chip_rank_symbols='A,B,C,D,E,F'"
-    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     # set_name = " --set_name='TLD Piecepack, Elements Suits (v0.1)'"
     # deck_label  = " --deck_label=elements"
@@ -97,20 +97,22 @@ task :test do
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
     extra_flags = "  --inverted --directional_marker_style=matching"
-    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
     extra_flags = " --directional_marker_style=none"
-    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_options" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepacks'
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,darkolivegreen3,lightblue2,grey"
     deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
     extra_flags = light_scheme + " --style=simple_hex --directional_marker_style=matching"
-    sh "exec/make_piecepack_images" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags
+    file = "4french.json"
+    sh "exec/make_options" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' > ' + file
+    sh "exec/make_piecepacks --file=" + file
 
     # set_name = " --set_name='TLD Euchre Piecepack, French Suits (v0.1)'"
     # deck_label = " --deck_label=french"

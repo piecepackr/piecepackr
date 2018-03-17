@@ -17,7 +17,7 @@ Depends:
     optparse,
     parallel,
     png,
-    rjson
+    jsonlite
 Imports:
 Suggests:
 SystemRequirements: pdfsam

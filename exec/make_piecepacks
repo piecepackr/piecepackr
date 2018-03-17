@@ -1,0 +1,30 @@
+#!/usr/bin/env Rscript
+
+options(error = quote(dump.frames("last.dump", TRUE)), warn=2)
+
+suppressPackageStartupMessages(library("piecepack"))
+
+parser <- OptionParser()
+parser <- add_option(parser, c('-f', '--file'), default=NULL, help="Source of piecepack style information (default stdin input)")
+opts <- parse_args(parser)
+
+if (is.null(opts$file)) {
+    con <- file("stdin")
+    opts <- jsonlite::fromJSON(readLines(con))
+    close(con)
+} else {
+    opts <- jsonlite::fromJSON(opts$file)
+}
+               
+sublist <- opts[c("set_name", "program", "copyright", "license1", "license2")]
+cfilename <- sprintf("svg/%s.json", opts$set_label)
+
+writeLines(jsonlite::toJSON(sublist), cfilename)
+
+opts$directory <- sprintf("svg/%s", opts$deck_label)
+
+make_images(opts)
+
+make_set(opts)
+
+invisible(NULL)

@@ -1,7 +1,7 @@
 cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package="piecepack")))
 
 make_header <- function(collection) {
-    arg <- rjson::fromJSON(file=file.path("svg", paste0(collection, ".json")))
+    arg <- jsonlite::fromJSON(readLines(file.path("svg", paste0(collection, ".json"))))
     vp <- viewport(y=unit(10.05, "in"), width=unit(8, "in"), height=unit(0.8, "in"))
     pushViewport(vp)
     vp <- viewport(x=0.3, y=0.3, height=0.5)
@@ -318,7 +318,7 @@ make_bookmarks_txt <- function(n_sets) {
 #' @export
 make_collection <- function(collection) {
     suppressPackageStartupMessages(library("piecepack"))
-    arg <- rjson::fromJSON(file=file.path("svg", paste0(collection, ".json")))
+    arg <- jsonlite::fromJSON(readLines(file.path("svg", paste0(collection, ".json"))))
     sets <- list.files("pdf", full.names=TRUE)
     n_sets <- length(sets)
     fp <- shQuote(file.path("previews", paste0(collection, ".pdf")))
