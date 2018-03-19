@@ -8,18 +8,19 @@ make_style <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--deck_label", default="deck")
     parser <- add_option(parser, "--suit_colors", default="darkred,black,darkgreen,darkblue,grey")
     # parser <- add_option(parser, "--background", default="seashell3")
-    parser <- add_option(parser, "--background", default="white")
+    parser <- add_option(parser, "--background_color", default="white")
     parser <- add_option(parser, "--directional_marker", default="neutral", help="'neutral' use the neutral color, 'matching' use suit color on suit sides and neutral on neutral sides, 'none' suppress direction mark (warning: can result in a non-conforming piecepack)")
     parser <- add_option(parser, "--suit_symbols", default="♠,♥,♣,♦,★")
     parser <- add_option(parser, "--rank_symbols", default="NA2345")
     parser <- add_option(parser, "--rank_symbols.chip_face", default=NULL, help="Rank symbols for 'chips', defaults to what ``rank_symbols`` is set to. 'A,B,C,D,E,F' is good if building piecepack pyramids.")
     parser <- add_option(parser, "--style", default="basic", help="'basic' or 'simple_hex'")
     parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=FALSE)
-    parser <- add_option(parser, "--inverted", action="store_true", default=FALSE)
+    parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=FALSE)
     parser <- add_option(parser, c("-f", "--file"), default=NULL, help="Filename to write style to (default outputs to standard output)")
     opts <- parse_args(parser, args)
     filename <- opts$file
     opts$file <- NULL
+    opts$help <- NULL
 
     if (is.null(filename)) {
         writeLines(jsonlite::toJSON(opts, pretty=TRUE), stdout())

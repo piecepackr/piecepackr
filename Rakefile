@@ -43,7 +43,7 @@ task :dual do
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     file2 = "configurations/dual2_inverted_latin.json"
-    extra_flags = "   --inverted --use_suit_as_ace --background=white --file=" + file2
+    extra_flags = "   --invert_colors.suited --use_suit_as_ace --background=white --file=" + file2
     sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
     sh "exec/make_piecepack --file=" + file2
 
@@ -69,7 +69,7 @@ task :dual do
     rank_symbols = " --rank_symbols=' ,꩜,2,3,4,5'"
     black_scheme = " --suit_colors=black,black,black,black,grey40 --background=grey70"
     file5 = "configurations/dual5_black_swiss.json"
-    extra_flags = " --inverted --directional_marker=matching --use_suit_as_ace --file=" + file5 + black_scheme
+    extra_flags = " --invert_colors.suited --directional_marker=matching --use_suit_as_ace --file=" + file5 + black_scheme
     sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
     sh "exec/make_piecepack --file=" + file5
 
@@ -77,7 +77,7 @@ task :dual do
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔,★"
     white_scheme = " --suit_colors=white,white,white,white,grey40 --background=grey70"
     file6 = "configurations/dual6_white_swiss.json"
-    extra_flags = " --inverted --directional_marker=matching --use_suit_as_ace --file=" + file6 + white_scheme
+    extra_flags = " --invert_colors.suited --directional_marker=matching --use_suit_as_ace --file=" + file6 + white_scheme
     sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
     sh "exec/make_piecepack --file=" + file6
 
@@ -106,7 +106,7 @@ task :test do
     deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = "  --inverted --directional_marker=matching"
+    extra_flags = "  --invert_colors.suited --directional_marker=matching"
     sh "exec/configure_piecepack" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     deck_label = " --deck_label=3french"
@@ -145,5 +145,10 @@ task :test do
     # # rank_symbols = " --rank_symbols=' 🝔,🜩,☰,⚏,☵"
     # rank_symbols = " --rank_symbols=' 🝪,🜩,ʒ,♃,🜪"
     Rake::Task[:arrange].invoke()
+end
+
+desc "Run all demos"
+task :all do
+    Rake::Task[:dual].invoke()
 end
 
