@@ -189,7 +189,7 @@ draw_pawn_belt <- function(i_s, arg) {
 
 make_pawns <- function(arg) {
     # Pawn
-    for (i_s in seq(along=arg$suit_names)) {
+    for (i_s in 1:4) {
 
         filename <- file.path(arg$directory, pawn_filename("pawn", i_s))
         ppsvg(filename, width=0.75,  height=4.5)
@@ -336,7 +336,6 @@ make_tiles <- function(arg) {
     for (i_s in 1:4) {
         for (i_r in 1:6) {
 
-            suit_name <- arg$suit_names[i_s]
             filename <- file.path(arg$directory, tile_filename("front", i_s, i_r))
             ppsvg(filename)
             grid.newpage()
@@ -347,9 +346,9 @@ make_tiles <- function(arg) {
 }
 
 add_directional_marker <- function(i_s, arg, suit_side=TRUE) {
-    if (arg$directional_marker_style == "none") {
+    if (arg$directional_marker == "none") {
         dcol <- NA
-    } else if (!suit_side || arg$directional_marker_style == "neutral") {
+    } else if (!suit_side || arg$directional_marker == "neutral") {
         dcol <- arg$suit_colors[5]
     } else if (arg$inverted) {
         dcol <- arg$background
@@ -470,7 +469,7 @@ draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
 draw_chip_value <- function(i_s, i_r, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
-    rank_symbol <- arg$chip_rank_symbols[i_r] # don't use ``use_suit_as_ace``
+    rank_symbol <- arg$rank_symbols.chip_face[i_r] # don't use ``use_suit_as_ace``
 
     if (arg$inverted) {
         bcol <- suit_color

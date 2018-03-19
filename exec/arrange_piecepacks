@@ -4,8 +4,6 @@ options(error = quote(dump.frames("last.dump", TRUE)))
 
 suppressPackageStartupMessages(library("piecepack"))
 
-opts <- get_options()
-
 collections <- get_collection()
 # collections <- unique(get_collection(directories))
 

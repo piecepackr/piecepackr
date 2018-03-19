@@ -28,6 +28,15 @@ The software currently assumes one has installed:
 * `Symbola <http://www.fontspace.com/unicode-fonts-for-ancient-scripts/symbola>`_ good coverage of the Symbol block of the Unicode Standard.
 * `Noto Sans Cham <https://www.google.com/get/noto/>`_ contains the rare "Cham Punctuation Spiral".
 
+How to use
+----------
+
+Although the API is in flux you can run a working example that builds a "dual piecepacks" demo by running::
+
+    $ rake dual
+
+Besides building a "dual piecepacks" pdf this command will also print the command-line commands needed to build the pdf.
+
 Licence
 -------
 

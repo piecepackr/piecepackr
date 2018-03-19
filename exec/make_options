@@ -1,7 +1,0 @@
-#!/usr/bin/env Rscript
-
-suppressPackageStartupMessages(library("piecepack"))
-
-opts <- get_options()
-
-writeLines(jsonlite::toJSON(opts, pretty=TRUE), stdout())

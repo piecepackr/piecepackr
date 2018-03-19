@@ -1,0 +1,5 @@
+#!/usr/bin/env Rscript
+
+suppressPackageStartupMessages(library("piecepack"))
+
+make_style()
