@@ -2,12 +2,12 @@
   "set_label": ["dual_piecepacks_proof_of_concept_printer_friendly"],
   "set_name": ["\"Dual piecepacks\" proof of concept (v0.5)"],
   "deck_label": ["5swiss"],
-  "suit_colors": ["black,black,black,black,grey40"],
-  "background_color": ["grey70"],
-  "directional_marker": ["matching"],
   "suit_symbols": ["🌹,⛊,🌰,🔔,★"],
   "rank_symbols": [" ,꩜,2,3,4,5"],
-  "style": ["basic"],
+  "directional_marker": ["matching"],
   "use_suit_as_ace": [true],
+  "style": ["basic"],
+  "suit_colors": ["black,black,black,black,grey40"],
+  "background_color": ["grey70"],
   "invert_colors.suited": [true]
 }

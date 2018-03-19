@@ -2,21 +2,36 @@ split <- function(x, sep=",") { strsplit(x, sep)[[1]] }
 
 #' @export
 make_style <- function(args=commandArgs(TRUE)) {
+    default_str <- "(default %default)"
     parser <- OptionParser("Program to make piecepack images")
-    parser <- add_option(parser, "--set_label", default="collection")
-    parser <- add_option(parser, "--set_name", default="set")
-    parser <- add_option(parser, "--deck_label", default="deck")
-    parser <- add_option(parser, "--suit_colors", default="darkred,black,darkgreen,darkblue,grey")
-    # parser <- add_option(parser, "--background", default="seashell3")
-    parser <- add_option(parser, "--background_color", default="white")
-    parser <- add_option(parser, "--directional_marker", default="neutral", help="'neutral' use the neutral color, 'matching' use suit color on suit sides and neutral on neutral sides, 'none' suppress direction mark (warning: can result in a non-conforming piecepack)")
-    parser <- add_option(parser, "--suit_symbols", default="♠,♥,♣,♦,★")
-    parser <- add_option(parser, "--rank_symbols", default="NA2345")
-    parser <- add_option(parser, "--rank_symbols.chip_face", default=NULL, help="Rank symbols for 'chips', defaults to what ``rank_symbols`` is set to. 'A,B,C,D,E,F' is good if building piecepack pyramids.")
-    parser <- add_option(parser, "--style", default="basic", help="'basic' or 'simple_hex'")
-    parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=FALSE)
-    parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=FALSE)
+    parser <- add_option(parser, "--set_label", default="collection", help=default_str)
+    parser <- add_option(parser, "--set_name", default="set", help=default_str)
+    parser <- add_option(parser, "--deck_label", default="deck", help=default_str)
+
+    # Symbols
+    parser <- add_option(parser, "--suit_symbols", default="♠,♥,♣,♦,★", help=default_str)
+    parser <- add_option(parser, "--rank_symbols", default="NA2345", help=default_str)
+    parser <- add_option(parser, "--rank_symbols.chip_face", default=NULL, help=default_str)
+
+    # Style
+    parser <- add_option(parser, "--directional_marker", default="neutral", 
+                         help=paste("'neutral' use the neutral color, 'matching' use suit color on suit sides and neutral on neutral sides,",
+                                    "'none' suppress direction mark (warning: can result in a non-conforming piecepack)",
+                                    default_str))
+    parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=FALSE, help=default_str)
+    parser <- add_option(parser, "--style", default="basic", help=paste("'basic' or 'simple_hex'", default_str))
+
+    # Color scheme
+    parser <- add_option(parser, "--suit_colors", default="darkred,black,darkgreen,darkblue,grey", help=default_str)
+    parser <- add_option(parser, "--background_color", default="white", help=default_str)
+    parser <- add_option(parser, "--background_color.suited", default=NULL, help=default_str)
+    parser <- add_option(parser, "--background_color.unsuited", default=NULL, help=default_str)
+    #### Update
+    parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, help=default_str)
+    parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=FALSE, help=default_str)
+    parser <- add_option(parser, "--invert_colors.unsuited", action="store_true", default=NULL, help=default_str)
     parser <- add_option(parser, c("-f", "--file"), default=NULL, help="Filename to write style to (default outputs to standard output)")
+
     opts <- parse_args(parser, args)
     filename <- opts$file
     opts$file <- NULL

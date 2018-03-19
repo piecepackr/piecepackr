@@ -2,12 +2,12 @@
   "set_label": ["dual_piecepacks_proof_of_concept_printer_friendly"],
   "set_name": ["\"Dual piecepacks\" proof of concept (v0.5)"],
   "deck_label": ["4french"],
-  "suit_colors": ["hotpink2,dimgrey,palegreen,lightblue2,grey"],
-  "background_color": ["white"],
-  "directional_marker": ["neutral"],
   "suit_symbols": ["♥,♠,♣,♦,★"],
   "rank_symbols": ["N,A,2,3,4,5"],
-  "style": ["simple_hex"],
+  "directional_marker": ["neutral"],
   "use_suit_as_ace": [false],
+  "style": ["simple_hex"],
+  "suit_colors": ["hotpink2,dimgrey,palegreen,lightblue2,grey"],
+  "background_color": ["white"],
   "invert_colors.suited": [false]
 }
