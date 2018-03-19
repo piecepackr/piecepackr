@@ -30,48 +30,58 @@ task :dual do
     # alt_scheme = " --suit_colors=white,orange2,yellow,purple"
     set_label = " --set_label=dual_piecepacks_proof_of_concept_printer_friendly"
 
-    # set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4)'"
-    set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.4, more printer-friendly)'"
+    set_name = " --set_name='\"Dual piecepacks\" proof of concept (v0.5)'"
     deck_label = " --deck_label=1piecepack"
     suit_symbols = " --suit_symbols=🌞,🌜,👑,⚜,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    extra_flags = " --use_suit_as_ace --background=white"
-    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
+    file1 = "configurations/dual1_uninverted_piecepack.json"
+    extra_flags = " --use_suit_as_ace --background=white --file=" + file1
+    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags 
+    sh "exec/make_piecepack --file=" + file1
 
     deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
-    extra_flags = "   --inverted --use_suit_as_ace --background=white"
-    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
+    file2 = "configurations/dual2_inverted_latin.json"
+    extra_flags = "   --inverted --use_suit_as_ace --background=white --file=" + file2
+    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack --file=" + file2
 
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --style=simple_hex"
-    extra_flags = " "
-    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
+    file3 = "configurations/dual3_dark_french.json"
+    extra_flags = " --file=" + file3
+    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags 
+    sh "exec/make_piecepack --file=" + file3
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,palegreen,lightblue2,grey"
     deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5' --background=white --style=simple_hex"
-    extra_flags = " " + light_scheme
-    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
+    file4 = "configurations/dual4_light_french.json"
+    extra_flags = " --file=" + file4 + light_scheme
+    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack --file=" + file4
 
     deck_label = " --deck_label=5swiss"
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔,★"
     rank_symbols = " --rank_symbols=' ,꩜,2,3,4,5'"
     black_scheme = " --suit_colors=black,black,black,black,grey40 --background=grey70"
-    extra_flags = " --inverted --use_suit_as_ace" + black_scheme
-    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags  + ' | exec/make_piecepack'
+    file5 = "configurations/dual5_black_swiss.json"
+    extra_flags = " --inverted --directional_marker=matching --use_suit_as_ace --file=" + file5 + black_scheme
+    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack --file=" + file5
 
     deck_label = " --deck_label=6swiss"
     suit_symbols = " --suit_symbols=🌹,⛊,🌰,🔔,★"
     white_scheme = " --suit_colors=white,white,white,white,grey40 --background=grey70"
-    extra_flags = " --inverted --use_suit_as_ace" + white_scheme
-    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
+    file6 = "configurations/dual6_white_swiss.json"
+    extra_flags = " --inverted --directional_marker=matching --use_suit_as_ace --file=" + file6 + white_scheme
+    sh "exec/configure_piecepack" + set_name + set_label + deck_label + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack --file=" + file6
 
     Rake::Task[:arrange].invoke()
-     
 end
 
 desc "Test"

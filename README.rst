@@ -31,11 +31,11 @@ The software currently assumes one has installed:
 How to use
 ----------
 
-Although the API is in flux you can run a working example that builds a "dual piecepacks" demo by running::
+Although the API is in flux you run a working example that builds a "dual piecepacks" demo by running::
 
     $ rake dual
 
-Besides building a "dual piecepacks" pdf this command will also print the command-line commands needed to build the pdf.
+Besides building a "dual piecepacks" pdf this command will also print the command-line commands needed to build the pdf.  It runs the command-line programs `exec/configure_piecepack`, `exec/make_piecepack`, and `exec/arrange_piecepacks`.  You can view sample configuration files for individual piecepacks in the `configurations` folder.
 
 Licence
 -------

@@ -1,0 +1,14 @@
+{
+  "help": [false],
+  "set_label": ["dual_piecepacks_proof_of_concept_printer_friendly"],
+  "set_name": ["\"Dual piecepacks\" proof of concept (v0.5)"],
+  "deck_label": ["2latin"],
+  "suit_colors": ["darkred,black,darkgreen,darkblue,grey"],
+  "background": ["white"],
+  "directional_marker": ["neutral"],
+  "suit_symbols": ["🏆,🗡️,⚕️,𐇛,꩜"],
+  "rank_symbols": [" ,A,2,3,4,5"],
+  "style": ["basic"],
+  "use_suit_as_ace": [true],
+  "inverted": [true]
+}
