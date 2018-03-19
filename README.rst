@@ -35,7 +35,7 @@ Although the API is in flux you run a working example that builds a "dual piecep
 
     $ rake dual
 
-Besides building a "dual piecepacks" pdf this command will also print the command-line commands needed to build the pdf.  It runs the command-line programs `exec/configure_piecepack`, `exec/make_piecepack`, and `exec/arrange_piecepacks`.  You can view sample configuration files for individual piecepacks in the `configurations` folder.
+Besides building a "dual piecepacks" pdf this command will also print the command-line commands needed to build the pdf.  It runs the command-line programs ``exec/configure_piecepack``, ``exec/make_piecepack``, and ``exec/arrange_piecepacks``.  You can view sample configuration files for individual piecepacks in the ``configurations`` folder.
 
 Licence
 -------
