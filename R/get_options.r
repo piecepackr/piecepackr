@@ -27,8 +27,8 @@ make_style <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--background_color.suited", default=NULL, help=default_str)
     parser <- add_option(parser, "--background_color.unsuited", default=NULL, help=default_str)
     #### Update
-    parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, help=default_str)
-    parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=FALSE, help=default_str)
+    parser <- add_option(parser, "--invert_colors", action="store_true", default=FALSE, help=default_str)
+    parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=NULL, help=default_str)
     parser <- add_option(parser, "--invert_colors.unsuited", action="store_true", default=NULL, help=default_str)
     parser <- add_option(parser, c("-f", "--file"), default=NULL, help="Filename to write style to (default outputs to standard output)")
 
@@ -101,3 +101,5 @@ read_style <- function(args=commandArgs(TRUE)) {
 
     opts
 }
+
+

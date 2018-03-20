@@ -148,7 +148,7 @@ s_size_dir <- 12
 draw_pawn <- function(i_s, arg) {
     suit_color <- arg$suit_colors[i_s]
     suit_symbol <- arg$suit_symbols[i_s]
-    if (arg$invert_colors.suited) {
+    if (should_invert("pawn", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -170,7 +170,7 @@ draw_pawn <- function(i_s, arg) {
 draw_pawn_belt <- function(i_s, arg) {
     suit_color <- arg$suit_colors[i_s]
     suit_symbol <- arg$suit_symbols[i_s]
-    if (arg$invert_colors.suited) {
+    if (should_invert("belt", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -208,7 +208,7 @@ make_pawns <- function(arg) {
 }
 
 draw_joker_tile_face <- function(arg, draw_border = TRUE) {
-    if (arg$invert_colors.suited) {
+    if (should_invert("tile_face", arg)) {
         bcol <- arg$suit_colors[5]
         scol <- arg$background_color
     } else {
@@ -229,10 +229,7 @@ draw_joker_tile_face <- function(arg, draw_border = TRUE) {
         add_bleed_lines(arg, "tile")
     }
     if (arg$style == "simple_hex") {
-        if (arg$invert_colors.suited) 
-            add_hexlines(arg, hl_col=arg$background_color)
-        else 
-            add_hexlines(arg)
+        add_hexlines(arg, hl_col=scol)
     }
     gp_tr <- gpar(col=scol, fontsize=fs_ts)
     grid.text(symbol.1, x=0.25, y=.75, gp=gp_tr)
@@ -278,7 +275,7 @@ draw_tile_front <- function(i_s, i_r, arg, draw_border = TRUE) {
     else
         rank_symbol <- arg$rank_symbols[i_r]
 
-    if (arg$invert_colors.suited) {
+    if (should_invert("tile_face", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -292,28 +289,21 @@ draw_tile_front <- function(i_s, i_r, arg, draw_border = TRUE) {
         grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
         grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
     }
-    if (arg$style == "simple_hex") {
-        add_hexlines(arg)
-        gp_tr <- gpar(col=scol, fontsize=fs_tr)
-        grid.text(rank_symbol, gp=gp_tr)
+    if (arg$style == "simple_hex")
+        add_hexlines(arg, hl_col=scol)
 
-        gp_ts <- gpar(col=scol, fontsize=fs_ts)
-        vp <- viewport(x=0.25, y=0.75, width=0.5, height=0.5)
-        pushViewport(vp)
-        grid.text(suit_symbol, gp=gp_ts)
-        upViewport()
-    } else {
-        gp_tr <- gpar(col=scol, fontsize=fs_tr)
-        grid.text(rank_symbol, gp=gp_tr)
+    gp_tr <- gpar(col=scol, fontsize=fs_tr)
+    grid.text(rank_symbol, gp=gp_tr)
 
-        gp_ts <- gpar(col=scol, fontsize=fs_ts)
-        vp <- viewport(x=0.25, y=0.75, width=0.5, height=0.5)
-        pushViewport(vp)
-        grid.text(suit_symbol, gp=gp_ts)
-        upViewport()
-    }
+    gp_ts <- gpar(col=scol, fontsize=fs_ts)
+    vp <- viewport(x=0.25, y=0.75, width=0.5, height=0.5)
+    pushViewport(vp)
+    grid.text(suit_symbol, gp=gp_ts)
+    upViewport()
+
     if (draw_border)
         grid.rect(gp=gpar(col="grey", fill=NA))
+
     invisible(NULL)
 }
 
@@ -345,12 +335,41 @@ make_tiles <- function(arg) {
     }
 }
 
-add_directional_marker <- function(i_s, arg, suit_side=TRUE) {
+should_invert <- function(component, arg) {
+    suited <- is_suited(component)
+    if (suited && !is.null(arg$invert_colors.suited)) {
+        arg$invert_colors.suited
+    } else if (!suited && !is.null(arg$invert_colors.unsuited)) {
+        arg$invert_colors.unsuited
+    } else {
+        arg$invert_colors
+    }
+}
+
+is_suited <- function(component) {
+    switch(component,
+           tile_back = FALSE,
+           tile_face = TRUE, #### joker?
+           coin_back = TRUE,
+           coin_face = FALSE,
+           die = TRUE,
+           rank_die = FALSE,
+           suit_die = TRUE,
+           suit_rank_die = TRUE, #### null
+           saucer_face = TRUE,
+           saucer_back = FALSE,
+           pawn = TRUE,
+           belt = TRUE,
+           chip_face = TRUE,
+           chip_back = TRUE)
+}
+
+add_directional_marker <- function(i_s, component, arg) {
     if (arg$directional_marker == "none") {
         dcol <- NA
-    } else if (!suit_side || arg$directional_marker == "neutral") {
+    } else if (arg$directional_marker == "neutral") {
         dcol <- arg$suit_colors[5]
-    } else if (arg$invert_colors.suited) {
+    } else if (should_invert(component, arg)) { 
         dcol <- arg$background_color
     } else {
         dcol <- arg$suit_colors[i_s]
@@ -364,7 +383,7 @@ oc_fontsize <- 30 # orthodox coin font size
 draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
-    if (arg$invert_colors.suited) {
+    if (should_invert("suit_die", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -380,10 +399,12 @@ draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
     invisible(NULL)
 }
 
+
 draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
-    if (i_s < 5 && arg$invert_colors.suited) {
+    component <- ifelse(i_s < 5, "saucer_face", "saucer_back")
+    if (should_invert(component, arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -394,7 +415,7 @@ draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(i_s, arg, suit_side=i_s < 5)
+    add_directional_marker(i_s, component, arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
@@ -432,7 +453,7 @@ draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(rank_symbol, gp = gpar(col=arg$suit_colors[5], fontsize=oc_fontsize) )
-    add_directional_marker(5, arg, suit_side=FALSE)
+    add_directional_marker(5, "coin_face", arg)
     if (draw_border) {
         grid.circle(gp=gpar(col="grey", fill=NA))
     }
@@ -447,7 +468,7 @@ draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     else
         rank_symbol <- arg$rank_symbols[i_r]
 
-    if (arg$invert_colors.suited) {
+    if (should_invert("die", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -469,9 +490,9 @@ draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
 draw_chip_value <- function(i_s, i_r, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
-    rank_symbol <- arg$rank_symbols.chip_face[i_r] # don't use ``use_suit_as_ace``
+    rank_symbol <- arg$rank_symbols.chip_face[i_r] #### don't use ``use_suit_as_ace``
 
-    if (arg$invert_colors.suited) {
+    if (should_invert("chip_face", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -483,7 +504,7 @@ draw_chip_value <- function(i_s, i_r, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(rank_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(i_s, arg, suit_side=TRUE)
+    add_directional_marker(i_s, "chip_face", arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
@@ -493,7 +514,7 @@ draw_coin_suit <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
 
-    if (arg$invert_colors.suited) {
+    if (should_invert("coin_back", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -504,16 +525,17 @@ draw_coin_suit <- function(i_s, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(i_s, arg, suit_side=TRUE)
+    add_directional_marker(i_s, "coin_back", arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
+
 draw_chip_suit <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
     suit_color <- arg$suit_colors[i_s]
 
-    if (arg$invert_colors.suited) {
+    if (should_invert("chip_back", arg)) {
         bcol <- suit_color
         scol <- arg$background_color
     } else {
@@ -525,136 +547,136 @@ draw_chip_suit <- function(i_s, arg, draw_border = TRUE) {
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize))
-    add_directional_marker(i_s, arg, suit_side=TRUE)
+    add_directional_marker(i_s, "chip_back", arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
 
-make_stickers <- function(arg) {
-    circle_lwd <- 22
-    cr <- 0.45
-
-    for (i_s in 1:4) {
-        for (i_r in 1:6) {
-
-            # # tile value
-            # filename <- file.path(arg$directory, sticker_filename("tile_value", i_s, i_r))
-            # ppsvg(filename)
-            # grid.newpage()
-            # grid.rect(gp = gpar(fill=bcol))
-            # if (arg$add_bleed_lines)
-            #     add_bleed_lines(arg, "sticker")
-            # symbol <- ifelse(i_r == 2, ace_symbol, rank_symbol)
-            # grid.text(symbol, gp = gpar(col=scol, fontsize=od_fontsize) )
-            # dev.off()
-
-            # die
-            filename <- file.path(arg$directory, sticker_filename("die", i_s, i_r))
-            ppsvg(filename)
-            grid.newpage()
-            draw_die_face(i_s, i_r, arg)
-            dev.off()
-
-            # chip value
-            filename <- file.path(arg$directory, sticker_filename("chip_value", i_s, i_r))
-            ppsvg(filename)
-            grid.newpage()
-            draw_chip_value(i_s, i_r, arg)
-            dev.off()
-
-        }
-        # # tile suite
-        # filename <- file.path(arg$directory, sticker_filename("tile_suite", i_s, ""))
-        # ppsvg(filename)
-        # grid.newpage()
-        # grid.rect(gp = gpar(fill=bcol))
-        # if (arg$add_bleed_lines)
-        #     add_bleed_lines(arg, "sticker")
-        # grid.text(suit_symbol, gp = gpar(col=scol, fontsize=od_fontsize) )
-        # dev.off()
-
-        # coin suit
-        filename <- file.path(arg$directory, sticker_filename("coin_suit", i_s, ""))
-        ppsvg(filename)
-        grid.newpage()
-        draw_coin_suit(i_s, arg)
-        dev.off()
-
-        # chip suit
-        filename <- file.path(arg$directory, sticker_filename("chip_suit", i_s, ""))
-        ppsvg(filename)
-        grid.newpage()
-        draw_chip_suit(i_s, arg)
-        dev.off()
-
-        # suit dice
-        filename <- file.path(arg$directory, sticker_filename("suit_die", i_s, ""))
-        ppsvg(filename)
-        grid.newpage()
-        draw_suit_die_face(i_s, arg)
-        dev.off()
-
-        # pawn saucer suit
-        filename <- file.path(arg$directory, sticker_filename("saucer_suit", i_s, ""))
-        ppsvg(filename)
-        grid.newpage()
-        draw_pawn_saucer_suit(i_s, arg)
-        dev.off()
-    }
-
-    # pawn saucer hidden
-    filename <- file.path(arg$directory, sticker_filename("saucer_hidden", "", ""))
-    ppsvg(filename)
-    grid.newpage()
-    draw_pawn_saucer_suit(5, arg)
-    dev.off()
-
-    # suit dice
-    filename <- file.path(arg$directory, sticker_filename("suit_die", "joker", ""))
-    ppsvg(filename)
-    grid.newpage()
-    draw_suit_die_face(5, arg)
-    dev.off()
-
-    # suit/rank ace
-    filename <- file.path(arg$directory, sticker_filename("suit_die", "ace", ""))
-    ppsvg(filename)
-    grid.newpage()
-    draw_suit_die_face(5, arg)
-    dev.off()
-
-    # rank dice
-    for (i_r in seq(along=arg$rank_symbols)) {
-        filename <- file.path(arg$directory, sticker_filename("rank_die", "", i_r))
-        ppsvg(filename)
-        grid.newpage()
-        draw_rankdie(i_r, arg)
-        dev.off()
-
-        # coin value
-        filename <- file.path(arg$directory, sticker_filename("coin_value", "", i_r))
-        ppsvg(filename)
-        grid.newpage()
-        draw_coin_value(i_r, arg)
-        dev.off()
-    }
-
-    filename <- file.path(arg$directory, sticker_filename("suit_die", "null", ""))
-    ppsvg(filename)
-    grid.newpage()
-    draw_suitdie_null(arg)
-    dev.off()
-
-    # # tile back
-    # filename <- file.path(arg$directory, sticker_filename("tile_back", "", ""))
-    # ppsvg(filename)
-    # grid.newpage()
-    # grid.rect(gp = gpar(fill=bcol))
-    # if (arg$add_bleed_lines)
-    #     add_bleed_lines(arg, "sticker")
-
-    # grid.lines(x=0.5, gp=gpar(col=arg$suit_colors[5], lwd=8))
-    # grid.lines(y=0.5, gp=gpar(col=arg$suit_colors[5], lwd=8))
-    # dev.off()
-}
+# make_stickers <- function(arg) {
+#     circle_lwd <- 22
+#     cr <- 0.45
+# 
+#     for (i_s in 1:4) {
+#         for (i_r in 1:6) {
+# 
+#             # # tile value
+#             # filename <- file.path(arg$directory, sticker_filename("tile_value", i_s, i_r))
+#             # ppsvg(filename)
+#             # grid.newpage()
+#             # grid.rect(gp = gpar(fill=bcol))
+#             # if (arg$add_bleed_lines)
+#             #     add_bleed_lines(arg, "sticker")
+#             # symbol <- ifelse(i_r == 2, ace_symbol, rank_symbol)
+#             # grid.text(symbol, gp = gpar(col=scol, fontsize=od_fontsize) )
+#             # dev.off()
+# 
+#             # die
+#             filename <- file.path(arg$directory, sticker_filename("die", i_s, i_r))
+#             ppsvg(filename)
+#             grid.newpage()
+#             draw_die_face(i_s, i_r, arg)
+#             dev.off()
+# 
+#             # chip value
+#             filename <- file.path(arg$directory, sticker_filename("chip_value", i_s, i_r))
+#             ppsvg(filename)
+#             grid.newpage()
+#             draw_chip_value(i_s, i_r, arg)
+#             dev.off()
+# 
+#         }
+#         # # tile suite
+#         # filename <- file.path(arg$directory, sticker_filename("tile_suite", i_s, ""))
+#         # ppsvg(filename)
+#         # grid.newpage()
+#         # grid.rect(gp = gpar(fill=bcol))
+#         # if (arg$add_bleed_lines)
+#         #     add_bleed_lines(arg, "sticker")
+#         # grid.text(suit_symbol, gp = gpar(col=scol, fontsize=od_fontsize) )
+#         # dev.off()
+# 
+#         # coin suit
+#         filename <- file.path(arg$directory, sticker_filename("coin_suit", i_s, ""))
+#         ppsvg(filename)
+#         grid.newpage()
+#         draw_coin_suit(i_s, arg)
+#         dev.off()
+# 
+#         # chip suit
+#         filename <- file.path(arg$directory, sticker_filename("chip_suit", i_s, ""))
+#         ppsvg(filename)
+#         grid.newpage()
+#         draw_chip_suit(i_s, arg)
+#         dev.off()
+# 
+#         # suit dice
+#         filename <- file.path(arg$directory, sticker_filename("suit_die", i_s, ""))
+#         ppsvg(filename)
+#         grid.newpage()
+#         draw_suit_die_face(i_s, arg)
+#         dev.off()
+# 
+#         # pawn saucer suit
+#         filename <- file.path(arg$directory, sticker_filename("saucer_suit", i_s, ""))
+#         ppsvg(filename)
+#         grid.newpage()
+#         draw_pawn_saucer_suit(i_s, arg)
+#         dev.off()
+#     }
+# 
+#     # pawn saucer hidden
+#     filename <- file.path(arg$directory, sticker_filename("saucer_hidden", "", ""))
+#     ppsvg(filename)
+#     grid.newpage()
+#     draw_pawn_saucer_suit(5, arg)
+#     dev.off()
+# 
+#     # suit dice
+#     filename <- file.path(arg$directory, sticker_filename("suit_die", "joker", ""))
+#     ppsvg(filename)
+#     grid.newpage()
+#     draw_suit_die_face(5, arg)
+#     dev.off()
+# 
+#     # suit/rank ace
+#     filename <- file.path(arg$directory, sticker_filename("suit_die", "ace", ""))
+#     ppsvg(filename)
+#     grid.newpage()
+#     draw_suit_die_face(5, arg)
+#     dev.off()
+# 
+#     # rank dice
+#     for (i_r in seq(along=arg$rank_symbols)) {
+#         filename <- file.path(arg$directory, sticker_filename("rank_die", "", i_r))
+#         ppsvg(filename)
+#         grid.newpage()
+#         draw_rankdie(i_r, arg)
+#         dev.off()
+# 
+#         # coin value
+#         filename <- file.path(arg$directory, sticker_filename("coin_value", "", i_r))
+#         ppsvg(filename)
+#         grid.newpage()
+#         draw_coin_value(i_r, arg)
+#         dev.off()
+#     }
+# 
+#     filename <- file.path(arg$directory, sticker_filename("suit_die", "null", ""))
+#     ppsvg(filename)
+#     grid.newpage()
+#     draw_suitdie_null(arg)
+#     dev.off()
+# 
+#     # # tile back
+#     # filename <- file.path(arg$directory, sticker_filename("tile_back", "", ""))
+#     # ppsvg(filename)
+#     # grid.newpage()
+#     # grid.rect(gp = gpar(fill=bcol))
+#     # if (arg$add_bleed_lines)
+#     #     add_bleed_lines(arg, "sticker")
+# 
+#     # grid.lines(x=0.5, gp=gpar(col=arg$suit_colors[5], lwd=8))
+#     # grid.lines(y=0.5, gp=gpar(col=arg$suit_colors[5], lwd=8))
+#     # dev.off()
+# }

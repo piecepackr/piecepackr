@@ -113,17 +113,15 @@ task :test do
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = " --directional_marker=none"
+    extra_flags = " --directional_marker=none --invert_colors"
     sh "exec/configure_piecepack" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,darkolivegreen3,lightblue2,grey"
     deck_label = " --deck_label=4french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = light_scheme + " --style=simple_hex --directional_marker=matching"
-    file = "4french.json"
-    sh "exec/configure_piecepack" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' --file=' + file
-    sh "exec/make_piecepack --file=" + file
+    extra_flags = light_scheme + " --style=simple_hex --directional_marker=matching --invert_colors.unsuited"
+    sh "exec/configure_piecepack" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     # set_name = " --set_name='TLD Euchre Piecepack, French Suits (v0.1)'"
     # deck_label = " --deck_label=french"
