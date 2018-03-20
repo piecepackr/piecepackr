@@ -502,7 +502,7 @@ draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     scol <- get_suit_color("chip_face", i_s, arg)
     suit_symbol <- arg$suit_symbols[i_s]
     if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- arg$suit_symbols[5] #### Or arg$suit_symbols[i_s]? or a style?
+        rank_symbol <- arg$suit_symbols[i_s] #### Or arg$suit_symbols[5]? or a style?
     else
         rank_symbol <- arg$rank_symbols.chip_face[i_r]
 
