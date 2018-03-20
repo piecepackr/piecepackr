@@ -129,7 +129,7 @@ make_set <- function(opts) {
         # Draw components
         for (i_r in 1:6) {
             seekViewport(paste0("tile.front.", i_r))
-            draw_tile_front(i_s, i_r, opts)
+            draw_tile_face(i_s, i_r, opts)
             seekViewport(paste0("tile.back.", i_r))
             draw_tile_back(opts)
         }
@@ -138,7 +138,7 @@ make_set <- function(opts) {
         l_coins <- list()
         for(i_r in 1:6) {
             seekViewport(paste0("coin.suit.", i_r))
-            draw_coin_suit(i_s, opts)
+            draw_coin_back(i_s, opts)
             seekViewport(paste0("coin.value.", i_r))
             draw_coin_value(i_r, opts)
         }
@@ -279,9 +279,9 @@ make_set <- function(opts) {
             seekViewport(paste0("ppdie.", i_s, i_r))
             draw_die_face(i_s, i_r, opts)
             seekViewport(paste0("chips.suit.", i_s, i_r))
-            draw_chip_suit(i_s, opts)
+            draw_chip_back(i_s, opts)
             seekViewport(paste0("chips.value.", i_s, i_r))
-            draw_chip_value(i_s, i_r, opts)
+            draw_chip_face(i_s, i_r, opts)
         }
     }
 

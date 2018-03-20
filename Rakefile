@@ -107,13 +107,13 @@ task :test do
     deck_label = " --deck_label=2latin"
     suit_symbols = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = "  --invert_colors.suited --directional_marker=matching"
+    extra_flags = "  --invert_colors.suited --directional_marker=matching "
     sh "exec/configure_piecepack" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     deck_label = " --deck_label=3french"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     rank_symbols = " --rank_symbols='N,A,2,3,4,5'"
-    extra_flags = " --directional_marker=none --invert_colors"
+    extra_flags = " --directional_marker=none --background_color.unsuited=orange"
     sh "exec/configure_piecepack" + set_name + deck_label + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     light_scheme = " --suit_colors=hotpink2,dimgrey,darkolivegreen3,lightblue2,grey"

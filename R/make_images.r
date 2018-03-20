@@ -24,6 +24,68 @@ grid.inversecircle <- function() {
     grid.polygon(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white"))
 }
 
+get_background_color_helper <- function(component, i_s, arg) {
+    suited <- is_suited(component)
+    if (suited && !is.null(arg$background_color.suited)) {
+        arg$background_color.suited
+    } else if (!suited && !is.null(arg$background_color.unsuited)) {
+        arg$background_color.unsuited
+    } else {
+        arg$background_color
+    }
+}
+
+get_suit_color_helper <- function(component, i_s, arg) {
+    arg$suit_colors[i_s]
+}
+
+get_background_color <- function(component, i_s, arg) {
+    bcol <- get_background_color_helper(component, i_s, arg)
+    scol <- get_suit_color_helper(component, i_s, arg)
+    if (should_invert(component, arg))
+        scol
+    else
+        bcol
+}
+
+get_suit_color <- function(component, i_s, arg) {
+    bcol <- get_background_color_helper(component, i_s, arg)
+    scol <- get_suit_color_helper(component, i_s, arg)
+    if (should_invert(component, arg))
+        bcol
+    else
+        scol
+}
+
+should_invert <- function(component, arg) {
+    suited <- is_suited(component)
+    if (suited && !is.null(arg$invert_colors.suited)) {
+        arg$invert_colors.suited
+    } else if (!suited && !is.null(arg$invert_colors.unsuited)) {
+        arg$invert_colors.unsuited
+    } else {
+        arg$invert_colors
+    }
+}
+
+is_suited <- function(component) {
+    switch(component,
+           tile_back = FALSE,
+           tile_face = TRUE, #### joker?
+           coin_back = TRUE,
+           coin_face = FALSE,
+           die = TRUE,
+           rank_die = FALSE,
+           suit_die = TRUE,
+           suit_rank_die = TRUE, #### null
+           saucer_face = TRUE,
+           saucer_back = FALSE,
+           pawn = TRUE,
+           belt = TRUE,
+           chip_face = TRUE,
+           chip_back = TRUE)
+}
+
 make_preview <- function(arg) {
     dir <- arg$directory
 
@@ -49,20 +111,20 @@ make_preview <- function(arg) {
     # Draw components
     for (ii in 1:4) {
         seekViewport(paste0("tile.", ii))
-        draw_tile_front(ii, 2, arg)
+        draw_tile_face(ii, 2, arg)
     }
     seekViewport(paste0("coin.1"))
     draw_coin_value(1, arg)
     seekViewport(paste0("coin.2"))
     draw_coin_value(2, arg)
     seekViewport(paste0("coin.3"))
-    draw_coin_suit(4, arg)
+    draw_coin_back(4, arg)
     seekViewport(paste0("coin.4"))
     draw_coin_value(3, arg)
     seekViewport(paste0("coin.5"))
-    draw_coin_suit(2, arg)
+    draw_coin_back(2, arg)
     seekViewport(paste0("coin.6"))
-    draw_coin_suit(1, arg)
+    draw_coin_back(1, arg)
 
     dev.off()
 }
@@ -146,43 +208,35 @@ s_offset_dir <- 0.15
 s_size_dir <- 12
 
 draw_pawn <- function(i_s, arg) {
-    suit_color <- arg$suit_colors[i_s]
     suit_symbol <- arg$suit_symbols[i_s]
-    if (should_invert("pawn", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
+    bcol <- get_background_color("pawn", i_s, arg)
+    scol <- get_suit_color("pawn", i_s, arg)
+    neutral_col <- arg$suit_colors[5]
+
     grid.rect(gp = gpar(fill=bcol))
     gp_tr <- gpar(col=scol, fontsize=40)
     grid.text(suit_symbol, y=0.65, rot=180, gp=gp_tr)
     grid.text(suit_symbol, y=0.35, rot=0, gp=gp_tr)
-    grid.lines(y=0.5, gp=gpar(col=arg$suit_colors[5], lty="dashed"))
-    grid.lines(y=0.1, gp=gpar(col=arg$suit_colors[5], lty="dashed"))
-    grid.lines(y=0.9, gp=gpar(col=arg$suit_colors[5], lty="dashed"))
-    grid.rect(gp = gpar(col=arg$suit_colors[5], fill=NA))
+    grid.lines(y=0.5, gp=gpar(col=neutral_col, lty="dashed"))
+    grid.lines(y=0.1, gp=gpar(col=neutral_col, lty="dashed"))
+    grid.lines(y=0.9, gp=gpar(col=neutral_col, lty="dashed"))
+    grid.rect(gp = gpar(col=neutral_col, fill=NA))
 
     invisible(NULL)
 }
 
 draw_pawn_belt <- function(i_s, arg) {
-    suit_color <- arg$suit_colors[i_s]
     suit_symbol <- arg$suit_symbols[i_s]
-    if (should_invert("belt", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
+    bcol <- get_background_color("belt", i_s, arg)
+    scol <- get_suit_color("belt", i_s, arg)
+    neutral_col <- arg$suit_colors[5]
+
     grid.rect(gp = gpar(fill=bcol))
     gp_tr <- gpar(col=scol, fontsize=20)
     grid.text(suit_symbol, gp=gp_tr)
     grid.lines(y=0.9, gp=gpar(col=scol, lwd=8))
     grid.lines(y=0.1, gp=gpar(col=scol, lwd=8))
-    grid.rect(gp = gpar(col=arg$suit_colors[5], fill=NA))
+    grid.rect(gp = gpar(col=neutral_col, fill=NA))
 
     invisible(NULL)
 }
@@ -208,28 +262,26 @@ make_pawns <- function(arg) {
 }
 
 draw_joker_tile_face <- function(arg, draw_border = TRUE) {
-    if (should_invert("tile_face", arg)) {
-        bcol <- arg$suit_colors[5]
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- arg$suit_colors[5]
-    }
-    #### Add option to use each of four suits instead
+    bcol <- get_background_color("tile_face", 5, arg)
+    scol <- get_suit_color("tile_face", 5, arg)
+    hexline_col <- get_suit_color("tile_face", 5, arg) #### use scol? or add a style?
+    checker_col <- arg$suit_colors[5] #### won't show hex lines
+
+    #### Add option to use each of four suits instead?
     symbol.1 <- arg$suit_symbols[5]
     symbol.2 <- arg$suit_symbols[5]
     symbol.3 <- arg$suit_symbols[5]
     symbol.4 <- arg$suit_symbols[5]
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_checkers) {
-        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
-        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
+        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=checker_col))
+        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=checker_col))
     }
     if (arg$add_bleed_lines) {
         add_bleed_lines(arg, "tile")
     }
     if (arg$style == "simple_hex") {
-        add_hexlines(arg, hl_col=scol)
+        add_hexlines(arg, hl_col=hexline_col)
     }
     gp_tr <- gpar(col=scol, fontsize=fs_ts)
     grid.text(symbol.1, x=0.25, y=.75, gp=gp_tr)
@@ -251,12 +303,16 @@ fs_tr <- 72 #### font size tile rank
 fs_ts <- 32  #### font size tile suit
 
 draw_tile_back <- function(arg, draw_border = TRUE) {
-    grid.rect(gp = gpar(fill=arg$background_color))
+    bcol <- get_background_color("tile_back", 5, arg)
+    scol <- get_suit_color("tile_back", 5, arg)
+    hexline_col <- get_suit_color("tile_back", 5, arg) #### use scol? or add a style?
+    
+    grid.rect(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "tile")
-    gp_gl <- gpar(col=arg$suit_colors[5], lwd=8, lineend="square")
+    gp_gl <- gpar(col=scol, lwd=8, lineend="square")
     if (arg$style == "simple_hex") 
-        add_hexlines(arg)
+        add_hexlines(arg, hl_col=hexline_col)
     # width <- c(0.02, 0.98) # avoid bleading over the edge
     # grid.lines(x=0.5, y=width, gp=gp_gl)
     # grid.lines(y=0.5, x=width, gp=gp_gl)
@@ -267,30 +323,26 @@ draw_tile_back <- function(arg, draw_border = TRUE) {
     invisible(NULL)
 }
 
-draw_tile_front <- function(i_s, i_r, arg, draw_border = TRUE) {
+draw_tile_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
+    bcol <- get_background_color("tile_face", i_s, arg)
+    scol <- get_suit_color("tile_face", i_s, arg)
+    hexline_col <- get_suit_color("tile_face", 5, arg) #### use scol? or add a style?
+    checker_col <- arg$suit_colors[5] #### won't show hex lines
     if (i_r == 2 && arg$use_suit_as_ace)
         rank_symbol <- suit_symbol
     else
         rank_symbol <- arg$rank_symbols[i_r]
 
-    if (should_invert("tile_face", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "tile")
     if (arg$add_checkers) {
-        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
-        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=arg$suit_colors[5]))
+        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=checker_col))
+        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=checker_col))
     }
     if (arg$style == "simple_hex")
-        add_hexlines(arg, hl_col=scol)
+        add_hexlines(arg, hl_col=hexline_col) 
 
     gp_tr <- gpar(col=scol, fontsize=fs_tr)
     grid.text(rank_symbol, gp=gp_tr)
@@ -329,50 +381,22 @@ make_tiles <- function(arg) {
             filename <- file.path(arg$directory, tile_filename("front", i_s, i_r))
             ppsvg(filename)
             grid.newpage()
-            draw_tile_front(i_s, i_r, arg)
+            draw_tile_face(i_s, i_r, arg)
             dev.off()
         }
     }
 }
 
-should_invert <- function(component, arg) {
-    suited <- is_suited(component)
-    if (suited && !is.null(arg$invert_colors.suited)) {
-        arg$invert_colors.suited
-    } else if (!suited && !is.null(arg$invert_colors.unsuited)) {
-        arg$invert_colors.unsuited
-    } else {
-        arg$invert_colors
-    }
-}
+add_directional_marker <- function(component, i_s, arg) {
+    scol <- get_suit_color(component, i_s, arg)
+    neutral_col <- arg$suit_colors[5]
 
-is_suited <- function(component) {
-    switch(component,
-           tile_back = FALSE,
-           tile_face = TRUE, #### joker?
-           coin_back = TRUE,
-           coin_face = FALSE,
-           die = TRUE,
-           rank_die = FALSE,
-           suit_die = TRUE,
-           suit_rank_die = TRUE, #### null
-           saucer_face = TRUE,
-           saucer_back = FALSE,
-           pawn = TRUE,
-           belt = TRUE,
-           chip_face = TRUE,
-           chip_back = TRUE)
-}
-
-add_directional_marker <- function(i_s, component, arg) {
     if (arg$directional_marker == "none") {
         dcol <- NA
     } else if (arg$directional_marker == "neutral") {
-        dcol <- arg$suit_colors[5]
-    } else if (should_invert(component, arg)) { 
-        dcol <- arg$background_color
+        dcol <- neutral_col
     } else {
-        dcol <- arg$suit_colors[i_s]
+        dcol <- scol
     }
     grid.lines(x=c(0.5, 0.5), y=c(0.90, 0.95), gp=gpar(col=dcol, lwd=10))
 }
@@ -382,14 +406,9 @@ oc_fontsize <- 30 # orthodox coin font size
 
 draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
-    if (should_invert("suit_die", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
+    bcol <- get_background_color("suit_die", i_s, arg)
+    scol <- get_suit_color("suit_die", i_s, arg)
+
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
@@ -402,41 +421,39 @@ draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
 
 draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
     component <- ifelse(i_s < 5, "saucer_face", "saucer_back")
-    if (should_invert(component, arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
+    bcol <- get_background_color(component, i_s, arg)
+    scol <- get_suit_color(component, i_s, arg)
+
     grid.circle(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(i_s, component, arg)
+    add_directional_marker(component, i_s, arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
 
 draw_rankdie <- function(i_r, arg, draw_border = TRUE) {
-    rank_symbol <- arg$rank_symbols[i_r]
+    bcol <- get_background_color("rank_die", 5, arg)
+    scol <- get_suit_color("rank_die", 5, arg)
     if (i_r == 2 && arg$use_suit_as_ace)
         rank_symbol <- arg$suit_symbols[5]
-    color <- arg$suit_colors[5]
+    else
+        rank_symbol <- arg$rank_symbols[i_r]
+
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
-    grid.rect(gp = gpar(fill=arg$background_color))
-    grid.text(rank_symbol, gp = gpar(col=color, fontsize=od_fontsize) )
+    grid.rect(gp = gpar(fill=bcol))
+    grid.text(rank_symbol, gp = gpar(col=scol, fontsize=od_fontsize) )
     if (draw_border) 
         grid.rect(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
 
 draw_suitdie_null <- function(arg, draw_border = TRUE) {
-    grid.rect(gp = gpar(fill=arg$background_color))
+    grid.rect(gp = gpar(fill=arg$background_color)) #### don't use get_background_color?
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     if (draw_border) 
@@ -445,15 +462,18 @@ draw_suitdie_null <- function(arg, draw_border = TRUE) {
 }
 
 draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
+    bcol <- get_background_color("coin_face", 5, arg)
+    scol <- get_suit_color("coin_face", 5, arg)
     if (i_r == 2 && arg$use_suit_as_ace)
         rank_symbol <- arg$suit_symbols[5]
     else
         rank_symbol <- arg$rank_symbols[i_r]
-    grid.circle(gp = gpar(fill=arg$background_color))
+
+    grid.circle(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
-    grid.text(rank_symbol, gp = gpar(col=arg$suit_colors[5], fontsize=oc_fontsize) )
-    add_directional_marker(5, "coin_face", arg)
+    grid.text(rank_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
+    add_directional_marker("coin_face", 5, arg)
     if (draw_border) {
         grid.circle(gp=gpar(col="grey", fill=NA))
     }
@@ -461,93 +481,69 @@ draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
 }
 
 draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
-    suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
+    bcol <- get_background_color("die", i_s, arg)
+    scol <- get_suit_color("die", i_s, arg)
     if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- suit_symbol
+        rank_symbol <- arg$suit_symbols[i_s]
     else
         rank_symbol <- arg$rank_symbols[i_r]
-
-    if (should_invert("die", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
 
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
-    symbol <- ifelse(i_r == 2 && arg$use_suit_as_ace, 
-                     suit_symbol, rank_symbol)
-    grid.text(symbol, gp = gpar(col=scol, fontsize=od_fontsize))
+    grid.text(rank_symbol, gp = gpar(col=scol, fontsize=od_fontsize))
     if (draw_border) 
         grid.rect(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
 
-draw_chip_value <- function(i_s, i_r, arg, draw_border = TRUE) {
+draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
+    bcol <- get_background_color("chip_face", i_s, arg)
+    scol <- get_suit_color("chip_face", i_s, arg)
     suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
-    rank_symbol <- arg$rank_symbols.chip_face[i_r] #### don't use ``use_suit_as_ace``
+    if (i_r == 2 && arg$use_suit_as_ace)
+        rank_symbol <- arg$suit_symbols[5] #### Or arg$suit_symbols[i_s]? or a style?
+    else
+        rank_symbol <- arg$rank_symbols.chip_face[i_r]
 
-    if (should_invert("chip_face", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
     grid.circle(gp = gpar(fill=bcol))
     # grid.circle(r=cr, gp=gpar(col=scol, lwd=circle_lwd, fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(rank_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(i_s, "chip_face", arg)
+    add_directional_marker("chip_face", i_s, arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
 
-draw_coin_suit <- function(i_s, arg, draw_border = TRUE) {
+draw_coin_back <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
+    bcol <- get_background_color("coin_back", i_s, arg)
+    scol <- get_suit_color("coin_back", i_s, arg)
 
-    if (should_invert("coin_back", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
     grid.circle(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize) )
-    add_directional_marker(i_s, "coin_back", arg)
+    add_directional_marker("coin_back", i_s, arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
 }
 
-draw_chip_suit <- function(i_s, arg, draw_border = TRUE) {
+draw_chip_back <- function(i_s, arg, draw_border = TRUE) {
     suit_symbol <- arg$suit_symbols[i_s]
-    suit_color <- arg$suit_colors[i_s]
+    suit_symbol <- arg$suit_symbols[i_s]
+    bcol <- get_background_color("chip_back", i_s, arg)
+    scol <- get_suit_color("chip_back", i_s, arg)
 
-    if (should_invert("chip_back", arg)) {
-        bcol <- suit_color
-        scol <- arg$background_color
-    } else {
-        bcol <- arg$background_color
-        scol <- suit_color
-    }
     grid.circle(gp = gpar(fill=bcol))
     # grid.circle(r=cr, gp=gpar(col=scol, lwd=circle_lwd, fill=bcol))
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
     grid.text(suit_symbol, gp = gpar(col=scol, fontsize=oc_fontsize))
-    add_directional_marker(i_s, "chip_back", arg)
+    add_directional_marker("chip_back", i_s, arg)
     if (draw_border) 
         grid.circle(gp=gpar(col="grey", fill=NA))
     invisible(NULL)
@@ -582,7 +578,7 @@ draw_chip_suit <- function(i_s, arg, draw_border = TRUE) {
 #             filename <- file.path(arg$directory, sticker_filename("chip_value", i_s, i_r))
 #             ppsvg(filename)
 #             grid.newpage()
-#             draw_chip_value(i_s, i_r, arg)
+#             draw_chip_face(i_s, i_r, arg)
 #             dev.off()
 # 
 #         }
@@ -600,14 +596,14 @@ draw_chip_suit <- function(i_s, arg, draw_border = TRUE) {
 #         filename <- file.path(arg$directory, sticker_filename("coin_suit", i_s, ""))
 #         ppsvg(filename)
 #         grid.newpage()
-#         draw_coin_suit(i_s, arg)
+#         draw_coin_back(i_s, arg)
 #         dev.off()
 # 
 #         # chip suit
 #         filename <- file.path(arg$directory, sticker_filename("chip_suit", i_s, ""))
 #         ppsvg(filename)
 #         grid.newpage()
-#         draw_chip_suit(i_s, arg)
+#         draw_chip_back(i_s, arg)
 #         dev.off()
 # 
 #         # suit dice

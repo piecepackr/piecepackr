@@ -1,7 +1,6 @@
 split <- function(x, sep=",") { strsplit(x, sep)[[1]] } 
 
-#' @export
-make_style <- function(args=commandArgs(TRUE)) {
+configuration_options <- function(args=commandArgs(TRUE)) {
     default_str <- "(default %default)"
     parser <- OptionParser("Program to make piecepack images")
     parser <- add_option(parser, "--set_label", default="collection", help=default_str)
@@ -33,6 +32,13 @@ make_style <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, c("-f", "--file"), default=NULL, help="Filename to write style to (default outputs to standard output)")
 
     opts <- parse_args(parser, args)
+    opts
+}
+
+
+#' @export
+make_style <- function(args=commandArgs(TRUE)) {
+    opts <- configuration_options(args)
     filename <- opts$file
     opts$file <- NULL
     opts$help <- NULL
@@ -44,21 +50,7 @@ make_style <- function(args=commandArgs(TRUE)) {
     }
 }
 
-#' @export
-
-read_style <- function(args=commandArgs(TRUE)) {
-    parser <- OptionParser()
-    parser <- add_option(parser, c('-f', '--file'), default=NULL, help="Source of piecepack style information (default stdin input)")
-    opts <- parse_args(parser, args)
-
-    if (is.null(opts$file)) 
-        con <- file("stdin")
-    else 
-        con <- file(opts$file)
-    
-    opts <- jsonlite::fromJSON(readLines(con))
-    close(con)
-
+process_configuration <- function(opts) {
     opts$parallel <- FALSE
     opts$fast <- TRUE
     opts$add_checkers <- FALSE
@@ -99,6 +91,24 @@ read_style <- function(args=commandArgs(TRUE)) {
     # opts$suit_colors <- rep(c("dimgrey"), 4)
     # opts$suit_colors <- rep(c("white"), 4)
 
+    opts
+}
+
+#' @export
+read_style <- function(args=commandArgs(TRUE)) {
+    parser <- OptionParser()
+    parser <- add_option(parser, c('-f', '--file'), default=NULL, help="Source of piecepack style information (default stdin input)")
+    opts <- parse_args(parser, args)
+
+    if (is.null(opts$file)) 
+        con <- file("stdin")
+    else 
+        con <- file(opts$file)
+    
+    opts <- jsonlite::fromJSON(readLines(con))
+    close(con)
+
+    opts <- process_configuration(opts)
     opts
 }
 
