@@ -9,5 +9,6 @@
   "style": ["basic"],
   "suit_colors": ["black,black,black,black,grey40"],
   "background_color": ["grey70"],
+  "invert_colors": [false],
   "invert_colors.suited": [true]
 }

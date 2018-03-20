@@ -9,5 +9,5 @@
   "style": ["simple_hex"],
   "suit_colors": ["darkred,black,darkgreen,darkblue,grey"],
   "background_color": ["white"],
-  "invert_colors.suited": [false]
+  "invert_colors": [false]
 }
