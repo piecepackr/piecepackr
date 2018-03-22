@@ -57,6 +57,19 @@ get_suit_color <- function(component, i_s, arg) {
         scol
 }
 
+get_suit_symbol <- function(component, i_s, arg) {
+    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol
+}
+
+get_rank_symbol <- function(component, i_s, i_r, arg) {
+    if (i_r == 2 && arg$use_suit_as_ace)
+        rank_symbol <- arg$suit_symbols[i_s]
+    else
+        rank_symbol <- arg$rank_symbols[i_r]
+    rank_symbol
+}       
+
 should_invert <- function(component, arg) {
     suited <- is_suited(component)
     if (suited && !is.null(arg$invert_colors.suited)) {
@@ -71,7 +84,7 @@ should_invert <- function(component, arg) {
 is_suited <- function(component) {
     switch(component,
            tile_back = FALSE,
-           tile_face = TRUE, #### joker?
+           tile_face = TRUE, #### joker_tile_face?
            coin_back = TRUE,
            coin_face = FALSE,
            die = TRUE,
@@ -208,7 +221,7 @@ s_offset_dir <- 0.15
 s_size_dir <- 12
 
 draw_pawn <- function(i_s, arg) {
-    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol <- get_suit_symbol("pawn", i_s, arg)
     bcol <- get_background_color("pawn", i_s, arg)
     scol <- get_suit_color("pawn", i_s, arg)
     neutral_col <- arg$suit_colors[5]
@@ -226,7 +239,7 @@ draw_pawn <- function(i_s, arg) {
 }
 
 draw_pawn_belt <- function(i_s, arg) {
-    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol <- get_suit_symbol("belt", i_s, arg)
     bcol <- get_background_color("belt", i_s, arg)
     scol <- get_suit_color("belt", i_s, arg)
     neutral_col <- arg$suit_colors[5]
@@ -268,10 +281,11 @@ draw_joker_tile_face <- function(arg, draw_border = TRUE) {
     checker_col <- arg$suit_colors[5] #### won't show hex lines
 
     #### Add option to use each of four suits instead?
-    symbol.1 <- arg$suit_symbols[5]
-    symbol.2 <- arg$suit_symbols[5]
-    symbol.3 <- arg$suit_symbols[5]
-    symbol.4 <- arg$suit_symbols[5]
+    suit_symbol <- 
+    symbol.1 <- get_suit_symbol("tile_face", 5, arg) #### joker_tile_face?
+    symbol.2 <- get_suit_symbol("tile_face", 5, arg)
+    symbol.3 <- get_suit_symbol("tile_face", 5, arg)
+    symbol.4 <- get_suit_symbol("tile_face", 5, arg)
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_checkers) {
         grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=checker_col))
@@ -324,15 +338,12 @@ draw_tile_back <- function(arg, draw_border = TRUE) {
 }
 
 draw_tile_face <- function(i_s, i_r, arg, draw_border = TRUE) {
-    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol <- get_suit_symbol("tile_face", i_s, arg)
     bcol <- get_background_color("tile_face", i_s, arg)
     scol <- get_suit_color("tile_face", i_s, arg)
+    rank_symbol <- get_rank_symbol("tile_face", i_s, i_r, arg)
     hexline_col <- get_suit_color("tile_face", 5, arg) #### use scol? or add a style?
     checker_col <- arg$suit_colors[5] #### won't show hex lines
-    if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- suit_symbol
-    else
-        rank_symbol <- arg$rank_symbols[i_r]
 
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
@@ -405,7 +416,7 @@ od_fontsize <- 30 # orthodox die font size
 oc_fontsize <- 30 # orthodox coin font size
 
 draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
-    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol <- get_suit_symbol("suit_die", i_s, arg)
     bcol <- get_background_color("suit_die", i_s, arg)
     scol <- get_suit_color("suit_die", i_s, arg)
 
@@ -420,8 +431,8 @@ draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
 
 
 draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
-    suit_symbol <- arg$suit_symbols[i_s]
     component <- ifelse(i_s < 5, "saucer_face", "saucer_back")
+    suit_symbol <- get_suit_symbol(component, i_s, arg)
     bcol <- get_background_color(component, i_s, arg)
     scol <- get_suit_color(component, i_s, arg)
 
@@ -438,10 +449,7 @@ draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
 draw_rankdie <- function(i_r, arg, draw_border = TRUE) {
     bcol <- get_background_color("rank_die", 5, arg)
     scol <- get_suit_color("rank_die", 5, arg)
-    if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- arg$suit_symbols[5]
-    else
-        rank_symbol <- arg$rank_symbols[i_r]
+    rank_symbol <- get_rank_symbol("rank_die", 5, i_r, arg)
 
     if (arg$add_bleed_lines)
         add_bleed_lines(arg, "sticker")
@@ -464,10 +472,7 @@ draw_suitdie_null <- function(arg, draw_border = TRUE) {
 draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
     bcol <- get_background_color("coin_face", 5, arg)
     scol <- get_suit_color("coin_face", 5, arg)
-    if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- arg$suit_symbols[5]
-    else
-        rank_symbol <- arg$rank_symbols[i_r]
+    rank_symbol <- get_rank_symbol("coin_face", 5, i_r, arg)
 
     grid.circle(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
@@ -483,10 +488,7 @@ draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
 draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     bcol <- get_background_color("die", i_s, arg)
     scol <- get_suit_color("die", i_s, arg)
-    if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- arg$suit_symbols[i_s]
-    else
-        rank_symbol <- arg$rank_symbols[i_r]
+    rank_symbol <- get_rank_symbol("die", i_s, i_r, arg)
 
     grid.rect(gp = gpar(fill=bcol))
     if (arg$add_bleed_lines)
@@ -500,11 +502,8 @@ draw_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
 draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     bcol <- get_background_color("chip_face", i_s, arg)
     scol <- get_suit_color("chip_face", i_s, arg)
-    suit_symbol <- arg$suit_symbols[i_s]
-    if (i_r == 2 && arg$use_suit_as_ace)
-        rank_symbol <- arg$suit_symbols[i_s] #### Or arg$suit_symbols[5]? or a style?
-    else
-        rank_symbol <- arg$rank_symbols.chip_face[i_r]
+    suit_symbol <- get_suit_symbol("chip_face", i_s, arg)
+    rank_symbol <- get_rank_symbol("chip_face", i_s, i_r, arg)
 
     grid.circle(gp = gpar(fill=bcol))
     # grid.circle(r=cr, gp=gpar(col=scol, lwd=circle_lwd, fill=bcol))
@@ -518,7 +517,7 @@ draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
 }
 
 draw_coin_back <- function(i_s, arg, draw_border = TRUE) {
-    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol <- get_suit_symbol("coin_back", i_s, arg)
     bcol <- get_background_color("coin_back", i_s, arg)
     scol <- get_suit_color("coin_back", i_s, arg)
 
@@ -533,8 +532,7 @@ draw_coin_back <- function(i_s, arg, draw_border = TRUE) {
 }
 
 draw_chip_back <- function(i_s, arg, draw_border = TRUE) {
-    suit_symbol <- arg$suit_symbols[i_s]
-    suit_symbol <- arg$suit_symbols[i_s]
+    suit_symbol <- get_suit_symbol("chip_back", i_s, arg)
     bcol <- get_background_color("chip_back", i_s, arg)
     scol <- get_suit_color("chip_back", i_s, arg)
 
