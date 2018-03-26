@@ -1,14 +1,12 @@
 {
-  "set_label": ["dual_piecepacks_proof_of_concept_printer_friendly"],
-  "set_name": ["\"Dual piecepacks\" proof of concept (v0.5)"],
-  "deck_label": ["2latin"],
+  "deck_title": ["Latin-suited (Inverted color scheme)"],
+  "deck_filename": ["dual2latin"],
   "suit_symbols": ["🏆,🗡️,⚕️,𐇛,꩜"],
   "rank_symbols": [" ,A,2,3,4,5"],
-  "directional_marker": ["neutral"],
   "use_suit_as_ace": [true],
-  "style": ["basic"],
-  "suit_colors": ["darkred,black,darkgreen,darkblue,grey"],
-  "background_color": ["white"],
+  "family": ["Symbola"],
   "invert_colors": [false],
-  "invert_colors.suited": [true]
+  "invert_colors.suited": [true],
+  "rank_symbols.chip_face": ["A,B,C,D,E,F"],
+  "use_suit_as_ace.chip_face": [false]
 }

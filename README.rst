@@ -10,7 +10,7 @@ Install
 
 You'll need to install some system requirements::
 
-    $ sudo apt install ghostscript pdfsam rake r-base 
+    $ sudo apt install ghostscript pdfsam poppler-utils rake r-base 
 
 You'll also need to install the development version of grImport2 package and this package::
 
@@ -31,11 +31,23 @@ The software currently assumes one has installed:
 How to use
 ----------
 
-Although the API is in flux you run a working example that builds a "dual piecepacks" demo by running::
+One uses the ``exec/make_piecepack`` command to make a single PnP pdf of a piecepack deck.  One can arrange several PnP pdf's using the ``exec/arrange_piecepack`` command.  The ``exec/make_piecepack`` command requires JSON configuration either provided as Standard Input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``exec/configure_piecepack`` can be used to generate configuration files or you can manually modify one.  Although the API is in flux you can build the demo files and see the command-line calls used to build them by running::
 
-    $ rake dual
+    $ rake demo_name
 
-Besides building a "dual piecepacks" pdf this command will also print the command-line commands needed to build the pdf.  It runs the command-line programs ``exec/configure_piecepack``, ``exec/make_piecepack``, and ``exec/arrange_piecepacks``.  You can view sample configuration files for individual piecepacks in the ``configurations`` folder.
+Where ``demo_name`` is either
+
+dual
+  This will build the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept
+orthodox
+  This will build a non-configured piecepack, a piecepack-suited piecepack that complies with the `Anatomy of a Piecepack <http://www.piecepack.org/Anatomy.html>`_ standard, and a matching 2-color french-suited piecepack (aka a "Playing Cards" expansion).
+
+Configuration options
+---------------------
+
+``exec/configure_piecepack --help``: 
+
+.. include:: configurations/configure_piecepack_options.txt
 
 Licence
 -------

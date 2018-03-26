@@ -1,0 +1,362 @@
+| Usage: Program to make piecepack images
+| 
+| 
+| Options:
+| 	-h, --help
+| 		Show this help message and exit
+| 
+| 	--deck_title=DECK_TITLE
+| 		(default "Deck title")
+| 
+| 	--deck_filename=DECK_FILENAME
+| 		(default "deck_filename")
+| 
+| 	--suit_symbols=SUIT_SYMBOLS
+| 		(default "♠,♥,♣,♦,★")
+| 
+| 	--rank_symbols=RANK_SYMBOLS
+| 		(default "N,A,2,3,4,5")
+| 
+| 	--directional_marker=DIRECTIONAL_MARKER
+| 		(default "neutral")
+| 
+| 	--use_suit_as_ace
+| 		(default "FALSE")
+| 
+| 	--use_ace_as_ace
+| 		Opposite of use_suit_as_ace (default "TRUE")
+| 
+| 	--style=STYLE
+| 		"basic" or "simple_hex" (default "basic")
+| 
+| 	--family=FAMILY
+| 		Default font family (default "sans")
+| 
+| 	--suit_colors=SUIT_COLORS
+| 		(default "darkred,black,darkgreen,darkblue,grey")
+| 
+| 	--background_color=BACKGROUND_COLOR
+| 		(default "white")
+| 
+| 	--invert_colors
+| 		(default "FALSE")
+| 
+| 	--uninvert_colors
+| 		Opposite of invert_colors (default "FALSE")
+| 
+| 	-f FILE, --file=FILE
+| 		Filename to write configuration to (default outputs to standard output)
+| 
+| 	--background_color.suited=BACKGROUND_COLOR.SUITED
+| 		(default is value of "background_color" option)
+| 
+| 	--background_color.unsuited=BACKGROUND_COLOR.UNSUITED
+| 		(default is value of "background_color" option)
+| 
+| 	--invert_colors.suited
+| 		(default is value of "invert_colors" option)
+| 
+| 	--invert_colors.unsuited
+| 		(default is value of "invert_colors" option)
+| 
+| 	--uninvert_colors.suited
+| 		(default is value of "invert_colors" option)
+| 
+| 	--uninvert_colors.unsuited
+| 		(default is value of "invert_colors" option)
+| 
+| 	--rank_symbols.tile_back=RANK_SYMBOLS.TILE_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.tile_back=SUIT_SYMBOLS.TILE_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.tile_back
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.tile_back
+| 		Opposite of --use_ace_as_ace.tile_back
+| 
+| 	--background_color.tile_back=BACKGROUND_COLOR.TILE_BACK
+| 		default is value of background_color.unsuited
+| 
+| 	--invert_colors.tile_back
+| 		default is value of invert_colors.unsuited
+| 
+| 	--uninvert_colors.tile_back
+| 		default is value of invert_colors.unsuited
+| 
+| 	--rank_symbols.tile_face=RANK_SYMBOLS.TILE_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.tile_face=SUIT_SYMBOLS.TILE_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.tile_face
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.tile_face
+| 		Opposite of --use_ace_as_ace.tile_face
+| 
+| 	--background_color.tile_face=BACKGROUND_COLOR.TILE_FACE
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.tile_face
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.tile_face
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.coin_back=RANK_SYMBOLS.COIN_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.coin_back=SUIT_SYMBOLS.COIN_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.coin_back
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.coin_back
+| 		Opposite of --use_ace_as_ace.coin_back
+| 
+| 	--background_color.coin_back=BACKGROUND_COLOR.COIN_BACK
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.coin_back
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.coin_back
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.coin_face=RANK_SYMBOLS.COIN_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.coin_face=SUIT_SYMBOLS.COIN_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.coin_face
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.coin_face
+| 		Opposite of --use_ace_as_ace.coin_face
+| 
+| 	--background_color.coin_face=BACKGROUND_COLOR.COIN_FACE
+| 		default is value of background_color.unsuited
+| 
+| 	--invert_colors.coin_face
+| 		default is value of invert_colors.unsuited
+| 
+| 	--uninvert_colors.coin_face
+| 		default is value of invert_colors.unsuited
+| 
+| 	--rank_symbols.piecepack_die=RANK_SYMBOLS.PIECEPACK_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.piecepack_die=SUIT_SYMBOLS.PIECEPACK_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.piecepack_die
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.piecepack_die
+| 		Opposite of --use_ace_as_ace.piecepack_die
+| 
+| 	--background_color.piecepack_die=BACKGROUND_COLOR.PIECEPACK_DIE
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.piecepack_die
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.piecepack_die
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.rank_die=RANK_SYMBOLS.RANK_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.rank_die=SUIT_SYMBOLS.RANK_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.rank_die
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.rank_die
+| 		Opposite of --use_ace_as_ace.rank_die
+| 
+| 	--background_color.rank_die=BACKGROUND_COLOR.RANK_DIE
+| 		default is value of background_color.unsuited
+| 
+| 	--invert_colors.rank_die
+| 		default is value of invert_colors.unsuited
+| 
+| 	--uninvert_colors.rank_die
+| 		default is value of invert_colors.unsuited
+| 
+| 	--rank_symbols.suit_die=RANK_SYMBOLS.SUIT_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.suit_die=SUIT_SYMBOLS.SUIT_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.suit_die
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.suit_die
+| 		Opposite of --use_ace_as_ace.suit_die
+| 
+| 	--background_color.suit_die=BACKGROUND_COLOR.SUIT_DIE
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.suit_die
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.suit_die
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.suit_rank_die=RANK_SYMBOLS.SUIT_RANK_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.suit_rank_die=SUIT_SYMBOLS.SUIT_RANK_DIE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.suit_rank_die
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.suit_rank_die
+| 		Opposite of --use_ace_as_ace.suit_rank_die
+| 
+| 	--background_color.suit_rank_die=BACKGROUND_COLOR.SUIT_RANK_DIE
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.suit_rank_die
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.suit_rank_die
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.saucer_face=RANK_SYMBOLS.SAUCER_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.saucer_face=SUIT_SYMBOLS.SAUCER_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.saucer_face
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.saucer_face
+| 		Opposite of --use_ace_as_ace.saucer_face
+| 
+| 	--background_color.saucer_face=BACKGROUND_COLOR.SAUCER_FACE
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.saucer_face
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.saucer_face
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.saucer_back=RANK_SYMBOLS.SAUCER_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.saucer_back=SUIT_SYMBOLS.SAUCER_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.saucer_back
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.saucer_back
+| 		Opposite of --use_ace_as_ace.saucer_back
+| 
+| 	--background_color.saucer_back=BACKGROUND_COLOR.SAUCER_BACK
+| 		default is value of background_color.unsuited
+| 
+| 	--invert_colors.saucer_back
+| 		default is value of invert_colors.unsuited
+| 
+| 	--uninvert_colors.saucer_back
+| 		default is value of invert_colors.unsuited
+| 
+| 	--rank_symbols.pawn=RANK_SYMBOLS.PAWN
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.pawn=SUIT_SYMBOLS.PAWN
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.pawn
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.pawn
+| 		Opposite of --use_ace_as_ace.pawn
+| 
+| 	--background_color.pawn=BACKGROUND_COLOR.PAWN
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.pawn
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.pawn
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.pawn_belt=RANK_SYMBOLS.PAWN_BELT
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.pawn_belt=SUIT_SYMBOLS.PAWN_BELT
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.pawn_belt
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.pawn_belt
+| 		Opposite of --use_ace_as_ace.pawn_belt
+| 
+| 	--background_color.pawn_belt=BACKGROUND_COLOR.PAWN_BELT
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.pawn_belt
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.pawn_belt
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.chip_face=RANK_SYMBOLS.CHIP_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.chip_face=SUIT_SYMBOLS.CHIP_FACE
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.chip_face
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.chip_face
+| 		Opposite of --use_ace_as_ace.chip_face
+| 
+| 	--background_color.chip_face=BACKGROUND_COLOR.CHIP_FACE
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.chip_face
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.chip_face
+| 		default is value of invert_colors.suited
+| 
+| 	--rank_symbols.chip_back=RANK_SYMBOLS.CHIP_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--suit_symbols.chip_back=SUIT_SYMBOLS.CHIP_BACK
+| 		(default is value of "rank_symbols" option)
+| 
+| 	--use_suit_as_ace.chip_back
+| 		(default is value of "use_suit_as_ace" option)
+| 
+| 	--use_ace_as_ace.chip_back
+| 		Opposite of --use_ace_as_ace.chip_back
+| 
+| 	--background_color.chip_back=BACKGROUND_COLOR.CHIP_BACK
+| 		default is value of background_color.suited
+| 
+| 	--invert_colors.chip_back
+| 		default is value of invert_colors.suited
+| 
+| 	--uninvert_colors.chip_back
+| 		default is value of invert_colors.suited
+| 
+| 

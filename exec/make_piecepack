@@ -6,13 +6,6 @@ suppressPackageStartupMessages(library("piecepack"))
 
 opts <- read_style()
                
-sublist <- opts[c("set_name", "program", "copyright", "license1", "license2")]
-cfilename <- sprintf("svg/%s.json", opts$set_label)
-
-writeLines(jsonlite::toJSON(sublist), cfilename)
-
-opts$directory <- sprintf("svg/%s", opts$deck_label)
-
 make_images(opts)
 
 make_set(opts)

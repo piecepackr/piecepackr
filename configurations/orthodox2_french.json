@@ -1,0 +1,10 @@
+{
+  "deck_title": ["Orthodox-style 2-color french-suited piecepack (aka Playing Cards Expansion)"],
+  "deck_filename": ["orthodox2_french"],
+  "suit_symbols": ["♥,♠,♣,♦,★"],
+  "rank_symbols": [" ,A,2,3,4,5"],
+  "family": ["Symbola"],
+  "invert_colors": [false],
+  "rank_symbols.chip_face": ["A,B,C,D,E,F"],
+  "use_suit_as_ace.chip_face": [false]
+}

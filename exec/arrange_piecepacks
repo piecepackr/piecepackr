@@ -4,22 +4,14 @@ options(error = quote(dump.frames("last.dump", TRUE)))
 
 suppressPackageStartupMessages(library("piecepack"))
 
-collections <- get_collection()
-# collections <- unique(get_collection(directories))
+opts <- get_arrangement_opts()
 
+dir.create("collections", showWarnings=FALSE)
 
-if (dir.exists("collections")) { unlink("collections", recursive=TRUE) }
-dir.create("collections")
+dir.create("previews", showWarnings=FALSE)
 
-if (dir.exists("previews")) { unlink("previews", recursive=TRUE) }
-dir.create("previews")
+make_collection_preview(opts)
 
-cl <- parallel::makeCluster(mc <- getOption("cl.cores", parallel::detectCores()))
-
-# .po2 <- parallel::parLapply(cl, collections, make_preview)
-.po2 <- lapply(collections, make_collection_preview)
-
-# .po3 # parallel::parLapply(cl, collections, make_collection)
-.p03 <- lapply(collections, make_collection)
+make_collection(opts)
 
 invisible(NULL)

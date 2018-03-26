@@ -1,6 +1,6 @@
 {
-  "deck_title": ["Piecepack-suited (Un-inverted color scheme)"],
-  "deck_filename": ["dual1piecepack"],
+  "deck_title": ["Orthodox piecepack"],
+  "deck_filename": ["orthodox1_piecepack"],
   "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
   "rank_symbols": [" ,A,2,3,4,5"],
   "use_suit_as_ace": [true],
