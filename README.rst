@@ -47,9 +47,7 @@ orthodox
 Configuration options
 ---------------------
 
-``exec/configure_piecepack --help``: 
-
-.. include:: configurations/configure_piecepack_options.txt
+`exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/configure_piecepack_options.txt>`_
 
 Licence
 -------

@@ -30,7 +30,8 @@ desc "Install"
 task :install do
     sh 'sudo Rscript -e "suppressMessages(devtools::document())"'
     sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
-    sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
+    # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
+    sh 'exec/configure_piecepack --help > configurations/configure_piecepack_options.txt'
 end
 
 desc "Default piecepack demo"
