@@ -48,7 +48,7 @@ Options:
 		(default is not to draw any hexlines)
 
 	--directional_mark_theta=DIRECTIONAL_MARK_THETA
-		(default 135 for tile faces and 90 for non-tile-back components)
+		(default 135 for tile faces and die faces and 90 for everything else)
 
 	--font=FONT
 		Default font family (default "sans")

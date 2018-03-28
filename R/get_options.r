@@ -38,7 +38,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--hexline_colors", default=NULL,
                          help='(default is not to draw any hexlines)')
     parser <- add_option(parser, "--directional_mark_theta", default=NULL, type="double", 
-                         help='(default 135 for tile faces and 90 for non-tile-back components)')
+                         help='(default 135 for tile faces and die faces and 90 for everything else)')
 
     # Font
     parser <- add_option(parser, "--font", default=NULL,
