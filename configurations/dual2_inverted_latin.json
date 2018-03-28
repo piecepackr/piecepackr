@@ -1,12 +1,14 @@
 {
   "deck_title": ["Latin-suited (Inverted color scheme)"],
   "deck_filename": ["dual2latin"],
-  "suit_symbols": ["🏆,🗡️,⚕️,𐇛,꩜"],
   "rank_symbols": [" ,A,2,3,4,5"],
+  "suit_symbols": ["🏆,🗡️,⚕️,𐇛,꩜"],
+  "suit_symbols_scale": ["0.6,1,1,1.1,1.2"],
   "use_suit_as_ace": [true],
-  "family": ["Symbola"],
-  "invert_colors": [false],
+  "font": ["Symbola"],
   "invert_colors.suited": [true],
   "rank_symbols.chip_face": ["A,B,C,D,E,F"],
-  "use_suit_as_ace.chip_face": [false]
+  "directional_mark_symbols.chip_face": [",,,,"],
+  "use_suit_as_ace.chip_face": [false],
+  "directional_mark_symbols.chip_back": [",,,,"]
 }

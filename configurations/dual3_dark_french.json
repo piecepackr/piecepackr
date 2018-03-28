@@ -1,10 +1,10 @@
 {
   "deck_title": ["French-suited (Dark color scheme)"],
   "deck_filename": ["dual3french"],
-  "suit_symbols": ["♥,♠,♣,♦,★"],
   "rank_symbols": ["N,A,2,3,4,5"],
-  "style": ["simple_hex"],
-  "family": ["Symbola"],
-  "background_color": ["white"],
-  "invert_colors": [false]
+  "suit_symbols": ["♥,♠,♣,♦,★"],
+  "suit_symbols_scale": ["1,1,1,1,1.2,1.2"],
+  "hexline_colors": ["darkred,black,darkgreen,darkblue,grey"],
+  "font": ["Symbola"],
+  "background_color": ["white"]
 }

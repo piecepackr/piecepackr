@@ -1,11 +1,11 @@
 {
   "deck_title": ["French-suited (Light color scheme)"],
   "deck_filename": ["dual4french"],
-  "suit_symbols": ["♥,♠,♣,♦,★"],
   "rank_symbols": ["N,A,2,3,4,5"],
-  "style": ["simple_hex"],
-  "family": ["Symbola"],
+  "suit_symbols": ["♥,♠,♣,♦,★"],
+  "suit_symbols_scale": ["1,1,1,1,1.2,1.2"],
+  "hexline_colors": ["hotpink2,dimgrey,palegreen,lightblue2,grey"],
+  "font": ["Symbola"],
   "suit_colors": ["hotpink2,dimgrey,palegreen,lightblue2,grey"],
-  "background_color": ["white"],
-  "invert_colors": [false]
+  "background_color": ["white"]
 }

@@ -62,8 +62,8 @@ make_collection_preview <- function(arg) {
         grid.newpage()
         vp <- viewport(x=unit(4.25, "in"), y=unit(5.0, "in"), width=unit(8, "in"), height=unit(8, "in")) 
         pushViewport(vp)
-        grid.arrange(grobs=l_logos, ncol=2, newpage=FALSE, padding=0)
-        grid.arrange(grobs=l_squares, ncol=2, newpage=FALSE, padding=0)
+        gridExtra::grid.arrange(grobs=l_logos, ncol=2, newpage=FALSE, padding=0)
+        gridExtra::grid.arrange(grobs=l_squares, ncol=2, newpage=FALSE, padding=0)
         upViewport()
         make_preview_header(arg)
     }
@@ -79,7 +79,7 @@ make_set <- function(opts) {
     pdf_file <- paste0("pdf/", opts$deck_filename, ".pdf")
     unlink(pdf_file)
 
-    cairo_pdf(pdf_file, onefile=TRUE, width=8.5, height=11, family=opts$family)
+    cairo_pdf(pdf_file, onefile=TRUE, width=8.5, height=11, family=opts$font)
 
     l_piecepack_die <- list()
     for (i_s in 1:opts$n_suits) {
@@ -218,14 +218,14 @@ make_set <- function(opts) {
         seekViewport("main")
         addViewport(y=unit(3.8, "in"),width=unit(6, "in"), height=unit(0.75, "in"), name="pawnsaucers")
         seekViewport("pawnsaucers")
-        addViewport(x=1/8-1/16, width=1/8, name="pawnsaucer.face.4")
-        addViewport(x=2/8-1/16, width=1/8, name="pawnsaucer.back.4")
-        addViewport(x=3/8-1/16, width=1/8, name="pawnsaucer.face.3")
-        addViewport(x=4/8-1/16, width=1/8, name="pawnsaucer.back.3")
-        addViewport(x=5/8-1/16, width=1/8, name="pawnsaucer.face.2")
-        addViewport(x=6/8-1/16, width=1/8, name="pawnsaucer.back.2")
-        addViewport(x=7/8-1/16, width=1/8, name="pawnsaucer.face.1")
-        addViewport(x=8/8-1/16, width=1/8, name="pawnsaucer.back.1")
+        addViewport(x=1/8-1/16, width=1/8, name="pawnsaucer.face.1")
+        addViewport(x=2/8-1/16, width=1/8, name="pawnsaucer.back.1")
+        addViewport(x=3/8-1/16, width=1/8, name="pawnsaucer.face.2")
+        addViewport(x=4/8-1/16, width=1/8, name="pawnsaucer.back.2")
+        addViewport(x=5/8-1/16, width=1/8, name="pawnsaucer.face.3")
+        addViewport(x=6/8-1/16, width=1/8, name="pawnsaucer.back.3")
+        addViewport(x=7/8-1/16, width=1/8, name="pawnsaucer.face.4")
+        addViewport(x=8/8-1/16, width=1/8, name="pawnsaucer.back.4")
         seekViewport("main")
 
         die_x <- c(2, 4.5, 4.5, 2)
@@ -255,19 +255,19 @@ make_set <- function(opts) {
         seekViewport("joker.tile.back")
         draw_tile_back(opts)
         seekViewport("suitdie.0")
-        draw_suitdie_null(opts)
-        for (i_r in 1:4) {
-            seekViewport(paste0("suitdie.", i_r))
-            draw_suit_die_face(5-i_r, opts)
+        draw_suit_die_face(6, opts)
+        for (i_s in 1:4) {
+            seekViewport(paste0("suitdie.", i_s))
+            draw_suit_die_face(5-i_s, opts)
         }
         seekViewport(paste0("suitdie.", 5))
         draw_suit_die_face(5, opts)
         for (i_r in 1:6) {
             seekViewport(paste0("rankdie.", i_r))
-            draw_rankdie(i_r, opts)
+            draw_piecepack_die_face(opts$i_unsuit + 1, i_r, opts)
         }
         seekViewport("suitrankdie.1")
-        draw_rankdie(1, opts)
+        draw_piecepack_die_face(6, 1, opts)
         seekViewport("suitrankdie.2")
         draw_piecepack_die_face(5, 2, opts)
         for (i_r in 3:6) {

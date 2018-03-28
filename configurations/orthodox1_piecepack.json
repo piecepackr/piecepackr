@@ -1,11 +1,21 @@
 {
   "deck_title": ["Orthodox piecepack"],
   "deck_filename": ["orthodox1_piecepack"],
-  "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
   "rank_symbols": [" ,A,2,3,4,5"],
+  "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
+  "suit_symbols_scale": ["0.7,0.8,0.8,1.1,1.2,1.2"],
   "use_suit_as_ace": [true],
-  "family": ["Symbola"],
-  "invert_colors": [false],
+  "font": ["Symbola"],
+  "suit_colors": ["darkred,black,darkgreen,darkblue,black"],
+  "directional_mark_colors.coin_back": ["black,black,black,black,black"],
+  "directional_mark_colors.coin_face": ["black,black,black,black,black"],
+  "directional_mark_symbols.piecepack_die": [",,,,"],
+  "suit_symbols.saucer_face": ["●,●,●,●,"],
+  "suit_symbols_scale.saucer_face": ["0.5,0.5,0.5,0.5,0.5"],
+  "directional_mark_colors.saucer_face": ["black,black,black,black,black"],
+  "suit_symbols.saucer_back": ["●,●,●,●,"],
   "rank_symbols.chip_face": ["A,B,C,D,E,F"],
-  "use_suit_as_ace.chip_face": [false]
+  "directional_mark_symbols.chip_face": [",,,,"],
+  "use_suit_as_ace.chip_face": [false],
+  "directional_mark_symbols.chip_back": [",,,,"]
 }
