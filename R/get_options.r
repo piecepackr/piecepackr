@@ -110,7 +110,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         dest_str <- paste0("invert_colors.", component)
         parser <- add_option(parser, opt_str, dest=dest_str,
                              default=NULL, action="store_false", 
-                             help='default is either value of "invert_colors.suited" or "invert_colors.unsuited"')
+                             help=paste0('Opposite of "', dest_str, '" option'))
 
     }
 

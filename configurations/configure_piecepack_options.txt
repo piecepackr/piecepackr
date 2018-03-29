@@ -135,7 +135,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.tile_back
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.tile_back" option
 
 	--rank_symbols.tile_face=RANK_SYMBOLS.TILE_FACE
 		(default is value of "rank_symbols" option)
@@ -183,7 +183,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.tile_face
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.tile_face" option
 
 	--rank_symbols.coin_back=RANK_SYMBOLS.COIN_BACK
 		(default is value of "rank_symbols" option)
@@ -231,7 +231,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.coin_back
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.coin_back" option
 
 	--rank_symbols.coin_face=RANK_SYMBOLS.COIN_FACE
 		(default is value of "rank_symbols" option)
@@ -279,7 +279,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.coin_face
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.coin_face" option
 
 	--rank_symbols.piecepack_die=RANK_SYMBOLS.PIECEPACK_DIE
 		(default is value of "rank_symbols" option)
@@ -327,7 +327,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.piecepack_die
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.piecepack_die" option
 
 	--rank_symbols.rank_die=RANK_SYMBOLS.RANK_DIE
 		(default is value of "rank_symbols" option)
@@ -375,7 +375,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.rank_die
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.rank_die" option
 
 	--rank_symbols.suit_die=RANK_SYMBOLS.SUIT_DIE
 		(default is value of "rank_symbols" option)
@@ -423,7 +423,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.suit_die
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.suit_die" option
 
 	--rank_symbols.saucer_face=RANK_SYMBOLS.SAUCER_FACE
 		(default is value of "rank_symbols" option)
@@ -471,7 +471,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.saucer_face
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.saucer_face" option
 
 	--rank_symbols.saucer_back=RANK_SYMBOLS.SAUCER_BACK
 		(default is value of "rank_symbols" option)
@@ -519,7 +519,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.saucer_back
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.saucer_back" option
 
 	--rank_symbols.pawn=RANK_SYMBOLS.PAWN
 		(default is value of "rank_symbols" option)
@@ -567,7 +567,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.pawn
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.pawn" option
 
 	--rank_symbols.pawn_belt=RANK_SYMBOLS.PAWN_BELT
 		(default is value of "rank_symbols" option)
@@ -615,7 +615,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.pawn_belt
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.pawn_belt" option
 
 	--rank_symbols.chip_face=RANK_SYMBOLS.CHIP_FACE
 		(default is value of "rank_symbols" option)
@@ -663,7 +663,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.chip_face
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.chip_face" option
 
 	--rank_symbols.chip_back=RANK_SYMBOLS.CHIP_BACK
 		(default is value of "rank_symbols" option)
@@ -711,7 +711,7 @@ Options:
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
 	--uninvert_colors.chip_back
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+		Opposite of "invert_colors.chip_back" option
 
 	--n_suits=N_SUITS
 		(default is inferred from "suit_symbols" option)
