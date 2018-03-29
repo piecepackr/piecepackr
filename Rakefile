@@ -32,6 +32,8 @@ task :install do
     sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
     # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'exec/configure_piecepack --help > configurations/configure_piecepack_options.txt'
+    sh 'exec/make_piecepack --help > configurations/make_piecepack_options.txt'
+    sh 'exec/arrange_piecepacks --help > configurations/arrange_piecepacks_options.txt'
 end
 
 desc "Default piecepack demo"

@@ -5,8 +5,8 @@ This is an R package and some executable Rscripts designed to make a pdf of piec
 
 .. warning:: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
 
-Install
--------
+Installation
+------------
 
 You'll need to install some system requirements::
 
@@ -31,25 +31,42 @@ The software currently assumes one has installed:
 How to use
 ----------
 
-One uses the ``exec/make_piecepack`` command to make a single PnP pdf of a piecepack deck.  One can arrange several PnP pdf's using the ``exec/arrange_piecepack`` command.  The ``exec/make_piecepack`` command requires JSON configuration either provided as Standard Input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``exec/configure_piecepack`` can be used to generate configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can build the demo files and see the command-line calls used to build them by running::
+One uses the ``exec/make_piecepack`` command to make a single PnP pdf of a piecepack deck.  One can arrange several PnP pdf's using the ``exec/arrange_piecepacks`` command.  The ``exec/make_piecepack`` command requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``exec/configure_piecepack`` can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
 
     $ rake demo_name
 
-Where ``demo_name`` is either
+Where ``demo_name`` is either:
 
 default
-    This will build a non-configured piecepack (the default type built by this software).  `Resulting pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.
+    This will build a non-configured piecepack (the default type built by this software).  `Resulting "default piecepack" demo pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.
 dual
-    This will build the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept.  `Resulting pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_.
+    This will build the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept.  `Resulting "dual piecepacks" demo pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_.
 orthodox
-    This will build a piecepack-suited piecepack that complies with the `Anatomy of a Piecepack <http://www.piecepack.org/Anatomy.html>`_ standard as well as a matching 2-color french-suited piecepack (aka a "Playing Cards" expansion).  `Resulting pdf <https://www.dropbox.com/s/derdlo3j8sdeoox/orthodox_demo.pdf?dl=0>`_.
+    This will build a piecepack-suited piecepack that complies with the `Anatomy of a Piecepack <http://www.piecepack.org/Anatomy.html>`_ standard as well as a matching 2-color french-suited piecepack (aka a "Playing Cards" expansion).  `Resulting "orthodox piecepacks" demo pdf <https://www.dropbox.com/s/derdlo3j8sdeoox/orthodox_demo.pdf?dl=0>`_.  The "chip" accessory has been configured to be more convenient for labeling paper pyramids to make "piecepack pyramids".
 
-Configuration options
----------------------
+Executable options
+------------------
 
-`exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/configure_piecepack_options.txt>`_
+* `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/configure_piecepack_options.txt>`_
+* `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/make_piecepack_options.txt>`_
+* `exec/arrange_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/configurations/arrange_piecepacks_options.txt>`_
 
 Licence
 -------
 
 This software package and the piecepack pdf's created by it are released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file LICENSE for more info.  This license is compatible with version 3 of the Gnu Public License (GPL-3).
+
+Frequently Asked Questions
+--------------------------
+
+What are the "chips" accessories that shows up on the accesories page of the print-and-play pdf supposed to be used for?
+    The "chips" are a customizable accessory that can aid in playing certain types of games.  Some possible uses:
+
+    1.  One option (and source of the name "chip") is to mount them on suit-colored poker chips.  By default both sides will show suit and direction and one side will also show a rank. In such a configuration it could be used to replace piecepack pyramids in a subset of games like Alien City or Ice Floe, could be used to add more pieces in games like checkers/go, could be used to reduce abstraction in chess (i.e. each side's pieces could be distinguished by color), etc. 
+    2. A second option would be to mount them on pyramids (i.e. paste rank side on one face of the pyramid and suit side on another face of the pyramid) to get something equivalent to `piecepack pyramids <http://www.ludism.org/ppwiki/PiecepackPyramids>`_.  A classic configuration for this purpose would be "``--rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --directional_mark_symbols.chip_face=,,,, --directional_mark_symbols.chip_back=,,,,``".
+    3. A third option would be to produce the equivalent of the "piecepack stones" accessory (i.e. from the `Sensible Expansions proposal <http://www.ludism.org/ppwiki/SensibleExpansions>`_).  A good configuration for this purpose would be  "``suit_symbols.chip_back=,,,, --directional_mark_colors.chip_back=grey,grey,grey,grey,grey --uninvert_colors.chip_back``". 
+    4. A fourth option would be to produce the equivalent of the "suit (star) coin" accessory (i.e. from the `JCD piecepack <http://www.piecepack.org/JCD.html>`_).  A good configuration for this purpose would be "``--use_suit_as_ace.chip_face --invert_colors.chip_face``".  
+    5. A fifth option if paired with another deck with six extra ranks would be to mount the chip faces on a large d12 to make a "dozenal piecepack die" for each suit.  The suits could then also go on a d12 to make a "dozenal suit die" especially if there are in fact a dozen suits.
+
+What is the purpose of the "hex lines" that can be configured onto the tiles by the ``hexline_colors`` option?
+    It you use the tiles to build a hex board the hexlines will visually show four of the six hexagon cell sides.
