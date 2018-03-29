@@ -42,7 +42,7 @@ Options:
 		(default "FALSE")
 
 	--use_ace_as_ace
-		Opposite of use_suit_as_ace (default "TRUE")
+		Opposite of "use_suit_as_ace" option
 
 	--hexline_colors=HEXLINE_COLORS
 		(default is not to draw any hexlines)
@@ -66,7 +66,7 @@ Options:
 		(default "FALSE")
 
 	--uninvert_colors
-		Opposite of invert_colors (default "FALSE")
+		Opposite of "invert_colors" option
 
 	-f FILE, --file=FILE
 		Filename to write configuration to (default outputs to standard output)
@@ -123,7 +123,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.tile_back
-		Opposite of --use_ace_as_ace.tile_back
+		Opposite of "use_suit_as_ace.tile_back" option
 
 	--directional_mark_theta.tile_back=DIRECTIONAL_MARK_THETA.TILE_BACK
 		(default is value of "directional_mark_theta" option)
@@ -171,7 +171,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.tile_face
-		Opposite of --use_ace_as_ace.tile_face
+		Opposite of "use_suit_as_ace.tile_face" option
 
 	--directional_mark_theta.tile_face=DIRECTIONAL_MARK_THETA.TILE_FACE
 		(default is value of "directional_mark_theta" option)
@@ -219,7 +219,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.coin_back
-		Opposite of --use_ace_as_ace.coin_back
+		Opposite of "use_suit_as_ace.coin_back" option
 
 	--directional_mark_theta.coin_back=DIRECTIONAL_MARK_THETA.COIN_BACK
 		(default is value of "directional_mark_theta" option)
@@ -267,7 +267,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.coin_face
-		Opposite of --use_ace_as_ace.coin_face
+		Opposite of "use_suit_as_ace.coin_face" option
 
 	--directional_mark_theta.coin_face=DIRECTIONAL_MARK_THETA.COIN_FACE
 		(default is value of "directional_mark_theta" option)
@@ -315,7 +315,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.piecepack_die
-		Opposite of --use_ace_as_ace.piecepack_die
+		Opposite of "use_suit_as_ace.piecepack_die" option
 
 	--directional_mark_theta.piecepack_die=DIRECTIONAL_MARK_THETA.PIECEPACK_DIE
 		(default is value of "directional_mark_theta" option)
@@ -363,7 +363,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.rank_die
-		Opposite of --use_ace_as_ace.rank_die
+		Opposite of "use_suit_as_ace.rank_die" option
 
 	--directional_mark_theta.rank_die=DIRECTIONAL_MARK_THETA.RANK_DIE
 		(default is value of "directional_mark_theta" option)
@@ -411,7 +411,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.suit_die
-		Opposite of --use_ace_as_ace.suit_die
+		Opposite of "use_suit_as_ace.suit_die" option
 
 	--directional_mark_theta.suit_die=DIRECTIONAL_MARK_THETA.SUIT_DIE
 		(default is value of "directional_mark_theta" option)
@@ -459,7 +459,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.saucer_face
-		Opposite of --use_ace_as_ace.saucer_face
+		Opposite of "use_suit_as_ace.saucer_face" option
 
 	--directional_mark_theta.saucer_face=DIRECTIONAL_MARK_THETA.SAUCER_FACE
 		(default is value of "directional_mark_theta" option)
@@ -507,7 +507,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.saucer_back
-		Opposite of --use_ace_as_ace.saucer_back
+		Opposite of "use_suit_as_ace.saucer_back" option
 
 	--directional_mark_theta.saucer_back=DIRECTIONAL_MARK_THETA.SAUCER_BACK
 		(default is value of "directional_mark_theta" option)
@@ -555,7 +555,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.pawn
-		Opposite of --use_ace_as_ace.pawn
+		Opposite of "use_suit_as_ace.pawn" option
 
 	--directional_mark_theta.pawn=DIRECTIONAL_MARK_THETA.PAWN
 		(default is value of "directional_mark_theta" option)
@@ -603,7 +603,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.pawn_belt
-		Opposite of --use_ace_as_ace.pawn_belt
+		Opposite of "use_suit_as_ace.pawn_belt" option
 
 	--directional_mark_theta.pawn_belt=DIRECTIONAL_MARK_THETA.PAWN_BELT
 		(default is value of "directional_mark_theta" option)
@@ -651,7 +651,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.chip_face
-		Opposite of --use_ace_as_ace.chip_face
+		Opposite of "use_suit_as_ace.chip_face" option
 
 	--directional_mark_theta.chip_face=DIRECTIONAL_MARK_THETA.CHIP_FACE
 		(default is value of "directional_mark_theta" option)
@@ -699,7 +699,7 @@ Options:
 		(default is value of "use_suit_as_ace" option)
 
 	--use_ace_as_ace.chip_back
-		Opposite of --use_ace_as_ace.chip_back
+		Opposite of "use_suit_as_ace.chip_back" option
 
 	--directional_mark_theta.chip_back=DIRECTIONAL_MARK_THETA.CHIP_BACK
 		(default is value of "directional_mark_theta" option)

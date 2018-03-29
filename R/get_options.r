@@ -32,7 +32,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=NULL, 
                          help='(default "FALSE")')
     parser <- add_option(parser, "--use_ace_as_ace", dest="use_suit_as_ace", 
-                         action="store_false", default=NULL, help='Opposite of use_suit_as_ace (default "TRUE")')
+                         action="store_false", default=NULL, 
+                         help='Opposite of "use_suit_as_ace" option')
     # parser <- add_option(parser, "--style", default=NULL, 
     #                      help='"basic" or "simple_hex" (default "basic")')
     parser <- add_option(parser, "--hexline_colors", default=NULL,
@@ -54,7 +55,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
                          help='(default "FALSE")')
     parser <- add_option(parser, "--uninvert_colors", action="store_false", dest="invert_colors",
-                         default=NULL, help='Opposite of invert_colors (default "FALSE")')
+                         default=NULL, help='Opposite of "invert_colors" option')
     parser <- add_option(parser, c("-f", "--file"), default=NULL, 
                          help="Filename to write configuration to (default outputs to standard output)")
 
@@ -93,7 +94,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         dest_str <- paste0("use_suit_as_ace.", component)
         parser <- add_option(parser, opt_str, dest=dest_str, 
                              action="store_false", default=NULL, 
-                             help=paste('Opposite of', opt_str))
+                             help=paste0('Opposite of "', dest_str, '" option'))
         opt_str <- paste0("--directional_mark_theta.", component)
         parser <- add_option(parser, opt_str, default=NULL, type="double",
                              help='(default is value of "directional_mark_theta" option)')
@@ -106,7 +107,9 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         parser <- add_option(parser, opt_str, default=NULL, action="store_true", 
                              help='default is either value of "invert_colors.suited" or "invert_colors.unsuited"')
         opt_str <- paste0("--uninvert_colors.", component)
-        parser <- add_option(parser, opt_str, default=NULL, action="store_false", 
+        dest_str <- paste0("invert_colors.", component)
+        parser <- add_option(parser, opt_str, dest=dest_str,
+                             default=NULL, action="store_false", 
                              help='default is either value of "invert_colors.suited" or "invert_colors.unsuited"')
 
     }
