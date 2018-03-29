@@ -18,7 +18,7 @@ Options:
 		(default "♠,♥,♣,♦,★")
 
 	--directional_mark_symbols=DIRECTIONAL_MARK_SYMBOLS
-		(default the value of the "suit_symbols" option)
+		(default is to try to pick a reasonable directional mark symbol based on the component)
 
 	--rank_symbols_font=RANK_SYMBOLS_FONT
 		(default is to use the value of "font" option)

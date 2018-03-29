@@ -14,7 +14,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--suit_symbols", default=NULL, 
                          help='(default "♠,♥,♣,♦,★")')
     parser <- add_option(parser, "--directional_mark_symbols", default=NULL, 
-                         help='(default the value of the "suit_symbols" option)')
+                         help='(default is to try to pick a reasonable directional mark symbol based on the component)')
     parser <- add_option(parser, "--rank_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--suit_symbols_font", default=NULL, 
@@ -84,7 +84,6 @@ configuration_options <- function(args=commandArgs(TRUE)) {
             opt_str <- paste0("--", style, ".", component)
             parser <- add_option(parser, opt_str, default=NULL, 
                              help=paste0('(default is value of "', style, '" option)'))
-
         }
         # Style
         opt_str <- paste0("--use_suit_as_ace.", component)
@@ -111,7 +110,6 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         parser <- add_option(parser, opt_str, dest=dest_str,
                              default=NULL, action="store_false", 
                              help=paste0('Opposite of "', dest_str, '" option'))
-
     }
 
     # Misc
