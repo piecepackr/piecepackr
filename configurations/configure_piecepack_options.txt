@@ -6,7 +6,7 @@ Options:
 		Show this help message and exit
 
 	--deck_title=DECK_TITLE
-		(default "Deck title")
+		(default "")
 
 	--deck_filename=DECK_FILENAME
 		(default "deck_filename")
@@ -17,7 +17,7 @@ Options:
 	--suit_symbols=SUIT_SYMBOLS
 		(default "♠,♥,♣,♦,★")
 
-	--directional_mark_symbols=DIRECTIONAL_MARK_SYMBOLS
+	--dm_symbols=DM_SYMBOLS
 		(default is to try to pick a reasonable directional mark symbol based on the component)
 
 	--rank_symbols_font=RANK_SYMBOLS_FONT
@@ -26,7 +26,7 @@ Options:
 	--suit_symbols_font=SUIT_SYMBOLS_FONT
 		(default is to use the value of "font" option)
 
-	--directional_mark_symbols_font=DIRECTIONAL_MARK_SYMBOLS_FONT
+	--dm_symbols_font=DM_SYMBOLS_FONT
 		(default is to use the value of "font" option)
 
 	--rank_symbols_scale=RANK_SYMBOLS_SCALE
@@ -35,7 +35,7 @@ Options:
 	--suit_symbols_scale=SUIT_SYMBOLS_SCALE
 		(default is not to adjust scale)
 
-	--directional_mark_symbols_scale=DIRECTIONAL_MARK_SYMBOLS_SCALE
+	--dm_symbols_scale=DM_SYMBOLS_SCALE
 		(default is not to adjust scale)
 
 	--use_suit_as_ace
@@ -47,7 +47,7 @@ Options:
 	--hexline_colors=HEXLINE_COLORS
 		(default is not to draw any hexlines)
 
-	--directional_mark_theta=DIRECTIONAL_MARK_THETA
+	--dm_theta=DM_THETA
 		(default 135 for tile faces and die faces and 90 for everything else)
 
 	--font=FONT
@@ -56,7 +56,7 @@ Options:
 	--suit_colors=SUIT_COLORS
 		(default "darkred,black,darkgreen,darkblue,grey")
 
-	--directional_mark_colors=DIRECTIONAL_MARK_COLORS
+	--dm_colors=DM_COLORS
 		(default the value of the "suit_colors" option)
 
 	--background_color=BACKGROUND_COLOR
@@ -107,17 +107,17 @@ Options:
 	--suit_symbols_scale.tile_back=SUIT_SYMBOLS_SCALE.TILE_BACK
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.tile_back=DIRECTIONAL_MARK_SYMBOLS.TILE_BACK
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.tile_back=DM_SYMBOLS.TILE_BACK
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.tile_back=DIRECTIONAL_MARK_SYMBOLS_FONT.TILE_BACK
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.tile_back=DM_SYMBOLS_FONT.TILE_BACK
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.tile_back=DIRECTIONAL_MARK_SYMBOLS_SCALE.TILE_BACK
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.tile_back=DM_SYMBOLS_SCALE.TILE_BACK
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.tile_back=DIRECTIONAL_MARK_COLORS.TILE_BACK
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.tile_back=DM_COLORS.TILE_BACK
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.tile_back
 		(default is value of "use_suit_as_ace" option)
@@ -125,8 +125,8 @@ Options:
 	--use_ace_as_ace.tile_back
 		Opposite of "use_suit_as_ace.tile_back" option
 
-	--directional_mark_theta.tile_back=DIRECTIONAL_MARK_THETA.TILE_BACK
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.tile_back=DM_THETA.TILE_BACK
+		(default is value of "dm_theta" option)
 
 	--background_color.tile_back=BACKGROUND_COLOR.TILE_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -155,17 +155,17 @@ Options:
 	--suit_symbols_scale.tile_face=SUIT_SYMBOLS_SCALE.TILE_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.tile_face=DIRECTIONAL_MARK_SYMBOLS.TILE_FACE
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.tile_face=DM_SYMBOLS.TILE_FACE
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.tile_face=DIRECTIONAL_MARK_SYMBOLS_FONT.TILE_FACE
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.tile_face=DM_SYMBOLS_FONT.TILE_FACE
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.tile_face=DIRECTIONAL_MARK_SYMBOLS_SCALE.TILE_FACE
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.tile_face=DM_SYMBOLS_SCALE.TILE_FACE
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.tile_face=DIRECTIONAL_MARK_COLORS.TILE_FACE
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.tile_face=DM_COLORS.TILE_FACE
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.tile_face
 		(default is value of "use_suit_as_ace" option)
@@ -173,8 +173,8 @@ Options:
 	--use_ace_as_ace.tile_face
 		Opposite of "use_suit_as_ace.tile_face" option
 
-	--directional_mark_theta.tile_face=DIRECTIONAL_MARK_THETA.TILE_FACE
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.tile_face=DM_THETA.TILE_FACE
+		(default is value of "dm_theta" option)
 
 	--background_color.tile_face=BACKGROUND_COLOR.TILE_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -203,17 +203,17 @@ Options:
 	--suit_symbols_scale.coin_back=SUIT_SYMBOLS_SCALE.COIN_BACK
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.coin_back=DIRECTIONAL_MARK_SYMBOLS.COIN_BACK
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.coin_back=DM_SYMBOLS.COIN_BACK
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.coin_back=DIRECTIONAL_MARK_SYMBOLS_FONT.COIN_BACK
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.coin_back=DM_SYMBOLS_FONT.COIN_BACK
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.coin_back=DIRECTIONAL_MARK_SYMBOLS_SCALE.COIN_BACK
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.coin_back=DM_SYMBOLS_SCALE.COIN_BACK
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.coin_back=DIRECTIONAL_MARK_COLORS.COIN_BACK
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.coin_back=DM_COLORS.COIN_BACK
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.coin_back
 		(default is value of "use_suit_as_ace" option)
@@ -221,8 +221,8 @@ Options:
 	--use_ace_as_ace.coin_back
 		Opposite of "use_suit_as_ace.coin_back" option
 
-	--directional_mark_theta.coin_back=DIRECTIONAL_MARK_THETA.COIN_BACK
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.coin_back=DM_THETA.COIN_BACK
+		(default is value of "dm_theta" option)
 
 	--background_color.coin_back=BACKGROUND_COLOR.COIN_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -251,17 +251,17 @@ Options:
 	--suit_symbols_scale.coin_face=SUIT_SYMBOLS_SCALE.COIN_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.coin_face=DIRECTIONAL_MARK_SYMBOLS.COIN_FACE
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.coin_face=DM_SYMBOLS.COIN_FACE
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.coin_face=DIRECTIONAL_MARK_SYMBOLS_FONT.COIN_FACE
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.coin_face=DM_SYMBOLS_FONT.COIN_FACE
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.coin_face=DIRECTIONAL_MARK_SYMBOLS_SCALE.COIN_FACE
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.coin_face=DM_SYMBOLS_SCALE.COIN_FACE
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.coin_face=DIRECTIONAL_MARK_COLORS.COIN_FACE
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.coin_face=DM_COLORS.COIN_FACE
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.coin_face
 		(default is value of "use_suit_as_ace" option)
@@ -269,8 +269,8 @@ Options:
 	--use_ace_as_ace.coin_face
 		Opposite of "use_suit_as_ace.coin_face" option
 
-	--directional_mark_theta.coin_face=DIRECTIONAL_MARK_THETA.COIN_FACE
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.coin_face=DM_THETA.COIN_FACE
+		(default is value of "dm_theta" option)
 
 	--background_color.coin_face=BACKGROUND_COLOR.COIN_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -299,17 +299,17 @@ Options:
 	--suit_symbols_scale.piecepack_die=SUIT_SYMBOLS_SCALE.PIECEPACK_DIE
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.piecepack_die=DIRECTIONAL_MARK_SYMBOLS.PIECEPACK_DIE
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.piecepack_die=DM_SYMBOLS.PIECEPACK_DIE
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.piecepack_die=DIRECTIONAL_MARK_SYMBOLS_FONT.PIECEPACK_DIE
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.piecepack_die=DM_SYMBOLS_FONT.PIECEPACK_DIE
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.piecepack_die=DIRECTIONAL_MARK_SYMBOLS_SCALE.PIECEPACK_DIE
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.piecepack_die=DM_SYMBOLS_SCALE.PIECEPACK_DIE
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.piecepack_die=DIRECTIONAL_MARK_COLORS.PIECEPACK_DIE
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.piecepack_die=DM_COLORS.PIECEPACK_DIE
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.piecepack_die
 		(default is value of "use_suit_as_ace" option)
@@ -317,8 +317,8 @@ Options:
 	--use_ace_as_ace.piecepack_die
 		Opposite of "use_suit_as_ace.piecepack_die" option
 
-	--directional_mark_theta.piecepack_die=DIRECTIONAL_MARK_THETA.PIECEPACK_DIE
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.piecepack_die=DM_THETA.PIECEPACK_DIE
+		(default is value of "dm_theta" option)
 
 	--background_color.piecepack_die=BACKGROUND_COLOR.PIECEPACK_DIE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -328,54 +328,6 @@ Options:
 
 	--uninvert_colors.piecepack_die
 		Opposite of "invert_colors.piecepack_die" option
-
-	--rank_symbols.rank_die=RANK_SYMBOLS.RANK_DIE
-		(default is value of "rank_symbols" option)
-
-	--rank_symbols_font.rank_die=RANK_SYMBOLS_FONT.RANK_DIE
-		(default is value of "rank_symbols_font" option)
-
-	--rank_symbols_scale.rank_die=RANK_SYMBOLS_SCALE.RANK_DIE
-		(default is value of "rank_symbols_scale" option)
-
-	--suit_symbols.rank_die=SUIT_SYMBOLS.RANK_DIE
-		(default is value of "suit_symbols" option)
-
-	--suit_symbols_font.rank_die=SUIT_SYMBOLS_FONT.RANK_DIE
-		(default is value of "suit_symbols_font" option)
-
-	--suit_symbols_scale.rank_die=SUIT_SYMBOLS_SCALE.RANK_DIE
-		(default is value of "suit_symbols_scale" option)
-
-	--directional_mark_symbols.rank_die=DIRECTIONAL_MARK_SYMBOLS.RANK_DIE
-		(default is value of "directional_mark_symbols" option)
-
-	--directional_mark_symbols_font.rank_die=DIRECTIONAL_MARK_SYMBOLS_FONT.RANK_DIE
-		(default is value of "directional_mark_symbols_font" option)
-
-	--directional_mark_symbols_scale.rank_die=DIRECTIONAL_MARK_SYMBOLS_SCALE.RANK_DIE
-		(default is value of "directional_mark_symbols_scale" option)
-
-	--directional_mark_colors.rank_die=DIRECTIONAL_MARK_COLORS.RANK_DIE
-		(default is value of "directional_mark_colors" option)
-
-	--use_suit_as_ace.rank_die
-		(default is value of "use_suit_as_ace" option)
-
-	--use_ace_as_ace.rank_die
-		Opposite of "use_suit_as_ace.rank_die" option
-
-	--directional_mark_theta.rank_die=DIRECTIONAL_MARK_THETA.RANK_DIE
-		(default is value of "directional_mark_theta" option)
-
-	--background_color.rank_die=BACKGROUND_COLOR.RANK_DIE
-		default is either value of "background_color.suited" or "background_color.unsuited"
-
-	--invert_colors.rank_die
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
-
-	--uninvert_colors.rank_die
-		Opposite of "invert_colors.rank_die" option
 
 	--rank_symbols.suit_die=RANK_SYMBOLS.SUIT_DIE
 		(default is value of "rank_symbols" option)
@@ -395,17 +347,17 @@ Options:
 	--suit_symbols_scale.suit_die=SUIT_SYMBOLS_SCALE.SUIT_DIE
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.suit_die=DIRECTIONAL_MARK_SYMBOLS.SUIT_DIE
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.suit_die=DM_SYMBOLS.SUIT_DIE
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.suit_die=DIRECTIONAL_MARK_SYMBOLS_FONT.SUIT_DIE
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.suit_die=DM_SYMBOLS_FONT.SUIT_DIE
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.suit_die=DIRECTIONAL_MARK_SYMBOLS_SCALE.SUIT_DIE
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.suit_die=DM_SYMBOLS_SCALE.SUIT_DIE
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.suit_die=DIRECTIONAL_MARK_COLORS.SUIT_DIE
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.suit_die=DM_COLORS.SUIT_DIE
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.suit_die
 		(default is value of "use_suit_as_ace" option)
@@ -413,8 +365,8 @@ Options:
 	--use_ace_as_ace.suit_die
 		Opposite of "use_suit_as_ace.suit_die" option
 
-	--directional_mark_theta.suit_die=DIRECTIONAL_MARK_THETA.SUIT_DIE
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.suit_die=DM_THETA.SUIT_DIE
+		(default is value of "dm_theta" option)
 
 	--background_color.suit_die=BACKGROUND_COLOR.SUIT_DIE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -443,17 +395,17 @@ Options:
 	--suit_symbols_scale.saucer_face=SUIT_SYMBOLS_SCALE.SAUCER_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.saucer_face=DIRECTIONAL_MARK_SYMBOLS.SAUCER_FACE
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.saucer_face=DM_SYMBOLS.SAUCER_FACE
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.saucer_face=DIRECTIONAL_MARK_SYMBOLS_FONT.SAUCER_FACE
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.saucer_face=DM_SYMBOLS_FONT.SAUCER_FACE
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.saucer_face=DIRECTIONAL_MARK_SYMBOLS_SCALE.SAUCER_FACE
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.saucer_face=DM_SYMBOLS_SCALE.SAUCER_FACE
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.saucer_face=DIRECTIONAL_MARK_COLORS.SAUCER_FACE
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.saucer_face=DM_COLORS.SAUCER_FACE
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.saucer_face
 		(default is value of "use_suit_as_ace" option)
@@ -461,8 +413,8 @@ Options:
 	--use_ace_as_ace.saucer_face
 		Opposite of "use_suit_as_ace.saucer_face" option
 
-	--directional_mark_theta.saucer_face=DIRECTIONAL_MARK_THETA.SAUCER_FACE
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.saucer_face=DM_THETA.SAUCER_FACE
+		(default is value of "dm_theta" option)
 
 	--background_color.saucer_face=BACKGROUND_COLOR.SAUCER_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -491,17 +443,17 @@ Options:
 	--suit_symbols_scale.saucer_back=SUIT_SYMBOLS_SCALE.SAUCER_BACK
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.saucer_back=DIRECTIONAL_MARK_SYMBOLS.SAUCER_BACK
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.saucer_back=DM_SYMBOLS.SAUCER_BACK
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.saucer_back=DIRECTIONAL_MARK_SYMBOLS_FONT.SAUCER_BACK
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.saucer_back=DM_SYMBOLS_FONT.SAUCER_BACK
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.saucer_back=DIRECTIONAL_MARK_SYMBOLS_SCALE.SAUCER_BACK
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.saucer_back=DM_SYMBOLS_SCALE.SAUCER_BACK
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.saucer_back=DIRECTIONAL_MARK_COLORS.SAUCER_BACK
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.saucer_back=DM_COLORS.SAUCER_BACK
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.saucer_back
 		(default is value of "use_suit_as_ace" option)
@@ -509,8 +461,8 @@ Options:
 	--use_ace_as_ace.saucer_back
 		Opposite of "use_suit_as_ace.saucer_back" option
 
-	--directional_mark_theta.saucer_back=DIRECTIONAL_MARK_THETA.SAUCER_BACK
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.saucer_back=DM_THETA.SAUCER_BACK
+		(default is value of "dm_theta" option)
 
 	--background_color.saucer_back=BACKGROUND_COLOR.SAUCER_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -539,17 +491,17 @@ Options:
 	--suit_symbols_scale.pawn=SUIT_SYMBOLS_SCALE.PAWN
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.pawn=DIRECTIONAL_MARK_SYMBOLS.PAWN
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.pawn=DM_SYMBOLS.PAWN
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.pawn=DIRECTIONAL_MARK_SYMBOLS_FONT.PAWN
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.pawn=DM_SYMBOLS_FONT.PAWN
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.pawn=DIRECTIONAL_MARK_SYMBOLS_SCALE.PAWN
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.pawn=DM_SYMBOLS_SCALE.PAWN
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.pawn=DIRECTIONAL_MARK_COLORS.PAWN
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.pawn=DM_COLORS.PAWN
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.pawn
 		(default is value of "use_suit_as_ace" option)
@@ -557,8 +509,8 @@ Options:
 	--use_ace_as_ace.pawn
 		Opposite of "use_suit_as_ace.pawn" option
 
-	--directional_mark_theta.pawn=DIRECTIONAL_MARK_THETA.PAWN
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.pawn=DM_THETA.PAWN
+		(default is value of "dm_theta" option)
 
 	--background_color.pawn=BACKGROUND_COLOR.PAWN
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -587,17 +539,17 @@ Options:
 	--suit_symbols_scale.pawn_belt=SUIT_SYMBOLS_SCALE.PAWN_BELT
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.pawn_belt=DIRECTIONAL_MARK_SYMBOLS.PAWN_BELT
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.pawn_belt=DM_SYMBOLS.PAWN_BELT
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.pawn_belt=DIRECTIONAL_MARK_SYMBOLS_FONT.PAWN_BELT
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.pawn_belt=DM_SYMBOLS_FONT.PAWN_BELT
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.pawn_belt=DIRECTIONAL_MARK_SYMBOLS_SCALE.PAWN_BELT
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.pawn_belt=DM_SYMBOLS_SCALE.PAWN_BELT
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.pawn_belt=DIRECTIONAL_MARK_COLORS.PAWN_BELT
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.pawn_belt=DM_COLORS.PAWN_BELT
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.pawn_belt
 		(default is value of "use_suit_as_ace" option)
@@ -605,8 +557,8 @@ Options:
 	--use_ace_as_ace.pawn_belt
 		Opposite of "use_suit_as_ace.pawn_belt" option
 
-	--directional_mark_theta.pawn_belt=DIRECTIONAL_MARK_THETA.PAWN_BELT
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.pawn_belt=DM_THETA.PAWN_BELT
+		(default is value of "dm_theta" option)
 
 	--background_color.pawn_belt=BACKGROUND_COLOR.PAWN_BELT
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -635,17 +587,17 @@ Options:
 	--suit_symbols_scale.chip_face=SUIT_SYMBOLS_SCALE.CHIP_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.chip_face=DIRECTIONAL_MARK_SYMBOLS.CHIP_FACE
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.chip_face=DM_SYMBOLS.CHIP_FACE
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.chip_face=DIRECTIONAL_MARK_SYMBOLS_FONT.CHIP_FACE
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.chip_face=DM_SYMBOLS_FONT.CHIP_FACE
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.chip_face=DIRECTIONAL_MARK_SYMBOLS_SCALE.CHIP_FACE
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.chip_face=DM_SYMBOLS_SCALE.CHIP_FACE
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.chip_face=DIRECTIONAL_MARK_COLORS.CHIP_FACE
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.chip_face=DM_COLORS.CHIP_FACE
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.chip_face
 		(default is value of "use_suit_as_ace" option)
@@ -653,8 +605,8 @@ Options:
 	--use_ace_as_ace.chip_face
 		Opposite of "use_suit_as_ace.chip_face" option
 
-	--directional_mark_theta.chip_face=DIRECTIONAL_MARK_THETA.CHIP_FACE
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.chip_face=DM_THETA.CHIP_FACE
+		(default is value of "dm_theta" option)
 
 	--background_color.chip_face=BACKGROUND_COLOR.CHIP_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -683,17 +635,17 @@ Options:
 	--suit_symbols_scale.chip_back=SUIT_SYMBOLS_SCALE.CHIP_BACK
 		(default is value of "suit_symbols_scale" option)
 
-	--directional_mark_symbols.chip_back=DIRECTIONAL_MARK_SYMBOLS.CHIP_BACK
-		(default is value of "directional_mark_symbols" option)
+	--dm_symbols.chip_back=DM_SYMBOLS.CHIP_BACK
+		(default is value of "dm_symbols" option)
 
-	--directional_mark_symbols_font.chip_back=DIRECTIONAL_MARK_SYMBOLS_FONT.CHIP_BACK
-		(default is value of "directional_mark_symbols_font" option)
+	--dm_symbols_font.chip_back=DM_SYMBOLS_FONT.CHIP_BACK
+		(default is value of "dm_symbols_font" option)
 
-	--directional_mark_symbols_scale.chip_back=DIRECTIONAL_MARK_SYMBOLS_SCALE.CHIP_BACK
-		(default is value of "directional_mark_symbols_scale" option)
+	--dm_symbols_scale.chip_back=DM_SYMBOLS_SCALE.CHIP_BACK
+		(default is value of "dm_symbols_scale" option)
 
-	--directional_mark_colors.chip_back=DIRECTIONAL_MARK_COLORS.CHIP_BACK
-		(default is value of "directional_mark_colors" option)
+	--dm_colors.chip_back=DM_COLORS.CHIP_BACK
+		(default is value of "dm_colors" option)
 
 	--use_suit_as_ace.chip_back
 		(default is value of "use_suit_as_ace" option)
@@ -701,8 +653,8 @@ Options:
 	--use_ace_as_ace.chip_back
 		Opposite of "use_suit_as_ace.chip_back" option
 
-	--directional_mark_theta.chip_back=DIRECTIONAL_MARK_THETA.CHIP_BACK
-		(default is value of "directional_mark_theta" option)
+	--dm_theta.chip_back=DM_THETA.CHIP_BACK
+		(default is value of "dm_theta" option)
 
 	--background_color.chip_back=BACKGROUND_COLOR.CHIP_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -712,6 +664,9 @@ Options:
 
 	--uninvert_colors.chip_back
 		Opposite of "invert_colors.chip_back" option
+
+	--n_ranks=N_RANKS
+		(default is inferred from "rank_symbols" option)
 
 	--n_suits=N_SUITS
 		(default is inferred from "suit_symbols" option)

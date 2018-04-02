@@ -8,4 +8,7 @@ Options:
 	-f FILE, --file=FILE
 		Source of piecepack style information (default stdin input)
 
+	--paper=PAPER
+		Default paper size, either "letter" or "A4" (default "letter")
+
 

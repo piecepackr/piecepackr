@@ -1,6 +1,6 @@
 COMPONENTS <- c("tile_back", "tile_face", #### joker_tile_face?
            "coin_back", "coin_face",
-           "piecepack_die", "rank_die", "suit_die", 
+           "piecepack_die", "suit_die", 
            "saucer_face", "saucer_back",
            "pawn", "pawn_belt",
            "chip_face", "chip_back")
@@ -36,8 +36,14 @@ get_background_color_helper <- function(component, i_s, arg) {
     }
 }
 
+get_suit_colors <- function(component, arg) {
+   suit_colors <- opts[["suit_colors"]]
+   expand_suit_elements(suit_colors, "suit_colors", component, arg) 
+}
+
 get_suit_color_helper <- function(component, i_s, arg) {
-    ifelse(i_s <= arg$n_suits, arg$suit_colors[i_s], arg$suit_colors[arg$i_unsuit])
+    suit_colors <- get_suit_colors(component, arg)
+    ifelse(i_s <= arg$n_suits, suit_colors[i_s], suit_colors[arg$i_unsuit])
 }
 
 should_invert <- function(component, i_s, arg) {
@@ -61,7 +67,6 @@ is_suited <- function(component, i_s, arg) {
            coin_back = TRUE,
            coin_face = FALSE,
            piecepack_die = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
-           rank_die = FALSE,
            suit_die = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
            saucer_face = TRUE,
            saucer_back = FALSE,
@@ -71,51 +76,54 @@ is_suited <- function(component, i_s, arg) {
            chip_back = TRUE)
 }
 
-get_directional_mark_theta <- function(component, arg) {
-    component_str <- paste0("directional_mark_theta", component)
+get_dm_theta <- function(component, arg) {
+    component_str <- paste0("dm_theta", component)
     if (!is.null(arg[[component_str]])) {
         arg[[component_str]]
-    } else if (!is.null(arg[["directional_mark_theta"]])) {
-        arg[["directional_mark_theta"]]
-    } else if (component %in% c("tile_face", "piecepack_die", "rank_die", "suit_die")) {
+    } else if (!is.null(arg[["dm_theta"]])) {
+        arg[["dm_theta"]]
+    } else if (component %in% c("tile_face", "piecepack_die", "suit_die")) {
         135
     } else {
         90
     }
 }
 
-get_directional_mark_symbols <- function(component, arg) {
-    component_str <- paste0("directional_mark_symbols.", component)
+get_dm_symbols <- function(component, arg) {
+    component_str <- paste0("dm_symbols.", component)
     if (!is.null(arg[[component_str]])) {
         dm_symbols <- arg[[component_str]]
-    } else if (!is.null(arg[["directional_mark_symbols"]])) {
-        dm_symbols <- arg[["directional_mark_symbols"]]
+    } else if (!is.null(arg[["dm_symbols"]])) {
+        dm_symbols <- arg[["dm_symbols"]]
     } else {
-        if (component %in% c("coin_back", "coin_face", "chip_back", "saucer_back", "saucer_face")) {
-            dm_symbols <- rep("▲", arg$n_suits + 1)
+        if (component %in% c("coin_back", "coin_face")) {
+            dm_symbols <- rep("●", arg$n_suits + 1)
+        } else if (component %in% c("chip_back")) {
+            dm_symbols <- rep("⛃", arg$n_suits + 1)
+        } else if (component %in% c("saucer_back", "saucer_face")) {
+            dm_symbols <- rep("♟", arg$n_suits + 1)
         } else if (component %in% c("suit_die")) {
             dm_symbols <- rep("", arg$n_suits +1)
         } else {
-            dm_symbols <- arg[["suit_symbols"]]
+            dm_symbols <- get_suit_symbols(component, arg)
         }
     }
-    if (length(dm_symbols) < arg$n_suits + 2)
-        dm_symbols <- c(dm_symbols, "")
+    dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", component, arg)
     dm_symbols
 }
 
-get_directional_mark_symbol <- function(component, i_s, arg) {
-    get_directional_mark_symbols(component, arg)[i_s]
+get_dm_symbol <- function(component, i_s, arg) {
+    get_dm_symbols(component, arg)[i_s]
 }
 
-get_directional_mark_color <- function(component, i_s, arg) {
-    component_str <- paste0("directional_mark_colors.", component)
+get_dm_color <- function(component, i_s, arg) {
+    component_str <- paste0("dm_colors.", component)
     if (!is.null(arg[[component_str]])) {
-        arg[[component_str]][i_s]
-    } else if (!is.null(arg[["directional_mark_colors"]])) {
-        arg[["directional_mark_colors"]][i_s]
+        colors <- expand_suit_elements(arg[[component_str]], "suit_colors", component, arg)[i_s]
+    } else if (!is.null(arg[["dm_colors"]])) {
+        colors <- expand_suit_elements(arg[["dm_colors"]], "suit_colors", component, arg)[i_s]
     } else {
-        get_suit_color(component, i_s, arg)
+        colors <- get_suit_color(component, i_s, arg)
     }
 }
 
@@ -144,23 +152,46 @@ get_suit_symbol <- function(component, i_s, arg) {
 get_rank_symbols <- function(component, arg) {
     component_str <- paste0("rank_symbols.", component)
     if (!is.null(arg[[component_str]]))
-        arg[[component_str]]
+        rank_symbols <- arg[[component_str]]
     else
-        arg$rank_symbols
+        rank_symbols <- arg$rank_symbols
+    expand_rank_elements(rank_symbols, "rank_symbols", component, arg)
 }
-get_suit_symbols <- function(component, arg) {
+get_suit_symbols <- function(component, arg, expand=TRUE) {
     component_str <- paste0("suit_symbols.", component)
     if (!is.null(arg[[component_str]]))
         suit_symbols <- arg[[component_str]]
     else
         suit_symbols <- arg$suit_symbols
-    if (length(suit_symbols) < arg$n_suits + 2) {
-        if (component %in% "suit_die")
-            suit_symbols <- c(suit_symbols, "")
-        else
-            suit_symbols <- c(suit_symbols, suit_symbols[arg$i_unsuit])
-    }
+    if (expand) 
+        suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", component, arg)
     suit_symbols
+}
+
+expand_suit_elements <- function(elements, style, component, arg) {
+    if (length(elements) == 1) {
+        elements <- rep(elements, arg$n_suits + 1)
+    } else if (length(elements) == arg$n_suits) {
+        elements <- c(elements, switch(style, scale=1.0, ""))
+    }
+    if (length(elements) == arg$i_unsuit) {
+        elements <- c(elements, switch(style, 
+                           scale = 1.0,
+                           rank_suit_symbols = elements[arg$i_unsuit],
+                           suit_symbols = switch(component, 
+                                suit_die = "", piecepack_die = "", elements[arg$i_unsuit]),
+                           elements[arg$i_unsuit]))
+    }
+    elements
+}
+
+expand_rank_elements <- function(elements, style, component, arg) {
+    if (length(elements) == 1) {
+        elements <- rep(elements, arg$n_ranks)
+    } 
+    if (length(elements) == arg$n_ranks)
+        elements <- c(elements, switch(style, rank_symbols = "", elements[arg$n_ranks]))
+    elements
 }
 
 get_use_suit_as_ace <- function(component, arg) {
@@ -173,12 +204,13 @@ get_use_suit_as_ace <- function(component, arg) {
 
 get_rank_symbol <- function(component, i_s, i_r, arg) {
     rank_symbols <- get_rank_symbols(component, arg)
-    suit_symbols <- get_suit_symbols(component, arg)
+    suit_symbols <- get_rank_suit_symbols(component, arg)
     use_suit_as_ace <- get_use_suit_as_ace(component, arg)
-    if (i_r == 2 && use_suit_as_ace)
+    if (i_r == 2 && use_suit_as_ace) {
         rank_symbol <- suit_symbols[i_s]
-    else
+    } else {
         rank_symbol <- rank_symbols[i_r]
+    }
     rank_symbol
 }       
 
@@ -194,11 +226,9 @@ get_rank_scales <- function(component, arg) {
     } else if (!is.null(arg[["rank_symbols_scale"]])) {
         scales <- arg[["rank_symbols_scale"]]
     } else {
-        scales <- rep(1.0, arg$n_suits + 2)
+        scales <- 1.0
     }
-    if (length(scales) < arg$n_suits + 2)
-        scales <- c(scales, 1.0)
-    scales
+    expand_rank_elements(scales, "scale", component, arg)
 }
 get_rank_scale <- function(component, i_r, arg) {
     get_rank_scales(component, arg)[i_r]
@@ -210,11 +240,9 @@ get_rank_fonts <- function(component, arg) {
     } else if (!is.null(arg[["rank_symbols_font"]])) {
         fonts <- arg[["rank_symbols_font"]]
     } else {
-        fonts <- rep(arg[["font"]], arg$n_suits + 2)
+        fonts <- arg[["font"]]
     }
-    if (length(fonts) < arg$n_suits + 2)
-        fonts <- c(fonts, arg$font)
-    fonts
+    expand_rank_elements(fonts, "font", component, arg)
 }
 get_rank_font <- function(component, i_s, i_r, arg) {
     rank_font <- get_rank_fonts(component, arg)[i_r]
@@ -232,31 +260,27 @@ get_suit_fonts <- function(component, arg) {
     } else if (!is.null(arg[["suit_symbols_font"]])) {
         fonts <- arg[["suit_symbols_font"]]
     } else {
-        fonts <- rep(arg[["font"]], arg$n_suits + 2)
+        fonts <- arg[["font"]]
     }
-    if (length(fonts) < arg$n_suits + 2)
-        fonts <- c(fonts, arg$font)
-    fonts
+    expand_suit_elements(fonts, "font", component, arg)
 }
 get_suit_font <- function(component, i_s, arg) {
     get_suit_fonts(component, arg)[i_s]
 }
 get_dm_fonts <- function(component, arg) {
-    component_str <- paste0("directional_mark_symbols_font.", component)
+    component_str <- paste0("dm_symbols_font.", component)
     if (!is.null(arg[[component_str]])) {
         fonts <- arg[[component_str]]
-    } else if (!is.null(arg[["directional_mark_symbols_font"]])) {
-        fonts <- arg[["directional_mark_symbols_font"]]
-    } else if (all(get_directional_mark_symbols(component, arg) == get_suit_symbols(component, arg))){ 
+    } else if (!is.null(arg[["dm_symbols_font"]])) {
+        fonts <- arg[["dm_symbols_font"]]
+    } else if (all(get_dm_symbols(component, arg) == get_suit_symbols(component, arg))){ 
         fonts <- get_suit_fonts(component, arg)
     } else {
-        fonts <- rep(arg[["font"]], arg$n_suits + 2)
+        fonts <- arg[["font"]]
     }
-    if (length(fonts) < arg$n_suits + 2)
-        fonts <- c(fonts, arg$font)
-    fonts
+    expand_suit_elements(fonts, "font", component, arg)
 }
-get_directional_mark_font <- function(component, i_s, arg) {
+get_dm_font <- function(component, i_s, arg) {
     get_dm_fonts(component, arg)[i_s]
 }
 get_suit_scales <- function(component, arg) {
@@ -266,29 +290,30 @@ get_suit_scales <- function(component, arg) {
     } else if (!is.null(arg[["suit_symbols_scale"]])) {
         scales <- arg[["suit_symbols_scale"]]
     } else {
-        scales <- rep(1.0, arg$n_suits + 2)
+        scales <- 1.0
     }
-    if (length(scales) < arg$n_suits + 2)
-        scales <- c(scales, 1.0)
-    scales
+    expand_suit_elements(scales, "scale", component, arg)
+}
+get_rank_suit_symbols <- function(component, arg) {
+    suit_symbols <- get_suit_symbols(component, arg, expand=FALSE)
+    suit_symbols <- expand_suit_elements(suit_symbols, "rank_suit_symbols", component, arg)
+    suit_symbols
 }
 get_suit_scale <- function(component, i_s, arg) {
     get_suit_scales(component, arg)[i_s]
 }
 get_dm_scales <- function(component, arg) {
-    component_str <- paste0("directional_mark_symbols_scale.", component)
+    component_str <- paste0("dm_symbols_scale.", component)
     if (!is.null(arg[[component_str]])) {
         scales <- arg[[component_str]]
-    } else if (!is.null(arg[["directional_mark_symbols_scale"]])) {
-        scales <- arg[["directional_mark_symbols_scale"]]
-    } else if (all(get_directional_mark_symbols(component, arg) == get_suit_symbols(component, arg))) { 
+    } else if (!is.null(arg[["dm_symbols_scale"]])) {
+        scales <- arg[["dm_symbols_scale"]]
+    } else if (all(get_dm_symbols(component, arg) == get_suit_symbols(component, arg))) { 
         scales <- get_suit_scales(component, arg)
     } else {
-        scales <- rep(1.0, arg$n_suits + 2)
+        scales <- 1.0
     }
-    if (length(scales) < arg$n_suits + 2)
-        scales <- c(scales, 1.0)
-    scales
+    expand_suit_elements(scales, "scale", component, arg)
 }
 get_dm_scale <- function(component, i_s, arg) {
     get_dm_scales(component, arg)[i_s]
@@ -308,7 +333,7 @@ get_suit_fontsize <- function(component, i_s, arg) {
     scale * fs
 }
 
-get_directional_mark_fontsize <- function(component, i_s, arg) {
+get_dm_fontsize <- function(component, i_s, arg) {
     scale <- get_dm_scale(component, i_s, arg)
     fs <- switch(component,
                  "tile_face" = 32,
@@ -343,7 +368,7 @@ get_component_opt <- function(component, i_s, i_r, arg) {
     style <- get_style(component, arg)
     bcol <- get_background_color(component, i_s, arg)
     scol <- get_suit_color(component, i_s, arg)
-    dm_col <- get_directional_mark_color(component, i_s, arg)
+    dm_col <- get_dm_color(component, i_s, arg)
     hexline_col <- get_hexline_color(component, i_s, arg) 
     checker_col <- arg$suit_colors[arg$i_unsuit] #### won't show hex lines
     rank_symbol <- get_rank_symbol(component, i_s, i_r, arg)
@@ -352,10 +377,10 @@ get_component_opt <- function(component, i_s, i_r, arg) {
     suit_symbol <- get_suit_symbol(component, i_s, arg)
     suit_fontsize <- get_suit_fontsize(component, i_s, arg)
     suit_font <- get_suit_font(component, i_s, arg)
-    dm_symbol <- get_directional_mark_symbol(component, i_s, arg)
-    dm_fontsize <- get_directional_mark_fontsize(component, i_s, arg)
-    dm_font <- get_directional_mark_font(component, i_s, arg)
-    theta <- get_directional_mark_theta(component, arg)
+    dm_symbol <- get_dm_symbol(component, i_s, arg)
+    dm_fontsize <- get_dm_fontsize(component, i_s, arg)
+    dm_font <- get_dm_font(component, i_s, arg)
+    theta <- get_dm_theta(component, arg)
     r <- sqrt(0.25^2 + 0.25^2)
     dm_x <- r * cos(pi * theta / 180) + 0.5
     dm_y <- r * sin(pi * theta / 180) + 0.5
@@ -396,15 +421,21 @@ make_preview <- function(arg) {
         draw_tile_face(ii, 2, arg)
     }
     seekViewport(paste0("coin.1"))
-    draw_coin_value(1, arg)
+    draw_coin_face(1, arg)
     seekViewport(paste0("coin.2"))
-    draw_coin_value(2, arg)
+    draw_coin_face(2, arg)
     seekViewport(paste0("coin.3"))
-    draw_coin_back(4, arg)
+    if (opts$n_suits < 5)
+        draw_coin_back(4, arg)
+    else
+        draw_coin_back(5, arg)
     seekViewport(paste0("coin.4"))
-    draw_coin_value(3, arg)
+    draw_coin_face(3, arg)
     seekViewport(paste0("coin.5"))
-    draw_coin_back(2, arg)
+    if (opts$n_suits < 6)
+        draw_coin_back(2, arg)
+    else
+        draw_coin_back(6, arg)
     seekViewport(paste0("coin.6"))
     draw_coin_back(1, arg)
 
@@ -465,7 +496,7 @@ add_hexlines <- function(arg, omit_direction=FALSE, hl_col=arg$suit_colors[5]) {
 
 draw_pawn <- function(i_s, arg) {
     opt <- get_component_opt("pawn", i_s, 1, arg)
-    neutral_col <- arg$suit_colors[5]
+    neutral_col <- arg$suit_colors[opts$i_unsuit]
 
     grid.rect(gp = gpar(fill=opt$bcol))
     gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
@@ -481,7 +512,7 @@ draw_pawn <- function(i_s, arg) {
 
 draw_pawn_belt <- function(i_s, arg) {
     opt <- get_component_opt("pawn_belt", i_s, 1, arg)
-    neutral_col <- arg$suit_colors[5]
+    neutral_col <- arg$suit_colors[opts$i_unsuit]
 
     grid.rect(gp = gpar(fill=opt$bcol))
     gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
@@ -524,7 +555,7 @@ draw_joker_tile_face <- function(arg, draw_border = TRUE) {
 }
 
 draw_tile_back <- function(arg, draw_border = TRUE) {
-    opt <- get_component_opt("tile_back", 5, 1, arg)
+    opt <- get_component_opt("tile_back", opts$i_unsuit, 1, arg)
     
     grid.rect(gp = gpar(fill=opt$bcol))
     add_hexlines(arg, hl_col=opt$hexline_col)
@@ -572,7 +603,7 @@ draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
 }
 
 
-draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
+draw_pawn_saucer <- function(i_s, arg, draw_border = TRUE) {
     component <- ifelse(i_s < arg$i_unsuit, "saucer_face", "saucer_back")
     opt <- get_component_opt(component, i_s, 1, arg)
 
@@ -586,7 +617,7 @@ draw_pawn_saucer_suit <- function(i_s, arg, draw_border = TRUE) {
     invisible(NULL)
 }
 
-draw_coin_value <- function(i_r, arg, draw_border = TRUE) {
+draw_coin_face <- function(i_r, arg, draw_border = TRUE) {
     opt <- get_component_opt("coin_face", arg$i_unsuit, i_r, arg)
 
     grid.circle(gp = gpar(fill=opt$bcol))

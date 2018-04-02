@@ -4,7 +4,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     default_str <- "(default %default)"
     parser <- OptionParser("Program to make piecepack configurations for exec/make_piecepack")
     parser <- add_option(parser, "--deck_title", default=NULL, 
-                         help='(default "Deck title")')
+                         help='(default "")')
     parser <- add_option(parser, "--deck_filename", default=NULL, 
                          help='(default "deck_filename")')
 
@@ -13,19 +13,19 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default "N,A,2,3,4,5")')
     parser <- add_option(parser, "--suit_symbols", default=NULL, 
                          help='(default "♠,♥,♣,♦,★")')
-    parser <- add_option(parser, "--directional_mark_symbols", default=NULL, 
+    parser <- add_option(parser, "--dm_symbols", default=NULL, 
                          help='(default is to try to pick a reasonable directional mark symbol based on the component)')
     parser <- add_option(parser, "--rank_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--suit_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
-    parser <- add_option(parser, "--directional_mark_symbols_font", default=NULL, 
+    parser <- add_option(parser, "--dm_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--rank_symbols_scale", default=NULL, 
                          help='(default is not to adjust scale)')
     parser <- add_option(parser, "--suit_symbols_scale", default=NULL, 
                          help='(default is not to adjust scale)')
-    parser <- add_option(parser, "--directional_mark_symbols_scale", default=NULL, 
+    parser <- add_option(parser, "--dm_symbols_scale", default=NULL, 
                          help='(default is not to adjust scale)')
 
     # Style
@@ -38,7 +38,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     #                      help='"basic" or "simple_hex" (default "basic")')
     parser <- add_option(parser, "--hexline_colors", default=NULL,
                          help='(default is not to draw any hexlines)')
-    parser <- add_option(parser, "--directional_mark_theta", default=NULL, type="double", 
+    parser <- add_option(parser, "--dm_theta", default=NULL, type="double", 
                          help='(default 135 for tile faces and die faces and 90 for everything else)')
 
     # Font
@@ -48,7 +48,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     # Color scheme
     parser <- add_option(parser, "--suit_colors", default=NULL, 
                          help='(default "darkred,black,darkgreen,darkblue,grey")')
-    parser <- add_option(parser, "--directional_mark_colors", default=NULL, 
+    parser <- add_option(parser, "--dm_colors", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
     parser <- add_option(parser, "--background_color", default=NULL, 
                          help='(default "white")')
@@ -79,8 +79,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         # Symbols
         for (style in c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
                         "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
-                        "directional_mark_symbols", "directional_mark_symbols_font", 
-                        "directional_mark_symbols_scale", "directional_mark_colors")) {
+                        "dm_symbols", "dm_symbols_font", 
+                        "dm_symbols_scale", "dm_colors")) {
             opt_str <- paste0("--", style, ".", component)
             parser <- add_option(parser, opt_str, default=NULL, 
                              help=paste0('(default is value of "', style, '" option)'))
@@ -94,9 +94,9 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         parser <- add_option(parser, opt_str, dest=dest_str, 
                              action="store_false", default=NULL, 
                              help=paste0('Opposite of "', dest_str, '" option'))
-        opt_str <- paste0("--directional_mark_theta.", component)
+        opt_str <- paste0("--dm_theta.", component)
         parser <- add_option(parser, opt_str, default=NULL, type="double",
-                             help='(default is value of "directional_mark_theta" option)')
+                             help='(default is value of "dm_theta" option)')
 
         # Color
         opt_str <- paste0("--background_color.", component)
@@ -113,6 +113,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     }
 
     # Misc
+    parser <- add_option(parser, "--n_ranks", default=NULL, type="double", 
+                         help='(default is inferred from "rank_symbols" option)')
     parser <- add_option(parser, "--n_suits", default=NULL, type="double", 
                          help='(default is inferred from "suit_symbols" option)')
 
@@ -138,18 +140,18 @@ make_style <- function(args=commandArgs(TRUE)) {
 #' @export
 get_arrangement_opts <- function(args=commandArgs(TRUE)) {
     parser <- OptionParser("Program to arrange piecepacks")
-    parser <- add_option(parser, "--collection_filename", default=NULL,
+    parser <- add_option(parser, "--collection_filename", default="collection_filename",
                          help='(default "collection_filename")')
-    parser <- add_option(parser, "--collection_title", default=NULL,
+    parser <- add_option(parser, "--collection_title", default="collection_title",
                          help='(default "collection_title")')
     parser <- add_option(parser, "--decks", help='(all of them)')
+    parser <- add_option(parser, "--paper", default="letter",
+                         help='Default paper size, either "letter" or "A4" (default "letter")')
+    parser <- add_option(parser, "--font", default="sans",
+                         help='Default font family (default "sans")')
 
     opts <- parse_args(parser, args)
 
-    if (is.null(opts$set_filename))
-        opts$set_filename <- "collection_filename"
-    if (is.null(opts$set_title))
-        opts$set_title <- "collection_title"
     if (is.null(opts$decks))
         opts$decks <- gsub(".pdf$", "", list.files("pdf"))
     else
@@ -160,7 +162,8 @@ get_arrangement_opts <- function(args=commandArgs(TRUE)) {
 }
 
 add_copyright <- function(opts) {
-    opts$program <- "Generated by the Configurable Piecepack PDF Maker."
+    # opts$program <- "Generated by the Configurable Piecepack PDF Maker."
+    opts$program <- "Generated by the piecepack R package: github.com/trevorld/piecepack"
     opts$copyright <- "© 2016-2018 Trevor L Davis. Some Rights Reserved."
     opts$license1 <- "This work is licensed under a CC BY-SA 4.0 license:"
     opts$license2 <- "https://creativecommons.org/licenses/by-sa/4.0/"
@@ -175,9 +178,10 @@ process_configuration <- function(opts) {
     opts$add_bleed_lines <- FALSE
 
     if (is.null(opts$deck_title))
-        opts$deck_title <- "deck_title"
+        opts$deck_title <- ""
+
     if (is.null(opts$deck_filename))
-        opts$deck_filename <- "deck_filename"
+        opts$deck_filename <- "piecepack_deck"
 
     if (is.null(opts[["font"]]))
         opts$font <- "sans"
@@ -186,12 +190,12 @@ process_configuration <- function(opts) {
         opts$rank_symbols <- "N,A,2,3,4,5"
     if (is.null(opts[["suit_symbols"]]))
         opts$suit_symbols <- "♥,♠,♣,♦,★"
+    if (is.null(opts[["suit_colors"]]))
+        opts$suit_colors <- "darkred,black,darkgreen,darkblue,grey"
     if (is.null(opts[["use_suit_as_ace"]]))
         opts$use_suit_as_ace <- FALSE
     if (is.null(opts[["style"]]))
         opts$style <- "basic"
-    if (is.null(opts[["suit_colors"]]))
-        opts$suit_colors <- "darkred,black,darkgreen,darkblue,grey"
     if (is.null(opts[["background_color"]]))
         opts$background_color <- "white"
     if (is.null(opts[["invert_colors"]]))
@@ -202,6 +206,8 @@ process_configuration <- function(opts) {
     opts$suit_symbols <- split(opts$suit_symbols)
     opts$suit_colors <- split(opts$suit_colors)
     opts$rank_symbols <- split(opts$rank_symbols)
+    if (is.null(opts$n_ranks))
+        opts$n_ranks <- length(opts$rank_symbols)
     if (is.null(opts$n_suits))
         opts$n_suits <- length(opts$suit_symbols) - 1
     opts$i_unsuit <- opts$n_suits + 1
@@ -209,29 +215,29 @@ process_configuration <- function(opts) {
 
     if (!is.null(opts[["hexline_colors"]]))
         opts$hexline_colors = split(opts[["hexline_colors"]])
-    if (!is.null(opts[["directional_mark_symbols"]]))
-        opts$directional_mark_symbols <- split(opts[["directional_mark_symbols"]])
+    if (!is.null(opts[["dm_symbols"]]))
+        opts$dm_symbols <- split(opts[["dm_symbols"]])
     if (!is.null(opts[["rank_symbols_font"]]))
         opts[["rank_symbols_font"]] <- split(opts[["rank_symbols_font"]])
     if (!is.null(opts[["suit_symbols_font"]]))
         opts[["suit_symbols_font"]] <- split(opts[["suit_symbols_font"]])
-    if (!is.null(opts[["directional_mark_symbols_font"]]))
-        opts[["directional_mark_symbols_font"]] <- split(opts[["directional_mark_symbols_font"]])
+    if (!is.null(opts[["dm_symbols_font"]]))
+        opts[["dm_symbols_font"]] <- split(opts[["dm_symbols_font"]])
     if (!is.null(opts[["rank_symbols_scale"]]))
         opts[["rank_symbols_scale"]] <- as.numeric(split(opts[["rank_symbols_scale"]]))
     if (!is.null(opts[["suit_symbols_scale"]]))
         opts[["suit_symbols_scale"]] <- as.numeric(split(opts[["suit_symbols_scale"]]))
-    if (!is.null(opts[["directional_mark_symbols_scale"]]))
-        opts[["directional_mark_symbols_scale"]] <- as.numeric(split(opts[["directional_mark_symbols_scale"]]))
+    if (!is.null(opts[["dm_symbols_scale"]]))
+        opts[["dm_symbols_scale"]] <- as.numeric(split(opts[["dm_symbols_scale"]]))
     for(component in COMPONENTS) {
-        for (style in c("rank_symbols", "suit_symbols", "directional_mark_symbols",
-                        "rank_symbols_font", "suit_symbols_font", "directional_mark_symbols_font",
-                        "directional_mark_colors")) {
+        for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
+                        "rank_symbols_font", "suit_symbols_font", "dm_symbols_font",
+                        "dm_colors")) {
             component_str <- paste0(style, ".", component)
             if (!is.null(opts[[component_str]]))
                 opts[[component_str]] <- split(opts[[component_str]])
         }
-        for (style in c("rank_symbols_scale", "suit_symbols_scale", "directional_mark_symbols_scale")) {
+        for (style in c("rank_symbols_scale", "suit_symbols_scale", "dm_symbols_scale")) {
             component_str <- paste0(style, ".", component)
             if (!is.null(opts[[component_str]]))
                 opts[[component_str]] <- as.numeric(split(opts[[component_str]]))
@@ -249,16 +255,25 @@ process_configuration <- function(opts) {
 read_style <- function(args=commandArgs(TRUE)) {
     parser <- OptionParser("Program to make piecepack deck pdf")
     parser <- add_option(parser, c('-f', '--file'), default=NULL, help="Source of piecepack style information (default stdin input)")
-    opts <- parse_args(parser, args)
+    parser <- add_option(parser, "--paper", default="letter",
+                         help='Default paper size, either "letter" or "A4" (default "letter")')
+    args <- parse_args(parser, args)
 
-    if (is.null(opts$file)) 
+    if (is.null(args$file)) 
         con <- file("stdin")
     else 
-        con <- file(opts$file)
+        con <- file(args$file)
     
     opts <- jsonlite::fromJSON(readLines(con))
     close(con)
 
+    opts$paper <- args$paper
+
     opts <- process_configuration(opts)
     opts
+}
+
+#' @export
+c2o <- function(args=NULL) {
+    process_configuration(configuration_options(args))
 }
