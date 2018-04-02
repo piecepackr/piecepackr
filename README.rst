@@ -71,7 +71,7 @@ Build a demo `"orthodox piecepacks" pdf <https://www.dropbox.com/s/derdlo3j8sdeo
 sixpack
 ~~~~~~~
 
-Build a demo `"sixpack pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`_.  It includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
+Build a demo `"Sixpack" pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`_.  It includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
 
 Executable options
 ------------------
