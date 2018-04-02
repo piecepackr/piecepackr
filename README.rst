@@ -5,6 +5,8 @@ This is an R package designed to make piecepack graphics.  It includes some exec
 
 **Warning**: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
 
+.. contents::
+
 Installation
 ------------
 
