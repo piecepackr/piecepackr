@@ -43,7 +43,7 @@ task :install do
     # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'exec/configure_piecepack --help | cat > configurations/configure_piecepack_options.txt | true'
     sh 'exec/make_piecepack --help | cat > configurations/make_piecepack_options.txt'
-    sh 'exec/arrange_piecepacks --help | cat > configurations/arrange_piecepacks_options.txt'
+    sh 'exec/collect_piecepacks --help | cat > configurations/collect_piecepacks_options.txt'
 end
 
 desc "Default piecepack demo"
@@ -54,7 +54,7 @@ task :default do
     sh configure_piecepack + extra_flags
     sh "exec/make_piecepack --file=" + file1
     decks = " --decks=piecepack_deck"
-    sh "exec/arrange_piecepacks --collection_filename=default_demo --collection_title='Default demo" + version_str + decks
+    sh "exec/collect_piecepacks --collection_filename=default_demo --collection_title='Default demo" + version_str + decks
     sh "xdg-open collections/default_demo.pdf"
 end
 
@@ -80,7 +80,7 @@ task :chinese_zodiac do
     sh "exec/make_piecepack --file=" + file2 
 
     decks = " --decks=chinese_zodiac1,chinese_zodiac2"
-    sh "exec/arrange_piecepacks --collection_filename=chinese_zodiac_demo --collection_title='Chinese zodiac demo'" + decks
+    sh "exec/collect_piecepacks --collection_filename=chinese_zodiac_demo --collection_title='Chinese zodiac demo'" + decks
     sh "xdg-open collections/chinese_zodiac_demo.pdf"
 end
 
@@ -125,7 +125,7 @@ task :sixpack do
     sh "exec/make_piecepack --file=" + file4 
 
     decks = " --decks=sixpack1,sixpack2,sixpack3,sixpack4"
-    sh "exec/arrange_piecepacks --collection_filename=sixpack_demo --collection_title='Sixpack demo'" + decks
+    sh "exec/collect_piecepacks --collection_filename=sixpack_demo --collection_title='Sixpack demo'" + decks
     sh "xdg-open collections/sixpack_demo.pdf"
 end
 
@@ -152,7 +152,7 @@ task :orthodox do
     sh "exec/make_piecepack --file=" + file2 
 
     decks = " --decks=orthodox1_piecepack,orthodox2_french"
-    sh "exec/arrange_piecepacks --collection_filename=orthodox_demo --collection_title='Orthodox demo" + version_str + decks
+    sh "exec/collect_piecepacks --collection_filename=orthodox_demo --collection_title='Orthodox demo" + version_str + decks
     sh "xdg-open collections/orthodox_demo.pdf"
 end
 
@@ -214,7 +214,7 @@ task :dual do
     sh "exec/make_piecepack --file=" + file6
 
     decks = " --decks=dual1piecepack,dual2latin,dual3french,dual4french,dual5swiss,dual6swiss"
-    sh "exec/arrange_piecepacks --collection_filename=dual_demo" + collection_title + decks
+    sh "exec/collect_piecepacks --collection_filename=dual_demo" + collection_title + decks
     sh "xdg-open collections/dual_demo.pdf"
 end
 
@@ -253,7 +253,7 @@ task :test do
     sh 'exec/configure_piecepack' + deck_filename + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     decks = " --decks=test1piecepack,test2latin,test3french,test4french"
-    sh "exec/arrange_piecepacks --collection_filename=test --collection_title='Test'" + decks
+    sh "exec/collect_piecepacks --collection_filename=test --collection_title='Test'" + decks
     sh "xdg-open collections/test.pdf"
 
     # deck_name = " --deck_name='TLD Euchre Piecepack, French Suits (v0.1)'"

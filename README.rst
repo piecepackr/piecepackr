@@ -1,9 +1,9 @@
-Configurable Piecepack PDF Maker
---------------------------------
+Piecepack Graphics R Package
+----------------------------
 
-This is an R package and some executable Rscripts designed to make a pdf of piecepack components with the intention that they either be printed on label paper and mounted on components or printed on paperboard and folded/glued together in order to make a `piecepack <http://www.ludism.org/ppwiki/HomePage>`_.  
+This is an R package designed to make piecepack graphics.  It includes some executable Rscripts designed to make a pdf of piecepack components with the intention that they either be printed on label paper and mounted on components or printed on paperboard and folded/glued together in order to make a `piecepack <http://www.ludism.org/ppwiki/HomePage>`_.  
 
-.. warning:: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
+**Warning**: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
 
 Installation
 ------------
@@ -21,21 +21,30 @@ You'll also need to install the development version of grImport2 package and thi
 
 You'll also need some decent fonts installed on your system with the Unicode symbols you'd like to use in your piecepack.  
 
-.. warning:: Not all fonts can be freely distributed!  Be careful with which ones you use!
+**Warning**: Not all fonts can be freely distributed!  Be careful with which ones you use!
 
 The software currently assumes one has installed:
 
 * `Symbola <http://www.fontspace.com/unicode-fonts-for-ancient-scripts/symbola>`_ good coverage of the Symbol block of the Unicode Standard.
 * `Noto Sans Cham <https://www.google.com/get/noto/>`_ contains the rare "Cham Punctuation Spiral".
 
-How to use
-----------
+How to use executable Rscripts
+------------------------------
 
-One uses the ``exec/make_piecepack`` command to make a single PnP pdf of a piecepack deck.  One can arrange several PnP pdf's using the ``exec/arrange_piecepacks`` command.  The ``exec/make_piecepack`` command requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``exec/configure_piecepack`` can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
+One uses the ``exec/make_piecepack`` command to make a single print-and-play pdf of a piecepack deck.  One can collect several print-and-play pdf's using the ``exec/collect_piecepacks`` command.  The ``exec/make_piecepack`` command requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``exec/configure_piecepack`` can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
 
     $ rake demo_name
 
 Where ``demo_name`` is either:
+
+#. ``chinese_zodiac``
+#. ``default``
+#. ``dual``
+#. ``orthodox``
+#. ``sixpack``
+
+Demo descriptions
+-----------------
 
 chinese_zodiac
 ~~~~~~~~~~~~~~
