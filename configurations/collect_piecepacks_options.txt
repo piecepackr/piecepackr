@@ -15,7 +15,7 @@ Options:
 		(all of them)
 
 	--paper=PAPER
-		Default paper size, either "letter" or "A4" (default "letter")
+		Paper size, either "letter" or "A4" (default "letter")
 
 	--font=FONT
 		Default font family (default "sans")

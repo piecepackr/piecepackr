@@ -78,7 +78,7 @@ Executable options
 
 * `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/configure_piecepack_options.txt>`_
 * `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/make_piecepack_options.txt>`_
-* `exec/arrange_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/configurations/arrange_piecepacks_options.txt>`_
+* `exec/collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/configurations/collect_piecepacks_options.txt>`_
 
 Licence
 -------

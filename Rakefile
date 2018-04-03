@@ -80,7 +80,7 @@ task :chinese_zodiac do
     sh "exec/make_piecepack --file=" + file2 
 
     decks = " --decks=chinese_zodiac1,chinese_zodiac2"
-    sh "exec/collect_piecepacks --collection_filename=chinese_zodiac_demo --collection_title='Chinese zodiac demo'" + decks
+    sh "exec/collect_piecepacks --collection_filename=chinese_zodiac_demo --collection_title='Chinese zodiac demo" + version_str + decks
     sh "xdg-open collections/chinese_zodiac_demo.pdf"
 end
 
@@ -125,7 +125,7 @@ task :sixpack do
     sh "exec/make_piecepack --file=" + file4 
 
     decks = " --decks=sixpack1,sixpack2,sixpack3,sixpack4"
-    sh "exec/collect_piecepacks --collection_filename=sixpack_demo --collection_title='Sixpack demo'" + decks
+    sh "exec/collect_piecepacks --collection_filename=sixpack_demo --collection_title='Sixpack demo" + version_str + decks
     sh "xdg-open collections/sixpack_demo.pdf"
 end
 
@@ -163,7 +163,6 @@ task :dual do
     # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue"
     # alt_scheme = " --suit_colors=white,orange2,yellow,purple"
 
-    collection_title = " --collection_title='\"Dual piecepacks\" proof of concept" + version_str
     deck_filename = " --deck_filename=dual1piecepack"
     deck_title = " --deck_title='Piecepack-suited (Un-inverted color scheme)" + version_str
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
@@ -213,6 +212,7 @@ task :dual do
     sh configure_piecepack + deck_title + deck_filename + swiss_suits + rank_symbols + extra_flags
     sh "exec/make_piecepack --file=" + file6
 
+    collection_title = " --collection_title='\"Dual piecepacks\" proof of concept" + version_str
     decks = " --decks=dual1piecepack,dual2latin,dual3french,dual4french,dual5swiss,dual6swiss"
     sh "exec/collect_piecepacks --collection_filename=dual_demo" + collection_title + decks
     sh "xdg-open collections/dual_demo.pdf"

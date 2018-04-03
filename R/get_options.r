@@ -146,7 +146,7 @@ get_arrangement_opts <- function(args=commandArgs(TRUE)) {
                          help='(default "collection_title")')
     parser <- add_option(parser, "--decks", help='(all of them)')
     parser <- add_option(parser, "--paper", default="letter",
-                         help='Default paper size, either "letter" or "A4" (default "letter")')
+                         help='Paper size, either "letter" or "A4" (default "letter")')
     parser <- add_option(parser, "--font", default="sans",
                          help='Default font family (default "sans")')
 
