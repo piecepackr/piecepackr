@@ -25,10 +25,11 @@ You'll also need some decent fonts installed on your system with the Unicode sym
 
 **Warning**: Not all fonts can be freely distributed!  Be careful with which ones you use!
 
-The software currently assumes one has installed:
+The demos assumes one has installed:
 
 * `Symbola <http://www.fontspace.com/unicode-fonts-for-ancient-scripts/symbola>`_ good coverage of the Symbol block of the Unicode Standard.
 * `Noto Sans Cham <https://www.google.com/get/noto/>`_ contains the rare "Cham Punctuation Spiral".
+* `Noto Sans CJK SC <https://www.google.com/get/noto/>`_ (``chinese_zodiac`` demo only)
 
 How to use executable Rscripts
 ------------------------------

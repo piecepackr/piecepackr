@@ -22,6 +22,7 @@ french_suits2 = " --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1,1,1,
 swiss_suits = " --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1.2,1.2"
 sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=1,1,1,1,0.7,0.8,1.2,1.2"
 chinese_elements = " --suit_symbols=🌲,🔥,⛰️,🏆,🌊, --suit_symbols_scale=1.1,1.1,1,0.6,0.6 --suit_colors=darkgreen,red3,chocolate4,black,darkblue,grey"
+chinese_elements2 = " --suit_symbols=木,火,土,金,水, --suit_symbols_scale=0.7 --suit_symbols_font='Noto Sans CJK SC' --suit_colors=darkgreen,red3,chocolate4,black,darkblue,grey"
 piecepack_suits = " --suit_symbols=🌞,🌜,👑,⚜,꩜ --suit_symbols_scale=0.7,0.8,0.8,1.1,1.2,1.2"
 hexlines_dark = " --hexline_colors=darkred,black,darkgreen,darkblue,grey"
 hexlines_light = " --hexline_colors=hotpink2,dimgrey,palegreen,lightblue2,grey"
@@ -78,7 +79,25 @@ task :chinese_zodiac do
     sh configure_piecepack + deck_title + deck_filename + suit_symbols + rank_symbols + extra_flags 
     sh "exec/make_piecepack --file=" + file2 
 
-    decks = " --decks=chinese_zodiac1,chinese_zodiac2"
+    deck_title = " --deck_title='Chinese zodiac #3" + version_str
+    deck_filename = " --deck_filename=chinese_zodiac3"
+    suit_symbols = chinese_elements2
+    rank_symbols = " --rank_symbols=鼠,龙,猴,牛,蛇,鸡 --rank_symbols_font='Noto Sans CJK SC' --rank_symbols_scale=0.7"
+    file1 = "configurations/chinese_zodiac3.json"
+    extra_flags = " --file=" + file1  
+    sh configure_piecepack + deck_title + deck_filename + suit_symbols + rank_symbols + extra_flags
+    sh "exec/make_piecepack --file=" + file1
+
+    deck_title = " --deck_title='Chinese zodiac #4" + version_str
+    deck_filename = " --deck_filename=chinese_zodiac4"
+    suit_symbols = chinese_elements2
+    rank_symbols = " --rank_symbols=虎,马,狗,兔,羊,猪 --rank_symbols_font='Noto Sans CJK SC' --rank_symbols_scale=0.7"
+    file2 = "configurations/chinese_zodiac4.json"
+    extra_flags = " --file=" + file2 
+    sh configure_piecepack + deck_title + deck_filename + suit_symbols + rank_symbols + extra_flags 
+    sh "exec/make_piecepack --file=" + file2 
+
+    decks = " --decks=chinese_zodiac1,chinese_zodiac2,chinese_zodiac3,chinese_zodiac4"
     sh "exec/collect_piecepacks --collection_filename=chinese_zodiac_demo --collection_title='Chinese zodiac demo" + version_str + decks
     sh "xdg-open collections/chinese_zodiac_demo.pdf"
 end

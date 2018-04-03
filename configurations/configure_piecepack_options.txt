@@ -62,6 +62,9 @@ Options:
 	--background_color=BACKGROUND_COLOR
 		(default "white")
 
+	--border_color=BORDER_COLOR
+		(default "grey")
+
 	--invert_colors
 		(default "FALSE")
 
