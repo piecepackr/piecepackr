@@ -52,6 +52,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default the value of the "suit_colors" option)')
     parser <- add_option(parser, "--background_color", default=NULL, 
                          help='(default "white")')
+    parser <- add_option(parser, "--border_color", default=NULL, 
+                         help='(default "grey")')
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
                          help='(default "FALSE")')
     parser <- add_option(parser, "--uninvert_colors", action="store_false", dest="invert_colors",
@@ -198,6 +200,8 @@ process_configuration <- function(opts) {
         opts$style <- "basic"
     if (is.null(opts[["background_color"]]))
         opts$background_color <- "white"
+    if (is.null(opts[["border_color"]]))
+        opts$border_color <- "grey"
     if (is.null(opts[["invert_colors"]]))
         opts$invert_colors <- FALSE
 

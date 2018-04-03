@@ -150,7 +150,7 @@ draw_suitrank_die <- function(opts, flip=FALSE) {
             }
         } else if (opts$n_suits == 5) {
             downViewport(paste0(label, ".die.6"))
-            draw_piecepack_die_face(5, 6, opts)
+            draw_piecepack_die_face(6, 6, opts)
             upViewport()
             for (i_r in 1:5) {
                 downViewport(paste0(label, ".die.", i_r))

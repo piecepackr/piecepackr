@@ -11,13 +11,14 @@ task :clean do
     sh "killall evince | true"
 end
 
-version_str = " (v0.7.0-0)'"
+version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'` + ")'"
 
 configure_piecepack = "exec/configure_piecepack --font=Symbola "
 pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back="
 light_scheme = " --suit_colors=hotpink2,dimgrey,palegreen,lightblue2,grey"
 latin_suits = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜ --suit_symbols_scale=0.6,1,1,1.1,1.2"
 french_suits = " --suit_symbols=♥,♠,♣,♦,★ --suit_symbols_scale=1,1,1,1,1.2,1.2"
+french_suits2 = " --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1,1,1,1,1.2,1.2"
 swiss_suits = " --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1.2,1.2"
 sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=1,1,1,1,0.7,0.8,1.2,1.2"
 chinese_elements = " --suit_symbols=🌲,🔥,⛰️,🏆,🌊, --suit_symbols_scale=1.1,1.1,1,0.6,0.6 --suit_colors=darkgreen,red3,chocolate4,black,darkblue,grey"
@@ -47,7 +48,6 @@ task :install do
 end
 
 desc "Default piecepack demo"
-task :default => :clean
 task :default do
     file1 = "configurations/default.json"
     extra_flags = " --file=" + file1
@@ -59,7 +59,6 @@ task :default do
 end
 
 desc "Chinese zodiac demo"
-task :chinese_zodiac => :clean
 task :chinese_zodiac do
     deck_title = " --deck_title='Chinese zodiac #1" + version_str
     deck_filename = " --deck_filename=chinese_zodiac1"
@@ -85,7 +84,6 @@ task :chinese_zodiac do
 end
 
 desc "Sixpack piecepacks demo"
-task :sixpack => :clean
 task :sixpack do
     deck_title = " --deck_title='Sixpack-suited piecepack" + version_str
     deck_filename = " --deck_filename=sixpack1"
@@ -131,7 +129,6 @@ end
 
 
 desc "Orthodox piecepacks demo"
-task :orthodox => :clean
 task :orthodox do
     deck_title = " --deck_title='Orthodox piecepack" + version_str
     deck_filename = " --deck_filename=orthodox1_piecepack"
@@ -144,7 +141,7 @@ task :orthodox do
 
     deck_title = " --deck_title='Orthodox-style 2-color french-suited piecepack" + version_str
     deck_filename = " --deck_filename=orthodox2_french"
-    suit_symbols = french_suits + " --suit_colors=darkred,black,black,darkred,black "
+    suit_symbols = french_suits2 + " --suit_colors=darkred,black,black,darkred,black "
     rank_symbols = " --rank_symbols=' ,A,2,3,4,5'"
     file2 = "configurations/orthodox2_french.json"
     extra_flags = " --use_suit_as_ace --file=" + file2 + pyramid_configuration + orthodox_dm + orthodox_saucers2
@@ -157,7 +154,6 @@ task :orthodox do
 end
 
 desc "Dual piecepacks demo"
-task :dual => :clean
 task :dual do
     # --background_color=seashell3")
     # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue"
@@ -253,7 +249,7 @@ task :test do
     sh 'exec/configure_piecepack' + deck_filename + suit_symbols + rank_symbols + extra_flags + ' | exec/make_piecepack'
 
     decks = " --decks=test1piecepack,test2latin,test3french,test4french"
-    sh "exec/collect_piecepacks --collection_filename=test --collection_title='Test'" + decks
+    sh "exec/collect_piecepacks --collection_filename=test --collection_title='Test'" + version_str + decks
     sh "xdg-open collections/test.pdf"
 
     # deck_name = " --deck_name='TLD Euchre Piecepack, French Suits (v0.1)'"

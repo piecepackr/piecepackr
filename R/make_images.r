@@ -494,32 +494,34 @@ add_hexlines <- function(arg, omit_direction=FALSE, hl_col=arg$suit_colors[5]) {
         seg(1, 1 - ho, 1 - ho, 1, hl_col, hl_size) 
 }
 
-draw_pawn <- function(i_s, arg) {
+draw_pawn <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt("pawn", i_s, 1, arg)
-    neutral_col <- arg$suit_colors[opts$i_unsuit]
 
     grid.rect(gp = gpar(fill=opt$bcol))
     gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
     grid.text(opt$suit_symbol, y=0.65, rot=180, gp=gp_tr)
     grid.text(opt$suit_symbol, y=0.35, rot=0, gp=gp_tr)
-    grid.lines(y=0.5, gp=gpar(col=neutral_col, lty="dashed"))
-    grid.lines(y=0.1, gp=gpar(col=neutral_col, lty="dashed"))
-    grid.lines(y=0.9, gp=gpar(col=neutral_col, lty="dashed"))
-    grid.rect(gp = gpar(col=neutral_col, fill=NA))
+    grid.lines(y=0.5, gp=gpar(col=opt$scol, lty="dashed"))
+    grid.lines(y=0.1, gp=gpar(col=opt$scol, lty="dashed"))
+    grid.lines(y=0.9, gp=gpar(col=opt$scol, lty="dashed"))
+
+    if (draw_border)
+        grid.rect(gp = gpar(col=arg$border_color, fill=NA))
 
     invisible(NULL)
 }
 
-draw_pawn_belt <- function(i_s, arg) {
+draw_pawn_belt <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt("pawn_belt", i_s, 1, arg)
-    neutral_col <- arg$suit_colors[opts$i_unsuit]
 
     grid.rect(gp = gpar(fill=opt$bcol))
     gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
     grid.text(opt$suit_symbol, gp=gp_tr)
     grid.lines(y=0.9, gp=gpar(col=opt$scol, lwd=8))
     grid.lines(y=0.1, gp=gpar(col=opt$scol, lwd=8))
-    grid.rect(gp = gpar(col=neutral_col, fill=NA))
+
+    if (draw_border)
+        grid.rect(gp = gpar(col=arg$border_color, fill=NA))
 
     invisible(NULL)
 }
@@ -550,7 +552,7 @@ draw_joker_tile_face <- function(arg, draw_border = TRUE) {
     grid.text(symbol.2, x=0.75, y=.75, gp=gp_tr)
 
     if (draw_border) 
-        grid.rect(gp=gpar(col="grey", fill=NA))
+        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -563,7 +565,7 @@ draw_tile_back <- function(arg, draw_border = TRUE) {
     grid.lines(x=0.5, gp=gp_gl)
     grid.lines(y=0.5, gp=gp_gl)
     if (draw_border)
-        grid.rect(gp=gpar(col="grey", fill=NA))
+        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -584,7 +586,7 @@ draw_tile_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
 
     if (draw_border)
-        grid.rect(gp=gpar(col="grey", fill=NA))
+        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
 
     invisible(NULL)
 }
@@ -598,7 +600,7 @@ draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
-        grid.rect(gp=gpar(col="grey", fill=NA))
+        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -613,7 +615,7 @@ draw_pawn_saucer <- function(i_s, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
-        grid.circle(gp=gpar(col="grey", fill=NA))
+        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -626,7 +628,7 @@ draw_coin_face <- function(i_r, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) {
-        grid.circle(gp=gpar(col="grey", fill=NA))
+        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
     }
     invisible(NULL)
 }
@@ -640,7 +642,7 @@ draw_piecepack_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
-        grid.rect(gp=gpar(col="grey", fill=NA))
+        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -654,7 +656,7 @@ draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
-        grid.circle(gp=gpar(col="grey", fill=NA))
+        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -667,7 +669,7 @@ draw_coin_back <- function(i_s, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
-        grid.circle(gp=gpar(col="grey", fill=NA))
+        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -681,6 +683,6 @@ draw_chip_back <- function(i_s, arg, draw_border = TRUE) {
     dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
-        grid.circle(gp=gpar(col="grey", fill=NA))
+        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }

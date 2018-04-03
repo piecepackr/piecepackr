@@ -1,0 +1,12 @@
+piecepack 0.7.1
+===============
+
+* Add ``--border_color`` configuration option and fix bug in PnP border colors (#42).
+* Fix bug in the "suit-rank" die for 5-suited piecepacks (#41).
+* Fix bug in "orthodox" demo. 
+
+piecepack 0.7.0
+===============
+
+* Improved print-and-play layout (#35).
+* Added "Chinese zodiac" and "sixpack" demos (#38).
