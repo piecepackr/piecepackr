@@ -1,4 +1,4 @@
-COMPONENTS <- c("tile_back", "tile_face", #### joker_tile_face?
+COMPONENTS <- c("tile_back", "tile_face", 
            "coin_back", "coin_face",
            "piecepack_die", "suit_die", 
            "saucer_face", "saucer_back",
@@ -63,7 +63,7 @@ should_invert <- function(component, i_s, arg) {
 is_suited <- function(component, i_s, arg) {
     switch(component,
            tile_back = FALSE,
-           tile_face = TRUE, #### joker_tile_face?
+           tile_face = TRUE, 
            coin_back = TRUE,
            coin_face = FALSE,
            piecepack_die = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
@@ -77,7 +77,7 @@ is_suited <- function(component, i_s, arg) {
 }
 
 get_dm_theta <- function(component, arg) {
-    component_str <- paste0("dm_theta", component)
+    component_str <- paste0("dm_theta.", component)
     if (!is.null(arg[[component_str]])) {
         arg[[component_str]]
     } else if (!is.null(arg[["dm_theta"]])) {
@@ -86,6 +86,16 @@ get_dm_theta <- function(component, arg) {
         135
     } else {
         90
+    }
+}
+get_dm_r <- function(component, arg) {
+    component_str <- paste0("dm_r.", component)
+    if (!is.null(arg[[component_str]])) {
+        arg[[component_str]]
+    } else if (!is.null(arg[["dm_r"]])) {
+        arg[["dm_r"]]
+    } else {
+        sqrt(0.25^2 + 0.25^2)
     }
 }
 
@@ -324,11 +334,11 @@ get_suit_fontsize <- function(component, i_s, arg) {
     fs <- switch(component,
                  "pawn_belt" = 20,
                  "chip_back" = 24,
-                 "coin_back" = 24,
+                 "coin_back" = 28,
                  "pawn" = 40,
-                 "saucer_back" = 30,
-                 "saucer_face" = 30,
-                 "suit_die" = 24,
+                 "saucer_back" = 32,
+                 "saucer_face" = 32,
+                 "suit_die" = 28,
                  24)
     scale * fs
 }
@@ -337,7 +347,7 @@ get_dm_fontsize <- function(component, i_s, arg) {
     scale <- get_dm_scale(component, i_s, arg)
     fs <- switch(component,
                  "tile_face" = 32,
-                 8)
+                 10)
     scale * fs
 }
 
@@ -351,8 +361,8 @@ get_rank_fontsize <- function(component, i_s, i_r, arg) {
         scale <- rank_scale
     fs <- switch(component,
                  "piecepack_die" = 20,
-                 "chip_face" = 24,
-                 "coin_face" = 24,
+                 "chip_face" = 28,
+                 "coin_face" = 28,
                  "tile_face" = 72,
                  20)
     scale * fs
@@ -381,7 +391,7 @@ get_component_opt <- function(component, i_s, i_r, arg) {
     dm_fontsize <- get_dm_fontsize(component, i_s, arg)
     dm_font <- get_dm_font(component, i_s, arg)
     theta <- get_dm_theta(component, arg)
-    r <- sqrt(0.25^2 + 0.25^2)
+    r <- get_dm_r(component, arg)
     dm_x <- r * cos(pi * theta / 180) + 0.5
     dm_y <- r * sin(pi * theta / 180) + 0.5
 
@@ -395,27 +405,50 @@ get_component_opt <- function(component, i_s, i_r, arg) {
 
 
 make_preview <- function(arg) {
+    pheight <- 2*tile_width+3*die_width
     svg(file.path(arg$directory, "preview.svg"), 
-        family=arg$font, width=4, height=4.67)
+        family=arg$font, width=3*tile_width, height=pheight)
     # dev.new(width=4, height=4.67, unit="in")
     grid.newpage()
 
     # Build viewports
     pushViewport(viewport(name="main"))
-    addViewport(y=unit(2.67, "in"), width=unit(4, "in"), height=unit(4, "in"), name="tiles")
+    addViewport(y=inch(pheight-tile_width), width=inch(3 * tile_width), height=inch(2 * tile_width), name="tiles")
     downViewport("tiles")
-    addViewport(x=0.25, y=0.75, width=0.5, height=0.5, name="tile.1")
-    addViewport(x=0.75, y=0.75, width=0.5, height=0.5, name="tile.2")
-    addViewport(x=0.75, y=0.25, width=0.5, height=0.5, name="tile.3")
-    addViewport(x=0.25, y=0.25, width=0.5, height=0.5, name="tile.4")
+    addViewport(x=1/3-1/6, y=3/4, width=inch(tile_width), height=inch(tile_width), name="tile.1")
+    addViewport(x=3/3-1/6, y=3/4, width=inch(tile_width), height=inch(tile_width), name="tile.2")
+    addViewport(x=3/3-1/6, y=1/4, width=inch(tile_width), height=inch(tile_width), name="tile.3")
+    addViewport(x=1/3-1/6, y=1/4, width=inch(tile_width), height=inch(tile_width), name="tile.4")
+    addViewport(x=2/3-1/6, y=3/4, width=inch(tile_width), height=inch(tile_width), name="tile.5")
+    addViewport(x=2/3-1/6, y=1/4, width=inch(tile_width), height=inch(tile_width), name="tile.6")
     seekViewport("main")
-    addViewport(y=unit(0.335, "in"), width=unit(4, "in"), height=unit(0.67, "in"), name="coins")
+    addViewport(x=inch(1.5*coin_width), y=inch(1.5*die_width), width=inch(3*coin_width), height=inch(2*coin_width), name="coins")
     downViewport("coins")
-    for (ii in 1:6) {
-        addViewport(x=ii/6-1/12, width=1/6, name=paste0("coin.", ii))
+    for (ii in 1:3) {
+        addViewport(x=ii/3-1/6, y=3/4, height=1/2, width=1/3, name=paste0("coin.", ii))
+        addViewport(x=ii/3-1/6, y=1/4, height=1/2, width=1/3, name=paste0("coin.", 3+ii))
     }
+    seekViewport("main")
+    addViewport(x=3/3-1/6, y=inch(1.5*die_width), width=inch(4 * die_width), height=inch(3 * die_width), name="suitrankdie")
+    addViewport(x=inch(tile_width+2.5*die_width), y=inch(2*die_width), 
+                width=inch(2 * saucer_width), height=inch(saucer_width), name="saucers")
+    downViewport('saucers')
+    addViewport(x=0.25, width=0.5, name="saucer.face")
+    addViewport(x=0.75, width=0.5, name="saucer.back")
 
     # Draw components
+    seekViewport("tile.6")
+    if (arg$n_suits < 6) {
+        draw_tile_back(arg)
+    } else {
+        draw_tile_face(6, 2, arg)
+    }
+    seekViewport("tile.5")
+    if (arg$n_suits < 5) {
+        draw_tile_back(arg)
+    } else {
+        draw_tile_face(5, 2, arg)
+    }
     for (ii in 1:min(4, arg$n_suits)) {
         seekViewport(paste0("tile.", ii))
         draw_tile_face(ii, 2, arg)
@@ -437,7 +470,15 @@ make_preview <- function(arg) {
     else
         draw_coin_back(6, arg)
     seekViewport(paste0("coin.6"))
-    draw_coin_back(1, arg)
+    draw_coin_back(3, arg)
+
+    seekViewport("suitrankdie")
+    draw_suitrank_die(arg)
+
+    seekViewport("saucer.face")
+    draw_pawn_saucer(1, arg)
+    seekViewport("saucer.back")
+    draw_pawn_saucer(arg$i_unsuit, arg)
 
     dev.off()
 }
@@ -498,7 +539,7 @@ draw_pawn <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt("pawn", i_s, 1, arg)
 
     grid.rect(gp = gpar(fill=opt$bcol))
-    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
+    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, y=0.65, rot=180, gp=gp_tr)
     grid.text(opt$suit_symbol, y=0.35, rot=0, gp=gp_tr)
     grid.lines(y=0.5, gp=gpar(col=opt$scol, lty="dashed"))
@@ -515,7 +556,7 @@ draw_pawn_belt <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt("pawn_belt", i_s, 1, arg)
 
     grid.rect(gp = gpar(fill=opt$bcol))
-    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
+    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, gp=gp_tr)
     grid.lines(y=0.9, gp=gpar(col=opt$scol, lwd=8))
     grid.lines(y=0.1, gp=gpar(col=opt$scol, lwd=8))
@@ -523,36 +564,6 @@ draw_pawn_belt <- function(i_s, arg, draw_border = TRUE) {
     if (draw_border)
         grid.rect(gp = gpar(col=arg$border_color, fill=NA))
 
-    invisible(NULL)
-}
-
-draw_joker_tile_face <- function(arg, draw_border = TRUE) {
-    opt <- get_component_opt("tile_face", arg$i_unsuit, 1, arg) #### joker_tile_face?
-
-    #### Add option to use each of four suits instead?
-    symbol.1 <- get_suit_symbol("tile_face", arg$i_unsuit, arg) 
-    symbol.2 <- get_suit_symbol("tile_face", arg$i_unsuit, arg)
-    symbol.3 <- get_suit_symbol("tile_face", arg$i_unsuit, arg)
-    symbol.4 <- get_suit_symbol("tile_face", arg$i_unsuit, arg)
-    grid.rect(gp = gpar(fill=opt$bcol))
-    if (arg$add_checkers) {
-        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=opt$checker_col))
-        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=opt$checker_col))
-    }
-    if (opt$style == "simple_hex") {
-        add_hexlines(arg, hl_col=opt$hexline_col)
-    }
-    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
-    grid.text(symbol.1, x=0.25, y=.75, gp=gp_tr)
-    grid.text(symbol.3, x=0.75, y=.25, gp=gp_tr)
-
-    if (arg$add_checkers) 
-        gp_tr <- gpar(col=opt$bcol, fontsize=opt$suit_fontsize, family=opt$suit_font)
-    grid.text(symbol.4, x=0.25, y=.25, gp=gp_tr)
-    grid.text(symbol.2, x=0.75, y=.75, gp=gp_tr)
-
-    if (draw_border) 
-        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
     invisible(NULL)
 }
 
@@ -579,10 +590,10 @@ draw_tile_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     }
     add_hexlines(arg, hl_col=opt$hexline_col) 
 
-    gp_tr <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, family=opt$rank_font)
+    gp_tr <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
     grid.text(opt$rank_symbol, gp=gp_tr)
 
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
 
     if (draw_border)
@@ -595,9 +606,9 @@ draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt("suit_die", i_s, 1, arg)
 
     grid.rect(gp = gpar(fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
+    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
         grid.rect(gp=gpar(col=arg$border_color, fill=NA))
@@ -610,9 +621,9 @@ draw_pawn_saucer <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt(component, i_s, 1, arg)
 
     grid.circle(gp = gpar(fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
+    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
         grid.circle(gp=gpar(col=arg$border_color, fill=NA))
@@ -623,9 +634,9 @@ draw_coin_face <- function(i_r, arg, draw_border = TRUE) {
     opt <- get_component_opt("coin_face", arg$i_unsuit, i_r, arg)
 
     grid.circle(gp = gpar(fill=opt$bcol))
-    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, family=opt$rank_font)
+    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
     grid.text(opt$rank_symbol, gp =  rgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) {
         grid.circle(gp=gpar(col=arg$border_color, fill=NA))
@@ -637,9 +648,9 @@ draw_piecepack_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
     opt <- get_component_opt("piecepack_die", i_s, i_r, arg)
 
     grid.rect(gp = gpar(fill=opt$bcol))
-    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, family=opt$rank_font)
+    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
     grid.text(opt$rank_symbol, gp = rgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
         grid.rect(gp=gpar(col=arg$border_color, fill=NA))
@@ -651,9 +662,9 @@ draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
 
     grid.circle(gp = gpar(fill=opt$bcol))
     # grid.circle(r=cr, gp=gpar(col=opt$scol, lwd=circle_lwd, fill=bcol))
-    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, family=opt$rank_font)
+    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
     grid.text(opt$rank_symbol, gp=rgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
         grid.circle(gp=gpar(col=arg$border_color, fill=NA))
@@ -664,9 +675,9 @@ draw_coin_back <- function(i_s, arg, draw_border = TRUE) {
     opt <- get_component_opt("coin_back", i_s, 1, arg)
 
     grid.circle(gp = gpar(fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
+    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
         grid.circle(gp=gpar(col=arg$border_color, fill=NA))
@@ -678,9 +689,9 @@ draw_chip_back <- function(i_s, arg, draw_border = TRUE) {
 
     grid.circle(gp = gpar(fill=opt$bcol))
     # grid.circle(r=cr, gp=gpar(col=opt$scol, lwd=circle_lwd, fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, family=opt$suit_font)
+    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, family=opt$dm_font)
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
     grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
     if (draw_border) 
         grid.circle(gp=gpar(col=arg$border_color, fill=NA))

@@ -175,12 +175,12 @@ make_header_helper <- function(title, arg) {
     addViewport(y=inch(y_header), width=inch(6.0), height=inch(header_height), name="header")
     seekViewport("header")
     width_image = 0.14
-    addViewport(y=0.9, height=0.2, name="title")
+    addViewport(y=0.85, height=0.2, name="title")
     addViewport(x=width_image/2, y=0.4, width=width_image, height=0.5, name="l_cc_image")
     addViewport(x=1-width_image/2, y=0.4, width=width_image, height=0.5, name="r_cc_image")
     addViewport(x=0.5, y=0.4, width=1-2*width_image, height=0.8, name="text")
     seekViewport("text")
-    gp <- gpar(fontsize=9)
+    gp <- gpar(fontsize=9, fontfamily=arg$header_font)
     # grid.text(arg$program, x=0.0, y=0.8, just="left", gp=gp)
     # grid.text(arg$copyright, x=0.0, y=0.6, just="left", gp=gp)
     # grid.text(arg$license1, x=0.0, y=0.4, just="left", gp=gp)
@@ -194,11 +194,12 @@ make_header_helper <- function(title, arg) {
     seekViewport("r_cc_image")
     grid.draw(cc_file)
     seekViewport("title")
-    grid.text(title, just="center", gp=gpar(fontsize=15))
+    gp <- gpar(fontsize=15, fontfamily=arg$header_font, fontface="bold")
+    grid.text(title, just="center", gp=gp)
 }
 
 make_preview_header <- function(arg) {
-    make_header_helper(arg$collection_title, arg)
+    make_header_helper(arg$title, arg)
 }
 
 seekViewport <- function(...) { suppressWarnings(grid::seekViewport(...)) }
@@ -218,7 +219,7 @@ make_collection_preview <- function(arg) {
     suppressPackageStartupMessages(library('piecepack'))
 
     decks <- arg$decks
-    fp <- paste0("previews/", arg$collection_filename, ".pdf")
+    fp <- paste0("previews/", arg$filename, ".pdf")
     pp_pdf(fp, arg$font, arg$paper)
 
     n_pages <- ceiling(length(decks) / 6)
@@ -328,14 +329,14 @@ draw_suit_page <- function(i_s, opts) {
     draw_coin_4by3(i_s, opts)
 
     # pawn and belt
-    seekViewport("lpawn")
-    draw_pawn(i_s, opts)
-    seekViewport("rpawn")
-    draw_pawn(i_s, opts)
     seekViewport("lpawnbelt")
     draw_pawn_belt(i_s, opts)
     seekViewport("rpawnbelt")
     draw_pawn_belt(i_s, opts)
+    seekViewport("lpawn")
+    draw_pawn(i_s, opts)
+    seekViewport("rpawn")
+    draw_pawn(i_s, opts)
 
     # die
     seekViewport("rdie")
@@ -368,7 +369,7 @@ draw_suit_page <- function(i_s, opts) {
 
 }
 
-draw_accessories_page <- function(opts) {
+draw_accessories_page <- function(opts, odd=TRUE) {
     grid.newpage()
 
     # Build viewports
@@ -390,6 +391,7 @@ draw_accessories_page <- function(opts) {
     die_right <- die_xl + 0.8
     addViewport(y=inch(ydh), x=inch(die_xl), width=inch(2), height=inch(1.5), name="lsuitdie")
     addViewport(y=inch(ydh), x=inch(win_width-die_xl), width=inch(2), height=inch(1.5), name="rsuitdie")
+    addViewport(y=inch(ydm-die_width), width=inch(2), height=inch(1.5), name="suitdie3")
     addViewport(y=inch(ydm), x=inch(win_width-die_xl), width=inch(2), height=inch(1.5), name="suitrankdie1")
     addViewport(y=inch(ydm), x=inch(win_width-die_xm), width=inch(2), height=inch(1.5), name="suitrankdie2")
     addViewport(y=inch(ydm), x=inch(die_xl), width=inch(2), height=inch(1.5), name="suitrankdie3")
@@ -438,6 +440,11 @@ draw_accessories_page <- function(opts) {
     draw_suit_die(opts)
     seekViewport("lsuitdie")
     draw_suit_die(opts, flip=TRUE)
+    seekViewport("suitdie3")
+    if (odd)
+        draw_suit_die(opts)
+    else
+        draw_suit_die(opts, flip=TRUE)
     seekViewport("suitrankdie1")
      draw_suitrank_die(opts)
     seekViewport("suitrankdie2")
@@ -519,7 +526,7 @@ make_set <- function(opts) {
     # Accessories
     if ((opts$n_suits >= 4) && (opts$n_suits <= 6)) {
         draw_accessories_page(opts)
-        draw_accessories_page(opts)
+        draw_accessories_page(opts, odd=FALSE)
     }
     dev.off()
     invisible(NULL)
@@ -549,11 +556,15 @@ make_collection <- function(arg) {
     suppressPackageStartupMessages(library("piecepack"))
     deck_filenames <- file.path("pdf", paste0(arg$decks, ".pdf"))
     n_sets <- length(deck_filenames)
-    fp <- shQuote(file.path("previews", paste0(arg$collection_filename, ".pdf")))
-    of_un <- file.path("collections", paste0(arg$collection_filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
+    fp <- shQuote(file.path("previews", paste0(arg$filename, ".pdf")))
+    of_un <- file.path("collections", paste0(arg$filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
     of <- shQuote(of_un)
-    bf <- shQuote(file.path("collections", paste0(arg$collection_filename, ".pdf")))
-    command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(arg$collection_title), "--pdfauthor", shQuote("Trevor L Davis"), "--pdfkeywords", shQuote("piecepack"), fp, paste(shQuote(deck_filenames), collapse=" "))
+    bf <- shQuote(file.path("collections", paste0(arg$filename, ".pdf")))
+    command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(arg$title), 
+                     "--pdfauthor", shQuote(arg$author), 
+                     "--pdfkeywords", shQuote(arg$keywords), 
+                     "--pdfsubject", shQuote(arg$subject),
+                     fp, paste(shQuote(deck_filenames), collapse=" "))
     cat(command, "\n")
     system(command)
 

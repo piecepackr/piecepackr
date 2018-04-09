@@ -20,6 +20,9 @@ Options:
 	--dm_symbols=DM_SYMBOLS
 		(default is to try to pick a reasonable directional mark symbol based on the component)
 
+	--header_font=HEADER_FONT
+		(default is to use the value of "font" option)
+
 	--rank_symbols_font=RANK_SYMBOLS_FONT
 		(default is to use the value of "font" option)
 
@@ -50,6 +53,9 @@ Options:
 	--dm_theta=DM_THETA
 		(default 135 for tile faces and die faces and 90 for everything else)
 
+	--dm_r=DM_R
+		(default sqrt(.25^2+.25^2))
+
 	--font=FONT
 		Default font family (default "sans")
 
@@ -60,7 +66,7 @@ Options:
 		(default the value of the "suit_colors" option)
 
 	--background_color=BACKGROUND_COLOR
-		(default "white")
+		(default "transparent")
 
 	--border_color=BORDER_COLOR
 		(default "grey")
@@ -131,6 +137,9 @@ Options:
 	--dm_theta.tile_back=DM_THETA.TILE_BACK
 		(default is value of "dm_theta" option)
 
+	--dm_r.tile_back=DM_R.TILE_BACK
+		(default is value of "dm_r" option)
+
 	--background_color.tile_back=BACKGROUND_COLOR.TILE_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -178,6 +187,9 @@ Options:
 
 	--dm_theta.tile_face=DM_THETA.TILE_FACE
 		(default is value of "dm_theta" option)
+
+	--dm_r.tile_face=DM_R.TILE_FACE
+		(default is value of "dm_r" option)
 
 	--background_color.tile_face=BACKGROUND_COLOR.TILE_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -227,6 +239,9 @@ Options:
 	--dm_theta.coin_back=DM_THETA.COIN_BACK
 		(default is value of "dm_theta" option)
 
+	--dm_r.coin_back=DM_R.COIN_BACK
+		(default is value of "dm_r" option)
+
 	--background_color.coin_back=BACKGROUND_COLOR.COIN_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -274,6 +289,9 @@ Options:
 
 	--dm_theta.coin_face=DM_THETA.COIN_FACE
 		(default is value of "dm_theta" option)
+
+	--dm_r.coin_face=DM_R.COIN_FACE
+		(default is value of "dm_r" option)
 
 	--background_color.coin_face=BACKGROUND_COLOR.COIN_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -323,6 +341,9 @@ Options:
 	--dm_theta.piecepack_die=DM_THETA.PIECEPACK_DIE
 		(default is value of "dm_theta" option)
 
+	--dm_r.piecepack_die=DM_R.PIECEPACK_DIE
+		(default is value of "dm_r" option)
+
 	--background_color.piecepack_die=BACKGROUND_COLOR.PIECEPACK_DIE
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -370,6 +391,9 @@ Options:
 
 	--dm_theta.suit_die=DM_THETA.SUIT_DIE
 		(default is value of "dm_theta" option)
+
+	--dm_r.suit_die=DM_R.SUIT_DIE
+		(default is value of "dm_r" option)
 
 	--background_color.suit_die=BACKGROUND_COLOR.SUIT_DIE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -419,6 +443,9 @@ Options:
 	--dm_theta.saucer_face=DM_THETA.SAUCER_FACE
 		(default is value of "dm_theta" option)
 
+	--dm_r.saucer_face=DM_R.SAUCER_FACE
+		(default is value of "dm_r" option)
+
 	--background_color.saucer_face=BACKGROUND_COLOR.SAUCER_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -466,6 +493,9 @@ Options:
 
 	--dm_theta.saucer_back=DM_THETA.SAUCER_BACK
 		(default is value of "dm_theta" option)
+
+	--dm_r.saucer_back=DM_R.SAUCER_BACK
+		(default is value of "dm_r" option)
 
 	--background_color.saucer_back=BACKGROUND_COLOR.SAUCER_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -515,6 +545,9 @@ Options:
 	--dm_theta.pawn=DM_THETA.PAWN
 		(default is value of "dm_theta" option)
 
+	--dm_r.pawn=DM_R.PAWN
+		(default is value of "dm_r" option)
+
 	--background_color.pawn=BACKGROUND_COLOR.PAWN
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -562,6 +595,9 @@ Options:
 
 	--dm_theta.pawn_belt=DM_THETA.PAWN_BELT
 		(default is value of "dm_theta" option)
+
+	--dm_r.pawn_belt=DM_R.PAWN_BELT
+		(default is value of "dm_r" option)
 
 	--background_color.pawn_belt=BACKGROUND_COLOR.PAWN_BELT
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -611,6 +647,9 @@ Options:
 	--dm_theta.chip_face=DM_THETA.CHIP_FACE
 		(default is value of "dm_theta" option)
 
+	--dm_r.chip_face=DM_R.CHIP_FACE
+		(default is value of "dm_r" option)
+
 	--background_color.chip_face=BACKGROUND_COLOR.CHIP_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -658,6 +697,9 @@ Options:
 
 	--dm_theta.chip_back=DM_THETA.CHIP_BACK
 		(default is value of "dm_theta" option)
+
+	--dm_r.chip_back=DM_R.CHIP_BACK
+		(default is value of "dm_r" option)
 
 	--background_color.chip_back=BACKGROUND_COLOR.CHIP_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"

@@ -1,0 +1,32 @@
+Usage: Program to arrange piecepacks
+
+
+Options:
+	-h, --help
+		Show this help message and exit
+
+	--author=AUTHOR
+		Pdf author (default "")
+
+	--filename=FILENAME
+		Pdf filename (default "piecepack_collection")
+
+	--keywords=KEYWORDS
+		Pdf keywords (default "piecepack")
+
+	--subject=SUBJECT
+		Pdf subject (default "")
+
+	--title=TITLE
+		Pdf title (default "Piecepack collection")
+
+	--decks=DECKS
+		Comma separated list of decks to collect (default collects all of them)
+
+	--paper=PAPER
+		Pdf paper size, either "letter" or "A4" (default "letter")
+
+	--font=FONT
+		Default font family (default "sans")
+
+

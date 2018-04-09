@@ -1,0 +1,10 @@
+*.rst
+*.txt
+collections
+configurations
+pdf
+previews
+svg
+CONTRIBUTING
+Rakefile
+tmp

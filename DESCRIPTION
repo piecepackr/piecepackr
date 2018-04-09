@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepack
 Type: Package
 Title: Functions and Rscripts to Build Piecepack Decks
-Version: 0.7.1-2
+Version: 0.7.1-3
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: 
@@ -20,5 +20,6 @@ Imports:
     stringi,
     stringr
 Suggests:
-SystemRequirements: pdfsam
+    testthat
+SystemRequirements: ghostscript, pdfsam, poppler-utils
 RoxygenNote: 6.0.1

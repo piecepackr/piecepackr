@@ -15,6 +15,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default "♠,♥,♣,♦,★")')
     parser <- add_option(parser, "--dm_symbols", default=NULL, 
                          help='(default is to try to pick a reasonable directional mark symbol based on the component)')
+    parser <- add_option(parser, "--header_font", default=NULL, 
+                         help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--rank_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--suit_symbols_font", default=NULL, 
@@ -40,6 +42,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default is not to draw any hexlines)')
     parser <- add_option(parser, "--dm_theta", default=NULL, type="double", 
                          help='(default 135 for tile faces and die faces and 90 for everything else)')
+    parser <- add_option(parser, "--dm_r", default=NULL, type="double", 
+                         help='(default sqrt(.25^2+.25^2))')
 
     # Font
     parser <- add_option(parser, "--font", default=NULL,
@@ -51,7 +55,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--dm_colors", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
     parser <- add_option(parser, "--background_color", default=NULL, 
-                         help='(default "white")')
+                         help='(default "transparent")')
     parser <- add_option(parser, "--border_color", default=NULL, 
                          help='(default "grey")')
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
@@ -99,6 +103,9 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         opt_str <- paste0("--dm_theta.", component)
         parser <- add_option(parser, opt_str, default=NULL, type="double",
                              help='(default is value of "dm_theta" option)')
+        opt_str <- paste0("--dm_r.", component)
+        parser <- add_option(parser, opt_str, default=NULL, type="double",
+                             help='(default is value of "dm_r" option)')
 
         # Color
         opt_str <- paste0("--background_color.", component)
@@ -142,15 +149,22 @@ make_style <- function(args=commandArgs(TRUE)) {
 #' @export
 get_arrangement_opts <- function(args=commandArgs(TRUE)) {
     parser <- OptionParser("Program to arrange piecepacks")
-    parser <- add_option(parser, "--collection_filename", default="collection_filename",
-                         help='(default "collection_filename")')
-    parser <- add_option(parser, "--collection_title", default="collection_title",
-                         help='(default "collection_title")')
-    parser <- add_option(parser, "--decks", help='(all of them)')
+    parser <- add_option(parser, "--author", default="",
+                         help='Pdf author (default "")')
+    parser <- add_option(parser, "--filename", default="piecepack_collection",
+                         help='Pdf filename (default "%default")')
+    parser <- add_option(parser, "--keywords", default="piecepack",
+                         help='Pdf keywords (default "%default")')
+    parser <- add_option(parser, "--subject", default="", 
+                         help='Pdf subject (default "%default")')
+    parser <- add_option(parser, "--title", default="Piecepack collection", 
+                         help='Pdf title (default "%default")')
+    parser <- add_option(parser, "--decks", 
+                         help='Comma separated list of decks to collect (default collects all of them)')
     parser <- add_option(parser, "--paper", default="letter",
-                         help='Paper size, either "letter" or "A4" (default "letter")')
+                         help='Pdf paper size, either "letter" or "A4" (default "%default")')
     parser <- add_option(parser, "--font", default="sans",
-                         help='Default font family (default "sans")')
+                         help='Default font family (default "%default")')
 
     opts <- parse_args(parser, args)
 
@@ -160,6 +174,7 @@ get_arrangement_opts <- function(args=commandArgs(TRUE)) {
         opts$decks <- split(opts$decks)
 
     opts <- add_copyright(opts)
+    opts$header_font <- opts$font
     opts
 }
 
@@ -187,6 +202,8 @@ process_configuration <- function(opts) {
 
     if (is.null(opts[["font"]]))
         opts$font <- "sans"
+    if (is.null(opts[["header_font"]]))
+        opts$header_font <- opts$font
 
     if (is.null(opts[["rank_symbols"]]))
         opts$rank_symbols <- "N,A,2,3,4,5"
@@ -199,7 +216,7 @@ process_configuration <- function(opts) {
     if (is.null(opts[["style"]]))
         opts$style <- "basic"
     if (is.null(opts[["background_color"]]))
-        opts$background_color <- "white"
+        opts$background_color <- "transparent"
     if (is.null(opts[["border_color"]]))
         opts$border_color <- "grey"
     if (is.null(opts[["invert_colors"]]))

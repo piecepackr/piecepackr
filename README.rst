@@ -1,7 +1,7 @@
 Piecepack Graphics R Package
 ----------------------------
 
-This is an R package designed to make piecepack graphics.  It includes some executable Rscripts designed to make a pdf of piecepack components with the intention that they either be printed on label paper and mounted on components or printed on paperboard and folded/glued together in order to make a `piecepack <http://www.ludism.org/ppwiki/HomePage>`_.  
+This is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components.
 
 **Warning**: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
 
@@ -12,24 +12,29 @@ Installation
 
 You'll need to install some system requirements::
 
-    $ sudo apt install ghostscript pdfsam poppler-utils rake r-base 
+    $ sudo apt install ghostscript pdfsam poppler-utils r-base 
 
-You'll also need to install the development version of grImport2 package and this package::
+The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``exec/collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of ``grImport2`` R package as well as the ``piecepack`` R package itself::
 
     $ sudo R
     > install.packages("devtools")
     > devtools::install_github("sjp/grImport2")
     > devtools::install_github("trevorld/piecepack")
 
-You'll also need some decent fonts installed on your system with the Unicode symbols you'd like to use in your piecepack.  
+If you want to run the demos you'll need ``rake``  and several fonts::
 
-**Warning**: Not all fonts can be freely distributed!  Be careful with which ones you use!
+    $ sudo apt install fonts-dejavu fonts-noto fonts-symbola rake
+    $ fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
+    $ curl -O http://www.quivira-font.com/files/Quivira.otf
+    $ cp Quivira.otf $fonts_dir/
+    $ curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip
+    $ unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
+    $ cp NotoEmoji-Regular.ttf $fonts_dir
+    $ rm NotoEmoji-unhinted.zip
 
-The demos assumes one has installed:
+If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  
 
-* `Symbola <http://www.fontspace.com/unicode-fonts-for-ancient-scripts/symbola>`_ good coverage of the Symbol block of the Unicode Standard.
-* `Noto Sans Cham <https://www.google.com/get/noto/>`_ contains the rare "Cham Punctuation Spiral".
-* `Noto Sans CJK SC <https://www.google.com/get/noto/>`_ (``chinese_zodiac`` demo only)
+**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto, Quivira, and Symbola fonts used in the demos are safe to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
 How to use executable Rscripts
 ------------------------------
@@ -44,6 +49,7 @@ Where ``demo_name`` is either:
 #. ``default``
 #. ``dual``
 #. ``orthodox``
+#. ``rainbow_deck``
 #. ``sixpack``
 
 Demo descriptions
@@ -57,7 +63,7 @@ Build a demo `"Chinese Zodiac" piecepack pdf <https://www.dropbox.com/s/eu5uxwk6
 default
 ~~~~~~~
 
-Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.  This is the default type of piecepack built by this software if the user does no configuration.  
+Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.  This is the default type of piecepack built by this software if the user does no configuration (except arrange for the use of the "Noto Sans" family of fonts).  
 
 dual
 ~~~~
@@ -68,6 +74,11 @@ orthodox
 ~~~~~~~~
 
 Build a demo `"orthodox piecepacks" pdf <https://www.dropbox.com/s/derdlo3j8sdeoox/orthodox_demo.pdf?dl=0>`_.  It includes a piecepack-suited piecepack that complies with the `Anatomy of a Piecepack <http://www.piecepack.org/Anatomy.html>`_ standard as well as a matching 2-color french-suited piecepack (aka a "Playing Cards" expansion).  The "chip" accessory has been configured to be more convenient for labeling paper pyramids to make "piecepack pyramids".
+
+rainbow_deck
+~~~~~~~~~~~~
+
+Build a demo `"Rainbow Deck suited piecepacks" pdf <https://www.dropbox.com/s/dcxrrmcqtfass2r/rainbow_deck_demo.pdf?dl=0>`_.  It builds two 6-suited piecepacks with the suits ♥,★,♣,♦,♛,♠: one in a "dark" color scheme and another in a "light" color scheme.  The `Rainbow Deck (RD) <https://boardgamegeek.com/boardgame/59655/rainbow-deck>`_ is a cardgame system by Chen Changcai.
 
 sixpack
 ~~~~~~~
@@ -88,6 +99,13 @@ This software package and the piecepack pdf's created by it are released under a
 
 Frequently Asked Questions
 --------------------------
+
+How should I Print & Play my piecepack?
+    The Print-and-Play pdf's produced by the ``exec/make_piecepack`` command are designed to be used in three different ways:
+
+    1. Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
+    2. Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
+    3. Print double-sided on paper(board) and cut out the components.  One will need to do some additional folding and application of adhesive/tape in order to construct the dice and pawns.
 
 What are the "chips" accessories that shows up on the accesories page of the print-and-play pdf supposed to be used for?
     The "chips" are a customizable accessory that can aid in playing certain types of games.  Some possible uses:
