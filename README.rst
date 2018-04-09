@@ -23,18 +23,18 @@ The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can b
 
 If you want to run the demos you'll need ``rake``  and several fonts::
 
-    $ sudo apt install fonts-dejavu fonts-noto fonts-symbola rake
+    $ sudo apt install fonts-noto rake
     $ fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
     $ curl -O http://www.quivira-font.com/files/Quivira.otf
     $ cp Quivira.otf $fonts_dir/
     $ curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip
     $ unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
-    $ cp NotoEmoji-Regular.ttf $fonts_dir
+    $ cp NotoEmoji-Regular.ttf $fonts_dir/
     $ rm NotoEmoji-unhinted.zip
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  
 
-**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto, Quivira, and Symbola fonts used in the demos are safe to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
+**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The Noto and Quivira fonts used in the demos are safe to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
 How to use executable Rscripts
 ------------------------------
