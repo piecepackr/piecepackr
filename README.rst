@@ -88,9 +88,9 @@ Build a demo `"Sixpack" pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_d
 Executable options
 ------------------
 
-* `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/configure_piecepack_options.txt>`_
-* `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/configurations/make_piecepack_options.txt>`_
-* `exec/collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/configurations/collect_piecepacks_options.txt>`_
+* `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/man/configure_piecepack_options.txt>`_
+* `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/man/make_piecepack_options.txt>`_
+* `exec/collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/man/collect_piecepacks_options.txt>`_
 
 Licence
 -------
