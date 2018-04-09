@@ -78,7 +78,7 @@ Build a demo `"orthodox piecepacks" pdf <https://www.dropbox.com/s/derdlo3j8sdeo
 rainbow_deck
 ~~~~~~~~~~~~
 
-Build a demo `"Rainbow Deck suited piecepacks" pdf <https://www.dropbox.com/s/dcxrrmcqtfass2r/rainbow_deck_demo.pdf?dl=0>`_.  It builds two 6-suited piecepacks with the suits ♥,★,♣,♦,♛,♠: one in a "dark" color scheme and another in a "light" color scheme.  The `Rainbow Deck (RD) <https://boardgamegeek.com/boardgame/59655/rainbow-deck>`_ is a cardgame system by Chen Changcai.
+Build a demo `"Rainbow Deck suited piecepacks" pdf <https://www.dropbox.com/s/dcxrrmcqtfass2r/rainbow_deck_demo.pdf?dl=0>`_.  It builds two 6-suited piecepacks with the suits ♥,★,♣,♦,♛,♠: one in a "dark" multicolored scheme and another in a "light" multicolored scheme.  The `Rainbow Deck (RD) <https://boardgamegeek.com/boardgame/59655/rainbow-deck>`_ is a cardgame system by Chen Changcai.
 
 sixpack
 ~~~~~~~
