@@ -51,6 +51,7 @@ Where ``demo_name`` is either:
 #. ``dual``
 #. ``orthodox``
 #. ``rainbow_deck``
+#. ``reversi``
 #. ``sixpack``
 
 Demo descriptions
@@ -74,7 +75,22 @@ Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3
 dual
 ~~~~
 
-Build a demo `"dual piecepacks" pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_ which includes the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one `latin-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Origin_and_development_of_the_Latin_suits>`_ piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two `swiss-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Invention_of_the_Germanic_suits>`_ piecepacks (one dark grayscale color scheme, one light grayscale color scheme). 
+Build a demo `"dual piecepacks" pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_ which includes the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one `latin-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Origin_and_development_of_the_Latin_suits>`_ piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two `swiss-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Invention_of_the_Germanic_suits>`_ piecepacks (one dark grayscale color scheme, one light grayscale color scheme).  
+
+"Dual piecepacks" are eight piecepack **suits** with the following properties:
+
+* The eight **suits** suits can be "easily" visually distinguished
+* The eight suits can be "easily" visually split into two separate **groups** of four suits
+* Each "suit" in a group can be "easily" visually **linked** with exactly one suit in the other group 
+
+This gives one the following nice properties:
+
+* One can play games requiring one piecepack deck plus an expansion piecepack deck by treating the eight **suits** as separate suits
+* One can play games requiring two piecepack decks by treating each pair of **linked** suits as the same suit
+* One can play games that are "SixPack" friendly by taking three suits from each visually distinct **group**. One can scale this down to games that are "Playing Cards Expansion" friendly or even scale up to four-grouped-suits versus four-grouped-suits friendly games (like Canadian checkers or Bughouse chess).
+* One can play entirely new games provided by the extra layer of relationships. Proof-of-concept new game is `Dual Piecepacks Poker <http://www.ludism.org/ppwiki/DualPiecepacksPoker>`_. 
+
+It is possible to construct three piecepacks where each pair of piecepack decks are "dual piecepacks" (e.g. piecepack-suited + inverted latin-suited + light french-suited). This could be called a "trial `HoardPack <http://www.ludism.org/ppwiki/HoardPack>`_" (apparently "trial" is the proper "three" analogue to "dual"). 
 
 orthodox
 ~~~~~~~~
@@ -85,6 +101,11 @@ rainbow_deck
 ~~~~~~~~~~~~
 
 Build a demo `"Rainbow Deck suited piecepacks" pdf <https://www.dropbox.com/s/dcxrrmcqtfass2r/rainbow_deck_demo.pdf?dl=0>`_.  It builds two 6-suited piecepacks with the suits ♥,★,♣,♦,♛,♠: one in a "dark" multicolored scheme and another in a "light" multicolored scheme.  The `Rainbow Deck (RD) <https://boardgamegeek.com/boardgame/59655/rainbow-deck>`_ is a cardgame system by Chen Changcai.
+
+reversi
+~~~~~~~
+
+Build a demo `"Reversi-friendly piecepacks" pdf <https://www.dropbox.com/s/rgxkdwqwwkd5jbk/reversi_demo.pdf?dl=0>`_.  It contains several piecepacks with color schemes configured to easily distinguish between the back and face of the coins, tiles, and "chips" accessories (and in some decks the suit dice and suit-rank dice) to facilitate the playing of games like `Reversi <http://www.piecepack.org/rules/Reversi.pdf>`_.  It contains a piecepack-suited piecepack with brown "suited" background, an `ACS-elements-suited <http://www.scs.illinois.edu/~mainzv/HIST/Logo/logo.php>` piecepack with black "suited" background, dual printer-friendly grayscale sixpacks, and two "mirrored-color-scheme" six-suited piecepacks where one has a red "suited" background and black "unsuited" background and the other one has a black "suited" background and black "unsuited" background.  Besides reversi a pair of "mirrored-color-scheme" piecepacks is great for playing games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ and `Backgammon <https://en.wikipedia.org/wiki/Backgammon>`_.
 
 sixpack
 ~~~~~~~

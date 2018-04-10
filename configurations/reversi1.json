@@ -1,11 +1,13 @@
 {
-  "deck_title": ["Piecepack-suited (Un-inverted color scheme) (v0.7.1-5)"],
-  "deck_filename": ["dual1piecepack"],
+  "deck_title": ["Piecepack-suited (v0.7.1-5)"],
+  "deck_filename": ["reversi1"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
   "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham"],
   "suit_symbols_scale": ["0.7,0.8,0.8,1.1,1.2,1.2"],
-  "font": ["Noto Sans Symbols"]
+  "font": ["Noto Sans Symbols"],
+  "background_color.suited": ["tan3"],
+  "background_color.chip_back": ["white"]
 }

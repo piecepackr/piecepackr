@@ -107,6 +107,9 @@ Options:
 	--rank_symbols_scale.tile_back=RANK_SYMBOLS_SCALE.TILE_BACK
 		(default is value of "rank_symbols_scale" option)
 
+	--suit_colors.tile_back=SUIT_COLORS.TILE_BACK
+		(default is value of "suit_colors" option)
+
 	--suit_symbols.tile_back=SUIT_SYMBOLS.TILE_BACK
 		(default is value of "suit_symbols" option)
 
@@ -157,6 +160,9 @@ Options:
 
 	--rank_symbols_scale.tile_face=RANK_SYMBOLS_SCALE.TILE_FACE
 		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.tile_face=SUIT_COLORS.TILE_FACE
+		(default is value of "suit_colors" option)
 
 	--suit_symbols.tile_face=SUIT_SYMBOLS.TILE_FACE
 		(default is value of "suit_symbols" option)
@@ -209,6 +215,9 @@ Options:
 	--rank_symbols_scale.coin_back=RANK_SYMBOLS_SCALE.COIN_BACK
 		(default is value of "rank_symbols_scale" option)
 
+	--suit_colors.coin_back=SUIT_COLORS.COIN_BACK
+		(default is value of "suit_colors" option)
+
 	--suit_symbols.coin_back=SUIT_SYMBOLS.COIN_BACK
 		(default is value of "suit_symbols" option)
 
@@ -259,6 +268,9 @@ Options:
 
 	--rank_symbols_scale.coin_face=RANK_SYMBOLS_SCALE.COIN_FACE
 		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.coin_face=SUIT_COLORS.COIN_FACE
+		(default is value of "suit_colors" option)
 
 	--suit_symbols.coin_face=SUIT_SYMBOLS.COIN_FACE
 		(default is value of "suit_symbols" option)
@@ -311,6 +323,9 @@ Options:
 	--rank_symbols_scale.piecepack_die=RANK_SYMBOLS_SCALE.PIECEPACK_DIE
 		(default is value of "rank_symbols_scale" option)
 
+	--suit_colors.piecepack_die=SUIT_COLORS.PIECEPACK_DIE
+		(default is value of "suit_colors" option)
+
 	--suit_symbols.piecepack_die=SUIT_SYMBOLS.PIECEPACK_DIE
 		(default is value of "suit_symbols" option)
 
@@ -361,6 +376,9 @@ Options:
 
 	--rank_symbols_scale.suit_die=RANK_SYMBOLS_SCALE.SUIT_DIE
 		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.suit_die=SUIT_COLORS.SUIT_DIE
+		(default is value of "suit_colors" option)
 
 	--suit_symbols.suit_die=SUIT_SYMBOLS.SUIT_DIE
 		(default is value of "suit_symbols" option)
@@ -413,6 +431,9 @@ Options:
 	--rank_symbols_scale.saucer_face=RANK_SYMBOLS_SCALE.SAUCER_FACE
 		(default is value of "rank_symbols_scale" option)
 
+	--suit_colors.saucer_face=SUIT_COLORS.SAUCER_FACE
+		(default is value of "suit_colors" option)
+
 	--suit_symbols.saucer_face=SUIT_SYMBOLS.SAUCER_FACE
 		(default is value of "suit_symbols" option)
 
@@ -463,6 +484,9 @@ Options:
 
 	--rank_symbols_scale.saucer_back=RANK_SYMBOLS_SCALE.SAUCER_BACK
 		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.saucer_back=SUIT_COLORS.SAUCER_BACK
+		(default is value of "suit_colors" option)
 
 	--suit_symbols.saucer_back=SUIT_SYMBOLS.SAUCER_BACK
 		(default is value of "suit_symbols" option)
@@ -515,6 +539,9 @@ Options:
 	--rank_symbols_scale.pawn=RANK_SYMBOLS_SCALE.PAWN
 		(default is value of "rank_symbols_scale" option)
 
+	--suit_colors.pawn=SUIT_COLORS.PAWN
+		(default is value of "suit_colors" option)
+
 	--suit_symbols.pawn=SUIT_SYMBOLS.PAWN
 		(default is value of "suit_symbols" option)
 
@@ -565,6 +592,9 @@ Options:
 
 	--rank_symbols_scale.pawn_belt=RANK_SYMBOLS_SCALE.PAWN_BELT
 		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.pawn_belt=SUIT_COLORS.PAWN_BELT
+		(default is value of "suit_colors" option)
 
 	--suit_symbols.pawn_belt=SUIT_SYMBOLS.PAWN_BELT
 		(default is value of "suit_symbols" option)
@@ -617,6 +647,9 @@ Options:
 	--rank_symbols_scale.chip_face=RANK_SYMBOLS_SCALE.CHIP_FACE
 		(default is value of "rank_symbols_scale" option)
 
+	--suit_colors.chip_face=SUIT_COLORS.CHIP_FACE
+		(default is value of "suit_colors" option)
+
 	--suit_symbols.chip_face=SUIT_SYMBOLS.CHIP_FACE
 		(default is value of "suit_symbols" option)
 
@@ -667,6 +700,9 @@ Options:
 
 	--rank_symbols_scale.chip_back=RANK_SYMBOLS_SCALE.CHIP_BACK
 		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.chip_back=SUIT_COLORS.CHIP_BACK
+		(default is value of "suit_colors" option)
 
 	--suit_symbols.chip_back=SUIT_SYMBOLS.CHIP_BACK
 		(default is value of "suit_symbols" option)

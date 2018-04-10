@@ -1,0 +1,15 @@
+{
+  "deck_title": ["Red-suited  (v0.7.1-5)"],
+  "deck_filename": ["reversi5"],
+  "rank_symbols": ["N,A,2,3,4,5"],
+  "suit_symbols": ["♥,♦,🌞,♚,,,★"],
+  "header_font": ["Noto Sans"],
+  "rank_symbols_font": ["Noto Sans"],
+  "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols"],
+  "suit_symbols_scale": ["1,1,0.8,1,1,1,1"],
+  "font": ["Noto Sans Symbols"],
+  "suit_colors": ["white"],
+  "background_color.suited": ["darkred"],
+  "background_color.unsuited": ["black"],
+  "background_color.chip_back": ["black"]
+}

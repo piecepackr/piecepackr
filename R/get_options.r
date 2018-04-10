@@ -84,7 +84,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     for (component in COMPONENTS) {
         # Symbols
         for (style in c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
-                        "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
+                        "suit_colors", "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
                         "dm_symbols", "dm_symbols_font", 
                         "dm_symbols_scale", "dm_colors")) {
             opt_str <- paste0("--", style, ".", component)
@@ -253,7 +253,7 @@ process_configuration <- function(opts) {
     for(component in COMPONENTS) {
         for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
                         "rank_symbols_font", "suit_symbols_font", "dm_symbols_font",
-                        "dm_colors")) {
+                        "suit_colors", "dm_colors")) {
             component_str <- paste0(style, ".", component)
             if (!is.null(opts[[component_str]]))
                 opts[[component_str]] <- split(opts[[component_str]])

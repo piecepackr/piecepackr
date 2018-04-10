@@ -37,8 +37,13 @@ get_background_color_helper <- function(component, i_s, arg) {
 }
 
 get_suit_colors <- function(component, arg) {
-   suit_colors <- opts[["suit_colors"]]
-   expand_suit_elements(suit_colors, "suit_colors", component, arg) 
+    component_str <- paste0("suit_colors.", component)
+    if (!is.null(arg[[component_str]])) {
+        suit_colors <- arg[[component_str]]
+    } else {
+        suit_colors <- opts[["suit_colors"]]
+    }
+    expand_suit_elements(suit_colors, "suit_colors", component, arg) 
 }
 
 get_suit_color_helper <- function(component, i_s, arg) {
