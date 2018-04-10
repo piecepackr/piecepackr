@@ -23,7 +23,7 @@ The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can b
 
 If you want to run the demos you'll need ``rake``  and several fonts::
 
-    $ sudo apt install fonts-noto rake
+    $ sudo apt install fonts-dejavu fonts-noto rake
     $ fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
     $ curl -O http://www.quivira-font.com/files/Quivira.otf
     $ cp Quivira.otf $fonts_dir/
@@ -34,7 +34,7 @@ If you want to run the demos you'll need ``rake``  and several fonts::
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_.
 
-**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
+**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
 How to use executable Rscripts
 ------------------------------
@@ -46,6 +46,7 @@ One uses the ``exec/make_piecepack`` command to make a single print-and-play pdf
 Where ``demo_name`` is either:
 
 #. ``chinese_zodiac``
+#. ``crown_and_anchor``
 #. ``default``
 #. ``dual``
 #. ``orthodox``
@@ -59,6 +60,11 @@ chinese_zodiac
 ~~~~~~~~~~~~~~
 
 Build a demo `"Chinese Zodiac" piecepack pdf <https://www.dropbox.com/s/eu5uxwk6hcihy53/chinese_zodiac_demo.pdf?dl=0>`_.  This is two 5-suited piecepacks (Wood, Fire, Earth, Metal, and Water) each using a different six animals taken from the Chinese zodiac as ranks.
+
+crown_and_anchor
+~~~~~~~~~~~~~~~~
+
+Build a demo `"Crown and anchor" piecepack pdf <https://www.dropbox.com/s/pir2aau09yl11h5/crown_and_anchor_demo.pdf?dl=0>`_.  `"Crown and anchor" <https://en.wikipedia.org/wiki/Crown_and_Anchor>`_ is a classic public domain dice game that uses the following six suits: ♥,♦,♣,♠,♚,⚓.  These six suits were also used by the `"Empire Deck" <https://boardgamegeek.com/boardgame/24869/empire-deck>`_ of palying cards. Jonathan C. Dietrich classic `JCD Piecepack <http://www.piecepack.org/JCD.html>`_ replaced the Fleur-de-lis (Arms) with Anchors to allow compatibility with these suits.  This demo builds two six-suited piecepack decks using the Crown and anchor suits (one in a classic red/black and another multicolored) and four four-suited piecepack decks using the JCD piecepack suits (one monoscale, one red/black, one classic multicolored, and one in an alternative multicolored scheme).
 
 default
 ~~~~~~~

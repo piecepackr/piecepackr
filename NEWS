@@ -13,6 +13,7 @@ piecepack 0.7.1
 * Tweaked fonts in all demos.
 
 * Added Rainbow Deck suited piecepack demo (#47).
+* Added Crown and Anchor suited piecepacks demo (#46).
 * Added Simplified Hanzi decks to Chinese zodiac demo.
 
 piecepack 0.7.0

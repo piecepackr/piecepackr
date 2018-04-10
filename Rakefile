@@ -17,21 +17,21 @@ configure_piecepack = "exec/configure_piecepack --font='Noto Sans Symbols' --hea
 collect_piecepacks = "exec/collect_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
 
 # Colors
-# --background_color=seashell3")
-# dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue"
-# alt_scheme = " --suit_colors=white,orange2,yellow,purple"
 chinese_elements_colors = " --suit_colors=darkgreen,red3,chocolate4,black,darkblue,grey"
+# alt = "white,orange2,yellow,purple"
 light = "hotpink2,dimgrey,palegreen,lightblue2,"
 dark = "darkred,black,darkgreen,darkblue,"
 light_scheme = light + "grey"
-dark_scheme = dark + "grey"
+# dark_scheme = dark + "grey"
 hexlines_dark = " --hexline_colors=" + dark + "transparent"
-hexlines_light = " --hexline_colors=" + light+ "transparent"
+hexlines_light = " --hexline_colors=" + light + "transparent"
 rd_dark = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,white"
 rd_light = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,white"
 
 # Suits
-french_suits = " --suit_symbols=♥,♠,♣,♦,★ --suit_symbols_scale=1,1,1,1,1,1 --suit_symbols_font='Noto Sans Symbols'"
+ca_suits = " --suit_symbols=♥,♦,♣,♠,♚,⚓,★ --suit_symbols_scale=1,1,1,1,1,1,1,1 --suit_symbols_font='Noto Sans Symbols'"
+jcd_suits = " --suit_symbols=🌞,🌜,♚,⚓,꩜ --suit_symbols_scale=0.7,0.8,1,1,1.2 --suit_symbols_font='Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham'"
+# french_suits = " --suit_symbols=♥,♠,♣,♦,★ --suit_symbols_scale=1,1,1,1,1,1 --suit_symbols_font='Noto Sans Symbols'"
 french_suits_swirl = " --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1,1,1,1,1.2,1.2"
 # latin_suits_swirl = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜ --suit_symbols_scale=0.6,1,1,1.1,1.2"
 latin_suits_swirl = " --suit_symbols=,,,,꩜ --suit_symbols_font=Quivira --suit_symbols_scale=1,1,1,1,1.2"
@@ -60,6 +60,7 @@ orthodox_saucers3 = " --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit
 ## Demos
 desc "Run all demos"
 task :all do
+    Rake::Task[:crown_and_anchor].invoke()
     Rake::Task[:chinese_zodiac].invoke()
     Rake::Task[:default].invoke()
     Rake::Task[:dual].invoke()
@@ -111,6 +112,57 @@ task :chinese_zodiac do
     sh "xdg-open collections/chinese_zodiac_demo.pdf"
 end
 
+desc "Crown and anchor demo"
+task :crown_and_anchor do
+
+    deck_filename = " --deck_filename=crown_and_anchor1"
+    deck_title = " --deck_title='Crown and anchor suits" + version_str
+    file1 = "configurations/crown_and_anchor1.json"
+    extra_flags = " --suit_colors=darkred,darkred,black,black,darkred,black,grey --file=" + file1 
+    sh configure_piecepack + deck_title + deck_filename + ca_suits + default_ranks + extra_flags 
+    sh "exec/make_piecepack --file=" + file1
+
+    deck_filename = " --deck_filename=crown_and_anchor2"
+    deck_title = " --deck_title='Crown and anchor suits (Multicolor)" + version_str
+    file2 = "configurations/crown_and_anchor2.json"
+    extra_flags = " --suit_colors=darkred,darkblue,darkgreen,black,purple,orange2,grey --file=" + file2 
+    sh configure_piecepack + deck_title + deck_filename + ca_suits + default_ranks + extra_flags
+    sh "exec/make_piecepack --file=" + file2
+
+    deck_filename = " --deck_filename=crown_and_anchor3"
+    deck_title = " --deck_title='JCD piecepack suits (Monoscale)" + version_str
+    file3 = "configurations/crown_and_anchor3.json"
+    extra_flags = " --suit_colors=black --file=" + file3 
+    sh configure_piecepack + deck_title + deck_filename + jcd_suits + default_ranks + extra_flags
+    sh "exec/make_piecepack --file=" + file3
+
+    deck_filename = " --deck_filename=crown_and_anchor4"
+    deck_title = " --deck_title='JCD piecepack suits (Black/Red)" + version_str
+    file4 = "configurations/crown_and_anchor4.json"
+    extra_flags = " --suit_colors=darkred,black,darkred,black,grey --file=" + file4 
+    sh configure_piecepack + deck_title + deck_filename + jcd_suits + default_ranks + extra_flags
+    sh "exec/make_piecepack --file=" + file4
+
+    deck_filename = " --deck_filename=crown_and_anchor5"
+    deck_title = " --deck_title='JCD piecepack suits (Multicolor)" + version_str
+    file5 = "configurations/crown_and_anchor5.json"
+    extra_flags = " --suit_colors=darkred,black,darkgreen,darkblue,grey --file=" + file5 
+    sh configure_piecepack + deck_title + deck_filename + jcd_suits + default_ranks + extra_flags
+    sh "exec/make_piecepack --file=" + file5
+
+    deck_filename = " --deck_filename=crown_and_anchor6"
+    deck_title = " --deck_title='JCD piecepack suits (Multicolor)" + version_str
+    file6 = "configurations/crown_and_anchor6.json"
+    extra_flags = " --suit_colors=yellow,white,purple,orange2,tan4 --background_color=seashell3 --file=" + file6 
+    sh configure_piecepack + deck_title + deck_filename + jcd_suits + default_ranks + extra_flags
+    sh "exec/make_piecepack --file=" + file6
+
+    title = " --title='\"Crown and anchor\" demo" + version_str
+    decks = " --decks=crown_and_anchor1,crown_and_anchor2,crown_and_anchor3,crown_and_anchor4,crown_and_anchor5,crown_and_anchor6"
+    sh collect_piecepacks + " --filename=crown_and_anchor_demo" + title + decks
+    sh "xdg-open collections/crown_and_anchor_demo.pdf"
+end
+
 desc "Default piecepack demo"
 task :default do
     file1 = "configurations/default.json"
@@ -122,11 +174,9 @@ task :default do
     sh "xdg-open collections/default_demo.pdf"
 end
 
+
 desc "Dual piecepacks demo"
 task :dual do
-    # --background_color=seashell3")
-    # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue"
-    # alt_scheme = " --suit_colors=white,orange2,yellow,purple"
 
     deck_filename = " --deck_filename=dual1piecepack"
     deck_title = " --deck_title='Piecepack-suited (Un-inverted color scheme)" + version_str
@@ -334,6 +384,7 @@ end
 desc "Copy demos over to Dropbox"
 task :copy_demos do
     sh "cp collections/chinese_zodiac_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
+    sh "cp collections/crown_and_anchor.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
     sh "cp collections/default_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
     sh "cp collections/dual_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
     sh "cp collections/orthodox_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"

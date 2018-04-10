@@ -1,0 +1,13 @@
+{
+  "deck_title": ["JCD piecepack suits (Multicolor) (v0.7.1-4)"],
+  "deck_filename": ["crown_and_anchor6"],
+  "rank_symbols": ["N,A,2,3,4,5"],
+  "suit_symbols": ["🌞,🌜,♚,⚓,꩜"],
+  "header_font": ["Noto Sans"],
+  "rank_symbols_font": ["Noto Sans"],
+  "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham"],
+  "suit_symbols_scale": ["0.7,0.8,1,1,1.2"],
+  "font": ["Noto Sans Symbols"],
+  "suit_colors": ["yellow,white,purple,orange2,tan4"],
+  "background_color": ["seashell3"]
+}

@@ -1,5 +1,4 @@
-*.rst
-*.txt
+README.rst
 collections
 configurations
 pdf
