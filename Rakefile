@@ -384,7 +384,7 @@ end
 desc "Copy demos over to Dropbox"
 task :copy_demos do
     sh "cp collections/chinese_zodiac_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
-    sh "cp collections/crown_and_anchor.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
+    sh "cp collections/crown_and_anchor_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
     sh "cp collections/default_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
     sh "cp collections/dual_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
     sh "cp collections/orthodox_demo.pdf /home/trevorld/a/sync/Dropbox/Public/piecepack/"
