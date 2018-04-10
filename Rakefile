@@ -48,8 +48,8 @@ default_ranks = " --rank_symbols=N,A,2,3,4,5 --rank_symbols_font='Noto Sans'"
 orthodox_ranks = " --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font='Noto Sans'"
 
 # Configurations
-pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back= --dm_symbols_font.chip_face='Noto Sans', --dm_symbols_font.chip_back='Noto Sans'"
-orthodox_dm = " --dm_colors.coin_face=black --dm_colors.coin_back=black --dm_symbols.piecepack_die= --dm_symbols_font.piecepack_die='Noto Sans' --dm_symbols.coin_face='|' --dm_symbols_font.coin_face='Noto Sans' --dm_r.coin_face=0.45 --dm_symbols.coin_back='|' --dm_symbols_font.coin_back='Noto Sans' --dm_r.coin_back=0.45"
+pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back= "
+orthodox_dm = " --dm_colors.coin_face=black --dm_colors.coin_back=black --dm_symbols.piecepack_die= --dm_symbols.coin_face='|' --dm_symbols_font.coin_face='Noto Sans' --dm_r.coin_face=0.45 --dm_symbols.coin_back='|' --dm_symbols_font.coin_back='Noto Sans' --dm_r.coin_back=0.45"
 # ○ ⚆ ⚇ ● ⚈ ⚉
 orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer_face=black --dm_symbols.saucer_face='|' --dm_symbols_font.saucer_face='Noto Sans' --dm_r.saucer_face=0.45 --dm_symbols.saucer_back='|' --dm_symbols_font.saucer_back='Noto Sans' --dm_r.saucer_back=0.45"
 
@@ -151,7 +151,7 @@ task :crown_and_anchor do
     sh "exec/make_piecepack --file=" + file5
 
     deck_filename = " --deck_filename=crown_and_anchor6"
-    deck_title = " --deck_title='JCD piecepack suits (Multicolor)" + version_str
+    deck_title = " --deck_title='JCD piecepack suits (Alternative Multicolor)" + version_str
     file6 = "configurations/crown_and_anchor6.json"
     extra_flags = " --suit_colors=yellow,white,purple,orange2,tan4 --background_color=seashell3 --file=" + file6 
     sh configure_piecepack + deck_title + deck_filename + jcd_suits + default_ranks + extra_flags

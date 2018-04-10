@@ -19,7 +19,6 @@
   "dm_colors.coin_face": ["black"],
   "dm_r.coin_face": [0.45],
   "dm_symbols.piecepack_die": [""],
-  "dm_symbols_font.piecepack_die": ["Noto Sans"],
   "suit_symbols.saucer_face": ["●"],
   "suit_symbols_font.saucer_face": ["Noto Sans Symbols"],
   "suit_symbols_scale.saucer_face": ["1"],
@@ -33,8 +32,6 @@
   "dm_r.saucer_back": [0.45],
   "rank_symbols.chip_face": ["A,B,C,D,E,F"],
   "dm_symbols.chip_face": [""],
-  "dm_symbols_font.chip_face": ["Noto Sans,"],
   "use_suit_as_ace.chip_face": [false],
-  "dm_symbols.chip_back": [""],
-  "dm_symbols_font.chip_back": ["Noto Sans"]
+  "dm_symbols.chip_back": [""]
 }

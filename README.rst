@@ -59,7 +59,7 @@ Demo descriptions
 chinese_zodiac
 ~~~~~~~~~~~~~~
 
-Build a demo `"Chinese Zodiac" piecepack pdf <https://www.dropbox.com/s/eu5uxwk6hcihy53/chinese_zodiac_demo.pdf?dl=0>`_.  This is two 5-suited piecepacks (Wood, Fire, Earth, Metal, and Water) each using a different six animals taken from the Chinese zodiac as ranks.
+Build a demo `"Chinese Zodiac" piecepack pdf <https://www.dropbox.com/s/eu5uxwk6hcihy53/chinese_zodiac_demo.pdf?dl=0>`_.  This is two 5-suited piecepacks (Wood, Fire, Earth, Metal, and Water) each using a different six animals taken from the `Chinese zodiac <https://en.wikipedia.org/wiki/Chinese_zodiac>`_ as ranks.
 
 crown_and_anchor
 ~~~~~~~~~~~~~~~~
@@ -69,12 +69,12 @@ Build a demo `"Crown and anchor" piecepack pdf <https://www.dropbox.com/s/pir2aa
 default
 ~~~~~~~
 
-Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.  This is the default type of piecepack built by this software if the user does no configuration (except configure for the use of the "Noto Sans" family of fonts).  It currently builds a 4-suited piecepack using multicolored french-suits.
+Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.  This is the default type of piecepack built by this software if the user does no configuration (except configure for the use of the "Noto Sans" family of fonts).  It currently builds a 4-suited piecepack using `multicolored french-suits <https://en.wikipedia.org/wiki/Four-color_deck>`_.
 
 dual
 ~~~~
 
-Build a demo `"dual piecepacks" pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_ which includes the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one latin-suited piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two swiss-suited piecepacks (one dark grayscale color scheme, one light grayscale color scheme). 
+Build a demo `"dual piecepacks" pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_ which includes the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one `latin-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Origin_and_development_of_the_Latin_suits>`_ piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two `swiss-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Invention_of_the_Germanic_suits>`_ piecepacks (one dark grayscale color scheme, one light grayscale color scheme). 
 
 orthodox
 ~~~~~~~~
