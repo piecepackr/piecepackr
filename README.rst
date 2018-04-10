@@ -64,17 +64,17 @@ Build a demo `"Chinese Zodiac" piecepack pdf <https://www.dropbox.com/s/eu5uxwk6
 crown_and_anchor
 ~~~~~~~~~~~~~~~~
 
-Build a demo `"Crown and anchor" piecepack pdf <https://www.dropbox.com/s/pir2aau09yl11h5/crown_and_anchor_demo.pdf?dl=0>`_.  `"Crown and anchor" <https://en.wikipedia.org/wiki/Crown_and_Anchor>`_ is a classic public domain dice game that uses the following six suits: ♥,♦,♣,♠,♚,⚓.  These six suits were also used by the `"Empire Deck" <https://boardgamegeek.com/boardgame/24869/empire-deck>`_ of palying cards. Jonathan C. Dietrich classic `JCD Piecepack <http://www.piecepack.org/JCD.html>`_ replaced the Fleur-de-lis (Arms) with Anchors to allow compatibility with these suits.  This demo builds two six-suited piecepack decks using the Crown and anchor suits (one in a classic red/black and another multicolored) and four four-suited piecepack decks using the JCD piecepack suits (one monoscale, one red/black, one classic multicolored, and one in an alternative multicolored scheme).
+Build a demo `"Crown and anchor" piecepack pdf <https://www.dropbox.com/s/pir2aau09yl11h5/crown_and_anchor_demo.pdf?dl=0>`_.  `"Crown and anchor" <https://en.wikipedia.org/wiki/Crown_and_Anchor>`_ is a classic public domain dice game that uses the following six suits: ♥,♦,♣,♠,♚,⚓.  These six suits were also used by the `"Empire Deck" <https://boardgamegeek.com/boardgame/24869/empire-deck>`_ of playing cards. Jonathan C. Dietrich's classic `JCD Piecepack <http://www.piecepack.org/JCD.html>`_ replaced the Fleur-de-lis (Arms) with Anchors to allow compatibility with these suits.  This demo builds two six-suited piecepack decks using the Crown and anchor suits (one in a classic red/black and another multicolored) and four four-suited piecepack decks using the JCD piecepack suits (one monoscale, one red/black, one classic multicolored, and one in an alternative multicolored scheme).
 
 default
 ~~~~~~~
 
-Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.  This is the default type of piecepack built by this software if the user does no configuration (except configure for the use of the "Noto Sans" family of fonts).  
+Build a demo `"default" piecepack pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`_.  This is the default type of piecepack built by this software if the user does no configuration (except configure for the use of the "Noto Sans" family of fonts).  It currently builds a 4-suited piecepack using multicolored french-suits.
 
 dual
 ~~~~
 
-Build a demo `"dual piecepacks" pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_ which includes the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept. 
+Build a demo `"dual piecepacks" pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`_ which includes the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one latin-suited piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two swiss-suited piecepacks (one dark grayscale color scheme, one light grayscale color scheme). 
 
 orthodox
 ~~~~~~~~
@@ -89,7 +89,7 @@ Build a demo `"Rainbow Deck suited piecepacks" pdf <https://www.dropbox.com/s/dc
 sixpack
 ~~~~~~~
 
-Build a demo `"Sixpack" pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`_.  It includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
+Build a demo `"Sixpack" pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`_.  The Sixpack is a six-suited piecepack deck using the following suits: ♥,♠,♣,♦,🌞,🌜.  The demo includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
 
 Executable options
 ------------------
