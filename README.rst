@@ -31,6 +31,8 @@ If you want to run the demos you'll need ``rake``  and several fonts::
     $ unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
     $ cp NotoEmoji-Regular.ttf $fonts_dir/
     $ rm NotoEmoji-unhinted.zip
+    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
+    $ cp chess1.ttf $fonts_dir/chess_utrecht.ttf
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_.
 

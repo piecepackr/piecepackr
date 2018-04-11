@@ -38,8 +38,12 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='Opposite of "use_suit_as_ace" option')
     # parser <- add_option(parser, "--style", default=NULL, 
     #                      help='"basic" or "simple_hex" (default "basic")')
+    parser <- add_option(parser, "--checker_colors", default=NULL,
+                         help='(default is not to draw any checkers on tiles)')
+    parser <- add_option(parser, "--gridline_colors", default=NULL,
+                         help='(default is to draw gridlines on tile back using the "unsuit" suit color)')
     parser <- add_option(parser, "--hexline_colors", default=NULL,
-                         help='(default is not to draw any hexlines)')
+                         help='(default is not to draw any hexlines on tiles)')
     parser <- add_option(parser, "--dm_theta", default=NULL, type="double", 
                          help='(default 135 for tile faces and die faces and 90 for everything else)')
     parser <- add_option(parser, "--dm_r", default=NULL, type="double", 
@@ -234,6 +238,10 @@ process_configuration <- function(opts) {
     opts$i_unsuit <- opts$n_suits + 1
 
 
+    if (!is.null(opts[["checker_colors"]]))
+        opts$checker_colors = split(opts[["checker_colors"]])
+    if (!is.null(opts[["gridline_colors"]]))
+        opts$gridline_colors = split(opts[["gridline_colors"]])
     if (!is.null(opts[["hexline_colors"]]))
         opts$hexline_colors = split(opts[["hexline_colors"]])
     if (!is.null(opts[["dm_symbols"]]))

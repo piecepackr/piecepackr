@@ -1,15 +1,16 @@
 desc "Clean"
 task :clean do
-    rm_r "collections"
-    mkdir "collections"
-    rm_r "previews"
-    mkdir "previews"
-    rm_r "svg"
-    mkdir "svg"
-    rm_r "pdf"
-    mkdir "pdf"
+    dirs = ["collections", "previews", "svg", "pdf"]
+    dirs.each { |dir|
+        rm_r "#{dir}"
+        mkdir "#{dir}"
+        sh "touch #{dir}/.gitginore"
+    }
     sh "killall evince | true"
 end
+
+demos = ["chinese_zodiac", "crown_and_anchor", "default", "dual",
+         "orthodox", "rainbow_deck", "reversi"]
 
 version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'` + ")'"
 
@@ -51,6 +52,9 @@ chinese_elements2 = " --suit_symbols=木,火,土,金,水, --suit_symbols_scale=0
 # Ranks
 default_ranks = " --rank_symbols=N,A,2,3,4,5 --rank_symbols_font='Noto Sans'"
 orthodox_ranks = " --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font='Noto Sans'"
+# chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
+chess_ranks = " --rank_symbols=♞,♟,♝,♜,♛,♚ --rank_symbols_font='Sans Noto Symbols'"
+# chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
 
 # Configurations
 pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back= "
@@ -65,14 +69,9 @@ orthodox_saucers3 = " --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit
 ## Demos
 desc "Run all demos"
 task :all do
-    Rake::Task[:crown_and_anchor].invoke()
-    Rake::Task[:chinese_zodiac].invoke()
-    Rake::Task[:default].invoke()
-    Rake::Task[:dual].invoke()
-    Rake::Task[:orthodox].invoke()
-    Rake::Task[:rainbow_deck].invoke()
-    Rake::Task[:reversi].invoke()
-    Rake::Task[:sixpack].invoke()
+    demos.each { |demo|
+        Rake::Task["#{demo}"].invoke()
+    }
 end
 
 desc "Chinese zodiac demo"
@@ -116,6 +115,28 @@ task :chinese_zodiac do
     decks = " --decks=chinese_zodiac1,chinese_zodiac2,chinese_zodiac3,chinese_zodiac4"
     sh collect_piecepacks + " --filename=chinese_zodiac_demo --title='Chinese zodiac demo" + version_str + decks
     sh "xdg-open collections/chinese_zodiac_demo.pdf"
+end
+
+desc "Chess demo"
+task :chess do
+    deck_filename = " --deck_filename=chess1"
+    deck_title = " --deck_title='Chess ranked" + version_str
+    file = "configurations/chess1.json"
+    extra_flags = " --file=" + file 
+    sh configure_piecepack + deck_title + deck_filename + piecepack_suits + chess_ranks + extra_flags 
+
+    sh "exec/make_piecepack --file=" + file
+    deck_filename = " --deck_filename=chess2"
+    deck_title = " --deck_title='Chess ranked (tile face squares)" + version_str
+    file = "configurations/chess1.json"
+    extra_flags = " --file=" + file 
+    sh configure_piecepack + deck_title + deck_filename + piecepack_suits + chess_ranks + extra_flags 
+    sh "exec/make_piecepack --file=" + file
+
+    decks = " --decks=chess1"
+    sh collect_piecepacks + " --filename=chess_demo --title='Chess ranked piecepack demo" + version_str + decks
+    sh "xdg-open collections/chess_demo.pdf"
+
 end
 
 desc "Crown and anchor demo"
@@ -394,7 +415,7 @@ task :test do
     # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue,grey"
     # alt_scheme = " --suit_colors=white,orange2,yellow,purple,grey"
 
-    deck_filename = " --deck_filename=test1piecepack"
+    deck_filename = " --deck_filename=test1"
     extra_flags = " --use_suit_as_ace  --rank_symbols.chip_face='A,B,C,D,E,F'"
     sh configure_piecepack + deck_filename + piecepack_suits + orthodox_ranks + extra_flags + ' | exec/make_piecepack'
 
@@ -402,49 +423,27 @@ task :test do
     # deck_filename  = " --deck_filename=elements"
     # suit_symbols = " --suit_symbols=🔥,🌪️,⛰️,🌊,"
       
-    deck_filename = " --deck_filename=test2latin"
-    extra_flags = "  --invert_colors.suited  "
+    deck_filename = " --deck_filename=test2"
+    extra_flags = "  --invert_colors.suited  --background_color=white"
     sh configure_piecepack + deck_filename + latin_suits_swirl + default_ranks + extra_flags + ' | exec/make_piecepack'
 
-    deck_filename = " --deck_filename=test3french"
+    deck_filename = " --deck_filename=test3"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
     extra_flags = " --dm_symbols= --dm_symbols.tile_face=♥,♠,♣,♦,★ --background_color.unsuited=orange" 
     sh configure_piecepack + deck_filename + suit_symbols + default_ranks + extra_flags + ' | exec/make_piecepack'
 
-    deck_filename = " --deck_filename=test4french"
+    deck_filename = " --deck_filename=test4"
     suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
-    extra_flags = " --suit_colors=" + light_scheme + " --invert_colors.unsuited --font='Deja Vu Sans'" + hexlines_light
+    extra_flags = " --suit_colors=" + light_scheme + " --invert_colors.unsuited --background_color=white --font='Deja Vu Sans'" + hexlines_light
     sh 'exec/configure_piecepack' + deck_filename + suit_symbols + default_ranks + extra_flags + ' | exec/make_piecepack'
 
-    decks = " --decks=test1piecepack,test2latin,test3french,test4french"
-    sh collect_piecepacks + " --filename=test --title='Test'" + version_str + decks
+    decks = " --decks=test1,test2,test3,test4"
+    sh collect_piecepacks + " --filename=test --title='Test" + version_str + decks
     sh "xdg-open collections/test.pdf"
-
-    # deck_name = " --deck_name='TLD Euchre Piecepack, French Suits (v0.1)'"
-    # deck_filename = " --deck_filename=french"
-    # suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
-    # rank_symbols = " --rank_symbols=9,10,J,Q,K,A"
-      
-    # deck_name = " --deck_name='TLD Chess Piecepack (v0.1)'"
-    # deck_filename = " --deck_filename=chess"
-    # # suit_symbols = " --suit_symbols=♟,♟,♙,♙,"
-    # suit_symbols = " --suit_symbols=♙,♙,♙,♙,♙"
-    # rank_symbols = " --rank_symbols=♞,♟,♝,♜,♛,♚"
-    # rank_symbols = " --rank_symbols=♘,♙,♗,♖,♕,♔"
-    # # add_checkers = TRUE
-      
-    # deck_name = " --deck_name='TLD Alchemical Piecepack, Elemental Suits (v0.1)'"
-    # deck_filename = " --deck_filename=alchemical"
-    # # rank_symbols = "  --rank_symbols=' ,𝍩,𝍪,𝍫,𝍬,𝍭'"
-    # # rank_symbols = " --rank_symbols=' ,🝔,:,∴,⸪,⁙"
-    # # rank_symbols = " --rank_symbols=' 🝔,🜩,☰,⚏,☵"
-    # rank_symbols = " --rank_symbols=' 🝪,🜩,ʒ,♃,🜪"
 end
 
 desc "Copy demos over to Dropbox"
 task :copy_demos do
-    demos = ["chinese_zodiac", "crown_and_anchor", "default", "dual",
-             "orthodox", "rainbow_deck", "reversi"]
     dir = "/home/trevorld/a/sync/Dropbox/Public/piecepack/"
     demos.each { |x| sh "cp collections/#{x}_demo.pdf #{dir}" }
 end

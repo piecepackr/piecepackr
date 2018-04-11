@@ -46,6 +46,32 @@ get_suit_colors <- function(component, arg) {
     expand_suit_elements(suit_colors, "suit_colors", component, arg) 
 }
 
+get_shape <- function(component, arg) {
+    switch(component,
+           tile_back = "rect",
+           tile_face = "rect",
+           coin_back = "circle",
+           coin_face = "circle",
+           piecepack_die = "rect",
+           suit_die = "rect",
+           saucer_face = "circle",
+           saucer_back = "circle",
+           pawn = "rect",
+           pawn_belt = "rect",
+           chip_face = "circle",
+           chip_back = "circle")
+}
+
+get_grid_shape <- function(shape) {
+    switch(shape,
+           circle = grid.circle,
+           rect = grid.rect)
+}
+
+get_shape_fn <- function(component, arg) {
+    get_grid_shape(get_shape(component, arg))
+}
+
 get_suit_color_helper <- function(component, i_s, arg) {
     suit_colors <- get_suit_colors(component, arg)
     ifelse(i_s <= arg$n_suits, suit_colors[i_s], suit_colors[arg$i_unsuit])
@@ -158,6 +184,30 @@ get_suit_color <- function(component, i_s, arg) {
         bcol
     else
         scol
+}
+get_checker_color <- function(component, i_s, arg) {
+    if(!is.null(arg[["checker_colors"]]))
+        colors <- arg[["checker_colors"]]
+    else
+        colors <- NA
+    colors <- expand_suit_elements(colors, "checker_colors", component, arg)
+    colors[i_s]
+}
+get_gridline_color <- function(component, i_s, arg) {
+    if(!is.null(arg[["gridline_colors"]])) 
+        colors <- arg[["gridline_colors"]]
+    else
+        colors <- c(rep(NA, arg$n_suits), get_suit_color(component, arg$i_unsuit, arg))
+    colors <- expand_suit_elements(colors, "gridline_colors", component, arg)
+    colors[i_s]
+}
+get_hexline_color <- function(component, i_s, arg) {
+    if(!is.null(arg[["hexline_colors"]]))
+        colors <- arg[["hexline_colors"]]
+    else
+        colors <- NA
+    colors <- expand_suit_elements(colors, "hexline_colors", component, arg)
+    colors[i_s]
 }
 
 get_suit_symbol <- function(component, i_s, arg) {
@@ -372,20 +422,16 @@ get_rank_fontsize <- function(component, i_s, i_r, arg) {
                  20)
     scale * fs
 }
-get_hexline_color <- function(component, i_s, arg) {
-    if(!is.null(arg[["hexline_colors"]]))
-        arg[["hexline_colors"]][i_s]
-    else
-        NA
-}
 
 get_component_opt <- function(component, i_s, i_r, arg) {
+    shape_fn <- get_shape_fn(component, arg)
     style <- get_style(component, arg)
     bcol <- get_background_color(component, i_s, arg)
     scol <- get_suit_color(component, i_s, arg)
     dm_col <- get_dm_color(component, i_s, arg)
+    checker_col <- get_checker_color(component, i_s, arg)
+    gridline_col <- get_gridline_color(component, i_s, arg)
     hexline_col <- get_hexline_color(component, i_s, arg) 
-    checker_col <- arg$suit_colors[arg$i_unsuit] #### won't show hex lines
     rank_symbol <- get_rank_symbol(component, i_s, i_r, arg)
     rank_fontsize <- get_rank_fontsize(component, i_s, i_r, arg)
     rank_font <- get_rank_font(component, i_s, i_r, arg)
@@ -401,10 +447,10 @@ get_component_opt <- function(component, i_s, i_r, arg) {
     dm_y <- r * sin(pi * theta / 180) + 0.5
 
     list(style=style, bcol=bcol, scol=scol, 
-         hexline_col=hexline_col, checker_col=checker_col, 
+         checker_col=checker_col, gridline_col=gridline_col, hexline_col=hexline_col, 
          rank_symbol=rank_symbol, rank_fontsize=rank_fontsize, rank_font=rank_font,
          suit_symbol=suit_symbol, suit_fontsize=suit_fontsize, suit_font=suit_font,
-         dm_col=dm_col, dm_symbol=dm_symbol,
+         dm_col=dm_col, dm_symbol=dm_symbol, shape_fn=shape_fn,
          dm_fontsize=dm_fontsize, dm_font=dm_font, dm_x=dm_x, dm_y=dm_y)
 }
 
@@ -539,166 +585,140 @@ add_hexlines <- function(arg, omit_direction=FALSE, hl_col=arg$suit_colors[5]) {
     else
         seg(1, 1 - ho, 1 - ho, 1, hl_col, hl_size) 
 }
+add_tile_elements <- function(opt) {
+    grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=opt$checker_col))
+    grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(col=NA, fill=opt$checker_col))
+    add_hexlines(arg, hl_col=opt$hexline_col)
+    gp_gl <- gpar(col=opt$gridline_col, lwd=8, lineend="square")
+    grid.lines(x=0.5, gp=gp_gl)
+    grid.lines(y=0.5, gp=gp_gl)
+}
 
-draw_pawn <- function(i_s, arg, draw_border = TRUE) {
+add_dm_symbol <- function(opt) {
+    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
+    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
+}
+
+add_rank_symbol <- function(opt) {
+    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
+    grid.text(opt$rank_symbol, gp=rgp)
+}
+
+add_suit_symbol <- function(opt) {
+    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
+    grid.text(opt$suit_symbol, gp=sgp)
+}
+
+add_background <- function(opt) {
+    opt$shape_fn(gp = gpar(col=NA, fill=opt$bcol))
+}
+
+add_border <- function(opt) {
+    opt$shape_fn(gp = gpar(col=opt$border_color, fill=NA))
+}
+
+draw_pawn <- function(i_s, arg) {
     opt <- get_component_opt("pawn", i_s, 1, arg)
 
-    grid.rect(gp = gpar(fill=opt$bcol))
+    add_background(opt)
     gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, y=0.65, rot=180, gp=gp_tr)
     grid.text(opt$suit_symbol, y=0.35, rot=0, gp=gp_tr)
     grid.lines(y=0.5, gp=gpar(col=opt$scol, lty="dashed"))
     grid.lines(y=0.1, gp=gpar(col=opt$scol, lty="dashed"))
     grid.lines(y=0.9, gp=gpar(col=opt$scol, lty="dashed"))
-
-    if (draw_border)
-        grid.rect(gp = gpar(col=arg$border_color, fill=NA))
-
-    invisible(NULL)
+    add_border(opt)
 }
 
-draw_pawn_belt <- function(i_s, arg, draw_border = TRUE) {
+draw_pawn_belt <- function(i_s, arg) {
     opt <- get_component_opt("pawn_belt", i_s, 1, arg)
 
-    grid.rect(gp = gpar(fill=opt$bcol))
-    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
-    grid.text(opt$suit_symbol, gp=gp_tr)
+    add_background(opt)
+    add_suit_symbol(opt)
     grid.lines(y=0.9, gp=gpar(col=opt$scol, lwd=8))
     grid.lines(y=0.1, gp=gpar(col=opt$scol, lwd=8))
-
-    if (draw_border)
-        grid.rect(gp = gpar(col=arg$border_color, fill=NA))
-
-    invisible(NULL)
+    add_border(opt)
 }
 
-draw_tile_back <- function(arg, draw_border = TRUE) {
-    opt <- get_component_opt("tile_back", opts$i_unsuit, 1, arg)
-    
-    grid.rect(gp = gpar(fill=opt$bcol))
-    add_hexlines(arg, hl_col=opt$hexline_col)
-    gp_gl <- gpar(col=opt$scol, lwd=8, lineend="square")
-    grid.lines(x=0.5, gp=gp_gl)
-    grid.lines(y=0.5, gp=gp_gl)
-    if (draw_border)
-        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
-}
-
-draw_tile_face <- function(i_s, i_r, arg, draw_border = TRUE) {
-    opt <- get_component_opt("tile_face", i_s, i_r, arg)
-
-    grid.rect(gp = gpar(fill=opt$bcol))
-    if (arg$add_checkers) {
-        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(fill=opt$checker_col))
-        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(fill=opt$checker_col))
-    }
-    add_hexlines(arg, hl_col=opt$hexline_col) 
-
-    gp_tr <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
-    grid.text(opt$rank_symbol, gp=gp_tr)
-
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-
-    if (draw_border)
-        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
-
-    invisible(NULL)
-}
-
-draw_suit_die_face <- function(i_s, arg, draw_border = TRUE) {
+draw_suit_die_face <- function(i_s, arg) {
     opt <- get_component_opt("suit_die", i_s, 1, arg)
 
-    grid.rect(gp = gpar(fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
-    grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) 
-        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
+    add_background(opt)
+    add_suit_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }
 
+draw_tile_back <- function(arg) {
+    opt <- get_component_opt("tile_back", opts$i_unsuit, 1, arg)
+    
+    add_background(opt)
+    add_tile_elements(opt)
+    add_border(opt)
+}
 
-draw_pawn_saucer <- function(i_s, arg, draw_border = TRUE) {
+draw_tile_face <- function(i_s, i_r, arg) {
+    opt <- get_component_opt("tile_face", i_s, i_r, arg)
+
+    add_background(opt)
+    add_tile_elements(opt)
+    add_rank_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
+    
+}
+
+draw_pawn_saucer <- function(i_s, arg) {
     component <- ifelse(i_s < arg$i_unsuit, "saucer_face", "saucer_back")
     opt <- get_component_opt(component, i_s, 1, arg)
 
-    grid.circle(gp = gpar(fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
-    grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) 
-        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
+    add_background(opt)
+    add_suit_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }
 
-draw_coin_face <- function(i_r, arg, draw_border = TRUE) {
+draw_coin_face <- function(i_r, arg) {
     opt <- get_component_opt("coin_face", arg$i_unsuit, i_r, arg)
 
-    grid.circle(gp = gpar(fill=opt$bcol))
-    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
-    grid.text(opt$rank_symbol, gp =  rgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) {
-        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
-    }
-    invisible(NULL)
+    add_background(opt)
+    add_rank_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }
 
-draw_piecepack_die_face <- function(i_s, i_r, arg, draw_border = TRUE) {
+draw_piecepack_die_face <- function(i_s, i_r, arg) {
     opt <- get_component_opt("piecepack_die", i_s, i_r, arg)
 
-    grid.rect(gp = gpar(fill=opt$bcol))
-    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
-    grid.text(opt$rank_symbol, gp = rgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) 
-        grid.rect(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
+    add_background(opt)
+    add_rank_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }
 
-draw_chip_face <- function(i_s, i_r, arg, draw_border = TRUE) {
+draw_chip_face <- function(i_s, i_r, arg) {
     opt <- get_component_opt("chip_face", i_s, i_r, arg)
 
-    grid.circle(gp = gpar(fill=opt$bcol))
-    # grid.circle(r=cr, gp=gpar(col=opt$scol, lwd=circle_lwd, fill=bcol))
-    rgp <- gpar(col=opt$scol, fontsize=opt$rank_fontsize, fontfamily=opt$rank_font)
-    grid.text(opt$rank_symbol, gp=rgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) 
-        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
+    add_background(opt)
+    add_rank_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }
 
-draw_coin_back <- function(i_s, arg, draw_border = TRUE) {
+draw_coin_back <- function(i_s, arg) {
     opt <- get_component_opt("coin_back", i_s, 1, arg)
 
-    grid.circle(gp = gpar(fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
-    grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) 
-        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
+    add_background(opt)
+    add_suit_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }
 
-draw_chip_back <- function(i_s, arg, draw_border = TRUE) {
+draw_chip_back <- function(i_s, arg) {
     opt <- get_component_opt("chip_back", i_s, 1, arg)
 
-    grid.circle(gp = gpar(fill=opt$bcol))
-    # grid.circle(r=cr, gp=gpar(col=opt$scol, lwd=circle_lwd, fill=opt$bcol))
-    sgp <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
-    grid.text(opt$suit_symbol, gp=sgp)
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
-    if (draw_border) 
-        grid.circle(gp=gpar(col=arg$border_color, fill=NA))
-    invisible(NULL)
+    add_background(opt)
+    add_suit_symbol(opt)
+    add_dm_symbol(opt)
+    add_border(opt)
 }

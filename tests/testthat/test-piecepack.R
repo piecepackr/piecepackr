@@ -30,11 +30,11 @@ test_that("options work as expected", {
     expect_equal(get_rank_symbol("chip_face", 1, 2, c2o(args)), "B")
     expect_equal(get_rank_symbol("piecepack_die", 6, 2, c2o(args)), "★")
 
-    expect_equal(get_background_color("tile_face", 1, c2o("--background_color.unsuited=orange")), "white")
+    expect_equal(get_background_color("tile_face", 1, c2o("--background_color.unsuited=orange")), "transparent")
     expect_equal(get_background_color("tile_back", 1, c2o("--background_color.unsuited=orange")), "orange")
     expect_equal(is_suited("piecepack_die", 5, c2o()), TRUE)
     expect_equal(is_suited("piecepack_die", 6, c2o()), FALSE)
-    expect_equal(get_background_color("piecepack_die", 5, c2o("--background_color.unsuited=orange")), "white")
+    expect_equal(get_background_color("piecepack_die", 5, c2o("--background_color.unsuited=orange")), "transparent")
     expect_equal(get_background_color("piecepack_die", 6, c2o("--background_color.unsuited=orange")), "orange")
     expect_equal(get_dm_symbol("suit_die", 3, c2o("--dm_symbols=")), "")
     expect_equal(get_dm_symbol("suit_die", 3, c2o("--dm_symbols=,,,,")), "")

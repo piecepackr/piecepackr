@@ -47,8 +47,14 @@ Options:
 	--use_ace_as_ace
 		Opposite of "use_suit_as_ace" option
 
+	--checker_colors=CHECKER_COLORS
+		(default is not to draw any checkers on tiles)
+
+	--gridline_colors=GRIDLINE_COLORS
+		(default is to draw gridlines on tile back using the "unsuit" suit color)
+
 	--hexline_colors=HEXLINE_COLORS
-		(default is not to draw any hexlines)
+		(default is not to draw any hexlines on tiles)
 
 	--dm_theta=DM_THETA
 		(default 135 for tile faces and die faces and 90 for everything else)

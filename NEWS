@@ -1,8 +1,9 @@
 piecepack 0.7.1
 ===============
 
-* Add ``--border_color`` configuration option and fix bug in PnP border colors (#42).
-* Add ``--header_font``, ``--dm_r``, ``--dm_r.*``, and ``--suit_colors.*`` options.
+* Added ``--border_color`` configuration option and fix bug in PnP border colors (#42).
+* Added ``--header_font``, ``--dm_r``, ``--dm_r.*``, and ``--suit_colors.*`` options.
+* Added (or improved) ``--checker_colors``, ``--gridline_colors``, and ``--hexline_colors`` options
 * Add new and rename existing pdf metadata options in ``exec/collect_piecepacks``.
 * Improved "preview" layout.
 * Added additional suit die to accessories pages.
@@ -22,4 +23,4 @@ piecepack 0.7.0
 ===============
 
 * Improved print-and-play layout (#35).
-* Added "Chinese zodiac" and "sixpack" demos (#38).
+* Added "Chinese zodiac" and "sixpack" demos to pre-existing "default", "dual", and "orthodox" demos (#38).
