@@ -1,4 +1,5 @@
 split <- function(x, sep=",") { stringr::str_split(x, sep)[[1]] } 
+col_split <- function(x, sep=",") { gsub("^$", "transparent", split(x, sep)) }
 
 configuration_options <- function(args=commandArgs(TRUE)) {
     default_str <- "(default %default)"
@@ -222,14 +223,14 @@ process_configuration <- function(opts) {
     if (is.null(opts[["background_color"]]))
         opts$background_color <- "transparent"
     if (is.null(opts[["border_color"]]))
-        opts$border_color <- "grey"
+        opts$border_color <- "darkgreen"
     if (is.null(opts[["invert_colors"]]))
         opts$invert_colors <- FALSE
 
     opts <- add_copyright(opts)
 
     opts$suit_symbols <- split(opts$suit_symbols)
-    opts$suit_colors <- split(opts$suit_colors)
+    opts$suit_colors <- col_split(opts$suit_colors)
     opts$rank_symbols <- split(opts$rank_symbols)
     if (is.null(opts$n_ranks))
         opts$n_ranks <- length(opts$rank_symbols)
@@ -239,11 +240,11 @@ process_configuration <- function(opts) {
 
 
     if (!is.null(opts[["checker_colors"]]))
-        opts$checker_colors = split(opts[["checker_colors"]])
+        opts$checker_colors = col_split(opts[["checker_colors"]])
     if (!is.null(opts[["gridline_colors"]]))
-        opts$gridline_colors = split(opts[["gridline_colors"]])
+        opts$gridline_colors = col_split(opts[["gridline_colors"]])
     if (!is.null(opts[["hexline_colors"]]))
-        opts$hexline_colors = split(opts[["hexline_colors"]])
+        opts$hexline_colors = col_split(opts[["hexline_colors"]])
     if (!is.null(opts[["dm_symbols"]]))
         opts$dm_symbols <- split(opts[["dm_symbols"]])
     if (!is.null(opts[["rank_symbols_font"]]))
@@ -260,11 +261,15 @@ process_configuration <- function(opts) {
         opts[["dm_symbols_scale"]] <- as.numeric(split(opts[["dm_symbols_scale"]]))
     for(component in COMPONENTS) {
         for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
-                        "rank_symbols_font", "suit_symbols_font", "dm_symbols_font",
-                        "suit_colors", "dm_colors")) {
+                        "rank_symbols_font", "suit_symbols_font", "dm_symbols_font")) {
             component_str <- paste0(style, ".", component)
             if (!is.null(opts[[component_str]]))
                 opts[[component_str]] <- split(opts[[component_str]])
+        }
+        for (style in c( "suit_colors", "dm_colors")) {
+            component_str <- paste0(style, ".", component)
+            if (!is.null(opts[[component_str]]))
+                opts[[component_str]] <- col_split(opts[[component_str]])
         }
         for (style in c("rank_symbols_scale", "suit_symbols_scale", "dm_symbols_scale")) {
             component_str <- paste0(style, ".", component)

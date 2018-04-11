@@ -586,6 +586,7 @@ add_hexlines <- function(arg, omit_direction=FALSE, hl_col=arg$suit_colors[5]) {
         seg(1, 1 - ho, 1 - ho, 1, hl_col, hl_size) 
 }
 add_tile_elements <- function(opt) {
+    #### what to do with non-square shapes?
     grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=opt$checker_col))
     grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(col=NA, fill=opt$checker_col))
     add_hexlines(arg, hl_col=opt$hexline_col)

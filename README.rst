@@ -31,8 +31,9 @@ If you want to run the demos you'll need ``rake``  and several fonts::
     $ unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
     $ cp NotoEmoji-Regular.ttf $fonts_dir/
     $ rm NotoEmoji-unhinted.zip
-    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
-    $ cp chess1.ttf $fonts_dir/chess_utrecht.ttf
+
+..    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
+..    $ cp chess1.ttf $fonts_dir/ChessUtrecht.ttf
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_.
 
@@ -47,6 +48,7 @@ One uses the ``exec/make_piecepack`` command to make a single print-and-play pdf
 
 Where ``demo_name`` is either:
 
+#. ``chess``
 #. ``chinese_zodiac``
 #. ``crown_and_anchor``
 #. ``default``
@@ -58,6 +60,11 @@ Where ``demo_name`` is either:
 
 Demo descriptions
 -----------------
+
+chess
+~~~~~
+
+Build a demo `"Chess ranked" piecepack pdf <https://www.dropbox.com/s/zksjzil99efjn3r/chess_demo.pdf?dl=0>`_.  These are piecepacks that replace the six traditional piecepack ranks with the six FIDE chess ranks: ♞,♟,♝,♜,♛,♚.  This decreases the abstraction needed to play several variants of chess but does increases the abstraction needed to play some piecepack games (since one needs to mentally convert chess ranks to N,A,2,3,4,5 or 0,1,2,3,4,5).  Some of the decks have checkered tile faces or tile backs and various color schemes to facilitate playing various classic abstract games like Chess, Checkers, Backgammon, and Reversi.  **Warning** checkered tile backs results in a *non-conforming* piecepack since it leaks information about the direction of the tile face.  The last two pairs of demo chess sets are matched using a "mirrored" color scheme.  Besides Reversi this are great for playing chess games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ since each side's pieces will all be of the same color.  The last pair of chess-ranked piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).
 
 chinese_zodiac
 ~~~~~~~~~~~~~~
@@ -107,7 +114,8 @@ Build a demo `"Rainbow Deck suited piecepacks" pdf <https://www.dropbox.com/s/dc
 reversi
 ~~~~~~~
 
-Build a demo `"Reversi-friendly piecepacks" pdf <https://www.dropbox.com/s/rgxkdwqwwkd5jbk/reversi_demo.pdf?dl=0>`_.  It contains several piecepacks with color schemes configured to easily distinguish between the back and face of the coins, tiles, and "chips" accessories (and in some decks the suit dice and suit-rank dice) to facilitate the playing of games like `Reversi <http://www.piecepack.org/rules/Reversi.pdf>`_.  It contains a piecepack-suited piecepack with brown "suited" background, an `ACS-elements-suited <http://www.scs.illinois.edu/~mainzv/HIST/Logo/logo.php>`_ piecepack with black "suited" background, dual printer-friendly grayscale sixpacks, and two "mirrored-color-scheme" six-suited piecepacks where one has a red "suited" background and black "unsuited" background and the other one has a black "suited" background and black "unsuited" background.  Besides reversi a pair of "mirrored-color-scheme" piecepacks is great for playing games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ and `Backgammon <https://en.wikipedia.org/wiki/Backgammon>`_.
+Build a demo `"Reversi-friendly piecepacks" pdf <https://www.dropbox.com/s/rgxkdwqwwkd5jbk/reversi_demo.pdf?dl=0>`_.  It contains several piecepacks with color schemes configured to easily distinguish between the back and face of the coins, tiles, and "chips" accessories (and in some decks the suit dice and suit-rank dice) to facilitate the playing of games like `Reversi <http://www.piecepack.org/rules/Reversi.pdf>`_.  It contains a piecepack-suited piecepack with brown "suited" background, an `ACS-elements-suited <http://www.scs.illinois.edu/~mainzv/HIST/Logo/logo.php>`_ piecepack with black "suited" background, dual printer-friendly grayscale sixpacks, and two "mirrored" color scheme six-suited piecepacks where one has a red "suited" background and black "unsuited" background and the other one has a black "suited" background and black "unsuited" background.  Besides reversi a pair of "mirrored" color scheme piecepacks are great for playing games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ and `Backgammon <https://en.wikipedia.org/wiki/Backgammon>`_ since each side's pieces will all be of the same color.  Each of the last two pairs of reversi-friendly piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).
+
 
 sixpack
 ~~~~~~~
@@ -117,9 +125,9 @@ Build a demo `"Sixpack" pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_d
 Executable options
 ------------------
 
-* `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/man/configure_piecepack_options.txt>`_
-* `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/man/make_piecepack_options.txt>`_
-* `exec/collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/man/collect_piecepacks_options.txt>`_
+* `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/configure_piecepack_options.txt>`_
+* `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_options.txt>`_
+* `exec/collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/txt/collect_piecepacks_options.txt>`_
 
 Licence
 -------

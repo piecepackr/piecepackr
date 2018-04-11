@@ -1,0 +1,20 @@
+{
+  "deck_title": ["Black-suits (checkered tile faces) (v0.7.1-6)"],
+  "deck_filename": ["chess5"],
+  "rank_symbols": ["♞,♟,♝,♜,♛,♚"],
+  "suit_symbols": ["♠,♣,🌜,⚓,,,★"],
+  "header_font": ["Noto Sans"],
+  "rank_symbols_font": ["Sans Noto Symbols"],
+  "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols"],
+  "suit_symbols_scale": ["1,1,0.8,1,1,1,1"],
+  "checker_colors": ["grey,grey,grey,grey,grey,grey,"],
+  "font": ["Noto Sans Symbols"],
+  "suit_colors": ["black,black,black,black,black,black,darkred"],
+  "suit_symbols.coin_back": ["♟"],
+  "suit_symbols_font.coin_back": ["Noto Sans Symbols"],
+  "suit_symbols_scale.coin_back": ["1"],
+  "dm_symbols.coin_back": ["♠,♣,🌜,⚓,,,★"],
+  "dm_symbols_font.coin_back": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols"],
+  "dm_symbols_scale.coin_back": ["1,1,0.8,1,1,1,1"],
+  "dm_symbols.coin_face": ["★"]
+}

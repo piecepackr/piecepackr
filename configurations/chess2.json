@@ -1,0 +1,12 @@
+{
+  "deck_title": ["French-suits (checkered tile faces) (v0.7.1-6)"],
+  "deck_filename": ["chess2"],
+  "rank_symbols": ["♞,♟,♝,♜,♛,♚"],
+  "suit_symbols": ["♥,♠,♣,♦,꩜"],
+  "header_font": ["Noto Sans"],
+  "rank_symbols_font": ["Sans Noto Symbols"],
+  "suit_symbols_scale": ["1,1,1,1,1.2,1.2"],
+  "checker_colors": ["grey,grey,grey,grey,"],
+  "font": ["Noto Sans Symbols"],
+  "suit_colors": ["darkred,black,dimgrey,hotpink2,grey"]
+}

@@ -1,0 +1,19 @@
+{
+  "deck_title": ["Black-suits (checkered tile backs) (v0.7.1-6)"],
+  "deck_filename": ["chess3"],
+  "rank_symbols": ["♞,♟,♝,♜,♛,♚"],
+  "suit_symbols": ["♠,♣,☽,⚓,★"],
+  "header_font": ["Noto Sans"],
+  "rank_symbols_font": ["Sans Noto Symbols"],
+  "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,DejaVu Sans,Noto Sans Symbols"],
+  "checker_colors": [",,,,darkred"],
+  "gridline_colors": [""],
+  "font": ["Noto Sans Symbols"],
+  "suit_colors": ["black,black,black,black,darkred"],
+  "suit_symbols.coin_back": ["♟"],
+  "suit_symbols_font.coin_back": ["Noto Sans Symbols"],
+  "suit_symbols_scale.coin_back": ["1"],
+  "dm_symbols.coin_back": ["♠,♣,☽,⚓,★"],
+  "dm_symbols_font.coin_back": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Noto Sans Symbols"],
+  "dm_symbols.coin_face": ["★"]
+}

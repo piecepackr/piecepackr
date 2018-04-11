@@ -9,8 +9,8 @@ task :clean do
     sh "killall evince | true"
 end
 
-demos = ["chinese_zodiac", "crown_and_anchor", "default", "dual",
-         "orthodox", "rainbow_deck", "reversi"]
+demos = ["chess", "chinese_zodiac", "crown_and_anchor", "default",
+         "dual", "orthodox", "rainbow_deck", "reversi"]
 
 version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'` + ")'"
 
@@ -43,9 +43,16 @@ swiss_suits = " --suit_symbols=,,,, --suit_symbols_font=Quivira -
 sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=1,1,1,1,0.8,0.8,1.2,1.2 --suit_symbols_font='Noto Emoji'"
 sixpack_suits_black = " --suit_symbols=♥,♠,♣,♦,☀,🌘,꩜ --suit_symbols_scale=1,1,1,1,1.2,0.9,1"
 sixpack_suits_white = " --suit_symbols=♡,♤,♧,♢,☼,🌔,꩜ --suit_symbols_scale=1,1,1,1,1.4,0.9,1"
-black_suits = " --suit_symbols=♠,♣,🌜,⚓,,,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols' --suit_symbols_scale=1,1,0.8,1,1,1,1"
-red_suits = " --suit_symbols=♥,♦,🌞,♚,,,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols' --suit_symbols_scale=1,1,0.8,1,1,1,1"
+black_suits4 = " --suit_symbols=♠,♣,☽,⚓,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,DejaVu Sans,Noto Sans Symbols'"
+coin_black_suits4 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♠,♣,☽,⚓,★  --dm_symbols_font.coin_back='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Noto Sans Symbols'"
+black_suits6 = " --suit_symbols=♠,♣,🌜,⚓,,,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols' --suit_symbols_scale=1,1,0.8,1,1,1,1"
+coin_black_suits6 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♠,♣,🌜,⚓,,,★  --dm_symbols_font.coin_back='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols' --dm_symbols_scale.coin_back=1,1,0.8,1,1,1,1"
+red_suits4 = " --suit_symbols=♥,♦,☉,♚,★  --suit_symbols_font='Noto Sans Symbols'"
+coin_red_suits4 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1_--suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♥,♦,☉,♚,★  --dm_symbols_font.coin_back='Noto Sans Symbols'"
+red_suits6 = " --suit_symbols=♥,♦,🌞,♚,,,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols' --suit_symbols_scale=1,1,0.8,1,1,1,1"
+coin_red_suits6 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♥,♦,🌞,♚,,,★  --dm_symbols_font.coin_back='Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols' --dm_symbols_scale.coin_back=1,1,0.8,1,1,1,1"
 alchemical_elements = " --suit_symbols=🜁,🜂,🜃,🜄, --suit_colors=red,khaki2,green,cornflowerblue,grey"
+# emoji_elements = " --suit_symbols=🔥,🌪️,⛰️,🌊, --suit_colors=darkred,black,darkgreen,darkblue"
 chinese_elements = " --suit_symbols=🌲,🔥,⛰️,🏆,🌊, --suit_symbols_scale=1.1,1.1,1,0.6,0.6 --suit_symbols_font='Quivira,Quivira,Quivira,Noto Sans Symbols2,Noto Emoji,'" + chinese_elements_colors
 chinese_elements2 = " --suit_symbols=木,火,土,金,水, --suit_symbols_scale=0.7 --suit_symbols_font='Noto Sans CJK SC'" + chinese_elements_colors 
 
@@ -120,20 +127,48 @@ end
 desc "Chess demo"
 task :chess do
     deck_filename = " --deck_filename=chess1"
-    deck_title = " --deck_title='Chess ranked" + version_str
+    deck_title = " --deck_title='Piecepack-suits" + version_str
     file = "configurations/chess1.json"
     extra_flags = " --file=" + file 
     sh configure_piecepack + deck_title + deck_filename + piecepack_suits + chess_ranks + extra_flags 
-
     sh "exec/make_piecepack --file=" + file
+
     deck_filename = " --deck_filename=chess2"
-    deck_title = " --deck_title='Chess ranked (tile face squares)" + version_str
-    file = "configurations/chess1.json"
-    extra_flags = " --file=" + file 
-    sh configure_piecepack + deck_title + deck_filename + piecepack_suits + chess_ranks + extra_flags 
+    deck_title = " --deck_title='French-suits (checkered tile faces)" + version_str
+    file = "configurations/chess2.json"
+    extra_flags = " --checker_colors=grey,grey,grey,grey, --suit_colors=darkred,black,dimgrey,hotpink2,grey --file=" + file 
+    sh configure_piecepack + deck_title + deck_filename + french_suits_swirl + chess_ranks + extra_flags 
     sh "exec/make_piecepack --file=" + file
 
-    decks = " --decks=chess1"
+    deck_filename = " --deck_filename=chess3"
+    deck_title = " --deck_title='Black-suits (checkered tile backs)" + version_str
+    file = "configurations/chess3.json"
+    extra_flags = " --checker_colors=,,,,darkred --gridline_colors=  --suit_colors=black,black,black,black,darkred --file=" + file + coin_black_suits4
+    sh configure_piecepack + deck_title + deck_filename + black_suits4 + chess_ranks + extra_flags 
+    sh "exec/make_piecepack --file=" + file
+
+    deck_filename = " --deck_filename=chess4"
+    deck_title = " --deck_title='Red-suits (checkered tile backs)" + version_str
+    file = "configurations/chess4.json"
+    extra_flags = " --checker_colors=,,,,black --gridline_colors= --suit_colors=darkred,darkred,darkred,darkred,black --file=" + file + coin_red_suits4
+    sh configure_piecepack + deck_title + deck_filename + red_suits4 + chess_ranks + extra_flags 
+    sh "exec/make_piecepack --file=" + file
+
+    deck_filename = " --deck_filename=chess5"
+    deck_title = " --deck_title='Black-suits (checkered tile faces)" + version_str
+    file = "configurations/chess5.json"
+    extra_flags = " --checker_colors=grey,grey,grey,grey,grey,grey, --suit_colors=black,black,black,black,black,black,darkred --file=" + file + coin_black_suits6
+    sh configure_piecepack + deck_title + deck_filename + black_suits6 + chess_ranks + extra_flags 
+    sh "exec/make_piecepack --file=" + file
+
+    deck_filename = " --deck_filename=chess6"
+    deck_title = " --deck_title='Red-suits (checkered tile faces)" + version_str
+    file = "configurations/chess6.json"
+    extra_flags = " --checker_colors=grey,grey,grey,grey,grey,grey, --suit_colors=darkred,darkred,darkred,darkred,darkred,darkred,black --file=" + file + coin_red_suits6
+    sh configure_piecepack + deck_title + deck_filename + red_suits6 + chess_ranks + extra_flags 
+    sh "exec/make_piecepack --file=" + file
+
+    decks = " --decks=chess1,chess2,chess3,chess4,chess5,chess6"
     sh collect_piecepacks + " --filename=chess_demo --title='Chess ranked piecepack demo" + version_str + decks
     sh "xdg-open collections/chess_demo.pdf"
 
@@ -338,7 +373,7 @@ task :reversi do
 
     deck_title = " --deck_title='Red-suited " + version_str
     deck_filename = " --deck_filename=reversi5"
-    suit_symbols = red_suits + " --suit_colors=white --background_color.suited=darkred --background_color.unsuited=black"
+    suit_symbols = red_suits6 + " --suit_colors=white --background_color.suited=darkred --background_color.unsuited=black"
     file = "configurations/reversi5.json"
     extra_flags = " --background_color.chip_back=black --file=" + file
     sh configure_piecepack + deck_title + deck_filename + suit_symbols + default_ranks + extra_flags 
@@ -346,7 +381,7 @@ task :reversi do
 
     deck_title = " --deck_title='Black-suited " + version_str
     deck_filename = " --deck_filename=reversi6"
-    suit_symbols = black_suits + " --suit_colors=white --background_color.suited=black --background_color.unsuited=darkred"
+    suit_symbols = black_suits6 + " --suit_colors=white --background_color.suited=black --background_color.unsuited=darkred"
     file = "configurations/reversi6.json"
     extra_flags = " --background_color.chip_back=darkred --file=" + file
     sh configure_piecepack + deck_title + deck_filename + suit_symbols + default_ranks + extra_flags 
@@ -412,16 +447,10 @@ desc "Test"
 task :test => :clean
 task :test => :install
 task :test do
-    # dark_scheme = " --suit_colors=black,darkred,darkgreen,darkblue,grey"
-    # alt_scheme = " --suit_colors=white,orange2,yellow,purple,grey"
-
     deck_filename = " --deck_filename=test1"
     extra_flags = " --use_suit_as_ace  --rank_symbols.chip_face='A,B,C,D,E,F'"
     sh configure_piecepack + deck_filename + piecepack_suits + orthodox_ranks + extra_flags + ' | exec/make_piecepack'
 
-    # deck_name = " --deck_name='TLD Piecepack, Elements Suits (v0.1)'"
-    # deck_filename  = " --deck_filename=elements"
-    # suit_symbols = " --suit_symbols=🔥,🌪️,⛰️,🌊,"
       
     deck_filename = " --deck_filename=test2"
     extra_flags = "  --invert_colors.suited  --background_color=white"

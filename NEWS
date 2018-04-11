@@ -11,7 +11,8 @@ piecepack 0.7.1
 
 * Added Crown and Anchor suited piecepacks demo (#46).
 * Added Rainbow Deck suited piecepack demo (#47).
-* Added Reversi-friendly piecepack demo (#21)
+* Added Reversi-friendly piecepack demo (#21).
+* Added Chess-ranked piecepack demo (#24).
 
 * Fix bugs in "orthodox" demo (#43). 
 * Tweaked configuration in "dual" demo so first two decks are more compatible with other decks.
