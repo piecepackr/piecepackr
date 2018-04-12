@@ -1,11 +1,11 @@
 #!/usr/bin/env Rscript
 
-options(error = quote(dump.frames("deck_dump", TRUE)), warn=2)
+options(error = quote(dump.frames("preview_dump", TRUE)), warn=2)
 
 suppressPackageStartupMessages(library("piecepack"))
 
 opts <- read_style()
-
-make_set(opts, opts$pdf_deck_dir)
+               
+make_previews(opts)
 
 invisible(NULL)

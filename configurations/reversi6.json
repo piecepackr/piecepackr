@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Black-suited  (v0.7.1-6)"],
+  "deck_title": ["Black-suited  (v0.7.1-7)"],
   "deck_filename": ["reversi6"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♠,♣,🌜,⚓,,,★"],
@@ -11,5 +11,7 @@
   "suit_colors": ["white"],
   "background_color.suited": ["black"],
   "background_color.unsuited": ["darkred"],
+  "shape.chip_face": ["5"],
+  "shape.chip_back": ["5"],
   "background_color.chip_back": ["darkred"]
 }

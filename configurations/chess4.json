@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Red-suits (checkered tile backs) (v0.7.1-6)"],
+  "deck_title": ["Red-suits (checkered tile backs) (v0.7.1-7)"],
   "deck_filename": ["chess4"],
   "rank_symbols": ["♞,♟,♝,♜,♛,♚"],
   "suit_symbols": ["♥,♦,☉,♚,★"],
@@ -11,7 +11,8 @@
   "font": ["Noto Sans Symbols"],
   "suit_colors": ["darkred,darkred,darkred,darkred,black"],
   "suit_symbols.coin_back": ["♟"],
-  "suit_symbols_scale.coin_back": ["1_--suit_symbols_font.coin_back=Noto Sans Symbols"],
+  "suit_symbols_font.coin_back": ["Noto Sans Symbols"],
+  "suit_symbols_scale.coin_back": ["1"],
   "dm_symbols.coin_back": ["♥,♦,☉,♚,★"],
   "dm_symbols_font.coin_back": ["Noto Sans Symbols"],
   "dm_symbols.coin_face": ["★"]

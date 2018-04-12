@@ -4,6 +4,7 @@ piecepack 0.7.1
 * Added ``--border_color`` configuration option and fix bug in PnP border colors (#42).
 * Added ``--header_font``, ``--dm_r``, ``--dm_r.*``, and ``--suit_colors.*`` options.
 * Added (or improved) ``--checker_colors``, ``--gridline_colors``, and ``--hexline_colors`` options
+* Added ``--shape``, ``--shape_theta``, ``--shape.*``, and ``--shape_theta.*`` options
 * Add new and rename existing pdf metadata options in ``exec/collect_piecepacks``.
 * Improved "preview" layout.
 * Added additional suit die to accessories pages.
@@ -13,11 +14,13 @@ piecepack 0.7.1
 * Added Rainbow Deck suited piecepack demo (#47).
 * Added Reversi-friendly piecepack demo (#21).
 * Added Chess-ranked piecepack demo (#24).
+* Added Hex-friendly piecepack demo
 
 * Fix bugs in "orthodox" demo (#43). 
 * Tweaked configuration in "dual" demo so first two decks are more compatible with other decks.
 * Tweaked fonts in all demos.
 * Added Simplified Hanzi decks to Chinese zodiac demo.
+* Tweaked "chip" shape in orthodox and Chineze zodiac demos.
 
 
 piecepack 0.7.0

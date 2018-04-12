@@ -9,7 +9,7 @@ Options:
 		Pdf author (default "")
 
 	--filename=FILENAME
-		Pdf filename (default "piecepack_collection")
+		Filename prefix (default "piecepack_collection")
 
 	--keywords=KEYWORDS
 		Pdf keywords (default "piecepack")
@@ -22,6 +22,18 @@ Options:
 
 	--decks=DECKS
 		Comma separated list of decks to collect (default collects all of them)
+
+	--pdf_deck_dir=PDF_DECK_DIR
+		(default "pdf/decks")
+
+	--pdf_collection_dir=PDF_COLLECTION_DIR
+		(default "pdf/collections")
+
+	--pdf_preview_dir=PDF_PREVIEW_DIR
+		(default "pdf/previews")
+
+	--svg_preview_dir=SVG_PREVIEW_DIR
+		(default "svg/previews")
 
 	--paper=PAPER
 		Pdf paper size, either "letter" or "A4" (default "letter")

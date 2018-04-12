@@ -1,14 +1,10 @@
 #!/usr/bin/env Rscript
 
-options(error = quote(dump.frames("last.dump", TRUE)))
+options(error = quote(dump.frames("collect_dump", TRUE)))
 
 suppressPackageStartupMessages(library("piecepack"))
 
 opts <- get_arrangement_opts()
-
-dir.create("collections", showWarnings=FALSE)
-
-dir.create("previews", showWarnings=FALSE)
 
 make_collection_preview(opts)
 

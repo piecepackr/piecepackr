@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Orthodox-style 2-color french-suited piecepack (v0.7.1-6)"],
+  "deck_title": ["Orthodox-style 2-color french-suited piecepack (v0.7.1-7)"],
   "deck_filename": ["orthodox2_french"],
   "rank_symbols": [",A,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,꩜"],
@@ -31,6 +31,8 @@
   "dm_r.saucer_back": [0.45],
   "rank_symbols.chip_face": ["A,B,C,D,E,F"],
   "dm_symbols.chip_face": [""],
+  "shape.chip_face": ["kite"],
   "use_suit_as_ace.chip_face": [false],
-  "dm_symbols.chip_back": [""]
+  "dm_symbols.chip_back": [""],
+  "shape.chip_back": ["kite"]
 }

@@ -9,7 +9,13 @@ Options:
 		(default "")
 
 	--deck_filename=DECK_FILENAME
-		(default "deck_filename")
+		Filename prefix (default "piecepack_deck")
+
+	--pdf_deck_dir=PDF_DECK_DIR
+		Directory to put pdfs in (default "pdf/decks")
+
+	--svg_preview_dir=SVG_PREVIEW_DIR
+		Directory to put pdfs in (default "svg/previews")
 
 	--rank_symbols=RANK_SYMBOLS
 		(default "N,A,2,3,4,5")
@@ -47,6 +53,12 @@ Options:
 	--use_ace_as_ace
 		Opposite of "use_suit_as_ace" option
 
+	--shape=SHAPE
+		either "rect", "circle", "halma", "kite", "star", or a number representing number of sides of a regular polygon (default is to choose reasonable shape based on component)'
+
+	--shape_theta=SHAPE_THETA
+		If shape is a number or "star" then angle of first vertex (in degrees) of polygon (default is "90")
+
 	--checker_colors=CHECKER_COLORS
 		(default is not to draw any checkers on tiles)
 
@@ -57,10 +69,10 @@ Options:
 		(default is not to draw any hexlines on tiles)
 
 	--dm_theta=DM_THETA
-		(default 135 for tile faces and die faces and 90 for everything else)
+		Angle (in degrees) of polar coordinates of direction mark (default 135 for tile faces and die faces and 90 for everything else)
 
 	--dm_r=DM_R
-		(default sqrt(.25^2+.25^2))
+		Radius from center (relative units) of polar coordinates of direction mark (default sqrt(.25^2+.25^2))
 
 	--font=FONT
 		Default font family (default "sans")
@@ -131,6 +143,9 @@ Options:
 	--dm_symbols_font.tile_back=DM_SYMBOLS_FONT.TILE_BACK
 		(default is value of "dm_symbols_font" option)
 
+	--shape.tile_back=SHAPE.TILE_BACK
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.tile_back=DM_SYMBOLS_SCALE.TILE_BACK
 		(default is value of "dm_symbols_scale" option)
 
@@ -148,6 +163,9 @@ Options:
 
 	--dm_r.tile_back=DM_R.TILE_BACK
 		(default is value of "dm_r" option)
+
+	--shape_theta.tile_back=SHAPE_THETA.TILE_BACK
+		(default is value of "shape_theta" option)
 
 	--background_color.tile_back=BACKGROUND_COLOR.TILE_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -185,6 +203,9 @@ Options:
 	--dm_symbols_font.tile_face=DM_SYMBOLS_FONT.TILE_FACE
 		(default is value of "dm_symbols_font" option)
 
+	--shape.tile_face=SHAPE.TILE_FACE
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.tile_face=DM_SYMBOLS_SCALE.TILE_FACE
 		(default is value of "dm_symbols_scale" option)
 
@@ -202,6 +223,9 @@ Options:
 
 	--dm_r.tile_face=DM_R.TILE_FACE
 		(default is value of "dm_r" option)
+
+	--shape_theta.tile_face=SHAPE_THETA.TILE_FACE
+		(default is value of "shape_theta" option)
 
 	--background_color.tile_face=BACKGROUND_COLOR.TILE_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -239,6 +263,9 @@ Options:
 	--dm_symbols_font.coin_back=DM_SYMBOLS_FONT.COIN_BACK
 		(default is value of "dm_symbols_font" option)
 
+	--shape.coin_back=SHAPE.COIN_BACK
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.coin_back=DM_SYMBOLS_SCALE.COIN_BACK
 		(default is value of "dm_symbols_scale" option)
 
@@ -256,6 +283,9 @@ Options:
 
 	--dm_r.coin_back=DM_R.COIN_BACK
 		(default is value of "dm_r" option)
+
+	--shape_theta.coin_back=SHAPE_THETA.COIN_BACK
+		(default is value of "shape_theta" option)
 
 	--background_color.coin_back=BACKGROUND_COLOR.COIN_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -293,6 +323,9 @@ Options:
 	--dm_symbols_font.coin_face=DM_SYMBOLS_FONT.COIN_FACE
 		(default is value of "dm_symbols_font" option)
 
+	--shape.coin_face=SHAPE.COIN_FACE
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.coin_face=DM_SYMBOLS_SCALE.COIN_FACE
 		(default is value of "dm_symbols_scale" option)
 
@@ -310,6 +343,9 @@ Options:
 
 	--dm_r.coin_face=DM_R.COIN_FACE
 		(default is value of "dm_r" option)
+
+	--shape_theta.coin_face=SHAPE_THETA.COIN_FACE
+		(default is value of "shape_theta" option)
 
 	--background_color.coin_face=BACKGROUND_COLOR.COIN_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -347,6 +383,9 @@ Options:
 	--dm_symbols_font.piecepack_die=DM_SYMBOLS_FONT.PIECEPACK_DIE
 		(default is value of "dm_symbols_font" option)
 
+	--shape.piecepack_die=SHAPE.PIECEPACK_DIE
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.piecepack_die=DM_SYMBOLS_SCALE.PIECEPACK_DIE
 		(default is value of "dm_symbols_scale" option)
 
@@ -364,6 +403,9 @@ Options:
 
 	--dm_r.piecepack_die=DM_R.PIECEPACK_DIE
 		(default is value of "dm_r" option)
+
+	--shape_theta.piecepack_die=SHAPE_THETA.PIECEPACK_DIE
+		(default is value of "shape_theta" option)
 
 	--background_color.piecepack_die=BACKGROUND_COLOR.PIECEPACK_DIE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -401,6 +443,9 @@ Options:
 	--dm_symbols_font.suit_die=DM_SYMBOLS_FONT.SUIT_DIE
 		(default is value of "dm_symbols_font" option)
 
+	--shape.suit_die=SHAPE.SUIT_DIE
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.suit_die=DM_SYMBOLS_SCALE.SUIT_DIE
 		(default is value of "dm_symbols_scale" option)
 
@@ -419,6 +464,9 @@ Options:
 	--dm_r.suit_die=DM_R.SUIT_DIE
 		(default is value of "dm_r" option)
 
+	--shape_theta.suit_die=SHAPE_THETA.SUIT_DIE
+		(default is value of "shape_theta" option)
+
 	--background_color.suit_die=BACKGROUND_COLOR.SUIT_DIE
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -427,6 +475,66 @@ Options:
 
 	--uninvert_colors.suit_die
 		Opposite of "invert_colors.suit_die" option
+
+	--rank_symbols.pawn=RANK_SYMBOLS.PAWN
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.pawn=RANK_SYMBOLS_FONT.PAWN
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.pawn=RANK_SYMBOLS_SCALE.PAWN
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.pawn=SUIT_COLORS.PAWN
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.pawn=SUIT_SYMBOLS.PAWN
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.pawn=SUIT_SYMBOLS_FONT.PAWN
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.pawn=SUIT_SYMBOLS_SCALE.PAWN
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.pawn=DM_SYMBOLS.PAWN
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.pawn=DM_SYMBOLS_FONT.PAWN
+		(default is value of "dm_symbols_font" option)
+
+	--shape.pawn=SHAPE.PAWN
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.pawn=DM_SYMBOLS_SCALE.PAWN
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.pawn=DM_COLORS.PAWN
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.pawn
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.pawn
+		Opposite of "use_suit_as_ace.pawn" option
+
+	--dm_theta.pawn=DM_THETA.PAWN
+		(default is value of "dm_theta" option)
+
+	--dm_r.pawn=DM_R.PAWN
+		(default is value of "dm_r" option)
+
+	--shape_theta.pawn=SHAPE_THETA.PAWN
+		(default is value of "shape_theta" option)
+
+	--background_color.pawn=BACKGROUND_COLOR.PAWN
+		default is either value of "background_color.suited" or "background_color.unsuited"
+
+	--invert_colors.pawn
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.pawn
+		Opposite of "invert_colors.pawn" option
 
 	--rank_symbols.saucer_face=RANK_SYMBOLS.SAUCER_FACE
 		(default is value of "rank_symbols" option)
@@ -455,6 +563,9 @@ Options:
 	--dm_symbols_font.saucer_face=DM_SYMBOLS_FONT.SAUCER_FACE
 		(default is value of "dm_symbols_font" option)
 
+	--shape.saucer_face=SHAPE.SAUCER_FACE
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.saucer_face=DM_SYMBOLS_SCALE.SAUCER_FACE
 		(default is value of "dm_symbols_scale" option)
 
@@ -472,6 +583,9 @@ Options:
 
 	--dm_r.saucer_face=DM_R.SAUCER_FACE
 		(default is value of "dm_r" option)
+
+	--shape_theta.saucer_face=SHAPE_THETA.SAUCER_FACE
+		(default is value of "shape_theta" option)
 
 	--background_color.saucer_face=BACKGROUND_COLOR.SAUCER_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -509,6 +623,9 @@ Options:
 	--dm_symbols_font.saucer_back=DM_SYMBOLS_FONT.SAUCER_BACK
 		(default is value of "dm_symbols_font" option)
 
+	--shape.saucer_back=SHAPE.SAUCER_BACK
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.saucer_back=DM_SYMBOLS_SCALE.SAUCER_BACK
 		(default is value of "dm_symbols_scale" option)
 
@@ -527,6 +644,9 @@ Options:
 	--dm_r.saucer_back=DM_R.SAUCER_BACK
 		(default is value of "dm_r" option)
 
+	--shape_theta.saucer_back=SHAPE_THETA.SAUCER_BACK
+		(default is value of "shape_theta" option)
+
 	--background_color.saucer_back=BACKGROUND_COLOR.SAUCER_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"
 
@@ -535,114 +655,6 @@ Options:
 
 	--uninvert_colors.saucer_back
 		Opposite of "invert_colors.saucer_back" option
-
-	--rank_symbols.pawn=RANK_SYMBOLS.PAWN
-		(default is value of "rank_symbols" option)
-
-	--rank_symbols_font.pawn=RANK_SYMBOLS_FONT.PAWN
-		(default is value of "rank_symbols_font" option)
-
-	--rank_symbols_scale.pawn=RANK_SYMBOLS_SCALE.PAWN
-		(default is value of "rank_symbols_scale" option)
-
-	--suit_colors.pawn=SUIT_COLORS.PAWN
-		(default is value of "suit_colors" option)
-
-	--suit_symbols.pawn=SUIT_SYMBOLS.PAWN
-		(default is value of "suit_symbols" option)
-
-	--suit_symbols_font.pawn=SUIT_SYMBOLS_FONT.PAWN
-		(default is value of "suit_symbols_font" option)
-
-	--suit_symbols_scale.pawn=SUIT_SYMBOLS_SCALE.PAWN
-		(default is value of "suit_symbols_scale" option)
-
-	--dm_symbols.pawn=DM_SYMBOLS.PAWN
-		(default is value of "dm_symbols" option)
-
-	--dm_symbols_font.pawn=DM_SYMBOLS_FONT.PAWN
-		(default is value of "dm_symbols_font" option)
-
-	--dm_symbols_scale.pawn=DM_SYMBOLS_SCALE.PAWN
-		(default is value of "dm_symbols_scale" option)
-
-	--dm_colors.pawn=DM_COLORS.PAWN
-		(default is value of "dm_colors" option)
-
-	--use_suit_as_ace.pawn
-		(default is value of "use_suit_as_ace" option)
-
-	--use_ace_as_ace.pawn
-		Opposite of "use_suit_as_ace.pawn" option
-
-	--dm_theta.pawn=DM_THETA.PAWN
-		(default is value of "dm_theta" option)
-
-	--dm_r.pawn=DM_R.PAWN
-		(default is value of "dm_r" option)
-
-	--background_color.pawn=BACKGROUND_COLOR.PAWN
-		default is either value of "background_color.suited" or "background_color.unsuited"
-
-	--invert_colors.pawn
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
-
-	--uninvert_colors.pawn
-		Opposite of "invert_colors.pawn" option
-
-	--rank_symbols.pawn_belt=RANK_SYMBOLS.PAWN_BELT
-		(default is value of "rank_symbols" option)
-
-	--rank_symbols_font.pawn_belt=RANK_SYMBOLS_FONT.PAWN_BELT
-		(default is value of "rank_symbols_font" option)
-
-	--rank_symbols_scale.pawn_belt=RANK_SYMBOLS_SCALE.PAWN_BELT
-		(default is value of "rank_symbols_scale" option)
-
-	--suit_colors.pawn_belt=SUIT_COLORS.PAWN_BELT
-		(default is value of "suit_colors" option)
-
-	--suit_symbols.pawn_belt=SUIT_SYMBOLS.PAWN_BELT
-		(default is value of "suit_symbols" option)
-
-	--suit_symbols_font.pawn_belt=SUIT_SYMBOLS_FONT.PAWN_BELT
-		(default is value of "suit_symbols_font" option)
-
-	--suit_symbols_scale.pawn_belt=SUIT_SYMBOLS_SCALE.PAWN_BELT
-		(default is value of "suit_symbols_scale" option)
-
-	--dm_symbols.pawn_belt=DM_SYMBOLS.PAWN_BELT
-		(default is value of "dm_symbols" option)
-
-	--dm_symbols_font.pawn_belt=DM_SYMBOLS_FONT.PAWN_BELT
-		(default is value of "dm_symbols_font" option)
-
-	--dm_symbols_scale.pawn_belt=DM_SYMBOLS_SCALE.PAWN_BELT
-		(default is value of "dm_symbols_scale" option)
-
-	--dm_colors.pawn_belt=DM_COLORS.PAWN_BELT
-		(default is value of "dm_colors" option)
-
-	--use_suit_as_ace.pawn_belt
-		(default is value of "use_suit_as_ace" option)
-
-	--use_ace_as_ace.pawn_belt
-		Opposite of "use_suit_as_ace.pawn_belt" option
-
-	--dm_theta.pawn_belt=DM_THETA.PAWN_BELT
-		(default is value of "dm_theta" option)
-
-	--dm_r.pawn_belt=DM_R.PAWN_BELT
-		(default is value of "dm_r" option)
-
-	--background_color.pawn_belt=BACKGROUND_COLOR.PAWN_BELT
-		default is either value of "background_color.suited" or "background_color.unsuited"
-
-	--invert_colors.pawn_belt
-		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
-
-	--uninvert_colors.pawn_belt
-		Opposite of "invert_colors.pawn_belt" option
 
 	--rank_symbols.chip_face=RANK_SYMBOLS.CHIP_FACE
 		(default is value of "rank_symbols" option)
@@ -671,6 +683,9 @@ Options:
 	--dm_symbols_font.chip_face=DM_SYMBOLS_FONT.CHIP_FACE
 		(default is value of "dm_symbols_font" option)
 
+	--shape.chip_face=SHAPE.CHIP_FACE
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.chip_face=DM_SYMBOLS_SCALE.CHIP_FACE
 		(default is value of "dm_symbols_scale" option)
 
@@ -688,6 +703,9 @@ Options:
 
 	--dm_r.chip_face=DM_R.CHIP_FACE
 		(default is value of "dm_r" option)
+
+	--shape_theta.chip_face=SHAPE_THETA.CHIP_FACE
+		(default is value of "shape_theta" option)
 
 	--background_color.chip_face=BACKGROUND_COLOR.CHIP_FACE
 		default is either value of "background_color.suited" or "background_color.unsuited"
@@ -725,6 +743,9 @@ Options:
 	--dm_symbols_font.chip_back=DM_SYMBOLS_FONT.CHIP_BACK
 		(default is value of "dm_symbols_font" option)
 
+	--shape.chip_back=SHAPE.CHIP_BACK
+		(default is value of "shape" option)
+
 	--dm_symbols_scale.chip_back=DM_SYMBOLS_SCALE.CHIP_BACK
 		(default is value of "dm_symbols_scale" option)
 
@@ -742,6 +763,9 @@ Options:
 
 	--dm_r.chip_back=DM_R.CHIP_BACK
 		(default is value of "dm_r" option)
+
+	--shape_theta.chip_back=SHAPE_THETA.CHIP_BACK
+		(default is value of "shape_theta" option)
 
 	--background_color.chip_back=BACKGROUND_COLOR.CHIP_BACK
 		default is either value of "background_color.suited" or "background_color.unsuited"

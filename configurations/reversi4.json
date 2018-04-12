@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Sixpack-suited (\"White\" suits) (v0.7.1-6)"],
+  "deck_title": ["Sixpack-suited (\"White\" suits) (v0.7.1-7)"],
   "deck_filename": ["reversi4"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♡,♤,♧,♢,☼,🌔,꩜"],
@@ -8,5 +8,7 @@
   "suit_symbols_scale": ["1,1,1,1,1.4,0.9,1"],
   "font": ["Noto Sans Symbols"],
   "suit_colors": ["black,black,black,black,black,black,grey"],
-  "suit_colors.chip_back": ["grey"]
+  "shape.chip_face": ["5"],
+  "suit_colors.chip_back": ["grey"],
+  "shape.chip_back": ["5"]
 }

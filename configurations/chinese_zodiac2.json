@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Chinese zodiac #2 (v0.7.1-6)"],
+  "deck_title": ["Chinese zodiac #2 (v0.7.1-7)"],
   "deck_filename": ["chinese_zodiac2"],
   "rank_symbols": ["🐅,🐎,🐕,🐇,🐏,🐖"],
   "suit_symbols": ["🌲,🔥,⛰️,🏆,🌊,"],
@@ -9,5 +9,7 @@
   "rank_symbols_scale": ["0.6"],
   "suit_symbols_scale": ["1.1,1.1,1,0.6,0.6"],
   "font": ["Noto Sans Symbols"],
-  "suit_colors": ["darkgreen,red3,chocolate4,black,darkblue,grey"]
+  "suit_colors": ["darkgreen,red3,chocolate4,black,darkblue,grey"],
+  "shape.chip_face": ["5"],
+  "shape.chip_back": ["5"]
 }

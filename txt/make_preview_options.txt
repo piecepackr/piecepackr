@@ -1,0 +1,14 @@
+Usage: Program to make piecepack deck pdf
+
+
+Options:
+	-h, --help
+		Show this help message and exit
+
+	-f FILE, --file=FILE
+		Source of piecepack style information (default stdin input)
+
+	--paper=PAPER
+		Default paper size, either "letter" or "A4" (default "letter")
+
+

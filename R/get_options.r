@@ -7,7 +7,11 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--deck_title", default=NULL, 
                          help='(default "")')
     parser <- add_option(parser, "--deck_filename", default=NULL, 
-                         help='(default "deck_filename")')
+                         help='Filename prefix (default "piecepack_deck")')
+    parser <- add_option(parser, "--pdf_deck_dir", default=NULL,
+                         help='Directory to put pdfs in (default "pdf/decks")')
+    parser <- add_option(parser, "--svg_preview_dir", default=NULL,
+                         help='Directory to put pdfs in (default "svg/previews")')
 
     # Symbols
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
@@ -39,6 +43,14 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='Opposite of "use_suit_as_ace" option')
     # parser <- add_option(parser, "--style", default=NULL, 
     #                      help='"basic" or "simple_hex" (default "basic")')
+    parser <- add_option(parser, "--shape", default=NULL,
+                         help=paste('either "rect", "circle", "halma", "kite", "star",',
+                                   "or a number representing number of sides of a regular polygon",
+                                   "(default is to choose reasonable shape based on component)'"))
+    parser <- add_option(parser, "--shape_theta", default=NULL, type="double",
+                         help=paste('If shape is a number or "star" then angle of first vertex',
+                                   '(in degrees) of polygon', '(default is "90")'))
+
     parser <- add_option(parser, "--checker_colors", default=NULL,
                          help='(default is not to draw any checkers on tiles)')
     parser <- add_option(parser, "--gridline_colors", default=NULL,
@@ -46,9 +58,12 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--hexline_colors", default=NULL,
                          help='(default is not to draw any hexlines on tiles)')
     parser <- add_option(parser, "--dm_theta", default=NULL, type="double", 
-                         help='(default 135 for tile faces and die faces and 90 for everything else)')
+                         help=paste('Angle (in degrees) of polar coordinates of direction mark',
+                                   '(default 135 for tile faces and die faces and 90 for everything else)'))
     parser <- add_option(parser, "--dm_r", default=NULL, type="double", 
-                         help='(default sqrt(.25^2+.25^2))')
+                         help=paste('Radius from center (relative units)',
+                                  'of polar coordinates of direction mark',
+                                  '(default sqrt(.25^2+.25^2))'))
 
     # Font
     parser <- add_option(parser, "--font", default=NULL,
@@ -90,7 +105,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         # Symbols
         for (style in c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
                         "suit_colors", "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
-                        "dm_symbols", "dm_symbols_font", 
+                        "dm_symbols", "dm_symbols_font", "shape",
                         "dm_symbols_scale", "dm_colors")) {
             opt_str <- paste0("--", style, ".", component)
             parser <- add_option(parser, opt_str, default=NULL, 
@@ -105,12 +120,11 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         parser <- add_option(parser, opt_str, dest=dest_str, 
                              action="store_false", default=NULL, 
                              help=paste0('Opposite of "', dest_str, '" option'))
-        opt_str <- paste0("--dm_theta.", component)
-        parser <- add_option(parser, opt_str, default=NULL, type="double",
-                             help='(default is value of "dm_theta" option)')
-        opt_str <- paste0("--dm_r.", component)
-        parser <- add_option(parser, opt_str, default=NULL, type="double",
-                             help='(default is value of "dm_r" option)')
+        for (style in c("dm_theta", "dm_r", "shape_theta")) {
+            opt_str <- paste0("--", style, ".", component)
+            parser <- add_option(parser, opt_str, default=NULL, type="double",
+                                 help=paste0('(default is value of "', style, '" option)'))
+        }
 
         # Color
         opt_str <- paste0("--background_color.", component)
@@ -157,7 +171,7 @@ get_arrangement_opts <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--author", default="",
                          help='Pdf author (default "")')
     parser <- add_option(parser, "--filename", default="piecepack_collection",
-                         help='Pdf filename (default "%default")')
+                         help='Filename prefix (default "%default")')
     parser <- add_option(parser, "--keywords", default="piecepack",
                          help='Pdf keywords (default "%default")')
     parser <- add_option(parser, "--subject", default="", 
@@ -166,6 +180,14 @@ get_arrangement_opts <- function(args=commandArgs(TRUE)) {
                          help='Pdf title (default "%default")')
     parser <- add_option(parser, "--decks", 
                          help='Comma separated list of decks to collect (default collects all of them)')
+    parser <- add_option(parser, "--pdf_deck_dir", default="pdf/decks",
+                         help='(default "%default")')
+    parser <- add_option(parser, "--pdf_collection_dir", default="pdf/collections",
+                         help='(default "%default")')
+    parser <- add_option(parser, "--pdf_preview_dir", default="pdf/previews",
+                         help='(default "%default")')
+    parser <- add_option(parser, "--svg_preview_dir", default="svg/previews",
+                         help='(default "svg/previews")')
     parser <- add_option(parser, "--paper", default="letter",
                          help='Pdf paper size, either "letter" or "A4" (default "%default")')
     parser <- add_option(parser, "--font", default="sans",
@@ -174,7 +196,7 @@ get_arrangement_opts <- function(args=commandArgs(TRUE)) {
     opts <- parse_args(parser, args)
 
     if (is.null(opts$decks))
-        opts$decks <- gsub(".pdf$", "", list.files("pdf"))
+        opts$decks <- gsub(".pdf$", "", list.files(opts$pdf_deck_dir))
     else
         opts$decks <- split(opts$decks)
 
@@ -204,6 +226,10 @@ process_configuration <- function(opts) {
 
     if (is.null(opts$deck_filename))
         opts$deck_filename <- "piecepack_deck"
+    if (is.null(opts$pdf_deck_dir))
+        opts$pdf_deck_dir <- "pdf/decks"
+    if (is.null(opts$svg_preview_dir))
+        opts$svg_preview_dir <- "svg/previews"
 
     if (is.null(opts[["font"]]))
         opts$font <- "sans"
@@ -223,7 +249,7 @@ process_configuration <- function(opts) {
     if (is.null(opts[["background_color"]]))
         opts$background_color <- "transparent"
     if (is.null(opts[["border_color"]]))
-        opts$border_color <- "darkgreen"
+        opts$border_color <- "grey"
     if (is.null(opts[["invert_colors"]]))
         opts$invert_colors <- FALSE
 
@@ -278,9 +304,6 @@ process_configuration <- function(opts) {
 
         }
     }
-
-
-    opts$directory <- file.path("svg", opts$deck_filename)
 
     opts
 }

@@ -216,10 +216,10 @@ pp_pdf <- function(filename, family, paper) {
 
 #' @export
 make_collection_preview <- function(arg) {
-    suppressPackageStartupMessages(library('piecepack'))
+    dir.create(arg$pdf_preview_dir, recursive=TRUE, showWarnings=FALSE)
 
     decks <- arg$decks
-    fp <- paste0("previews/", arg$filename, ".pdf")
+    fp <- file.path(arg$pdf_preview_dir, paste0(arg$filename, ".pdf"))
     pp_pdf(fp, arg$font, arg$paper)
 
     n_pages <- ceiling(length(decks) / 6)
@@ -234,7 +234,7 @@ make_collection_preview <- function(arg) {
             if(is.na(deck))
                 l_logos[[kk+1]] <- nullGrob()
             else
-                l_logos[[kk+1]] <- pictureGrob(readPicture(file.path("svg", deck, "preview.svg"), warn=FALSE))
+                l_logos[[kk+1]] <- pictureGrob(readPicture(file.path(arg$svg_preview_dir, paste0(deck, ".svg")), warn=FALSE))
         }
         l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey", fill=NA)) })
         grid.newpage()
@@ -250,7 +250,7 @@ make_collection_preview <- function(arg) {
         grid.newpage()
         grid.text("This page intentionally left blank")
     }
-    dev.off()
+    invisible(dev.off())
 }
 
 coin_width <- 3/4
@@ -291,11 +291,11 @@ draw_suit_page <- function(i_s, opts) {
 
     ysaucer <- 3*tile_width + saucer_width/2
     addViewport(y=inch(ysaucer), height=inch(saucer_width), width=inch(4*saucer_width), name="saucers")
-    downViewport("saucers")
-    addViewport(x=1/4-1/8, width=0.5, name="lsaucer.face")
-    addViewport(x=2/4-1/8, width=0.5, name="lsaucer.back")
-    addViewport(x=3/4-1/8, width=0.5, name="rsaucer.face")
-    addViewport(x=4/4-1/8, width=0.5, name="rsaucer.back")
+    seekViewport("saucers")
+    addViewport(x=1/4-1/8, width=0.25, name="lsaucer.face")
+    addViewport(x=2/4-1/8, width=0.25, name="lsaucer.back")
+    addViewport(x=3/4-1/8, width=0.25, name="rsaucer.face")
+    addViewport(x=4/4-1/8, width=0.25, name="rsaucer.back")
     seekViewport("main")
     # addViewport(y=inch(ycoin), width=inch(7.5), height=inch(0.625), name="coinrow")
     # ycoin <- 6+ 3*coin_width
@@ -508,10 +508,10 @@ draw_accessories_page <- function(opts, odd=TRUE) {
 }
 
 #' @export
-make_set <- function(opts) {
-    suppressPackageStartupMessages(library('piecepack'))
+make_set <- function(opts, directory) {
+    dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
-    pdf_file <- paste0("pdf/", opts$deck_filename, ".pdf")
+    pdf_file <- file.path(directory, paste0(opts$deck_filename, ".pdf"))
     unlink(pdf_file)
 
     pp_pdf(pdf_file, opts$font, opts$paper)
@@ -520,7 +520,7 @@ make_set <- function(opts) {
         draw_suit_page(i_s, opts)
     }
     if (is_odd(opts$n_suits)) {
-        draw_suit_page(opts$i_unsuit, opts)
+        draw_suit_page(opts$i_unsuit+1, opts)
     }
 
     # Accessories
@@ -528,8 +528,7 @@ make_set <- function(opts) {
         draw_accessories_page(opts)
         draw_accessories_page(opts, odd=FALSE)
     }
-    dev.off()
-    invisible(NULL)
+    invisible(dev.off())
 }
 
 make_bookmarks_txt <- function(deck_filenames) {
@@ -553,13 +552,13 @@ n_pages <- function(pdf_filename) {
 
 #' @export
 make_collection <- function(arg) {
-    suppressPackageStartupMessages(library("piecepack"))
-    deck_filenames <- file.path("pdf", paste0(arg$decks, ".pdf"))
+    dir.create(arg$pdf_collection_dir, recursive=TRUE, showWarnings=FALSE)
+    deck_filenames <- file.path(arg$pdf_deck_dir, paste0(arg$decks, ".pdf"))
     n_sets <- length(deck_filenames)
-    fp <- shQuote(file.path("previews", paste0(arg$filename, ".pdf")))
-    of_un <- file.path("collections", paste0(arg$filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
+    fp <- shQuote(file.path(arg$pdf_preview_dir, paste0(arg$filename, ".pdf")))
+    of_un <- file.path(arg$pdf_collection_dir, paste0(arg$filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
     of <- shQuote(of_un)
-    bf <- shQuote(file.path("collections", paste0(arg$filename, ".pdf")))
+    bf <- shQuote(file.path(arg$pdf_collection_dir, paste0(arg$filename, ".pdf")))
     command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(arg$title), 
                      "--pdfauthor", shQuote(arg$author), 
                      "--pdfkeywords", shQuote(arg$keywords), 
