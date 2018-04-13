@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepack
 Type: Package
 Title: Functions and Rscripts to Build Piecepack Decks
-Version: 0.7.1-7
+Version: 0.7.1-8
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: 

@@ -531,7 +531,7 @@ make_set <- function(opts, directory) {
     invisible(dev.off())
 }
 
-make_bookmarks_txt <- function(deck_filenames) {
+make_bookmarks_txt <- function(deck_filenames, bm_filename) {
     n_sets <- length(deck_filenames)
     n_preview <- ceiling(n_sets / 6)
     if (is_odd(n_preview))
@@ -543,7 +543,7 @@ make_bookmarks_txt <- function(deck_filenames) {
         txt <- append(txt, new_txt)
         next_page <- next_page + n_pages(deck_filenames[ii])
     }
-    writeLines(txt, "bookmarks.txt")
+    writeLines(txt, bm_filename)
 }
 
 n_pages <- function(pdf_filename) {
@@ -568,8 +568,9 @@ make_collection <- function(arg) {
     system(command)
 
     # add bookmarks
-    make_bookmarks_txt(deck_filenames)
-    bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", "bookmarks.txt", "-f", of)
+    bm_filename <- tempfile(fileext=".txt")
+    make_bookmarks_txt(deck_filenames, bm_filename)
+    bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", bm_filename, "-f", of)
     # embed fonts gs -q -dNOPAUSE -dBATCH -dPDFSETTINGS=/prepress -sDEVICE=pdfwrite -sOutputFile=output.pdf input.pdf
     # pdftocairo -pdf input.pdf output.pdf
     cat(bcommand, "\n")

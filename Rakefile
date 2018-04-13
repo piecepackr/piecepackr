@@ -64,7 +64,7 @@ chinese_elements_sc = " --suit_symbols=木,火,土,金,水, --suit_symbols_scale
 default_ranks = " --rank_symbols=N,A,2,3,4,5 --rank_symbols_font='Noto Sans'"
 orthodox_ranks = " --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font='Noto Sans'"
 # chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
-chess_ranks = " --rank_symbols=♞,♟,♝,♜,♛,♚ --rank_symbols_font='Sans Noto Symbols'"
+chess_ranks = " --rank_symbols=♟,♞,♝,♜,♛,♚ --rank_symbols_font='Sans Noto Symbols'"
 # chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
 chinese_ranks_emoji1 = " --rank_symbols=🐀,🐉,🐒,🐂,🐍,🐓 --rank_symbols_scale=0.6 --rank_symbols_font='Noto Emoji'"
 chinese_ranks_emoji2 = " --rank_symbols=🐅,🐎,🐕,🐇,🐏,🐖 --rank_symbols_scale=0.6 --rank_symbols_font='Noto Emoji'"
