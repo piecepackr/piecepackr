@@ -72,7 +72,7 @@ Options:
 		Angle (in degrees) of polar coordinates of direction mark (default 135 for tile faces and die faces and 90 for everything else)
 
 	--dm_r=DM_R
-		Radius from center (relative units) of polar coordinates of direction mark (default sqrt(.25^2+.25^2))
+		Radius from center (relative units) of polar coordinates of direction mark (default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")
 
 	--font=FONT
 		Default font family (default "sans")

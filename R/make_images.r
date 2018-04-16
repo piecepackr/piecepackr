@@ -170,7 +170,12 @@ get_dm_theta <- function(component, arg) {
     )
 }
 get_dm_r <- function(component, arg) {
-    get_style_element("dm_r", component, arg, sqrt(0.25^2 + 0.25^2))
+    shape <- get_shape(component, arg)
+    get_style_element("dm_r", component, arg, 
+                      switch(shape,
+                             rect = sqrt(0.25^2 + 0.25^2),
+                             circle = sqrt(0.25^2 + 0.25^2),
+                             0.3))
 }
 
 get_dm_symbols <- function(component, arg) {
@@ -368,7 +373,7 @@ get_suit_fontsize <- function(component, i_s, arg) {
     scale <- get_suit_scale(component, i_s, arg)
     fs <- switch(component,
                  "pawn_belt" = 20,
-                 "chip_back" = 24,
+                 "chip_back" = 22,
                  "coin_back" = 28,
                  "pawn" = 40,
                  "saucer_back" = 32,
@@ -396,7 +401,7 @@ get_rank_fontsize <- function(component, i_s, i_r, arg) {
         scale <- rank_scale
     fs <- switch(component,
                  "piecepack_die" = 20,
-                 "chip_face" = 28,
+                 "chip_face" = 22,
                  "coin_face" = 28,
                  "tile_face" = 72,
                  20)

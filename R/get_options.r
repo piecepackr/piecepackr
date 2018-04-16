@@ -63,7 +63,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--dm_r", default=NULL, type="double", 
                          help=paste('Radius from center (relative units)',
                                   'of polar coordinates of direction mark',
-                                  '(default sqrt(.25^2+.25^2))'))
+                                  '(default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")'))
 
     # Font
     parser <- add_option(parser, "--font", default=NULL,

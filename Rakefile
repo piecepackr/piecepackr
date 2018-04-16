@@ -44,7 +44,7 @@ piecepack_suits = " --suit_symbols=🌞,🌜,👑,⚜,꩜ --suit_symbols_scale=0
 rd_suits = " --suit_symbols=♥,★,♣,♦,♛,♠,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font='Noto Sans Symbols'"
 # swiss_suits = " --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1.2,1.2"
 swiss_suits = " --suit_symbols=,,,, --suit_symbols_font=Quivira --suit_symbols_scale=1"
-sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=1,1,1,1,0.8,0.8,1.2,1.2 --suit_symbols_font='Noto Emoji'"
+sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=0.9,0.9,0.9,0.9,0.7,0.7,1.1,1.2 --suit_symbols_font='Noto Emoji'"
 sixpack_suits_black = " --suit_symbols=♥,♠,♣,♦,☀,🌘,꩜ --suit_symbols_scale=1,1,1,1,1.2,0.9,1"
 sixpack_suits_white = " --suit_symbols=♡,♤,♧,♢,☼,🌔,꩜ --suit_symbols_scale=1,1,1,1,1.4,0.9,1"
 black_suits4 = " --suit_symbols=♠,♣,☽,⚓,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,DejaVu Sans,Noto Sans Symbols'"
@@ -81,8 +81,8 @@ orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer_face=black -
 orthodox_saucers1 = " --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
 orthodox_saucers2 = " --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
 orthodox_saucers3 = " --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,1,1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
-hex_components = " --shape.tile_face=6 --shape.tile_back=6 --shape.coin_face=3 --shape.coin_back=3 --shape.saucer_face=3 --shape.saucer_back=3 --shape.chip_face=3 --shape.chip_back=3 --dm_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_back=0.7 --dm_r.coin_face=0.3 --dm_r.coin_back=0.3 --dm_r.saucer_face=0.3 --dm_r.saucer_back=0.3 --dm_r.chip_face=0.3 --dm_r.chip_back=0.3 --shape_theta.coin_face=-90 --shape_theta.coin_back=-90 --shape_theta.saucer_face=-90 --shape_theta.saucer_back=-90 --shape_theta.chip_face=-90 --shape_theta.chip_back=-90 --dm_theta.coin_face=-90 --dm_theta.coin_back=-90 --dm_theta.saucer_face=-90 --dm_theta.saucer_back=-90 --dm_theta.chip_face=-90 --dm_theta.chip_back=-90"
-star_chips  = " --shape.chip_face=star --shape.chip_back=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_back=0.7 --dm_r.chip_face=0.3 --dm_r.chip_back=0.3"
+hex_components = " --shape.tile_face=6 --shape.tile_back=6 --shape.coin_face=3 --shape.coin_back=3 --shape.saucer_face=3 --shape.saucer_back=3 --shape.chip_face=3 --shape.chip_back=3 --dm_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_back=0.7 --shape_theta.coin_face=-90 --shape_theta.coin_back=-90 --shape_theta.saucer_face=-90 --shape_theta.saucer_back=-90 --shape_theta.chip_face=-90 --shape_theta.chip_back=-90 --dm_theta.coin_face=-90 --dm_theta.coin_back=-90 --dm_theta.saucer_face=-90 --dm_theta.saucer_back=-90 --dm_theta.chip_face=-90 --dm_theta.chip_back=-90"
+star_chips  = " --shape.chip_face=star --shape.chip_back=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_back=0.7"
 
 ## Demos
 desc "Run all demos"
@@ -255,12 +255,12 @@ task :hex do
 
     deck_title = " --deck_title='Piecepack-suited (Hex-shaped tile faces/backs)" + version_str
     file = "hex3" 
-    extra_flags = " --dm_theta.tile_face=120 --dm_r.tile_face=0.3" + hex_components + " --background_colors=hotpink2,grey,grey,hotpink2,white"
+    extra_flags = " --dm_theta.tile_face=120" + hex_components + " --background_colors=hotpink2,grey,grey,hotpink2,white"
     make_piecepack file, deck_title + french_suits_swirl + default_ranks + extra_flags 
 
     deck_title = " --deck_title='Piecepack-suited (Hexpack-ish style)" + version_str
     file = "hex4"
-    extra_flags = " --shape_theta.tile_face=0 --shape_theta.tile_back=0 --dm_r.tile_face=0.3 --dm_theta.tile_face=-90 --gridline_colors= --checker_colors=,,,,grey --suit_colors.chip_back=" + hex_components
+    extra_flags = " --shape_theta.tile_face=0 --shape_theta.tile_back=0 --dm_theta.tile_face=-90 --gridline_colors= --checker_colors=,,,,grey --suit_colors.chip_back=" + hex_components
     make_piecepack file, deck_title + french_suits_swirl + default_ranks + extra_flags 
 
     decks = " --decks=hex1,hex2,hex3,hex4"

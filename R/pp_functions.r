@@ -256,11 +256,16 @@ make_collection_preview <- function(arg) {
 coin_width <- 3/4
 die_width <- 1/2
 tile_width <- 2
-belt_width <- 1.5
 saucer_width <- 7/8
 chip_width <- 5/8
 win_width <- 8
 win_height <- 10.5
+pawn_height <- 1.75
+pawn_width <- 3/4
+# pawn_height <- 9/8
+# pawn_width <- 5/8
+belt_height <- 1/2
+belt_width <- 2 * pawn_width
 
 mainViewport <- function() {
     addViewport(width=inch(win_width), height=inch(win_height), name="main")
@@ -276,14 +281,13 @@ draw_suit_page <- function(i_s, opts) {
     downViewport("tiles")
     make_4by3_viewports("tile")
     seekViewport("main")
-    xpawn <- 0.75/2
-    pheight <- 4.5
-    pwidth <- 0.75
-    ypawn <- win_height - pheight/2 
-    addViewport(x=inch(xpawn), y=inch(ypawn), width=inch(pwidth), height=inch(pheight), name="lpawn")
-    addViewport(x=inch(win_width-xpawn), y=inch(ypawn), width=inch(pwidth), height=inch(pheight), name="rpawn")
+    xpawn <- pawn_width/2
+    pheight <- 2.5 * pawn_height
+    ypawn <- 3*tile_width + pheight/2 
+    addViewport(x=inch(xpawn), y=inch(ypawn), width=inch(pawn_width), height=inch(pheight), name="lpawn")
+    addViewport(x=inch(win_width-xpawn), y=inch(ypawn), width=inch(pawn_width), height=inch(pheight), name="rpawn")
 
-    xdie <- pwidth + 3*die_width/2 
+    xdie <- pawn_width + 3*die_width/2 
     # ydie <- win_width - 4*die_width/2 - 0.125
     ydie <- 3*tile_width + 4*die_width/2
     addViewport(x=inch(xdie) , y=inch(ydie), width=inch(2), height=inch(1.5), angle=-90, name="ldie")
@@ -312,9 +316,9 @@ draw_suit_page <- function(i_s, opts) {
     # ybelt <- ycoin + 3*coin_width/2 + die_width/2
     # xbelt <- win_width/2 - belt_width/2
     ybelt <- ydie2 + 2*die_width + die_width/2
-    xbelt <- pwidth + belt_width/2
-    addViewport(x=inch(xbelt), y=inch(ybelt), width=inch(belt_width), height=inch(0.5), name="lpawnbelt")
-    addViewport(x=inch(win_width-xbelt), y=inch(ybelt), width=inch(belt_width), height=inch(0.5), name="rpawnbelt")
+    xbelt <- pawn_width + belt_width/2
+    addViewport(x=inch(xbelt), y=inch(ybelt), width=inch(belt_width), height=inch(belt_height), name="lpawnbelt")
+    addViewport(x=inch(win_width-xbelt), y=inch(ybelt), width=inch(belt_width), height=inch(belt_height), name="rpawnbelt")
 
     # Draw components
     for (i_r in 1:6) {
