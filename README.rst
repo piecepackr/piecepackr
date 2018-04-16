@@ -54,7 +54,7 @@ If you want to run the demos you'll need to clone the git repository and you'll 
 ..    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
 ..    $ cp chess1.ttf $fonts_dir/ChessUtrecht.ttf
 
-Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not but if you want to upgrade to the newest version of the package you'll need to run ``bash$ git pull; sudo rake upgrade`` to upgrade to the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
+Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not but if you want to upgrade to the newest version of the package you'll need to run ``$ git pull; sudo rake upgrade`` to upgrade to the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  
 
