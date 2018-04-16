@@ -181,13 +181,13 @@ get_dm_r <- function(component, arg) {
 get_dm_symbols <- function(component, arg) {
     dm_symbols <- get_style_element("dm_symbols", component, arg, {
         if (component %in% c("coin_back", "coin_face")) {
-            dm_symbols <- rep("●", arg$n_suits + 1)
+            dm_symbols <- "●"
         } else if (component %in% c("chip_back")) {
-            dm_symbols <- rep("⛃", arg$n_suits + 1)
+            dm_symbols <- "⛃"
         } else if (component %in% c("saucer_back", "saucer_face")) {
-            dm_symbols <- rep("♟", arg$n_suits + 1)
+            dm_symbols <- "♟"
         } else if (component %in% c("suit_die")) {
-            dm_symbols <- rep("", arg$n_suits +1)
+            dm_symbols <- ""
         } else {
             dm_symbols <- get_suit_symbols(component, arg)
         }
