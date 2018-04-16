@@ -32,12 +32,12 @@ R does not add executables in an installed R package to a user's path.  If you p
     $ Rexec piecepack make_preview [options]
     $ Rexec piecepack collect_piecepacks [options]
 
-  If use ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
+   If use ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
 
-   alias configure_piecepack="Rexec piecepack configure_piecepack"
-   alias make_piecepack="Rexec piecepack make_piecepack"
-   alias make_preview="Rexec piecepack make_preview"
-   alias collect_piecepacks="Rexec piecepack collect_piecepacks"
+    alias configure_piecepack="Rexec piecepack configure_piecepack"
+    alias make_piecepack="Rexec piecepack make_piecepack"
+    alias make_preview="Rexec piecepack make_preview"
+    alias collect_piecepacks="Rexec piecepack collect_piecepacks"
 
 If you want to run the demos you'll need to clone the git repository and you'll need ``rake``  and several fonts:: 
 
