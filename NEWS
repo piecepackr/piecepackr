@@ -4,6 +4,7 @@ piecepack 0.7.1
 * Added ``--border_color`` configuration option and fix bug in PnP border colors (#42).
 * Added ``--header_font``, ``--dm_r``, ``--dm_r.*``, and ``--suit_colors.*`` options.
 * Added (or improved) ``--checker_colors``, ``--gridline_colors``, and ``--hexline_colors`` options
+* Renamed ``--background_color`` option to ``--background_colors`` which can now vary by suit (#52)
 * Added ``--shape``, ``--shape_theta``, ``--shape.*``, and ``--shape_theta.*`` options
 * Add new and rename existing pdf metadata options in ``exec/collect_piecepacks``.
 * Improved "preview" layout.
@@ -21,7 +22,8 @@ piecepack 0.7.1
 * Tweaked fonts in all demos.
 * Added Simplified Hanzi decks to Chinese zodiac demo.
 * Tweaked "chip" shape in orthodox and Chineze zodiac demos.
-
+* Tweaked background colors in 3rd hex demo
+* Tweaked background colors in 3rd crown-and-anchor demo
 
 piecepack 0.7.0
 ===============

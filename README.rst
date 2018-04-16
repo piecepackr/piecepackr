@@ -14,15 +14,34 @@ You'll need to install some system requirements::
 
     $ sudo apt install ghostscript pdfsam poppler-utils r-base 
 
-The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``exec/collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of ``grImport2`` R package as well as the ``piecepack`` R package itself::
+The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of ``grImport2`` R package as well as the ``piecepack`` R package itself, these (and their R package dependencies) can easily be installed with help of the ``devtools`` package::
 
     $ sudo R
     > install.packages("devtools")
     > devtools::install_github("sjp/grImport2")
     > devtools::install_github("trevorld/piecepack")
 
-If you want to run the demos you'll need ``rake``  and several fonts::
+R does not add executables in an installed R package to a user's path.  If you plan on using the Rscript executables included with this package (in the ``exec`` folder) you can either:
 
+    1. Find where R installed them and either use them directly (perhaps with help of an 'alias') or add that directory to your ``$PATH``.  The location is system dependent but on my computer they are located in ``/usr/local/lib/R/site-library/piecepack/exec/``. 
+    2. Download them from github, mark them executable (if necessary), and if desired manually add them to your path (perhaps by copying them over to ``$HOME/bin/``).  Simple but you may to re-download them again if you ever upgrade the underlying R package.  
+    3. You can use a simple shell script wrapper like `Rexec <https://github.com/trevorld/Rexec>`_ to access them::
+
+        $ Rexec piecepack configure_piecepack [options]
+        $ Rexec piecepack make_piecepack [options]
+        $ Rexec piecepack make_preview [options]
+        $ Rexec piecepack collect_piecepacks [options]
+
+    If use ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
+
+        alias configure_piecepack="Rexec piecepack configure_piecepack"
+        alias make_piecepack="Rexec piecepack make_piecepack"
+        alias make_preview="Rexec piecepack make_preview"
+        alias collect_piecepacks="Rexec piecepack collect_piecepacks"
+
+If you want to run the demos you'll need to clone the git repository and you'll need ``rake``  and several fonts:: 
+
+    $ git clone https://github.com/trevorld/piecepack
     $ sudo apt install fonts-dejavu fonts-noto rake
     $ fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
     $ curl -O http://www.quivira-font.com/files/Quivira.otf
@@ -35,14 +54,16 @@ If you want to run the demos you'll need ``rake``  and several fonts::
 ..    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
 ..    $ cp chess1.ttf $fonts_dir/ChessUtrecht.ttf
 
-If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_.
+Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not but if you want to upgrade to the newest version of the package you'll need to run ``bash$ git pull; sudo rake upgrade`` to upgrade to the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
+
+If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  
 
 **Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
 How to use executable Rscripts
 ------------------------------
 
-One uses the ``exec/make_piecepack`` command to make a single print-and-play pdf of a piecepack deck.  One uses the ``exec/make_preview`` command to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``exec/collect_piecepacks`` command.  The ``exec/make_piecepack`` and ``exec/make_preview`` commands requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``exec/configure_piecepack`` can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
+One uses the ``make_piecepack`` command to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_preview`` command to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_piecepacks`` command.  The ``make_piecepack`` and ``make_preview`` commands requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure_piecepack`` can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
 
     $ rake demo_name
 
@@ -62,10 +83,10 @@ Where ``demo_name`` is either:
 Executable options
 ------------------
 
-* `exec/configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/configure_piecepack_options.txt>`_
-* `exec/make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_options.txt>`_
-* `exec/make_preview --help <https://github.com/trevorld/piecepack/blob/master/txt/make_preview_options.txt>`_
-* `exec/collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/txt/collect_piecepacks_options.txt>`_
+* `configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/configure_piecepack_options.txt>`_
+* `make_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_options.txt>`_
+* `make_preview --help <https://github.com/trevorld/piecepack/blob/master/txt/make_preview_options.txt>`_
+* `collect_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/txt/collect_piecepacks_options.txt>`_
 
 Demo descriptions
 -----------------
@@ -113,7 +134,7 @@ It is possible to construct three piecepacks where each pair of piecepack decks 
 hex
 ~~~
 
-A demo `"hex-friendly piecepacks" pdf <https://www.dropbox.com/s/2q7k2kfaung4f6l/hex_demo.pdf?dl=0>`_ of piecepack designs friendly for building and playing games on a hex board.  First deck has hex lines on the tile faces matching the suit color and second decks has grey hex lines on both tiles faces/backs.  If you build a "hex" layout with tiles that have hex lines then the hex lines should show four out of the six "hex" edges.  Third and fourth decks are inspired by the `Hexpack <http://www.hexpack.org/>`_ by Daniel Wilcox and Nathan Morse and have hex-shaped tiles and triangular coins.
+A demo `"hex-friendly piecepacks" pdf <https://www.dropbox.com/s/2q7k2kfaung4f6l/hex_demo.pdf?dl=0>`_ of piecepack designs friendly for building and playing games on a hex board.  First deck has hex lines on the tile faces matching the suit color and second deck has grey hex lines on both tiles faces/backs.  If you build a "hex" layout with tiles that have hex lines then the hex lines should show four out of the six "hex" edges.  Third and fourth decks are inspired by the `Hexpack <http://www.hexpack.org/>`_ by Daniel Wilcox and Nathan Morse and have hex-shaped tiles and triangular coins.  The third deck has the traditionally "red" suits have a pink background and the traditionally "black" suits have a grey background: three different background colors (pink, grey, white) facilitate building certain types of `hexagonal boards <https://en.wikipedia.org/wiki/Hexagonal_chess>`_.
 
 orthodox
 ~~~~~~~~
@@ -145,7 +166,7 @@ Frequently Asked Questions
 --------------------------
 
 How should I Print & Play my piecepack?
-    The Print-and-Play pdf's produced by the ``exec/make_piecepack`` command are designed to be used in three different ways:
+    The Print-and-Play pdf's produced by the ``make_piecepack`` command are designed to be used in three different ways:
 
     1. Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
     2. Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.

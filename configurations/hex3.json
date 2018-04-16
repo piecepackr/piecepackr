@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Piecepack-suited (Hex-shaped tile faces/backs) (v0.7.1-7)"],
+  "deck_title": ["Piecepack-suited (Hex-shaped tile faces/backs) (v0.7.1-8)"],
   "deck_filename": ["hex3"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,꩜"],
@@ -7,6 +7,7 @@
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_scale": ["1,1,1,1,1.2,1.2"],
   "font": ["Noto Sans Symbols"],
+  "background_colors": ["hotpink2,grey,grey,hotpink2,white"],
   "shape.tile_back": ["6"],
   "shape.tile_face": ["6"],
   "dm_theta.tile_face": [120],

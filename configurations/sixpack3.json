@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Sixpack (Dark multicolor scheme) (v0.7.1-7)"],
+  "deck_title": ["Sixpack (Dark multicolor scheme) (v0.7.1-8)"],
   "deck_filename": ["sixpack3"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,🌞,🌜,꩜"],
@@ -9,7 +9,7 @@
   "suit_symbols_scale": ["1,1,1,1,0.8,0.8,1.2,1.2"],
   "font": ["Noto Sans Symbols"],
   "suit_colors": ["darkred,black,darkgreen,darkblue,orange3,purple,tan4"],
-  "background_color": ["seashell3"],
+  "background_colors": ["seashell3"],
   "shape.chip_face": ["5"],
   "shape.chip_back": ["5"]
 }

@@ -1,5 +1,5 @@
 {
-  "deck_title": ["Red-suited  (v0.7.1-7)"],
+  "deck_title": ["Red-suited  (v0.7.1-8)"],
   "deck_filename": ["reversi5"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♦,🌞,♚,,,★"],
@@ -9,9 +9,9 @@
   "suit_symbols_scale": ["1,1,0.8,1,1,1,1"],
   "font": ["Noto Sans Symbols"],
   "suit_colors": ["white"],
-  "background_color.suited": ["darkred"],
-  "background_color.unsuited": ["black"],
+  "background_colors.suited": ["darkred"],
+  "background_colors.unsuited": ["black"],
   "shape.chip_face": ["5"],
   "shape.chip_back": ["5"],
-  "background_color.chip_back": ["black"]
+  "background_colors.chip_back": ["black"]
 }

@@ -74,7 +74,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default "darkred,black,darkgreen,darkblue,grey")')
     parser <- add_option(parser, "--dm_colors", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
-    parser <- add_option(parser, "--background_color", default=NULL, 
+    parser <- add_option(parser, "--background_colors", default=NULL, 
                          help='(default "transparent")')
     parser <- add_option(parser, "--border_color", default=NULL, 
                          help='(default "grey")')
@@ -86,10 +86,10 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help="Filename to write configuration to (default outputs to standard output)")
 
     # Suited/unsuited variants
-    parser <- add_option(parser, "--background_color.suited", default=NULL, 
-                         help='(default is value of "background_color" option)')
-    parser <- add_option(parser, "--background_color.unsuited", default=NULL, 
-                         help='(default is value of "background_color" option)')
+    parser <- add_option(parser, "--background_colors.suited", default=NULL, 
+                         help='(default is value of "background_colors" option)')
+    parser <- add_option(parser, "--background_colors.unsuited", default=NULL, 
+                         help='(default is value of "background_colors" option)')
 
     parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=NULL, 
                          help='(default is value of "invert_colors" option)')
@@ -127,9 +127,9 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         }
 
         # Color
-        opt_str <- paste0("--background_color.", component)
+        opt_str <- paste0("--background_colors.", component)
         parser <- add_option(parser, opt_str, default=NULL, 
-                             help='default is either value of "background_color.suited" or "background_color.unsuited"')
+                             help='default is either value of "background_colors.suited" or "background_colors.unsuited"')
         opt_str <- paste0("--invert_colors.", component)
         parser <- add_option(parser, opt_str, default=NULL, action="store_true", 
                              help='default is either value of "invert_colors.suited" or "invert_colors.unsuited"')
@@ -246,8 +246,8 @@ process_configuration <- function(opts) {
         opts$use_suit_as_ace <- FALSE
     if (is.null(opts[["style"]]))
         opts$style <- "basic"
-    if (is.null(opts[["background_color"]]))
-        opts$background_color <- "transparent"
+    if (is.null(opts[["background_colors"]]))
+        opts$background_colors <- "transparent"
     if (is.null(opts[["border_color"]]))
         opts$border_color <- "grey"
     if (is.null(opts[["invert_colors"]]))
@@ -265,6 +265,8 @@ process_configuration <- function(opts) {
     opts$i_unsuit <- opts$n_suits + 1
 
 
+    if (!is.null(opts[["background_colors"]]))
+        opts$background_colors = col_split(opts[["background_colors"]])
     if (!is.null(opts[["checker_colors"]]))
         opts$checker_colors = col_split(opts[["checker_colors"]])
     if (!is.null(opts[["gridline_colors"]]))
@@ -285,6 +287,11 @@ process_configuration <- function(opts) {
         opts[["suit_symbols_scale"]] <- as.numeric(split(opts[["suit_symbols_scale"]]))
     if (!is.null(opts[["dm_symbols_scale"]]))
         opts[["dm_symbols_scale"]] <- as.numeric(split(opts[["dm_symbols_scale"]]))
+    for(suited in c("suited", "unsuited")) {
+        component_str <- paste0("background_colors", ".", suited)
+        if (!is.null(opts[[component_str]]))
+            opts[[component_str]] <- col_split(opts[[component_str]])
+    }
     for(component in COMPONENTS) {
         for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
                         "rank_symbols_font", "suit_symbols_font", "dm_symbols_font")) {
@@ -292,7 +299,7 @@ process_configuration <- function(opts) {
             if (!is.null(opts[[component_str]]))
                 opts[[component_str]] <- split(opts[[component_str]])
         }
-        for (style in c( "suit_colors", "dm_colors")) {
+        for (style in c( "background_colors", "suit_colors", "dm_colors")) {
             component_str <- paste0(style, ".", component)
             if (!is.null(opts[[component_str]]))
                 opts[[component_str]] <- col_split(opts[[component_str]])

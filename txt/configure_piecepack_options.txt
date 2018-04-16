@@ -83,7 +83,7 @@ Options:
 	--dm_colors=DM_COLORS
 		(default the value of the "suit_colors" option)
 
-	--background_color=BACKGROUND_COLOR
+	--background_colors=BACKGROUND_COLORS
 		(default "transparent")
 
 	--border_color=BORDER_COLOR
@@ -98,11 +98,11 @@ Options:
 	-f FILE, --file=FILE
 		Filename to write configuration to (default outputs to standard output)
 
-	--background_color.suited=BACKGROUND_COLOR.SUITED
-		(default is value of "background_color" option)
+	--background_colors.suited=BACKGROUND_COLORS.SUITED
+		(default is value of "background_colors" option)
 
-	--background_color.unsuited=BACKGROUND_COLOR.UNSUITED
-		(default is value of "background_color" option)
+	--background_colors.unsuited=BACKGROUND_COLORS.UNSUITED
+		(default is value of "background_colors" option)
 
 	--invert_colors.suited
 		(default is value of "invert_colors" option)
@@ -167,8 +167,8 @@ Options:
 	--shape_theta.tile_back=SHAPE_THETA.TILE_BACK
 		(default is value of "shape_theta" option)
 
-	--background_color.tile_back=BACKGROUND_COLOR.TILE_BACK
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.tile_back=BACKGROUND_COLORS.TILE_BACK
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.tile_back
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -227,8 +227,8 @@ Options:
 	--shape_theta.tile_face=SHAPE_THETA.TILE_FACE
 		(default is value of "shape_theta" option)
 
-	--background_color.tile_face=BACKGROUND_COLOR.TILE_FACE
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.tile_face=BACKGROUND_COLORS.TILE_FACE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.tile_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -287,8 +287,8 @@ Options:
 	--shape_theta.coin_back=SHAPE_THETA.COIN_BACK
 		(default is value of "shape_theta" option)
 
-	--background_color.coin_back=BACKGROUND_COLOR.COIN_BACK
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.coin_back=BACKGROUND_COLORS.COIN_BACK
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.coin_back
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -347,8 +347,8 @@ Options:
 	--shape_theta.coin_face=SHAPE_THETA.COIN_FACE
 		(default is value of "shape_theta" option)
 
-	--background_color.coin_face=BACKGROUND_COLOR.COIN_FACE
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.coin_face=BACKGROUND_COLORS.COIN_FACE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.coin_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -407,8 +407,8 @@ Options:
 	--shape_theta.piecepack_die=SHAPE_THETA.PIECEPACK_DIE
 		(default is value of "shape_theta" option)
 
-	--background_color.piecepack_die=BACKGROUND_COLOR.PIECEPACK_DIE
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.piecepack_die=BACKGROUND_COLORS.PIECEPACK_DIE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.piecepack_die
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -467,8 +467,8 @@ Options:
 	--shape_theta.suit_die=SHAPE_THETA.SUIT_DIE
 		(default is value of "shape_theta" option)
 
-	--background_color.suit_die=BACKGROUND_COLOR.SUIT_DIE
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.suit_die=BACKGROUND_COLORS.SUIT_DIE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.suit_die
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -527,8 +527,8 @@ Options:
 	--shape_theta.pawn=SHAPE_THETA.PAWN
 		(default is value of "shape_theta" option)
 
-	--background_color.pawn=BACKGROUND_COLOR.PAWN
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.pawn=BACKGROUND_COLORS.PAWN
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.pawn
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -587,8 +587,8 @@ Options:
 	--shape_theta.saucer_face=SHAPE_THETA.SAUCER_FACE
 		(default is value of "shape_theta" option)
 
-	--background_color.saucer_face=BACKGROUND_COLOR.SAUCER_FACE
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.saucer_face=BACKGROUND_COLORS.SAUCER_FACE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.saucer_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -647,8 +647,8 @@ Options:
 	--shape_theta.saucer_back=SHAPE_THETA.SAUCER_BACK
 		(default is value of "shape_theta" option)
 
-	--background_color.saucer_back=BACKGROUND_COLOR.SAUCER_BACK
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.saucer_back=BACKGROUND_COLORS.SAUCER_BACK
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.saucer_back
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -707,8 +707,8 @@ Options:
 	--shape_theta.chip_face=SHAPE_THETA.CHIP_FACE
 		(default is value of "shape_theta" option)
 
-	--background_color.chip_face=BACKGROUND_COLOR.CHIP_FACE
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.chip_face=BACKGROUND_COLORS.CHIP_FACE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.chip_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
@@ -767,8 +767,8 @@ Options:
 	--shape_theta.chip_back=SHAPE_THETA.CHIP_BACK
 		(default is value of "shape_theta" option)
 
-	--background_color.chip_back=BACKGROUND_COLOR.CHIP_BACK
-		default is either value of "background_color.suited" or "background_color.unsuited"
+	--background_colors.chip_back=BACKGROUND_COLORS.CHIP_BACK
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
 	--invert_colors.chip_back
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"

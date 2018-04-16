@@ -90,7 +90,8 @@ get_style_element <- function(style, component, arg, default=NULL, suited=FALSE)
 
 get_background_color_helper <- function(component, i_s, arg) {
     suited <- is_suited(component, i_s, arg)
-    get_style_element("background_color", component, arg, suited=suited)
+    colors <- get_style_element("background_colors", component, arg, suited=suited)
+    expand_suit_elements(colors, "background_colors", component, arg)[i_s]
 }
 
 get_suit_colors <- function(component, arg) {
@@ -143,7 +144,8 @@ get_suit_color_helper <- function(component, i_s, arg) {
 
 should_invert <- function(component, i_s, arg) {
     suited <- is_suited(component, i_s, arg)
-    get_style_element("invert_colors", component, arg, suited=suited)
+    should_inverts <- get_style_element("invert_colors", component, arg, suited=suited)
+    expand_suit_elements(should_inverts, "should_inverts", component, arg)[i_s]
 }
 
 is_suited <- function(component, i_s, arg) {
