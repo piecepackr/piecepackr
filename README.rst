@@ -24,15 +24,15 @@ The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can b
 R does not add executables in an installed R package to a user's path.  If you plan on using the Rscript executables included with this package (in the ``exec`` folder) you can either:
 
 1. Find where R installed them and either use them directly (perhaps with help of an 'alias') or add that directory to your ``$PATH``.  The location is system dependent but on my computer they are located in ``/usr/local/lib/R/site-library/piecepack/exec/``. 
-2. Download them from github, mark them executable (if necessary), and if desired manually add them to your path (perhaps by copying them over to ``$HOME/bin/``).  Simple but you may to re-download them again if you ever upgrade the underlying R package.  
+2. Download them from github, mark them executable (if necessary), and if desired manually add them to your path (perhaps by copying them over to ``$HOME/bin/``).  Simple but you may need to re-download them again if you ever upgrade the underlying R package.  
 3. You can use a simple shell script wrapper like `Rexec <https://github.com/trevorld/Rexec>`_ to access them::
 
     $ Rexec piecepack configure_piecepack [options]
-        $ Rexec piecepack make_piecepack [options]
-        $ Rexec piecepack make_preview [options]
-        $ Rexec piecepack collect_piecepacks [options]
+    $ Rexec piecepack make_piecepack [options]
+    $ Rexec piecepack make_preview [options]
+    $ Rexec piecepack collect_piecepacks [options]
 
-If use ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
+  If use ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
 
    alias configure_piecepack="Rexec piecepack configure_piecepack"
    alias make_piecepack="Rexec piecepack make_piecepack"
