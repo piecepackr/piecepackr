@@ -32,7 +32,7 @@ R does not add executables in an installed R package to a user's path.  If you p
     $ Rexec piecepack make_preview [options]
     $ Rexec piecepack collect_piecepacks [options]
 
-   If use ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
+   If using ``Rexec`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
 
     alias configure_piecepack="Rexec piecepack configure_piecepack"
     alias make_piecepack="Rexec piecepack make_piecepack"
