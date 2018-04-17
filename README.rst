@@ -10,21 +10,45 @@ This is an R package designed to make configurable piecepack graphics.  It inclu
 Installation
 ------------
 
-You'll need to install some system requirements::
+Short instructions using Rakefile on Ubuntu (17.10+)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Clones repo and installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) but doesn't add executable Rscripts to ``$PATH``.  Should sets up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed then what a strictly minimal install would need).::
+
+    $ sudo apt install git rake
+    $ git clone https://github.com/trevorld/piecepack
+    $ cd piecepack
+    $ rake install_dependencies_ubuntu
+    $ rake install
+
+To update previously cloned repo to newest version and re-install R package::
+
+    $ cd piecepack
+    $ git pull
+    $ rake install
+
+Detailed instructions
+~~~~~~~~~~~~~~~~~~~~~
+
+You'll need to install some system requirements to use this R package and its executables::
 
     $ sudo apt install ghostscript pdfsam poppler-utils r-base 
 
-The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of ``grImport2`` R package as well as the ``piecepack`` R package itself, these (and their R package dependencies) can easily be installed with help of the ``devtools`` package::
+The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of ``grImport2`` R package as well as the ``piecepack`` R package itself and their R package dependencies.  These (and their R package dependencies) can easily be installed with help of the ``devtools`` package::
 
-    $ sudo R
-    > install.packages("devtools")
-    > devtools::install_github("sjp/grImport2")
-    > devtools::install_github("trevorld/piecepack")
+    $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
+    $ sudo Rscript -e "devtools::install_github(\"sjp/grImport2\")"
+    $ sudo Rscript -e "devtools::install_github(\"trevorld/piecepack\")"
 
 R does not add executables in an installed R package to a user's path.  If you plan on using the Rscript executables included with this package (in the ``exec`` folder) you can either:
 
 1. Find where R installed them and either use them directly (perhaps with help of an 'alias') or add that directory to your ``$PATH``.  The location is system dependent but on my computer they are located in ``/usr/local/lib/R/site-library/piecepack/exec/``. 
-2. Download them from github, mark them executable (if necessary), and if desired manually add them to your path (perhaps by copying them over to ``$HOME/bin/``).  Simple but you may need to re-download them again if you ever upgrade the underlying R package.  
+2. Download them from github, mark them executable (if necessary), and if desired manually add them to your path (perhaps by copying them over to ``$HOME/bin/``).  Simple but you may need to re-download them again if you ever upgrade the underlying R package.  If you clone the entire repo you can download the newest versions using ``git pull``::
+
+    $ git clone https://github.com/trevorld/piecepack # done only once
+    $ cd piecepack # executables are in the exec folder
+    $ git pull # downloads any updates
+
 3. You can use a simple shell script wrapper like `Rbin <https://github.com/trevorld/Rbin>`_ to access them::
 
     $ Rbin piecepack configure_piecepack [options]
@@ -45,20 +69,18 @@ If you want to run the demos you'll need to clone the git repository and you'll 
     $ sudo apt install fonts-dejavu fonts-noto rake
     $ fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
     $ curl -O http://www.quivira-font.com/files/Quivira.otf
-    $ cp Quivira.otf $fonts_dir/
+    $ mv Quivira.otf $fonts_dir/
     $ curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip
     $ unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
-    $ cp NotoEmoji-Regular.ttf $fonts_dir/
+    $ mv NotoEmoji-Regular.ttf $fonts_dir/
     $ rm NotoEmoji-unhinted.zip
 
 ..    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
-..    $ cp chess1.ttf $fonts_dir/ChessUtrecht.ttf
+..    $ mv chess1.ttf $fonts_dir/ChessUtrecht.ttf
 
-Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not but if you want to upgrade to the newest version of the package you'll need to run ``$ git pull; sudo rake upgrade`` to upgrade to the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
+Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not when running a demo. If you want to upgrade to the newest version of the package you'll need to run ``$ git pull; rake install`` to download the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to then re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
 
-If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  
-
-**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
+If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  **Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
 How to use executable Rscripts
 ------------------------------
@@ -69,6 +91,7 @@ One uses the ``make_piecepack`` command to make a single print-and-play pdf of a
 
 Where ``demo_name`` is either:
 
+#. ``all`` (makes everyone of the below demos)
 #. ``chess``
 #. ``chinese_zodiac``
 #. ``crown_and_anchor``

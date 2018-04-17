@@ -378,9 +378,15 @@ task :sixpack do
 end
 
 ## Development Utilities
-desc "Upgrade R package"
-task :upgrade do
-    sh 'sudo Rscript -e "suppressMessages(devtools::document())"'
+desc "Copy all demos over to Dropbox"
+task :copy_demos do
+    dir = "/home/trevorld/a/sync/Dropbox/Public/piecepack/"
+    demos.each { |x| sh "cp pdf/collections/#{x}_demo.pdf #{dir}" }
+end
+
+desc "(Re-)install piecepack R package"
+task :install do
+    sh 'Rscript -e "suppressMessages(devtools::document())"'
     sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
     # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
@@ -389,13 +395,38 @@ task :upgrade do
     sh 'exec/collect_piecepacks --help | cat > txt/collect_piecepacks_options.txt'
 end
 
+desc "Install R package and dependencies on Ubuntu (17.10+)"
+task :install_dependencies_ubuntu do
+    sh 'sudo apt install ghostscript pdfsam poppler-utils r-base'
+    sh 'sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
+    sh 'sudo Rscript -e "devtools::install_github(\"sjp/grImport2\")"'
+    sh 'sudo apt install fonts-dejavu fonts-noto rake'
+    fonts_dir = ENV.fetch("XDG_DATA_HOME", ENV["HOME"] + "/.local/share") + "/fonts/"
+    sh 'curl -O http://www.quivira-font.com/files/Quivira.otf'
+    sh 'mv Quivira.otf ' + fonts_dir 
+    sh 'curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip'
+    sh 'unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf'
+    sh 'mv NotoEmoji-Regular.ttf ' + fonts_dir
+    sh 'rm NotoEmoji-unhinted.zip'
+end
+
 def open_pdf (demo)
     sh "xdg-open pdf/collections/" + demo + "_demo.pdf 2>/dev/null | true"
 end
 
+desc "Open demo pdf (all to open all of them)"
+task  :open, [:demo] do |t, args|
+    if "#{args[:demo]}" == "all"
+        demos.each { |demo| open_pdf "#{demo}" }
+    else
+        open_pdf "#{args[:demo]}"
+    end
+end
+
+
 desc "Test"
 task :test => :clean
-task :test => :upgrade
+task :test => :install
 task :test do
     extra_flags = " --use_suit_as_ace --rank_symbols.chip_face='A,B,C,D,E,F'"
     file = "test1"
@@ -421,13 +452,4 @@ task :test do
     open_pdf "test"
 end
 
-desc "Open demos"
-task :open_demos do
-    demos.each { |demo| open_pdf "#{demo}" }
-end
 
-desc "Copy demos over to Dropbox"
-task :copy_demos do
-    dir = "/home/trevorld/a/sync/Dropbox/Public/piecepack/"
-    demos.each { |x| sh "cp pdf/collections/#{x}_demo.pdf #{dir}" }
-end
