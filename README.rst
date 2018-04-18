@@ -30,7 +30,7 @@ To update previously cloned repo to newest version and re-install R package::
 Detailed instructions
 ~~~~~~~~~~~~~~~~~~~~~
 
-This package is developed and tested on Ubuntu Linux.  Instructions are given below for installation on Ubuntu Linux but installing on another \*nix OS should be a straightforward substitution of the ``apt`` package manager with your OS's preferred package manager like ``brew`` for OSX (you may also need to tweak the package names to match what is in your repos and to manually install some software/fonts not in your repos).  It is also possible to `install and run an Ubuntu terminal <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_ on recent versions of Windows or to (freely) run Ubuntu in a virtual machine or even in a ``chroot``.  
+This package is developed and tested on Ubuntu Linux.  Instructions are given below for installation on Ubuntu Linux but installing on another \*nix OS should be a straightforward substitution of the ``apt`` package manager with your OS's preferred package manager like ``brew`` for OSX (you may also need to tweak the package names to match what is in your repos and to manually install some software/fonts not in your repos).  It is also possible to `install and run an Ubuntu terminal <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_ on recent versions of Windows or to (freely) run Ubuntu in a virtual machine or even in a ``chroot``.  If you have a really minimal \*nix environment you may also need to install Cairo and a windows manager like X or Quartz.
 
 You'll need to install some system requirements to use this R package and its executables::
 
