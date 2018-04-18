@@ -263,8 +263,6 @@ expand_suit_elements <- function(elements, style, component, arg) {
     }
     if (length(elements) == arg$i_unsuit) {
         elements <- c(elements, switch(style, 
-                           scale = 1.0,
-                           rank_suit_symbols = elements[arg$i_unsuit],
                            suit_symbols = switch(component, 
                                 suit_die = "", piecepack_die = "", elements[arg$i_unsuit]),
                            gridline_colors = NA,

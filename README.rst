@@ -30,6 +30,8 @@ To update previously cloned repo to newest version and re-install R package::
 Detailed instructions
 ~~~~~~~~~~~~~~~~~~~~~
 
+This package is developed and tested on Ubuntu Linux.  Instructions are given below for installation on Ubuntu Linux but installing on another \*nix OS should be a straightforward substitution of the ``apt`` package manager with your OS's preferred package manager like ``brew`` for OSX (you may also need to tweak the package names to match what is in your repos and to manually install some software/fonts not in your repos).  It is also possible to `install and run an Ubuntu terminal <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_ on recent versions of Windows or to (freely) run Ubuntu in a virtual machine or even in a ``chroot``.  
+
 You'll need to install some system requirements to use this R package and its executables::
 
     $ sudo apt install ghostscript pdfsam poppler-utils r-base 
@@ -92,7 +94,7 @@ One uses the ``make_piecepack`` command to make a single print-and-play pdf of a
 
 Where ``demo_name`` is either:
 
-#. ``all`` (makes everyone of the below demos)
+#. ``all`` (makes each of the following demos)
 #. ``chess``
 #. ``chinese_zodiac``
 #. ``crown_and_anchor``
@@ -230,7 +232,7 @@ What are the "chips" accessories that shows up on the accesories page of the pri
     3. A third option would be to produce the "piecepack stones" accessory (i.e. from the `Sensible Expansions proposal <http://www.ludism.org/ppwiki/SensibleExpansions>`_).  A good configuration for this purpose would be  ``--suit_symbols.chip_back= --dm_colors.chip_back=grey --dm_symbols=■ --uninvert_colors.chip_back  --shape.chip_back=rect --shape.chip_face=rect``. 
     4. A fourth option would be to produce a "suit (star) coin" accessory (i.e. from the `JCD piecepack <http://www.piecepack.org/JCD.html>`_).  A good configuration for this purpose would be ``--use_suit_as_ace.chip_face --invert_colors.chip_face --shape.chip_face=star --rank_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_face=0.7 --shape.chip_back=star --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip_back=0.7``.  
     5. A fifth option if paired with another deck with six extra ranks would be to mount the chip faces on a large d12 to make a "dozenal piecepack die" for each suit.  The suits could then also go on a d12 to make a "dozenal suit die" especially if there are in fact a dozen suits.  A good configuration for this purpose would be "``--shape.chip_face=5 --shape.chip_back=5``
-    6. A sixth option would be to make "hexpack triangular chips" (i.e. from the `Hexpack`_).  A good configuration for this purpose would be ``--shape.chip_face=3 --dm_theta.chip_face=-90 --dm_symbols_scale.chip_face=0.7 --shape.chip_back=3 --dm_theta.chip_back=-90 --dm_symbols_scale.chip_back=0.7``.
+    6. A sixth option would be to make "hexpack triangular chits" (i.e. from the `Hexpack`_).  A good configuration for this purpose would be ``--shape.chip_face=3 --dm_theta.chip_face=-90 --dm_symbols_scale.chip_face=0.7 --shape.chip_back=3 --suit_colors.chip_back=``.
 
 What is the purpose of the "hex lines" that can be configured onto the tiles by the ``hexline_colors`` option?
     It you use the tiles to build a hex board the hexlines will visually show four of the six hexagon cell sides.
