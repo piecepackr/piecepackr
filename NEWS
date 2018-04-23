@@ -1,3 +1,8 @@
+piecepack 0.8.0
+===============
+
+* Added ``make_piecepack_images`` executable (#48).  Renamed other executables. 
+
 piecepack 0.7.1
 ===============
 

@@ -76,7 +76,7 @@ draw_piecepack_die <- function(i_s, opts, flip=FALSE) {
         make_die_viewports(label, flip=flip)
         for(i_r in 1:6) {
             downViewport(paste0(label, ".die.", i_r))
-            draw_piecepack_die_face(i_s, i_r, opts)
+            draw_ppdie_face(i_s, i_r, opts)
             upViewport()
         }
     })
@@ -89,29 +89,29 @@ draw_suit_die <- function(opts, flip=FALSE) {
         make_die_viewports(label, flip=flip)
         if (opts$n_suits == 4) {
             downViewport(paste0(label, ".die.1"))
-            draw_suit_die_face(6, opts)
+            draw_suitdie_face(6, opts)
             upViewport()
             for (i_s in 1:4) {
                 downViewport(paste0(label, ".die.", i_s+1))
-                draw_suit_die_face(5-i_s, opts)
+                draw_suitdie_face(5-i_s, opts)
                 upViewport()
             }
             downViewport(paste0(label, ".die.6"))
-            draw_suit_die_face(5, opts)
+            draw_suitdie_face(5, opts)
             upViewport()
         } else if (opts$n_suits == 5) {
             for (i_s in 1:5) {
                 downViewport(paste0(label, ".die.", i_s))
-                draw_suit_die_face(6-i_s, opts)
+                draw_suitdie_face(6-i_s, opts)
                 upViewport()
             }
             downViewport(paste0(label, ".die.6"))
-            draw_suit_die_face(6, opts)
+            draw_suitdie_face(6, opts)
             upViewport()
         } else if (opts$n_suits == 6) {
             for (i_s in 1:6) {
                 downViewport(paste0(label, ".die.", i_s))
-                draw_suit_die_face(7-i_s, opts)
+                draw_suitdie_face(7-i_s, opts)
                 upViewport()
             }
         } else {
@@ -126,7 +126,7 @@ draw_rank_die <- function(opts, flip=FALSE) {
         make_die_viewports(label, flip=flip)
         for (i_r in 1:6) {
             seekViewport(paste0(label, ".die.", i_r))
-            draw_piecepack_die_face(opts$i_unsuit + 1, i_r, opts)
+            draw_ppdie_face(opts$i_unsuit + 1, i_r, opts)
         }
     })
 }
@@ -138,29 +138,29 @@ draw_suitrank_die <- function(opts, flip=FALSE) {
         make_die_viewports(label, flip=flip)
         if (opts$n_suits == 4) {
             downViewport(paste0(label, ".die.1"))
-            draw_piecepack_die_face(6, 1, opts)
+            draw_ppdie_face(6, 1, opts)
             upViewport()
             downViewport(paste0(label, ".die.2"))
-            draw_piecepack_die_face(5, 2, opts)
+            draw_ppdie_face(5, 2, opts)
             upViewport()
             for (i_r in 3:6) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_piecepack_die_face(5-(i_r-2), i_r, opts)
+                draw_ppdie_face(5-(i_r-2), i_r, opts)
                 upViewport()
             }
         } else if (opts$n_suits == 5) {
             downViewport(paste0(label, ".die.6"))
-            draw_piecepack_die_face(6, 6, opts)
+            draw_ppdie_face(6, 6, opts)
             upViewport()
             for (i_r in 1:5) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_piecepack_die_face(6-i_r, i_r, opts)
+                draw_ppdie_face(6-i_r, i_r, opts)
                 upViewport()
             }
         } else if (opts$n_suits == 6) {
             for (i_r in 1:6) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_piecepack_die_face(7-i_r, i_r, opts)
+                draw_ppdie_face(7-i_r, i_r, opts)
                 upViewport()
             }
         } else {
@@ -171,7 +171,7 @@ draw_suitrank_die <- function(opts, flip=FALSE) {
 
 make_header_helper <- function(title, arg) {
     header_height <- 0.8
-    y_header <- win_height - header_height/2
+    y_header <- WIN_HEIGHT - header_height/2
     addViewport(y=inch(y_header), width=inch(6.0), height=inch(header_height), name="header")
     seekViewport("header")
     width_image = 0.14
@@ -253,22 +253,11 @@ make_collection_preview <- function(arg) {
     invisible(dev.off())
 }
 
-coin_width <- 3/4
-die_width <- 1/2
-tile_width <- 2
-saucer_width <- 7/8
-chip_width <- 5/8
-win_width <- 8
-win_height <- 10.5
-pawn_height <- 1.75
-pawn_width <- 3/4
-# pawn_height <- 9/8
-# pawn_width <- 5/8
-belt_height <- 1/2
-belt_width <- 2 * pawn_width
+WIN_WIDTH <- 8
+WIN_HEIGHT <- 10.5
 
 mainViewport <- function() {
-    addViewport(width=inch(win_width), height=inch(win_height), name="main")
+    addViewport(width=inch(WIN_WIDTH), height=inch(WIN_HEIGHT), name="main")
     downViewport("main")
 }
 
@@ -277,24 +266,24 @@ draw_suit_page <- function(i_s, opts) {
 
     # Build viewports
     mainViewport()
-    addViewport(y=inch(1.5*tile_width), width=inch(4*tile_width), height=inch(3*tile_width), name="tiles")
+    addViewport(y=inch(1.5*TILE_WIDTH), width=inch(4*TILE_WIDTH), height=inch(3*TILE_WIDTH), name="tiles")
     downViewport("tiles")
     make_4by3_viewports("tile")
     seekViewport("main")
-    xpawn <- pawn_width/2
-    pheight <- 2.5 * pawn_height
-    ypawn <- 3*tile_width + pheight/2 
-    addViewport(x=inch(xpawn), y=inch(ypawn), width=inch(pawn_width), height=inch(pheight), name="lpawn")
-    addViewport(x=inch(win_width-xpawn), y=inch(ypawn), width=inch(pawn_width), height=inch(pheight), name="rpawn")
+    xpawn <- PAWN_WIDTH/2
+    pheight <- 2.5 * PAWN_HEIGHT
+    ypawn <- 3*TILE_WIDTH + pheight/2 
+    addViewport(x=inch(xpawn), y=inch(ypawn), width=inch(PAWN_WIDTH), height=inch(pheight), name="lpawn")
+    addViewport(x=inch(WIN_WIDTH-xpawn), y=inch(ypawn), width=inch(PAWN_WIDTH), height=inch(pheight), name="rpawn")
 
-    xdie <- pawn_width + 3*die_width/2 
-    # ydie <- win_width - 4*die_width/2 - 0.125
-    ydie <- 3*tile_width + 4*die_width/2
+    xdie <- PAWN_WIDTH + 3*DIE_WIDTH/2 
+    # ydie <- WIN_WIDTH - 4*DIE_WIDTH/2 - 0.125
+    ydie <- 3*TILE_WIDTH + 4*DIE_WIDTH/2
     addViewport(x=inch(xdie) , y=inch(ydie), width=inch(2), height=inch(1.5), angle=-90, name="ldie")
-    addViewport(x=inch(win_width-xdie) , y=inch(ydie), width=inch(2), height=inch(1.5),  angle=90, name="rdie")
+    addViewport(x=inch(WIN_WIDTH-xdie) , y=inch(ydie), width=inch(2), height=inch(1.5),  angle=90, name="rdie")
 
-    ysaucer <- 3*tile_width + saucer_width/2
-    addViewport(y=inch(ysaucer), height=inch(saucer_width), width=inch(4*saucer_width), name="saucers")
+    ysaucer <- 3*TILE_WIDTH + SAUCER_WIDTH/2
+    addViewport(y=inch(ysaucer), height=inch(SAUCER_WIDTH), width=inch(4*SAUCER_WIDTH), name="saucers")
     seekViewport("saucers")
     addViewport(x=1/4-1/8, width=0.25, name="lsaucer.face")
     addViewport(x=2/4-1/8, width=0.25, name="lsaucer.back")
@@ -302,23 +291,23 @@ draw_suit_page <- function(i_s, opts) {
     addViewport(x=4/4-1/8, width=0.25, name="rsaucer.back")
     seekViewport("main")
     # addViewport(y=inch(ycoin), width=inch(7.5), height=inch(0.625), name="coinrow")
-    # ycoin <- 6+ 3*coin_width
-    ycoin <- ysaucer + saucer_width/2 + 3*coin_width/2
-    addViewport(y=inch(ycoin), width=inch(4 * coin_width), height=inch(3 * coin_width), name="coins")
+    # ycoin <- 6+ 3*COIN_WIDTH
+    ycoin <- ysaucer + SAUCER_WIDTH/2 + 3*COIN_WIDTH/2
+    addViewport(y=inch(ycoin), width=inch(4 * COIN_WIDTH), height=inch(3 * COIN_WIDTH), name="coins")
     seekViewport("main")
 
 
-    # ydie2 <- ybelt - 1.5*die_width
-    ydie2 <- ydie + 2*die_width 
+    # ydie2 <- ybelt - 1.5*DIE_WIDTH
+    ydie2 <- ydie + 2*DIE_WIDTH 
     addViewport(x=inch(xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5), angle=-90, name="ldie2")
-    addViewport(x=inch(win_width-xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5),  angle=90, name="rdie2")
+    addViewport(x=inch(WIN_WIDTH-xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5),  angle=90, name="rdie2")
 
-    # ybelt <- ycoin + 3*coin_width/2 + die_width/2
-    # xbelt <- win_width/2 - belt_width/2
-    ybelt <- ydie2 + 2*die_width + die_width/2
-    xbelt <- pawn_width + belt_width/2
-    addViewport(x=inch(xbelt), y=inch(ybelt), width=inch(belt_width), height=inch(belt_height), name="lpawnbelt")
-    addViewport(x=inch(win_width-xbelt), y=inch(ybelt), width=inch(belt_width), height=inch(belt_height), name="rpawnbelt")
+    # ybelt <- ycoin + 3*COIN_WIDTH/2 + DIE_WIDTH/2
+    # xbelt <- WIN_WIDTH/2 - BELT_WIDTH/2
+    ybelt <- ydie2 + 2*DIE_WIDTH + DIE_WIDTH/2
+    xbelt <- PAWN_WIDTH + BELT_WIDTH/2
+    addViewport(x=inch(xbelt), y=inch(ybelt), width=inch(BELT_WIDTH), height=inch(BELT_HEIGHT), name="lpawnbelt")
+    addViewport(x=inch(WIN_WIDTH-xbelt), y=inch(ybelt), width=inch(BELT_WIDTH), height=inch(BELT_HEIGHT), name="rpawnbelt")
 
     # Draw components
     for (i_r in 1:6) {
@@ -334,9 +323,9 @@ draw_suit_page <- function(i_s, opts) {
 
     # pawn and belt
     seekViewport("lpawnbelt")
-    draw_pawn_belt(i_s, opts)
+    draw_belt_face(i_s, opts)
     seekViewport("rpawnbelt")
-    draw_pawn_belt(i_s, opts)
+    draw_belt_face(i_s, opts)
     seekViewport("lpawn")
     draw_pawn(i_s, opts)
     seekViewport("rpawn")
@@ -354,13 +343,13 @@ draw_suit_page <- function(i_s, opts) {
 
     # pawn saucers
     seekViewport("lsaucer.face")
-    draw_pawn_saucer(i_s, opts)
+    draw_saucer_face(i_s, opts)
     seekViewport("lsaucer.back")
-    draw_pawn_saucer(opts$i_unsuit, opts)
+    draw_saucer_back(opts)
     seekViewport("rsaucer.face")
-    draw_pawn_saucer(i_s, opts)
+    draw_saucer_face(i_s, opts)
     seekViewport("rsaucer.back")
-    draw_pawn_saucer(opts$i_unsuit, opts)
+    draw_saucer_back(opts)
 
     # annotations
     seekViewport("main")
@@ -385,36 +374,36 @@ draw_accessories_page <- function(opts, odd=TRUE) {
     addViewport(x=0.75, width=0.5, name="joker.tile.back")
     seekViewport("main")
     # dice
-    ydh <- y_joker - die_width/2 + die_width
-    ydm <- ydh - 3 * die_width
-    ydl <- ydm - 3 * die_width
-    ydb <- ydl - 3 * die_width
-    die_xl = 2*die_width
-    die_xm = die_xl + 2*die_width
-    die_xh = die_xm + 2*die_width
+    ydh <- y_joker - DIE_WIDTH/2 + DIE_WIDTH
+    ydm <- ydh - 3 * DIE_WIDTH
+    ydl <- ydm - 3 * DIE_WIDTH
+    ydb <- ydl - 3 * DIE_WIDTH
+    die_xl = 2*DIE_WIDTH
+    die_xm = die_xl + 2*DIE_WIDTH
+    die_xh = die_xm + 2*DIE_WIDTH
     die_right <- die_xl + 0.8
     addViewport(y=inch(ydh), x=inch(die_xl), width=inch(2), height=inch(1.5), name="lsuitdie")
-    addViewport(y=inch(ydh), x=inch(win_width-die_xl), width=inch(2), height=inch(1.5), name="rsuitdie")
-    addViewport(y=inch(ydm-die_width), width=inch(2), height=inch(1.5), name="suitdie3")
-    addViewport(y=inch(ydm), x=inch(win_width-die_xl), width=inch(2), height=inch(1.5), name="suitrankdie1")
-    addViewport(y=inch(ydm), x=inch(win_width-die_xm), width=inch(2), height=inch(1.5), name="suitrankdie2")
+    addViewport(y=inch(ydh), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="rsuitdie")
+    addViewport(y=inch(ydm-DIE_WIDTH), width=inch(2), height=inch(1.5), name="suitdie3")
+    addViewport(y=inch(ydm), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="suitrankdie1")
+    addViewport(y=inch(ydm), x=inch(WIN_WIDTH-die_xm), width=inch(2), height=inch(1.5), name="suitrankdie2")
     addViewport(y=inch(ydm), x=inch(die_xl), width=inch(2), height=inch(1.5), name="suitrankdie3")
     addViewport(y=inch(ydm), x=inch(die_xm), width=inch(2), height=inch(1.5), name="suitrankdie4")
-    addViewport(y=inch(ydl), x=inch(win_width-die_xl), width=inch(2), height=inch(1.5), name="rankdie1")
-    addViewport(y=inch(ydl), x=inch(win_width-die_xm), width=inch(2), height=inch(1.5), name="rankdie2")
-    addViewport(y=inch(ydl), x=inch(win_width-die_xh), width=inch(2), height=inch(1.5), name="rankdie3")
+    addViewport(y=inch(ydl), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="rankdie1")
+    addViewport(y=inch(ydl), x=inch(WIN_WIDTH-die_xm), width=inch(2), height=inch(1.5), name="rankdie2")
+    addViewport(y=inch(ydl), x=inch(WIN_WIDTH-die_xh), width=inch(2), height=inch(1.5), name="rankdie3")
     addViewport(y=inch(ydl), x=inch(die_xh), width=inch(2), height=inch(1.5), name="rankdie4")
-    addViewport(y=inch(ydb), x=inch(win_width-die_xl), width=inch(2), height=inch(1.5), name="rankdie1l")
-    addViewport(y=inch(ydb), x=inch(win_width-die_xm), width=inch(2), height=inch(1.5), name="rankdie2l")
-    addViewport(y=inch(ydb), x=inch(win_width-die_xh), width=inch(2), height=inch(1.5), name="rankdie3l")
+    addViewport(y=inch(ydb), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="rankdie1l")
+    addViewport(y=inch(ydb), x=inch(WIN_WIDTH-die_xm), width=inch(2), height=inch(1.5), name="rankdie2l")
+    addViewport(y=inch(ydb), x=inch(WIN_WIDTH-die_xh), width=inch(2), height=inch(1.5), name="rankdie3l")
     addViewport(y=inch(ydb), x=inch(die_xh), width=inch(2), height=inch(1.5), name="rankdie4l")
 
     die_x <- c(die_xl, die_xm, die_xm, die_xl, die_xh, die_xh)
     die_y <- c(ydl, ydl, ydb, ydb, ydl, ydb)
     for (i_s in 1:opts$n_suits) {
         addViewport(y=inch(die_y[i_s]), x=inch(die_x[i_s]), width=inch(2), height=inch(1.5), name=paste0("ppdie.", i_s))
-        addViewport(y=inch((opts$n_suits + 1 - i_s)*chip_width - 0.5*chip_width), 
-                    width=inch(12*chip_width), height=inch(chip_width), name=paste0("chips.", i_s))
+        addViewport(y=inch((opts$n_suits + 1 - i_s)*CHIP_WIDTH - 0.5*CHIP_WIDTH), 
+                    width=inch(12*CHIP_WIDTH), height=inch(CHIP_WIDTH), name=paste0("chips.", i_s))
         seekViewport(paste0("chips.", i_s))
         for (i_r in 1:6) {
             addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0("chips.suit.", i_s, i_r))
@@ -422,8 +411,8 @@ draw_accessories_page <- function(opts, odd=TRUE) {
         }
         seekViewport("main")
     }
-    saucer_y <- 4*chip_width + 0.5*saucer_width + 0.125
-    addViewport(y=inch(saucer_y),width=inch(8*saucer_width), height=inch(saucer_width), name="pawnsaucers")
+    saucer_y <- 4*CHIP_WIDTH + 0.5*SAUCER_WIDTH + 0.125
+    addViewport(y=inch(saucer_y),width=inch(8*SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="pawnsaucers")
     seekViewport("pawnsaucers")
     addViewport(x=1/8-1/16, width=1/8, name="pawnsaucer.face.1")
     addViewport(x=2/8-1/16, width=1/8, name="pawnsaucer.back.1")
@@ -482,9 +471,9 @@ draw_accessories_page <- function(opts, odd=TRUE) {
         draw_piecepack_die(i_s, opts, flip=TRUE)
         if (opts$n_suits <= 4) {
             seekViewport(paste0("pawnsaucer.face.", i_s))
-            draw_pawn_saucer(i_s, opts)
+            draw_saucer_face(i_s, opts)
             seekViewport(paste0("pawnsaucer.back.", i_s))
-            draw_pawn_saucer(opts$i_unsuit, opts)
+            draw_saucer_back(opts)
         }
 
         for (i_r in 1:6) {

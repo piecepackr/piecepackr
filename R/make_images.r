@@ -1,7 +1,10 @@
-COMPONENTS <- c("tile_back", "tile_face", 
+COMPONENTS <- c("tile", "coin", "ppdie", "suitdie", 
+           "pawn", "belt", "saucer", "chip")
+COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
            "coin_back", "coin_face",
-           "piecepack_die", "suit_die", 
-           "pawn", "saucer_face", "saucer_back",
+           "ppdie_face", "suitdie_face", 
+           "pawn_face", "pawn_back", 
+           "belt_face",  "saucer_face", "saucer_back",
            "chip_face", "chip_back")
 
 seg <- function(x, y, xend, yend, color="black", ...) {
@@ -71,16 +74,25 @@ grid.star_fn <- function(theta) {
     function(gp) { grid.polygon(x, y, gp=gp) }
 }
 
-get_style_element <- function(style, component, arg, default=NULL, suited=FALSE) {
+get_component <- function(component_side) {
+    split(component_side, "_")[1]
+}
+
+get_style_element <- function(style, component_side, arg, default=NULL, suited=FALSE) {
+    component <- get_component(component_side)
+
+    component_side_str <- paste0(style, ".", component_side)
     component_str <- paste0(style, ".", component)
-    suited_component_str <- paste0(style, ".", "suited")
-    unsuited_component_str <- paste0(style, ".", "unsuited")
-    if (!is.null(arg[[component_str]])) {
+    suited_str <- paste0(style, ".", "suited")
+    unsuited_str <- paste0(style, ".", "unsuited")
+    if (!is.null(arg[[component_side_str]])) {
+        arg[[component_side_str]]
+    } else if (!is.null(arg[[component_str]])) {
         arg[[component_str]]
-    } else if (suited && !is.null(arg[[suited_component_str]])) {
-        arg[[suited_component_str]]
-    } else if (!suited && !is.null(arg[[unsuited_component_str]])) {
-        arg[[unsuited_component_str]]
+    } else if (suited && !is.null(arg[[suited_str]])) {
+        arg[[suited_str]]
+    } else if (!suited && !is.null(arg[[unsuited_str]])) {
+        arg[[unsuited_str]]
     } else if (!is.null(arg[[style]])) {
         arg[[style]]
     } else {
@@ -88,34 +100,35 @@ get_style_element <- function(style, component, arg, default=NULL, suited=FALSE)
     }
 }
 
-get_background_color_helper <- function(component, i_s, arg) {
-    suited <- is_suited(component, i_s, arg)
-    colors <- get_style_element("background_colors", component, arg, suited=suited)
-    expand_suit_elements(colors, "background_colors", component, arg)[i_s]
+get_background_color_helper <- function(component_side, i_s, arg) {
+    suited <- is_suited(component_side, i_s, arg)
+    colors <- get_style_element("background_colors", component_side, arg, suited=suited)
+    expand_suit_elements(colors, "background_colors", component_side, arg)[i_s]
 }
 
-get_suit_colors <- function(component, arg) {
-    suit_colors <- get_style_element("suit_colors", component, arg)
-    expand_suit_elements(suit_colors, "suit_colors", component, arg) 
+get_suit_colors <- function(component_side, arg) {
+    suit_colors <- get_style_element("suit_colors", component_side, arg)
+    expand_suit_elements(suit_colors, "suit_colors", component_side, arg) 
 }
 
-get_shape_theta <- function(component, arg) {
-    get_style_element("shape_theta", component, arg, 90)
+get_shape_theta <- function(component_side, arg) {
+    get_style_element("shape_theta", component_side, arg, 90)
 }
 
-get_shape <- function(component, arg) {
-    get_style_element("shape", component, arg,
-        switch(component,
+get_shape <- function(component_side, arg) {
+    get_style_element("shape", component_side, arg,
+        switch(component_side,
                tile_back = "rect",
                tile_face = "rect",
                coin_back = "circle",
                coin_face = "circle",
-               piecepack_die = "rect",
-               suit_die = "rect",
+               ppdie_face = "rect",
+               suitdie_face = "rect",
                saucer_face = "circle",
                saucer_back = "circle",
-               pawn = "halma",
-               pawn_belt = "rect",
+               pawn_face = "halma",
+               pawn_back = "halma",
+               belt_face = "rect",
                chip_face = "circle",
                chip_back = "circle")
         )
@@ -131,131 +144,132 @@ get_grid_shape <- function(shape, theta) {
            grid.pp.polygon_fn(as.numeric(shape), theta))
 }
 
-get_shape_fn <- function(component, arg) {
-    shape <- get_shape(component, arg)
-    theta <- get_shape_theta(component, arg)
+get_shape_fn <- function(component_side, arg) {
+    shape <- get_shape(component_side, arg)
+    theta <- get_shape_theta(component_side, arg)
     get_grid_shape(shape, theta)
 }
 
-get_suit_color_helper <- function(component, i_s, arg) {
-    suit_colors <- get_suit_colors(component, arg)
+get_suit_color_helper <- function(component_side, i_s, arg) {
+    suit_colors <- get_suit_colors(component_side, arg)
     ifelse(i_s <= arg$n_suits, suit_colors[i_s], suit_colors[arg$i_unsuit])
 }
 
-should_invert <- function(component, i_s, arg) {
-    suited <- is_suited(component, i_s, arg)
-    should_inverts <- get_style_element("invert_colors", component, arg, suited=suited)
-    expand_suit_elements(should_inverts, "should_inverts", component, arg)[i_s]
+should_invert <- function(component_side, i_s, arg) {
+    suited <- is_suited(component_side, i_s, arg)
+    should_inverts <- get_style_element("invert_colors", component_side, arg, suited=suited)
+    expand_suit_elements(should_inverts, "should_inverts", component_side, arg)[i_s]
 }
 
-is_suited <- function(component, i_s, arg) {
-    switch(component,
+is_suited <- function(component_side, i_s, arg) {
+    switch(component_side,
            tile_back = FALSE,
            tile_face = TRUE, 
            coin_back = TRUE,
            coin_face = FALSE,
-           piecepack_die = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
-           suit_die = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
+           ppdie_face = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
+           suitdie_face = ifelse(i_s <= arg$i_unsuit, TRUE, FALSE),
            saucer_face = TRUE,
            saucer_back = FALSE,
-           pawn = TRUE,
-           pawn_belt = TRUE,
+           pawn_face = TRUE,
+           pawn_back = TRUE,
+           belt_face = TRUE,
            chip_face = TRUE,
            chip_back = TRUE)
 }
 
-get_dm_theta <- function(component, arg) {
-    get_style_element("dm_theta", component, arg,
-        ifelse(component %in% c("tile_face", "piecepack_die", "suit_die"), 135, 90)
+get_dm_theta <- function(component_side, arg) {
+    get_style_element("dm_theta", component_side, arg,
+        ifelse(component_side %in% c("tile_face", "ppdie_face", "suitdie_face"), 135, 90)
     )
 }
-get_dm_r <- function(component, arg) {
-    shape <- get_shape(component, arg)
-    get_style_element("dm_r", component, arg, 
+get_dm_r <- function(component_side, arg) {
+    shape <- get_shape(component_side, arg)
+    get_style_element("dm_r", component_side, arg, 
                       switch(shape,
                              rect = sqrt(0.25^2 + 0.25^2),
                              circle = sqrt(0.25^2 + 0.25^2),
                              0.3))
 }
 
-get_dm_symbols <- function(component, arg) {
-    dm_symbols <- get_style_element("dm_symbols", component, arg, {
-        if (component %in% c("coin_back", "coin_face")) {
+get_dm_symbols <- function(component_side, arg) {
+    dm_symbols <- get_style_element("dm_symbols", component_side, arg, {
+        if (component_side %in% c("coin_back", "coin_face")) {
             dm_symbols <- "●"
-        } else if (component %in% c("chip_back")) {
+        } else if (component_side %in% c("chip_back")) {
             dm_symbols <- "⛃"
-        } else if (component %in% c("saucer_back", "saucer_face")) {
+        } else if (component_side %in% c("saucer_back", "saucer_face")) {
             dm_symbols <- "♟"
-        } else if (component %in% c("suit_die")) {
+        } else if (component_side %in% c("suitdie_face")) {
             dm_symbols <- ""
         } else {
-            dm_symbols <- get_suit_symbols(component, arg)
+            dm_symbols <- get_suit_symbols(component_side, arg)
         }
     })
-    dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", component, arg)
+    dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", component_side, arg)
     dm_symbols
 }
 
-get_dm_symbol <- function(component, i_s, arg) {
-    get_dm_symbols(component, arg)[i_s]
+get_dm_symbol <- function(component_side, i_s, arg) {
+    get_dm_symbols(component_side, arg)[i_s]
 }
 
-get_dm_color <- function(component, i_s, arg) {
-    colors <- get_style_element("dm_colors", component, arg, get_suit_color(component, i_s, arg))
-    colors <- expand_suit_elements(colors, "suit_colors", component, arg)
+get_dm_color <- function(component_side, i_s, arg) {
+    colors <- get_style_element("dm_colors", component_side, arg, get_suit_color(component_side, i_s, arg))
+    colors <- expand_suit_elements(colors, "suit_colors", component_side, arg)
     colors[i_s]
 }
 
-get_background_color <- function(component, i_s, arg) {
-    bcol <- get_background_color_helper(component, i_s, arg)
-    scol <- get_suit_color_helper(component, i_s, arg)
-    if (should_invert(component, i_s, arg))
+get_background_color <- function(component_side, i_s, arg) {
+    bcol <- get_background_color_helper(component_side, i_s, arg)
+    scol <- get_suit_color_helper(component_side, i_s, arg)
+    if (should_invert(component_side, i_s, arg))
         scol
     else
         bcol
 }
 
-get_suit_color <- function(component, i_s, arg) {
-    bcol <- get_background_color_helper(component, i_s, arg)
-    scol <- get_suit_color_helper(component, i_s, arg)
-    if (should_invert(component, i_s, arg))
+get_suit_color <- function(component_side, i_s, arg) {
+    bcol <- get_background_color_helper(component_side, i_s, arg)
+    scol <- get_suit_color_helper(component_side, i_s, arg)
+    if (should_invert(component_side, i_s, arg))
         bcol
     else
         scol
 }
-get_checker_color <- function(component, i_s, arg) {
-    colors <- get_style_element("checker_colors", component, arg, NA)
-    colors <- expand_suit_elements(colors, "checker_colors", component, arg)
+get_checker_color <- function(component_side, i_s, arg) {
+    colors <- get_style_element("checker_colors", component_side, arg, NA)
+    colors <- expand_suit_elements(colors, "checker_colors", component_side, arg)
     colors[i_s]
 }
-get_gridline_color <- function(component, i_s, arg) {
-    colors <- get_style_element("gridline_colors", component, arg, 
-        c(rep(NA, arg$n_suits), get_suit_color(component, arg$i_unsuit, arg)))
-    colors <- expand_suit_elements(colors, "gridline_colors", component, arg)
+get_gridline_color <- function(component_side, i_s, arg) {
+    colors <- get_style_element("gridline_colors", component_side, arg, 
+        c(rep(NA, arg$n_suits), get_suit_color(component_side, arg$i_unsuit, arg)))
+    colors <- expand_suit_elements(colors, "gridline_colors", component_side, arg)
     colors[i_s]
 }
-get_hexline_color <- function(component, i_s, arg) {
-    colors <- get_style_element("hexline_colors", component, arg, NA)
-    colors <- expand_suit_elements(colors, "hexline_colors", component, arg)
+get_hexline_color <- function(component_side, i_s, arg) {
+    colors <- get_style_element("hexline_colors", component_side, arg, NA)
+    colors <- expand_suit_elements(colors, "hexline_colors", component_side, arg)
     colors[i_s]
 }
 
-get_suit_symbol <- function(component, i_s, arg) {
-    get_suit_symbols(component, arg)[i_s]
+get_suit_symbol <- function(component_side, i_s, arg) {
+    get_suit_symbols(component_side, arg)[i_s]
 }
 
-get_rank_symbols <- function(component, arg) {
-    rank_symbols <- get_style_element("rank_symbols", component, arg)
-    expand_rank_elements(rank_symbols, "rank_symbols", component, arg)
+get_rank_symbols <- function(component_side, arg) {
+    rank_symbols <- get_style_element("rank_symbols", component_side, arg)
+    expand_rank_elements(rank_symbols, "rank_symbols", component_side, arg)
 }
-get_suit_symbols <- function(component, arg, expand=TRUE) {
-    suit_symbols <- get_style_element("suit_symbols", component, arg)
+get_suit_symbols <- function(component_side, arg, expand=TRUE) {
+    suit_symbols <- get_style_element("suit_symbols", component_side, arg)
     if (expand) 
-        suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", component, arg)
+        suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", component_side, arg)
     suit_symbols
 }
 
-expand_suit_elements <- function(elements, style, component, arg) {
+expand_suit_elements <- function(elements, style, component_side, arg) {
     if (length(elements) == 1) {
         elements <- rep(elements, arg$n_suits + 1)
     } else if (length(elements) == arg$n_suits) {
@@ -263,15 +277,15 @@ expand_suit_elements <- function(elements, style, component, arg) {
     }
     if (length(elements) == arg$i_unsuit) {
         elements <- c(elements, switch(style, 
-                           suit_symbols = switch(component, 
-                                suit_die = "", piecepack_die = "", elements[arg$i_unsuit]),
+                           suit_symbols = switch(component_side, 
+                                suitdie_face = "", ppdie_face = "", elements[arg$i_unsuit]),
                            gridline_colors = NA,
                            elements[arg$i_unsuit]))
     }
     elements
 }
 
-expand_rank_elements <- function(elements, style, component, arg) {
+expand_rank_elements <- function(elements, style, component_side, arg) {
     if (length(elements) == 1) {
         elements <- rep(elements, arg$n_ranks)
     } 
@@ -280,14 +294,14 @@ expand_rank_elements <- function(elements, style, component, arg) {
     elements
 }
 
-get_use_suit_as_ace <- function(component, arg) {
-    get_style_element("use_suit_as_ace", component, arg)
+get_use_suit_as_ace <- function(component_side, arg) {
+    get_style_element("use_suit_as_ace", component_side, arg)
 }
 
-get_rank_symbol <- function(component, i_s, i_r, arg) {
-    rank_symbols <- get_rank_symbols(component, arg)
-    suit_symbols <- get_rank_suit_symbols(component, arg)
-    use_suit_as_ace <- get_use_suit_as_ace(component, arg)
+get_rank_symbol <- function(component_side, i_s, i_r, arg) {
+    rank_symbols <- get_rank_symbols(component_side, arg)
+    suit_symbols <- get_rank_suit_symbols(component_side, arg)
+    use_suit_as_ace <- get_use_suit_as_ace(component_side, arg)
     if (i_r == 2 && use_suit_as_ace) {
         rank_symbol <- suit_symbols[i_s]
     } else {
@@ -296,109 +310,109 @@ get_rank_symbol <- function(component, i_s, i_r, arg) {
     rank_symbol
 }       
 
-get_style <- function(component, arg) {
-    get_style_element("style", component, arg)
+get_style <- function(component_side, arg) {
+    get_style_element("style", component_side, arg)
 }
 
-get_rank_scales <- function(component, arg) {
-    scales <- get_style_element("rank_symbols_scale", component, arg, 1.0)
-    expand_rank_elements(scales, "scale", component, arg)
+get_rank_scales <- function(component_side, arg) {
+    scales <- get_style_element("rank_symbols_scale", component_side, arg, 1.0)
+    expand_rank_elements(scales, "scale", component_side, arg)
 }
-get_rank_scale <- function(component, i_r, arg) {
-    get_rank_scales(component, arg)[i_r]
+get_rank_scale <- function(component_side, i_r, arg) {
+    get_rank_scales(component_side, arg)[i_r]
 }
-get_rank_fonts <- function(component, arg) {
-    fonts <- get_style_element("rank_symbols_font", component, arg, arg[["font"]])
-    expand_rank_elements(fonts, "font", component, arg)
+get_rank_fonts <- function(component_side, arg) {
+    fonts <- get_style_element("rank_symbols_font", component_side, arg, arg[["font"]])
+    expand_rank_elements(fonts, "font", component_side, arg)
 }
-get_rank_font <- function(component, i_s, i_r, arg) {
-    rank_font <- get_rank_fonts(component, arg)[i_r]
-    suit_font <- get_suit_font(component, i_s,  arg)
-    use_suit_as_ace <- get_use_suit_as_ace(component, arg)
+get_rank_font <- function(component_side, i_s, i_r, arg) {
+    rank_font <- get_rank_fonts(component_side, arg)[i_r]
+    suit_font <- get_suit_font(component_side, i_s,  arg)
+    use_suit_as_ace <- get_use_suit_as_ace(component_side, arg)
     if (i_r == 2 && use_suit_as_ace)
         suit_font
     else
         rank_font
 }
-get_suit_fonts <- function(component, arg) {
-    fonts <- get_style_element("suit_symbols_font", component, arg, arg[["font"]])
-    expand_suit_elements(fonts, "font", component, arg)
+get_suit_fonts <- function(component_side, arg) {
+    fonts <- get_style_element("suit_symbols_font", component_side, arg, arg[["font"]])
+    expand_suit_elements(fonts, "font", component_side, arg)
 }
-get_suit_font <- function(component, i_s, arg) {
-    get_suit_fonts(component, arg)[i_s]
+get_suit_font <- function(component_side, i_s, arg) {
+    get_suit_fonts(component_side, arg)[i_s]
 }
-get_dm_fonts <- function(component, arg) {
-    component_str <- paste0("dm_symbols_font.", component)
-    fonts <- get_style_element("dm_symbols_font", component, arg, {
-        if (all(get_dm_symbols(component, arg) == get_suit_symbols(component, arg))){ 
-            fonts <- get_suit_fonts(component, arg)
+get_dm_fonts <- function(component_side, arg) {
+    fonts <- get_style_element("dm_symbols_font", component_side, arg, {
+        if (all(get_dm_symbols(component_side, arg) == get_suit_symbols(component_side, arg))){ 
+            fonts <- get_suit_fonts(component_side, arg)
         } else {
             fonts <- arg[["font"]]
         }
     })
-    expand_suit_elements(fonts, "font", component, arg)
+    expand_suit_elements(fonts, "font", component_side, arg)
 }
-get_dm_font <- function(component, i_s, arg) {
-    get_dm_fonts(component, arg)[i_s]
+get_dm_font <- function(component_side, i_s, arg) {
+    get_dm_fonts(component_side, arg)[i_s]
 }
-get_suit_scales <- function(component, arg) {
-    scales <- get_style_element("suit_symbols_scale", component, arg, 1.0)
-    expand_suit_elements(scales, "scale", component, arg)
+get_suit_scales <- function(component_side, arg) {
+    scales <- get_style_element("suit_symbols_scale", component_side, arg, 1.0)
+    expand_suit_elements(scales, "scale", component_side, arg)
 }
-get_rank_suit_symbols <- function(component, arg) {
-    suit_symbols <- get_suit_symbols(component, arg, expand=FALSE)
-    suit_symbols <- expand_suit_elements(suit_symbols, "rank_suit_symbols", component, arg)
+get_rank_suit_symbols <- function(component_side, arg) {
+    suit_symbols <- get_suit_symbols(component_side, arg, expand=FALSE)
+    suit_symbols <- expand_suit_elements(suit_symbols, "rank_suit_symbols", component_side, arg)
     suit_symbols
 }
-get_suit_scale <- function(component, i_s, arg) {
-    get_suit_scales(component, arg)[i_s]
+get_suit_scale <- function(component_side, i_s, arg) {
+    get_suit_scales(component_side, arg)[i_s]
 }
-get_dm_scales <- function(component, arg) {
-    scales <- get_style_element("dm_symbols_scale", component, arg, {
-        if (all(get_dm_symbols(component, arg) == get_suit_symbols(component, arg))) { 
-            scales <- get_suit_scales(component, arg)
+get_dm_scales <- function(component_side, arg) {
+    scales <- get_style_element("dm_symbols_scale", component_side, arg, {
+        if (all(get_dm_symbols(component_side, arg) == get_suit_symbols(component_side, arg))) { 
+            scales <- get_suit_scales(component_side, arg)
         } else {
             scales <- 1.0
         }
     })
-    expand_suit_elements(scales, "scale", component, arg)
+    expand_suit_elements(scales, "scale", component_side, arg)
 }
-get_dm_scale <- function(component, i_s, arg) {
-    get_dm_scales(component, arg)[i_s]
+get_dm_scale <- function(component_side, i_s, arg) {
+    get_dm_scales(component_side, arg)[i_s]
 }
 
-get_suit_fontsize <- function(component, i_s, arg) {
-    scale <- get_suit_scale(component, i_s, arg)
-    fs <- switch(component,
-                 "pawn_belt" = 20,
+get_suit_fontsize <- function(component_side, i_s, arg) {
+    scale <- get_suit_scale(component_side, i_s, arg)
+    fs <- switch(component_side,
+                 "belt_face" = 20,
                  "chip_back" = 22,
                  "coin_back" = 28,
-                 "pawn" = 40,
+                 "pawn_face" = 40,
+                 "pawn_back" = 40,
                  "saucer_back" = 32,
                  "saucer_face" = 32,
-                 "suit_die" = 28,
+                 "suitdie_face" = 28,
                  24)
     scale * fs
 }
 
-get_dm_fontsize <- function(component, i_s, arg) {
-    scale <- get_dm_scale(component, i_s, arg)
-    fs <- switch(component,
+get_dm_fontsize <- function(component_side, i_s, arg) {
+    scale <- get_dm_scale(component_side, i_s, arg)
+    fs <- switch(component_side,
                  "tile_face" = 32,
                  10)
     scale * fs
 }
 
-get_rank_fontsize <- function(component, i_s, i_r, arg) {
-    rank_scale <- get_rank_scale(component, i_r, arg)
-    suit_scale <- get_suit_scale(component, i_s,  arg)
-    use_suit_as_ace <- get_use_suit_as_ace(component, arg)
+get_rank_fontsize <- function(component_side, i_s, i_r, arg) {
+    rank_scale <- get_rank_scale(component_side, i_r, arg)
+    suit_scale <- get_suit_scale(component_side, i_s,  arg)
+    use_suit_as_ace <- get_use_suit_as_ace(component_side, arg)
     if (i_r == 2 && use_suit_as_ace)
         scale <- suit_scale
     else
         scale <- rank_scale
-    fs <- switch(component,
-                 "piecepack_die" = 20,
+    fs <- switch(component_side,
+                 "ppdie_face" = 20,
                  "chip_face" = 22,
                  "coin_face" = 28,
                  "tile_face" = 72,
@@ -422,29 +436,29 @@ to_theta <- function(x, y) {
     atan2(y, x)
 }
 
-get_component_opt <- function(component, i_s, i_r, arg) {
-    shape <- get_shape(component, arg)
-    shape_fn <- get_shape_fn(component, arg)
-    shape_theta <- get_shape_theta(component, arg)
-    style <- get_style(component, arg)
-    bcol <- get_background_color(component, i_s, arg)
-    scol <- get_suit_color(component, i_s, arg)
-    dm_col <- get_dm_color(component, i_s, arg)
+get_component_opt <- function(component_side, i_s, i_r, arg) {
+    shape <- get_shape(component_side, arg)
+    shape_fn <- get_shape_fn(component_side, arg)
+    shape_theta <- get_shape_theta(component_side, arg)
+    style <- get_style(component_side, arg)
+    bcol <- get_background_color(component_side, i_s, arg)
+    scol <- get_suit_color(component_side, i_s, arg)
+    dm_col <- get_dm_color(component_side, i_s, arg)
     border_col <- arg$border_color
-    checker_col <- get_checker_color(component, i_s, arg)
-    gridline_col <- get_gridline_color(component, i_s, arg)
-    hexline_col <- get_hexline_color(component, i_s, arg) 
-    rank_symbol <- get_rank_symbol(component, i_s, i_r, arg)
-    rank_fontsize <- get_rank_fontsize(component, i_s, i_r, arg)
-    rank_font <- get_rank_font(component, i_s, i_r, arg)
-    suit_symbol <- get_suit_symbol(component, i_s, arg)
-    suit_fontsize <- get_suit_fontsize(component, i_s, arg)
-    suit_font <- get_suit_font(component, i_s, arg)
-    dm_symbol <- get_dm_symbol(component, i_s, arg)
-    dm_fontsize <- get_dm_fontsize(component, i_s, arg)
-    dm_font <- get_dm_font(component, i_s, arg)
-    theta <- get_dm_theta(component, arg)
-    r <- get_dm_r(component, arg)
+    checker_col <- get_checker_color(component_side, i_s, arg)
+    gridline_col <- get_gridline_color(component_side, i_s, arg)
+    hexline_col <- get_hexline_color(component_side, i_s, arg) 
+    rank_symbol <- get_rank_symbol(component_side, i_s, i_r, arg)
+    rank_fontsize <- get_rank_fontsize(component_side, i_s, i_r, arg)
+    rank_font <- get_rank_font(component_side, i_s, i_r, arg)
+    suit_symbol <- get_suit_symbol(component_side, i_s, arg)
+    suit_fontsize <- get_suit_fontsize(component_side, i_s, arg)
+    suit_font <- get_suit_font(component_side, i_s, arg)
+    dm_symbol <- get_dm_symbol(component_side, i_s, arg)
+    dm_fontsize <- get_dm_fontsize(component_side, i_s, arg)
+    dm_font <- get_dm_font(component_side, i_s, arg)
+    theta <- get_dm_theta(component_side, arg)
+    r <- get_dm_r(component_side, arg)
     dm_x <- to_x(theta, r) + 0.5
     dm_y <- to_y(theta, r) + 0.5
 
@@ -460,32 +474,32 @@ get_component_opt <- function(component, i_s, i_r, arg) {
 
 
 make_preview <- function(arg) {
-    pheight <- 2*tile_width+3*die_width
+    pheight <- 2*TILE_WIDTH+3*DIE_WIDTH
     svg(file.path(arg$svg_preview_dir, paste0(arg$deck_filename, ".svg")), 
-        family=arg$font, width=3*tile_width, height=pheight)
+        family=arg$font, width=3*TILE_WIDTH, height=pheight)
     grid.newpage()
 
     # Build viewports
     pushViewport(viewport(name="main"))
-    addViewport(y=inch(pheight-tile_width), width=inch(3 * tile_width), height=inch(2 * tile_width), name="tiles")
+    addViewport(y=inch(pheight-TILE_WIDTH), width=inch(3 * TILE_WIDTH), height=inch(2 * TILE_WIDTH), name="tiles")
     downViewport("tiles")
-    addViewport(x=1/3-1/6, y=3/4, width=inch(tile_width), height=inch(tile_width), name="tile.1")
-    addViewport(x=3/3-1/6, y=3/4, width=inch(tile_width), height=inch(tile_width), name="tile.2")
-    addViewport(x=3/3-1/6, y=1/4, width=inch(tile_width), height=inch(tile_width), name="tile.3")
-    addViewport(x=1/3-1/6, y=1/4, width=inch(tile_width), height=inch(tile_width), name="tile.4")
-    addViewport(x=2/3-1/6, y=3/4, width=inch(tile_width), height=inch(tile_width), name="tile.5")
-    addViewport(x=2/3-1/6, y=1/4, width=inch(tile_width), height=inch(tile_width), name="tile.6")
+    addViewport(x=1/3-1/6, y=3/4, width=inch(TILE_WIDTH), height=inch(TILE_WIDTH), name="tile.1")
+    addViewport(x=3/3-1/6, y=3/4, width=inch(TILE_WIDTH), height=inch(TILE_WIDTH), name="tile.2")
+    addViewport(x=3/3-1/6, y=1/4, width=inch(TILE_WIDTH), height=inch(TILE_WIDTH), name="tile.3")
+    addViewport(x=1/3-1/6, y=1/4, width=inch(TILE_WIDTH), height=inch(TILE_WIDTH), name="tile.4")
+    addViewport(x=2/3-1/6, y=3/4, width=inch(TILE_WIDTH), height=inch(TILE_WIDTH), name="tile.5")
+    addViewport(x=2/3-1/6, y=1/4, width=inch(TILE_WIDTH), height=inch(TILE_WIDTH), name="tile.6")
     seekViewport("main")
-    addViewport(x=inch(1.5*coin_width), y=inch(1.5*die_width), width=inch(3*coin_width), height=inch(2*coin_width), name="coins")
+    addViewport(x=inch(1.5*COIN_WIDTH), y=inch(1.5*DIE_WIDTH), width=inch(3*COIN_WIDTH), height=inch(2*COIN_WIDTH), name="coins")
     downViewport("coins")
     for (ii in 1:3) {
         addViewport(x=ii/3-1/6, y=3/4, height=1/2, width=1/3, name=paste0("coin.", ii))
         addViewport(x=ii/3-1/6, y=1/4, height=1/2, width=1/3, name=paste0("coin.", 3+ii))
     }
     seekViewport("main")
-    addViewport(x=3/3-1/6, y=inch(1.5*die_width), width=inch(4 * die_width), height=inch(3 * die_width), name="suitrankdie")
-    addViewport(x=inch(tile_width+2.5*die_width), y=inch(2*die_width), 
-                width=inch(2 * saucer_width), height=inch(saucer_width), name="saucers")
+    addViewport(x=3/3-1/6, y=inch(1.5*DIE_WIDTH), width=inch(4 * DIE_WIDTH), height=inch(3 * DIE_WIDTH), name="suitrankdie")
+    addViewport(x=inch(TILE_WIDTH+2.5*DIE_WIDTH), y=inch(2*DIE_WIDTH), 
+                width=inch(2 * SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="saucers")
     downViewport('saucers')
     addViewport(x=0.25, width=0.5, name="saucer.face")
     addViewport(x=0.75, width=0.5, name="saucer.back")
@@ -530,9 +544,9 @@ make_preview <- function(arg) {
     draw_suitrank_die(arg)
 
     seekViewport("saucer.face")
-    draw_pawn_saucer(1, arg)
+    draw_saucer_face(1, arg)
     seekViewport("saucer.back")
-    draw_pawn_saucer(arg$i_unsuit, arg)
+    draw_saucer_back(arg)
 
     invisible(dev.off())
 }
@@ -542,24 +556,181 @@ make_previews <- function(arg) {
     dir.create(arg$svg_preview_dir, recursive=TRUE, showWarnings=FALSE)
     make_preview(arg)
 }
+COIN_WIDTH <- 3/4
+DIE_WIDTH <- 1/2
+TILE_WIDTH <- 2
+SAUCER_WIDTH <- 7/8
+CHIP_WIDTH <- 5/8
+PAWN_HEIGHT <- 1.75
+PAWN_WIDTH <- 3/4
+# PAWN_HEIGHT <- 9/8
+# PAWN_WIDTH <- 5/8
+BELT_HEIGHT <- 1/2
+BELT_WIDTH <- 2 * PAWN_WIDTH
+
+get_pp_width <- function(component) {
+    switch(component, 
+           belt = BELT_WIDTH,
+           chip = CHIP_WIDTH,
+           coin = COIN_WIDTH,
+           pawn = PAWN_WIDTH,
+           ppdie = DIE_WIDTH,
+           saucer = SAUCER_WIDTH,
+           suitdie = DIE_WIDTH,
+           tile = TILE_WIDTH,
+           1)
+}
+
+get_pp_height <- function(component) {
+    switch(component, 
+           belt = BELT_HEIGHT,
+           chip = CHIP_WIDTH,
+           coin = COIN_WIDTH,
+           pawn = PAWN_HEIGHT,
+           ppdie = DIE_WIDTH,
+           saucer = SAUCER_WIDTH,
+           suitdie = DIE_WIDTH,
+           tile = TILE_WIDTH,
+           1)
+}
+
+pp_device <- function(filename, component, format, theta) {
+    width <- get_pp_width(component)
+    height <- get_pp_height(component)
+    if (theta %in% c(90, 270)) {
+        twidth <- height
+        height <- width
+        width <- twidth
+    }
+    res <- 72
+    bg <- "transparent"
+    dev <- switch(format,
+                bmp = bmp(filename, width, height, "in", res=res, bg=bg),
+                jpeg = jpeg(filename, width, height, "in", res=res, bg=bg),
+                pdf = cairo_pdf(filename, width, height, bg=bg),
+                png = png(filename, width, height, "in", res=res, bg=bg),
+                ps = cairo_ps(filename, width, height, bg=bg),
+                svg = svg(filename, width, height, bg=bg),
+                tiff = tiff(filename, width, height, "in", res=res, bg=bg))
+    addViewport(angle=theta, name="main")
+    downViewport("main")
+}
 
 #' @export
-make_images <- function(arg, directory) {
-    dir.create(directory, recursive=TRUE, showWarnings=FALSE)
-    # make_tiles(arg)
-    # make_stickers(arg)
-    # make_pawns(arg)
+make_images <- function(arg) {
+    for (format in arg$component_formats) {
+        directory <- component_directory(arg, format)
+        dir.create(directory, recursive=TRUE, showWarnings=FALSE)
+        for (theta in arg$component_thetas) {
+            make_images_helper(arg, format, theta)
+        }
+    }
 }
 
-sticker_filename <- function(component, suit_name, rank_name) {
-    filename <- sprintf("s_%s_%s_%s.svg", component, suit_name, rank_name)
+component_directory <- function(arg, format) {
+    file.path(arg[[paste0(format, "_component_dir")]], arg$deck_filename)
 }
 
-tile_filename <- function(component, suit_name, rank_name) {
-    filename <- sprintf("t_%s_%s_%s.svg", component, suit_name, rank_name)
+component_filename <- function(arg, component_side, format, theta, 
+                               i_s=NULL, i_r=NULL) {
+    directory <- component_directory(arg, format)
+    filename <- paste0(component_side, 
+                       ifelse(is.null(i_s), "", paste0("_s", i_s)),
+                       ifelse(is.null(i_r), "", paste0("_r", i_r)),
+                       paste0("_t", theta), paste0(".", format))
+    file.path(directory, filename)
 }
-pawn_filename <- function(component, suit_name, rank_name="") {
-    filename <- sprintf("p_%s_%s_%s.svg", component, suit_name, rank_name)
+
+make_images_helper <- function(arg, format, theta) {
+    suppressWarnings({
+    # saucer back
+    f <- component_filename(arg, "saucer_back", format, theta)
+    pp_device(f, "saucer", format, theta)
+    draw_saucer_back(arg)
+    invisible(dev.off())
+
+    # tile back
+    f <- component_filename(arg, "tile_back", format, theta)
+    pp_device(f, "tile", format, theta)
+    draw_tile_back(arg)
+    invisible(dev.off())
+
+    for (i_s in 1:arg$n_suits) {
+        # pawn belt
+        f <- component_filename(arg, "belt_face", format, theta, i_s=i_s)
+        pp_device(f, "belt", format, theta)
+        draw_belt_face(i_s, arg)
+        invisible(dev.off())
+
+        # chip back
+        f <- component_filename(arg, "chip_back", format, theta, i_s=i_s)
+        pp_device(f, "chip", format, theta)
+        draw_chip_back(i_s, arg)
+        invisible(dev.off())
+        
+        # coin back
+        f <- component_filename(arg, "coin_back", format, theta, i_s=i_s)
+        pp_device(f, "coin", format, theta)
+        draw_coin_back(i_s, arg)
+        invisible(dev.off())
+
+        # pawn back
+        f <- component_filename(arg, "pawn_back", format, theta, i_s=i_s)
+        pp_device(f, "pawn", format, theta)
+        draw_pawn_back(i_s, arg)
+        invisible(dev.off())
+
+        # pawn face
+        f <- component_filename(arg, "pawn_face", format, theta, i_s=i_s)
+        pp_device(f, "pawn", format, theta)
+        draw_pawn_face(i_s, arg)
+        invisible(dev.off())
+
+        # saucer face
+        f <- component_filename(arg, "saucer_face", format, theta, i_s=i_s)
+        pp_device(f, "saucer", format, theta)
+        draw_saucer_face(i_s, arg)
+        invisible(dev.off())
+
+        # suitdie face
+        f <- component_filename(arg, "suitdie_face", format, theta, i_s=i_s)
+        pp_device(f, "suitdie", format, theta)
+        draw_suitdie_face(i_s, arg)
+        invisible(dev.off())
+
+        for (i_r in 1:arg$n_ranks) {
+            # chip face
+            f <- component_filename(arg, "chip_face", format, 
+                                    theta, i_s=i_s, i_r=i_r)
+            pp_device(f, "chip", format, theta)
+            draw_chip_face(i_s, i_r, arg)
+            invisible(dev.off())
+
+            # ppdie face
+            f <- component_filename(arg, "ppdie_face", format, 
+                                    theta, i_s=i_s, i_r=i_r)
+            pp_device(f, "ppdie", format, theta)
+            draw_ppdie_face(i_s, i_r, arg)
+            invisible(dev.off())
+
+            # tile face
+            f <- component_filename(arg, "tile_face", format, 
+                                    theta, i_s=i_s, i_r=i_r)
+            pp_device(f, "tile", format, theta)
+            draw_tile_face(i_s, i_r, arg)
+            invisible(dev.off())
+        }
+    }
+
+    for (i_r in 1:arg$n_ranks) {
+        # coin face
+        f <- component_filename(arg, "coin_face", format, 
+                                theta, i_r=i_r)
+        pp_device(f, "coin", format, theta)
+        draw_coin_face(i_r, arg)
+        invisible(dev.off())
+    }
+    })
 }
 
 add_gridlines <- function(opt) {
@@ -671,7 +842,14 @@ add_border <- function(opt) {
 }
 
 draw_pawn_face <- function(i_s, arg) {
-    opt <- get_component_opt("pawn", i_s, 1, arg)
+    opt <- get_component_opt("pawn_face", i_s, 1, arg)
+    add_background(opt)
+    gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
+    grid.text(opt$suit_symbol, y=0.75, gp=gp_tr)
+    add_border(opt)
+}
+draw_pawn_back <- function(i_s, arg) {
+    opt <- get_component_opt("pawn_back", i_s, 1, arg)
     add_background(opt)
     gp_tr <- gpar(col=opt$scol, fontsize=opt$suit_fontsize, fontfamily=opt$suit_font)
     grid.text(opt$suit_symbol, y=0.75, gp=gp_tr)
@@ -679,26 +857,24 @@ draw_pawn_face <- function(i_s, arg) {
 }
 
 draw_pawn <- function(i_s, arg) {
-    opt <- get_component_opt("pawn", i_s, 1, arg)
-
     suppressWarnings({
-        addViewport(y=0.30, height=0.4, name="bottom_pawn_face")
-        addViewport(y=0.70, height=0.4, name="top_pawn_face", angle=180)
-        downViewport("bottom_pawn_face")
+        addViewport(y=0.30, height=0.4, name="pawn_face")
+        addViewport(y=0.70, height=0.4, name="pawn_back", angle=180)
+        downViewport("pawn_face")
         draw_pawn_face(i_s, arg)
         upViewport()
-        downViewport("top_pawn_face")
-        draw_pawn_face(i_s, arg)
+        downViewport("pawn_back")
+        draw_pawn_back(i_s, arg)
         upViewport()
     })
-    grid.lines(y=0.5, gp=gpar(col=opt$border_col, fill=NA, lty="dashed"))
-    grid.rect(gp=gpar(col=opt$border_col, fill=NA))
-    seg(0.5, 0, 0.5, 0.05, opt$border_col)
-    seg(0.5, 1, 0.5, 0.95, opt$border_col)
+    grid.lines(y=0.5, gp=gpar(col=arg$border_col, fill=NA, lty="dashed"))
+    grid.rect(gp=gpar(col=arg$border_col, fill=NA))
+    seg(0.5, 0, 0.5, 0.05, arg$border_col)
+    seg(0.5, 1, 0.5, 0.95, arg$border_col)
 }
 
-draw_pawn_belt <- function(i_s, arg) {
-    opt <- get_component_opt("pawn_belt", i_s, 1, arg)
+draw_belt_face <- function(i_s, arg) {
+    opt <- get_component_opt("belt_face", i_s, 1, arg)
 
     add_background(opt)
     add_suit_symbol(opt)
@@ -707,8 +883,8 @@ draw_pawn_belt <- function(i_s, arg) {
     add_border(opt)
 }
 
-draw_suit_die_face <- function(i_s, arg) {
-    opt <- get_component_opt("suit_die", i_s, 1, arg)
+draw_suitdie_face <- function(i_s, arg) {
+    opt <- get_component_opt("suitdie_face", i_s, 1, arg)
 
     add_background(opt)
     add_suit_symbol(opt)
@@ -735,6 +911,13 @@ draw_tile_face <- function(i_s, i_r, arg) {
     
 }
 
+draw_saucer_face <- function(i_s, arg) {
+    draw_pawn_saucer(i_s, arg)
+}
+draw_saucer_back <- function(arg) {
+    draw_pawn_saucer(arg$i_unsuit, arg)
+}
+
 draw_pawn_saucer <- function(i_s, arg) {
     component <- ifelse(i_s < arg$i_unsuit, "saucer_face", "saucer_back")
     opt <- get_component_opt(component, i_s, 1, arg)
@@ -754,8 +937,8 @@ draw_coin_face <- function(i_r, arg) {
     add_border(opt)
 }
 
-draw_piecepack_die_face <- function(i_s, i_r, arg) {
-    opt <- get_component_opt("piecepack_die", i_s, i_r, arg)
+draw_ppdie_face <- function(i_s, i_r, arg) {
+    opt <- get_component_opt("ppdie_face", i_s, i_r, arg)
 
     add_background(opt)
     add_rank_symbol(opt)

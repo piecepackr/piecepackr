@@ -11,12 +11,6 @@ Options:
 	--deck_filename=DECK_FILENAME
 		Filename prefix (default "piecepack_deck")
 
-	--pdf_deck_dir=PDF_DECK_DIR
-		Directory to put pdfs in (default "pdf/decks")
-
-	--svg_preview_dir=SVG_PREVIEW_DIR
-		Directory to put pdfs in (default "svg/previews")
-
 	--rank_symbols=RANK_SYMBOLS
 		(default "N,A,2,3,4,5")
 
@@ -356,185 +350,305 @@ Options:
 	--uninvert_colors.coin_face
 		Opposite of "invert_colors.coin_face" option
 
-	--rank_symbols.piecepack_die=RANK_SYMBOLS.PIECEPACK_DIE
+	--rank_symbols.ppdie_face=RANK_SYMBOLS.PPDIE_FACE
 		(default is value of "rank_symbols" option)
 
-	--rank_symbols_font.piecepack_die=RANK_SYMBOLS_FONT.PIECEPACK_DIE
+	--rank_symbols_font.ppdie_face=RANK_SYMBOLS_FONT.PPDIE_FACE
 		(default is value of "rank_symbols_font" option)
 
-	--rank_symbols_scale.piecepack_die=RANK_SYMBOLS_SCALE.PIECEPACK_DIE
+	--rank_symbols_scale.ppdie_face=RANK_SYMBOLS_SCALE.PPDIE_FACE
 		(default is value of "rank_symbols_scale" option)
 
-	--suit_colors.piecepack_die=SUIT_COLORS.PIECEPACK_DIE
+	--suit_colors.ppdie_face=SUIT_COLORS.PPDIE_FACE
 		(default is value of "suit_colors" option)
 
-	--suit_symbols.piecepack_die=SUIT_SYMBOLS.PIECEPACK_DIE
+	--suit_symbols.ppdie_face=SUIT_SYMBOLS.PPDIE_FACE
 		(default is value of "suit_symbols" option)
 
-	--suit_symbols_font.piecepack_die=SUIT_SYMBOLS_FONT.PIECEPACK_DIE
+	--suit_symbols_font.ppdie_face=SUIT_SYMBOLS_FONT.PPDIE_FACE
 		(default is value of "suit_symbols_font" option)
 
-	--suit_symbols_scale.piecepack_die=SUIT_SYMBOLS_SCALE.PIECEPACK_DIE
+	--suit_symbols_scale.ppdie_face=SUIT_SYMBOLS_SCALE.PPDIE_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--dm_symbols.piecepack_die=DM_SYMBOLS.PIECEPACK_DIE
+	--dm_symbols.ppdie_face=DM_SYMBOLS.PPDIE_FACE
 		(default is value of "dm_symbols" option)
 
-	--dm_symbols_font.piecepack_die=DM_SYMBOLS_FONT.PIECEPACK_DIE
+	--dm_symbols_font.ppdie_face=DM_SYMBOLS_FONT.PPDIE_FACE
 		(default is value of "dm_symbols_font" option)
 
-	--shape.piecepack_die=SHAPE.PIECEPACK_DIE
+	--shape.ppdie_face=SHAPE.PPDIE_FACE
 		(default is value of "shape" option)
 
-	--dm_symbols_scale.piecepack_die=DM_SYMBOLS_SCALE.PIECEPACK_DIE
+	--dm_symbols_scale.ppdie_face=DM_SYMBOLS_SCALE.PPDIE_FACE
 		(default is value of "dm_symbols_scale" option)
 
-	--dm_colors.piecepack_die=DM_COLORS.PIECEPACK_DIE
+	--dm_colors.ppdie_face=DM_COLORS.PPDIE_FACE
 		(default is value of "dm_colors" option)
 
-	--use_suit_as_ace.piecepack_die
+	--use_suit_as_ace.ppdie_face
 		(default is value of "use_suit_as_ace" option)
 
-	--use_ace_as_ace.piecepack_die
-		Opposite of "use_suit_as_ace.piecepack_die" option
+	--use_ace_as_ace.ppdie_face
+		Opposite of "use_suit_as_ace.ppdie_face" option
 
-	--dm_theta.piecepack_die=DM_THETA.PIECEPACK_DIE
+	--dm_theta.ppdie_face=DM_THETA.PPDIE_FACE
 		(default is value of "dm_theta" option)
 
-	--dm_r.piecepack_die=DM_R.PIECEPACK_DIE
+	--dm_r.ppdie_face=DM_R.PPDIE_FACE
 		(default is value of "dm_r" option)
 
-	--shape_theta.piecepack_die=SHAPE_THETA.PIECEPACK_DIE
+	--shape_theta.ppdie_face=SHAPE_THETA.PPDIE_FACE
 		(default is value of "shape_theta" option)
 
-	--background_colors.piecepack_die=BACKGROUND_COLORS.PIECEPACK_DIE
+	--background_colors.ppdie_face=BACKGROUND_COLORS.PPDIE_FACE
 		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
-	--invert_colors.piecepack_die
+	--invert_colors.ppdie_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
-	--uninvert_colors.piecepack_die
-		Opposite of "invert_colors.piecepack_die" option
+	--uninvert_colors.ppdie_face
+		Opposite of "invert_colors.ppdie_face" option
 
-	--rank_symbols.suit_die=RANK_SYMBOLS.SUIT_DIE
+	--rank_symbols.suitdie_face=RANK_SYMBOLS.SUITDIE_FACE
 		(default is value of "rank_symbols" option)
 
-	--rank_symbols_font.suit_die=RANK_SYMBOLS_FONT.SUIT_DIE
+	--rank_symbols_font.suitdie_face=RANK_SYMBOLS_FONT.SUITDIE_FACE
 		(default is value of "rank_symbols_font" option)
 
-	--rank_symbols_scale.suit_die=RANK_SYMBOLS_SCALE.SUIT_DIE
+	--rank_symbols_scale.suitdie_face=RANK_SYMBOLS_SCALE.SUITDIE_FACE
 		(default is value of "rank_symbols_scale" option)
 
-	--suit_colors.suit_die=SUIT_COLORS.SUIT_DIE
+	--suit_colors.suitdie_face=SUIT_COLORS.SUITDIE_FACE
 		(default is value of "suit_colors" option)
 
-	--suit_symbols.suit_die=SUIT_SYMBOLS.SUIT_DIE
+	--suit_symbols.suitdie_face=SUIT_SYMBOLS.SUITDIE_FACE
 		(default is value of "suit_symbols" option)
 
-	--suit_symbols_font.suit_die=SUIT_SYMBOLS_FONT.SUIT_DIE
+	--suit_symbols_font.suitdie_face=SUIT_SYMBOLS_FONT.SUITDIE_FACE
 		(default is value of "suit_symbols_font" option)
 
-	--suit_symbols_scale.suit_die=SUIT_SYMBOLS_SCALE.SUIT_DIE
+	--suit_symbols_scale.suitdie_face=SUIT_SYMBOLS_SCALE.SUITDIE_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--dm_symbols.suit_die=DM_SYMBOLS.SUIT_DIE
+	--dm_symbols.suitdie_face=DM_SYMBOLS.SUITDIE_FACE
 		(default is value of "dm_symbols" option)
 
-	--dm_symbols_font.suit_die=DM_SYMBOLS_FONT.SUIT_DIE
+	--dm_symbols_font.suitdie_face=DM_SYMBOLS_FONT.SUITDIE_FACE
 		(default is value of "dm_symbols_font" option)
 
-	--shape.suit_die=SHAPE.SUIT_DIE
+	--shape.suitdie_face=SHAPE.SUITDIE_FACE
 		(default is value of "shape" option)
 
-	--dm_symbols_scale.suit_die=DM_SYMBOLS_SCALE.SUIT_DIE
+	--dm_symbols_scale.suitdie_face=DM_SYMBOLS_SCALE.SUITDIE_FACE
 		(default is value of "dm_symbols_scale" option)
 
-	--dm_colors.suit_die=DM_COLORS.SUIT_DIE
+	--dm_colors.suitdie_face=DM_COLORS.SUITDIE_FACE
 		(default is value of "dm_colors" option)
 
-	--use_suit_as_ace.suit_die
+	--use_suit_as_ace.suitdie_face
 		(default is value of "use_suit_as_ace" option)
 
-	--use_ace_as_ace.suit_die
-		Opposite of "use_suit_as_ace.suit_die" option
+	--use_ace_as_ace.suitdie_face
+		Opposite of "use_suit_as_ace.suitdie_face" option
 
-	--dm_theta.suit_die=DM_THETA.SUIT_DIE
+	--dm_theta.suitdie_face=DM_THETA.SUITDIE_FACE
 		(default is value of "dm_theta" option)
 
-	--dm_r.suit_die=DM_R.SUIT_DIE
+	--dm_r.suitdie_face=DM_R.SUITDIE_FACE
 		(default is value of "dm_r" option)
 
-	--shape_theta.suit_die=SHAPE_THETA.SUIT_DIE
+	--shape_theta.suitdie_face=SHAPE_THETA.SUITDIE_FACE
 		(default is value of "shape_theta" option)
 
-	--background_colors.suit_die=BACKGROUND_COLORS.SUIT_DIE
+	--background_colors.suitdie_face=BACKGROUND_COLORS.SUITDIE_FACE
 		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
-	--invert_colors.suit_die
+	--invert_colors.suitdie_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
-	--uninvert_colors.suit_die
-		Opposite of "invert_colors.suit_die" option
+	--uninvert_colors.suitdie_face
+		Opposite of "invert_colors.suitdie_face" option
 
-	--rank_symbols.pawn=RANK_SYMBOLS.PAWN
+	--rank_symbols.pawn_face=RANK_SYMBOLS.PAWN_FACE
 		(default is value of "rank_symbols" option)
 
-	--rank_symbols_font.pawn=RANK_SYMBOLS_FONT.PAWN
+	--rank_symbols_font.pawn_face=RANK_SYMBOLS_FONT.PAWN_FACE
 		(default is value of "rank_symbols_font" option)
 
-	--rank_symbols_scale.pawn=RANK_SYMBOLS_SCALE.PAWN
+	--rank_symbols_scale.pawn_face=RANK_SYMBOLS_SCALE.PAWN_FACE
 		(default is value of "rank_symbols_scale" option)
 
-	--suit_colors.pawn=SUIT_COLORS.PAWN
+	--suit_colors.pawn_face=SUIT_COLORS.PAWN_FACE
 		(default is value of "suit_colors" option)
 
-	--suit_symbols.pawn=SUIT_SYMBOLS.PAWN
+	--suit_symbols.pawn_face=SUIT_SYMBOLS.PAWN_FACE
 		(default is value of "suit_symbols" option)
 
-	--suit_symbols_font.pawn=SUIT_SYMBOLS_FONT.PAWN
+	--suit_symbols_font.pawn_face=SUIT_SYMBOLS_FONT.PAWN_FACE
 		(default is value of "suit_symbols_font" option)
 
-	--suit_symbols_scale.pawn=SUIT_SYMBOLS_SCALE.PAWN
+	--suit_symbols_scale.pawn_face=SUIT_SYMBOLS_SCALE.PAWN_FACE
 		(default is value of "suit_symbols_scale" option)
 
-	--dm_symbols.pawn=DM_SYMBOLS.PAWN
+	--dm_symbols.pawn_face=DM_SYMBOLS.PAWN_FACE
 		(default is value of "dm_symbols" option)
 
-	--dm_symbols_font.pawn=DM_SYMBOLS_FONT.PAWN
+	--dm_symbols_font.pawn_face=DM_SYMBOLS_FONT.PAWN_FACE
 		(default is value of "dm_symbols_font" option)
 
-	--shape.pawn=SHAPE.PAWN
+	--shape.pawn_face=SHAPE.PAWN_FACE
 		(default is value of "shape" option)
 
-	--dm_symbols_scale.pawn=DM_SYMBOLS_SCALE.PAWN
+	--dm_symbols_scale.pawn_face=DM_SYMBOLS_SCALE.PAWN_FACE
 		(default is value of "dm_symbols_scale" option)
 
-	--dm_colors.pawn=DM_COLORS.PAWN
+	--dm_colors.pawn_face=DM_COLORS.PAWN_FACE
 		(default is value of "dm_colors" option)
 
-	--use_suit_as_ace.pawn
+	--use_suit_as_ace.pawn_face
 		(default is value of "use_suit_as_ace" option)
 
-	--use_ace_as_ace.pawn
-		Opposite of "use_suit_as_ace.pawn" option
+	--use_ace_as_ace.pawn_face
+		Opposite of "use_suit_as_ace.pawn_face" option
 
-	--dm_theta.pawn=DM_THETA.PAWN
+	--dm_theta.pawn_face=DM_THETA.PAWN_FACE
 		(default is value of "dm_theta" option)
 
-	--dm_r.pawn=DM_R.PAWN
+	--dm_r.pawn_face=DM_R.PAWN_FACE
 		(default is value of "dm_r" option)
 
-	--shape_theta.pawn=SHAPE_THETA.PAWN
+	--shape_theta.pawn_face=SHAPE_THETA.PAWN_FACE
 		(default is value of "shape_theta" option)
 
-	--background_colors.pawn=BACKGROUND_COLORS.PAWN
+	--background_colors.pawn_face=BACKGROUND_COLORS.PAWN_FACE
 		default is either value of "background_colors.suited" or "background_colors.unsuited"
 
-	--invert_colors.pawn
+	--invert_colors.pawn_face
 		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
 
-	--uninvert_colors.pawn
-		Opposite of "invert_colors.pawn" option
+	--uninvert_colors.pawn_face
+		Opposite of "invert_colors.pawn_face" option
+
+	--rank_symbols.pawn_back=RANK_SYMBOLS.PAWN_BACK
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.pawn_back=RANK_SYMBOLS_FONT.PAWN_BACK
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.pawn_back=RANK_SYMBOLS_SCALE.PAWN_BACK
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.pawn_back=SUIT_COLORS.PAWN_BACK
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.pawn_back=SUIT_SYMBOLS.PAWN_BACK
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.pawn_back=SUIT_SYMBOLS_FONT.PAWN_BACK
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.pawn_back=SUIT_SYMBOLS_SCALE.PAWN_BACK
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.pawn_back=DM_SYMBOLS.PAWN_BACK
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.pawn_back=DM_SYMBOLS_FONT.PAWN_BACK
+		(default is value of "dm_symbols_font" option)
+
+	--shape.pawn_back=SHAPE.PAWN_BACK
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.pawn_back=DM_SYMBOLS_SCALE.PAWN_BACK
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.pawn_back=DM_COLORS.PAWN_BACK
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.pawn_back
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.pawn_back
+		Opposite of "use_suit_as_ace.pawn_back" option
+
+	--dm_theta.pawn_back=DM_THETA.PAWN_BACK
+		(default is value of "dm_theta" option)
+
+	--dm_r.pawn_back=DM_R.PAWN_BACK
+		(default is value of "dm_r" option)
+
+	--shape_theta.pawn_back=SHAPE_THETA.PAWN_BACK
+		(default is value of "shape_theta" option)
+
+	--background_colors.pawn_back=BACKGROUND_COLORS.PAWN_BACK
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.pawn_back
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.pawn_back
+		Opposite of "invert_colors.pawn_back" option
+
+	--rank_symbols.belt_face=RANK_SYMBOLS.BELT_FACE
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.belt_face=RANK_SYMBOLS_FONT.BELT_FACE
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.belt_face=RANK_SYMBOLS_SCALE.BELT_FACE
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.belt_face=SUIT_COLORS.BELT_FACE
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.belt_face=SUIT_SYMBOLS.BELT_FACE
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.belt_face=SUIT_SYMBOLS_FONT.BELT_FACE
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.belt_face=SUIT_SYMBOLS_SCALE.BELT_FACE
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.belt_face=DM_SYMBOLS.BELT_FACE
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.belt_face=DM_SYMBOLS_FONT.BELT_FACE
+		(default is value of "dm_symbols_font" option)
+
+	--shape.belt_face=SHAPE.BELT_FACE
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.belt_face=DM_SYMBOLS_SCALE.BELT_FACE
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.belt_face=DM_COLORS.BELT_FACE
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.belt_face
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.belt_face
+		Opposite of "use_suit_as_ace.belt_face" option
+
+	--dm_theta.belt_face=DM_THETA.BELT_FACE
+		(default is value of "dm_theta" option)
+
+	--dm_r.belt_face=DM_R.BELT_FACE
+		(default is value of "dm_r" option)
+
+	--shape_theta.belt_face=SHAPE_THETA.BELT_FACE
+		(default is value of "shape_theta" option)
+
+	--background_colors.belt_face=BACKGROUND_COLORS.BELT_FACE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.belt_face
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.belt_face
+		Opposite of "invert_colors.belt_face" option
 
 	--rank_symbols.saucer_face=RANK_SYMBOLS.SAUCER_FACE
 		(default is value of "rank_symbols" option)
@@ -781,5 +895,38 @@ Options:
 
 	--n_suits=N_SUITS
 		(default is inferred from "suit_symbols" option)
+
+	--pdf_deck_dir=PDF_DECK_DIR
+		Directory to put pdfs in (default "pdf/decks")
+
+	--svg_preview_dir=SVG_PREVIEW_DIR
+		Directory to put pdfs in (default "svg/previews")
+
+	--bmp_component_dir=BMP_COMPONENT_DIR
+		Directory to put bmp component images in (default "bmp/components")
+
+	--jpeg_component_dir=JPEG_COMPONENT_DIR
+		Directory to put jpeg component images in (default "jpeg/components")
+
+	--pdf_component_dir=PDF_COMPONENT_DIR
+		Directory to put pdf component images in (default "pdf/components")
+
+	--png_component_dir=PNG_COMPONENT_DIR
+		Directory to put png component images in (default "png/components")
+
+	--ps_component_dir=PS_COMPONENT_DIR
+		Directory to put ps component images in (default "ps/components")
+
+	--svg_component_dir=SVG_COMPONENT_DIR
+		Directory to put svg component images in (default "svg/components")
+
+	--tiff_component_dir=TIFF_COMPONENT_DIR
+		Directory to put tiff component images in (default "tiff/components")
+
+	--component_formats=COMPONENT_FORMATS
+		Default image formats for ``make_images`` (default "pdf,png,svg")
+
+	--component_thetas=COMPONENT_THETAS
+		Default rotations for ``make_images`` (default "0,90,180,270")
 
 

@@ -1,5 +1,8 @@
 split <- function(x, sep=",") { stringr::str_split(x, sep)[[1]] } 
 col_split <- function(x, sep=",") { gsub("^$", "transparent", split(x, sep)) }
+numeric_split <- function(x, sep=",") { as.numeric(split(x, sep)) }
+
+FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 
 configuration_options <- function(args=commandArgs(TRUE)) {
     default_str <- "(default %default)"
@@ -8,10 +11,6 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default "")')
     parser <- add_option(parser, "--deck_filename", default=NULL, 
                          help='Filename prefix (default "piecepack_deck")')
-    parser <- add_option(parser, "--pdf_deck_dir", default=NULL,
-                         help='Directory to put pdfs in (default "pdf/decks")')
-    parser <- add_option(parser, "--svg_preview_dir", default=NULL,
-                         help='Directory to put pdfs in (default "svg/previews")')
 
     # Symbols
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
@@ -101,7 +100,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          dest="invert_colors.unsuited", help='(default is value of "invert_colors" option)')
 
     # Components variants
-    for (component in COMPONENTS) {
+    for (component in COMPONENT_AND_SIDES) {
         # Symbols
         for (style in c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
                         "suit_colors", "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
@@ -145,6 +144,26 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default is inferred from "rank_symbols" option)')
     parser <- add_option(parser, "--n_suits", default=NULL, type="double", 
                          help='(default is inferred from "suit_symbols" option)')
+
+    # Directories
+    parser <- add_option(parser, "--pdf_deck_dir", default=NULL,
+                         help='Directory to put pdfs in (default "pdf/decks")')
+
+    parser <- add_option(parser, "--svg_preview_dir", default=NULL,
+                         help='Directory to put pdfs in (default "svg/previews")')
+
+    for (format in FORMATS) {
+        option <- paste0("--", format, "_component_dir")
+        parser <- add_option(parser, option, default=NULL,
+                         help=sprintf('Directory to put %s component images in (default "%s/components")', format, format))
+
+    }
+
+    # Formats
+    parser <- add_option(parser, "--component_formats", default=NULL,
+                         help='Default image formats for ``make_images`` (default "pdf,png,svg")')
+    parser <- add_option(parser, "--component_thetas", default=NULL,
+                         help='Default rotations for ``make_images`` (default "0,90,180,270")')
 
     opts <- parse_args(parser, args)
     opts
@@ -216,11 +235,6 @@ add_copyright <- function(opts) {
 }
 
 process_configuration <- function(opts) {
-    opts$parallel <- FALSE
-    opts$fast <- TRUE
-    opts$add_checkers <- FALSE
-    opts$add_bleed_lines <- FALSE
-
     if (is.null(opts$deck_title))
         opts$deck_title <- ""
 
@@ -263,7 +277,17 @@ process_configuration <- function(opts) {
     if (is.null(opts$n_suits))
         opts$n_suits <- length(opts$suit_symbols) - 1
     opts$i_unsuit <- opts$n_suits + 1
-
+    for(format in FORMATS) {
+        option_str <- paste0(format, "_component_dir")
+        if (is.null(opts[[option_str]]))
+            opts[[option_str]] <- file.path(format, "components")
+    }
+    if (is.null(opts[["component_formats"]]))
+        opts$component_formats <- "pdf,png,svg"
+    opts$component_formats <- split(opts$component_formats)
+    if (is.null(opts[["component_thetas"]]))
+        opts$component_thetas <- "0,90,180,270"
+    opts$component_thetas <- numeric_split(opts$component_thetas)
 
     if (!is.null(opts[["background_colors"]]))
         opts$background_colors = col_split(opts[["background_colors"]])
@@ -292,7 +316,7 @@ process_configuration <- function(opts) {
         if (!is.null(opts[[component_str]]))
             opts[[component_str]] <- col_split(opts[[component_str]])
     }
-    for(component in COMPONENTS) {
+    for(component in COMPONENT_AND_SIDES) {
         for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
                         "rank_symbols_font", "suit_symbols_font", "dm_symbols_font")) {
             component_str <- paste0(style, ".", component)

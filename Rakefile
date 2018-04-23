@@ -1,6 +1,6 @@
 desc "Clean"
 task :clean do
-    dirs = ["svg", "pdf"]
+    dirs = ["bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff"]
     dirs.each { |dir|
         sh "rm -r #{dir} | true"
     }
@@ -12,13 +12,14 @@ demos = ["chess", "chinese_zodiac", "crown_and_anchor", "default",
 
 version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'` + ")'"
 
-collect_piecepacks = "exec/collect_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
+collect_piecepacks = "exec/collect_pnp_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
 def make_piecepack (filename, extra_flags)
     configure_piecepack = "exec/configure_piecepack --font='Noto Sans Symbols' --header_font='Noto Sans' "
     json_file = "configurations/" + filename + ".json"
     sh configure_piecepack + " --file=" + json_file + " --deck_filename=" + filename + extra_flags
-    sh "exec/make_preview --file=" + json_file
-    sh "exec/make_piecepack --file=" + json_file
+    sh "exec/make_pnp_piecepack --file=" + json_file
+    sh "exec/make_piecepack_preview --file=" + json_file
+    sh "exec/make_piecepack_images --file=" + json_file
 end
 
 # Colors
@@ -74,7 +75,7 @@ chinese_ranks_sc2 = " --rank_symbols=虎,马,狗,兔,羊,猪 --rank_symbols_font
 # Configurations
 dozenal_chips = " --shape.chip_face=5 --shape.chip_back=5"
 pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back= --shape.chip_face=kite --shape.chip_back=kite"
-orthodox_dm = " --dm_colors.coin_face=black --dm_colors.coin_back=black --dm_symbols.piecepack_die= --dm_symbols.coin_face='|' --dm_symbols_font.coin_face='Noto Sans' --dm_r.coin_face=0.45 --dm_symbols.coin_back='|' --dm_symbols_font.coin_back='Noto Sans' --dm_r.coin_back=0.45"
+orthodox_dm = " --dm_colors.coin_face=black --dm_colors.coin_back=black --dm_symbols.ppdie_face= --dm_symbols.coin_face='|' --dm_symbols_font.coin_face='Noto Sans' --dm_r.coin_face=0.45 --dm_symbols.coin_back='|' --dm_symbols_font.coin_back='Noto Sans' --dm_r.coin_back=0.45"
 # ○ ⚆ ⚇ ● ⚈ ⚉
 orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer_face=black --dm_symbols.saucer_face='|' --dm_symbols_font.saucer_face='Noto Sans' --dm_r.saucer_face=0.45 --dm_symbols.saucer_back='|' --dm_symbols_font.saucer_back='Noto Sans' --dm_r.saucer_back=0.45"
 
@@ -271,17 +272,17 @@ desc "Orthodox piecepacks demo"
 task :orthodox do
     deck_title = " --deck_title='Orthodox piecepack" + version_str
     suit_symbols = piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black"
-    file = "orthodox1_piecepack"
+    file = "orthodox1"
     extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers1
     make_piecepack file, deck_title + suit_symbols + orthodox_ranks + extra_flags
 
     deck_title = " --deck_title='Orthodox-style 2-color french-suited piecepack" + version_str
     suit_symbols = french_suits_swirl + " --suit_colors=darkred,black,black,darkred,black "
-    file = "orthodox2_french"
+    file = "orthodox2"
     extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers2
     make_piecepack file, deck_title + suit_symbols + orthodox_ranks + extra_flags 
 
-    decks = " --decks=orthodox1_piecepack,orthodox2_french"
+    decks = " --decks=orthodox1,orthodox2"
     sh collect_piecepacks + " --filename=orthodox_demo --title='Orthodox demo" + version_str + decks
 end
 
@@ -390,9 +391,10 @@ task :install do
     sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
     # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
-    sh 'exec/make_preview --help | cat > txt/make_preview_options.txt'
-    sh 'exec/make_piecepack --help | cat > txt/make_piecepack_options.txt'
-    sh 'exec/collect_piecepacks --help | cat > txt/collect_piecepacks_options.txt'
+    sh 'exec/make_piecepack_preview --help | cat > txt/make_piecepack_preview_options.txt'
+    sh 'exec/make_piecepack_images --help | cat > txt/make_piecepack_images_options.txt'
+    sh 'exec/make_pnp_piecepack --help | cat > txt/make_pnp_piecepack_options.txt'
+    sh 'exec/collect_pnp_piecepacks --help | cat > txt/collect_pnp_piecepacks_options.txt'
 end
 
 desc "Install R package and dependencies on Ubuntu (17.10+)"
@@ -423,7 +425,6 @@ task  :open, [:demo] do |t, args|
     end
 end
 
-
 desc "Test"
 task :test => :clean
 task :test => :install
@@ -449,7 +450,5 @@ task :test do
     # decks = " --decks=test1,test2,test3,test4"
     decks = " --decks=test1,test2"
     sh collect_piecepacks + " --filename=test --title='Test" + version_str + decks
-    open_pdf "test"
+    # open_pdf "test"
 end
-
-

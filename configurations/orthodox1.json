@@ -1,6 +1,6 @@
 {
-  "deck_title": ["Orthodox piecepack (v0.7.1-10)"],
-  "deck_filename": ["orthodox1_piecepack"],
+  "deck_title": ["Orthodox piecepack (v0.8.0-0)"],
+  "deck_filename": ["orthodox1"],
   "rank_symbols": [",A,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
   "header_font": ["Noto Sans"],
@@ -18,7 +18,7 @@
   "dm_symbols_font.coin_face": ["Noto Sans"],
   "dm_colors.coin_face": ["black"],
   "dm_r.coin_face": [0.45],
-  "dm_symbols.piecepack_die": [""],
+  "dm_symbols.ppdie_face": [""],
   "suit_symbols.saucer_face": ["●"],
   "suit_symbols_font.saucer_face": ["Noto Sans Symbols"],
   "suit_symbols_scale.saucer_face": ["1"],

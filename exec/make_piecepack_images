@@ -1,0 +1,11 @@
+#!/usr/bin/env Rscript
+
+options(error = quote(dump.frames("images_dump", TRUE)), warn=2)
+
+suppressPackageStartupMessages(library("piecepack"))
+
+opts <- read_style()
+               
+make_images(opts)
+
+invisible(NULL)
