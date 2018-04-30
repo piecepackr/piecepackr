@@ -1,5 +1,5 @@
 {
-  "deck_title": ["RD-suited piecepack (Dark color scheme) (v0.8.0-1)"],
+  "deck_title": ["RD-suited piecepack (Dark color scheme) (v0.8.0-2)"],
   "deck_filename": ["rainbow_deck1"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,★,♣,♦,♛,♠,꩜"],
@@ -10,6 +10,5 @@
   "font": ["Noto Sans Symbols"],
   "suit_colors": ["#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,white"],
   "background_colors": ["sienna"],
-  "shape.chip_face": ["5"],
-  "shape.chip_back": ["5"]
+  "shape.chip": ["5"]
 }

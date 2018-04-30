@@ -116,6 +116,534 @@ Options:
 	--uninvert_colors.unsuited
 		(default is value of "invert_colors" option)
 
+	--rank_symbols.tile=RANK_SYMBOLS.TILE
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.tile=RANK_SYMBOLS_FONT.TILE
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.tile=RANK_SYMBOLS_SCALE.TILE
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.tile=SUIT_COLORS.TILE
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.tile=SUIT_SYMBOLS.TILE
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.tile=SUIT_SYMBOLS_FONT.TILE
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.tile=SUIT_SYMBOLS_SCALE.TILE
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.tile=DM_SYMBOLS.TILE
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.tile=DM_SYMBOLS_FONT.TILE
+		(default is value of "dm_symbols_font" option)
+
+	--shape.tile=SHAPE.TILE
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.tile=DM_SYMBOLS_SCALE.TILE
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.tile=DM_COLORS.TILE
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.tile
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.tile
+		Opposite of "use_suit_as_ace.tile" option
+
+	--dm_theta.tile=DM_THETA.TILE
+		(default is value of "dm_theta" option)
+
+	--dm_r.tile=DM_R.TILE
+		(default is value of "dm_r" option)
+
+	--ps_theta.tile=PS_THETA.TILE
+		(default is value of "ps_theta" option)
+
+	--ps_r.tile=PS_R.TILE
+		(default is value of "ps_r" option)
+
+	--shape_theta.tile=SHAPE_THETA.TILE
+		(default is value of "shape_theta" option)
+
+	--background_colors.tile=BACKGROUND_COLORS.TILE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.tile
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.tile
+		Opposite of "invert_colors.tile" option
+
+	--rank_symbols.coin=RANK_SYMBOLS.COIN
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.coin=RANK_SYMBOLS_FONT.COIN
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.coin=RANK_SYMBOLS_SCALE.COIN
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.coin=SUIT_COLORS.COIN
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.coin=SUIT_SYMBOLS.COIN
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.coin=SUIT_SYMBOLS_FONT.COIN
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.coin=SUIT_SYMBOLS_SCALE.COIN
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.coin=DM_SYMBOLS.COIN
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.coin=DM_SYMBOLS_FONT.COIN
+		(default is value of "dm_symbols_font" option)
+
+	--shape.coin=SHAPE.COIN
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.coin=DM_SYMBOLS_SCALE.COIN
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.coin=DM_COLORS.COIN
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.coin
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.coin
+		Opposite of "use_suit_as_ace.coin" option
+
+	--dm_theta.coin=DM_THETA.COIN
+		(default is value of "dm_theta" option)
+
+	--dm_r.coin=DM_R.COIN
+		(default is value of "dm_r" option)
+
+	--ps_theta.coin=PS_THETA.COIN
+		(default is value of "ps_theta" option)
+
+	--ps_r.coin=PS_R.COIN
+		(default is value of "ps_r" option)
+
+	--shape_theta.coin=SHAPE_THETA.COIN
+		(default is value of "shape_theta" option)
+
+	--background_colors.coin=BACKGROUND_COLORS.COIN
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.coin
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.coin
+		Opposite of "invert_colors.coin" option
+
+	--rank_symbols.ppdie=RANK_SYMBOLS.PPDIE
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.ppdie=RANK_SYMBOLS_FONT.PPDIE
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.ppdie=RANK_SYMBOLS_SCALE.PPDIE
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.ppdie=SUIT_COLORS.PPDIE
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.ppdie=SUIT_SYMBOLS.PPDIE
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.ppdie=SUIT_SYMBOLS_FONT.PPDIE
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.ppdie=SUIT_SYMBOLS_SCALE.PPDIE
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.ppdie=DM_SYMBOLS.PPDIE
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.ppdie=DM_SYMBOLS_FONT.PPDIE
+		(default is value of "dm_symbols_font" option)
+
+	--shape.ppdie=SHAPE.PPDIE
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.ppdie=DM_SYMBOLS_SCALE.PPDIE
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.ppdie=DM_COLORS.PPDIE
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.ppdie
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.ppdie
+		Opposite of "use_suit_as_ace.ppdie" option
+
+	--dm_theta.ppdie=DM_THETA.PPDIE
+		(default is value of "dm_theta" option)
+
+	--dm_r.ppdie=DM_R.PPDIE
+		(default is value of "dm_r" option)
+
+	--ps_theta.ppdie=PS_THETA.PPDIE
+		(default is value of "ps_theta" option)
+
+	--ps_r.ppdie=PS_R.PPDIE
+		(default is value of "ps_r" option)
+
+	--shape_theta.ppdie=SHAPE_THETA.PPDIE
+		(default is value of "shape_theta" option)
+
+	--background_colors.ppdie=BACKGROUND_COLORS.PPDIE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.ppdie
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.ppdie
+		Opposite of "invert_colors.ppdie" option
+
+	--rank_symbols.suitdie=RANK_SYMBOLS.SUITDIE
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.suitdie=RANK_SYMBOLS_FONT.SUITDIE
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.suitdie=RANK_SYMBOLS_SCALE.SUITDIE
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.suitdie=SUIT_COLORS.SUITDIE
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.suitdie=SUIT_SYMBOLS.SUITDIE
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.suitdie=SUIT_SYMBOLS_FONT.SUITDIE
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.suitdie=SUIT_SYMBOLS_SCALE.SUITDIE
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.suitdie=DM_SYMBOLS.SUITDIE
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.suitdie=DM_SYMBOLS_FONT.SUITDIE
+		(default is value of "dm_symbols_font" option)
+
+	--shape.suitdie=SHAPE.SUITDIE
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.suitdie=DM_SYMBOLS_SCALE.SUITDIE
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.suitdie=DM_COLORS.SUITDIE
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.suitdie
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.suitdie
+		Opposite of "use_suit_as_ace.suitdie" option
+
+	--dm_theta.suitdie=DM_THETA.SUITDIE
+		(default is value of "dm_theta" option)
+
+	--dm_r.suitdie=DM_R.SUITDIE
+		(default is value of "dm_r" option)
+
+	--ps_theta.suitdie=PS_THETA.SUITDIE
+		(default is value of "ps_theta" option)
+
+	--ps_r.suitdie=PS_R.SUITDIE
+		(default is value of "ps_r" option)
+
+	--shape_theta.suitdie=SHAPE_THETA.SUITDIE
+		(default is value of "shape_theta" option)
+
+	--background_colors.suitdie=BACKGROUND_COLORS.SUITDIE
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.suitdie
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.suitdie
+		Opposite of "invert_colors.suitdie" option
+
+	--rank_symbols.pawn=RANK_SYMBOLS.PAWN
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.pawn=RANK_SYMBOLS_FONT.PAWN
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.pawn=RANK_SYMBOLS_SCALE.PAWN
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.pawn=SUIT_COLORS.PAWN
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.pawn=SUIT_SYMBOLS.PAWN
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.pawn=SUIT_SYMBOLS_FONT.PAWN
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.pawn=SUIT_SYMBOLS_SCALE.PAWN
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.pawn=DM_SYMBOLS.PAWN
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.pawn=DM_SYMBOLS_FONT.PAWN
+		(default is value of "dm_symbols_font" option)
+
+	--shape.pawn=SHAPE.PAWN
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.pawn=DM_SYMBOLS_SCALE.PAWN
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.pawn=DM_COLORS.PAWN
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.pawn
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.pawn
+		Opposite of "use_suit_as_ace.pawn" option
+
+	--dm_theta.pawn=DM_THETA.PAWN
+		(default is value of "dm_theta" option)
+
+	--dm_r.pawn=DM_R.PAWN
+		(default is value of "dm_r" option)
+
+	--ps_theta.pawn=PS_THETA.PAWN
+		(default is value of "ps_theta" option)
+
+	--ps_r.pawn=PS_R.PAWN
+		(default is value of "ps_r" option)
+
+	--shape_theta.pawn=SHAPE_THETA.PAWN
+		(default is value of "shape_theta" option)
+
+	--background_colors.pawn=BACKGROUND_COLORS.PAWN
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.pawn
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.pawn
+		Opposite of "invert_colors.pawn" option
+
+	--rank_symbols.belt=RANK_SYMBOLS.BELT
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.belt=RANK_SYMBOLS_FONT.BELT
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.belt=RANK_SYMBOLS_SCALE.BELT
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.belt=SUIT_COLORS.BELT
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.belt=SUIT_SYMBOLS.BELT
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.belt=SUIT_SYMBOLS_FONT.BELT
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.belt=SUIT_SYMBOLS_SCALE.BELT
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.belt=DM_SYMBOLS.BELT
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.belt=DM_SYMBOLS_FONT.BELT
+		(default is value of "dm_symbols_font" option)
+
+	--shape.belt=SHAPE.BELT
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.belt=DM_SYMBOLS_SCALE.BELT
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.belt=DM_COLORS.BELT
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.belt
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.belt
+		Opposite of "use_suit_as_ace.belt" option
+
+	--dm_theta.belt=DM_THETA.BELT
+		(default is value of "dm_theta" option)
+
+	--dm_r.belt=DM_R.BELT
+		(default is value of "dm_r" option)
+
+	--ps_theta.belt=PS_THETA.BELT
+		(default is value of "ps_theta" option)
+
+	--ps_r.belt=PS_R.BELT
+		(default is value of "ps_r" option)
+
+	--shape_theta.belt=SHAPE_THETA.BELT
+		(default is value of "shape_theta" option)
+
+	--background_colors.belt=BACKGROUND_COLORS.BELT
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.belt
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.belt
+		Opposite of "invert_colors.belt" option
+
+	--rank_symbols.saucer=RANK_SYMBOLS.SAUCER
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.saucer=RANK_SYMBOLS_FONT.SAUCER
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.saucer=RANK_SYMBOLS_SCALE.SAUCER
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.saucer=SUIT_COLORS.SAUCER
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.saucer=SUIT_SYMBOLS.SAUCER
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.saucer=SUIT_SYMBOLS_FONT.SAUCER
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.saucer=SUIT_SYMBOLS_SCALE.SAUCER
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.saucer=DM_SYMBOLS.SAUCER
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.saucer=DM_SYMBOLS_FONT.SAUCER
+		(default is value of "dm_symbols_font" option)
+
+	--shape.saucer=SHAPE.SAUCER
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.saucer=DM_SYMBOLS_SCALE.SAUCER
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.saucer=DM_COLORS.SAUCER
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.saucer
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.saucer
+		Opposite of "use_suit_as_ace.saucer" option
+
+	--dm_theta.saucer=DM_THETA.SAUCER
+		(default is value of "dm_theta" option)
+
+	--dm_r.saucer=DM_R.SAUCER
+		(default is value of "dm_r" option)
+
+	--ps_theta.saucer=PS_THETA.SAUCER
+		(default is value of "ps_theta" option)
+
+	--ps_r.saucer=PS_R.SAUCER
+		(default is value of "ps_r" option)
+
+	--shape_theta.saucer=SHAPE_THETA.SAUCER
+		(default is value of "shape_theta" option)
+
+	--background_colors.saucer=BACKGROUND_COLORS.SAUCER
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.saucer
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.saucer
+		Opposite of "invert_colors.saucer" option
+
+	--rank_symbols.chip=RANK_SYMBOLS.CHIP
+		(default is value of "rank_symbols" option)
+
+	--rank_symbols_font.chip=RANK_SYMBOLS_FONT.CHIP
+		(default is value of "rank_symbols_font" option)
+
+	--rank_symbols_scale.chip=RANK_SYMBOLS_SCALE.CHIP
+		(default is value of "rank_symbols_scale" option)
+
+	--suit_colors.chip=SUIT_COLORS.CHIP
+		(default is value of "suit_colors" option)
+
+	--suit_symbols.chip=SUIT_SYMBOLS.CHIP
+		(default is value of "suit_symbols" option)
+
+	--suit_symbols_font.chip=SUIT_SYMBOLS_FONT.CHIP
+		(default is value of "suit_symbols_font" option)
+
+	--suit_symbols_scale.chip=SUIT_SYMBOLS_SCALE.CHIP
+		(default is value of "suit_symbols_scale" option)
+
+	--dm_symbols.chip=DM_SYMBOLS.CHIP
+		(default is value of "dm_symbols" option)
+
+	--dm_symbols_font.chip=DM_SYMBOLS_FONT.CHIP
+		(default is value of "dm_symbols_font" option)
+
+	--shape.chip=SHAPE.CHIP
+		(default is value of "shape" option)
+
+	--dm_symbols_scale.chip=DM_SYMBOLS_SCALE.CHIP
+		(default is value of "dm_symbols_scale" option)
+
+	--dm_colors.chip=DM_COLORS.CHIP
+		(default is value of "dm_colors" option)
+
+	--use_suit_as_ace.chip
+		(default is value of "use_suit_as_ace" option)
+
+	--use_ace_as_ace.chip
+		Opposite of "use_suit_as_ace.chip" option
+
+	--dm_theta.chip=DM_THETA.CHIP
+		(default is value of "dm_theta" option)
+
+	--dm_r.chip=DM_R.CHIP
+		(default is value of "dm_r" option)
+
+	--ps_theta.chip=PS_THETA.CHIP
+		(default is value of "ps_theta" option)
+
+	--ps_r.chip=PS_R.CHIP
+		(default is value of "ps_r" option)
+
+	--shape_theta.chip=SHAPE_THETA.CHIP
+		(default is value of "shape_theta" option)
+
+	--background_colors.chip=BACKGROUND_COLORS.CHIP
+		default is either value of "background_colors.suited" or "background_colors.unsuited"
+
+	--invert_colors.chip
+		default is either value of "invert_colors.suited" or "invert_colors.unsuited"
+
+	--uninvert_colors.chip
+		Opposite of "invert_colors.chip" option
+
 	--rank_symbols.tile_back=RANK_SYMBOLS.TILE_BACK
 		(default is value of "rank_symbols" option)
 
