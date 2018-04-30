@@ -1,4 +1,4 @@
-Usage: Program to arrange piecepacks
+Usage: Program to collect piecepacks
 
 
 Options:

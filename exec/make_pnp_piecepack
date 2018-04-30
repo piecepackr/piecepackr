@@ -4,8 +4,8 @@ options(error = quote(dump.frames("deck_dump", TRUE)), warn=2)
 
 suppressPackageStartupMessages(library("piecepack"))
 
-opts <- read_style()
+opts <- read_configuration(description="Program to make print-and-play piecepack deck")
 
-make_set(opts, opts$pdf_deck_dir)
+make_pnp_piecepack(opts)
 
 invisible(NULL)

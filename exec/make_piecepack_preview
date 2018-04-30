@@ -4,8 +4,8 @@ options(error = quote(dump.frames("preview_dump", TRUE)), warn=2)
 
 suppressPackageStartupMessages(library("piecepack"))
 
-opts <- read_style()
+opts <- read_configuration(description="Program to make piecepack preview")
                
-make_previews(opts)
+make_piecepack_preview(opts)
 
 invisible(NULL)

@@ -2,10 +2,11 @@ cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package=
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
+#' @export
 inch <- function(x) { unit(x, "in") }
 
-make_deck_header <- function(arg) {
-    make_header_helper(arg$deck_title, arg)
+make_deck_header <- function(cfg) {
+    make_header_helper(cfg$deck_title, cfg)
 }
 
 make_die_viewports <- function(label, flip=FALSE) {
@@ -47,129 +48,118 @@ make_coinrow_viewports <- function(label) {
     }
 }
 
-draw_coin_row <- function(i_s, opts) {
-    label <- stringi::stri_rand_strings(n=1, length=4)
-    make_coinrow_viewports(label, flip=flip)
-    for(i_r in 1:6) {
-        seekViewport(paste0(label, ".back.", i_r))
-        draw_coin_back(i_s, opts)
-        seekViewport(paste0(label, ".face.", i_r))
-        draw_coin_face(i_r, opts)
-    }
-}
-
-draw_coin_4by3 <- function(i_s, opts) {
+draw_coin_4by3 <- function(i_s, cfg) {
     label <- stringi::stri_rand_strings(n=1, length=4)
     make_4by3_viewports(label)
     for(i_r in 1:6) {
         seekViewport(paste0(label, ".back.", i_r))
-        draw_coin_back(i_s, opts)
+        draw_component("coin_back", cfg, i_s)
         seekViewport(paste0(label, ".face.", i_r))
-        draw_coin_face(i_r, opts)
+        draw_component("coin_face", cfg, i_r=i_r)
     }
 }
 
-draw_piecepack_die <- function(i_s, opts, flip=FALSE) {
+draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
     suppressWarnings({
         # label <- stringi::stri_rand_strings(n=1, length=4)
         label <- "piecepack"
         make_die_viewports(label, flip=flip)
         for(i_r in 1:6) {
             downViewport(paste0(label, ".die.", i_r))
-            draw_ppdie_face(i_s, i_r, opts)
+            draw_component("ppdie_face", cfg, i_s, i_r)
             upViewport()
         }
     })
 }
 
-draw_suit_die <- function(opts, flip=FALSE) {
+draw_suit_die <- function(cfg, flip=FALSE) {
     suppressWarnings({
         # label <- stringi::stri_rand_strings(n=1, length=4)
         label <- "suit"
         make_die_viewports(label, flip=flip)
-        if (opts$n_suits == 4) {
+        if (cfg$n_suits == 4) {
             downViewport(paste0(label, ".die.1"))
-            draw_suitdie_face(6, opts)
+            draw_component("suitdie_face", cfg, 6)
             upViewport()
             for (i_s in 1:4) {
                 downViewport(paste0(label, ".die.", i_s+1))
-                draw_suitdie_face(5-i_s, opts)
+                draw_component("suitdie_face", cfg, 5-i_s)
                 upViewport()
             }
             downViewport(paste0(label, ".die.6"))
-            draw_suitdie_face(5, opts)
+            draw_component("suitdie_face", cfg, 5)
             upViewport()
-        } else if (opts$n_suits == 5) {
+        } else if (cfg$n_suits == 5) {
             for (i_s in 1:5) {
                 downViewport(paste0(label, ".die.", i_s))
-                draw_suitdie_face(6-i_s, opts)
+                draw_component("suitdie_face", cfg, 6-i_s)
                 upViewport()
             }
             downViewport(paste0(label, ".die.6"))
-            draw_suitdie_face(6, opts)
+            draw_component("suitdie_face", cfg, 6)
             upViewport()
-        } else if (opts$n_suits == 6) {
+        } else if (cfg$n_suits == 6) {
             for (i_s in 1:6) {
                 downViewport(paste0(label, ".die.", i_s))
-                draw_suitdie_face(7-i_s, opts)
+                draw_component("suitdie_face", cfg, 7-i_s)
                 upViewport()
             }
         } else {
-            stop(paste("Don't know how to draw suit die for", opts$n_suits, "suits"))
+            stop(paste("Don't know how to draw suit die for", cfg$n_suits, "suits"))
         }
     })
 }
 
-draw_rank_die <- function(opts, flip=FALSE) {
+draw_rank_die <- function(cfg, flip=FALSE) {
     suppressWarnings({
         label <- stringi::stri_rand_strings(n=1, length=4)
         make_die_viewports(label, flip=flip)
         for (i_r in 1:6) {
             seekViewport(paste0(label, ".die.", i_r))
-            draw_ppdie_face(opts$i_unsuit + 1, i_r, opts)
+            draw_component("ppdie_face", cfg, cfg$i_unsuit + 1, i_r)
         }
     })
 }
 
-draw_suitrank_die <- function(opts, flip=FALSE) {
+draw_suitrank_die <- function(cfg, flip=FALSE) {
     suppressWarnings({
         # label <- stringi::stri_rand_strings(n=1, length=8)
         label <- "suitrank"
         make_die_viewports(label, flip=flip)
-        if (opts$n_suits == 4) {
+        if (cfg$n_suits == 4) {
             downViewport(paste0(label, ".die.1"))
-            draw_ppdie_face(6, 1, opts)
+            draw_component("ppdie_face", cfg, 6, 1)
             upViewport()
             downViewport(paste0(label, ".die.2"))
-            draw_ppdie_face(5, 2, opts)
+            draw_component("ppdie_face", cfg, 5, 2)
             upViewport()
             for (i_r in 3:6) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_ppdie_face(5-(i_r-2), i_r, opts)
+                draw_component("ppdie_face", cfg, 5-(i_r-2), i_r)
                 upViewport()
             }
-        } else if (opts$n_suits == 5) {
+        } else if (cfg$n_suits == 5) {
             downViewport(paste0(label, ".die.6"))
-            draw_ppdie_face(6, 6, opts)
+            draw_component("ppdie_face", cfg, 6, 6)
             upViewport()
             for (i_r in 1:5) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_ppdie_face(6-i_r, i_r, opts)
+                draw_component("ppdie_face", cfg, 6-i_r, i_r)
                 upViewport()
             }
-        } else if (opts$n_suits == 6) {
+        } else if (cfg$n_suits == 6) {
             for (i_r in 1:6) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_ppdie_face(7-i_r, i_r, opts)
+                draw_component("ppdie_face", cfg, 7-i_r, i_r)
                 upViewport()
             }
         } else {
-            stop(paste("Don't know how to draw suit/rank die for", opts$n_suits, "suits"))
+            stop(paste("Don't know how to draw suit/rank die for", cfg$n_suits, "suits"))
         }
     })
 }
 
-make_header_helper <- function(title, arg) {
+make_header_helper <- function(title, cfg) {
     header_height <- 0.8
     y_header <- WIN_HEIGHT - header_height/2
     addViewport(y=inch(y_header), width=inch(6.0), height=inch(header_height), name="header")
@@ -180,26 +170,26 @@ make_header_helper <- function(title, arg) {
     addViewport(x=1-width_image/2, y=0.4, width=width_image, height=0.5, name="r_cc_image")
     addViewport(x=0.5, y=0.4, width=1-2*width_image, height=0.8, name="text")
     seekViewport("text")
-    gp <- gpar(fontsize=9, fontfamily=arg$header_font)
-    # grid.text(arg$program, x=0.0, y=0.8, just="left", gp=gp)
-    # grid.text(arg$copyright, x=0.0, y=0.6, just="left", gp=gp)
-    # grid.text(arg$license1, x=0.0, y=0.4, just="left", gp=gp)
-    # grid.text(arg$license2, x=0.0, y=0.2, just="left", gp=gp)
-    grid.text(arg$program, x=0.5, y=0.8, just="center", gp=gp)
-    grid.text(arg$copyright, x=0.5, y=0.6, just="center", gp=gp)
-    grid.text(arg$license1, x=0.5, y=0.4, just="center", gp=gp)
-    grid.text(arg$license2, x=0.5, y=0.2, just="center", gp=gp)
+    gp <- gpar(fontsize=9, fontfamily=cfg$header_font)
+    # grid.text(cfg$program, x=0.0, y=0.8, just="left", gp=gp)
+    # grid.text(cfg$copyright, x=0.0, y=0.6, just="left", gp=gp)
+    # grid.text(cfg$license1, x=0.0, y=0.4, just="left", gp=gp)
+    # grid.text(cfg$license2, x=0.0, y=0.2, just="left", gp=gp)
+    grid.text(cfg$program, x=0.5, y=0.8, just="center", gp=gp)
+    grid.text(cfg$copyright, x=0.5, y=0.6, just="center", gp=gp)
+    grid.text(cfg$license1, x=0.5, y=0.4, just="center", gp=gp)
+    grid.text(cfg$license2, x=0.5, y=0.2, just="center", gp=gp)
     seekViewport("l_cc_image")
     grid.draw(cc_file)
     seekViewport("r_cc_image")
     grid.draw(cc_file)
     seekViewport("title")
-    gp <- gpar(fontsize=15, fontfamily=arg$header_font, fontface="bold")
+    gp <- gpar(fontsize=15, fontfamily=cfg$header_font, fontface="bold")
     grid.text(title, just="center", gp=gp)
 }
 
-make_preview_header <- function(arg) {
-    make_header_helper(arg$title, arg)
+make_preview_header <- function(cfg) {
+    make_header_helper(cfg$title, cfg)
 }
 
 seekViewport <- function(...) { suppressWarnings(grid::seekViewport(...)) }
@@ -215,12 +205,12 @@ pp_pdf <- function(filename, family, paper) {
 }
 
 #' @export
-make_collection_preview <- function(arg) {
-    dir.create(arg$pdf_preview_dir, recursive=TRUE, showWarnings=FALSE)
+make_collection_preview <- function(cfg) {
+    dir.create(cfg$pdf_preview_dir, recursive=TRUE, showWarnings=FALSE)
 
-    decks <- arg$decks
-    fp <- file.path(arg$pdf_preview_dir, paste0(arg$filename, ".pdf"))
-    pp_pdf(fp, arg$font, arg$paper)
+    decks <- cfg$decks
+    fp <- file.path(cfg$pdf_preview_dir, paste0(cfg$filename, ".pdf"))
+    pp_pdf(fp, cfg$font, cfg$paper)
 
     n_pages <- ceiling(length(decks) / 6)
 
@@ -234,7 +224,7 @@ make_collection_preview <- function(arg) {
             if(is.na(deck))
                 l_logos[[kk+1]] <- nullGrob()
             else
-                l_logos[[kk+1]] <- pictureGrob(readPicture(file.path(arg$svg_preview_dir, paste0(deck, ".svg")), warn=FALSE))
+                l_logos[[kk+1]] <- pictureGrob(readPicture(file.path(cfg$svg_preview_dir, paste0(deck, ".svg")), warn=FALSE))
         }
         l_squares <- lapply(seq(along=l_logos), function(x) { rectGrob(gp=gpar(lty="dashed", col="grey", fill=NA)) })
         grid.newpage()
@@ -243,7 +233,7 @@ make_collection_preview <- function(arg) {
         gridExtra::grid.arrange(grobs=l_logos, ncol=2, newpage=FALSE, padding=0)
         gridExtra::grid.arrange(grobs=l_squares, ncol=2, newpage=FALSE, padding=0)
         upViewport()
-        make_preview_header(arg)
+        make_preview_header(cfg)
     }
 
     if (is_odd(n_pages)) {
@@ -261,7 +251,7 @@ mainViewport <- function() {
     downViewport("main")
 }
 
-draw_suit_page <- function(i_s, opts) {
+draw_suit_page <- function(i_s, cfg) {
     grid.newpage()
 
     # Build viewports
@@ -271,7 +261,8 @@ draw_suit_page <- function(i_s, opts) {
     make_4by3_viewports("tile")
     seekViewport("main")
     xpawn <- PAWN_WIDTH/2
-    pheight <- 2.5 * PAWN_HEIGHT
+    # pheight <- 2.5 * PAWN_HEIGHT
+    pheight <- 2 * PAWN_HEIGHT + 2 * PAWN_BASE
     ypawn <- 3*TILE_WIDTH + pheight/2 
     addViewport(x=inch(xpawn), y=inch(ypawn), width=inch(PAWN_WIDTH), height=inch(pheight), name="lpawn")
     addViewport(x=inch(WIN_WIDTH-xpawn), y=inch(ypawn), width=inch(PAWN_WIDTH), height=inch(pheight), name="rpawn")
@@ -285,10 +276,10 @@ draw_suit_page <- function(i_s, opts) {
     ysaucer <- 3*TILE_WIDTH + SAUCER_WIDTH/2
     addViewport(y=inch(ysaucer), height=inch(SAUCER_WIDTH), width=inch(4*SAUCER_WIDTH), name="saucers")
     seekViewport("saucers")
-    addViewport(x=1/4-1/8, width=0.25, name="lsaucer.face")
-    addViewport(x=2/4-1/8, width=0.25, name="lsaucer.back")
-    addViewport(x=3/4-1/8, width=0.25, name="rsaucer.face")
-    addViewport(x=4/4-1/8, width=0.25, name="rsaucer.back")
+    draw_component("saucer_face", cfg, i_s, x=1/4-1/8)
+    draw_component("saucer_back", cfg, x=2/4-1/8)
+    draw_component("saucer_face", cfg, i_s, x=3/4-1/8)
+    draw_component("saucer_back", cfg, x=4/4-1/8)
     seekViewport("main")
     # addViewport(y=inch(ycoin), width=inch(7.5), height=inch(0.625), name="coinrow")
     # ycoin <- 6+ 3*COIN_WIDTH
@@ -304,52 +295,38 @@ draw_suit_page <- function(i_s, opts) {
 
     # ybelt <- ycoin + 3*COIN_WIDTH/2 + DIE_WIDTH/2
     # xbelt <- WIN_WIDTH/2 - BELT_WIDTH/2
-    ybelt <- ydie2 + 2*DIE_WIDTH + DIE_WIDTH/2
-    xbelt <- PAWN_WIDTH + BELT_WIDTH/2
-    addViewport(x=inch(xbelt), y=inch(ybelt), width=inch(BELT_WIDTH), height=inch(BELT_HEIGHT), name="lpawnbelt")
-    addViewport(x=inch(WIN_WIDTH-xbelt), y=inch(ybelt), width=inch(BELT_WIDTH), height=inch(BELT_HEIGHT), name="rpawnbelt")
+    ybelt <- ydie2 + DIE_WIDTH + DIE_WIDTH/2
+    xbelt <- BELT_WIDTH/2
+    draw_component("belt_face", cfg, i_s, x=inch(xbelt), y=inch(ybelt))
+    draw_component("belt_face", cfg, i_s, x=inch(WIN_WIDTH-xbelt), y=inch(ybelt))
 
     # Draw components
     for (i_r in 1:6) {
         seekViewport(paste0("tile.face.", i_r))
-        draw_tile_face(i_s, i_r, opts)
+        draw_component("tile_face", cfg, i_s, i_r)
         seekViewport(paste0("tile.back.", i_r))
-        draw_tile_back(opts)
+        draw_component("tile_back", cfg)
     }
 
     # coins
     seekViewport("coins")
-    draw_coin_4by3(i_s, opts)
+    draw_coin_4by3(i_s, cfg)
 
     # pawn and belt
-    seekViewport("lpawnbelt")
-    draw_belt_face(i_s, opts)
-    seekViewport("rpawnbelt")
-    draw_belt_face(i_s, opts)
     seekViewport("lpawn")
-    draw_pawn(i_s, opts)
+    draw_pawn(i_s, cfg)
     seekViewport("rpawn")
-    draw_pawn(i_s, opts)
+    draw_pawn(i_s, cfg)
 
     # die
     seekViewport("rdie")
-    draw_piecepack_die(i_s, opts)
+    draw_piecepack_die(i_s, cfg)
     seekViewport("ldie")
-    draw_piecepack_die(i_s, opts, flip=TRUE)
+    draw_piecepack_die(i_s, cfg, flip=TRUE)
     seekViewport("rdie2")
-    draw_piecepack_die(i_s, opts)
+    draw_piecepack_die(i_s, cfg)
     seekViewport("ldie2")
-    draw_piecepack_die(i_s, opts, flip=TRUE)
-
-    # pawn saucers
-    seekViewport("lsaucer.face")
-    draw_saucer_face(i_s, opts)
-    seekViewport("lsaucer.back")
-    draw_saucer_back(opts)
-    seekViewport("rsaucer.face")
-    draw_saucer_face(i_s, opts)
-    seekViewport("rsaucer.back")
-    draw_saucer_back(opts)
+    draw_piecepack_die(i_s, cfg, flip=TRUE)
 
     # annotations
     seekViewport("main")
@@ -358,20 +335,20 @@ draw_suit_page <- function(i_s, opts) {
     # grid.text("pawn", x=inch(3.25), y=inch(ypawn+0.5))
     # grid.text("pawn belt", x=inch(3.25), y=inch(ybelt+0.4))
     # grid.text("tiles", y=inch( 6.4))
-    make_deck_header(opts)
+    make_deck_header(cfg)
 
 }
 
-draw_accessories_page <- function(opts, odd=TRUE) {
+draw_accessories_page <- function(cfg, odd=TRUE) {
     grid.newpage()
 
     # Build viewports
     mainViewport()
     y_joker <- 8.75
-    addViewport(y=inch(y_joker), x=0.5, width=inch(4), height=inch(2), name="joker.tiles")
+    addViewport(y=inch(y_joker), x=0.5, width=inch(2*TILE_WIDTH), height=inch(TILE_WIDTH), name="joker.tiles")
     downViewport("joker.tiles")
-    addViewport(x=0.25, width=0.5, name="joker.tile.face")
-    addViewport(x=0.75, width=0.5, name="joker.tile.back")
+    draw_component("tile_face", cfg, cfg$i_unsuit, cfg$n_ranks + 1, x=0.25)
+    draw_component("tile_back", cfg, x=0.75)
     seekViewport("main")
     # dice
     ydh <- y_joker - DIE_WIDTH/2 + DIE_WIDTH
@@ -400,88 +377,69 @@ draw_accessories_page <- function(opts, odd=TRUE) {
 
     die_x <- c(die_xl, die_xm, die_xm, die_xl, die_xh, die_xh)
     die_y <- c(ydl, ydl, ydb, ydb, ydl, ydb)
-    for (i_s in 1:opts$n_suits) {
+    for (i_s in 1:cfg$n_suits) {
         addViewport(y=inch(die_y[i_s]), x=inch(die_x[i_s]), width=inch(2), height=inch(1.5), name=paste0("ppdie.", i_s))
-        addViewport(y=inch((opts$n_suits + 1 - i_s)*CHIP_WIDTH - 0.5*CHIP_WIDTH), 
+        addViewport(y=inch((cfg$n_suits + 1 - i_s)*CHIP_WIDTH - 0.5*CHIP_WIDTH), 
                     width=inch(12*CHIP_WIDTH), height=inch(CHIP_WIDTH), name=paste0("chips.", i_s))
         seekViewport(paste0("chips.", i_s))
         for (i_r in 1:6) {
-            addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0("chips.suit.", i_s, i_r))
-            addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0("chips.value.", i_s, i_r))
+            draw_component("chip_back", cfg, i_s,      x=(2*i_r-1)/12-1/24)
+            draw_component("chip_face", cfg, i_s, i_r, x=(2*i_r  )/12-1/24)
         }
         seekViewport("main")
     }
-    saucer_y <- 4*CHIP_WIDTH + 0.5*SAUCER_WIDTH + 0.125
-    addViewport(y=inch(saucer_y),width=inch(8*SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="pawnsaucers")
-    seekViewport("pawnsaucers")
-    addViewport(x=1/8-1/16, width=1/8, name="pawnsaucer.face.1")
-    addViewport(x=2/8-1/16, width=1/8, name="pawnsaucer.back.1")
-    addViewport(x=3/8-1/16, width=1/8, name="pawnsaucer.face.2")
-    addViewport(x=4/8-1/16, width=1/8, name="pawnsaucer.back.2")
-    addViewport(x=5/8-1/16, width=1/8, name="pawnsaucer.face.3")
-    addViewport(x=6/8-1/16, width=1/8, name="pawnsaucer.back.3")
-    addViewport(x=7/8-1/16, width=1/8, name="pawnsaucer.face.4")
-    addViewport(x=8/8-1/16, width=1/8, name="pawnsaucer.back.4")
-    seekViewport("main")
+    if (cfg$n_suits <= 4) {
+        saucer_y <- 4*CHIP_WIDTH + 0.5*SAUCER_WIDTH + 0.125
+        addViewport(y=inch(saucer_y),width=inch(8*SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="pawnsaucers")
+        seekViewport("pawnsaucers")
+        for (i_s in 1:cfg$n_suits) {
+            draw_component("saucer_face", cfg, i_s, x=(2*i_s-1)/8-1/16)
+            draw_component("saucer_back", cfg,      x=(2*i_s  )/8-1/16)
+        }
+        seekViewport("main")
+    }
 
     # Draw components
-    seekViewport("joker.tile.face")
-    draw_tile_face(opts$i_unsuit, opts$n_ranks + 1, opts)
-    seekViewport("joker.tile.back")
-    draw_tile_back(opts)
     seekViewport("rsuitdie")
-    draw_suit_die(opts)
+    draw_suit_die(cfg)
     seekViewport("lsuitdie")
-    draw_suit_die(opts, flip=TRUE)
+    draw_suit_die(cfg, flip=TRUE)
     seekViewport("suitdie3")
     if (odd)
-        draw_suit_die(opts)
+        draw_suit_die(cfg)
     else
-        draw_suit_die(opts, flip=TRUE)
+        draw_suit_die(cfg, flip=TRUE)
     seekViewport("suitrankdie1")
-     draw_suitrank_die(opts)
+     draw_suitrank_die(cfg)
     seekViewport("suitrankdie2")
-     draw_suitrank_die(opts)
+     draw_suitrank_die(cfg)
     seekViewport("suitrankdie3")
-     draw_suitrank_die(opts, flip=TRUE)
+     draw_suitrank_die(cfg, flip=TRUE)
     seekViewport("suitrankdie4")
-     draw_suitrank_die(opts, flip=TRUE)
+     draw_suitrank_die(cfg, flip=TRUE)
     seekViewport("rankdie1")
-    draw_rank_die(opts)
+    draw_rank_die(cfg)
     seekViewport("rankdie2")
-    draw_rank_die(opts)
+    draw_rank_die(cfg)
     seekViewport("rankdie3")
-    draw_rank_die(opts)
-    if (opts$n_suits < 5) {
+    draw_rank_die(cfg)
+    if (cfg$n_suits < 5) {
         seekViewport("rankdie4")
-        draw_rank_die(opts, flip=TRUE)
+        draw_rank_die(cfg, flip=TRUE)
     }
     seekViewport("rankdie1l")
-    draw_rank_die(opts)
+    draw_rank_die(cfg)
     seekViewport("rankdie2l")
-    draw_rank_die(opts)
+    draw_rank_die(cfg)
     seekViewport("rankdie3l")
-    draw_rank_die(opts)
-    if (opts$n_suits < 6) {
+    draw_rank_die(cfg)
+    if (cfg$n_suits < 6) {
         seekViewport("rankdie4l")
-        draw_rank_die(opts, flip=TRUE)
+        draw_rank_die(cfg, flip=TRUE)
     }
-    for (i_s in 1:opts$n_suits) {
+    for (i_s in 1:cfg$n_suits) {
         seekViewport(paste0("ppdie.", i_s))
-        draw_piecepack_die(i_s, opts, flip=TRUE)
-        if (opts$n_suits <= 4) {
-            seekViewport(paste0("pawnsaucer.face.", i_s))
-            draw_saucer_face(i_s, opts)
-            seekViewport(paste0("pawnsaucer.back.", i_s))
-            draw_saucer_back(opts)
-        }
-
-        for (i_r in 1:6) {
-            seekViewport(paste0("chips.suit.", i_s, i_r))
-            draw_chip_back(i_s, opts)
-            seekViewport(paste0("chips.value.", i_s, i_r))
-            draw_chip_face(i_s, i_r, opts)
-        }
+        draw_piecepack_die(i_s, cfg, flip=TRUE)
     }
 
     # Annotations
@@ -496,30 +454,30 @@ draw_accessories_page <- function(opts, odd=TRUE) {
     # grid.text("suit die", x=inch(die_right), y=inch(ydh-0.3), rot=90)
     # grid.text("suit/rank die", x=inch(die_right), y=inch(ydl-0.3), rot=90)
     # grid.text("rank die", x=inch(die_right), y=inch(ydm-0.3), rot=90)
-    make_deck_header(opts)
-
+    make_deck_header(cfg)
 }
 
 #' @export
-make_set <- function(opts, directory) {
+make_pnp_piecepack <- function(cfg) {
+    directory <- cfg$pdf_deck_dir
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
-    pdf_file <- file.path(directory, paste0(opts$deck_filename, ".pdf"))
+    pdf_file <- file.path(directory, paste0(cfg$deck_filename, ".pdf"))
     unlink(pdf_file)
 
-    pp_pdf(pdf_file, opts$font, opts$paper)
+    pp_pdf(pdf_file, cfg$font, cfg$paper)
 
-    for (i_s in 1:opts$n_suits) {
-        draw_suit_page(i_s, opts)
+    for (i_s in 1:cfg$n_suits) {
+        draw_suit_page(i_s, cfg)
     }
-    if (is_odd(opts$n_suits)) {
-        draw_suit_page(opts$i_unsuit+1, opts)
+    if (is_odd(cfg$n_suits)) {
+        draw_suit_page(cfg$i_unsuit+1, cfg)
     }
 
     # Accessories
-    if ((opts$n_suits >= 4) && (opts$n_suits <= 6)) {
-        draw_accessories_page(opts)
-        draw_accessories_page(opts, odd=FALSE)
+    if ((cfg$n_suits >= 4) && (cfg$n_suits <= 6)) {
+        draw_accessories_page(cfg)
+        draw_accessories_page(cfg, odd=FALSE)
     }
     invisible(dev.off())
 }
@@ -544,18 +502,18 @@ n_pages <- function(pdf_filename) {
 }
 
 #' @export
-make_collection <- function(arg) {
-    dir.create(arg$pdf_collection_dir, recursive=TRUE, showWarnings=FALSE)
-    deck_filenames <- file.path(arg$pdf_deck_dir, paste0(arg$decks, ".pdf"))
+make_collection <- function(cfg) {
+    dir.create(cfg$pdf_collection_dir, recursive=TRUE, showWarnings=FALSE)
+    deck_filenames <- file.path(cfg$pdf_deck_dir, paste0(cfg$decks, ".pdf"))
     n_sets <- length(deck_filenames)
-    fp <- shQuote(file.path(arg$pdf_preview_dir, paste0(arg$filename, ".pdf")))
-    of_un <- file.path(arg$pdf_collection_dir, paste0(arg$filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
+    fp <- shQuote(file.path(cfg$pdf_preview_dir, paste0(cfg$filename, ".pdf")))
+    of_un <- file.path(cfg$pdf_collection_dir, paste0(cfg$filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
     of <- shQuote(of_un)
-    bf <- shQuote(file.path(arg$pdf_collection_dir, paste0(arg$filename, ".pdf")))
-    command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(arg$title), 
-                     "--pdfauthor", shQuote(arg$author), 
-                     "--pdfkeywords", shQuote(arg$keywords), 
-                     "--pdfsubject", shQuote(arg$subject),
+    bf <- shQuote(file.path(cfg$pdf_collection_dir, paste0(cfg$filename, ".pdf")))
+    command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(cfg$title), 
+                     "--pdfauthor", shQuote(cfg$author), 
+                     "--pdfkeywords", shQuote(cfg$keywords), 
+                     "--pdfsubject", shQuote(cfg$subject),
                      fp, paste(shQuote(deck_filenames), collapse=" "))
     cat(command, "\n")
     system(command)

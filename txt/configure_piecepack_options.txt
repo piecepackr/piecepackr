@@ -1,4 +1,4 @@
-Usage: Program to make piecepack configurations for exec/make_piecepack
+Usage: Program to make piecepack configurations
 
 
 Options:
@@ -68,6 +68,12 @@ Options:
 	--dm_r=DM_R
 		Radius from center (relative units) of polar coordinates of direction mark (default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")
 
+	--ps_theta=PS_THETA
+		Angle (in degrees) of polar coordinates of primary symbol (default 135 for tile faces and die faces and 90 for everything else)
+
+	--ps_r=PS_R
+		Radius from center (relative units) of polar coordinates of primary symbol (default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")
+
 	--font=FONT
 		Default font family (default "sans")
 
@@ -78,7 +84,7 @@ Options:
 		(default the value of the "suit_colors" option)
 
 	--background_colors=BACKGROUND_COLORS
-		(default "transparent")
+		(default "white")
 
 	--border_color=BORDER_COLOR
 		(default "grey")
@@ -158,6 +164,12 @@ Options:
 	--dm_r.tile_back=DM_R.TILE_BACK
 		(default is value of "dm_r" option)
 
+	--ps_theta.tile_back=PS_THETA.TILE_BACK
+		(default is value of "ps_theta" option)
+
+	--ps_r.tile_back=PS_R.TILE_BACK
+		(default is value of "ps_r" option)
+
 	--shape_theta.tile_back=SHAPE_THETA.TILE_BACK
 		(default is value of "shape_theta" option)
 
@@ -217,6 +229,12 @@ Options:
 
 	--dm_r.tile_face=DM_R.TILE_FACE
 		(default is value of "dm_r" option)
+
+	--ps_theta.tile_face=PS_THETA.TILE_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.tile_face=PS_R.TILE_FACE
+		(default is value of "ps_r" option)
 
 	--shape_theta.tile_face=SHAPE_THETA.TILE_FACE
 		(default is value of "shape_theta" option)
@@ -278,6 +296,12 @@ Options:
 	--dm_r.coin_back=DM_R.COIN_BACK
 		(default is value of "dm_r" option)
 
+	--ps_theta.coin_back=PS_THETA.COIN_BACK
+		(default is value of "ps_theta" option)
+
+	--ps_r.coin_back=PS_R.COIN_BACK
+		(default is value of "ps_r" option)
+
 	--shape_theta.coin_back=SHAPE_THETA.COIN_BACK
 		(default is value of "shape_theta" option)
 
@@ -337,6 +361,12 @@ Options:
 
 	--dm_r.coin_face=DM_R.COIN_FACE
 		(default is value of "dm_r" option)
+
+	--ps_theta.coin_face=PS_THETA.COIN_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.coin_face=PS_R.COIN_FACE
+		(default is value of "ps_r" option)
 
 	--shape_theta.coin_face=SHAPE_THETA.COIN_FACE
 		(default is value of "shape_theta" option)
@@ -398,6 +428,12 @@ Options:
 	--dm_r.ppdie_face=DM_R.PPDIE_FACE
 		(default is value of "dm_r" option)
 
+	--ps_theta.ppdie_face=PS_THETA.PPDIE_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.ppdie_face=PS_R.PPDIE_FACE
+		(default is value of "ps_r" option)
+
 	--shape_theta.ppdie_face=SHAPE_THETA.PPDIE_FACE
 		(default is value of "shape_theta" option)
 
@@ -457,6 +493,12 @@ Options:
 
 	--dm_r.suitdie_face=DM_R.SUITDIE_FACE
 		(default is value of "dm_r" option)
+
+	--ps_theta.suitdie_face=PS_THETA.SUITDIE_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.suitdie_face=PS_R.SUITDIE_FACE
+		(default is value of "ps_r" option)
 
 	--shape_theta.suitdie_face=SHAPE_THETA.SUITDIE_FACE
 		(default is value of "shape_theta" option)
@@ -518,6 +560,12 @@ Options:
 	--dm_r.pawn_face=DM_R.PAWN_FACE
 		(default is value of "dm_r" option)
 
+	--ps_theta.pawn_face=PS_THETA.PAWN_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.pawn_face=PS_R.PAWN_FACE
+		(default is value of "ps_r" option)
+
 	--shape_theta.pawn_face=SHAPE_THETA.PAWN_FACE
 		(default is value of "shape_theta" option)
 
@@ -577,6 +625,12 @@ Options:
 
 	--dm_r.pawn_back=DM_R.PAWN_BACK
 		(default is value of "dm_r" option)
+
+	--ps_theta.pawn_back=PS_THETA.PAWN_BACK
+		(default is value of "ps_theta" option)
+
+	--ps_r.pawn_back=PS_R.PAWN_BACK
+		(default is value of "ps_r" option)
 
 	--shape_theta.pawn_back=SHAPE_THETA.PAWN_BACK
 		(default is value of "shape_theta" option)
@@ -638,6 +692,12 @@ Options:
 	--dm_r.belt_face=DM_R.BELT_FACE
 		(default is value of "dm_r" option)
 
+	--ps_theta.belt_face=PS_THETA.BELT_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.belt_face=PS_R.BELT_FACE
+		(default is value of "ps_r" option)
+
 	--shape_theta.belt_face=SHAPE_THETA.BELT_FACE
 		(default is value of "shape_theta" option)
 
@@ -697,6 +757,12 @@ Options:
 
 	--dm_r.saucer_face=DM_R.SAUCER_FACE
 		(default is value of "dm_r" option)
+
+	--ps_theta.saucer_face=PS_THETA.SAUCER_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.saucer_face=PS_R.SAUCER_FACE
+		(default is value of "ps_r" option)
 
 	--shape_theta.saucer_face=SHAPE_THETA.SAUCER_FACE
 		(default is value of "shape_theta" option)
@@ -758,6 +824,12 @@ Options:
 	--dm_r.saucer_back=DM_R.SAUCER_BACK
 		(default is value of "dm_r" option)
 
+	--ps_theta.saucer_back=PS_THETA.SAUCER_BACK
+		(default is value of "ps_theta" option)
+
+	--ps_r.saucer_back=PS_R.SAUCER_BACK
+		(default is value of "ps_r" option)
+
 	--shape_theta.saucer_back=SHAPE_THETA.SAUCER_BACK
 		(default is value of "shape_theta" option)
 
@@ -818,6 +890,12 @@ Options:
 	--dm_r.chip_face=DM_R.CHIP_FACE
 		(default is value of "dm_r" option)
 
+	--ps_theta.chip_face=PS_THETA.CHIP_FACE
+		(default is value of "ps_theta" option)
+
+	--ps_r.chip_face=PS_R.CHIP_FACE
+		(default is value of "ps_r" option)
+
 	--shape_theta.chip_face=SHAPE_THETA.CHIP_FACE
 		(default is value of "shape_theta" option)
 
@@ -877,6 +955,12 @@ Options:
 
 	--dm_r.chip_back=DM_R.CHIP_BACK
 		(default is value of "dm_r" option)
+
+	--ps_theta.chip_back=PS_THETA.CHIP_BACK
+		(default is value of "ps_theta" option)
+
+	--ps_r.chip_back=PS_R.CHIP_BACK
+		(default is value of "ps_r" option)
 
 	--shape_theta.chip_back=SHAPE_THETA.CHIP_BACK
 		(default is value of "shape_theta" option)

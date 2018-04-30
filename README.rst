@@ -209,7 +209,7 @@ What are the dimensions of the components?
     #. tiles (default "rect") are drawn into a 2" by 2" square 
     #. coins (default "circle") are drawn into a ¾" by ¾" square
     #. dice (default "rect") faces are drawn into a ½" by ½" square
-    #. pawn sides (default "halma") are drawn into a ¾" by 1¾" rectangle
+    #. pawn sides (default "halma") are drawn into a ½" by ⅞" rectangle
     #. "pawn belts" (default "rect") are drawn into a 1½" by ½" rectangle
     #. "pawn saucers" (default "circle") are drawn into a ⅞" by ⅞" square
     #. "chips" (default "circle") are drawn into a ⅝" by ⅝" square

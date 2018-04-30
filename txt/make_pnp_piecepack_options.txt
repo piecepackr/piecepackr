@@ -1,4 +1,4 @@
-Usage: Program to make piecepack deck pdf
+Usage: Program to make print-and-play piecepack deck
 
 
 Options:

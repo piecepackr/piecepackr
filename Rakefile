@@ -14,12 +14,15 @@ version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'
 
 collect_piecepacks = "exec/collect_pnp_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
 def make_piecepack (filename, extra_flags)
+    skip_images = ENV.has_key?("skip_images") # rake skip_images=
     configure_piecepack = "exec/configure_piecepack --font='Noto Sans Symbols' --header_font='Noto Sans' "
     json_file = "configurations/" + filename + ".json"
     sh configure_piecepack + " --file=" + json_file + " --deck_filename=" + filename + extra_flags
     sh "exec/make_pnp_piecepack --file=" + json_file
     sh "exec/make_piecepack_preview --file=" + json_file
-    sh "exec/make_piecepack_images --file=" + json_file
+    if not skip_images
+        sh "exec/make_piecepack_images --file=" + json_file
+    end
 end
 
 # Colors
@@ -73,17 +76,19 @@ chinese_ranks_sc1 = " --rank_symbols=鼠,龙,猴,牛,蛇,鸡 --rank_symbols_font
 chinese_ranks_sc2 = " --rank_symbols=虎,马,狗,兔,羊,猪 --rank_symbols_font='Noto Sans CJK SC' --rank_symbols_scale=0.7"
 
 # Configurations
-dozenal_chips = " --shape.chip_face=5 --shape.chip_back=5"
-pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back= --shape.chip_face=kite --shape.chip_back=kite"
-orthodox_dm = " --dm_colors.coin_face=black --dm_colors.coin_back=black --dm_symbols.ppdie_face= --dm_symbols.coin_face='|' --dm_symbols_font.coin_face='Noto Sans' --dm_r.coin_face=0.45 --dm_symbols.coin_back='|' --dm_symbols_font.coin_back='Noto Sans' --dm_r.coin_back=0.45"
+dozenal_chips = " --shape.chip=5"
+pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip= --shape.chip=kite"
+orthodox_dm = " --dm_colors.coin=black --dm_symbols.ppdie= --dm_symbols.coin='|' --dm_symbols_font.coin='Noto Sans' --dm_r.coin=0.45"
 # ○ ⚆ ⚇ ● ⚈ ⚉
-orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer_face=black --dm_symbols.saucer_face='|' --dm_symbols_font.saucer_face='Noto Sans' --dm_r.saucer_face=0.45 --dm_symbols.saucer_back='|' --dm_symbols_font.saucer_back='Noto Sans' --dm_r.saucer_back=0.45"
+orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer=black --dm_symbols.saucer='|' --dm_symbols_font.saucer='Noto Sans' --dm_r.saucer=0.45"
+orthodox_pawns = " --invert_colors.pawn --suit_symbols.pawn= --dm_symbols.pawn="
+orthodox_pawns6p = " --invert_colors.pawn --suit_symbols.pawn=⚈,⚉,⚈,⚉,, --dm_symbols.pawn="
 
 orthodox_saucers1 = " --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
 orthodox_saucers2 = " --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
 orthodox_saucers3 = " --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,1,1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
-hex_components = " --shape.tile_face=6 --shape.tile_back=6 --shape.coin_face=3 --shape.coin_back=3 --shape.saucer_face=3 --shape.saucer_back=3 --shape.chip_face=3 --shape.chip_back=3 --dm_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_back=0.7 --shape_theta.coin_face=-90 --shape_theta.coin_back=-90 --shape_theta.saucer_face=-90 --shape_theta.saucer_back=-90 --shape_theta.chip_face=-90 --shape_theta.chip_back=-90 --dm_theta.coin_face=-90 --dm_theta.coin_back=-90 --dm_theta.saucer_face=-90 --dm_theta.saucer_back=-90 --dm_theta.chip_face=-90 --dm_theta.chip_back=-90"
-star_chips  = " --shape.chip_face=star --shape.chip_back=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_back=0.7"
+hex_components = " --shape.tile=6 --shape.coin=3 --shape.saucer=3 --shape.chip=3 --dm_symbols_scale.chip=0.7 --shape_theta.coin=-90 --shape_theta.saucer=-90 --shape_theta.chip=-90 --dm_theta.coin=-90 --dm_theta.saucer=-90 --dm_theta.chip=-90"
+star_chips  = " --shape.chip=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip=0.7"
 
 ## Demos
 desc "Run all demos"
@@ -273,13 +278,13 @@ task :orthodox do
     deck_title = " --deck_title='Orthodox piecepack" + version_str
     suit_symbols = piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black"
     file = "orthodox1"
-    extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers1
+    extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers1 + orthodox_pawns
     make_piecepack file, deck_title + suit_symbols + orthodox_ranks + extra_flags
 
     deck_title = " --deck_title='Orthodox-style 2-color french-suited piecepack" + version_str
     suit_symbols = french_suits_swirl + " --suit_colors=darkred,black,black,darkred,black "
     file = "orthodox2"
-    extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers2
+    extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers2 + orthodox_pawns
     make_piecepack file, deck_title + suit_symbols + orthodox_ranks + extra_flags 
 
     decks = " --decks=orthodox1,orthodox2"
@@ -358,7 +363,7 @@ task :sixpack do
     deck_title = " --deck_title='Sixpack ('Orthodox' style)" + version_str
     suit_symbols = sixpack_suits + ' --suit_colors=darkred,black,black,darkred,darkred,black,black'
     file = "sixpack2"
-    extra_flags = "" + pyramid_configuration + orthodox_dm + orthodox_saucers3
+    extra_flags = "" + pyramid_configuration + orthodox_dm + orthodox_saucers3 + orthodox_pawns6p
     make_piecepack file, deck_title + suit_symbols + orthodox_ranks + extra_flags 
 
     deck_title = " --deck_title='Sixpack (Dark multicolor scheme)" + version_str
@@ -449,6 +454,6 @@ task :test do
 
     # decks = " --decks=test1,test2,test3,test4"
     decks = " --decks=test1,test2"
-    sh collect_piecepacks + " --filename=test --title='Test" + version_str + decks
+    sh collect_piecepacks + " --filename=test_demo --title='Test" + version_str + decks
     # open_pdf "test"
 end

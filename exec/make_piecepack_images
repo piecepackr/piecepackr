@@ -4,8 +4,8 @@ options(error = quote(dump.frames("images_dump", TRUE)), warn=2)
 
 suppressPackageStartupMessages(library("piecepack"))
 
-opts <- read_style()
+opts <- read_configuration(description="Program to make piecepack component images")
                
-make_images(opts)
+make_piecepack_images(opts)
 
 invisible(NULL)

@@ -6,7 +6,7 @@ FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 
 configuration_options <- function(args=commandArgs(TRUE)) {
     default_str <- "(default %default)"
-    parser <- OptionParser("Program to make piecepack configurations for exec/make_piecepack")
+    parser <- OptionParser("Program to make piecepack configurations")
     parser <- add_option(parser, "--deck_title", default=NULL, 
                          help='(default "")')
     parser <- add_option(parser, "--deck_filename", default=NULL, 
@@ -63,6 +63,13 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help=paste('Radius from center (relative units)',
                                   'of polar coordinates of direction mark',
                                   '(default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")'))
+    parser <- add_option(parser, "--ps_theta", default=NULL, type="double", 
+                         help=paste('Angle (in degrees) of polar coordinates of primary symbol',
+                                   '(default 135 for tile faces and die faces and 90 for everything else)'))
+    parser <- add_option(parser, "--ps_r", default=NULL, type="double", 
+                         help=paste('Radius from center (relative units)',
+                                  'of polar coordinates of primary symbol',
+                                  '(default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")'))
 
     # Font
     parser <- add_option(parser, "--font", default=NULL,
@@ -74,7 +81,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--dm_colors", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
     parser <- add_option(parser, "--background_colors", default=NULL, 
-                         help='(default "transparent")')
+                         help='(default "white")')
     parser <- add_option(parser, "--border_color", default=NULL, 
                          help='(default "grey")')
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
@@ -100,7 +107,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          dest="invert_colors.unsuited", help='(default is value of "invert_colors" option)')
 
     # Components variants
-    for (component in COMPONENT_AND_SIDES) {
+    for (component in c(COMPONENTS, COMPONENT_AND_SIDES)) {
         # Symbols
         for (style in c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
                         "suit_colors", "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
@@ -119,7 +126,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         parser <- add_option(parser, opt_str, dest=dest_str, 
                              action="store_false", default=NULL, 
                              help=paste0('Opposite of "', dest_str, '" option'))
-        for (style in c("dm_theta", "dm_r", "shape_theta")) {
+        for (style in c("dm_theta", "dm_r", "ps_theta", "ps_r", "shape_theta")) {
             opt_str <- paste0("--", style, ".", component)
             parser <- add_option(parser, opt_str, default=NULL, type="double",
                                  help=paste0('(default is value of "', style, '" option)'))
@@ -171,7 +178,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
 
 
 #' @export
-make_style <- function(args=commandArgs(TRUE)) {
+configure_piecepack <- function(args=commandArgs(TRUE)) {
     opts <- configuration_options(args)
     filename <- opts$file
     opts$file <- NULL
@@ -186,7 +193,7 @@ make_style <- function(args=commandArgs(TRUE)) {
 
 #' @export
 get_arrangement_opts <- function(args=commandArgs(TRUE)) {
-    parser <- OptionParser("Program to arrange piecepacks")
+    parser <- OptionParser("Program to collect piecepacks")
     parser <- add_option(parser, "--author", default="",
                          help='Pdf author (default "")')
     parser <- add_option(parser, "--filename", default="piecepack_collection",
@@ -261,7 +268,7 @@ process_configuration <- function(opts) {
     if (is.null(opts[["style"]]))
         opts$style <- "basic"
     if (is.null(opts[["background_colors"]]))
-        opts$background_colors <- "transparent"
+        opts$background_colors <- "white"
     if (is.null(opts[["border_color"]]))
         opts$border_color <- "grey"
     if (is.null(opts[["invert_colors"]]))
@@ -316,7 +323,7 @@ process_configuration <- function(opts) {
         if (!is.null(opts[[component_str]]))
             opts[[component_str]] <- col_split(opts[[component_str]])
     }
-    for(component in COMPONENT_AND_SIDES) {
+    for(component in c(COMPONENTS, COMPONENT_AND_SIDES)) {
         for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
                         "rank_symbols_font", "suit_symbols_font", "dm_symbols_font")) {
             component_str <- paste0(style, ".", component)
@@ -340,8 +347,8 @@ process_configuration <- function(opts) {
 }
 
 #' @export
-read_style <- function(args=commandArgs(TRUE)) {
-    parser <- OptionParser("Program to make piecepack deck pdf")
+read_configuration <- function(args=commandArgs(TRUE), description="") {
+    parser <- OptionParser(description)
     parser <- add_option(parser, c('-f', '--file'), default=NULL, help="Source of piecepack style information (default stdin input)")
     parser <- add_option(parser, "--paper", default="letter",
                          help='Default paper size, either "letter" or "A4" (default "letter")')

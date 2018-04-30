@@ -3,4 +3,4 @@ options(error = quote(dump.frames("configure_dump", TRUE)), warn=2)
 
 suppressPackageStartupMessages(library("piecepack"))
 
-make_style()
+configure_piecepack()
