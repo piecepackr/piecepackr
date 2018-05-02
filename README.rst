@@ -1,7 +1,7 @@
 Piecepack Graphics R Package
 ----------------------------
 
-This is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components.
+This is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components as well as an Rscript to build images of individual components.  The API can also be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) or even to make a custom Print & Play layout.
 
 **Warning**: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
 
@@ -115,8 +115,11 @@ Executable options
 * `make_piecepack_preview --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_preview_options.txt>`_
 * `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
 
-Demo descriptions
------------------
+.. _`Demo descriptions`:
+
+Demos
+-----
+
 
 chess
 ~~~~~
@@ -193,50 +196,71 @@ Frequently Asked Questions
 --------------------------
 
 How should I Print & Play my piecepack?
-    The Print-and-Play pdf's produced by the ``make_piecepack`` command are designed to be used in three different ways:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    1. Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
-    2. Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
-    3. Print double-sided on paper(board) and cut out the components.  One will need to do some additional folding and application of adhesive/tape in order to construct the dice and pawns.
+The Print-and-Play pdf's produced by the ``make_piecepack`` command are designed to be used in three different ways:
 
-    The `Piecepack Wiki <www.ludism.org/ppwiki>`_ has a page on `making piecepacks <http://www.ludism.org/ppwiki/MakingPiecepacks>`_. The BoardGameGeek `Print-and-Play Wiki <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ also has lots of good info like how to `quickly make coins uisng an arch punch <https://boardgamegeek.com/thread/507240/making-circular-tokens-and-counters-arch-punch>`_.  
+- Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
+- Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
+- Print double-sided on paper(board) and cut out the components.  One will need to do some additional folding and application of adhesive/tape in order to construct the dice and pawns.
 
-    **Warning:**  Generally it is advisable to uncheck 'fit to size' when printing PDF files otherwise your components maybe re-sized by the printer.
+The `Piecepack Wiki <www.ludism.org/ppwiki>`_ has a page on `making piecepacks <http://www.ludism.org/ppwiki/MakingPiecepacks>`_. The BoardGameGeek `Print-and-Play Wiki <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ also has lots of good info like how to `quickly make coins uisng an arch punch <https://boardgamegeek.com/thread/507240/making-circular-tokens-and-counters-arch-punch>`_.  
+
+**Warning:**  Generally it is advisable to uncheck 'fit to size' when printing PDF files otherwise your components maybe re-sized by the printer.
 
 What are the dimensions of the components?
-    Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts" and "chips") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    #. tiles (default "rect") are drawn into a 2" by 2" square 
-    #. coins (default "circle") are drawn into a ¾" by ¾" square
-    #. dice (default "rect") faces are drawn into a ½" by ½" square
-    #. pawn sides (default "halma") are drawn into a ½" by ⅞" rectangle
-    #. "pawn belts" (default "rect") are drawn into a 1½" by ½" rectangle
-    #. "pawn saucers" (default "circle") are drawn into a ⅞" by ⅞" square
-    #. "chips" (default "circle") are drawn into a ⅝" by ⅝" square
+Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts" and "chips") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes:
+
+- tiles (default "rect") are drawn into a 2" by 2" square 
+- coins (default "circle") are drawn into a ¾" by ¾" square
+- dice (default "rect") faces are drawn into a ½" by ½" square
+- pawn sides (default "halma") are drawn into a ½" by ⅞" rectangle
+- "pawn belts" (default "rect") are drawn into a 1½" by ½" rectangle
+- "pawn saucers" (default "circle") are drawn into a ⅞" by ⅞" square
+- "chips" (default "circle") are drawn into a ⅝" by ⅝" square
        
-    Components are drawn into rectangular drawing spaces (which are always squares except for pawn components).  The program allows one to customize piecepack component shapes.  If a components shape is ``rect`` it will fill up the entire rectangular drawing space, if it is a ``circle`` then the rectangular drawing space will be circumscribed around the circle.  If a components shape is a ``star`` or a regular polygon specified by its number of sides then the rectangular drawing space will be circumscribed around a circle that will be circumscribed around that regular polygon (or ``star``).  The rectangular drawing space also is circumscribed around the special ``halma`` and ``kite`` shapes.
+Components are drawn into rectangular drawing spaces (which are always squares except for pawn components).  The program allows one to customize piecepack component shapes.  If a components shape is ``rect`` it will fill up the entire rectangular drawing space, if it is a ``circle`` then the rectangular drawing space will be circumscribed around the circle.  If a components shape is a ``star`` or a regular polygon specified by its number of sides then the rectangular drawing space will be circumscribed around a circle that will be circumscribed around that regular polygon (or ``star``).  The rectangular drawing space also is circumscribed around the special ``halma`` and ``kite`` shapes.
 
-    **Warning:**  Generally it is advisable to uncheck 'fit to size' when printing PDF files otherwise your components maybe re-sized by the printer.
+**Warning:**  Generally it is advisable to uncheck 'fit to size' when printing PDF files otherwise your components maybe re-sized by the printer.
 
 What are the possible color options?
-    You can specify colors either by `RGB hex color codes <http://www.color-hex.com/>`_ or `R color strings <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>`_.  "transparent" is a color option which does what you'd expect it to (if used for something other than the background color will render the element effectively invisible).  **Warning:** you shouldn't mix "transparent" backgrounds with the ``invert_colors`` options.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can specify colors either by `RGB hex color codes <http://www.color-hex.com/>`_ or `R color strings <http://www.stat.columbia.edu/~tzheng/files/Rcolor.pdf>`_.  "transparent" is a color option which does what you'd expect it to (if used for something other than the background color will render the element effectively invisible).  **Warning:** you shouldn't mix "transparent" backgrounds with the ``invert_colors`` options.
 
 I have some images I want to use as suit/rank/directional mark symbols, how can I use them with this program?
-    You'll need to take them and put them into a font.  `FontForge <https://fontforge.github.io/en-US/>`_ is a popular open-source program suitable for this task.  `fontcustom <https://github.com/FontCustom/fontcustom>`_ is a popular command-line wrapper around FontForge.  You may need to convert your images from one format to another format first.  To guarantee dispatch by ``fontconfig`` you might want to put the symbols in a part of the "Private Use Area" of Unicode not used by any other fonts on your system.  If you do that you won't need to specify your font otherwise you'll need to configure the ``suit_symbols_font``, ``rank_symbols_font``, and/or ``dm_symbols_font`` options.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You'll need to take them and put them into a font.  `FontForge <https://fontforge.github.io/en-US/>`_ is a popular open-source program suitable for this task.  `fontcustom <https://github.com/FontCustom/fontcustom>`_ is a popular command-line wrapper around FontForge.  You may need to convert your images from one format to another format first.  To guarantee dispatch by ``fontconfig`` you might want to put the symbols in a part of the "Private Use Area" of Unicode not used by any other fonts on your system.  If you do that you won't need to specify your font otherwise you'll need to configure the ``suit_symbols_font``, ``rank_symbols_font``, and/or ``dm_symbols_font`` options.
 
 What are the "chips" accessories that shows up on the accesories page of the print-and-play pdf supposed to be used for?
-    The "chips" are a customizable accessory that can aid in playing certain types of games.  Some possible uses:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    1.  One option (and source of the name "chip") is to mount them on suit-colored poker chips.  By default both sides will show suit and direction and one side will also show a rank. In such a configuration it could be used to replace piecepack pyramids in a subset of games like Alien City or Ice Floe, could be used to add more pieces in games like checkers/go, could be used to reduce abstraction in chess (i.e. each side's pieces could be distinguished by color), etc. 
-    2. A second option would be to mount them on pyramids to make `piecepack pyramids <http://www.ludism.org/ppwiki/PiecepackPyramids>`_.  A classic configuration for this purpose would be ``--rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip_face= --dm_symbols.chip_back= --shape.chip_face=kite --shape.chip_back=kite``.
-    3. A third option would be to produce the "piecepack stones" accessory (i.e. from the `Sensible Expansions proposal <http://www.ludism.org/ppwiki/SensibleExpansions>`_).  A good configuration for this purpose would be  ``--suit_symbols.chip_back= --dm_colors.chip_back=grey --dm_symbols=■ --uninvert_colors.chip_back  --shape.chip_back=rect --shape.chip_face=rect``. 
-    4. A fourth option would be to produce a "suit (star) coin" accessory (i.e. from the `JCD piecepack <http://www.piecepack.org/JCD.html>`_).  A good configuration for this purpose would be ``--use_suit_as_ace.chip_face --invert_colors.chip_face --shape.chip_face=star --rank_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip_face=0.7 --shape.chip_back=star --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip_back=0.7``.  
-    5. A fifth option if paired with another deck with six extra ranks would be to mount the chip faces on a large d12 to make a "dozenal piecepack die" for each suit.  The suits could then also go on a d12 to make a "dozenal suit die" especially if there are in fact a dozen suits.  A good configuration for this purpose would be "``--shape.chip_face=5 --shape.chip_back=5``
-    6. A sixth option would be to make "hexpack triangular chits" (i.e. from the `Hexpack`_).  A good configuration for this purpose would be ``--shape.chip_face=3 --dm_theta.chip_face=-90 --dm_symbols_scale.chip_face=0.7 --shape.chip_back=3 --suit_colors.chip_back=``.
+The "chips" are a customizable accessory that can aid in playing certain types of games.  Some possible uses:
+
+-  One option (and source of the name "chip") is to mount them on suit-colored poker chips.  By default both sides will show suit and direction and one side will also show a rank. In such a configuration it could be used to replace piecepack pyramids in a subset of games like Alien City or Ice Floe, could be used to add more pieces in games like checkers/go, could be used to reduce abstraction in chess (i.e. each side's pieces could be distinguished by color), etc. 
+-  A second option would be to mount them on pyramids to make `piecepack pyramids <http://www.ludism.org/ppwiki/PiecepackPyramids>`_.  A classic configuration for this purpose would be ``--rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip= --shape.chip=kite``.
+-  A third option would be to produce the "piecepack stones" accessory (i.e. from the `Sensible Expansions proposal <http://www.ludism.org/ppwiki/SensibleExpansions>`_).  A good configuration for this purpose would be  ``--suit_symbols.chip_back= --dm_colors.chip_back=grey --dm_symbols=■ --uninvert_colors.chip_back  --shape.chip=rect``. 
+-  A fourth option would be to produce a "suit (star) coin" accessory (i.e. from the `JCD piecepack <http://www.piecepack.org/JCD.html>`_).  A good configuration for this purpose would be ``--use_suit_as_ace.chip_face --invert_colors.chip_face --shape.chip=star --rank_symbols_scale.chip_face=0.7 --dm_symbols_scale.chip=0.7 --suit_symbols_scale.chip_back=0.7``.  
+-  A fifth option if paired with another deck with six extra ranks would be to mount the chip faces on a large d12 to make a "dozenal piecepack die" for each suit.  The suits could then also go on a d12 to make a "dozenal suit die" especially if there are in fact a dozen suits.  A good configuration for this purpose would be "``--shape.chip=5``.
+-  A sixth option would be to make "hexpack triangular chits" (i.e. from the `Hexpack`_).  A good configuration for this purpose would be ``--shape.chip=3 --dm_theta.chip=-90 --dm_symbols_scale.chip=0.7 --suit_colors.chip_back=``.
 
 What is the purpose of the "hex lines" that can be configured onto the tiles by the ``hexline_colors`` option?
-    It you use the tiles to build a hex board the hexlines will visually show four of the six hexagon cell sides.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+It you use the tiles to build a hex board the hexlines will visually show four of the six hexagon cell sides.
 
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
-    The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (i.e. this sometimes happens to me in my demos but since the decks still look nice with the font it chooses I decided at some point not to waste anymore time banging my head on messing around with ``fontconfig`` configuration files trying to override ``fontconfig``).  Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans").  If this happens and you really care about it then the only way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to delete from your system the fonts that ``fontconfig`` chooses over your font.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (i.e. this sometimes happens to me in my demos but since the decks still look nice with the font it chooses I decided at some point not to waste anymore time banging my head on messing around with ``fontconfig`` configuration files trying to override ``fontconfig``).  Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans").  If this happens and you really care about it then the only way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to delete from your system the fonts that ``fontconfig`` chooses over your font.
+
+How do I use this package in piecepack rulesets?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+There are two main ways that this package could be used to help make piecepack rulesets:
+
+1) The ``make_piecepack_images`` executable makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
+2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important functions for diagram drawing exported by the ``piecepack`` R package are ``read_configuration`` used to read in a JSON configuration file with the relevant piecepack configuration and ``draw_component`` which draws piecepack components to the graphics device. 
