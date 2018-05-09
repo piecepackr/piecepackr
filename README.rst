@@ -13,7 +13,7 @@ Installation
 Short instructions using Rakefile on Ubuntu (17.10+)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Clones repo and installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) but doesn't add executable Rscripts to ``$PATH``.  Should sets up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed then what a strictly minimal install would need).::
+The below commands clones repo and installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) but doesn't add executable Rscripts to ``$PATH``.  Should sets up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed then what a strictly minimal install would need).::
 
     $ sudo apt install git rake
     $ git clone https://github.com/trevorld/piecepack
@@ -30,7 +30,28 @@ To update previously cloned repo to newest version and re-install R package::
 Detailed instructions
 ~~~~~~~~~~~~~~~~~~~~~
 
-This package is developed and tested on Ubuntu Linux.  Instructions are given below for installation on Ubuntu Linux but installing on another \*nix OS should be a straightforward substitution of the ``apt`` package manager with your OS's preferred package manager like ``brew`` for OSX (you may also need to tweak the package names to match what is in your repos and to manually install some software/fonts not in your repos).  It is also possible to `install and run an Ubuntu terminal <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_ on recent versions of Windows or to (freely) run Ubuntu in a virtual machine or even in a ``chroot``.  If you have a really minimal \*nix environment you may also need to install Cairo and a windows manager like X or Quartz.
+System dependencies
++++++++++++++++++++
+
+#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo
+#. `grImport2 <https://github.com/sjp/grImport2>`_ R package plus several R packages available on CRAN
+#. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
+
+System suggestions
+++++++++++++++++++
+
+#. ``pdfjoin`` (part of `pdfsam <https://pdfsam.org/>`_) (needed for ``collect_piecepacks`` executable)
+#. ``gs`` (part of `ghostscript <https://www.ghostscript.com/>`_) (needed for ``collect_piecepacks`` executable)
+#. ``pdfinfo`` (part of `poppler-utils <https://poppler.freedesktop.org/>`_) (needed for ``collect_piecepacks`` executable)
+#. `Rake - Ruby Make <https://github.com/ruby/rake>`_ (needed for running demos and other developer build commands)
+#. Several `Noto <https://www.google.com/get/noto/>`_ fonts (in particular "Noto Sans", "Noto Sans Symbols", "Noto Sans Symbols2", "Noto Emoji", "Noto Sans Cham", "Noto Sans CJK SC")
+#. `Quivira <http://quivira-font.com/>`_ font
+#. `DejaVu Sans <https://dejavu-fonts.github.io/>`_ font
+
+Installation Notes
+++++++++++++++++++
+
+This package is developed and tested on Ubuntu Linux.  Instructions are given below for installation on Ubuntu Linux but installing on another \*nix OS should be a straightforward substitution of the ``apt`` package manager with your OS's preferred package manager like ``brew`` for OSX (you may also need to tweak the package names to match what is in your repos and to manually install some software/fonts not in your repos).  The system dependencies/suggestions are all *theoretically* installable on Windows but it is likely easier on recent versions of Windows to `install and run an Ubuntu terminal <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_ or to (freely) run Ubuntu in a virtual machine or possibly even in a ``chroot``.  
 
 You'll need to install some system requirements to use this R package and its executables::
 
@@ -88,7 +109,7 @@ If you don't install the above fonts then you might need to install some additio
 How to use executable Rscripts
 ------------------------------
 
-One uses the ``make_pnp_piecepack`` command to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_piecepack_preview`` command to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_pnp_piecepacks`` command.  The ``make_pnp_piecepack``, ``make_piecepack_images``, and ``make_piecepack_preview`` commands requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure_piecepack`` can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
+One uses the ``make_pnp_piecepack`` executable to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_piecepack_preview`` executable to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_pnp_piecepacks`` executable.  The ``make_piecepack_images`` executable makes individual images of piecepack components.  The ``make_pnp_piecepack``, ``make_piecepack_images``, and ``make_piecepack_preview`` executables requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure_piecepack`` executable can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
 
     $ rake demo_name
 
@@ -198,7 +219,7 @@ Frequently Asked Questions
 How should I Print & Play my piecepack?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Print-and-Play pdf's produced by the ``make_piecepack`` command are designed to be used in three different ways:
+The Print-and-Play pdf's produced by the ``make_piecepack`` executable are designed to be used in three different ways:
 
 - Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
 - Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
