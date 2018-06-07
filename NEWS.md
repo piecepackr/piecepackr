@@ -5,8 +5,10 @@ piecepack 0.8.0
 * Shrunk the pawn down to ½" by ⅞" and made them directional by default (#50).
 * Exported component drawing function ``draw_component`` (#3, #58).
 * Allow styles by general component (#57) and open up primary symbol theta and r (#51).
+* Document exported functions in Rd pages.
 
 * Fixed bugs in "orthodox" pawns (#62).
+* Expanded Rainbow Deck demo (#64).
 
 piecepack 0.7.1
 ===============

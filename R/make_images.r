@@ -1,3 +1,7 @@
+#' @importFrom grDevices bmp cairo_pdf cairo_ps dev.off jpeg png svg tiff
+#' @import grid
+
+
 COMPONENTS <- c("tile", "coin", "ppdie", "suitdie", 
            "pawn", "belt", "saucer", "chip")
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
@@ -221,14 +225,14 @@ get_ps_r <- function(component_side, cfg) {
 get_dm_symbols <- function(component_side, cfg) {
     dm_symbols <- get_style_element("dm_symbols", component_side, cfg, {
         if (component_side %in% c("coin_back", "coin_face")) {
-            dm_symbols <- "●"
+            dm_symbols <- "\u25cf" # "●"
         } else if (component_side %in% c("chip_back")) {
-            dm_symbols <- "⛃"
+            dm_symbols <- "\u26c3" # "⛃"
         } else if (component_side %in% c("saucer_back", "saucer_face")) {
-            dm_symbols <- "♟"
+            dm_symbols <- "\u265f" # "♟"
         } else if (component_side %in% c("pawn_face")) {
-            dm_symbols <- "👀"
-            # dm_symbols <- "😃"
+            dm_symbols <- "\U0001f440" # "👀"
+            # dm_symbols <- "\U0001f603" # "😃"
         } else if (component_side %in% c("suitdie_face", "pawn_back", 
                                          "belt_face", "tile_back")) {
             dm_symbols <- ""
@@ -461,7 +465,7 @@ to_y <- function(theta, r) {
 }
 
 to_r <- function(x, y) {
-    sqrt(x^2, y^2)
+    sqrt(x^2 + y^2)
 }
 
 to_theta <- function(x, y) {
@@ -568,6 +572,11 @@ make_preview <- function(cfg) {
     invisible(dev.off())
 }
 
+#' Make piecepack deck preview svg
+#'
+#' Make piecepack deck preview svg
+#'
+#' @param cfg Piecepack configuration list
 #' @export
 make_piecepack_preview <- function(cfg) {
     dir.create(cfg$svg_preview_dir, recursive=TRUE, showWarnings=FALSE)
@@ -622,6 +631,11 @@ pp_device <- function(filename, component, format, theta) {
     downViewport("main")
 }
 
+#' Make piecepack images
+#'
+#' Makes images of individual piecepack components.
+#'
+#' @param cfg Piecepack configuration list
 #' @export
 make_piecepack_images <- function(cfg) {
     for (format in cfg$component_formats) {
@@ -851,6 +865,23 @@ draw_pawn <- function(i_s, cfg) {
     seg(0.5, 1, 0.5, 1-ll, cfg$border_col)
 }
 
+#' Draw piecepack component
+#' 
+#' Draws a piecepack component onto the graphics device
+#' 
+#' @param component_side A string with component and side separated by a underscore e.g. "coin_face"
+#' @param cfg Piecepack configuration list
+#' @param i_s Number of suit
+#' @param i_r Number of rank
+#' @param x Number between 0 and 1 of where to place component
+#' @param y Number between 0 and 1 of where to place component
+#' @param width Width of component
+#' @param height Height of component
+#' @param svg If \code{TRUE} instead of drawing directly into graphics device
+#'            export to svg, re-import svg, and then draw it to graphics device.  
+#'            This is useful if drawing really big or small and don't want
+#'            to play with re-configuring fontsizes.
+#' @param ... Extra arguments to pass to \code{grid::viewport} like \code{angle}.
 #' @export
 draw_component <- function(component_side, cfg=c2o(), i_s=cfg$i_unsuit, i_r=1, x=0.5, y=0.5, 
                            width=NULL, height=NULL, svg=FALSE, ...) {
@@ -861,6 +892,7 @@ draw_component <- function(component_side, cfg=c2o(), i_s=cfg$i_unsuit, i_r=1, x
         height=inch(get_pp_height(component))
     if (svg) {
         svg_file <- tempfile(fileext=".svg")
+        on.exit(unlink(svg_file))
         pp_width=get_pp_width(component)
         pp_height=get_pp_height(component)
 

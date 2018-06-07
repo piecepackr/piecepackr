@@ -7,20 +7,17 @@ task :clean do
     sh "killall evince | true"
 end
 
-demos = ["chess", "chinese_zodiac", "crown_and_anchor", "default",
-         "dual", "hex", "orthodox", "rainbow_deck", "reversi", "sixpack"]
-
 version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'` + ")'"
 
 collect_piecepacks = "exec/collect_pnp_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
 def make_piecepack (filename, extra_flags)
-    skip_images = ENV.has_key?("skip_images") # rake skip_images=
+    make_images = ENV.has_key?("make_images") # rake make_images=
     configure_piecepack = "exec/configure_piecepack --font='Noto Sans Symbols' --header_font='Noto Sans' "
     json_file = "configurations/" + filename + ".json"
     sh configure_piecepack + " --file=" + json_file + " --deck_filename=" + filename + extra_flags
     sh "exec/make_pnp_piecepack --file=" + json_file
     sh "exec/make_piecepack_preview --file=" + json_file
-    if not skip_images
+    if make_images
         sh "exec/make_piecepack_images --file=" + json_file
     end
 end
@@ -34,8 +31,12 @@ light_scheme = light + "grey"
 # dark_scheme = dark + "grey"
 hexlines_dark = " --hexline_colors=" + dark + "transparent"
 hexlines_light = " --hexline_colors=" + light + "transparent"
-rd_dark = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,white"
-rd_light = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,white"
+rd_dark = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,sienna"
+rd_light = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,sienna"
+rd_dark2 = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,white"
+rd_light2 = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,white"
+rd_dark3 = "#ff0000,#ffc000,#008000,#0000ff,#800080,white,sienna"
+rd_light3 = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,white,sienna"
 
 # Suits
 ca_suits = " --suit_symbols=♥,♦,♣,♠,♚,⚓,★ --suit_symbols_scale=1,1,1,1,1,1,1,1 --suit_symbols_font='Noto Sans Symbols'"
@@ -46,6 +47,7 @@ french_suits_swirl = " --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1
 latin_suits_swirl = " --suit_symbols=,,,,꩜ --suit_symbols_font=Quivira --suit_symbols_scale=1,1,1,1,1.2"
 piecepack_suits = " --suit_symbols=🌞,🌜,👑,⚜,꩜ --suit_symbols_scale=0.7,0.8,0.8,1.1,1.2,1.2 --suit_symbols_font='Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham'"
 rd_suits = " --suit_symbols=♥,★,♣,♦,♛,♠,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font='Noto Sans Symbols'"
+rd_suits2 = " --suit_symbols=♥,★,♣,♦,♛,♤,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font='Noto Sans Symbols'"
 # swiss_suits = " --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1.2,1.2"
 swiss_suits = " --suit_symbols=,,,, --suit_symbols_font=Quivira --suit_symbols_scale=1"
 sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=0.9,0.9,0.9,0.9,0.7,0.7,1.1,1.2 --suit_symbols_font='Noto Emoji'"
@@ -82,7 +84,7 @@ orthodox_dm = " --dm_colors.coin=black --dm_symbols.ppdie= --dm_symbols.coin='|'
 # ○ ⚆ ⚇ ● ⚈ ⚉
 orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer=black --dm_symbols.saucer='|' --dm_symbols_font.saucer='Noto Sans' --dm_r.saucer=0.45"
 orthodox_pawns = " --invert_colors.pawn --suit_symbols.pawn= --dm_symbols.pawn="
-orthodox_pawns6p = " --invert_colors.pawn --suit_symbols.pawn=⚈,⚉,⚈,⚉,, --dm_symbols.pawn="
+orthodox_pawns6p = " --invert_colors.pawn --suit_symbols.pawn=⚈,⚈,⚉,⚉,, --dm_symbols.pawn="
 
 orthodox_saucers1 = " --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
 orthodox_saucers2 = " --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
@@ -91,12 +93,11 @@ hex_components = " --shape.tile=6 --shape.coin=3 --shape.saucer=3 --shape.chip=3
 star_chips  = " --shape.chip=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip=0.7"
 
 ## Demos
+demos = ["chess", "chinese_zodiac", "crown_and_anchor", "default",
+         "dual", "hex", "orthodox", "rainbow_deck", "reversi", "sixpack"]
+
 desc "Run all demos"
-task :all do
-    demos.each { |demo|
-        Rake::Task["#{demo}"].invoke()
-    }
-end
+multitask :all => demos
 
 desc "Chess demo"
 task :chess do
@@ -292,22 +293,53 @@ task :orthodox do
 end
 
 desc "Rainbow deck demo"
-task :rainbow_deck do
-    rd_background = " --background_colors=sienna"
-    deck_title = " --deck_title='RD-suited piecepack (Dark color scheme)" + version_str
+multitask :rainbow_deck => [:rd1, :rd2, :rd3, :rd4, :rd5, :rd6]
+multitask :rainbow_deck do
+    decks = " --decks=rainbow_deck1,rainbow_deck2,rainbow_deck3,rainbow_deck4,rainbow_deck5,rainbow_deck6"
+    sh collect_piecepacks + " --filename=rainbow_deck_demo --title='Rainbow Deck suited piecepack demo" + version_str + decks + " --subject='The Rainbow Deck (RD) is a cardgame system by Chen Changcai.  More information is available at https://boardgamegeek.com/boardgame/59655/rainbow-deck.'"
+end
+task :rd1 do
+    deck_title = " --deck_title='RD-suited piecepack (Dark suits)" + version_str
     suit_symbols = rd_suits + ' --suit_colors=' + rd_dark
     file = "rainbow_deck1"
-    extra_flags = "" + rd_background + dozenal_chips
+    extra_flags = dozenal_chips
     make_piecepack file, deck_title + suit_symbols + default_ranks + extra_flags 
-
-    deck_title = " --deck_title='RD-suited piecepack (Light color scheme)" + version_str
+end
+task :rd2 do
+    deck_title = " --deck_title='RD-suited piecepack (Light suits)" + version_str
     suit_symbols = rd_suits + ' --suit_colors=' + rd_light
     file = "rainbow_deck2"
+    extra_flags = dozenal_chips
+    make_piecepack file, deck_title + suit_symbols + default_ranks + extra_flags 
+end
+rd_background = " --background_colors=sienna"
+task :rd3 do
+    deck_title = " --deck_title='RD-suited piecepack (Dark suits)" + version_str
+    suit_symbols = rd_suits + ' --suit_colors=' + rd_dark2
+    file = "rainbow_deck3"
     extra_flags = "" + rd_background + dozenal_chips
     make_piecepack file, deck_title + suit_symbols + default_ranks + extra_flags 
-
-    decks = " --decks=rainbow_deck1,rainbow_deck2"
-    sh collect_piecepacks + " --filename=rainbow_deck_demo --title='Rainbow Deck suited piecepack demo" + version_str + decks + " --subject='The Rainbow Deck (RD) is a cardgame system by Chen Changcai.  More information is available at https://boardgamegeek.com/boardgame/59655/rainbow-deck.'"
+end
+task :rd4 do
+    deck_title = " --deck_title='RD-suited piecepack (Light suits)" + version_str
+    suit_symbols = rd_suits + ' --suit_colors=' + rd_light2
+    file = "rainbow_deck4"
+    extra_flags = "" + rd_background + dozenal_chips
+    make_piecepack file, deck_title + suit_symbols + default_ranks + extra_flags 
+end
+task :rd5 do
+    deck_title = " --deck_title='RD-suited piecepack (Dark suits)" + version_str
+    suit_symbols = rd_suits2 + ' --suit_colors=' + rd_dark3
+    file = "rainbow_deck5"
+    extra_flags = " --background_colors.suited=black" + dozenal_chips
+    make_piecepack file, deck_title + suit_symbols + default_ranks + extra_flags 
+end
+task :rd6 do
+    deck_title = " --deck_title='RD-suited piecepack (Light suits)" + version_str
+    suit_symbols = rd_suits2 + ' --suit_colors=' + rd_light3
+    file = "rainbow_deck6"
+    extra_flags = " --background_colors.suited=grey" + dozenal_chips
+    make_piecepack file, deck_title + suit_symbols + default_ranks + extra_flags 
 end
 
 desc "Reversi-friendly piecepacks demo"

@@ -1,7 +1,13 @@
+#' @importFrom grImport2 pictureGrob readPicture
 cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package="piecepack")))
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
+#' Inch utility function
+#'
+#' This utility function is equivalent to \code{grid::unit(x, "in")}.
+#' 
+#' @param x Number representing number of inches
 #' @export
 inch <- function(x) { unit(x, "in") }
 
@@ -204,6 +210,11 @@ pp_pdf <- function(filename, family, paper) {
     }
 }
 
+#' Make collection preview
+#' 
+#' Makes a preview pdf of a collection of pnp decks.
+#'
+#' @param cfg Piecepack configuration list
 #' @export
 make_collection_preview <- function(cfg) {
     dir.create(cfg$pdf_preview_dir, recursive=TRUE, showWarnings=FALSE)
@@ -457,6 +468,11 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
     make_deck_header(cfg)
 }
 
+#' Make print-and-play piecepack pdf
+#'
+#' Makes a print-and-play piecepack pdf.
+#'
+#' @param cfg Piecepack configuration list
 #' @export
 make_pnp_piecepack <- function(cfg) {
     directory <- cfg$pdf_deck_dir
@@ -501,6 +517,12 @@ n_pages <- function(pdf_filename) {
     as.numeric(system(paste("pdfinfo", pdf_filename, " | grep Pages | sed 's/[^0-9]*//'"), intern=TRUE))
 }
 
+#' Collects print-and-play piecepack pdfs into one pdf
+#'
+#' Collects print-and-play piecepack pdfs into one pdf
+#' with a preview at the beginning.
+#'
+#' @param cfg Piecepack configuration list
 #' @export
 make_collection <- function(cfg) {
     dir.create(cfg$pdf_collection_dir, recursive=TRUE, showWarnings=FALSE)
