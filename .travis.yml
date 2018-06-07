@@ -1,0 +1,26 @@
+language: r
+cache: packages
+r:
+    - release
+    - devel 
+os:
+    - linux
+sudo: false
+latex: false
+warnings_are_errors: true
+cran: https://cran.rstudio.com
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+r_github_packages:
+    - r-lib/covr
+    - sjp/grImport2
+after_success:
+    - Rscript -e 'covr::codecov()'
+addons:
+    apt:
+        packages:
+            - ghostscript
+            - pdfsam
+            - poppler-utils
