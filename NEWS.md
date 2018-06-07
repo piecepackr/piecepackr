@@ -7,8 +7,9 @@ piecepack 0.8.0
 * Allow styles by general component (#57) and open up primary symbol theta and r (#51).
 * Document exported functions in Rd pages.
 
-* Fixed bugs in "orthodox" pawns (#62).
 * Expanded Rainbow Deck demo (#64).
+
+* Fixed bugs in "orthodox" pawns (#62).
 
 piecepack 0.7.1
 ===============
