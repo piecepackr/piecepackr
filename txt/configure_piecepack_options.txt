@@ -47,6 +47,9 @@ Options:
 	--use_ace_as_ace
 		Opposite of "use_suit_as_ace" option
 
+	--pp_die_arrangement=PP_DIE_ARRANGEMENT
+		Either "counter" or "opposites_sum_to_5" (default "counter")
+
 	--shape=SHAPE
 		either "rect", "circle", "halma", "kite", "star", or a number representing number of sides of a regular polygon (default is to choose reasonable shape based on component)'
 

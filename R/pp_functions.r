@@ -70,8 +70,13 @@ draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
         # label <- stringi::stri_rand_strings(n=1, length=4)
         label <- "piecepack"
         make_die_viewports(label, flip=flip)
-        for(i_r in 1:6) {
-            downViewport(paste0(label, ".die.", i_r))
+        if (cfg$pp_die_arrangement == "opposites_sum_to_5")
+            arrangement <- c(1, 2, 3, 6, 5, 4)
+        else
+            arrangement <- 1:6
+        for(i_face in 1:6) {
+            i_r <- arrangement[i_face]
+            downViewport(paste0(label, ".die.", i_face))
             draw_component("ppdie_face", cfg, i_s, i_r)
             upViewport()
         }

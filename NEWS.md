@@ -6,6 +6,7 @@ piecepack 0.8.0
 * Exported component drawing function ``draw_component`` (#3, #58).
 * Allow styles by general component (#57) and open up primary symbol theta and r (#51).
 * Document exported functions in Rd pages.
+* Option to configure piecepack dice arrangement (#13)
 
 * Expanded Rainbow Deck demo (#64).
 

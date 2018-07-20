@@ -41,6 +41,8 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--use_ace_as_ace", dest="use_suit_as_ace", 
                          action="store_false", default=NULL, 
                          help='Opposite of "use_suit_as_ace" option')
+    parser <- add_option(parser, "--pp_die_arrangement", help='Either "counter" or "opposites_sum_to_5" (default "counter")')
+
     # parser <- add_option(parser, "--style", default=NULL, 
     #                      help='"basic" or "simple_hex" (default "basic")')
     parser <- add_option(parser, "--shape", default=NULL,
@@ -188,7 +190,10 @@ configure_piecepack <- function(args=commandArgs(TRUE)) {
     filename <- opts$file
     opts$file <- NULL
     opts$help <- NULL
+    .to_json(opts, filename)
+}
 
+.to_json <- function(opts, filename=NULL) {
     if (is.null(filename)) {
         writeLines(jsonlite::toJSON(opts, pretty=TRUE), stdout())
     } else {
@@ -275,6 +280,8 @@ process_configuration <- function(opts) {
         opts$suit_colors <- "darkred,black,darkgreen,darkblue,grey"
     if (is.null(opts[["use_suit_as_ace"]]))
         opts$use_suit_as_ace <- FALSE
+    if (is.null(opts[["pp_die_arrangement"]]))
+        opts$pp_die_arrangement <- "counter"
     if (is.null(opts[["style"]]))
         opts$style <- "basic"
     if (is.null(opts[["background_colors"]]))

@@ -1,7 +1,6 @@
 #' @importFrom grDevices bmp cairo_pdf cairo_ps dev.off jpeg png svg tiff
 #' @import grid
 
-
 COMPONENTS <- c("tile", "coin", "ppdie", "suitdie", 
            "pawn", "belt", "saucer", "chip")
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
@@ -22,7 +21,6 @@ PAWN_BASE <- 3/8
 # PAWN_WIDTH <- 5/8
 BELT_HEIGHT <- 1/2
 BELT_WIDTH <- 3 * DIE_WIDTH
-
 
 seg <- function(x, y, xend, yend, color="black", ...) {
     grid.segments(x0=x, y0=y, x1=xend, y1=yend, gp=gpar(col=color, ...))
@@ -464,15 +462,15 @@ to_y <- function(theta, r) {
     r * sin(pi * theta / 180)
 }
 
-to_r <- function(x, y) {
-    sqrt(x^2 + y^2)
-}
+# to_r <- function(x, y) {
+#     sqrt(x^2 + y^2)
+# }
+# 
+# to_theta <- function(x, y) {
+#     atan2(y, x)
+# }
 
-to_theta <- function(x, y) {
-    atan2(y, x)
-}
-
-get_component_opt <- function(component_side, i_s, i_r, cfg) {
+get_component_opt <- function(component_side, i_s=cfg$i_unsuit, i_r=1, cfg=c2o()) {
     shape <- get_shape(component_side, cfg)
     shape_fn <- get_shape_fn(component_side, cfg)
     shape_theta <- get_shape_theta(component_side, cfg)

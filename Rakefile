@@ -470,7 +470,7 @@ task :test do
     file = "test1"
     make_piecepack file,  piecepack_suits + orthodox_ranks + extra_flags 
 
-    extra_flags = "  --invert_colors.suited  --background_colors=white" + star_chips
+    extra_flags = " --pp_die_arrangement=opposites_sum_to_5 --invert_colors.suited  --background_colors=white" + star_chips
     file = "test2"
     make_piecepack file, latin_suits_swirl + default_ranks + extra_flags
 

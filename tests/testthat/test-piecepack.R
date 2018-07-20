@@ -1,6 +1,3 @@
-# expect_that(, throws_error())
-
-context("Test options are working")
 test_that("options work as expected", {
     extra_flags <- c("--invert_colors.suited", "--background_colors=white",
                      "--suit_colors=darkred,black,darkgreen,darkblue,grey")
@@ -43,4 +40,56 @@ test_that("options work as expected", {
     expect_equal(get_dm_symbol("ppdie_face", 6, c2o("--dm_symbols=,,,,")), "")
     expect_equal(get_dm_symbol("saucer_face", 3, c2o("--dm_symbols.saucer_face=b")), "b")
     expect_equal(get_dm_symbol("saucer_back", 5, c2o("--dm_symbols.saucer_back=b")), "b")
+})
+
+test_that("get_component_opt works as expected", {
+    opt <- get_component_opt("coin_face")
+    expect_equal(opt$style, "basic")
+    expect_equal(opt$bcol, "white")
+    expect_equal(opt$scol, "grey")
+    expect_equal(opt$border_col, "grey")
+    expect_equal(opt$checker_col, NA)
+    expect_equal(opt$gridline_col, "grey") ####
+    expect_equal(opt$hexline_col, NA)
+    expect_equal(opt$rank_symbol, "N")
+    expect_equal(opt$rank_fontsize, 28)
+    expect_equal(opt$rank_font, "sans")
+    expect_equal(opt$suit_symbol, "\u2605")
+    expect_equal(opt$suit_fontsize, 24)
+    expect_equal(opt$suit_font, "sans")
+    expect_equal(opt$dm_col, "grey")
+    expect_equal(opt$dm_symbol, "\u25cf")
+    expect_equal(opt$shape, "circle")
+    expect_equal(opt$shape_fn, grid.circle)
+    expect_equal(opt$shape_theta, 90)
+    expect_equal(opt$dm_fontsize, 10)
+    expect_equal(opt$dm_font, "sans")
+    expect_equal(opt$dm_x, 0.5)
+    expect_equal(opt$dm_y, to_y(90, sqrt(0.25^2 + 0.25^2)) + 0.5)
+    expect_equal(opt$ps_x, 0.5)
+    expect_equal(opt$ps_y, 0.5)
+
+    opt <- get_component_opt("chip_back")
+    expect_equal(opt$dm_symbol, "\u26c3")
+    opt <- get_component_opt("saucer_back")
+    expect_equal(opt$dm_symbol, "\u265f")
+    opt <- get_component_opt("pawn_face")
+    expect_equal(opt$dm_symbol, "\U0001f440")
+    opt <- get_component_opt("pawn_back")
+    expect_equal(opt$dm_symbol, "")
+})
+
+test_that("make_pnp_piecepack works as expected", {
+    cfg <- c2o(paste0("--pdf_deck_dir=", tempdir()))
+    json_filename <- tempfile(fileext=".json")
+    on.exit(unlink(json_filename))
+    .to_json(cfg, json_filename)
+    expect_true(file.exists(json_filename))
+    opts <- read_configuration(paste0("--file=", json_filename))
+
+    pdf_filename <- file.path(tempdir(), "piecepack_deck.pdf")
+    on.exit(unlink(pdf_filename))
+
+    make_pnp_piecepack(opts)
+    expect_true(file.exists(pdf_filename))
 })
