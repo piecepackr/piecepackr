@@ -5,9 +5,11 @@ Piecepack Graphics R Package
     :target: https://travis-ci.org/trevorld/optparse
     :alt: Build Status
 
-This is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components as well as an Rscript to build images of individual components.  The API can also be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) or even to make a custom Print & Play layout.
+.. image:: http://www.repostatus.org/badges/latest/wip.svg
+   :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
+   :target: http://www.repostatus.org/#wip
 
-**Warning**: This package is currently in an alpha state.  This means the API is incomplete and likely to change.
+This is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components as well as an Rscript to build images of individual components.  The API can also be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) or even to make a custom Print & Play layout.
 
 .. contents::
 
