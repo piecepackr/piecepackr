@@ -19,6 +19,7 @@ Imports:
     stringi,
     stringr
 Suggests:
-    testthat
+    testthat,
+    vdiffr
 SystemRequirements: ghostscript, pdfsam, poppler-utils
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

@@ -4,8 +4,9 @@
 \alias{draw_component}
 \title{Draw piecepack component}
 \usage{
-draw_component(component_side, cfg = c2o(), i_s = cfg$i_unsuit, i_r = 1,
-  x = 0.5, y = 0.5, width = NULL, height = NULL, svg = FALSE, ...)
+draw_component(component_side, cfg = c2o(), i_s = cfg$i_unsuit,
+  i_r = 1, x = 0.5, y = 0.5, width = NULL, height = NULL,
+  svg = FALSE, ...)
 }
 \arguments{
 \item{component_side}{A string with component and side separated by a underscore e.g. "coin_face"}

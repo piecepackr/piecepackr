@@ -17,7 +17,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
                          help='(default "N,A,2,3,4,5")')
     parser <- add_option(parser, "--suit_symbols", default=NULL, 
-                         help='(default "\u2660,\u2665,\u2663,\u2666,\u2605")') # ♠,♥,♣,♦,★
+                         help='(default "\u2665,\u2660,\u2663,\u2666,\u2605")') # ♥,♠,♣,♦,★
     parser <- add_option(parser, "--dm_symbols", default=NULL, 
                          help='(default is to try to pick a reasonable directional mark symbol based on the component)')
     parser <- add_option(parser, "--header_font", default=NULL, 
@@ -275,7 +275,7 @@ process_configuration <- function(opts) {
     if (is.null(opts[["rank_symbols"]]))
         opts$rank_symbols <- "N,A,2,3,4,5"
     if (is.null(opts[["suit_symbols"]]))
-        opts$suit_symbols <- "\u2660,\u2665,\u2663,\u2666,\u2605" # "♥,♠,♣,♦,★"
+        opts$suit_symbols <- "\u2665,\u2660,\u2663,\u2666,\u2605" # "♥,♠,♣,♦,★"
     if (is.null(opts[["suit_colors"]]))
         opts$suit_colors <- "darkred,black,darkgreen,darkblue,grey"
     if (is.null(opts[["use_suit_as_ace"]]))

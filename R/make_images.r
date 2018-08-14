@@ -42,15 +42,15 @@ grid.halma <- function(gp) {
     grid.polygon(x = c(0,0, x[indices],1,1), y=c(0,0.3,y[indices],0.3,0), gp=gp)
 }
 
-grid.inversecircle <- function() {
-    theta <- seq(0, 2*pi, length.out=100)
-    r <- 0.5
-    x_c <- 0.5 + to_x(theta, r)
-    y_c <- 0.5 + to_y(theta, r)
-    x_r <- c(1, 1, 0, 0, 1, 1)
-    y_r <- c(0.5, 0, 0, 1, 1, 0.5)
-    grid.polygon(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white"))
-}
+# grid.inversecircle <- function() {
+#     theta <- seq(0, 2*pi, length.out=100)
+#     r <- 0.5
+#     x_c <- 0.5 + to_x(theta, r)
+#     y_c <- 0.5 + to_y(theta, r)
+#     x_r <- c(1, 1, 0, 0, 1, 1)
+#     y_r <- c(0.5, 0, 0, 1, 1, 0.5)
+#     grid.polygon(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white"))
+# }
 
 grid.kite <- function(gp) {
     x <- c(0.5, 0, 0.5, 1, 0.5)
@@ -511,14 +511,28 @@ get_component_opt <- function(component_side, i_s=cfg$i_unsuit, i_r=1, cfg=c2o()
          dm_x=dm_x, dm_y=dm_y, ps_x=ps_x, ps_y=ps_y)
 }
 
-
-make_preview <- function(cfg) {
+#' Make piecepack deck preview svg
+#'
+#' Make piecepack deck preview svg
+#'
+#' @param cfg Piecepack configuration list
+#' @export
+make_piecepack_preview <- function(cfg=c2o()) {
+    dir.create(cfg$svg_preview_dir, recursive=TRUE, showWarnings=FALSE)
     pheight <- 2*TILE_WIDTH+3*DIE_WIDTH
+    pwidth <- 3*TILE_WIDTH
     svg(file.path(cfg$svg_preview_dir, paste0(cfg$deck_filename, ".svg")), 
         family=cfg$font, width=3*TILE_WIDTH, height=pheight)
+    draw_preview(cfg)
+    invisible(dev.off())
+}
+
+draw_preview <- function(cfg=c2o()) {
+    pheight <- 2*TILE_WIDTH+3*DIE_WIDTH
+    pwidth <- 3*TILE_WIDTH
     grid.newpage()
 
-    pushViewport(viewport(name="main"))
+    pushViewport(viewport(name="main", width=inch(pwidth), height=inch(pheight)))
     # tiles
     addViewport(y=inch(pheight-TILE_WIDTH), width=inch(3 * TILE_WIDTH), height=inch(2 * TILE_WIDTH), name="tiles")
     downViewport("tiles")
@@ -566,20 +580,8 @@ make_preview <- function(cfg) {
     downViewport('saucers')
     draw_component("saucer_face", cfg, i_s=1, x=0.25, y=0.5)
     draw_component("saucer_back", cfg, x=0.75, y=0.5)
-
-    invisible(dev.off())
 }
 
-#' Make piecepack deck preview svg
-#'
-#' Make piecepack deck preview svg
-#'
-#' @param cfg Piecepack configuration list
-#' @export
-make_piecepack_preview <- function(cfg) {
-    dir.create(cfg$svg_preview_dir, recursive=TRUE, showWarnings=FALSE)
-    make_preview(cfg)
-}
 
 get_pp_width <- function(component) {
     switch(component, 

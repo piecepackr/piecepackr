@@ -1,3 +1,4 @@
+context("options work as expected")
 test_that("options work as expected", {
     extra_flags <- c("--invert_colors.suited", "--background_colors=white",
                      "--suit_colors=darkred,black,darkgreen,darkblue,grey")
@@ -42,6 +43,7 @@ test_that("options work as expected", {
     expect_equal(get_dm_symbol("saucer_back", 5, c2o("--dm_symbols.saucer_back=b")), "b")
 })
 
+context("get_component_opt works as expected")
 test_that("get_component_opt works as expected", {
     opt <- get_component_opt("coin_face")
     expect_equal(opt$style, "basic")
@@ -79,6 +81,8 @@ test_that("get_component_opt works as expected", {
     expect_equal(opt$dm_symbol, "")
 })
 
+
+context("make_pnp_piecepack works as expected")
 test_that("make_pnp_piecepack works as expected", {
     cfg <- c2o(paste0("--pdf_deck_dir=", tempdir()))
     json_filename <- tempfile(fileext=".json")

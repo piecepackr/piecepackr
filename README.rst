@@ -1,9 +1,17 @@
 Piecepack Graphics R Package
 ============================
 
-.. image:: https://travis-ci.org/trevorld/optparse.png?branch=master
-    :target: https://travis-ci.org/trevorld/optparse
+.. image:: https://travis-ci.org/trevorld/piecepack.png?branch=master
+    :target: https://travis-ci.org/trevorld/piecepack
     :alt: Build Status
+
+.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/piecepack?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/trevorld/piecepack
+    :alt: AppVeyor Build Status
+
+.. image:: https://img.shields.io/codecov/c/github/trevorld/piecepack/master.svg
+    :target: https://codecov.io/github/trevorld/piecepack?branch=master
+    :alt: Coverage Status
 
 .. image:: http://www.repostatus.org/badges/latest/wip.svg
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
