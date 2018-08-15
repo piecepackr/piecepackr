@@ -438,7 +438,6 @@ desc "Install R package and dependencies on Ubuntu (17.10+)"
 task :install_dependencies_ubuntu do
     sh 'sudo apt install ghostscript pdfsam poppler-utils r-base'
     sh 'sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
-    sh 'sudo Rscript -e "devtools::install_github(\"sjp/grImport2\")"'
     sh 'sudo apt install fonts-dejavu fonts-noto rake'
     fonts_dir = ENV.fetch("XDG_DATA_HOME", ENV["HOME"] + "/.local/share") + "/fonts/"
     sh 'curl -O http://www.quivira-font.com/files/Quivira.otf'

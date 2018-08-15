@@ -47,8 +47,7 @@ Detailed instructions
 System dependencies
 +++++++++++++++++++
 
-#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo
-#. `grImport2 <https://github.com/sjp/grImport2>`_ R package plus several R packages available on CRAN
+#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN (these R package dependencies are usually installed for you when you install the ``piecepack`` R package): ``gridExtra``, ``grImport2``, ``optparse``, ``jsonlite``, ``stringi``, ``stringr``
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
 
 System suggestions
@@ -71,10 +70,9 @@ You'll need to install some system requirements to use this R package and its ex
 
     $ sudo apt install ghostscript pdfsam poppler-utils r-base 
 
-The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of ``grImport2`` R package as well as the ``piecepack`` R package itself and their R package dependencies.  These (and their R package dependencies) can easily be installed with help of the ``devtools`` package::
+The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package::
 
     $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
-    $ sudo Rscript -e "devtools::install_github(\"sjp/grImport2\")"
     $ sudo Rscript -e "devtools::install_github(\"trevorld/piecepack\")"
 
 R does not add executables in an installed R package to a user's path.  If you plan on using the Rscript executables included with this package (in the ``exec`` folder) you can either:

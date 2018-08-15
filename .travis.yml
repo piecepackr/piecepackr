@@ -15,7 +15,6 @@ notifications:
     on_failure: change
 r_github_packages:
     - r-lib/covr
-    - sjp/grImport2
 after_success:
     - Rscript -e 'covr::codecov()'
 addons:
