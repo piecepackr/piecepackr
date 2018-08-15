@@ -19,6 +19,7 @@ Imports:
     stringi,
     stringr
 Suggests:
+    gdtools,
     testthat,
     vdiffr
 SystemRequirements: ghostscript, pdfsam, poppler-utils

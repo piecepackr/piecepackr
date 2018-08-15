@@ -21,6 +21,7 @@ build_script:
 test_script:
   - travis-tool.sh run_tests
   - Rscript exec/make_pnp_piecepack --file=configurations/nothing.json
+  - R CMD install '*.tar.gz'
   - appveyor PushArtifact pdf\decks\piecepack_deck.pdf'
 
 on_failure:
