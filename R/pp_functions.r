@@ -485,6 +485,7 @@ make_pnp_piecepack <- function(cfg) {
 
     pdf_file <- file.path(directory, paste0(cfg$deck_filename, ".pdf"))
     unlink(pdf_file)
+    cat(pdf_file, "\n")
 
     pp_pdf(pdf_file, cfg$font, cfg$paper)
 
