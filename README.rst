@@ -24,8 +24,8 @@ This is an R package designed to make configurable piecepack graphics.  It inclu
 Installation
 ------------
 
-Short instructions using Rakefile on Ubuntu (17.10+)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Short instructions using Rakefile on Ubuntu (16.04+) including "Bash on Ubuntu on Windows (10)"
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The below commands clones repo and installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) but doesn't add executable Rscripts to ``$PATH``.  Should sets up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed then what a strictly minimal install would need).::
 
@@ -47,13 +47,13 @@ Detailed instructions
 System dependencies
 +++++++++++++++++++
 
-#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN (these R package dependencies are usually installed for you when you install the ``piecepack`` R package): ``gridExtra``, ``grImport2``, ``optparse``, ``jsonlite``, ``stringi``, ``stringr``
+#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you when you install the ``piecepack`` R package using ``devtools::install()``.
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
 
 System suggestions
 ++++++++++++++++++
 
-#. ``pdfjoin`` (part of `pdfsam <https://pdfsam.org/>`_) (needed for ``collect_piecepacks`` executable)
+#. ``pdfjoin`` (part of `pdfjam <https://warwick.ac.uk/fac/sci/statistics/staff/academic-research/firth/software/pdfjam/>`_ included in ``texlive-extra-utils``) (needed for ``collect_piecepacks`` executable)
 #. ``gs`` (part of `ghostscript <https://www.ghostscript.com/>`_) (needed for ``collect_piecepacks`` executable)
 #. ``pdfinfo`` (part of `poppler-utils <https://poppler.freedesktop.org/>`_) (needed for ``collect_piecepacks`` executable)
 #. `Rake - Ruby Make <https://github.com/ruby/rake>`_ (needed for running demos and other developer build commands)
@@ -68,10 +68,11 @@ This package is developed and tested on Ubuntu Linux.  Instructions are given be
 
 You'll need to install some system requirements to use this R package and its executables::
 
-    $ sudo apt install ghostscript pdfsam poppler-utils r-base 
+    $ sudo apt install ghostscript texlive-extra-utils poppler-utils r-base 
 
-The ``ghostscript``, ``pdfsam``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package::
+The ``ghostscript``, ``texlive-extra-utils``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
+    $ sudo apt install libcurl4-openssl-dev libssl-dev # system dependencies to install devtools packages
     $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
     $ sudo Rscript -e "devtools::install_github(\"trevorld/piecepack\")"
 
@@ -117,6 +118,12 @@ If you want to run the demos you'll also need to clone the git repository and yo
 Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not when running a demo. If you want to upgrade to the newest version of the package you'll need to run ``$ git pull; rake install`` to download the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to then re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  **Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
+
+If you want to help **develop** the ``piecepack`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
+
+    $ sudo apt install libxml2-dev libcairo2-dev
+    $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)" # re-install R package
+
 
 How to use executable Rscripts
 ------------------------------

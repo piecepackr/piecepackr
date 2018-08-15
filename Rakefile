@@ -422,10 +422,10 @@ task :copy_demos do
     demos.each { |x| sh "cp pdf/collections/#{x}_demo.pdf #{dir}" }
 end
 
-desc "(Re-)install piecepack R package"
-task :install do
+desc "Update package documentation"
+task :document do
     sh 'Rscript -e "suppressMessages(devtools::document())"'
-    sh 'sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)"'
+    sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
     # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
     sh 'exec/make_piecepack_preview --help | cat > txt/make_piecepack_preview_options.txt'
@@ -434,18 +434,32 @@ task :install do
     sh 'exec/collect_pnp_piecepacks --help | cat > txt/collect_pnp_piecepacks_options.txt'
 end
 
+desc "(Re-)install piecepack R package"
+task :install do
+    sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+end
+
 desc "Install R package and dependencies on Ubuntu (17.10+)"
 task :install_dependencies_ubuntu do
-    sh 'sudo apt install ghostscript pdfsam poppler-utils r-base'
+    sh 'sudo apt install ghostscript texlive-extra-utils poppler-utils r-base'
+    sh 'sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
     sh 'sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
     sh 'sudo apt install fonts-dejavu fonts-noto rake'
     fonts_dir = ENV.fetch("XDG_DATA_HOME", ENV["HOME"] + "/.local/share") + "/fonts/"
-    sh 'curl -O http://www.quivira-font.com/files/Quivira.otf'
-    sh 'mv Quivira.otf ' + fonts_dir 
-    sh 'curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip'
-    sh 'unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf'
-    sh 'mv NotoEmoji-Regular.ttf ' + fonts_dir
-    sh 'rm NotoEmoji-unhinted.zip'
+    unless Dir.exists?(fonts_dir)
+        Dir.mkdir(fonts_dir)
+        sh 'chmod go-w ' + fonts_dir
+    end
+    unless File.exists?(fonts_dir + "Quivira.otf")
+        sh 'curl -O http://www.quivira-font.com/files/Quivira.otf'
+        sh 'mv Quivira.otf ' + fonts_dir 
+    end
+    unless File.exists?(fonts_dir + "NotoEmoji-Regular.ttf")
+        sh 'curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip'
+        sh 'unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf'
+        sh 'mv NotoEmoji-Regular.ttf ' + fonts_dir
+        sh 'rm NotoEmoji-unhinted.zip'
+    end
 end
 
 def open_pdf (demo)
@@ -463,7 +477,7 @@ end
 
 desc "Test"
 task :test => :clean
-task :test => :install
+task :test => :document
 task :test do
     extra_flags = " --use_suit_as_ace --rank_symbols.chip_face='A,B,C,D,E,F'"
     file = "test1"
