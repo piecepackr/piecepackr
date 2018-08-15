@@ -21,5 +21,6 @@ addons:
     apt:
         packages:
             - ghostscript
+            - libfreetype6
             - pdfsam
             - poppler-utils
