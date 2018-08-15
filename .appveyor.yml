@@ -21,6 +21,7 @@ build_script:
 test_script:
   - travis-tool.sh run_tests
   - Rscript piecepack/exec/make_pnp_piecepack --file=piecepack/configurations/nothing.json
+  - appveyor PushArtifact pdf\decks\piecepack_deck.pdf'
 
 on_failure:
   - 7z a failure.zip *.Rcheck\*
@@ -44,6 +45,3 @@ artifacts:
 
   - path: '\*_*.zip'
     name: Bits
-
-  - path: 'pdf\decks\piecepack_deck.pdf'
-  - name: Bits
