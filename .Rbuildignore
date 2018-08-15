@@ -12,7 +12,11 @@ xml
 CONTRIBUTING
 Rakefile
 tmp
-txt
 rda
+collect_pnp_piecepacks_options.txt
+make_piecepack_images_options.txt 
+make_pnp_piecepack_options.txt
+configure_piecepack_options.txt
+make_piecepack_preview_options.txt
 .appveyor.yml
 .travis.yml
