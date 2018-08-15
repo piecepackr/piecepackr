@@ -1,6 +1,6 @@
 context("no regressions in figures")
 test_that("no regressions in figures", {
-
+    skip_on_cran()
     dc <- function(...) { draw_component(...) }
     vdiffr::expect_doppelganger("tile_back", function() dc("tile_back"))
     vdiffr::expect_doppelganger("tile_back-svg", function() dc("tile_back", svg=TRUE))
