@@ -20,7 +20,7 @@ build_script:
 
 test_script:
   - travis-tool.sh run_tests
-  - Rscript piecepack/exec/make_pnp_piecepack --file=piecepack/configurations/nothing.json
+  - Rscript exec/make_pnp_piecepack --file=configurations/nothing.json
   - appveyor PushArtifact pdf\decks\piecepack_deck.pdf'
 
 on_failure:
