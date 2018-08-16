@@ -20,8 +20,9 @@ build_script:
 
 test_script:
   - cinst ghostscript
+  - cmd: set "GSPATH=C:\\Program Files\\gs\\gs9.23\\bin\\"
+  - cmd: set "PATH=%GSPATH%;%PATH%"
   - cmd: gswin64c --version
-  - cmd: gs --version
   - travis-tool.sh run_tests
 # - Rscript -e "devtools::install()"
 # - Rscript exec/make_pnp_piecepack --file=configurations/nothing.json
