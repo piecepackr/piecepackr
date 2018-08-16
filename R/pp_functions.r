@@ -569,7 +569,7 @@ make_collection <- function(cfg) {
 }
 
 find_gs <- function() {
-    cmd <- tools::find_gs_cmd("gs")
+    cmd <- tools::find_gs_cmd()
     if (cmd == "") 
         stop("Can't find system dependency ghostscript on PATH")
     cmd

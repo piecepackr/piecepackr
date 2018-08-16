@@ -20,6 +20,8 @@ build_script:
 
 test_script:
   - cinst ghostscript
+  - cmd: gswin64c --version
+  - cmd: gs --version
   - travis-tool.sh run_tests
 # - Rscript -e "devtools::install()"
 # - Rscript exec/make_pnp_piecepack --file=configurations/nothing.json
