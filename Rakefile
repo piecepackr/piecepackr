@@ -441,7 +441,7 @@ end
 
 desc "Install R package and dependencies on Ubuntu (17.10+)"
 task :install_dependencies_ubuntu do
-    sh 'sudo apt install ghostscript texlive-extra-utils poppler-utils r-base'
+    sh 'sudo apt install ghostscript poppler-utils r-base'
     sh 'sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
     sh 'sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
     sh 'sudo apt install fonts-dejavu fonts-noto rake'

@@ -503,19 +503,24 @@ make_pnp_piecepack <- function(cfg) {
     invisible(dev.off())
 }
 
-make_bookmarks_txt <- function(deck_filenames, bm_filename) {
+make_pdfmark_txt <- function(pm_filename, cfg) {
+    deck_filenames <- file.path(cfg$pdf_deck_dir, paste0(cfg$decks, ".pdf"))
     n_sets <- length(deck_filenames)
+    txt <- paste0("[ /Title (", cfg$title, ")\n /Author (", cfg$author, ")\n /Subject (", 
+                cfg$subject, ")\n /Keywords (", cfg$keywords, ")\n /DOCINFO pdfmark")
+
     n_preview <- ceiling(n_sets / 6)
     if (is_odd(n_preview))
         n_preview <- n_preview + 1
-    txt <- "[/Page 1 /View [/XYZ null null null] /Title (Piecepack Sets Preview) /OUT pdfmark"
+    new_txt <- "[/Page 1 /View [/XYZ null null null] /Title (Piecepack Sets Preview) /OUT pdfmark"
+    txt <- append(txt, new_txt)
     next_page <- n_preview + 1
     for(ii in 1:n_sets) {
         new_txt <- sprintf("[/Page %s /View [/XYZ null null null] /Title (Piecepack Set #%s) /OUT pdfmark", next_page, ii)
         txt <- append(txt, new_txt)
         next_page <- next_page + n_pages(deck_filenames[ii])
     }
-    writeLines(txt, bm_filename)
+    writeLines(txt, pm_filename)
 }
 
 n_pages <- function(pdf_filename) {
@@ -531,29 +536,18 @@ n_pages <- function(pdf_filename) {
 #' @export
 make_collection <- function(cfg) {
     dir.create(cfg$pdf_collection_dir, recursive=TRUE, showWarnings=FALSE)
+
     deck_filenames <- file.path(cfg$pdf_deck_dir, paste0(cfg$decks, ".pdf"))
-    n_sets <- length(deck_filenames)
     fp <- shQuote(file.path(cfg$pdf_preview_dir, paste0(cfg$filename, ".pdf")))
-    of_un <- file.path(cfg$pdf_collection_dir, paste0(cfg$filename, "_o.pdf")) # unlink doesn't work with the shQuote'd version of file
-    of <- shQuote(of_un)
-    bf <- shQuote(file.path(cfg$pdf_collection_dir, paste0(cfg$filename, ".pdf")))
-    command <- paste("pdfjoin -q -o", of, "--pdftitle", shQuote(cfg$title), 
-                     "--pdfauthor", shQuote(cfg$author), 
-                     "--pdfkeywords", shQuote(cfg$keywords), 
-                     "--pdfsubject", shQuote(cfg$subject),
-                     fp, paste(shQuote(deck_filenames), collapse=" "))
-    cat(command, "\n")
-    system(command)
+    files <- paste(fp, paste(shQuote(deck_filenames), collapse=" "))
 
     # add bookmarks
-    bm_filename <- tempfile(fileext=".txt")
-    make_bookmarks_txt(deck_filenames, bm_filename)
-    bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", bm_filename, "-f", of)
-    # embed fonts gs -q -dNOPAUSE -dBATCH -dPDFSETTINGS=/prepress -sDEVICE=pdfwrite -sOutputFile=output.pdf input.pdf
-    # pdftocairo -pdf input.pdf output.pdf
+    pm_filename <- tempfile(fileext=".txt")
+    make_pdfmark_txt(pm_filename, cfg)
+    bf <- shQuote(file.path(cfg$pdf_collection_dir, paste0(cfg$filename, ".pdf")))
+    bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", pm_filename, files)
     cat(bcommand, "\n")
     system(bcommand)
-    unlink(of_un)
 }
 
 get_collections <- function() {

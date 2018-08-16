@@ -53,7 +53,6 @@ System dependencies
 System suggestions
 ++++++++++++++++++
 
-#. ``pdfjoin`` (part of `pdfjam <https://warwick.ac.uk/fac/sci/statistics/staff/academic-research/firth/software/pdfjam/>`_ included in ``texlive-extra-utils``) (needed for ``collect_piecepacks`` executable)
 #. ``gs`` (part of `ghostscript <https://www.ghostscript.com/>`_) (needed for ``collect_piecepacks`` executable)
 #. ``pdfinfo`` (part of `poppler-utils <https://poppler.freedesktop.org/>`_) (needed for ``collect_piecepacks`` executable)
 #. `Rake - Ruby Make <https://github.com/ruby/rake>`_ (needed for running demos and other developer build commands)
@@ -68,9 +67,9 @@ This package is developed and tested on Ubuntu Linux.  Instructions are given be
 
 You'll need to install some system requirements to use this R package and its executables::
 
-    $ sudo apt install ghostscript texlive-extra-utils poppler-utils r-base 
+    $ sudo apt install ghostscript poppler-utils r-base 
 
-The ``ghostscript``, ``texlive-extra-utils``, and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
+The ``ghostscript`` and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
     $ sudo apt install libcurl4-openssl-dev libssl-dev # system dependencies to install devtools packages
     $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
@@ -122,7 +121,7 @@ If you don't install the above fonts then you might need to install some additio
 If you want to help **develop** the ``piecepack`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
 
     $ sudo apt install libxml2-dev libcairo2-dev
-    $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)" # re-install R package
+    $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)"
 
 
 How to use executable Rscripts
@@ -159,7 +158,6 @@ Executable options
 
 Demos
 -----
-
 
 chess
 ~~~~~
@@ -222,7 +220,6 @@ reversi
 ~~~~~~~
 
 A demo `print-and-play pdf <https://www.dropbox.com/s/rgxkdwqwwkd5jbk/reversi_demo.pdf?dl=0>`__ of several piecepacks with color schemes configured to easily distinguish between the back and face of the coins, tiles, and "chips" accessories (and in some decks the suit dice and suit-rank dice) to facilitate the playing of games like `Reversi <http://www.piecepack.org/rules/Reversi.pdf>`_.  It contains a piecepack-suited piecepack with brown "suited" background, an `ACS-elements-suited <http://www.scs.illinois.edu/~mainzv/HIST/Logo/logo.php>`_ piecepack with black "suited" background, dual printer-friendly grayscale sixpacks, and two "mirrored" color scheme six-suited piecepacks where one has a red "suited" background and black "unsuited" background and the other one has a black "suited" background and black "unsuited" background.  Besides reversi a pair of "mirrored" color scheme piecepacks are great for playing games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ and `Backgammon <https://en.wikipedia.org/wiki/Backgammon>`_ since each side's pieces will all be of the same color.  Each of the last two pairs of reversi-friendly piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).
-
 
 sixpack
 ~~~~~~~
