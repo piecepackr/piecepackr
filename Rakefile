@@ -439,6 +439,11 @@ task :install do
     sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
 end
 
+desc "Upload codecov coverage report"
+task :codecov do
+    sh 'CODECOV_TOKEN="2db4a29a-971e-45e5-a230-676b5289d801" Rscript -e "covr::codecov()"'
+end
+
 desc "Install R package and dependencies on Ubuntu (17.10+)"
 task :install_dependencies_ubuntu do
     sh 'sudo apt install ghostscript poppler-utils r-base'
