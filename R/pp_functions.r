@@ -529,7 +529,7 @@ n_pages_pdfinfo <- function(pdf_filename) {
     as.numeric(strsplit(pdfinfo, " +")[[1]][2])
 }
 n_pages_gs <- function(pdf_filename) {
-    cmd <- tools::find_gs_cmd()
+    cmd <- find_gs()
     args <- c("-q", "-dNODISPLAY", "-c", paste(paste0('"(', pdf_filename, ")"),
               "(r)", "file", "runpdfbegin", "pdfpagecount", "=", 'quit"'))
     as.numeric(system2(cmd, args, stdout=TRUE))
@@ -561,11 +561,18 @@ make_collection <- function(cfg) {
     pm_filename <- tempfile(fileext=".txt")
     make_pdfmark_txt(pm_filename, cfg)
     bf <- shQuote(file.path(cfg$pdf_collection_dir, paste0(cfg$filename, ".pdf")))
-    cmd <- tools::find_gs_cmd()
+    cmd <- find_gs()
     args <- c("-q", "-o", bf, "-sDEVICE=pdfwrite", pm_filename, fp, deck_filenames)
     # bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", pm_filename, files)
     cat(cmd, args, "\n")
     system2(cmd, args)
+}
+
+find_gs <- function() {
+    cmd <- tools::find_gs_cmd("gs")
+    if (cmd == "") 
+        stop("Can't find system dependency ghostscript on PATH")
+    cmd
 }
 
 get_collections <- function() {
