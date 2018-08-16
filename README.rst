@@ -27,7 +27,7 @@ Installation
 Short instructions using Rakefile on Ubuntu (16.04+) including "Bash on Ubuntu on Windows (10)"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The below commands clones repo and installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) but doesn't add executable Rscripts to ``$PATH``.  Should sets up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed then what a strictly minimal install would need).::
+The below commands clones the ``piecepack`` R package github repo, installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) and then installs the ``piecepack`` R package (but doesn't add executable Rscripts to ``$PATH``).  Should set up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed than what a strictly minimal install would need).  These short instructions have been lightly tested on both Ubuntu Linux as well as `Bash on Ubuntu on Windows <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_::
 
     $ sudo apt install git rake
     $ git clone https://github.com/trevorld/piecepack
@@ -35,7 +35,7 @@ The below commands clones repo and installs a bunch of system dependencies, font
     $ rake install_dependencies_ubuntu
     $ rake install
 
-To update previously cloned repo to newest version and re-install R package::
+To update a previously cloned repo to the newest version and re-install the piecepack R package::
 
     $ cd piecepack
     $ git pull
@@ -49,12 +49,11 @@ System dependencies
 
 #. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you when you install the ``piecepack`` R package using ``devtools::install()``.
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
+#. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_piecepacks`` executable)
 
 System suggestions
 ++++++++++++++++++
 
-#. ``gs`` (part of `ghostscript <https://www.ghostscript.com/>`_) (needed for ``collect_piecepacks`` executable)
-#. ``pdfinfo`` (part of `poppler-utils <https://poppler.freedesktop.org/>`_) (needed for ``collect_piecepacks`` executable)
 #. `Rake - Ruby Make <https://github.com/ruby/rake>`_ (needed for running demos and other developer build commands)
 #. Several `Noto <https://www.google.com/get/noto/>`_ fonts (in particular "Noto Sans", "Noto Sans Symbols", "Noto Sans Symbols2", "Noto Emoji", "Noto Sans Cham", "Noto Sans CJK SC")
 #. `Quivira <http://quivira-font.com/>`_ font
@@ -67,11 +66,11 @@ This package is developed and tested on Ubuntu Linux.  Instructions are given be
 
 You'll need to install some system requirements to use this R package and its executables::
 
-    $ sudo apt install ghostscript poppler-utils r-base 
+    $ sudo apt install ghostscript r-base 
 
-The ``ghostscript`` and ``poppler-utils`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
+The ``ghostscript`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
-    $ sudo apt install libcurl4-openssl-dev libssl-dev # system dependencies to install devtools packages
+    $ sudo apt install libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
     $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
     $ sudo Rscript -e "devtools::install_github(\"trevorld/piecepack\")"
 
@@ -118,11 +117,10 @@ Since rake runs the demos locally in the cloned repo directory you don't need to
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  **Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
-If you want to help **develop** the ``piecepack`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
+If you want to help further **develop** the ``piecepack`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
 
-    $ sudo apt install libxml2-dev libcairo2-dev
+    $ sudo apt install libxml2-dev libcairo2-dev # system dependencies for roxygen2 and gdtools
     $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)"
-
 
 How to use executable Rscripts
 ------------------------------

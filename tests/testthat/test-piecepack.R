@@ -80,20 +80,3 @@ test_that("get_component_opt works as expected", {
     opt <- get_component_opt("pawn_back")
     expect_equal(opt$dm_symbol, "")
 })
-
-
-context("make_pnp_piecepack works as expected")
-test_that("make_pnp_piecepack works as expected", {
-    cfg <- c2o(paste0("--pdf_deck_dir=", tempdir()))
-    json_filename <- tempfile(fileext=".json")
-    on.exit(unlink(json_filename))
-    .to_json(cfg, json_filename)
-    expect_true(file.exists(json_filename))
-    opts <- read_configuration(paste0("--file=", json_filename))
-
-    pdf_filename <- file.path(tempdir(), "piecepack_deck.pdf")
-    on.exit(unlink(pdf_filename))
-
-    make_pnp_piecepack(opts)
-    expect_true(file.exists(pdf_filename))
-})

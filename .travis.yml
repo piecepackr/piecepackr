@@ -21,4 +21,3 @@ addons:
     apt:
         packages:
             - ghostscript
-            - poppler-utils

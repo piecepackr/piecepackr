@@ -1,3 +1,5 @@
+.rake_tasks~
+README.md
 *.swp
 *by-sa*
 *.rda

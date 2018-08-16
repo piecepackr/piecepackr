@@ -523,8 +523,24 @@ make_pdfmark_txt <- function(pm_filename, cfg) {
     writeLines(txt, pm_filename)
 }
 
+n_pages_pdfinfo <- function(pdf_filename) {
+    pdfinfo <- system2("pdfinfo", pdf_filename, stdout=TRUE)
+    pdfinfo <- grep("^Pages:", pdfinfo, value=TRUE)
+    as.numeric(strsplit(pdfinfo, " +")[[1]][2])
+}
+n_pages_gs <- function(pdf_filename) {
+    cmd <- tools::find_gs_cmd()
+    args <- c("-q", "-dNODISPLAY", "-c", paste(paste0('"(', pdf_filename, ")"),
+              "(r)", "file", "runpdfbegin", "pdfpagecount", "=", 'quit"'))
+    as.numeric(system2(cmd, args, stdout=TRUE))
+}
 n_pages <- function(pdf_filename) {
-    as.numeric(system(paste("pdfinfo", pdf_filename, " | grep Pages | sed 's/[^0-9]*//'"), intern=TRUE))
+    if (Sys.which("pdfinfo") != "") {
+        np <- n_pages_pdfinfo(pdf_filename)
+    } else {
+        np <- n_pages_gs(pdf_filename)
+    }
+    np
 }
 
 #' Collects print-and-play piecepack pdfs into one pdf
@@ -537,17 +553,19 @@ n_pages <- function(pdf_filename) {
 make_collection <- function(cfg) {
     dir.create(cfg$pdf_collection_dir, recursive=TRUE, showWarnings=FALSE)
 
-    deck_filenames <- file.path(cfg$pdf_deck_dir, paste0(cfg$decks, ".pdf"))
+    deck_filenames <- shQuote(file.path(cfg$pdf_deck_dir, paste0(cfg$decks, ".pdf")))
     fp <- shQuote(file.path(cfg$pdf_preview_dir, paste0(cfg$filename, ".pdf")))
-    files <- paste(fp, paste(shQuote(deck_filenames), collapse=" "))
+    # files <- paste(fp, paste(shQuote(deck_filenames), collapse=" "))
 
     # add bookmarks
     pm_filename <- tempfile(fileext=".txt")
     make_pdfmark_txt(pm_filename, cfg)
     bf <- shQuote(file.path(cfg$pdf_collection_dir, paste0(cfg$filename, ".pdf")))
-    bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", pm_filename, files)
-    cat(bcommand, "\n")
-    system(bcommand)
+    cmd <- tools::find_gs_cmd()
+    args <- c("-q", "-o", bf, "-sDEVICE=pdfwrite", pm_filename, fp, deck_filenames)
+    # bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", pm_filename, files)
+    cat(cmd, args, "\n")
+    system2(cmd, args)
 }
 
 get_collections <- function() {

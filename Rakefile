@@ -444,9 +444,9 @@ task :codecov do
     sh 'CODECOV_TOKEN="2db4a29a-971e-45e5-a230-676b5289d801" Rscript -e "covr::codecov()"'
 end
 
-desc "Install R package and dependencies on Ubuntu (17.10+)"
+desc "Install R package and dependencies on Ubuntu (16.04+)"
 task :install_dependencies_ubuntu do
-    sh 'sudo apt install ghostscript poppler-utils r-base'
+    sh 'sudo apt install ghostscript r-base'
     sh 'sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
     sh 'sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
     sh 'sudo apt install fonts-dejavu fonts-noto rake'

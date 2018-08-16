@@ -17,12 +17,13 @@ Imports:
     optparse,
     jsonlite,
     stringi,
-    stringr
+    stringr,
+    tools
 Suggests:
     devtools,
     gdtools,
     roxygen2,
     testthat,
     vdiffr
-SystemRequirements: ghostscript, poppler-utils
+SystemRequirements: ghostscript
 RoxygenNote: 6.1.0
