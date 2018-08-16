@@ -22,4 +22,3 @@ addons:
         packages:
             - ghostscript
             - poppler-utils
-            - texlive-extra-utils
