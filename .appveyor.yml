@@ -19,6 +19,7 @@ build_script:
   - travis-tool.sh install_deps
 
 test_script:
+  - cinst ghostscript
   - travis-tool.sh run_tests
 # - Rscript -e "devtools::install()"
 # - Rscript exec/make_pnp_piecepack --file=configurations/nothing.json
