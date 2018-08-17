@@ -29,17 +29,17 @@ Short instructions using Rakefile on Ubuntu (16.04+) including "Bash on Ubuntu o
 
 The below commands clones the ``piecepack`` R package github repo, installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) and then installs the ``piecepack`` R package (but doesn't add executable Rscripts to ``$PATH``).  Should set up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed than what a strictly minimal install would need).  These short instructions have been lightly tested on both Ubuntu Linux as well as `Bash on Ubuntu on Windows <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_::
 
-    $ sudo apt install git rake
+    $ sudo apt install -y git rake 
     $ git clone https://github.com/trevorld/piecepack
     $ cd piecepack
-    $ rake install_dependencies_ubuntu
-    $ rake install
+    $ rake apt_install_dependencies sudo= yes=
+    $ rake install sudo=
 
 To update a previously cloned repo to the newest version and re-install the piecepack R package::
 
     $ cd piecepack
     $ git pull
-    $ rake install
+    $ rake install sudo=
 
 Detailed instructions
 ~~~~~~~~~~~~~~~~~~~~~
@@ -66,11 +66,11 @@ This package is developed and tested on Ubuntu Linux.  Instructions are given be
 
 You'll need to install some system requirements to use this R package and its executables::
 
-    $ sudo apt install ghostscript r-base 
+    $ sudo apt install -y ghostscript r-base 
 
 The ``ghostscript`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
-    $ sudo apt install libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
+    $ sudo apt install -y libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
     $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
     $ sudo Rscript -e "devtools::install_github(\"trevorld/piecepack\")"
 
@@ -119,7 +119,7 @@ If you don't install the above fonts then you might need to install some additio
 
 If you want to help further **develop** the ``piecepack`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
 
-    $ sudo apt install libxml2-dev libcairo2-dev # system dependencies for roxygen2 and gdtools
+    $ sudo apt install -y libxml2-dev libcairo2-dev # system dependencies for roxygen2 and gdtools
     $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)"
 
 How to use executable Rscripts

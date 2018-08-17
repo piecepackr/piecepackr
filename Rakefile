@@ -7,18 +7,24 @@ task :clean do
     sh "killall evince | true"
 end
 
-version_str = " (v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'` + ")'"
+version = "v" + `Rscript -e 'cat(packageDescription("piecepack")$Version)'`
+version_str = " (" + version + ")'"
 
-collect_piecepacks = "exec/collect_pnp_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
+desc "Print version"
+task :version do
+    puts version
+end 
+
+collect_piecepacks = "Rscript exec/collect_pnp_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
 def make_piecepack (filename, extra_flags)
-    make_images = ENV.has_key?("make_images") # rake make_images=
-    configure_piecepack = "exec/configure_piecepack --font='Noto Sans Symbols' --header_font='Noto Sans' "
+    make_images = ENV.has_key?("make_images") # rake all make_images=
+    configure_piecepack = "Rscript exec/configure_piecepack --font='Noto Sans Symbols' --header_font='Noto Sans' "
     json_file = "configurations/" + filename + ".json"
     sh configure_piecepack + " --file=" + json_file + " --deck_filename=" + filename + extra_flags
-    sh "exec/make_pnp_piecepack --file=" + json_file
-    sh "exec/make_piecepack_preview --file=" + json_file
+    sh "Rscript exec/make_pnp_piecepack --file=" + json_file
+    sh "Rscript exec/make_piecepack_preview --file=" + json_file
     if make_images
-        sh "exec/make_piecepack_images --file=" + json_file
+        sh "Rscript exec/make_piecepack_images --file=" + json_file
     end
 end
 
@@ -425,18 +431,28 @@ end
 desc "Update package documentation"
 task :document do
     sh 'Rscript -e "suppressMessages(devtools::document())"'
-    sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
-    # sh 'exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
-    sh 'exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
-    sh 'exec/make_piecepack_preview --help | cat > txt/make_piecepack_preview_options.txt'
-    sh 'exec/make_piecepack_images --help | cat > txt/make_piecepack_images_options.txt'
-    sh 'exec/make_pnp_piecepack --help | cat > txt/make_pnp_piecepack_options.txt'
-    sh 'exec/collect_pnp_piecepacks --help | cat > txt/collect_pnp_piecepacks_options.txt'
+    use_sudo = ENV.has_key("sudo") # rake document sudo=
+    if use_sudo
+        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+    else
+        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+    end
+    # sh 'Rscript exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
+    sh 'Rscript exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
+    sh 'Rscript exec/make_piecepack_preview --help | cat > txt/make_piecepack_preview_options.txt'
+    sh 'Rscript exec/make_piecepack_images --help | cat > txt/make_piecepack_images_options.txt'
+    sh 'Rscript exec/make_pnp_piecepack --help | cat > txt/make_pnp_piecepack_options.txt'
+    sh 'Rscript exec/collect_pnp_piecepacks --help | cat > txt/collect_pnp_piecepacks_options.txt'
 end
 
 desc "(Re-)install piecepack R package"
 task :install do
-    sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+    use_sudo = ENV.has_key("sudo") # rake install sudo=
+    if use_sudo
+        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+    else
+        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+    end
 end
 
 desc "Upload codecov coverage report"
@@ -444,12 +460,25 @@ task :codecov do
     sh 'CODECOV_TOKEN="2db4a29a-971e-45e5-a230-676b5289d801" Rscript -e "covr::codecov()"'
 end
 
-desc "Install R package and dependencies on Ubuntu (16.04+)"
-task :install_dependencies_ubuntu do
-    sh 'sudo apt install ghostscript r-base'
-    sh 'sudo apt install libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
-    sh 'sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
-    sh 'sudo apt install fonts-dejavu fonts-noto rake'
+desc "Install R package and dependencies on Ubuntu (16.04+) (use sudo= to use sudo and yes= to use -y)"
+task :apt_install_dependencies do
+    use_sudo ENV.has_key("sudo") # rake install_dependencies_apt sudo=
+    use_yes ENV.has_key("yes") # rake install_dependencies_apt sudo= yes=
+    if use_yes
+        apt_install = 'apt install -y '
+    else
+        apt_install = 'apt install '
+    end
+    if use_sudo
+        apt_install = 'sudo ' + apt_install
+        rscript = 'sudo Rscript '
+    else
+        rscript = 'Rscript '
+    end
+    sh apt_install + 'ghostscript r-base'
+    sh apt_install + 'libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
+    sh rscript + '-e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
+    sh apt_install + 'fonts-dejavu fonts-noto rake'
     fonts_dir = ENV.fetch("XDG_DATA_HOME", ENV["HOME"] + "/.local/share") + "/fonts/"
     unless Dir.exists?(fonts_dir)
         Dir.mkdir(fonts_dir)
@@ -484,6 +513,7 @@ desc "Test"
 task :test => :clean
 task :test => :document
 task :test do
+    sh 'Rscript -e "devtools::test()"'
     extra_flags = " --use_suit_as_ace --rank_symbols.chip_face='A,B,C,D,E,F'"
     file = "test1"
     make_piecepack file,  piecepack_suits + orthodox_ranks + extra_flags 
