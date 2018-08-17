@@ -47,12 +47,12 @@ make_4by3_viewports <- function(label) {
     }
 }
 
-make_coinrow_viewports <- function(label) {
-    for (i_r in 1:6) {
-        addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0(label, ".back.", i_r))
-        addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0(label, ".face.", i_r))
-    }
-}
+# make_coinrow_viewports <- function(label) {
+#     for (i_r in 1:6) {
+#         addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0(label, ".back.", i_r))
+#         addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0(label, ".face.", i_r))
+#     }
+# }
 
 draw_coin_4by3 <- function(i_s, cfg) {
     label <- stringi::stri_rand_strings(n=1, length=4)
@@ -575,8 +575,4 @@ find_gs <- function() {
     if (cmd == "") 
         stop("Can't find system dependency ghostscript on PATH")
     cmd
-}
-
-get_collections <- function() {
-    sub(".json$", "", list.files("svg", pattern=".json$"))
 }

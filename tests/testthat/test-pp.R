@@ -16,9 +16,9 @@ test_that("make_pnp_piecepack works as expected", {
     svg_component_dir = tempfile()
     on.exit(unlink(svg_component_dir, recursive=TRUE))
 
-    cfg <- c2o(c(paste0("--pdf_deck_dir=", pdf_deck_dir), paste0("--svg_preview_dir=", svg_preview_dir),
-               paste0("--svg_component_dir=", svg_component_dir), "--component_formats=svg", "--component_thetas=0"))
-    .to_json(cfg, json_filename)
+    configure_piecepack(c(paste0("--pdf_deck_dir=", pdf_deck_dir), paste0("--svg_preview_dir=", svg_preview_dir),
+               paste0("--svg_component_dir=", svg_component_dir), "--component_formats=svg", "--component_thetas=0",
+               paste0("--file=", json_filename)))
     expect_true(file.exists(json_filename))
 
     opts <- read_configuration(paste0("--file=", json_filename))
