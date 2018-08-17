@@ -15,10 +15,10 @@ task :version do
     puts version
 end 
 
-collect_piecepacks = "Rscript exec/collect_pnp_piecepacks --font='Noto Sans' --author='Trevor L Davis' "
+collect_piecepacks = 'Rscript exec/collect_pnp_piecepacks --font="Noto Sans" --author="Trevor L Davis" '
 def make_piecepack (filename, extra_flags)
     make_images = ENV.has_key?("make_images") # rake all make_images=
-    configure_piecepack = "Rscript exec/configure_piecepack --font='Noto Sans Symbols' --header_font='Noto Sans' "
+    configure_piecepack = 'Rscript exec/configure_piecepack --font="Noto Sans Symbols" --header_font="Noto Sans" '
     json_file = "configurations/" + filename + ".json"
     sh configure_piecepack + " --file=" + json_file + " --deck_filename=" + filename + extra_flags
     sh "Rscript exec/make_pnp_piecepack --file=" + json_file
@@ -45,56 +45,56 @@ rd_dark3 = "#ff0000,#ffc000,#008000,#0000ff,#800080,white,sienna"
 rd_light3 = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,white,sienna"
 
 # Suits
-ca_suits = " --suit_symbols=♥,♦,♣,♠,♚,⚓,★ --suit_symbols_scale=1,1,1,1,1,1,1,1 --suit_symbols_font='Noto Sans Symbols'"
-jcd_suits = " --suit_symbols=🌞,🌜,♚,⚓,꩜ --suit_symbols_scale=0.7,0.8,1,1,1.2 --suit_symbols_font='Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham'"
-# french_suits = " --suit_symbols=♥,♠,♣,♦,★ --suit_symbols_scale=1,1,1,1,1,1 --suit_symbols_font='Noto Sans Symbols'"
-french_suits_swirl = " --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1,1,1,1,1.2,1.2"
-# latin_suits_swirl = " --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜ --suit_symbols_scale=0.6,1,1,1.1,1.2"
-latin_suits_swirl = " --suit_symbols=,,,,꩜ --suit_symbols_font=Quivira --suit_symbols_scale=1,1,1,1,1.2"
-piecepack_suits = " --suit_symbols=🌞,🌜,👑,⚜,꩜ --suit_symbols_scale=0.7,0.8,0.8,1.1,1.2,1.2 --suit_symbols_font='Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham'"
-rd_suits = " --suit_symbols=♥,★,♣,♦,♛,♠,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font='Noto Sans Symbols'"
-rd_suits2 = " --suit_symbols=♥,★,♣,♦,♛,♤,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font='Noto Sans Symbols'"
-# swiss_suits = " --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1.2,1.2"
-swiss_suits = " --suit_symbols=,,,, --suit_symbols_font=Quivira --suit_symbols_scale=1"
-sixpack_suits = " --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=0.9,0.9,0.9,0.9,0.7,0.7,1.1,1.2 --suit_symbols_font='Noto Emoji'"
-sixpack_suits_black = " --suit_symbols=♥,♠,♣,♦,☀,🌘,꩜ --suit_symbols_scale=1,1,1,1,1.2,0.9,1"
-sixpack_suits_white = " --suit_symbols=♡,♤,♧,♢,☼,🌔,꩜ --suit_symbols_scale=1,1,1,1,1.4,0.9,1"
-black_suits4 = " --suit_symbols=♠,♣,☽,⚓,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,DejaVu Sans,Noto Sans Symbols'"
-coin_black_suits4 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♠,♣,☽,⚓,★  --dm_symbols_font.coin_back='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Noto Sans Symbols'"
-black_suits6 = " --suit_symbols=♠,♣,🌜,⚓,,,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols' --suit_symbols_scale=1,1,0.8,1,1,1,1"
-coin_black_suits6 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♠,♣,🌜,⚓,,,★  --dm_symbols_font.coin_back='Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols' --dm_symbols_scale.coin_back=1,1,0.8,1,1,1,1"
-red_suits4 = " --suit_symbols=♥,♦,☉,♚,★  --suit_symbols_font='Noto Sans Symbols'"
-coin_red_suits4 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♥,♦,☉,♚,★  --dm_symbols_font.coin_back='Noto Sans Symbols'"
-red_suits6 = " --suit_symbols=♥,♦,🌞,♚,,,★  --suit_symbols_font='Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols' --suit_symbols_scale=1,1,0.8,1,1,1,1"
-coin_red_suits6 = " --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back='Noto Sans Symbols' --dm_symbols.coin_back=♥,♦,🌞,♚,,,★  --dm_symbols_font.coin_back='Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols' --dm_symbols_scale.coin_back=1,1,0.8,1,1,1,1"
+ca_suits = ' --suit_symbols=♥,♦,♣,♠,♚,⚓,★ --suit_symbols_scale=1,1,1,1,1,1,1,1 --suit_symbols_font="Noto Sans Symbols"'
+jcd_suits = ' --suit_symbols=🌞,🌜,♚,⚓,꩜ --suit_symbols_scale=0.7,0.8,1,1,1.2 --suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham"'
+# french_suits = ' --suit_symbols=♥,♠,♣,♦,★ --suit_symbols_scale=1,1,1,1,1,1 --suit_symbols_font="Noto Sans Symbols"'
+french_suits_swirl = ' --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1,1,1,1,1.2,1.2'
+# latin_suits_swirl = ' --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜ --suit_symbols_scale=0.6,1,1,1.1,1.2'
+latin_suits_swirl = ' --suit_symbols=,,,,꩜ --suit_symbols_font=Quivira --suit_symbols_scale=1,1,1,1,1.2'
+piecepack_suits = ' --suit_symbols=🌞,🌜,👑,⚜,꩜ --suit_symbols_scale=0.7,0.8,0.8,1.1,1.2,1.2 --suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham"'
+rd_suits = ' --suit_symbols=♥,★,♣,♦,♛,♠,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font="Noto Sans Symbols"'
+rd_suits2 = ' --suit_symbols=♥,★,♣,♦,♛,♤,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,1.2 --suit_symbols_font="Noto Sans Symbols"'
+# swiss_suits = ' --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1.2,1.2'
+swiss_suits = ' --suit_symbols=,,,, --suit_symbols_font=Quivira --suit_symbols_scale=1'
+sixpack_suits = ' --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=0.9,0.9,0.9,0.9,0.7,0.7,1.1,1.2 --suit_symbols_font="Noto Emoji"'
+sixpack_suits_black = ' --suit_symbols=♥,♠,♣,♦,☀,🌘,꩜ --suit_symbols_scale=1,1,1,1,1.2,0.9,1'
+sixpack_suits_white = ' --suit_symbols=♡,♤,♧,♢,☼,🌔,꩜ --suit_symbols_scale=1,1,1,1,1.4,0.9,1'
+black_suits4 = ' --suit_symbols=♠,♣,☽,⚓,★  --suit_symbols_font="Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,DejaVu Sans,Noto Sans Symbols"'
+coin_black_suits4 = ' --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back="Noto Sans Symbols" --dm_symbols.coin_back=♠,♣,☽,⚓,★  --dm_symbols_font.coin_back="Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Noto Sans Symbols"'
+black_suits6 = ' --suit_symbols=♠,♣,🌜,⚓,,,★  --suit_symbols_font="Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols" --suit_symbols_scale=1,1,0.8,1,1,1,1'
+coin_black_suits6 = ' --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back="Noto Sans Symbols" --dm_symbols.coin_back=♠,♣,🌜,⚓,,,★  --dm_symbols_font.coin_back="Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols" --dm_symbols_scale.coin_back=1,1,0.8,1,1,1,1'
+red_suits4 = ' --suit_symbols=♥,♦,☉,♚,★  --suit_symbols_font="Noto Sans Symbols"'
+coin_red_suits4 = ' --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back="Noto Sans Symbols" --dm_symbols.coin_back=♥,♦,☉,♚,★  --dm_symbols_font.coin_back="Noto Sans Symbols"'
+red_suits6 = ' --suit_symbols=♥,♦,🌞,♚,,,★  --suit_symbols_font="Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols" --suit_symbols_scale=1,1,0.8,1,1,1,1'
+coin_red_suits6 = ' --dm_symbols.coin_face=★ --suit_symbols.coin_back=♟ --suit_symbols_scale.coin_back=1 --suit_symbols_font.coin_back="Noto Sans Symbols" --dm_symbols.coin_back=♥,♦,🌞,♚,,,★  --dm_symbols_font.coin_back="Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols" --dm_symbols_scale.coin_back=1,1,0.8,1,1,1,1'
 alchemical_elements = " --suit_symbols=🜁,🜂,🜃,🜄, --suit_colors=red,khaki2,green,cornflowerblue,grey"
 # emoji_elements = " --suit_symbols=🔥,🌪️,⛰️,🌊, --suit_colors=darkred,black,darkgreen,darkblue"
-chinese_elements_emoji = " --suit_symbols=🌲,🔥,⛰️,🏆,🌊, --suit_symbols_scale=1.1,1.1,1,0.6,0.6 --suit_symbols_font='Quivira,Quivira,Quivira,Noto Sans Symbols2,Noto Emoji,'" + chinese_elements_colors
-chinese_elements_sc = " --suit_symbols=木,火,土,金,水, --suit_symbols_scale=0.7 --suit_symbols_font='Noto Sans CJK SC'" + chinese_elements_colors 
+chinese_elements_emoji = ' --suit_symbols=🌲,🔥,⛰️,🏆,🌊, --suit_symbols_scale=1.1,1.1,1,0.6,0.6 --suit_symbols_font="Quivira,Quivira,Quivira,Noto Sans Symbols2,Noto Emoji,"' + chinese_elements_colors
+chinese_elements_sc = ' --suit_symbols=木,火,土,金,水, --suit_symbols_scale=0.7 --suit_symbols_font="Noto Sans CJK SC"' + chinese_elements_colors 
 
 # Ranks
-default_ranks = " --rank_symbols=N,A,2,3,4,5 --rank_symbols_font='Noto Sans'"
-orthodox_ranks = " --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font='Noto Sans'"
+default_ranks = ' --rank_symbols=N,A,2,3,4,5 --rank_symbols_font="Noto Sans"'
+orthodox_ranks = ' --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font="Noto Sans"'
 # chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
-chess_ranks = " --rank_symbols=♟,♞,♝,♜,♛,♚ --rank_symbols_font='Sans Noto Symbols'"
+chess_ranks = ' --rank_symbols=♟,♞,♝,♜,♛,♚ --rank_symbols_font="Sans Noto Symbols"'
 # chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
-chinese_ranks_emoji1 = " --rank_symbols=🐀,🐉,🐒,🐂,🐍,🐓 --rank_symbols_scale=0.6 --rank_symbols_font='Noto Emoji'"
-chinese_ranks_emoji2 = " --rank_symbols=🐅,🐎,🐕,🐇,🐏,🐖 --rank_symbols_scale=0.6 --rank_symbols_font='Noto Emoji'"
-chinese_ranks_sc1 = " --rank_symbols=鼠,龙,猴,牛,蛇,鸡 --rank_symbols_font='Noto Sans CJK SC' --rank_symbols_scale=0.7"
-chinese_ranks_sc2 = " --rank_symbols=虎,马,狗,兔,羊,猪 --rank_symbols_font='Noto Sans CJK SC' --rank_symbols_scale=0.7"
+chinese_ranks_emoji1 = ' --rank_symbols=🐀,🐉,🐒,🐂,🐍,🐓 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
+chinese_ranks_emoji2 = ' --rank_symbols=🐅,🐎,🐕,🐇,🐏,🐖 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
+chinese_ranks_sc1 = ' --rank_symbols=鼠,龙,猴,牛,蛇,鸡 --rank_symbols_font="Noto Sans CJK SC" --rank_symbols_scale=0.7'
+chinese_ranks_sc2 = ' --rank_symbols=虎,马,狗,兔,羊,猪 --rank_symbols_font="Noto Sans CJK SC" --rank_symbols_scale=0.7'
 
 # Configurations
 dozenal_chips = " --shape.chip=5"
 pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip= --shape.chip=kite"
-orthodox_dm = " --dm_colors.coin=black --dm_symbols.ppdie= --dm_symbols.coin='|' --dm_symbols_font.coin='Noto Sans' --dm_r.coin=0.45"
+orthodox_dm = ' --dm_colors.coin=black --dm_symbols.ppdie= --dm_symbols.coin="|" --dm_symbols_font.coin="Noto Sans" --dm_r.coin=0.45'
 # ○ ⚆ ⚇ ● ⚈ ⚉
-orthodox_saucers = " --suit_symbols.saucer_back= --dm_colors.saucer=black --dm_symbols.saucer='|' --dm_symbols_font.saucer='Noto Sans' --dm_r.saucer=0.45"
+orthodox_saucers = ' --suit_symbols.saucer_back= --dm_colors.saucer=black --dm_symbols.saucer="|" --dm_symbols_font.saucer="Noto Sans" --dm_r.saucer=0.45'
 orthodox_pawns = " --invert_colors.pawn --suit_symbols.pawn= --dm_symbols.pawn="
 orthodox_pawns6p = " --invert_colors.pawn --suit_symbols.pawn=⚈,⚈,⚉,⚉,, --dm_symbols.pawn="
 
-orthodox_saucers1 = " --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
-orthodox_saucers2 = " --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
-orthodox_saucers3 = " --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,1,1 --suit_symbols_font.saucer_face='Noto Sans Symbols'" + orthodox_saucers
+orthodox_saucers1 = ' --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=1 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
+orthodox_saucers2 = ' --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
+orthodox_saucers3 = ' --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,1,1 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
 hex_components = " --shape.tile=6 --shape.coin=3 --shape.saucer=3 --shape.chip=3 --dm_symbols_scale.chip=0.7 --shape_theta.coin=-90 --shape_theta.saucer=-90 --shape_theta.chip=-90 --dm_theta.coin=-90 --dm_theta.saucer=-90 --dm_theta.chip=-90"
 star_chips  = " --shape.chip=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip=0.7"
 
@@ -205,7 +205,7 @@ end
 desc "Default piecepack demo"
 task :default do
     file = "default"
-    extra_flags = " --font='Noto Sans Symbols' --header_font='Noto Sans' --rank_symbols_font='Noto Sans'"
+    extra_flags = ' --font="Noto Sans Symbols" --header_font="Noto Sans" --rank_symbols_font="Noto Sans"'
     make_piecepack file, extra_flags
 
     decks = " --decks=default"
@@ -431,7 +431,7 @@ end
 desc "Update package documentation"
 task :document do
     sh 'Rscript -e "suppressMessages(devtools::document())"'
-    use_sudo = ENV.has_key("sudo") # rake document sudo=
+    use_sudo = ENV.has_key?("sudo") # rake document sudo=
     if use_sudo
         sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
     else
@@ -447,7 +447,7 @@ end
 
 desc "(Re-)install piecepack R package"
 task :install do
-    use_sudo = ENV.has_key("sudo") # rake install sudo=
+    use_sudo = ENV.has_key?("sudo") # rake install sudo=
     if use_sudo
         sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
     else
@@ -462,8 +462,8 @@ end
 
 desc "Install R package and dependencies on Ubuntu (16.04+) (use sudo= to use sudo and yes= to use -y)"
 task :apt_install_dependencies do
-    use_sudo ENV.has_key("sudo") # rake install_dependencies_apt sudo=
-    use_yes ENV.has_key("yes") # rake install_dependencies_apt sudo= yes=
+    use_sudo ENV.has_key?("sudo") # rake install_dependencies_apt sudo=
+    use_yes ENV.has_key?("yes") # rake install_dependencies_apt sudo= yes=
     if use_yes
         apt_install = 'apt install -y '
     else
