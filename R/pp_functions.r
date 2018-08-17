@@ -86,6 +86,8 @@ draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
 draw_suit_die <- function(cfg, flip=FALSE) {
     suppressWarnings({
         # label <- stringi::stri_rand_strings(n=1, length=4)
+        if (cfg$n_suits < 4 || cfg$n_suits > 6)
+            stop(paste("Don't know how to draw suit die for", cfg$n_suits, "suits"))
         label <- "suit"
         make_die_viewports(label, flip=flip)
         if (cfg$n_suits == 4) {
@@ -115,9 +117,7 @@ draw_suit_die <- function(cfg, flip=FALSE) {
                 draw_component("suitdie_face", cfg, 7-i_s)
                 upViewport()
             }
-        } else {
-            stop(paste("Don't know how to draw suit die for", cfg$n_suits, "suits"))
-        }
+        } 
     })
 }
 
@@ -135,6 +135,8 @@ draw_rank_die <- function(cfg, flip=FALSE) {
 draw_suitrank_die <- function(cfg, flip=FALSE) {
     suppressWarnings({
         # label <- stringi::stri_rand_strings(n=1, length=8)
+        if (cfg$n_suits < 4 || cfg$n_suits > 6)
+            stop(paste("Don't know how to draw suit/rank die for", cfg$n_suits, "suits"))
         label <- "suitrank"
         make_die_viewports(label, flip=flip)
         if (cfg$n_suits == 4) {
@@ -164,9 +166,7 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
                 draw_component("ppdie_face", cfg, 7-i_r, i_r)
                 upViewport()
             }
-        } else {
-            stop(paste("Don't know how to draw suit/rank die for", cfg$n_suits, "suits"))
-        }
+        } 
     })
 }
 
@@ -566,7 +566,7 @@ make_collection <- function(cfg) {
     cmd <- find_gs()
     args <- c("-q", "-o", bf, "-sDEVICE=pdfwrite", pm_filename, fp, deck_filenames)
     # bcommand <- paste("gs -q -o", bf, "-sDEVICE=pdfwrite", pm_filename, files)
-    cat(cmd, args, "\n")
+    # cat(cmd, args, "\n")
     system2(cmd, args)
 }
 

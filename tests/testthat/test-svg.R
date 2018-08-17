@@ -41,4 +41,12 @@ test_that("no regressions in figures", {
                                 function() dc("chip_back", cfg=c2o("--shape.chip=star"), i_s=1))
 
     vdiffr::expect_doppelganger("preview", draw_preview)
+    vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F", "--suit_colors=red,black,green,blue,orange,grey"))))
+    vdiffr::expect_doppelganger("draw_suit_die-6suits", function() draw_suit_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F,G", "--suit_colors=red,black,green,blue,orange,purple,grey"))))
+    expect_error(draw_suit_die(cfg=c2o(c("--suit_symbols=A,B,C,D", "--suit_colors=red,black,green,blue"))), 
+                         "Don't know how to draw suit die for 3 suits")
+    vdiffr::expect_doppelganger("draw_suitrank_die-5suits", function() draw_suitrank_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F", "--suit_colors=red,black,green,blue,orange,grey"))))
+    vdiffr::expect_doppelganger("draw_suitrank_die-6suits", function() draw_suitrank_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F,G", "--suit_colors=red,black,green,blue,orange,purple,grey"))))
+    expect_error(draw_suitrank_die(cfg=c2o(c("--suit_symbols=A,B,C,D", "--suit_colors=red,black,green,blue"))), 
+                         "Don't know how to draw suit/rank die for 3 suits")
 })
