@@ -518,27 +518,29 @@ make_pdfmark_txt <- function(pm_filename, cfg) {
     for(ii in 1:n_sets) {
         new_txt <- sprintf("[/Page %s /View [/XYZ null null null] /Title (Piecepack Set #%s) /OUT pdfmark", next_page, ii)
         txt <- append(txt, new_txt)
-        next_page <- next_page + n_pages(deck_filenames[ii])
+        next_page <- next_page + get_n_pages(deck_filenames[ii])
     }
     writeLines(txt, pm_filename)
 }
 
-n_pages_pdfinfo <- function(pdf_filename) {
+get_n_pages_pdfinfo <- function(pdf_filename) {
     pdfinfo <- system2("pdfinfo", pdf_filename, stdout=TRUE)
     pdfinfo <- grep("^Pages:", pdfinfo, value=TRUE)
     as.numeric(strsplit(pdfinfo, " +")[[1]][2])
 }
-n_pages_gs <- function(pdf_filename) {
+get_n_pages_gs <- function(pdf_filename) {
     cmd <- find_gs()
     args <- c("-q", "-dNODISPLAY", "-c", paste(paste0('"(', pdf_filename, ")"),
               "(r)", "file", "runpdfbegin", "pdfpagecount", "=", 'quit"'))
     as.numeric(system2(cmd, args, stdout=TRUE))
 }
-n_pages <- function(pdf_filename) {
+get_n_pages <- function(pdf_filename) {
     if (Sys.which("pdfinfo") != "") {
-        np <- n_pages_pdfinfo(pdf_filename)
+        pdf_filename <- normalizePath(pdf_filename)
+        np <- get_n_pages_pdfinfo(pdf_filename)
     } else {
-        np <- n_pages_gs(pdf_filename)
+        pdf_filename <- normalizePath(pdf_filename, winslash="/")
+        np <- get_n_pages_gs(pdf_filename)
     }
     np
 }
