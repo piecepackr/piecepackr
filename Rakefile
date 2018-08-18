@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 desc "Clean"
 task :clean do
     dirs = ["bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff"]
