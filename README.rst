@@ -71,8 +71,8 @@ You'll need to install some system requirements to use this R package and its ex
 The ``ghostscript`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
     $ sudo apt install -y libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
-    $ sudo Rscript -e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"' 
-    $ sudo Rscript -e "devtools::install_github(\"trevorld/piecepack\")"
+    $ sudo Rscript -e "install.packages('devtools', repos='https://cran.rstudio.com/')" 
+    $ sudo Rscript -e "devtools::install_github('trevorld/piecepack')"
 
 R does not add executables in an installed R package to a user's path.  If you plan on using the Rscript executables included with this package (in the ``exec`` folder) you can either:
 
