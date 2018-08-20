@@ -197,7 +197,7 @@ configure_piecepack <- function(args=commandArgs(TRUE)) {
     if (is.null(filename)) {
         writeLines(jsonlite::toJSON(opts, pretty=TRUE), stdout())
     } else {
-        writeLines(jsonlite::toJSON(opts, pretty=TRUE), filename)
+        writeLines(jsonlite::toJSON(opts, pretty=TRUE), filename, useBytes=TRUE)
     }
 }
 
@@ -382,7 +382,7 @@ read_configuration <- function(args=commandArgs(TRUE), description="") {
     else 
         con <- file(args$file)
     
-    opts <- jsonlite::fromJSON(readLines(con))
+    opts <- jsonlite::fromJSON(readLines(con, encoding="UTF-8"))
     close(con)
 
     opts$paper <- args$paper

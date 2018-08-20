@@ -500,7 +500,13 @@ task :apt_install_dependencies do
 end
 
 def open_pdf (demo)
-    sh "xdg-open pdf/collections/" + demo + "_demo.pdf 2>/dev/null | true"
+    if OS.windows?
+        sh "open pdf\\collections\\" + demo + "_demo.pdf"
+    elseif OS.mac?
+        sh "open pdf/collections/" + demo + "_demo.pdf"
+    else
+        sh "xdg-open pdf/collections/" + demo + "_demo.pdf 2>/dev/null | true"
+    end
 end
 
 desc "Open demo pdf (all to open all of them)"
@@ -539,4 +545,23 @@ task :test do
     decks = " --decks=test1,test2"
     sh collect_piecepacks + ' --filename=test_demo --title="Test' + version_str + decks
     # open_pdf "test"
+end
+
+# https://stackoverflow.com/questions/170956/how-can-i-find-which-operating-system-my-ruby-program-is-running-on
+module OS
+  def OS.windows?
+    (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.mac?
+   (/darwin/ =~ RUBY_PLATFORM) != nil
+  end
+
+  def OS.unix?
+    !OS.windows?
+  end
+
+  def OS.linux?
+    OS.unix? and not OS.mac?
+  end
 end
