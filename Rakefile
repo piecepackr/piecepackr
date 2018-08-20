@@ -200,7 +200,7 @@ task :crown_and_anchor do
     extra_flags = " --suit_colors=yellow,white,purple,orange2,tan4 --background_colors=seashell3"
     make_piecepack file, deck_title + jcd_suits + default_ranks + extra_flags
 
-    title = ' --title="\"Crown and anchor\" demo' + version_str
+    title = ' --title="Crown and anchor demo' + version_str
     decks = " --decks=crown_and_anchor1,crown_and_anchor2,crown_and_anchor3,crown_and_anchor4,crown_and_anchor5,crown_and_anchor6"
     sh collect_piecepacks + " --filename=crown_and_anchor_demo" + title + decks
 end
@@ -436,9 +436,9 @@ task :document do
     sh 'Rscript -e "suppressMessages(devtools::document())"'
     use_sudo = ENV.has_key?("sudo") # rake document sudo=
     if use_sudo
-        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     else
-        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     end
     # sh 'Rscript exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'Rscript exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
@@ -452,9 +452,9 @@ desc "(Re-)install piecepack R package"
 task :install do
     use_sudo = ENV.has_key?("sudo") # rake install sudo=
     if use_sudo
-        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     else
-        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\"Imports\", \"Suggests\"), upgrade_dependencies=FALSE)"'
+        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     end
 end
 
@@ -480,7 +480,7 @@ task :apt_install_dependencies do
     end
     sh apt_install + 'ghostscript r-base'
     sh apt_install + 'libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
-    sh rscript + '-e "install.packages(\"devtools\", repos=\"https://cran.rstudio.com/\")"'
+    sh rscript + '-e "install.packages(\'devtools\', repos=\'https://cran.rstudio.com/\')"'
     sh apt_install + 'fonts-dejavu fonts-noto rake'
     fonts_dir = ENV.fetch("XDG_DATA_HOME", ENV["HOME"] + "/.local/share") + "/fonts/"
     unless Dir.exists?(fonts_dir)
