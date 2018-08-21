@@ -49,7 +49,8 @@ System dependencies
 
 #. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you when you install the ``piecepack`` R package using ``devtools::install()``.
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
-#. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_piecepacks`` executable)
+#. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_piecepacks`` function/executable)
+#. `poppler-utils (aka xpdf-utils)  <https://poppler.freedesktop.org/>`_ (not needed if you won't be using the ``get_embedded_font`` function/executable)
 
 System suggestions
 ++++++++++++++++++
@@ -66,9 +67,11 @@ This package is developed and tested on Ubuntu Linux.  Instructions are given be
 
 You'll need to install some system requirements to use this R package and its executables::
 
-    $ sudo apt install -y ghostscript r-base 
+    $ sudo apt install -y ghostscript poppler-utils r-base 
 
-The ``ghostscript`` system requirements can be dropped if you do not plan on using the ``collect_piecepacks`` executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
+The ``ghostscript`` system requirement can be dropped if you do not plan on using the ``collect_piecepacks`` function/executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  The ``poppler-utils`` system requirement can be dropped if you do not plan on using ``get_embedded_font`` function/executable to help figure out which fonts ``cairo_pdf`` actually embeds into output pdf's. 
+
+You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
     $ sudo apt install -y libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
     $ sudo Rscript -e "install.packages('devtools', repos='https://cran.rstudio.com/')" 
@@ -125,7 +128,9 @@ If you want to help further **develop** the ``piecepack`` R package you'll also 
 How to use executable Rscripts
 ------------------------------
 
-One uses the ``make_pnp_piecepack`` executable to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_piecepack_preview`` executable to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_pnp_piecepacks`` executable.  The ``make_piecepack_images`` executable makes individual images of piecepack components.  The ``make_pnp_piecepack``, ``make_piecepack_images``, and ``make_piecepack_preview`` executables requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure_piecepack`` executable can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
+One uses the ``make_pnp_piecepack`` executable to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_piecepack_preview`` executable to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_pnp_piecepacks`` executable.  The ``make_piecepack_images`` executable makes individual images of piecepack components.  The ``make_pnp_piecepack``, ``make_piecepack_images``, and ``make_piecepack_preview`` executables requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure_piecepack`` executable can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  The ``get_embedded_font`` executable is a utility script that tells you which fonts will actually be embedded by Cairo for a given combination of requested fonts and Unicode characters.
+
+Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
 
     $ rake demo_name
 
@@ -151,6 +156,7 @@ Executable options
 * `make_piecepack_images --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_images_options.txt>`_
 * `make_piecepack_preview --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_preview_options.txt>`_
 * `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
+* `get_embedded_font --help <https://github.com/trevorld/piecepack/blob/master/txt/get_embedded_font_options.txt>`_
 
 .. _`Demo descriptions`:
 
@@ -292,7 +298,7 @@ It you use the tiles to build a hex board the hexlines will visually show four o
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (i.e. this sometimes happens to me in my demos but since the decks still look nice with the font it chooses I decided at some point not to waste anymore time banging my head on messing around with ``fontconfig`` configuration files trying to override ``fontconfig``).  Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans").  If this happens and you really care about it then the only way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to delete from your system the fonts that ``fontconfig`` chooses over your font.
+The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (i.e. this sometimes happens to me in my demos but since the decks still look nice with the font it chooses I decided at some point not to waste anymore time banging my head on messing around with ``fontconfig`` configuration files trying to override ``fontconfig``).  Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans").  If this happens and you really care about it then the only way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to delete from your system the fonts that ``fontconfig`` chooses over your font.  To help determine which fonts are actually being embedded you can use the ``get_embedded_font`` function or executable.
 
 How do I use this package in piecepack rulesets?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

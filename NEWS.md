@@ -1,3 +1,9 @@
+piecepack 0.9.0
+===============
+
+* Added ``get_embedded_font`` function and executable (#80).
+* Dropped ``pdfjoin`` from list of system dependencies (#77).
+
 piecepack 0.8.0
 ===============
 

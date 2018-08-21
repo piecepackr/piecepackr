@@ -78,8 +78,8 @@ chinese_elements_sc = ' --suit_symbols=木,火,土,金,水, --suit_symbols_scale
 default_ranks = ' --rank_symbols=N,A,2,3,4,5 --rank_symbols_font="Noto Sans"'
 orthodox_ranks = ' --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font="Noto Sans"'
 # chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
-# chess_ranks = ' --rank_symbols=♟,♞,♝,♜,♛,♚ --rank_symbols_font="Sans Noto Symbols"'
-chess_ranks = " --rank_symbols=\u265f,\u265e,\u265d,\u265c,\u265b,\u265a " + '--rank_symbols_font="Sans Noto Symbols"'
+# chess_ranks = ' --rank_symbols=♟,♞,♝,♜,♛,♚ --rank_symbols_font="Noto Sans Symbols"'
+chess_ranks = " --rank_symbols=\u265f,\u265e,\u265d,\u265c,\u265b,\u265a " + '--rank_symbols_font="Noto Sans Symbols"'
 # chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
 chinese_ranks_emoji1 = ' --rank_symbols=🐀,🐉,🐒,🐂,🐍,🐓 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
 chinese_ranks_emoji2 = ' --rank_symbols=🐅,🐎,🐕,🐇,🐏,🐖 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
@@ -434,28 +434,29 @@ end
 desc "Update package documentation"
 task :document do
     sh 'Rscript -e "suppressMessages(devtools::document())"'
-    use_sudo = ENV.has_key?("sudo") # rake document sudo=
-    if use_sudo
-        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
-    else
-        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
-    end
+    Rake::Task["install"].invoke
     # sh 'Rscript exec/configure_piecepack --help | sed "s/^/| /" > configurations/configure_piecepack_options.txt'
     sh 'Rscript exec/configure_piecepack --help | cat > txt/configure_piecepack_options.txt | true'
     sh 'Rscript exec/make_piecepack_preview --help | cat > txt/make_piecepack_preview_options.txt'
     sh 'Rscript exec/make_piecepack_images --help | cat > txt/make_piecepack_images_options.txt'
     sh 'Rscript exec/make_pnp_piecepack --help | cat > txt/make_pnp_piecepack_options.txt'
     sh 'Rscript exec/collect_pnp_piecepacks --help | cat > txt/collect_pnp_piecepacks_options.txt'
+    sh 'Rscript exec/get_embedded_font --help | cat > txt/get_embedded_font_options.txt'
 end
 
 desc "(Re-)install piecepack R package"
 task :install do
-    use_sudo = ENV.has_key?("sudo") # rake install sudo=
-    if use_sudo
-        sh 'sudo Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
+    use_sudo = ENV.has_key?("sudo") # rake document sudo=
+    is_quiet = ENV.has_key?("quiet") # rake document sudo= quiet=
+    if is_quiet
+        cmd = 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     else
-        sh 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
+        cmd = 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     end
+    if use_sudo
+        cmd = 'sudo ' + cmd
+    end
+    sh cmd
 end
 
 desc "Upload codecov coverage report"
@@ -478,7 +479,7 @@ task :apt_install_dependencies do
     else
         rscript = 'Rscript '
     end
-    sh apt_install + 'ghostscript r-base'
+    sh apt_install + 'ghostscript poppler-utils r-base'
     sh apt_install + 'libcurl4-openssl-dev libssl-dev libxml2-dev libcairo2-dev'
     sh rscript + '-e "install.packages(\'devtools\', repos=\'https://cran.rstudio.com/\')"'
     sh apt_install + 'fonts-dejavu fonts-noto rake'
@@ -549,19 +550,20 @@ end
 
 # https://stackoverflow.com/questions/170956/how-can-i-find-which-operating-system-my-ruby-program-is-running-on
 module OS
-  def OS.windows?
-    (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
-  end
+    def OS.windows?
+        (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil
+    end
 
-  def OS.mac?
-   (/darwin/ =~ RUBY_PLATFORM) != nil
-  end
+    def OS.mac?
+        (/darwin/ =~ RUBY_PLATFORM) != nil
+    end
 
-  def OS.unix?
-    !OS.windows?
-  end
+    def OS.unix?
+        !OS.windows?
+    end
 
-  def OS.linux?
-    OS.unix? and not OS.mac?
-  end
+    def OS.linux?
+        OS.unix? and not OS.mac?
+    end
 end
+

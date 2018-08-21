@@ -1,0 +1,18 @@
+#!/usr/bin/env Rscript
+
+suppressPackageStartupMessages(library("dplyr"))
+suppressPackageStartupMessages(library("optparse"))
+suppressPackageStartupMessages(library("piecepack"))
+
+parser <- OptionParser()
+parser <- add_option(parser, c("-f", "--font"), help="(comma separated) list of Fonts")
+parser <- add_option(parser, c("-c", "--char"), help="(comma separated) list of Characters")
+opts <- parse_args(parser)
+
+font <- piecepack:::split(opts$font)
+char <- piecepack:::split(opts$char)
+
+df <- expand.grid(font, char, stringsAsFactors=FALSE)
+names(df) <- c("font", "char")
+df <- dplyr::mutate(df, embedded_font = get_embedded_font(font, char))
+print(as.data.frame(df))

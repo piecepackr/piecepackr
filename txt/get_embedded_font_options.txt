@@ -1,0 +1,14 @@
+Usage: exec/get_embedded_font [options]
+
+
+Options:
+	-h, --help
+		Show this help message and exit
+
+	-f FONT, --font=FONT
+		(comma separated) list of Fonts
+
+	-c CHAR, --char=CHAR
+		(comma separated) list of Characters
+
+
