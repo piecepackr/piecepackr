@@ -13,7 +13,7 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <circle cx='360.00' cy='288.00' r='31.50pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text x='348.00' y='299.01' style='font-size: 32.00px; fill: #BEBEBE; font-family: Liberation Sans;' textLength='24.00px' lengthAdjust='spacingAndGlyphs'>★</text>
-<text x='356.25' y='269.17' style='font-size: 10.00px; fill: #BEBEBE; font-family: Liberation Sans;' textLength='7.50px' lengthAdjust='spacingAndGlyphs'>♟</text>
+<text x='345.34' y='299.01' style='font-size: 32.00px; fill: #BEBEBE; font-family: Liberation Sans;' textLength='29.33px' lengthAdjust='spacingAndGlyphs'>☼</text>
+<text x='355.05' y='269.17' style='font-size: 10.00px; fill: #BEBEBE; font-family: Liberation Sans;' textLength='9.90px' lengthAdjust='spacingAndGlyphs'>▲</text>
 <circle cx='360.00' cy='288.00' r='31.50pt' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>

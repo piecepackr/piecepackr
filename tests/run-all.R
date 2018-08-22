@@ -1,3 +1,3 @@
 library("testthat")
 
-test_check("piecepack")
+test_check("piecepackr")

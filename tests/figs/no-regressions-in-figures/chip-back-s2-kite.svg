@@ -14,6 +14,6 @@
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <polyline points='360.00,310.50 337.50,299.25 360.00,265.50 382.50,299.25 360.00,310.50 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='354.16' y='295.57' style='font-size: 22.00px; font-family: Liberation Sans;' textLength='11.69px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<text x='356.25' y='277.94' style='font-size: 10.00px; font-family: Liberation Sans;' textLength='7.50px' lengthAdjust='spacingAndGlyphs'>⛃</text>
+<text x='357.34' y='277.94' style='font-size: 10.00px; font-family: Liberation Sans;' textLength='5.31px' lengthAdjust='spacingAndGlyphs'>♠</text>
 <polyline points='360.00,310.50 337.50,299.25 360.00,265.50 382.50,299.25 360.00,310.50 360.00,310.50 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>
