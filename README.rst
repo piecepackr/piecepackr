@@ -1,5 +1,5 @@
-Piecepack Graphics R Package
-============================
+piecepackr: A Piecepack Graphics R Package
+==========================================
 
 .. image:: https://travis-ci.org/trevorld/piecepack.png?branch=master
     :target: https://travis-ci.org/trevorld/piecepack
@@ -17,7 +17,7 @@ Piecepack Graphics R Package
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-This is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components as well as an Rscript to build images of individual components.  The API can also be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) or even to make a custom Print & Play layout.
+``piecepackr`` is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components as well as an Rscript to build images of individual components.  The API can also be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) or even to make a custom Print & Play layout.
 
 .. contents::
 
@@ -27,17 +27,17 @@ Installation
 Short instructions using Rakefile on Ubuntu (16.04+) including "Bash on Ubuntu on Windows (10)"
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The below commands clones the ``piecepack`` R package github repo, installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) and then installs the ``piecepack`` R package (but doesn't add executable Rscripts to ``$PATH``).  Should set up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed than what a strictly minimal install would need).  These short instructions have been lightly tested on both Ubuntu Linux as well as `Bash on Ubuntu on Windows <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_::
+The below commands clones the ``piecepackr`` R package github repo, installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) and then installs the ``piecepackr`` R package (but doesn't add executable Rscripts to ``$PATH``).  Should set up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed than what a strictly minimal install would need).  These short instructions have been lightly tested on both Ubuntu Linux as well as `Bash on Ubuntu on Windows <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_::
 
     $ sudo apt install -y git rake 
-    $ git clone https://github.com/trevorld/piecepack
-    $ cd piecepack
+    $ git clone https://github.com/trevorld/piecepackr
+    $ cd piecepackr
     $ rake apt_install_dependencies sudo= yes=
     $ rake install sudo=
 
-To update a previously cloned repo to the newest version and re-install the piecepack R package::
+To update a previously cloned repo to the newest version and re-install the piecepackr R package::
 
-    $ cd piecepack
+    $ cd piecepackr
     $ git pull
     $ rake install sudo=
 
@@ -47,7 +47,7 @@ Detailed instructions
 System dependencies
 +++++++++++++++++++
 
-#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you when you install the ``piecepack`` R package using ``devtools::install()``.
+#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you when you install the ``piecepackr`` R package using ``devtools::install()``.
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
 #. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_piecepacks`` function/executable)
 #. `poppler-utils (aka xpdf-utils)  <https://poppler.freedesktop.org/>`_ (not needed if you won't be using the ``get_embedded_font`` function/executable)
@@ -71,39 +71,39 @@ You'll need to install some system requirements to use this R package and its ex
 
 The ``ghostscript`` system requirement can be dropped if you do not plan on using the ``collect_piecepacks`` function/executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  The ``poppler-utils`` system requirement can be dropped if you do not plan on using ``get_embedded_font`` function/executable to help figure out which fonts ``cairo_pdf`` actually embeds into output pdf's. 
 
-You'll also need to install the development version of the ``piecepack`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
+You'll also need to install the development version of the ``piecepackr`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
 
     $ sudo apt install -y libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
     $ sudo Rscript -e "install.packages('devtools', repos='https://cran.rstudio.com/')" 
-    $ sudo Rscript -e "devtools::install_github('trevorld/piecepack')"
+    $ sudo Rscript -e "devtools::install_github('trevorld/piecepackr')"
 
 R does not add executables in an installed R package to a user's path.  If you plan on using the Rscript executables included with this package (in the ``exec`` folder) you can either:
 
-1. Find where R installed them and either use them directly (perhaps with help of an 'alias' or 'symbolic link') or add that directory to your ``$PATH``.  The location is system dependent but on my computer they are located in ``/usr/local/lib/R/site-library/piecepack/exec/``. 
+1. Find where R installed them and either use them directly (perhaps with help of an 'alias' or 'symbolic link') or add that directory to your ``$PATH``.  The location is system dependent but on my computer they are located in ``/usr/local/lib/R/site-library/piecepackr/exec/``. 
 2. Download them from github, mark them executable (if necessary), and if desired manually add them to your path (perhaps by creating a symbolic link pointing to them in ``$HOME/bin/``).  Simple but you may need to re-download them again if you ever upgrade the underlying R package.  If you clone the entire repo you can download the newest versions using ``git pull``::
 
-    $ git clone https://github.com/trevorld/piecepack # done only once
-    $ cd piecepack # executables are in the exec folder
+    $ git clone https://github.com/trevorld/piecepackr # done only once
+    $ cd piecepackr # executables are in the exec folder
     $ git pull # downloads any updates to the executables
     $ sudo Rscript -e "devtools::install(quiet=TRUE, upgrade_dependencies=FALSE)" # re-install R package
 
 3. You can use a simple shell script wrapper like `Rbin <https://github.com/trevorld/Rbin>`_ to access them::
 
-    $ Rbin piecepack configure_piecepack [options]
-    $ Rbin piecepack make_piecepack [options]
-    $ Rbin piecepack make_preview [options]
-    $ Rbin piecepack collect_piecepacks [options]
+    $ Rbin piecepackr configure_piecepack [options]
+    $ Rbin piecepackr make_piecepack [options]
+    $ Rbin piecepackr make_preview [options]
+    $ Rbin piecepackr collect_piecepacks [options]
 
    If using ``Rbin`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
 
-    alias configure_piecepack="Rbin piecepack configure_piecepack"
-    alias make_piecepack="Rbin piecepack make_piecepack"
-    alias make_preview="Rbin piecepack make_preview"
-    alias collect_piecepacks="Rbin piecepack collect_piecepacks"
+    alias configure_piecepack="Rbin piecepackr configure_piecepack"
+    alias make_piecepack="Rbin piecepackr make_piecepack"
+    alias make_preview="Rbin piecepackr make_preview"
+    alias collect_piecepacks="Rbin piecepackr collect_piecepacks"
 
 If you want to run the demos you'll also need to clone the git repository and you'll need ``rake``  and several fonts:: 
 
-    $ git clone https://github.com/trevorld/piecepack
+    $ git clone https://github.com/trevorld/piecepackr
     $ sudo apt install fonts-dejavu fonts-noto rake
     $ fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
     $ curl -O http://www.quivira-font.com/files/Quivira.otf
@@ -116,11 +116,11 @@ If you want to run the demos you'll also need to clone the git repository and yo
 ..    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
 ..    $ mv chess1.ttf $fonts_dir/ChessUtrecht.ttf
 
-Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not when running a demo. If you want to upgrade to the newest version of the package you'll need to run ``$ git pull; rake install`` to download the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to then re-install the ``piecepack`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
+Since rake runs the demos locally in the cloned repo directory you don't need to worry about whether the Rscript executables are on your path or not when running a demo. If you want to upgrade to the newest version of the package you'll need to run ``$ git pull; rake install`` to download the newest versions of the Rscript executables and the demo-building ``Rakefile`` and to then re-install the ``piecepackr`` R package.  If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
 
 If you don't install the above fonts then you might need to install some additional fonts onto your system in order to cover all the symbols you'd like to use in your piecepack.  **Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
 
-If you want to help further **develop** the ``piecepack`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
+If you want to help further **develop** the ``piecepackr`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation::
 
     $ sudo apt install -y libxml2-dev libcairo2-dev # system dependencies for roxygen2 and gdtools
     $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)"
@@ -151,12 +151,12 @@ Where ``demo_name`` is either:
 Executable options
 ------------------
 
-* `configure_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/configure_piecepack_options.txt>`_
-* `make_pnp_piecepack --help <https://github.com/trevorld/piecepack/blob/master/txt/make_pnp_piecepack_options.txt>`_
-* `make_piecepack_images --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_images_options.txt>`_
-* `make_piecepack_preview --help <https://github.com/trevorld/piecepack/blob/master/txt/make_piecepack_preview_options.txt>`_
-* `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepack/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
-* `get_embedded_font --help <https://github.com/trevorld/piecepack/blob/master/txt/get_embedded_font_options.txt>`_
+* `configure_piecepack --help <https://github.com/trevorld/piecepackr/blob/master/txt/configure_piecepack_options.txt>`_
+* `make_pnp_piecepack --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_pnp_piecepack_options.txt>`_
+* `make_piecepack_images --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_images_options.txt>`_
+* `make_piecepack_preview --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_preview_options.txt>`_
+* `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepackr/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
+* `get_embedded_font --help <https://github.com/trevorld/piecepackr/blob/master/txt/get_embedded_font_options.txt>`_
 
 .. _`Demo descriptions`:
 
@@ -241,7 +241,7 @@ Frequently Asked Questions
 How should I Print & Play my piecepack?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Print-and-Play pdf's produced by the ``make_piecepack`` executable are designed to be used in three different ways:
+The Print-and-Play pdf's produced by the ``make_pnp_piecepack`` executable are designed to be used in three different ways:
 
 - Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
 - Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.

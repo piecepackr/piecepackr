@@ -1,5 +1,5 @@
 #' @importFrom grImport2 pictureGrob readPicture
-cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package="piecepack")))
+cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package="piecepackr")))
 
 is_odd <- function(x) { as.logical(x %% 2) }
 

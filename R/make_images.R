@@ -225,11 +225,15 @@ get_dm_symbols <- function(component_side, cfg) {
         if (component_side %in% c("coin_back", "coin_face")) {
             dm_symbols <- "\u25cf" # "●"
         } else if (component_side %in% c("chip_back")) {
-            dm_symbols <- "\u26c3" # "⛃"
+            dm_symbols <- get_suit_symbols(component_side, cfg)
+            # dm_symbols <- "\u26c3" # "⛃"
         } else if (component_side %in% c("saucer_back", "saucer_face")) {
-            dm_symbols <- "\u265f" # "♟"
+            dm_symbols <- "\u25b2" # "▲"
+            # dm_symbols <- "\u265f" # "♟"
         } else if (component_side %in% c("pawn_face")) {
-            dm_symbols <- "\U0001f440" # "👀"
+            dm_symbols <- "\u0298\u0298" # "ʘʘ"
+            # dm_symbols <- "\u2c7a\u2c7a" # "ⱺⱺ"
+            # dm_symbols <- "\U0001f440" # "👀"
             # dm_symbols <- "\U0001f603" # "😃"
         } else if (component_side %in% c("suitdie_face", "pawn_back", 
                                          "belt_face", "tile_back")) {

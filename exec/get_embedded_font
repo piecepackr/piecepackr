@@ -2,7 +2,7 @@
 
 suppressPackageStartupMessages(library("dplyr"))
 suppressPackageStartupMessages(library("optparse"))
-suppressPackageStartupMessages(library("piecepack"))
+suppressPackageStartupMessages(library("piecepackr"))
 
 parser <- OptionParser()
 parser <- add_option(parser, c("-f", "--font"), help="(comma separated) list of Fonts")

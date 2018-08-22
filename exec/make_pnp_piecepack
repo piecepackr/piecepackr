@@ -2,7 +2,7 @@
 
 options(error = quote(dump.frames("deck_dump", TRUE)), warn=2)
 
-suppressPackageStartupMessages(library("piecepack"))
+suppressPackageStartupMessages(library("piecepackr"))
 
 opts <- read_configuration(description="Program to make print-and-play piecepack deck")
 

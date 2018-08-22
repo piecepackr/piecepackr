@@ -9,8 +9,15 @@ task :clean do
     sh "killall evince | true"
 end
 
-version = 'v' + `Rscript -e "cat(packageDescription('piecepack')[['Version']])"`
-version_str = ' (' + version + ')"'
+def version
+    version = 'v' + `Rscript -e "cat(packageDescription('piecepackr')[['Version']])"`
+    return version
+end
+
+def version_str
+    version_str = ' (' + version + ')"'
+    return version_str
+end
 
 desc "Print version"
 task :version do
@@ -18,6 +25,7 @@ task :version do
 end 
 
 collect_piecepacks = 'Rscript exec/collect_pnp_piecepacks --font="Noto Sans" --author="Trevor L Davis" '
+
 def make_piecepack (filename, extra_flags)
     make_images = ENV.has_key?("make_images") # rake all make_images=
     configure_piecepack = 'Rscript exec/configure_piecepack --font="Noto Sans Symbols" --header_font="Noto Sans" '
@@ -28,6 +36,7 @@ def make_piecepack (filename, extra_flags)
     if make_images
         sh "Rscript exec/make_piecepack_images --file=" + json_file
     end
+    return nil
 end
 
 # Colors
@@ -78,8 +87,7 @@ chinese_elements_sc = ' --suit_symbols=木,火,土,金,水, --suit_symbols_scale
 default_ranks = ' --rank_symbols=N,A,2,3,4,5 --rank_symbols_font="Noto Sans"'
 orthodox_ranks = ' --rank_symbols=,A,2,3,4,5 --use_suit_as_ace --rank_symbols_font="Noto Sans"'
 # chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
-# chess_ranks = ' --rank_symbols=♟,♞,♝,♜,♛,♚ --rank_symbols_font="Noto Sans Symbols"'
-chess_ranks = " --rank_symbols=\u265f,\u265e,\u265d,\u265c,\u265b,\u265a " + '--rank_symbols_font="Noto Sans Symbols"'
+chess_ranks = " --rank_symbols=\u265f,\u265e,\u265d,\u265c,\u265b,\u265a " + '--rank_symbols_font="Noto Sans Symbols"' # ♟,♞,♝,♜,♛,♚
 # chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
 chinese_ranks_emoji1 = ' --rank_symbols=🐀,🐉,🐒,🐂,🐍,🐓 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
 chinese_ranks_emoji2 = ' --rank_symbols=🐅,🐎,🐕,🐇,🐏,🐖 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
@@ -215,7 +223,6 @@ task :default do
     title = ' --title="Default demo' + version_str
     sh collect_piecepacks + " --filename=default_demo" + title + decks
 end
-
 
 desc "Dual piecepacks demo"
 task :dual do
@@ -451,7 +458,7 @@ task :install do
     if is_quiet
         cmd = 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     else
-        cmd = 'Rscript -e "devtools::install(quiet=TRUE, dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
+        cmd = 'Rscript -e "devtools::install(dependencies=c(\'Imports\', \'Suggests\'), upgrade_dependencies=FALSE)"'
     end
     if use_sudo
         cmd = 'sudo ' + cmd
