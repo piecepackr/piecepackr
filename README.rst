@@ -1,16 +1,16 @@
 piecepackr: A Piecepack Graphics R Package
 ==========================================
 
-.. image:: https://travis-ci.org/trevorld/piecepack.png?branch=master
-    :target: https://travis-ci.org/trevorld/piecepack
+.. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
+    :target: https://travis-ci.org/trevorld/piecepackr
     :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/piecepack?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/trevorld/piecepack
+.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/piecepackr?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/trevorld/piecepackr
     :alt: AppVeyor Build Status
 
-.. image:: https://img.shields.io/codecov/c/github/trevorld/piecepack/master.svg
-    :target: https://codecov.io/github/trevorld/piecepack?branch=master
+.. image:: https://img.shields.io/codecov/c/github/trevorld/piecepackr/master.svg
+    :target: https://codecov.io/github/trevorld/piecepackr?branch=master
     :alt: Coverage Status
 
 .. image:: http://www.repostatus.org/badges/latest/wip.svg
