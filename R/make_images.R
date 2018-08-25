@@ -138,7 +138,7 @@ get_suit_colors <- function(component_side=NA, cfg=list(), expand=TRUE) {
 }
 
 get_border_colors <- function(component_side=NA, cfg=list(), expand=TRUE) {
-    border_colors <- col_split(get_style_element("border_color", component_side, cfg, "grey"))
+    border_colors <- col_split(get_style_element("border_colors", component_side, cfg, "grey"))
     if (expand)
         border_colors <- expand_suit_elements(border_colors, "border_colors", component_side, cfg)
     border_colors

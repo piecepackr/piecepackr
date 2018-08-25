@@ -79,7 +79,7 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default the value of the "suit_colors" option)')
     parser <- add_option(parser, "--background_colors", default=NULL, ####
                          help='(default "white")') 
-    parser <- add_option(parser, "--border_color", default=NULL, ####
+    parser <- add_option(parser, "--border_colors", default=NULL, ####
                          help='(default "grey")')
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
                          help='(default "FALSE")')
