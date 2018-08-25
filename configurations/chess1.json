@@ -1,11 +1,8 @@
 {
-  "deck_title": ["Piecepack-suits (v0.8.0-3)"],
+  "deck_title": ["Piecepack-suits (v0.9.1-0)"],
   "deck_filename": ["chess1"],
   "rank_symbols": ["♟,♞,♝,♜,♛,♚"],
   "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
-  "header_font": ["Noto Sans"],
-  "rank_symbols_font": ["Sans Noto Symbols"],
   "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham"],
-  "suit_symbols_scale": ["0.7,0.8,0.8,1.1,1.2,1.2"],
-  "font": ["Noto Sans Symbols"]
+  "suit_symbols_scale": ["0.6,0.7,0.75,0.9,0.9"]
 }

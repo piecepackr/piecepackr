@@ -1,13 +1,11 @@
 {
-  "deck_title": ["JCD piecepack suits (Monoscale) (v0.8.0-3)"],
+  "deck_title": ["JCD piecepack suits (Monoscale) (v0.9.1-0)"],
   "deck_filename": ["crown_and_anchor3"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,♚,⚓,꩜"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham"],
-  "suit_symbols_scale": ["0.7,0.8,1,1,1.2"],
-  "font": ["Noto Sans Symbols"],
+  "suit_symbols_scale": ["0.6,0.7,1,0.8,0.9"],
   "suit_colors": ["black,white,black,white,black"],
   "background_colors": ["white,black,white,black,white"]
 }

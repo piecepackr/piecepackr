@@ -15,7 +15,7 @@ Options:
 		(default "N,A,2,3,4,5")
 
 	--suit_symbols=SUIT_SYMBOLS
-		(default "♥,♠,♣,♦,★")
+		(default "♥,♠,♣,♦,☼")
 
 	--dm_symbols=DM_SYMBOLS
 		(default is to try to pick a reasonable directional mark symbol based on the component)

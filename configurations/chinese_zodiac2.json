@@ -1,14 +1,12 @@
 {
-  "deck_title": ["Chinese zodiac #2 (v0.8.0-3)"],
+  "deck_title": ["Chinese zodiac #2 (v0.9.1-0)"],
   "deck_filename": ["chinese_zodiac2"],
   "rank_symbols": ["🐅,🐎,🐕,🐇,🐏,🐖"],
   "suit_symbols": ["🌲,🔥,⛰️,🏆,🌊,"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Emoji"],
-  "suit_symbols_font": ["Quivira,Quivira,Quivira,Noto Sans Symbols2,Noto Emoji,"],
+  "suit_symbols_font": ["Noto Emoji,Noto Emoji,Noto Emoji,Noto Sans Symbols2,Noto Emoji"],
   "rank_symbols_scale": ["0.6"],
-  "suit_symbols_scale": ["1.1,1.1,1,0.6,0.6"],
-  "font": ["Noto Sans Symbols"],
+  "suit_symbols_scale": ["0.6,0.5,0.6,0.6,0.5"],
   "suit_colors": ["darkgreen,red3,chocolate4,black,darkblue,grey"],
   "shape.chip": ["5"]
 }

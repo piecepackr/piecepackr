@@ -1,14 +1,13 @@
 {
-  "deck_title": ["RD-suited piecepack (Light suits) (v0.8.0-3)"],
+  "deck_title": ["RD-suited piecepack (Light suits) (v0.9.1-0)"],
   "deck_filename": ["rainbow_deck6"],
   "rank_symbols": ["N,A,2,3,4,5"],
-  "suit_symbols": ["♥,★,♣,♦,♛,♤,꩜"],
-  "header_font": ["Noto Sans"],
+  "suit_symbols": ["♥,★,♣,♦,♛,♠,꩜"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Sans Symbols"],
-  "suit_symbols_scale": ["1,1,1,1,0.85,1,1.2"],
-  "font": ["Noto Sans Symbols"],
-  "suit_colors": ["#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,white,sienna"],
-  "background_colors.suited": ["grey"],
+  "suit_symbols_scale": ["1,1,1,1,0.85,1,0.9"],
+  "suit_colors": ["#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,sienna"],
+  "background_colors.suited": ["black"],
+  "background_colors.unsuited": ["grey"],
   "shape.chip": ["5"]
 }

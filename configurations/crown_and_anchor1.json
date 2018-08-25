@@ -1,12 +1,10 @@
 {
-  "deck_title": ["Crown and anchor suits (v0.8.0-3)"],
+  "deck_title": ["Crown and anchor suits (v0.9.1-0)"],
   "deck_filename": ["crown_and_anchor1"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♦,♣,♠,♚,⚓,★"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Sans Symbols"],
-  "suit_symbols_scale": ["1,1,1,1,1,1,1,1"],
-  "font": ["Noto Sans Symbols"],
+  "suit_symbols_scale": ["1,1,1,1,1,0.8,1"],
   "suit_colors": ["darkred,darkred,black,black,darkred,black,grey"]
 }

@@ -1,14 +1,12 @@
 {
-  "deck_title": ["Swiss-suited (Black color scheme) (v0.8.0-3)"],
+  "deck_title": ["Swiss-suited (Black color scheme) (v0.9.1-0)"],
   "deck_filename": ["dual5"],
   "rank_symbols": [",A,2,3,4,5"],
   "suit_symbols": [",,,,"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Quivira"],
   "suit_symbols_scale": ["1"],
   "use_suit_as_ace": [true],
-  "font": ["Noto Sans Symbols"],
   "suit_colors": ["black,black,black,black,grey40"],
   "background_colors": ["grey70"],
   "invert_colors.suited": [true]

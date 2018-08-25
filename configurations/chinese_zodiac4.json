@@ -1,14 +1,12 @@
 {
-  "deck_title": ["Chinese zodiac #4 (v0.8.0-3)"],
+  "deck_title": ["Chinese zodiac #4 (v0.9.1-0)"],
   "deck_filename": ["chinese_zodiac4"],
   "rank_symbols": ["虎,马,狗,兔,羊,猪"],
   "suit_symbols": ["木,火,土,金,水,"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans CJK SC"],
   "suit_symbols_font": ["Noto Sans CJK SC"],
   "rank_symbols_scale": ["0.7"],
   "suit_symbols_scale": ["0.7"],
-  "font": ["Noto Sans Symbols"],
   "suit_colors": ["darkgreen,red3,chocolate4,black,darkblue,grey"],
   "shape.chip": ["5"]
 }

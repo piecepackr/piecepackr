@@ -1,6 +1,3 @@
 {
-  "deck_filename": ["default"],
-  "header_font": ["Noto Sans"],
-  "rank_symbols_font": ["Noto Sans"],
-  "font": ["Noto Sans Symbols"]
+  "deck_filename": ["default"]
 }

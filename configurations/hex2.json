@@ -1,11 +1,9 @@
 {
-  "deck_title": ["French-suited (Grey hexlines on tile faces/backs) (v0.8.0-3)"],
+  "deck_title": ["French-suited (Grey hexlines on tile faces/backs) (v0.9.1-0)"],
   "deck_filename": ["hex2"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,꩜"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans"],
-  "suit_symbols_scale": ["1,1,1,1,1.2,1.2"],
-  "hexline_colors": ["grey"],
-  "font": ["Noto Sans Symbols"]
+  "suit_symbols_scale": ["1,1,1,1,0.9"],
+  "hexline_colors": ["grey"]
 }

@@ -22,6 +22,10 @@ PAWN_BASE <- 3/8
 BELT_HEIGHT <- 1/2
 BELT_WIDTH <- 3 * DIE_WIDTH
 
+split <- function(x, sep=",") { stringr::str_split(x, sep)[[1]] } 
+col_split <- function(x, sep=",") { gsub("^$", "transparent", split(x, sep)) }
+numeric_split <- function(x, sep=",") { as.numeric(split(x, sep)) }
+
 seg <- function(x, y, xend, yend, color="black", ...) {
     grid.segments(x0=x, y0=y, x1=xend, y1=yend, gp=gpar(col=color, ...))
 }
@@ -93,8 +97,12 @@ get_component <- function(component_side) {
     split(component_side, "_")[1]
 }
 
-get_style_element <- function(style, component_side, cfg, default=NULL, suited=FALSE) {
-    component <- get_component(component_side)
+get_style_element <- function(style, component_side=NA, cfg=list(), default=NULL, suited=FALSE) {
+    if(is.null(component_side)) {
+        component <- NULL
+    } else {
+        component <- get_component(component_side)
+    }
 
     component_side_str <- paste0(style, ".", component_side)
     component_str <- paste0(style, ".", component)
@@ -117,13 +125,27 @@ get_style_element <- function(style, component_side, cfg, default=NULL, suited=F
 
 get_background_color_helper <- function(component_side, i_s, cfg) {
     suited <- is_suited(component_side, i_s, cfg)
-    colors <- get_style_element("background_colors", component_side, cfg, suited=suited)
+    colors <- col_split(get_style_element("background_colors", component_side, cfg, "white", suited=suited))
     expand_suit_elements(colors, "background_colors", component_side, cfg)[i_s]
 }
 
-get_suit_colors <- function(component_side, cfg) {
-    suit_colors <- get_style_element("suit_colors", component_side, cfg)
-    expand_suit_elements(suit_colors, "suit_colors", component_side, cfg) 
+get_suit_colors <- function(component_side=NA, cfg=list(), expand=TRUE) {
+    suit_colors <- col_split(get_style_element("suit_colors", component_side, cfg, 
+                                     "darkred,black,darkgreen,darkblue,grey"))
+    if (expand)
+        suit_colors <- expand_suit_elements(suit_colors, "suit_colors", component_side, cfg) 
+    suit_colors
+}
+
+get_border_colors <- function(component_side=NA, cfg=list(), expand=TRUE) {
+    border_colors <- col_split(get_style_element("border_color", component_side, cfg, "grey"))
+    if (expand)
+        border_colors <- expand_suit_elements(border_colors, "border_colors", component_side, cfg)
+    border_colors
+}
+
+get_border_color <- function(component_side, i_s, cfg) {
+    get_border_colors(component_side, cfg)[i_s]
 }
 
 get_shape_theta <- function(component_side, cfg) {
@@ -167,12 +189,12 @@ get_shape_fn <- function(component_side, cfg) {
 
 get_suit_color_helper <- function(component_side, i_s, cfg) {
     suit_colors <- get_suit_colors(component_side, cfg)
-    ifelse(i_s <= cfg$n_suits, suit_colors[i_s], suit_colors[cfg$i_unsuit])
+    ifelse(i_s <= get_n_suits(cfg), suit_colors[i_s], suit_colors[get_i_unsuit(cfg)])
 }
 
 should_invert <- function(component_side, i_s, cfg) {
     suited <- is_suited(component_side, i_s, cfg)
-    should_inverts <- get_style_element("invert_colors", component_side, cfg, suited=suited)
+    should_inverts <- get_style_element("invert_colors", component_side, cfg, FALSE, suited=suited)
     expand_suit_elements(should_inverts, "should_inverts", component_side, cfg)[i_s]
 }
 
@@ -182,8 +204,8 @@ is_suited <- function(component_side, i_s, cfg) {
            tile_face = TRUE, 
            coin_back = TRUE,
            coin_face = FALSE,
-           ppdie_face = ifelse(i_s <= cfg$i_unsuit, TRUE, FALSE),
-           suitdie_face = ifelse(i_s <= cfg$i_unsuit, TRUE, FALSE),
+           ppdie_face = ifelse(i_s <= get_i_unsuit(cfg), TRUE, FALSE),
+           suitdie_face = ifelse(i_s <= get_i_unsuit(cfg), TRUE, FALSE),
            saucer_face = TRUE,
            saucer_back = FALSE,
            pawn_face = TRUE,
@@ -220,8 +242,26 @@ get_ps_r <- function(component_side, cfg) {
                       switch(shape, halma = 0.25, 0.0))
 }
 
+get_n_suits <- function(cfg=list()) {
+    if (is.null(cfg[["n_suits"]])) {
+        length(get_suit_symbols(cfg=cfg, expand=FALSE)) - 1
+    } else {
+        cfg[["n_suits"]]
+    }
+}
+
+get_n_ranks <- function(cfg=list()) {
+    if (is.null(cfg[["n_ranks"]])) {
+        length(get_rank_symbols(cfg=cfg, expand=FALSE))
+    } else {
+        cfg[["n_ranks"]]
+    }
+}
+
+get_i_unsuit <- function(cfg=list()) { get_n_suits(cfg) + 1 }
+
 get_dm_symbols <- function(component_side, cfg) {
-    dm_symbols <- get_style_element("dm_symbols", component_side, cfg, {
+    default = {
         if (component_side %in% c("coin_back", "coin_face")) {
             dm_symbols <- "\u25cf" # "●"
         } else if (component_side %in% c("chip_back")) {
@@ -241,7 +281,9 @@ get_dm_symbols <- function(component_side, cfg) {
         } else {
             dm_symbols <- get_suit_symbols(component_side, cfg)
         }
-    })
+    }
+    default <- paste(default, collapse=",")
+    dm_symbols <- split(get_style_element("dm_symbols", component_side, cfg, default))
     dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", component_side, cfg)
     dm_symbols
 }
@@ -274,18 +316,20 @@ get_suit_color <- function(component_side, i_s, cfg) {
         scol
 }
 get_checker_color <- function(component_side, i_s, cfg) {
-    colors <- get_style_element("checker_colors", component_side, cfg, NA)
+    colors <- col_split(get_style_element("checker_colors", component_side, cfg, NA))
     colors <- expand_suit_elements(colors, "checker_colors", component_side, cfg)
     colors[i_s]
 }
 get_gridline_color <- function(component_side, i_s, cfg) {
-    colors <- get_style_element("gridline_colors", component_side, cfg, 
-        c(rep(NA, cfg$n_suits), get_suit_color(component_side, cfg$i_unsuit, cfg)))
+    default <- c(rep(NA, get_n_suits(cfg)), get_suit_color(component_side, get_i_unsuit(cfg), cfg))
+    colors <- get_style_element("gridline_colors", component_side, cfg, paste(default, collapse=","))
+    colors <- col_split(colors)
     colors <- expand_suit_elements(colors, "gridline_colors", component_side, cfg)
     colors[i_s]
 }
 get_hexline_color <- function(component_side, i_s, cfg) {
     colors <- get_style_element("hexline_colors", component_side, cfg, NA)
+    colors <- col_split(colors)
     colors <- expand_suit_elements(colors, "hexline_colors", component_side, cfg)
     colors[i_s]
 }
@@ -294,44 +338,50 @@ get_suit_symbol <- function(component_side, i_s, cfg) {
     get_suit_symbols(component_side, cfg)[i_s]
 }
 
-get_rank_symbols <- function(component_side, cfg) {
-    rank_symbols <- get_style_element("rank_symbols", component_side, cfg)
-    expand_rank_elements(rank_symbols, "rank_symbols", component_side, cfg)
+get_rank_symbols <- function(component_side=NA, cfg=list(), expand=TRUE) {
+    rank_symbols <- split(get_style_element("rank_symbols", component_side, cfg, "N,A,2,3,4,5"))
+    if (expand)
+        rank_symbols <- expand_rank_elements(rank_symbols, "rank_symbols", component_side, cfg)
+    rank_symbols
 }
-get_suit_symbols <- function(component_side, cfg, expand=TRUE) {
-    suit_symbols <- get_style_element("suit_symbols", component_side, cfg)
+get_suit_symbols <- function(component_side=NA, cfg=list(), expand=TRUE) {
+    suit_symbols <- split(get_style_element("suit_symbols", component_side, cfg, 
+        "\u2665,\u2660,\u2663,\u2666,\u263c" # "♥,♠,♣,♦,☼"
+        # "\u2665,\u2660,\u2663,\u2666,\u2302" # "♥,♠,♣,♦,⌂"
+        # "\u2665,\u2660,\u2663,\u2666,\u2605" # "♥,♠,♣,♦,★"
+    ))
     if (expand) 
         suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", component_side, cfg)
     suit_symbols
 }
 
 expand_suit_elements <- function(elements, style, component_side, cfg) {
-    if (length(elements) == 1) {
-        elements <- rep(elements, cfg$n_suits + 1)
-    } else if (length(elements) == cfg$n_suits) {
+    if (length(elements) < get_n_suits(cfg)) {
+        elements <- rep(elements, length.out=get_n_suits(cfg) + 1)
+    } else if (length(elements) == get_n_suits(cfg)) {
         elements <- c(elements, switch(style, scale=1.0, ""))
     }
-    if (length(elements) == cfg$i_unsuit) {
+    if (length(elements) == get_i_unsuit(cfg)) {
         elements <- c(elements, switch(style, 
-                           suit_symbols = switch(component_side, 
-                                suitdie_face = "", ppdie_face = "", elements[cfg$i_unsuit]),
+                           suit_symbols = switch(ifelse(is.na(component_side), "NA", component_side), 
+                                suitdie_face = "", ppdie_face = "", elements[get_i_unsuit(cfg)]),
                            gridline_colors = NA,
-                           elements[cfg$i_unsuit]))
+                           elements[get_i_unsuit(cfg)]))
     }
     elements
 }
 
 expand_rank_elements <- function(elements, style, component_side, cfg) {
-    if (length(elements) == 1) {
-        elements <- rep(elements, cfg$n_ranks)
+    if (length(elements) < get_n_ranks(cfg)) {
+        elements <- rep(elements, length.out=get_n_ranks(cfg))
     } 
-    if (length(elements) == cfg$n_ranks)
-        elements <- c(elements, switch(style, rank_symbols = "", elements[cfg$n_ranks]))
+    if (length(elements) == get_n_ranks(cfg))
+        elements <- c(elements, switch(style, rank_symbols = "", elements[get_n_ranks(cfg)]))
     elements
 }
 
-get_use_suit_as_ace <- function(component_side, cfg) {
-    get_style_element("use_suit_as_ace", component_side, cfg)
+get_use_suit_as_ace <- function(component_side=NA, cfg=list()) {
+    get_style_element("use_suit_as_ace", component_side, cfg, FALSE)
 }
 
 get_rank_symbol <- function(component_side, i_s, i_r, cfg) {
@@ -351,14 +401,14 @@ get_style <- function(component_side, cfg) {
 }
 
 get_rank_scales <- function(component_side, cfg) {
-    scales <- get_style_element("rank_symbols_scale", component_side, cfg, 1.0)
+    scales <- numeric_split(get_style_element("rank_symbols_scale", component_side, cfg, 1.0))
     expand_rank_elements(scales, "scale", component_side, cfg)
 }
 get_rank_scale <- function(component_side, i_r, cfg) {
     get_rank_scales(component_side, cfg)[i_r]
 }
 get_rank_fonts <- function(component_side, cfg) {
-    fonts <- get_style_element("rank_symbols_font", component_side, cfg, cfg[["font"]])
+    fonts <- split(get_style_element("rank_symbols_font", component_side, cfg, get_font(cfg)))
     expand_rank_elements(fonts, "font", component_side, cfg)
 }
 get_rank_font <- function(component_side, i_s, i_r, cfg) {
@@ -371,27 +421,29 @@ get_rank_font <- function(component_side, i_s, i_r, cfg) {
         rank_font
 }
 get_suit_fonts <- function(component_side, cfg) {
-    fonts <- get_style_element("suit_symbols_font", component_side, cfg, cfg[["font"]])
+    fonts <- split(get_style_element("suit_symbols_font", component_side, cfg, get_font(cfg)))
     expand_suit_elements(fonts, "font", component_side, cfg)
 }
 get_suit_font <- function(component_side, i_s, cfg) {
     get_suit_fonts(component_side, cfg)[i_s]
 }
 get_dm_fonts <- function(component_side, cfg) {
-    fonts <- get_style_element("dm_symbols_font", component_side, cfg, {
+    default <- {
         if (all(get_dm_symbols(component_side, cfg) == get_suit_symbols(component_side, cfg))){ 
             fonts <- get_suit_fonts(component_side, cfg)
         } else {
-            fonts <- cfg[["font"]]
+            fonts <- get_font(cfg)
         }
-    })
+    }
+    default <- paste(default, collapse=",")
+    fonts <- split(get_style_element("dm_symbols_font", component_side, cfg, default))
     expand_suit_elements(fonts, "font", component_side, cfg)
 }
 get_dm_font <- function(component_side, i_s, cfg) {
     get_dm_fonts(component_side, cfg)[i_s]
 }
 get_suit_scales <- function(component_side, cfg) {
-    scales <- get_style_element("suit_symbols_scale", component_side, cfg, 1.0)
+    scales <- numeric_split(get_style_element("suit_symbols_scale", component_side, cfg, 1.0))
     expand_suit_elements(scales, "scale", component_side, cfg)
 }
 get_rank_suit_symbols <- function(component_side, cfg) {
@@ -403,13 +455,15 @@ get_suit_scale <- function(component_side, i_s, cfg) {
     get_suit_scales(component_side, cfg)[i_s]
 }
 get_dm_scales <- function(component_side, cfg) {
-    scales <- get_style_element("dm_symbols_scale", component_side, cfg, {
+    default <- {
         if (all(get_dm_symbols(component_side, cfg) == get_suit_symbols(component_side, cfg))) { 
             scales <- get_suit_scales(component_side, cfg)
         } else {
             scales <- 1.0
         }
-    })
+    }
+    default <- paste(default, collapse=",")
+    scales <- numeric_split(get_style_element("dm_symbols_scale", component_side, cfg, default))
     expand_suit_elements(scales, "scale", component_side, cfg)
 }
 get_dm_scale <- function(component_side, i_s, cfg) {
@@ -419,14 +473,14 @@ get_dm_scale <- function(component_side, i_s, cfg) {
 get_suit_fontsize <- function(component_side, i_s, cfg) {
     scale <- get_suit_scale(component_side, i_s, cfg)
     fs <- switch(component_side,
-                 "belt_face" = 20,
-                 "chip_back" = 22,
-                 "coin_back" = 28,
-                 "pawn_face" = 22,
-                 "pawn_back" = 22,
-                 "saucer_back" = 32,
-                 "saucer_face" = 32,
-                 "suitdie_face" = 28,
+                 "belt_face" = 22,
+                 "chip_back" = 28,
+                 "coin_back" = 34,
+                 "pawn_face" = 28,
+                 "pawn_back" = 28,
+                 "saucer_back" = 42,
+                 "saucer_face" = 42,
+                 "suitdie_face" = 32,
                  24)
     scale * fs
 }
@@ -434,10 +488,10 @@ get_suit_fontsize <- function(component_side, i_s, cfg) {
 get_dm_fontsize <- function(component_side, i_s, cfg) {
     scale <- get_dm_scale(component_side, i_s, cfg)
     fs <- switch(component_side,
-                 "tile_face" = 32,
+                 "tile_face" = 40,
                  "pawn_face" = 12,
                  "pawn_back" = 12,
-                 10)
+                 12)
     scale * fs
 }
 
@@ -474,7 +528,8 @@ to_y <- function(theta, r) {
 #     atan2(y, x)
 # }
 
-get_component_opt <- function(component_side, i_s=cfg$i_unsuit, i_r=1, cfg=c2o()) {
+
+get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=c2o()) {
     shape <- get_shape(component_side, cfg)
     shape_fn <- get_shape_fn(component_side, cfg)
     shape_theta <- get_shape_theta(component_side, cfg)
@@ -482,7 +537,7 @@ get_component_opt <- function(component_side, i_s=cfg$i_unsuit, i_r=1, cfg=c2o()
     bcol <- get_background_color(component_side, i_s, cfg)
     scol <- get_suit_color(component_side, i_s, cfg)
     dm_col <- get_dm_color(component_side, i_s, cfg)
-    border_col <- cfg$border_color
+    border_col <- get_border_color(component_side, i_s, cfg)
     checker_col <- get_checker_color(component_side, i_s, cfg)
     gridline_col <- get_gridline_color(component_side, i_s, cfg)
     hexline_col <- get_hexline_color(component_side, i_s, cfg) 
@@ -522,17 +577,17 @@ get_component_opt <- function(component_side, i_s=cfg$i_unsuit, i_r=1, cfg=c2o()
 #' @param cfg Piecepack configuration list
 #' @export
 make_piecepack_preview <- function(cfg=c2o()) {
-    dir.create(cfg$svg_preview_dir, recursive=TRUE, showWarnings=FALSE)
-    pheight <- 2*TILE_WIDTH+3*DIE_WIDTH
+    dir.create(get_svg_preview_dir(cfg), recursive=TRUE, showWarnings=FALSE)
+    pheight <- 3*TILE_WIDTH
     pwidth <- 3*TILE_WIDTH
-    svg(file.path(cfg$svg_preview_dir, paste0(cfg$deck_filename, ".svg")), 
-        family=cfg$font, width=3*TILE_WIDTH, height=pheight)
+    svg(file.path(get_svg_preview_dir(cfg), paste0(get_deck_filename(cfg), ".svg")), 
+        family=get_font(cfg), width=3*TILE_WIDTH, height=pheight)
     draw_preview(cfg)
     invisible(dev.off())
 }
 
 draw_preview <- function(cfg=c2o()) {
-    pheight <- 2*TILE_WIDTH+3*DIE_WIDTH
+    pheight <- 3*TILE_WIDTH
     pwidth <- 3*TILE_WIDTH
     grid.newpage()
 
@@ -542,30 +597,30 @@ draw_preview <- function(cfg=c2o()) {
     downViewport("tiles")
     x_tiles <- c(1/3, 3/3, 3/3, 1/3, 2/3, 2/3) - 1/6
     y_tiles <- c(3/4, 3/4, 1/4, 1/4, 3/4, 1/4)
-    for (i_s in 1:cfg$n_suits) {
+    for (i_s in 1:get_n_suits(cfg)) {
         draw_component("tile_face", cfg, i_s=i_s, i_r=2, x=x_tiles[i_s], y=y_tiles[i_s])
     }
-    if (cfg$n_suits < 5) {
+    if (get_n_suits(cfg) < 5) {
         draw_component("tile_back", cfg, x=x_tiles[5], y=y_tiles[5])
     } 
-    if (cfg$n_suits < 6) {
+    if (get_n_suits(cfg) < 6) {
         draw_component("tile_back", cfg, x=x_tiles[6], y=y_tiles[6])
     } 
 
     # coins
     seekViewport("main")
-    addViewport(x=inch(1.5*COIN_WIDTH), y=inch(1.5*DIE_WIDTH), width=inch(3*COIN_WIDTH), height=inch(2*COIN_WIDTH), name="coins")
+    addViewport(x=inch(1.5*COIN_WIDTH), y=inch(0.5*TILE_WIDTH), width=inch(3*COIN_WIDTH), height=inch(2*COIN_WIDTH), name="coins")
     downViewport("coins")
     x_coins <- rep(1:3, 2)/3 - 1/6
     y_coins <- rep(c(3/4, 1/4), each=3)
     draw_component("coin_face", cfg, i_r=1, x=x_coins[1], y=y_coins[1])
     draw_component("coin_face", cfg, i_r=2, x=x_coins[2], y=y_coins[2])
-    if (cfg$n_suits < 5)
+    if (get_n_suits(cfg) < 5)
         draw_component("coin_back", cfg, i_s=4, x=x_coins[3], y=y_coins[3])
     else
         draw_component("coin_back", cfg, i_s=5, x=x_coins[3], y=y_coins[3])
     draw_component("coin_face", cfg, i_r=3, x=x_coins[4], y=y_coins[4])
-    if (cfg$n_suits < 6)
+    if (get_n_suits(cfg) < 6)
         draw_component("coin_back", cfg, i_s=2, x=x_coins[5], y=y_coins[5])
     else
         draw_component("coin_back", cfg, i_s=6, x=x_coins[5], y=y_coins[5])
@@ -573,17 +628,25 @@ draw_preview <- function(cfg=c2o()) {
 
     # suitrank die
     seekViewport("main")
-    addViewport(x=3/3-1/6, y=inch(1.5*DIE_WIDTH), width=inch(4 * DIE_WIDTH), height=inch(3 * DIE_WIDTH), name="suitrankdie")
+    addViewport(x=3/3-1/6, y=inch(0.5*TILE_WIDTH), width=inch(4 * DIE_WIDTH), height=inch(3 * DIE_WIDTH), name="suitrankdie")
     seekViewport("suitrankdie")
     draw_suitrank_die(cfg)
 
     # saucers
     seekViewport("main")
-    addViewport(x=inch(TILE_WIDTH+2.5*DIE_WIDTH), y=inch(2*DIE_WIDTH), 
-                width=inch(2 * SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="saucers")
+    addViewport(x=inch(TILE_WIDTH+1.5*DIE_WIDTH), y=inch(0.5*TILE_WIDTH), 
+                width=inch(SAUCER_WIDTH), height=inch(2*SAUCER_WIDTH), name="saucers")
     downViewport('saucers')
-    draw_component("saucer_face", cfg, i_s=1, x=0.25, y=0.5)
-    draw_component("saucer_back", cfg, x=0.75, y=0.5)
+    draw_component("saucer_face", cfg, i_s=1, x=0.5, y=0.25)
+    draw_component("saucer_back", cfg, x=0.5, y=0.75)
+
+    # pawns
+    seekViewport("main")
+    addViewport(x=inch(TILE_WIDTH+3.0*DIE_WIDTH), y=inch(0.5*TILE_WIDTH),
+                width=inch(PAWN_WIDTH), height=inch(2*PAWN_HEIGHT), name="pawns")
+    downViewport("pawns")
+    draw_component("pawn_face", cfg, i_s=2, x=0.5, y=0.25)
+    draw_component("pawn_back", cfg, i_s=2, x=0.5, y=0.75, angle=180)
 }
 
 
@@ -652,8 +715,9 @@ make_piecepack_images <- function(cfg) {
 }
 
 component_directory <- function(cfg, format) {
-    file.path(cfg[[paste0(format, "_component_dir")]], cfg$deck_filename)
+    file.path(cfg[[paste0(format, "_component_dir")]], get_deck_filename(cfg))
 }
+
 
 component_filename <- function(cfg, component_side, format, theta, 
                                i_s=NULL, i_r=NULL) {
@@ -674,7 +738,7 @@ make_images_helper <- function(cfg, format, theta) {
             invisible(dev.off())
         }
 
-        for (i_s in 1:cfg$n_suits) {
+        for (i_s in 1:get_n_suits(cfg)) {
             for (component_side in c("belt_face", "chip_back", "coin_back", 
                                        "pawn_back", "pawn_face",
                                        "saucer_face", "suitdie_face")) {
@@ -684,7 +748,7 @@ make_images_helper <- function(cfg, format, theta) {
                 invisible(dev.off())
             }
 
-            for (i_r in 1:cfg$n_ranks) {
+            for (i_r in 1:get_n_ranks(cfg)) {
                 for (component_side in c("chip_face", "ppdie_face", "tile_face")) {
                     f <- component_filename(cfg, component_side, format, theta, i_s, i_r)
                     pp_device(f, get_component(component_side), format, theta)
@@ -693,7 +757,7 @@ make_images_helper <- function(cfg, format, theta) {
                 }
             }
         }
-        for (i_r in 1:cfg$n_ranks) {
+        for (i_r in 1:get_n_ranks(cfg)) {
             component_side <- "coin_face"
             f <- component_filename(cfg, component_side, format, theta, i_r=i_r)
             pp_device(f, get_component(component_side), format, theta)
@@ -862,11 +926,12 @@ draw_pawn <- function(i_s, cfg) {
         upViewport()
         upViewport()
     })
-    grid.lines(y=0.5, gp=gpar(col=cfg$border_col, fill=NA, lty="dashed"))
-    grid.rect(gp=gpar(col=cfg$border_col, fill=NA))
+    border_col <- get_border_color("pawn_face", i_s, cfg)
+    grid.lines(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
+    grid.rect(gp=gpar(col=border_col, fill=NA))
     ll <- 0.07
-    seg(0.5, 0, 0.5, ll, cfg$border_col)
-    seg(0.5, 1, 0.5, 1-ll, cfg$border_col)
+    seg(0.5, 0, 0.5, ll, border_col)
+    seg(0.5, 1, 0.5, 1-ll, border_col)
 }
 
 #' Draw piecepack component
@@ -887,7 +952,7 @@ draw_pawn <- function(i_s, cfg) {
 #'            to play with re-configuring fontsizes.
 #' @param ... Extra arguments to pass to \code{grid::viewport} like \code{angle}.
 #' @export
-draw_component <- function(component_side, cfg=c2o(), i_s=cfg$i_unsuit, i_r=1, x=0.5, y=0.5, 
+draw_component <- function(component_side, cfg=c2o(), i_s=get_i_unsuit(cfg), i_r=1, x=0.5, y=0.5, 
                            width=NULL, height=NULL, svg=FALSE, ...) {
     component <- get_component(component_side)
     if (is.null(width))

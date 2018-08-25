@@ -1,24 +1,18 @@
-split <- function(x, sep=",") { stringr::str_split(x, sep)[[1]] } 
-col_split <- function(x, sep=",") { gsub("^$", "transparent", split(x, sep)) }
-numeric_split <- function(x, sep=",") { as.numeric(split(x, sep)) }
-
 FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 
 #' @importFrom optparse OptionParser add_option parse_args
 configuration_options <- function(args=commandArgs(TRUE)) {
-    default_str <- "(default %default)"
     parser <- OptionParser("Program to make piecepack configurations")
     parser <- add_option(parser, "--deck_title", default=NULL, 
-                         help='(default "")')
+                         help=sprintf('(default "%s")', get_deck_title()))
     parser <- add_option(parser, "--deck_filename", default=NULL, 
-                         help='Filename prefix (default "piecepack_deck")')
+                         help=sprintf('Filename prefix (default "%s")', get_deck_filename()))
 
     # Symbols
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
-                         help='(default "N,A,2,3,4,5")')
+                         help=sprintf('(default "%s")', paste(get_rank_symbols(expand=FALSE), collapse=",")))
     parser <- add_option(parser, "--suit_symbols", default=NULL, 
-                         help='(default "\u2665,\u2660,\u2663,\u2666,\u263c")') # ♥,♠,♣,♦,☼
-                         # help='(default "\u2665,\u2660,\u2663,\u2666,\u2605")') # ♥,♠,♣,♦,★
+                         help=sprintf('(default "%s")', paste(get_suit_symbols(expand=FALSE), collapse=","))) 
     parser <- add_option(parser, "--dm_symbols", default=NULL, 
                          help='(default is to try to pick a reasonable directional mark symbol based on the component)')
     parser <- add_option(parser, "--header_font", default=NULL, 
@@ -38,14 +32,13 @@ configuration_options <- function(args=commandArgs(TRUE)) {
 
     # Style
     parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=NULL, 
-                         help='(default "FALSE")')
+                         help=sprintf('(default "%s")', get_use_suit_as_ace()))
     parser <- add_option(parser, "--use_ace_as_ace", dest="use_suit_as_ace", 
                          action="store_false", default=NULL, 
                          help='Opposite of "use_suit_as_ace" option')
-    parser <- add_option(parser, "--pp_die_arrangement", help='Either "counter" or "opposites_sum_to_5" (default "counter")')
+    parser <- add_option(parser, "--pp_die_arrangement", 
+                         help=sprintf('Either "counter" or "opposites_sum_to_5" (default "%s")', get_pp_die_arrangement()))
 
-    # parser <- add_option(parser, "--style", default=NULL, 
-    #                      help='"basic" or "simple_hex" (default "basic")')
     parser <- add_option(parser, "--shape", default=NULL,
                          help=paste('either "rect", "circle", "halma", "kite", "star",',
                                    "or a number representing number of sides of a regular polygon",
@@ -77,16 +70,16 @@ configuration_options <- function(args=commandArgs(TRUE)) {
 
     # Font
     parser <- add_option(parser, "--font", default=NULL,
-                         help='Default font family (default "sans")')
+                         help=sprintf('Default font family (default "%s")', get_font()))
 
     # Color scheme
     parser <- add_option(parser, "--suit_colors", default=NULL, 
-                         help='(default "darkred,black,darkgreen,darkblue,grey")')
+                         help=sprintf('(default "%s")', paste(get_suit_colors(expand=FALSE), collapse=",")))
     parser <- add_option(parser, "--dm_colors", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
-    parser <- add_option(parser, "--background_colors", default=NULL, 
-                         help='(default "white")')
-    parser <- add_option(parser, "--border_color", default=NULL, 
+    parser <- add_option(parser, "--background_colors", default=NULL, ####
+                         help='(default "white")') 
+    parser <- add_option(parser, "--border_color", default=NULL, ####
                          help='(default "grey")')
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
                          help='(default "FALSE")')
@@ -158,10 +151,10 @@ configuration_options <- function(args=commandArgs(TRUE)) {
 
     # Directories
     parser <- add_option(parser, "--pdf_deck_dir", default=NULL,
-                         help='Directory to put pdfs in (default "pdf/decks")')
+                         help=sprintf('Directory to put pdfs in (default "%s")', get_pdf_deck_dir()))
 
     parser <- add_option(parser, "--svg_preview_dir", default=NULL,
-                         help='Directory to put pdfs in (default "svg/previews")')
+                         help=sprintf('Directory to put pdfs in (default "%s")', get_svg_preview_dir()))
 
     for (format in FORMATS) {
         option <- paste0("--", format, "_component_dir")
@@ -208,103 +201,39 @@ configure_piecepack <- function(args=commandArgs(TRUE)) {
 #' 
 #' @param args Character vector of command-line arguments.
 #' @export
-get_arrangement_opts <- function(args=commandArgs(TRUE)) {
+get_arrangement_opts <- function(args=commandArgs(TRUE)) { ####
     parser <- OptionParser("Program to collect piecepacks")
-    parser <- add_option(parser, "--author", default="",
+    parser <- add_option(parser, "--author", default=get_author(),
                          help='Pdf author (default "")')
-    parser <- add_option(parser, "--filename", default="piecepack_collection",
+    parser <- add_option(parser, "--filename", default="piecepack_collection", ####
                          help='Filename prefix (default "%default")')
-    parser <- add_option(parser, "--keywords", default="piecepack",
+    parser <- add_option(parser, "--keywords", default=get_keywords(),
                          help='Pdf keywords (default "%default")')
-    parser <- add_option(parser, "--subject", default="", 
+    parser <- add_option(parser, "--subject", default=get_subject(), 
                          help='Pdf subject (default "%default")')
-    parser <- add_option(parser, "--title", default="Piecepack collection", 
+    parser <- add_option(parser, "--title", default=get_title(), 
                          help='Pdf title (default "%default")')
     parser <- add_option(parser, "--decks", 
                          help='Comma separated list of decks to collect (default collects all of them)')
-    parser <- add_option(parser, "--pdf_deck_dir", default="pdf/decks",
+    parser <- add_option(parser, "--pdf_deck_dir", default=get_pdf_deck_dir(),
                          help='(default "%default")')
-    parser <- add_option(parser, "--pdf_collection_dir", default="pdf/collections",
+    parser <- add_option(parser, "--pdf_collection_dir", default=get_pdf_collection_dir(),
                          help='(default "%default")')
-    parser <- add_option(parser, "--pdf_preview_dir", default="pdf/previews",
+    parser <- add_option(parser, "--pdf_preview_dir", default=get_pdf_preview_dir(),
                          help='(default "%default")')
-    parser <- add_option(parser, "--svg_preview_dir", default="svg/previews",
+    parser <- add_option(parser, "--svg_preview_dir", default=get_svg_preview_dir(),
                          help='(default "svg/previews")')
-    parser <- add_option(parser, "--paper", default="letter",
+    parser <- add_option(parser, "--paper", default=get_paper(),
                          help='Pdf paper size, either "letter" or "A4" (default "%default")')
-    parser <- add_option(parser, "--font", default="sans",
+    parser <- add_option(parser, "--font", default=get_font(),
                          help='Default font family (default "%default")')
 
-    opts <- parse_args(parser, args)
-
-    if (is.null(opts$decks))
-        opts$decks <- gsub(".pdf$", "", list.files(opts$pdf_deck_dir))
-    else
-        opts$decks <- split(opts$decks)
-
-    opts <- add_copyright(opts)
-    opts$header_font <- opts$font
-    opts
+    parse_args(parser, args)
 }
 
-add_copyright <- function(opts) {
-    # opts$program <- "Generated by the Configurable Piecepack PDF Maker."
-    opts$program <- "Generated by the piecepackr R package."
-    opts$copyright <- "\u00a9 2016-2018 Trevor L Davis. Some Rights Reserved."
-    opts$license1 <- "This work is licensed under a CC BY-SA 4.0 license:"
-    opts$license2 <- "https://creativecommons.org/licenses/by-sa/4.0/"
-
-    opts
-}
 
 process_configuration <- function(opts) {
-    if (is.null(opts$deck_title))
-        opts$deck_title <- ""
-
-    if (is.null(opts$deck_filename))
-        opts$deck_filename <- "piecepack_deck"
-    if (is.null(opts$pdf_deck_dir))
-        opts$pdf_deck_dir <- "pdf/decks"
-    if (is.null(opts$svg_preview_dir))
-        opts$svg_preview_dir <- "svg/previews"
-
-    if (is.null(opts[["font"]]))
-        opts$font <- "sans"
-    if (is.null(opts[["header_font"]]))
-        opts$header_font <- opts$font
-
-    if (is.null(opts[["rank_symbols"]]))
-        opts$rank_symbols <- "N,A,2,3,4,5"
-    if (is.null(opts[["suit_symbols"]])) {
-        # opts$suit_symbols <- "\u2665,\u2660,\u2663,\u2666,\u2605" # "♥,♠,♣,♦,★"
-        opts$suit_symbols <- "\u2665,\u2660,\u2663,\u2666,\u263c" # "♥,♠,♣,♦,☼"
-        # opts$suit_symbols <- "\u2665,\u2660,\u2663,\u2666,\u2302" # "♥,♠,♣,♦,⌂"
-    }
-    if (is.null(opts[["suit_colors"]]))
-        opts$suit_colors <- "darkred,black,darkgreen,darkblue,grey"
-    if (is.null(opts[["use_suit_as_ace"]]))
-        opts$use_suit_as_ace <- FALSE
-    if (is.null(opts[["pp_die_arrangement"]]))
-        opts$pp_die_arrangement <- "counter"
-    if (is.null(opts[["style"]]))
-        opts$style <- "basic"
-    if (is.null(opts[["background_colors"]]))
-        opts$background_colors <- "white"
-    if (is.null(opts[["border_color"]]))
-        opts$border_color <- "grey"
-    if (is.null(opts[["invert_colors"]]))
-        opts$invert_colors <- FALSE
-
-    opts <- add_copyright(opts)
-
-    opts$suit_symbols <- split(opts$suit_symbols)
-    opts$suit_colors <- col_split(opts$suit_colors)
-    opts$rank_symbols <- split(opts$rank_symbols)
-    if (is.null(opts$n_ranks))
-        opts$n_ranks <- length(opts$rank_symbols)
-    if (is.null(opts$n_suits))
-        opts$n_suits <- length(opts$suit_symbols) - 1
-    opts$i_unsuit <- opts$n_suits + 1
+    ####
     for(format in FORMATS) {
         option_str <- paste0(format, "_component_dir")
         if (is.null(opts[[option_str]]))
@@ -316,53 +245,6 @@ process_configuration <- function(opts) {
     if (is.null(opts[["component_thetas"]]))
         opts$component_thetas <- "0,90,180,270"
     opts$component_thetas <- numeric_split(opts$component_thetas)
-
-    if (!is.null(opts[["background_colors"]]))
-        opts$background_colors = col_split(opts[["background_colors"]])
-    if (!is.null(opts[["checker_colors"]]))
-        opts$checker_colors = col_split(opts[["checker_colors"]])
-    if (!is.null(opts[["gridline_colors"]]))
-        opts$gridline_colors = col_split(opts[["gridline_colors"]])
-    if (!is.null(opts[["hexline_colors"]]))
-        opts$hexline_colors = col_split(opts[["hexline_colors"]])
-    if (!is.null(opts[["dm_symbols"]]))
-        opts$dm_symbols <- split(opts[["dm_symbols"]])
-    if (!is.null(opts[["rank_symbols_font"]]))
-        opts[["rank_symbols_font"]] <- split(opts[["rank_symbols_font"]])
-    if (!is.null(opts[["suit_symbols_font"]]))
-        opts[["suit_symbols_font"]] <- split(opts[["suit_symbols_font"]])
-    if (!is.null(opts[["dm_symbols_font"]]))
-        opts[["dm_symbols_font"]] <- split(opts[["dm_symbols_font"]])
-    if (!is.null(opts[["rank_symbols_scale"]]))
-        opts[["rank_symbols_scale"]] <- as.numeric(split(opts[["rank_symbols_scale"]]))
-    if (!is.null(opts[["suit_symbols_scale"]]))
-        opts[["suit_symbols_scale"]] <- as.numeric(split(opts[["suit_symbols_scale"]]))
-    if (!is.null(opts[["dm_symbols_scale"]]))
-        opts[["dm_symbols_scale"]] <- as.numeric(split(opts[["dm_symbols_scale"]]))
-    for(suited in c("suited", "unsuited")) {
-        component_str <- paste0("background_colors", ".", suited)
-        if (!is.null(opts[[component_str]]))
-            opts[[component_str]] <- col_split(opts[[component_str]])
-    }
-    for(component in c(COMPONENTS, COMPONENT_AND_SIDES)) {
-        for (style in c("rank_symbols", "suit_symbols", "dm_symbols",
-                        "rank_symbols_font", "suit_symbols_font", "dm_symbols_font")) {
-            component_str <- paste0(style, ".", component)
-            if (!is.null(opts[[component_str]]))
-                opts[[component_str]] <- split(opts[[component_str]])
-        }
-        for (style in c( "background_colors", "suit_colors", "dm_colors")) {
-            component_str <- paste0(style, ".", component)
-            if (!is.null(opts[[component_str]]))
-                opts[[component_str]] <- col_split(opts[[component_str]])
-        }
-        for (style in c("rank_symbols_scale", "suit_symbols_scale", "dm_symbols_scale")) {
-            component_str <- paste0(style, ".", component)
-            if (!is.null(opts[[component_str]]))
-                opts[[component_str]] <- as.numeric(split(opts[[component_str]]))
-
-        }
-    }
 
     opts
 }

@@ -4,7 +4,7 @@
 \alias{draw_component}
 \title{Draw piecepack component}
 \usage{
-draw_component(component_side, cfg = c2o(), i_s = cfg$i_unsuit,
+draw_component(component_side, cfg = c2o(), i_s = get_i_unsuit(cfg),
   i_r = 1, x = 0.5, y = 0.5, width = NULL, height = NULL,
   svg = FALSE, ...)
 }

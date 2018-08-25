@@ -21,6 +21,78 @@ piecepackr: A Piecepack Graphics R Package
 
 .. contents::
 
+.. _`Demo descriptions`:
+
+Demos
+-----
+
+chess
+~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/zksjzil99efjn3r/chess_demo.pdf?dl=0>`__ of some "chess-ranked" piecepacks.  These are piecepacks that replace the six traditional piecepack ranks with the six FIDE chess ranks: ♟,♞,♝,♜,♛,♚.  This decreases the abstraction needed to play several variants of chess but does increases the abstraction needed to play some piecepack games (since one needs to mentally convert chess ranks to N,A,2,3,4,5 or 0,1,2,3,4,5).  Some of the decks have checkered tile faces or tile backs and various color schemes to facilitate playing various classic abstract games like Chess, Checkers, Backgammon, and Reversi.  **Warning**: checkered tile backs results in a *non-conforming* piecepack since it leaks information about the direction of the tile face.  The last two pairs of demo chess sets are matched using a "mirrored" color scheme.  Besides reversi this type of scheme is great for playing chess games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ since each side's pieces will all be of the same color.  The last pair of chess-ranked piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).  An interesting accessory for several of these chess-ranked piecepacks could be Daniel Wilcox and Nathan Morse's `The King's Caste <https://boardgamegeek.com/boardgame/38417/kings-caste>`_ Tarot deck.
+
+chinese_zodiac
+~~~~~~~~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/eu5uxwk6hcihy53/chinese_zodiac_demo.pdf?dl=0>`__ of some "Chinese Zodiac" piecepacks.  These are a pair of 5-suited piecepacks (Wood, Fire, Earth, Metal, and Water) each using a different six animals taken from the `Chinese zodiac <https://en.wikipedia.org/wiki/Chinese_zodiac>`_ as ranks.
+
+crown_and_anchor
+~~~~~~~~~~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/pir2aau09yl11h5/crown_and_anchor_demo.pdf?dl=0>`__ of some "Crown and anchor" suited piecepacks.  `"Crown and anchor" <https://en.wikipedia.org/wiki/Crown_and_Anchor>`_ is a classic public domain dice game that uses the following six suits: ♥,♦,♣,♠,♚,⚓.  These six suits were also used by the `"Empire Deck" <https://boardgamegeek.com/boardgame/24869/empire-deck>`_ of playing cards. Jonathan C. Dietrich's classic `JCD Piecepack <http://www.piecepack.org/JCD.html>`_ replaced the Fleur-de-lis (Arms) with Anchors to allow compatibility with these suits.  This demo builds two six-suited piecepack decks using the Crown and anchor suits (one in a classic red/black and another multicolored) and four four-suited piecepack decks using the JCD piecepack suits (one monoscale, one red/black, one classic multicolored, and one in an alternative multicolored scheme).
+
+default
+~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`__ of the default type of piecepack built by this software if the user does no configuration (except configure for the use of the "Noto Sans" family of fonts and its filename).  It currently builds a 4-suited piecepack using `multicolored french-suits <https://en.wikipedia.org/wiki/Four-color_deck>`_.
+
+dual
+~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`__ of the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one `latin-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Origin_and_development_of_the_Latin_suits>`_ piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two `swiss-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Invention_of_the_Germanic_suits>`_ piecepacks (one dark grayscale color scheme, one light grayscale color scheme).  One could use the piecepack-suited, latin-suited, and one of the french-suited piecepacks to build a "trial hoardpack".
+
+"Dual piecepacks" are eight piecepack **suits** with the following properties:
+
+* The eight **suits** suits can be "easily" visually distinguished
+* The eight suits can be "easily" visually split into two separate **groups** of four suits
+* Each "suit" in a group can be "easily" visually **linked** with exactly one suit in the other group 
+
+This gives one the following nice properties:
+
+* One can play games requiring one piecepack deck plus an expansion piecepack deck by treating the eight **suits** as separate suits
+* One can play games requiring two piecepack decks by treating each pair of **linked** suits as the same suit
+* One can play games that are "SixPack" friendly by taking three suits from each visually distinct **group**. One can scale this down to games that are "Playing Cards Expansion" friendly or even scale up to four-grouped-suits versus four-grouped-suits friendly games (like Canadian checkers or Bughouse chess).
+* One can play entirely new games provided by the extra layer of relationships. Proof-of-concept new game is `Dual Piecepacks Poker <http://www.ludism.org/ppwiki/DualPiecepacksPoker>`_. 
+
+It is possible to construct three piecepacks where each pair of piecepack decks are "dual piecepacks" (e.g. piecepack-suited + inverted latin-suited + light french-suited). This could be called a "trial `HoardPack <http://www.ludism.org/ppwiki/HoardPack>`_" (apparently "trial" is the proper "three" analogue to "dual"). 
+
+hex
+~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/2q7k2kfaung4f6l/hex_demo.pdf?dl=0>`__ of piecepack designs friendly for building and playing games on a hex board.  First deck has hex lines on the tile faces matching the suit color and second deck has grey hex lines on both tiles faces/backs.  If you build a "hex" layout with tiles that have hex lines then the hex lines should show four out of the six "hex" edges.  Third and fourth decks are inspired by the Hexpack_ by Daniel Wilcox and Nathan Morse and have hex-shaped tiles and triangular coins.  The third deck has the traditionally "red" french suits have a pink background and the traditionally "black" suits have a grey background: three different background colors (pink, grey, white) facilitate building certain types of `hexagonal boards <https://en.wikipedia.org/wiki/Hexagonal_chess>`_.  **Warning:** the hexagonal tiles produced by this program are a little bit smaller than those suggested by the Hexpack_ standard (i.e. instead of a hexagon circumscribed around a 2" diameter circle we have a 2" diameter circle circumscribed around the hexagon), note this does mean that these hexagons can fit entirely onto 2" by 2" square tiles.
+
+.. _Hexpack: http://www.hexpack.org/
+
+orthodox
+~~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/derdlo3j8sdeoox/orthodox_demo.pdf?dl=0>`__ of a piecepack-suited piecepack that complies with the `Anatomy of a Piecepack <http://www.piecepack.org/Anatomy.html>`_ standard as well as a matching 2-color french-suited piecepack (aka a "Playing Cards" expansion).  The "chip" accessory has been configured to be more convenient for labeling paper pyramids to make "piecepack pyramids".
+
+rainbow_deck
+~~~~~~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/dcxrrmcqtfass2r/rainbow_deck_demo.pdf?dl=0>`__ of a pair of "Rainbow Deck" suited piecepacks.  It builds two 6-suited piecepacks with the suits ♥,★,♣,♦,♛,♠: one in a "dark" multicolored scheme and another in a "light" multicolored scheme.  The `Rainbow Deck (RD) <https://boardgamegeek.com/boardgame/59655/rainbow-deck>`_ is a cardgame system by Chen Changcai.
+
+reversi
+~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/rgxkdwqwwkd5jbk/reversi_demo.pdf?dl=0>`__ of several piecepacks with color schemes configured to easily distinguish between the back and face of the coins, tiles, and "chips" accessories (and in some decks the suit dice and suit-rank dice) to facilitate the playing of games like `Reversi <http://www.piecepack.org/rules/Reversi.pdf>`_.  It contains a piecepack-suited piecepack with brown "suited" background, an `ACS-elements-suited <http://www.scs.illinois.edu/~mainzv/HIST/Logo/logo.php>`_ piecepack with black "suited" background, dual printer-friendly grayscale sixpacks, and two "mirrored" color scheme six-suited piecepacks where one has a red "suited" background and black "unsuited" background and the other one has a black "suited" background and black "unsuited" background.  Besides reversi a pair of "mirrored" color scheme piecepacks are great for playing games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ and `Backgammon <https://en.wikipedia.org/wiki/Backgammon>`_ since each side's pieces will all be of the same color.  Each of the last two pairs of reversi-friendly piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).
+
+sixpack
+~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`__ of some Sixpacks.  The Sixpack is a six-suited piecepack deck using the following suits: ♥,♠,♣,♦,🌞,🌜.  The demo includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
+
 Installation
 ------------
 
@@ -47,7 +119,7 @@ Detailed instructions
 System dependencies
 +++++++++++++++++++
 
-#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you when you install the ``piecepackr`` R package using ``devtools::install()``.
+#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you by R when you install the ``piecepackr`` R package.
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
 #. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_piecepacks`` function/executable)
 #. `poppler-utils (aka xpdf-utils)  <https://poppler.freedesktop.org/>`_ (not needed if you won't be using the ``get_embedded_font`` function/executable)
@@ -71,7 +143,7 @@ You'll need to install some system requirements to use this R package and its ex
 
 The ``ghostscript`` system requirement can be dropped if you do not plan on using the ``collect_piecepacks`` function/executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  The ``poppler-utils`` system requirement can be dropped if you do not plan on using ``get_embedded_font`` function/executable to help figure out which fonts ``cairo_pdf`` actually embeds into output pdf's. 
 
-You'll also need to install the development version of the ``piecepackr`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` function from the ``devtools`` package ::
+You'll also need to install the development version of the ``piecepackr`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` or ``install_github`` functions from the ``devtools`` package ::
 
     $ sudo apt install -y libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
     $ sudo Rscript -e "install.packages('devtools', repos='https://cran.rstudio.com/')" 
@@ -158,82 +230,11 @@ Executable options
 * `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepackr/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
 * `get_embedded_font --help <https://github.com/trevorld/piecepackr/blob/master/txt/get_embedded_font_options.txt>`_
 
-.. _`Demo descriptions`:
-
-Demos
------
-
-chess
-~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/zksjzil99efjn3r/chess_demo.pdf?dl=0>`__ of some "chess-ranked" piecepacks.  These are piecepacks that replace the six traditional piecepack ranks with the six FIDE chess ranks: ♟,♞,♝,♜,♛,♚.  This decreases the abstraction needed to play several variants of chess but does increases the abstraction needed to play some piecepack games (since one needs to mentally convert chess ranks to N,A,2,3,4,5 or 0,1,2,3,4,5).  Some of the decks have checkered tile faces or tile backs and various color schemes to facilitate playing various classic abstract games like Chess, Checkers, Backgammon, and Reversi.  **Warning**: checkered tile backs results in a *non-conforming* piecepack since it leaks information about the direction of the tile face.  The last two pairs of demo chess sets are matched using a "mirrored" color scheme.  Besides reversi this type of scheme is great for playing chess games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ since each side's pieces will all be of the same color.  The last pair of chess-ranked piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).  An interesting accessory for several of these chess-ranked piecepacks could be Daniel Wilcox and Nathan Morse's `The King's Caste <https://boardgamegeek.com/boardgame/38417/kings-caste>`_ Tarot deck.
-
-chinese_zodiac
-~~~~~~~~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/eu5uxwk6hcihy53/chinese_zodiac_demo.pdf?dl=0>`__ of some "Chinese Zodiac" piecepacks.  These are a pair of 5-suited piecepacks (Wood, Fire, Earth, Metal, and Water) each using a different six animals taken from the `Chinese zodiac <https://en.wikipedia.org/wiki/Chinese_zodiac>`_ as ranks.
-
-crown_and_anchor
-~~~~~~~~~~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/pir2aau09yl11h5/crown_and_anchor_demo.pdf?dl=0>`__ of some "Crown and anchor" suited piecepacks.  `"Crown and anchor" <https://en.wikipedia.org/wiki/Crown_and_Anchor>`_ is a classic public domain dice game that uses the following six suits: ♥,♦,♣,♠,♚,⚓.  These six suits were also used by the `"Empire Deck" <https://boardgamegeek.com/boardgame/24869/empire-deck>`_ of playing cards. Jonathan C. Dietrich's classic `JCD Piecepack <http://www.piecepack.org/JCD.html>`_ replaced the Fleur-de-lis (Arms) with Anchors to allow compatibility with these suits.  This demo builds two six-suited piecepack decks using the Crown and anchor suits (one in a classic red/black and another multicolored) and four four-suited piecepack decks using the JCD piecepack suits (one monoscale, one red/black, one classic multicolored, and one in an alternative multicolored scheme).
-
-default
-~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`__ of the default type of piecepack built by this software if the user does no configuration (except configure for the use of the "Noto Sans" family of fonts and its filename).  It currently builds a 4-suited piecepack using `multicolored french-suits <https://en.wikipedia.org/wiki/Four-color_deck>`_.
-
-dual
-~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/iezcku9rktvuk6r/dual_demo.pdf?dl=0>`__ of the six piecepacks in the `"dual piecepacks" <http://www.ludism.org/ppwiki/DualPiecepacks>`_ proof-of-concept: one piecepack-suited piecepack, one `latin-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Origin_and_development_of_the_Latin_suits>`_ piecepack (inverted color scheme), two french-suited piecepacks (one dark color scheme, one light color scheme), and two `swiss-suited <https://en.wikipedia.org/wiki/Suit_(cards)#Invention_of_the_Germanic_suits>`_ piecepacks (one dark grayscale color scheme, one light grayscale color scheme).  One could use the piecepack-suited, latin-suited, and one of the french-suited piecepacks to build a "trial hoardpack".
-
-"Dual piecepacks" are eight piecepack **suits** with the following properties:
-
-* The eight **suits** suits can be "easily" visually distinguished
-* The eight suits can be "easily" visually split into two separate **groups** of four suits
-* Each "suit" in a group can be "easily" visually **linked** with exactly one suit in the other group 
-
-This gives one the following nice properties:
-
-* One can play games requiring one piecepack deck plus an expansion piecepack deck by treating the eight **suits** as separate suits
-* One can play games requiring two piecepack decks by treating each pair of **linked** suits as the same suit
-* One can play games that are "SixPack" friendly by taking three suits from each visually distinct **group**. One can scale this down to games that are "Playing Cards Expansion" friendly or even scale up to four-grouped-suits versus four-grouped-suits friendly games (like Canadian checkers or Bughouse chess).
-* One can play entirely new games provided by the extra layer of relationships. Proof-of-concept new game is `Dual Piecepacks Poker <http://www.ludism.org/ppwiki/DualPiecepacksPoker>`_. 
-
-It is possible to construct three piecepacks where each pair of piecepack decks are "dual piecepacks" (e.g. piecepack-suited + inverted latin-suited + light french-suited). This could be called a "trial `HoardPack <http://www.ludism.org/ppwiki/HoardPack>`_" (apparently "trial" is the proper "three" analogue to "dual"). 
-
-hex
-~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/2q7k2kfaung4f6l/hex_demo.pdf?dl=0>`__ of piecepack designs friendly for building and playing games on a hex board.  First deck has hex lines on the tile faces matching the suit color and second deck has grey hex lines on both tiles faces/backs.  If you build a "hex" layout with tiles that have hex lines then the hex lines should show four out of the six "hex" edges.  Third and fourth decks are inspired by the Hexpack_ by Daniel Wilcox and Nathan Morse and have hex-shaped tiles and triangular coins.  The third deck has the traditionally "red" french suits have a pink background and the traditionally "black" suits have a grey background: three different background colors (pink, grey, white) facilitate building certain types of `hexagonal boards <https://en.wikipedia.org/wiki/Hexagonal_chess>`_.  **Warning:** the hexagonal tiles produced by this program are a little bit smaller than those suggested by the Hexpack_ standard (i.e. instead of a hexagon circumscribed around a 2" diameter circle we have a 2" diameter circle circumscribed around the hexagon), note this does mean that these hexagons can fit entirely onto 2" by 2" square tiles.
-
-.. _Hexpack: http://www.hexpack.org/
-
-orthodox
-~~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/derdlo3j8sdeoox/orthodox_demo.pdf?dl=0>`__ of a piecepack-suited piecepack that complies with the `Anatomy of a Piecepack <http://www.piecepack.org/Anatomy.html>`_ standard as well as a matching 2-color french-suited piecepack (aka a "Playing Cards" expansion).  The "chip" accessory has been configured to be more convenient for labeling paper pyramids to make "piecepack pyramids".
-
-rainbow_deck
-~~~~~~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/dcxrrmcqtfass2r/rainbow_deck_demo.pdf?dl=0>`__ of a pair of "Rainbow Deck" suited piecepacks.  It builds two 6-suited piecepacks with the suits ♥,★,♣,♦,♛,♠: one in a "dark" multicolored scheme and another in a "light" multicolored scheme.  The `Rainbow Deck (RD) <https://boardgamegeek.com/boardgame/59655/rainbow-deck>`_ is a cardgame system by Chen Changcai.
-
-reversi
-~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/rgxkdwqwwkd5jbk/reversi_demo.pdf?dl=0>`__ of several piecepacks with color schemes configured to easily distinguish between the back and face of the coins, tiles, and "chips" accessories (and in some decks the suit dice and suit-rank dice) to facilitate the playing of games like `Reversi <http://www.piecepack.org/rules/Reversi.pdf>`_.  It contains a piecepack-suited piecepack with brown "suited" background, an `ACS-elements-suited <http://www.scs.illinois.edu/~mainzv/HIST/Logo/logo.php>`_ piecepack with black "suited" background, dual printer-friendly grayscale sixpacks, and two "mirrored" color scheme six-suited piecepacks where one has a red "suited" background and black "unsuited" background and the other one has a black "suited" background and black "unsuited" background.  Besides reversi a pair of "mirrored" color scheme piecepacks are great for playing games like `Bughouse chess <https://en.wikipedia.org/wiki/Bughouse_chess>`_ and `Backgammon <https://en.wikipedia.org/wiki/Backgammon>`_ since each side's pieces will all be of the same color.  Each of the last two pairs of reversi-friendly piecepacks altogether has 12 * 6 = 72 coins (perfect for Reversi).
-
-sixpack
-~~~~~~~
-
-A demo `print-and-play pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`__ of some Sixpacks.  The Sixpack is a six-suited piecepack deck using the following suits: ♥,♠,♣,♦,🌞,🌜.  The demo includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
 
 Licence
 -------
 
-This software package and the piecepack pdf's created by it are released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file LICENSE for more info.  This license is compatible with version 3 of the Gnu Public License (GPL-3).
+This software package and the piecepack pdf's created by it are released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file LICENSE.md for more info.  This license is compatible with version 3 of the Gnu Public License (GPL-3).
 
 Frequently Asked Questions
 --------------------------
@@ -298,7 +299,38 @@ It you use the tiles to build a hex board the hexlines will visually show four o
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (i.e. this sometimes happens to me in my demos but since the decks still look nice with the font it chooses I decided at some point not to waste anymore time banging my head on messing around with ``fontconfig`` configuration files trying to override ``fontconfig``).  Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans").  If this happens and you really care about it then the only way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to delete from your system the fonts that ``fontconfig`` chooses over your font.  To help determine which fonts are actually being embedded you can use the ``get_embedded_font`` function or executable.
+The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use.  (although sometimes the symbol it chooses instead still looks nice in which case maybe you shouldn't sweat it).  It is hard but not impossible to `configure which fonts <https://eev.ee/blog/2015/05/20/i-stared-into-the-fontconfig-and-the-fontconfig-stared-back-at-me/>`_ are dispatched by fontconfig.  A perhaps easier way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to simply temporarily move (or permanently delete) from your system font folders the undesired fonts that ``fontconfig`` chooses over your requested fonts::
+
+    # temporarily force fontconfig to use Noto Emoji instead of Noto Color Emoji in my piecepacks on Ubuntu 18.04
+    $ sudo mv /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf ~/
+    ## Make some piecepacks
+    $ sudo mv ~/NotoColorEmoji.ttf /usr/share/fonts/truetype/noto/
+
+Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans" as one may have expected).    To help determine which fonts are actually being embedded you can use the ``get_embedded_font`` function or executable::
+
+    $ Rscript exec/get_embedded_font --font="Noto Sans Symbols2,Noto Emoji,sans" --char="♥,♠,♣,♦,🌞,🌜,꩜"
+           requested_font            embedded_font char
+    1  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♥
+    2  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♠
+    3  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♣
+    4  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♦
+    5  Noto Sans Symbols2                NotoEmoji    🌞
+    6  Noto Sans Symbols2                NotoEmoji    🌜
+    7  Noto Sans Symbols2     NotoSansCham-Regular    ꩜
+    8          Noto Emoji                NotoEmoji    ♥
+    9          Noto Emoji                NotoEmoji    ♠
+    10         Noto Emoji                NotoEmoji    ♣
+    11         Noto Emoji                NotoEmoji    ♦
+    12         Noto Emoji                NotoEmoji    🌞
+    13         Noto Emoji                NotoEmoji    🌜
+    14         Noto Emoji     NotoSansCham-Regular    ꩜
+    15               sans                    Arimo    ♥
+    16               sans                    Arimo    ♠
+    17               sans                    Arimo    ♣
+    18               sans                    Arimo    ♦
+    19               sans                NotoEmoji    🌞
+    20               sans                NotoEmoji    🌜
+    21               sans     NotoSansCham-Regular    ꩜
 
 How do I use this package in piecepack rulesets?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

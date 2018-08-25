@@ -1,4 +1,4 @@
-piecepack 0.9.0
+piecepack 0.9.x
 ===============
 
 * Added ``get_embedded_font`` function and executable (#80).

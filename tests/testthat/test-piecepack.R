@@ -43,16 +43,16 @@ test_that("options work as expected", {
     expect_equal(get_dm_symbol("saucer_back", 5, c2o("--dm_symbols.saucer_back=b")), "b")
 })
 
+cNA <- as.character(NA)
 context("get_component_opt works as expected")
 test_that("get_component_opt works as expected", {
     opt <- get_component_opt("coin_face")
-    expect_equal(opt$style, "basic")
     expect_equal(opt$bcol, "white")
     expect_equal(opt$scol, "grey")
     expect_equal(opt$border_col, "grey")
-    expect_equal(opt$checker_col, NA)
+    expect_equal(opt$checker_col, cNA)
     expect_equal(opt$gridline_col, "grey") ####
-    expect_equal(opt$hexline_col, NA)
+    expect_equal(opt$hexline_col, cNA)
     expect_equal(opt$rank_symbol, "N")
     expect_equal(opt$rank_fontsize, 28)
     expect_equal(opt$rank_font, "sans")
@@ -65,7 +65,7 @@ test_that("get_component_opt works as expected", {
     expect_equal(opt$shape, "circle")
     expect_equal(opt$shape_fn, grid.circle)
     expect_equal(opt$shape_theta, 90)
-    expect_equal(opt$dm_fontsize, 10)
+    expect_equal(opt$dm_fontsize, 12)
     expect_equal(opt$dm_font, "sans")
     expect_equal(opt$dm_x, 0.5)
     expect_equal(opt$dm_y, to_y(90, sqrt(0.25^2 + 0.25^2)) + 0.5)

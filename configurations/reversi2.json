@@ -1,11 +1,9 @@
 {
-  "deck_title": ["Elements-suited (v0.8.0-3)"],
+  "deck_title": ["Elements-suited (v0.9.1-0)"],
   "deck_filename": ["reversi2"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["🜁,🜂,🜃,🜄,"],
-  "header_font": ["Noto Sans"],
   "rank_symbols_font": ["Noto Sans"],
-  "font": ["Noto Sans Symbols"],
   "suit_colors": ["red,khaki2,green,cornflowerblue,grey"],
   "background_colors.suited": ["black"],
   "background_colors.chip_back": ["white"]

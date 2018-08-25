@@ -22,6 +22,6 @@
 <polyline points='360.00,360.00 360.00,216.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt;' />
 <polyline points='288.00,288.00 432.00,288.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt;' />
 <text x='334.00' y='312.77' style='font-size: 72.00px; fill: #8B0000; font-family: Liberation Sans;' textLength='52.00px' lengthAdjust='spacingAndGlyphs'>N</text>
-<text x='314.50' y='263.01' style='font-size: 32.00px; fill: #8B0000; font-family: Liberation Sans;' textLength='19.00px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='312.13' y='265.76' style='font-size: 40.00px; fill: #8B0000; font-family: Liberation Sans;' textLength='23.75px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>
