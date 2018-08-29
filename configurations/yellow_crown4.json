@@ -1,8 +1,9 @@
 {
   "deck_title": ["All french suits (v0.9.1-1)"],
   "deck_filename": ["yellow_crown4"],
-  "rank_symbols": ["O,A,2,3,4,5"],
+  "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,★,★,꩜"],
+  "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Sans Symbols"],
   "suit_symbols_scale": ["1,1,1,1,1,1,0.9"],
   "suit_colors": ["red,black,green,dodgerblue2,yellow2,darkblue,sienna"],

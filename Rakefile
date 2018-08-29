@@ -331,13 +331,13 @@ task :yellow_crown do
     suit_symbols = all_piecepack_suits + " --suit_colors=red,black,green,dodgerblue2,yellow2,darkblue,sienna"
     file = "yellow_crown3"
     extra_flags = " --background_colors=black,white,white,black,black,white,grey"
-    make_piecepack file, deck_title + suit_symbols + ibg_ranks + extra_flags
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags
 
     deck_title = ' --deck_title="All french suits' + version_str
     suit_symbols = all_french_suits + " --suit_colors=red,black,green,dodgerblue2,yellow2,darkblue,sienna"
     file = "yellow_crown4"
     extra_flags = " --background_colors=black,white,white,black,black,white,grey"
-    make_piecepack file, deck_title + suit_symbols + ibg_ranks + extra_flags
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags
 
     decks = " --decks=yellow_crown1,yellow_crown2,yellow_crown3,yellow_crown4"
     sh collect_piecepacks + ' --filename=yellow_crown_demo --title="Yellow Crown demo' + version_str + decks

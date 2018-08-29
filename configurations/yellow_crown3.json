@@ -1,8 +1,9 @@
 {
   "deck_title": ["All piecepack suits (v0.9.1-1)"],
   "deck_filename": ["yellow_crown3"],
-  "rank_symbols": ["O,A,2,3,4,5"],
+  "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,👑,⚜,♚,⚓,꩜"],
+  "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,Noto Sans Cham"],
   "suit_symbols_scale": ["0.6,0.7,0.75,0.9,1,0.8,0.9"],
   "suit_colors": ["red,black,green,dodgerblue2,yellow2,darkblue,sienna"],
