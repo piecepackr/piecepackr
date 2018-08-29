@@ -5,5 +5,5 @@
   "suit_symbols": ["♥,♠,♣,♦,꩜"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_scale": ["1,1,1,1,0.9"],
-  "hexline_colors.tile_face": ["darkred,black,darkgreen,darkblue,transparent"]
+  "hexline_colors.tile_face": ["darkred,black,darkgreen,darkblue,grey"]
 }

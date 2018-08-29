@@ -6,5 +6,5 @@
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_scale": ["1,1,1,1,0.9"],
   "suit_colors": ["hotpink2,dimgrey,palegreen,lightblue2,grey"],
-  "hexline_colors.tile_face": ["hotpink2,dimgrey,palegreen,lightblue2,transparent"]
+  "hexline_colors.tile_face": ["hotpink2,dimgrey,palegreen,lightblue2,grey"]
 }

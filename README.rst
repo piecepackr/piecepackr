@@ -249,7 +249,7 @@ The configurations in this program "cascade" (sort of like in "Cascading Style S
 
 The configuration "cascade" priorities are as follows:
 
-#. Direct styles have priority over indirect styles e.g. ``dm_symbols`` has priority over ``suit_symbols.tile_face`` for which symbol is used in the corner of the tile face and in turn ``suit_symbols_font`` has priority over ``font.coin_back`` for which fonts are used on the coin back.  This is because indirect styles are only used to a generate reasonable default if a direct style cannot be found.
+#. Direct styles have priority over indirect styles e.g. ``dm_symbols`` has priority over ``suit_symbols.tile_face`` for which symbol is used in the corner of the tile face and in turn ``suit_symbols_font`` has priority over ``font`` for which fonts are used on the coin back.  This is because indirect styles are only used to a generate reasonable default if a direct style cannot be found.
 #. Then if there is a tie ``.component_side`` has priority over ``.component`` which has priority over no component specification e.g. ``dm_symbols.saucer_back`` has priority over ``dm_symbols.saucer`` which has priority over just ``dm_symbols``.
 #. Then if there is still a tie ``.r#`` has priority over no rank specification e.g. ``invert_colors.r1`` has priority over ``invert_colors``.
 #. Then if there is still a tie ``.s#`` has priority over ``.suited`` / ``.unsuited`` which has priority over no suit specification e.g. ``invert_colors.s2`` has priority over ``invert_colors.suited`` has priority over just ``invert_colors``.

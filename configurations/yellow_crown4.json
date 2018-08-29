@@ -5,6 +5,6 @@
   "suit_symbols": ["♥,♠,♣,♦,★,★,꩜"],
   "suit_symbols_font": ["Noto Sans Symbols"],
   "suit_symbols_scale": ["1,1,1,1,1,1,0.9"],
-  "suit_colors": ["red,black,green,blue3,yellow2,darkblue,sienna"],
+  "suit_colors": ["red,black,green,dodgerblue2,yellow2,darkblue,sienna"],
   "background_colors": ["black,white,white,black,black,white,grey"]
 }

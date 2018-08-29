@@ -10,7 +10,7 @@
   "use_suit_as_ace": [true],
   "suit_symbols.saucer_face": ["●"],
   "suit_symbols_font.saucer_face": ["Noto Sans Symbols"],
-  "suit_symbols_scale.saucer_face": ["1"],
+  "suit_symbols_scale.saucer_face": ["0.7"],
   "suit_symbols.saucer_back": [""],
   "rank_symbols.chip_face": ["A,B,C,D,E,F"],
   "use_suit_as_ace.chip_face": [false],

@@ -47,9 +47,9 @@ chinese_elements_colors = " --suit_colors=darkgreen,red3,chocolate4,black,darkbl
 light = "hotpink2,dimgrey,palegreen,lightblue2,"
 dark = "darkred,black,darkgreen,darkblue,"
 light_scheme = light + "grey"
-# dark_scheme = dark + "grey"
-hexlines_dark = " --hexline_colors.tile_face=" + dark + "transparent"
-hexlines_light = " --hexline_colors.tile_face=" + light + "transparent"
+dark_scheme = dark + "grey"
+hexlines_dark = " --hexline_colors.tile_face=" + dark_scheme 
+hexlines_light = " --hexline_colors.tile_face=" + light_scheme 
 rd_dark = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,sienna"
 rd_light = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,sienna"
 rd_dark2 = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,white"
@@ -108,9 +108,9 @@ orthodox_saucers = ' --suit_symbols.saucer_back= --dm_colors.saucer=black --dm_s
 orthodox_pawns = " --invert_colors.pawn --suit_symbols.pawn= --dm_symbols.pawn="
 orthodox_pawns6p = " --invert_colors.pawn --suit_symbols.pawn=⚈,⚈,⚉,⚉,, --dm_symbols.pawn="
 
-orthodox_saucers1 = ' --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=1 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
+orthodox_saucers1 = ' --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
 orthodox_saucers2 = ' --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
-orthodox_saucers3 = ' --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,1,1 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
+orthodox_saucers3 = ' --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,0.7,0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
 hex_components = " --shape.tile=6 --shape.coin=3 --shape.saucer=3 --shape.chip=3 --dm_symbols_scale.chip=0.7 --shape_theta.coin=-90 --shape_theta.saucer=-90 --shape_theta.chip=-90 --dm_theta.coin=-90 --dm_theta.saucer=-90 --dm_theta.chip=-90"
 star_chips  = " --shape.chip=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip=0.7"
 
@@ -328,13 +328,13 @@ task :yellow_crown do
     make_piecepack file, deck_title + suit_symbols + ibg_ranks + extra_flags, 5, 1
 
     deck_title = ' --deck_title="All piecepack suits' + version_str
-    suit_symbols = all_piecepack_suits + " --suit_colors=red,black,green,blue3,yellow2,darkblue,sienna"
+    suit_symbols = all_piecepack_suits + " --suit_colors=red,black,green,dodgerblue2,yellow2,darkblue,sienna"
     file = "yellow_crown3"
     extra_flags = " --background_colors=black,white,white,black,black,white,grey"
     make_piecepack file, deck_title + suit_symbols + ibg_ranks + extra_flags
 
     deck_title = ' --deck_title="All french suits' + version_str
-    suit_symbols = all_french_suits + " --suit_colors=red,black,green,blue3,yellow2,darkblue,sienna"
+    suit_symbols = all_french_suits + " --suit_colors=red,black,green,dodgerblue2,yellow2,darkblue,sienna"
     file = "yellow_crown4"
     extra_flags = " --background_colors=black,white,white,black,black,white,grey"
     make_piecepack file, deck_title + suit_symbols + ibg_ranks + extra_flags
