@@ -116,7 +116,7 @@ star_chips  = " --shape.chip=star --rank_symbols_scale.chip_face=0.7 --suit_symb
 
 ## Demos
 demos = ["chess", "chinese_zodiac", "crown_and_anchor", "default",
-         "dual", "hex", "orthodox", "rainbow_deck", "reversi", "sixpack"]
+         "dual", "hex", "orthodox", "rainbow_deck", "reversi", "sixpack", "yellow_crown"]
 
 desc "Run all demos"
 multitask :all => demos

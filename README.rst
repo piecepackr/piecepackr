@@ -93,6 +93,11 @@ sixpack
 
 A demo `print-and-play pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_demo.pdf?dl=0>`__ of some Sixpacks.  The Sixpack is a six-suited piecepack deck using the following suits: ♥,♠,♣,♦,🌞,🌜.  The demo includes two red/black `Sixpack <http://www.ludism.org/ppwiki/SixPack>`_ suited piecepacks (the second in an "orthodox" scheme) as well as dual multicolor sixpacks.
 
+yellow_crown
+~~~~~~~~~~~~
+
+A demo `print-and-play pdf <https://www.dropbox.com/s/61p55982lrl3pld/yellow_crown_demo.pdf?dl=0>`__ of some piecepacks with yellow crowns.  The first is in an orthodox sytle piecepack while the second has an inverted suit color scheme combined with inverted nulls.  The third piecepack has both yellow crowns AND green crowns as well as both blue fleur-de-lis AND blue crowns suits thus containing the six most popular piecepack suit symbols with the "light" suits having a black background and the "dark" suits having a white background.  The fourth piecepack is a matching french-suited piecepack with the addition of both yellow and blue stars.
+
 Installation
 ------------
 
@@ -219,6 +224,7 @@ Where ``demo_name`` is either:
 #. ``rainbow_deck``
 #. ``reversi``
 #. ``sixpack``
+#. ``yellow_crown``
 
 Executable options
 ------------------
