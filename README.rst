@@ -254,7 +254,7 @@ The configuration "cascade" priorities are as follows:
 #. Then if there is still a tie ``.r#`` has priority over no rank specification e.g. ``invert_colors.r1`` has priority over ``invert_colors``.
 #. Then if there is still a tie ``.s#`` has priority over ``.suited`` / ``.unsuited`` which has priority over no suit specification e.g. ``invert_colors.s2`` has priority over ``invert_colors.suited`` has priority over just ``invert_colors``.
 
-Configurations are *often* allowed to be comma-separated to be able to specify different values for different suits or ranks e.g. ``background_colors=white`` or ``background_colors=pink,grey,grey,pink,white``.  
+Configurations are *often* allowed to be comma-separated to be able to specify different values for different suits or ranks e.g. ``background_colors=white`` or ``background_colors=pink,grey,grey,pink,white`` (note how the last [5th] element specifies that the "unsuit" background color should be "white").  
 
 Licence
 -------
