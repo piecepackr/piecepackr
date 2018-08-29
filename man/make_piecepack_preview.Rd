@@ -4,7 +4,7 @@
 \alias{make_piecepack_preview}
 \title{Make piecepack deck preview svg}
 \usage{
-make_piecepack_preview(cfg = c2o())
+make_piecepack_preview(cfg = list())
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}

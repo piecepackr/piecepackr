@@ -2,7 +2,8 @@ FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 
 #' @importFrom optparse OptionParser add_option parse_args
 configuration_options <- function(args=commandArgs(TRUE)) {
-    parser <- OptionParser("Program to make piecepack configurations")
+    parser <- OptionParser(paste("Program to make piecepack configurations.",
+                               "Set environmental variables PP_N_RANKS and/or PP_N_SUITS to configure individual ranks/suits"))
     parser <- add_option(parser, "--deck_title", default=NULL, 
                          help=sprintf('(default "%s")', get_deck_title()))
     parser <- add_option(parser, "--deck_filename", default=NULL, 
@@ -31,14 +32,6 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default is not to adjust scale)')
 
     # Style
-    parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=NULL, 
-                         help=sprintf('(default "%s")', get_use_suit_as_ace()))
-    parser <- add_option(parser, "--use_ace_as_ace", dest="use_suit_as_ace", 
-                         action="store_false", default=NULL, 
-                         help='Opposite of "use_suit_as_ace" option')
-    parser <- add_option(parser, "--pp_die_arrangement", 
-                         help=sprintf('Either "counter" or "opposites_sum_to_5" (default "%s")', get_pp_die_arrangement()))
-
     parser <- add_option(parser, "--shape", default=NULL,
                          help=paste('either "rect", "circle", "halma", "kite", "star",',
                                    "or a number representing number of sides of a regular polygon",
@@ -47,12 +40,6 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help=paste('If shape is a number or "star" then angle of first vertex',
                                    '(in degrees) of polygon', '(default is "90")'))
 
-    parser <- add_option(parser, "--checker_colors", default=NULL,
-                         help='(default is not to draw any checkers on tiles)')
-    parser <- add_option(parser, "--gridline_colors", default=NULL,
-                         help='(default is to draw gridlines on tile back using the "unsuit" suit color)')
-    parser <- add_option(parser, "--hexline_colors", default=NULL,
-                         help='(default is not to draw any hexlines on tiles)')
     parser <- add_option(parser, "--dm_theta", default=NULL, type="double", 
                          help=paste('Angle (in degrees) of polar coordinates of direction mark',
                                    '(default 135 for tile faces and die faces and 90 for everything else)'))
@@ -77,77 +64,39 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help=sprintf('(default "%s")', paste(get_suit_colors(expand=FALSE), collapse=",")))
     parser <- add_option(parser, "--dm_colors", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
-    parser <- add_option(parser, "--background_colors", default=NULL, ####
+    parser <- add_option(parser, "--background_colors", default=NULL, 
                          help='(default "white")') 
-    parser <- add_option(parser, "--border_colors", default=NULL, ####
+    parser <- add_option(parser, "--border_colors", default=NULL, 
                          help='(default "grey")')
+    parser <- add_option(parser, "--checker_colors", default=NULL,
+                         help='(default is not to draw any checkers on tiles)')
+    parser <- add_option(parser, "--gridline_colors", default=NULL,
+                         help='(default is to draw gridlines on tile back using the "unsuit" suit color)')
+    parser <- add_option(parser, "--hexline_colors", default=NULL,
+                         help='(default is not to draw any hexlines on tiles)')
+    parser <- add_option(parser, "--ribbon_colors", default=NULL,
+                         help='(default is to draw ribbons on pawn belts)')
+
+    # Booleans
     parser <- add_option(parser, "--invert_colors", action="store_true", default=NULL, 
                          help='(default "FALSE")')
     parser <- add_option(parser, "--uninvert_colors", action="store_false", dest="invert_colors",
                          default=NULL, help='Opposite of "invert_colors" option')
     parser <- add_option(parser, c("-f", "--file"), default=NULL, 
                          help="Filename to write configuration to (default outputs to standard output)")
-
-    # Suited/unsuited variants
-    parser <- add_option(parser, "--background_colors.suited", default=NULL, 
-                         help='(default is value of "background_colors" option)')
-    parser <- add_option(parser, "--background_colors.unsuited", default=NULL, 
-                         help='(default is value of "background_colors" option)')
-
-    parser <- add_option(parser, "--invert_colors.suited", action="store_true", default=NULL, 
-                         help='(default is value of "invert_colors" option)')
-    parser <- add_option(parser, "--invert_colors.unsuited", action="store_true", default=NULL, 
-                         help='(default is value of "invert_colors" option)')
-    parser <- add_option(parser, "--uninvert_colors.suited", action="store_false", default=NULL, 
-                         dest="invert_colors.suited", help='(default is value of "invert_colors" option)')
-    parser <- add_option(parser, "--uninvert_colors.unsuited", action="store_false", default=NULL, 
-                         dest="invert_colors.unsuited", help='(default is value of "invert_colors" option)')
-
-    # Components variants
-    for (component in c(COMPONENTS, COMPONENT_AND_SIDES)) {
-        # Symbols
-        for (style in c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
-                        "suit_colors", "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
-                        "dm_symbols", "dm_symbols_font", "shape",
-                        "dm_symbols_scale", "dm_colors")) {
-            opt_str <- paste0("--", style, ".", component)
-            parser <- add_option(parser, opt_str, default=NULL, 
-                             help=paste0('(default is value of "', style, '" option)'))
-        }
-        # Style
-        opt_str <- paste0("--use_suit_as_ace.", component)
-        parser <- add_option(parser, opt_str, default=NULL, action="store_true",
-                             help='(default is value of "use_suit_as_ace" option)')
-        opt_str <- paste0("--use_ace_as_ace.", component)
-        dest_str <- paste0("use_suit_as_ace.", component)
-        parser <- add_option(parser, opt_str, dest=dest_str, 
-                             action="store_false", default=NULL, 
-                             help=paste0('Opposite of "', dest_str, '" option'))
-        for (style in c("dm_theta", "dm_r", "ps_theta", "ps_r", "shape_theta")) {
-            opt_str <- paste0("--", style, ".", component)
-            parser <- add_option(parser, opt_str, default=NULL, type="double",
-                                 help=paste0('(default is value of "', style, '" option)'))
-        }
-
-        # Color
-        opt_str <- paste0("--background_colors.", component)
-        parser <- add_option(parser, opt_str, default=NULL, 
-                             help='default is either value of "background_colors.suited" or "background_colors.unsuited"')
-        opt_str <- paste0("--invert_colors.", component)
-        parser <- add_option(parser, opt_str, default=NULL, action="store_true", 
-                             help='default is either value of "invert_colors.suited" or "invert_colors.unsuited"')
-        opt_str <- paste0("--uninvert_colors.", component)
-        dest_str <- paste0("invert_colors.", component)
-        parser <- add_option(parser, opt_str, dest=dest_str,
-                             default=NULL, action="store_false", 
-                             help=paste0('Opposite of "', dest_str, '" option'))
-    }
+    parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=NULL, 
+                         help=sprintf('(default "%s")', get_use_suit_as_ace()))
+    parser <- add_option(parser, "--use_ace_as_ace", dest="use_suit_as_ace", 
+                         action="store_false", default=NULL, 
+                         help='Opposite of "use_suit_as_ace" option')
 
     # Misc
     parser <- add_option(parser, "--n_ranks", default=NULL, type="double", 
                          help='(default is inferred from "rank_symbols" option)')
     parser <- add_option(parser, "--n_suits", default=NULL, type="double", 
                          help='(default is inferred from "suit_symbols" option)')
+    parser <- add_option(parser, "--pp_die_arrangement", 
+                         help=sprintf('Either "counter" or "opposites_sum_to_5" (default "%s")', get_pp_die_arrangement()))
 
     # Directories
     parser <- add_option(parser, "--pdf_deck_dir", default=NULL,
@@ -163,12 +112,59 @@ configuration_options <- function(args=commandArgs(TRUE)) {
 
     }
 
-    # Formats
+    # Components
     parser <- add_option(parser, "--component_formats", default=NULL,
                          help='Default image formats for ``make_images`` (default "pdf,png,svg")')
     parser <- add_option(parser, "--component_thetas", default=NULL,
                          help='Default rotations for ``make_images`` (default "0,90,180,270")')
 
+    # Cascading variants
+    n_ranks <- as.numeric(Sys.getenv("PP_N_RANKS"))
+    n_ranks <- ifelse(is.na(n_ranks), 0, n_ranks)
+    n_suits <- as.numeric(Sys.getenv("PP_N_SUITS"))
+    n_suits <- ifelse(is.na(n_suits), 0, n_suits)
+    if (length(n_ranks)) 
+        rank_affixes <- c(paste0(".r", 1:n_ranks), "")
+    else
+        rank_affixes <- ""
+    if (length(n_suits))
+        suit_affixes <- c(paste0(".s", 1:n_suits), ".suited", ".unsuited", "")
+    else
+        suit_affixes <- ""
+    component_affixes <- c(paste0(".", c(COMPONENT_AND_SIDES, COMPONENTS)), "")
+    dfs <- expand.grid(component_affixes, rank_affixes, suit_affixes, stringsAsFactors=FALSE)
+    names(dfs) <- c("component", "rank", "suit")
+    affixes <- paste0(dfs$suit, dfs$rank, dfs$component)
+    styles <- c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
+                "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
+                "dm_symbols", "dm_symbols_font", "dm_symbols_scale",
+                "dm_theta", "dm_r", "ps_theta", "ps_r",
+                "dm_colors", "suit_colors", "background_colors",
+                "hexline_colors", "checker_colors", "gridline_colors", "ribbon_colors",
+                "border_colors", 
+                "shape", "shape_theta")
+    for (affix in affixes) {
+        if (affix == "") next
+
+        # Non-booleans
+        for (style in styles) {
+            opt_str <- paste0("--", style, affix)
+            parser <- add_option(parser, opt_str, default=NULL)
+        }
+
+        # Booleans
+        opt_str <- paste0("--use_suit_as_ace", affix)
+        parser <- add_option(parser, opt_str, default=NULL, action="store_true")
+        opt_str <- paste0("--use_ace_as_ace", affix)
+        dest_str <- paste0("use_suit_as_ace", affix)
+        parser <- add_option(parser, opt_str, dest=dest_str, action="store_false", default=NULL)
+        opt_str <- paste0("--invert_colors", affix)
+        parser <- add_option(parser, opt_str, default=NULL, action="store_true")
+        opt_str <- paste0("--uninvert_colors", affix)
+        dest_str <- paste0("invert_colors", affix)
+        parser <- add_option(parser, opt_str, dest=dest_str, default=NULL, action="store_false")
+
+    }
     opts <- parse_args(parser, args)
     opts
 }

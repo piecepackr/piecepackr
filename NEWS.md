@@ -3,6 +3,9 @@ piecepack 0.9.x
 
 * Added ``get_embedded_font`` function and executable (#80).
 * Dropped ``pdfjoin`` from list of system dependencies (#77).
+* Added ability to configure by individual suits and/or ranks (#44).
+
+* Added Yellow Crowns demo (#53)
 
 piecepack 0.8.0
 ===============

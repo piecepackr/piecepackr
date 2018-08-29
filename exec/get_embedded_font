@@ -4,13 +4,12 @@ suppressPackageStartupMessages(library("dplyr"))
 suppressPackageStartupMessages(library("optparse"))
 suppressPackageStartupMessages(library("piecepackr"))
 
-cfg <- c2o()
-default_chars <- c(piecepackr:::get_suit_symbols(NA, cfg), 
-                    piecepackr:::get_rank_symbols(NA, cfg), 
-                    piecepackr:::get_dm_symbols("coin_face", cfg),
-                    piecepackr:::get_dm_symbols("saucer_face", cfg), 
-                    piecepackr:::get_dm_symbols("chip_face", cfg), 
-                    piecepackr:::get_dm_symbols("pawn_face", cfg)) 
+default_chars <- c(piecepackr:::get_suit_symbols(), 
+                    piecepackr:::get_rank_symbols(), 
+                    piecepackr:::get_dm_symbols("coin_face"),
+                    piecepackr:::get_dm_symbols("saucer_face"), 
+                    piecepackr:::get_dm_symbols("chip_face"), 
+                    piecepackr:::get_dm_symbols("pawn_face")) 
 default_chars <- paste(unique(default_chars), collapse=",")
 
 parser <- OptionParser()

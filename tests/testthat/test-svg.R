@@ -5,16 +5,16 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("tile_back", function() dc("tile_back"))
     vdiffr::expect_doppelganger("tile_back-svg", function() dc("tile_back", svg=TRUE))
     vdiffr::expect_doppelganger("tile_back-hex", 
-                                function() dc("tile_back", cfg=c2o("--shape.tile_back=6")))
-    # expect_error(dc("tile_back", cfg=c2o("--shape.tile_back=halma")), "Don't know how to add")
+                                function() dc("tile_back", cfg=list(shape.tile_back="6")))
+    # expect_error(dc("tile_back", cfg=list(shape.tile_back="halma")), "Don't know how to add")
     vdiffr::expect_doppelganger("tile_face.s1.r1", function() dc("tile_face", i_s=1, i_r=1))
     vdiffr::expect_doppelganger("tile_face.s3.r2", function() dc("tile_face", i_s=3, i_r=2))
     vdiffr::expect_doppelganger("tile_face.s3.r2-suit_as_ace", 
-                                function() dc("tile_face", cfg=c2o("--use_suit_as_ace"), i_s=3, i_r=2))
+                                function() dc("tile_face", cfg=list(use_suit_as_ace=TRUE), i_s=3, i_r=2))
     vdiffr::expect_doppelganger("tile_face.s2.r3", function() dc("tile_face", i_s=2, i_r=3))
     vdiffr::expect_doppelganger("coin_back.s4", function() dc("coin_back", i_s=4))
     vdiffr::expect_doppelganger("coin_back.s4-inverted",
-                                function() dc("coin_back", cfg=c2o("--invert_colors"), i_s=4))
+                                function() dc("coin_back", cfg=list(invert_colors=TRUE), i_s=4))
     vdiffr::expect_doppelganger("coin_face.r1", function() dc("coin_face", i_r=1))
     vdiffr::expect_doppelganger("coin_face.r2", function() dc("coin_face", i_r=2))
     vdiffr::expect_doppelganger("coin_face.r4", function() dc("coin_face", i_r=4))
@@ -34,20 +34,20 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("chip_face.s3.r3", function() dc("chip_face", i_s=3, i_r=3))
     vdiffr::expect_doppelganger("chip_back.s4", function() dc("chip_back", i_s=4))
     vdiffr::expect_doppelganger("chip_back.s3-hex", 
-                                function() dc("chip_back", cfg=c2o("--shape.chip=6"), i_s=3))
+                                function() dc("chip_back", cfg=list(shape.chip="6"), i_s=3))
     vdiffr::expect_doppelganger("chip_back.s2-kite", 
-                                function() dc("chip_back", cfg=c2o("--shape.chip=kite"), i_s=2))
+                                function() dc("chip_back", cfg=list(shape.chip="kite"), i_s=2))
     vdiffr::expect_doppelganger("chip_back.s1-star", 
-                                function() dc("chip_back", cfg=c2o("--shape.chip=star"), i_s=1))
+                                function() dc("chip_back", cfg=list(shape.chip="star"), i_s=1))
 
     vdiffr::expect_doppelganger("preview", draw_preview)
-    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=c2o("--pp_die_arrangement=opposites_sum_to_5")))
-    vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F", "--suit_colors=red,black,green,blue,orange,grey"))))
-    vdiffr::expect_doppelganger("draw_suit_die-6suits", function() draw_suit_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F,G", "--suit_colors=red,black,green,blue,orange,purple,grey"))))
-    expect_error(draw_suit_die(cfg=c2o(c("--suit_symbols=A,B,C,D", "--suit_colors=red,black,green,blue"))), 
+    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5")))
+    vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))
+    vdiffr::expect_doppelganger("draw_suit_die-6suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
+    expect_error(draw_suit_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 
                          "Don't know how to draw suit die for 3 suits")
-    vdiffr::expect_doppelganger("draw_suitrank_die-5suits", function() draw_suitrank_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F", "--suit_colors=red,black,green,blue,orange,grey"))))
-    vdiffr::expect_doppelganger("draw_suitrank_die-6suits", function() draw_suitrank_die(cfg=c2o(c("--suit_symbols=A,B,C,D,E,F,G", "--suit_colors=red,black,green,blue,orange,purple,grey"))))
-    expect_error(draw_suitrank_die(cfg=c2o(c("--suit_symbols=A,B,C,D", "--suit_colors=red,black,green,blue"))), 
+    vdiffr::expect_doppelganger("draw_suitrank_die-5suits", function() draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))
+    vdiffr::expect_doppelganger("draw_suitrank_die-6suits", function() draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
+    expect_error(draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 
                          "Don't know how to draw suit/rank die for 3 suits")
 })

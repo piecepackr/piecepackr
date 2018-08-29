@@ -230,6 +230,25 @@ Executable options
 * `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepackr/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
 * `get_embedded_font --help <https://github.com/trevorld/piecepackr/blob/master/txt/get_embedded_font_options.txt>`_
 
+Piecepack configuration
+-----------------------
+
+One can override the defaults by explicitly setting configuration options by calling the ``configure_piecepack_options`` executable, manually creating/modifying a configuration json file by hand, or if calling functions directly by R manually creating/modifying a list of configuration options.  
+
+This program uses the abstraction that every piecepack component has a "component_side" name (like ``belt_face``), a suit, a rank, a primary symbol, a directional mark symbol, and embellishments like border lines, grid lines, hex lines, checkers, and ribbons.  On top of the normal "suited" piecepack suits this program also recognizes an extra "unsuit" suit which is used to configure "neutral" components like tile backs and coin faces.  Although the primary and directional mark symbols can be configured directly they are often configured indirectly by specifying various "suit" and "rank" symbol configurations.
+
+The configurations in this program "cascade" (sort of like in "Cascading Style Sheets").  A style configuration has the following format::
+
+    style_name(.suit)(.rank)(.component)
+
+The configuration "cascade" priorities are as follows:
+
+#. Direct styles have priority over indirect styles e.g. ``dm_symbols`` has priority over ``suit_symbols.tile_face`` for which symbol is used in the corner of the tile face and in turn ``suit_symbols_font`` has priority over ``font.coin_back`` for which fonts are used on the coin back.  This is because indirect styles are only used to a generate reasonable default if a direct style cannot be found.
+#. Then if there is a tie ``.component_side`` has priority over ``.component`` which has priority over no component specification e.g. ``dm_symbols.saucer_back`` has priority over ``dm_symbols.saucer`` which has priority over just ``dm_symbols``.
+#. Then if there is still a tie ``.r#`` has priority over no rank specification e.g. ``invert_colors.r1`` has priority over ``invert_colors``.
+#. Then if there is still a tie ``.s#`` has priority over ``.suited`` / ``.unsuited`` which has priority over no suit specification e.g. ``invert_colors.s2`` has priority over ``invert_colors.suited`` has priority over just ``invert_colors``.
+
+Configurations are *often* allowed to be comma-separated to be able to specify different values for different suits or ranks e.g. ``background_colors=white`` or ``background_colors=pink,grey,grey,pink,white``.  
 
 Licence
 -------

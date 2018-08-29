@@ -1,0 +1,12 @@
+{
+  "deck_title": ["Inverted piecepack (v0.9.1-1)"],
+  "deck_filename": ["yellow_crown2"],
+  "rank_symbols": ["O,A,2,3,4,5"],
+  "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
+  "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham"],
+  "suit_symbols_scale": ["0.6,0.7,0.75,0.9,0.9"],
+  "suit_colors": ["darkred,black,gold,darkblue,black"],
+  "invert_colors.s5.r1": [true],
+  "invert_colors.suited": [true],
+  "invert_colors.r1": [false]
+}

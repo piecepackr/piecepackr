@@ -1,9 +1,9 @@
 {
-  "deck_title": ["French-suits (checkered tile faces) (v0.9.1-0)"],
+  "deck_title": ["French-suits (checkered tile faces) (v0.9.1-1)"],
   "deck_filename": ["chess2"],
   "rank_symbols": ["♟,♞,♝,♜,♛,♚"],
   "suit_symbols": ["♥,♠,♣,♦,꩜"],
   "suit_symbols_scale": ["1,1,1,1,0.9"],
-  "checker_colors": ["grey,grey,grey,grey,"],
-  "suit_colors": ["darkred,black,dimgrey,hotpink2,grey"]
+  "suit_colors": ["darkred,black,dimgrey,hotpink2,grey"],
+  "checker_colors.tile_face": ["grey"]
 }

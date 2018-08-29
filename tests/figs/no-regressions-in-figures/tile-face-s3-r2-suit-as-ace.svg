@@ -13,14 +13,6 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='288.00' y='288.00' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none;' />
-<rect x='360.00' y='216.00' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none;' />
-<line x1='288.00' y1='252.00' x2='324.00' y2='216.00' style='stroke-width: 3.00; stroke: none;' />
-<line x1='288.00' y1='324.00' x2='324.00' y2='360.00' style='stroke-width: 3.00; stroke: none;' />
-<line x1='432.00' y1='324.00' x2='396.00' y2='360.00' style='stroke-width: 3.00; stroke: none;' />
-<line x1='432.00' y1='252.00' x2='396.00' y2='216.00' style='stroke-width: 3.00; stroke: none;' />
-<polyline points='360.00,360.00 360.00,216.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt;' />
-<polyline points='288.00,288.00 432.00,288.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt;' />
 <text x='336.38' y='312.77' style='font-size: 72.00px; fill: #006400; font-family: Liberation Sans;' textLength='47.25px' lengthAdjust='spacingAndGlyphs'>♣</text>
 <text x='310.88' y='265.76' style='font-size: 40.00px; fill: #006400; font-family: Liberation Sans;' textLength='26.25px' lengthAdjust='spacingAndGlyphs'>♣</text>
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />

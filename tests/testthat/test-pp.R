@@ -1,8 +1,6 @@
 context("make_pnp_piecepack works as expected")
 test_that("make_pnp_piecepack works as expected", {
 
-    json_filename <- tempfile(fileext=".json")
-    on.exit(unlink(json_filename))
     pdf_deck_dir = tempfile()
     on.exit(unlink(pdf_deck_dir, recursive=TRUE))
     svg_preview_dir = tempfile()
@@ -16,12 +14,20 @@ test_that("make_pnp_piecepack works as expected", {
     svg_component_dir = tempfile()
     on.exit(unlink(svg_component_dir, recursive=TRUE))
 
-    configure_piecepack(c(paste0("--pdf_deck_dir=", pdf_deck_dir), paste0("--svg_preview_dir=", svg_preview_dir),
-               paste0("--svg_component_dir=", svg_component_dir), "--component_formats=svg", "--component_thetas=0",
-               paste0("--file=", json_filename)))
-    expect_true(file.exists(json_filename))
+    # json_filename <- tempfile(fileext=".json")
+    # on.exit(unlink(json_filename))
+    # configure_piecepack(c(paste0("--pdf_deck_dir=", pdf_deck_dir), paste0("--svg_preview_dir=", svg_preview_dir),
+    #            paste0("--svg_component_dir=", svg_component_dir), "--component_formats=svg", "--component_thetas=0",
+    #            paste0("--file=", json_filename)))
+    # expect_true(file.exists(json_filename))
+    # opts <- read_configuration(paste0("--file=", json_filename))
 
-    opts <- read_configuration(paste0("--file=", json_filename))
+    opts <- list(pdf_deck_dir=pdf_deck_dir,
+                 svg_preview_dir=svg_preview_dir,
+                 svg_component_dir=svg_component_dir,
+                 component_formats="svg",
+                 component_thetas=0)
+
     make_pnp_piecepack(opts)
     make_piecepack_preview(opts)
     make_piecepack_images(opts)
