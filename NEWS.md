@@ -1,5 +1,14 @@
-piecepack 0.9.x
-===============
+
+piecepackr 0.10.x
+=================
+
+* Made non-reverse-compatible API changes to configuration and piecepack image making functions and scripts.
+* Increased the width of a pawn belt from 1.5" to 2" (so can fit around a 5/8" diameter pawn).
+
+* Changed the "light"-french-suited symbols in the "dual" demo from "black" symbols to "white" symbols.  Thanks Ron-Hale Evans for the suggestion.
+
+piecepackr 0.9.x
+================
 
 * Added ``get_embedded_font`` function and executable (#80).
 * Dropped ``pdfjoin`` from list of system dependencies (#77).
@@ -7,8 +16,8 @@ piecepack 0.9.x
 
 * Added Yellow Crowns demo (#53)
 
-piecepack 0.8.0
-===============
+piecepackr 0.8.0
+================
 
 * Added ``make_piecepack_images`` executable (#48).  Renamed other executables and functions in API. 
 * Shrunk the pawn down to ½" by ⅞" and made them directional by default (#50).
@@ -21,8 +30,8 @@ piecepack 0.8.0
 
 * Fixed bugs in "orthodox" pawns (#62).
 
-piecepack 0.7.1
-===============
+piecepackr 0.7.1
+================
 
 * Added ``--border_color`` configuration option and fix bug in PnP border colors (#42).
 * Added ``--header_font``, ``--dm_r``, ``--dm_r.*``, and ``--suit_colors.*`` options.
@@ -48,8 +57,8 @@ piecepack 0.7.1
 * Tweaked background colors in 3rd hex demo.
 * Tweaked background colors in 3rd crown-and-anchor demo.
 
-piecepack 0.7.0
-===============
+piecepackr 0.7.0
+================
 
 * Improved print-and-play layout (#35).
 * Added "Chinese zodiac" and "sixpack" demos to pre-existing "default", "dual", and "orthodox" demos (#38).

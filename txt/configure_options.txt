@@ -8,8 +8,11 @@ Options:
 	--deck_title=DECK_TITLE
 		(default "")
 
-	--deck_filename=DECK_FILENAME
+	--deck_name=DECK_NAME
 		Filename prefix (default "piecepack_deck")
+
+	-f FILE, --file=FILE
+		Filename to write configuration to (default outputs to standard output)
 
 	--rank_symbols=RANK_SYMBOLS
 		(default "N,A,2,3,4,5")
@@ -63,7 +66,7 @@ Options:
 		Default font family (default "sans")
 
 	--suit_colors=SUIT_COLORS
-		(default "darkred,black,darkgreen,darkblue,grey")
+		(default "#D55E00,#000000,#009E73,#56B4E9,#E69F00")
 
 	--dm_colors=DM_COLORS
 		(default the value of the "suit_colors" option)
@@ -92,9 +95,6 @@ Options:
 	--uninvert_colors
 		Opposite of "invert_colors" option
 
-	-f FILE, --file=FILE
-		Filename to write configuration to (default outputs to standard output)
-
 	--use_suit_as_ace
 		(default "FALSE")
 
@@ -109,39 +109,6 @@ Options:
 
 	--pp_die_arrangement=PP_DIE_ARRANGEMENT
 		Either "counter" or "opposites_sum_to_5" (default "counter")
-
-	--pdf_deck_dir=PDF_DECK_DIR
-		Directory to put pdfs in (default "pdf/decks")
-
-	--svg_preview_dir=SVG_PREVIEW_DIR
-		Directory to put pdfs in (default "svg/previews")
-
-	--bmp_component_dir=BMP_COMPONENT_DIR
-		Directory to put bmp component images in (default "bmp/components")
-
-	--jpeg_component_dir=JPEG_COMPONENT_DIR
-		Directory to put jpeg component images in (default "jpeg/components")
-
-	--pdf_component_dir=PDF_COMPONENT_DIR
-		Directory to put pdf component images in (default "pdf/components")
-
-	--png_component_dir=PNG_COMPONENT_DIR
-		Directory to put png component images in (default "png/components")
-
-	--ps_component_dir=PS_COMPONENT_DIR
-		Directory to put ps component images in (default "ps/components")
-
-	--svg_component_dir=SVG_COMPONENT_DIR
-		Directory to put svg component images in (default "svg/components")
-
-	--tiff_component_dir=TIFF_COMPONENT_DIR
-		Directory to put tiff component images in (default "tiff/components")
-
-	--component_formats=COMPONENT_FORMATS
-		Default image formats for ``make_images`` (default "pdf,png,svg")
-
-	--component_thetas=COMPONENT_THETAS
-		Default rotations for ``make_images`` (default "0,90,180,270")
 
 	--rank_symbols.s1.r1.tile_back=RANK_SYMBOLS.S1.R1.TILE_BACK
 		

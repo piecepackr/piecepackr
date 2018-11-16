@@ -17,7 +17,7 @@ piecepackr: A Piecepack Graphics R Package
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-``piecepackr`` is an R package designed to make configurable piecepack graphics.  It includes some executable Rscripts designed to make a `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdf of `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ components as well as an Rscript to build images of individual components.  The API can also be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) or even to make a custom Print & Play layout.
+``piecepackr`` is an R package designed to make configurable `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ graphics.  The API can be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized Print & Play layouts.  The package also includes some executable Rscripts to enable making customized piecepack `"Print & Play" <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ pdfs and/or to build images of individual piecepack components on the command-line.  
 
 .. contents::
 
@@ -96,7 +96,7 @@ A demo `print-and-play pdf <https://www.dropbox.com/s/nr60w36885dgudz/sixpack_de
 yellow_crown
 ~~~~~~~~~~~~
 
-A demo `print-and-play pdf <https://www.dropbox.com/s/61p55982lrl3pld/yellow_crown_demo.pdf?dl=0>`__ of some piecepacks with yellow crowns.  The first is in an orthodox sytle piecepack while the second has an inverted suit color scheme combined with inverted nulls.  The third piecepack has both yellow crowns AND green crowns as well as both blue fleur-de-lis AND blue crowns suits thus containing the six most popular piecepack suit symbols with the "light" suits having a black background and the "dark" suits having a white background.  The fourth piecepack is a matching french-suited piecepack with the addition of both yellow and blue stars.
+A demo `print-and-play pdf <https://www.dropbox.com/s/61p55982lrl3pld/yellow_crown_demo.pdf?dl=0>`__ of some piecepacks with yellow crowns.  The first is in an orthodox sytle piecepack while the second has an inverted suit color scheme combined with inverted nulls.  The third piecepack has both yellow crowns AND green crowns as well as both blue fleur-de-lis AND blue anchors suits thus containing the six most popular piecepack suit symbols with the "light" suits having a black background and the "dark" suits having a white background.  The fourth piecepack is a matching french-suited piecepack with the addition of both yellow and blue stars.
 
 Installation
 ------------
@@ -205,7 +205,7 @@ If you want to help further **develop** the ``piecepackr`` R package you'll also
 How to use executable Rscripts
 ------------------------------
 
-One uses the ``make_pnp_piecepack`` executable to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_piecepack_preview`` executable to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_pnp_piecepacks`` executable.  The ``make_piecepack_images`` executable makes individual images of piecepack components.  The ``make_pnp_piecepack``, ``make_piecepack_images``, and ``make_piecepack_preview`` executables requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure_piecepack`` executable can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  The ``get_embedded_font`` executable is a utility script that tells you which fonts will actually be embedded by Cairo for a given combination of requested fonts and Unicode characters.
+One uses the ``make_pnp`` executable to make a single print-and-play pdf of a piecepack deck.  One uses the ``make_preview`` executable to make a svg preview of a piecepack deck.  One can collect several print-and-play pdf's and previews using the ``collect_pnp`` executable.  The ``make_images`` executable makes individual images of piecepack components.  The ``make_pnp``, ``make_images``, and ``make_preview`` executables requires JSON configuration either provided as standard input to the program or as a file.  You can view sample configuration files for several demo piecepacks in the ``configurations`` folder.  The ``configure`` executable can be used to generate suitable JSON configuration files or you can manually modify a pre-existing one.  The ``get_embedded_font`` executable is a utility script that tells you which fonts will actually be embedded by Cairo for a given combination of requested fonts and Unicode characters.
 
 Although the API is in flux you can currently build the demo files and see the command-line calls used to build them by running::
 
@@ -229,17 +229,17 @@ Where ``demo_name`` is either:
 Executable options
 ------------------
 
-* `configure_piecepack --help <https://github.com/trevorld/piecepackr/blob/master/txt/configure_piecepack_options.txt>`_
-* `make_pnp_piecepack --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_pnp_piecepack_options.txt>`_
-* `make_piecepack_images --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_images_options.txt>`_
-* `make_piecepack_preview --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_preview_options.txt>`_
-* `collect_pnp_piecepacks --help <https://github.com/trevorld/piecepackr/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
+* `configure --help <https://github.com/trevorld/piecepackr/blob/master/txt/configure_piecepack_options.txt>`_
+* `make_pnp --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_pnp_piecepack_options.txt>`_
+* `make_images --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_images_options.txt>`_
+* `make_preview --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_preview_options.txt>`_
+* `collect_pnp --help <https://github.com/trevorld/piecepackr/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
 * `get_embedded_font --help <https://github.com/trevorld/piecepackr/blob/master/txt/get_embedded_font_options.txt>`_
 
 Piecepack configuration
 -----------------------
 
-One can override the defaults by explicitly setting configuration options by calling the ``configure_piecepack_options`` executable, manually creating/modifying a configuration json file by hand, or if calling functions directly by R manually creating/modifying a list of configuration options.  
+One can override the defaults by explicitly setting configuration options by calling the ``configure`` executable, manually creating/modifying a configuration json file by hand, or if calling functions directly by R manually creating/modifying a list of configuration options.  
 
 This program uses the abstraction that every piecepack component has a "component_side" name (like ``belt_face``), a suit, a rank, a primary symbol, a directional mark symbol, and embellishments like border lines, grid lines, hex lines, checkers, and ribbons.  On top of the normal "suited" piecepack suits this program also recognizes an extra "unsuit" suit which is used to configure "neutral" components like tile backs and coin faces.  Although the primary and directional mark symbols can be configured directly they are often configured indirectly by specifying various "suit" and "rank" symbol configurations.
 
@@ -267,7 +267,7 @@ Frequently Asked Questions
 How should I Print & Play my piecepack?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Print-and-Play pdf's produced by the ``make_pnp_piecepack`` executable are designed to be used in three different ways:
+The Print-and-Play pdf's produced by the ``make_pnp`` executable are designed to be used in three different ways:
 
 - Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
 - Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
@@ -286,7 +286,7 @@ Although one can use the API to make layouts with components of different sizes 
 - coins (default "circle") are drawn into a ¾" by ¾" square
 - dice (default "rect") faces are drawn into a ½" by ½" square
 - pawn sides (default "halma") are drawn into a ½" by ⅞" rectangle
-- "pawn belts" (default "rect") are drawn into a 1½" by ½" rectangle
+- "pawn belts" (default "rect") are drawn into a 2" by ½" rectangle
 - "pawn saucers" (default "circle") are drawn into a ⅞" by ⅞" square
 - "chips" (default "circle") are drawn into a ⅝" by ⅝" square
        
@@ -362,5 +362,5 @@ How do I use this package in piecepack rulesets?
 
 There are two main ways that this package could be used to help make piecepack rulesets:
 
-1) The ``make_piecepack_images`` executable makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
+1) The ``make_images`` executable makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
 2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important functions for diagram drawing exported by the ``piecepack`` R package are ``read_configuration`` used to read in a JSON configuration file with the relevant piecepack configuration and ``draw_component`` which draws piecepack components to the graphics device. 

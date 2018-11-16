@@ -1,9 +1,11 @@
 {
-  "deck_title": ["French-suited (Colored hexlines on tile faces) (v0.9.1-1)"],
-  "deck_filename": ["hex1"],
+  "deck_title": ["French-suited (Colored hexlines on tile faces) (v0.10.0-0)"],
+  "deck_name": ["hex1"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,꩜"],
   "rank_symbols_font": ["Noto Sans"],
+  "suit_symbols_font": ["Noto Sans Symbols"],
   "suit_symbols_scale": ["1,1,1,1,0.9"],
+  "suit_colors": ["darkred,black,darkgreen,darkblue,grey"],
   "hexline_colors.tile_face": ["darkred,black,darkgreen,darkblue,grey"]
 }

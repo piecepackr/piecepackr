@@ -4,10 +4,14 @@
 \alias{c2o}
 \title{Read piecepack configuration list from command-line arguments}
 \usage{
-c2o(args = NULL)
+c2o(args = NULL, pp_n_suits = NULL, pp_n_ranks = NULL)
 }
 \arguments{
 \item{args}{Character vector of command-line arguments.}
+
+\item{pp_n_suits}{Number of suits to create individual suit options for}
+
+\item{pp_n_ranks}{Number of ranks to create individual rank options for}
 }
 \description{
 Read piecepack configuration list from command-line arguments

@@ -1,0 +1,29 @@
+#!/usr/bin/env Rscript
+
+options(error = quote(dump.frames("images_dump", TRUE)), warn=2)
+
+suppressPackageStartupMessages(library("optparse"))
+suppressPackageStartupMessages(library("piecepackr"))
+
+parser <- OptionParser(description="Program to make piecepack component images")
+parser <- add_option(parser, c('-c', '--cfg_file'), default=NULL, help="Source of piecepack style information (default stdin input)")
+parser <- add_option(parser, "--formats", default="pdf,png,svg", help='Comma separated list of image formats (default "%default")')
+parser <- add_option(parser, "--thetas", default="0,90,180,270",
+                     help='Default rotations for ``make_images`` (default "%default")')
+parser <- add_option(parser, "--deck_name", default="piecepack_deck", help='Filename prefix (default "%default")')
+parser <- add_option(parser, "--dir_template", default="%format/components/%deck_name", 
+                help='Directory template (will sub in values for "%format" and "%deck_name") (default "%default")')
+
+args <- parse_args(parser)
+cfg <- piecepackr::read_configuration(args$cfg_file)
+               
+formats <- piecepackr::split(args$formats)
+for (format in formats) {
+    directory <- gsub("%deck_name", args$deck_name,
+                        gsub("%format", format, args$dir_template))
+    dir.create(directory, recursive=TRUE, showWarnings=FALSE)
+    thetas <- piecepackr::split(args$thetas, float=TRUE)
+    piecepackr::make_images(directory, cfg, format, thetas)
+}
+
+invisible(NULL)

@@ -4,12 +4,10 @@
 \alias{read_configuration}
 \title{Read piecepack configuration JSON}
 \usage{
-read_configuration(args = commandArgs(TRUE), description = "")
+read_configuration(cfg_file)
 }
 \arguments{
-\item{args}{Character vector of command-line arguments.}
-
-\item{description}{Description to pass to \code{OptionParser}.}
+\item{cfg_file}{Filename of json configuration.  If `NULL` read in from standard input.}
 }
 \description{
 Read in and process piecepack configuration JSON.

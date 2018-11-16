@@ -4,10 +4,15 @@
 \alias{make_collection_preview}
 \title{Make collection preview}
 \usage{
-make_collection_preview(cfg)
+make_collection_preview(output_filename, input_filenames,
+  size = "letter")
 }
 \arguments{
-\item{cfg}{Piecepack configuration list}
+\item{output_filename}{Filename of PnP output}
+
+\item{input_filenames}{Vector of input filenames}
+
+\item{PnP}{output size (currently either "letter" or "A4")}
 }
 \description{
 Makes a preview pdf of a collection of pnp decks.

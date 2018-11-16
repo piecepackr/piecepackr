@@ -1,3 +1,4 @@
 {
-  "deck_filename": ["default"]
+  "deck_name": ["default"],
+  "suit_colors": ["#D55E00,#000000,#009E73,#56B4E9,#E69F00"]
 }

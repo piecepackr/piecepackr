@@ -1,13 +1,7 @@
 FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 
 #' @importFrom optparse OptionParser add_option parse_args
-configuration_options <- function(args=commandArgs(TRUE)) {
-    parser <- OptionParser(paste("Program to make piecepack configurations.",
-                               "Set environmental variables PP_N_RANKS and/or PP_N_SUITS to configure individual ranks/suits"))
-    parser <- add_option(parser, "--deck_title", default=NULL, 
-                         help=sprintf('(default "%s")', get_deck_title()))
-    parser <- add_option(parser, "--deck_filename", default=NULL, 
-                         help=sprintf('Filename prefix (default "%s")', get_deck_filename()))
+configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
 
     # Symbols
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
@@ -82,8 +76,6 @@ configuration_options <- function(args=commandArgs(TRUE)) {
                          help='(default "FALSE")')
     parser <- add_option(parser, "--uninvert_colors", action="store_false", dest="invert_colors",
                          default=NULL, help='Opposite of "invert_colors" option')
-    parser <- add_option(parser, c("-f", "--file"), default=NULL, 
-                         help="Filename to write configuration to (default outputs to standard output)")
     parser <- add_option(parser, "--use_suit_as_ace", action="store_true", default=NULL, 
                          help=sprintf('(default "%s")', get_use_suit_as_ace()))
     parser <- add_option(parser, "--use_ace_as_ace", dest="use_suit_as_ace", 
@@ -98,39 +90,24 @@ configuration_options <- function(args=commandArgs(TRUE)) {
     parser <- add_option(parser, "--pp_die_arrangement", 
                          help=sprintf('Either "counter" or "opposites_sum_to_5" (default "%s")', get_pp_die_arrangement()))
 
-    # Directories
-    parser <- add_option(parser, "--pdf_deck_dir", default=NULL,
-                         help=sprintf('Directory to put pdfs in (default "%s")', get_pdf_deck_dir()))
-
-    parser <- add_option(parser, "--svg_preview_dir", default=NULL,
-                         help=sprintf('Directory to put pdfs in (default "%s")', get_svg_preview_dir()))
-
-    for (format in FORMATS) {
-        option <- paste0("--", format, "_component_dir")
-        parser <- add_option(parser, option, default=NULL,
-                         help=sprintf('Directory to put %s component images in (default "%s/components")', format, format))
-
-    }
-
-    # Components
-    parser <- add_option(parser, "--component_formats", default=NULL,
-                         help='Default image formats for ``make_images`` (default "pdf,png,svg")')
-    parser <- add_option(parser, "--component_thetas", default=NULL,
-                         help='Default rotations for ``make_images`` (default "0,90,180,270")')
 
     # Cascading variants
-    n_ranks <- as.numeric(Sys.getenv("PP_N_RANKS"))
-    n_ranks <- ifelse(is.na(n_ranks), 0, n_ranks)
-    n_suits <- as.numeric(Sys.getenv("PP_N_SUITS"))
-    n_suits <- ifelse(is.na(n_suits), 0, n_suits)
-    if (length(n_ranks)) 
-        rank_affixes <- c(paste0(".r", 1:n_ranks), "")
+    if (is.null(pp_n_ranks)) {
+        pp_n_ranks <- as.numeric(Sys.getenv("PP_N_RANKS"))
+        pp_n_ranks <- ifelse(is.na(pp_n_ranks), 0, pp_n_ranks)
+    }
+    if (is.null(pp_n_suits)) {
+        pp_n_suits <- as.numeric(Sys.getenv("PP_N_SUITS"))
+        pp_n_suits <- ifelse(is.na(pp_n_suits), 0, pp_n_suits)
+    }
+    if (as.logical(pp_n_ranks)) 
+        rank_affixes <- c(paste0(".r", 1:pp_n_ranks), "")
     else
         rank_affixes <- ""
-    if (length(n_suits))
-        suit_affixes <- c(paste0(".s", 1:n_suits), ".suited", ".unsuited", "")
+    if (as.logical(pp_n_suits))
+        suit_affixes <- c(paste0(".s", 1:pp_n_suits), ".suited", ".unsuited", "")
     else
-        suit_affixes <- ""
+        suit_affixes <- c(".suited", ".unsuited", "")
     component_affixes <- c(paste0(".", c(COMPONENT_AND_SIDES, COMPONENTS)), "")
     dfs <- expand.grid(component_affixes, rank_affixes, suit_affixes, stringsAsFactors=FALSE)
     names(dfs) <- c("component", "rank", "suit")
@@ -163,8 +140,11 @@ configuration_options <- function(args=commandArgs(TRUE)) {
         opt_str <- paste0("--uninvert_colors", affix)
         dest_str <- paste0("invert_colors", affix)
         parser <- add_option(parser, opt_str, dest=dest_str, default=NULL, action="store_false")
-
     }
+    parser
+}
+
+parse_configuration <- function(parser, args) {
     opts <- parse_args(parser, args)
     opts
 }
@@ -175,8 +155,18 @@ configuration_options <- function(args=commandArgs(TRUE)) {
 #' 
 #' @param args Character vector of command-line arguments.
 #' @export
-configure_piecepack <- function(args=commandArgs(TRUE)) {
-    opts <- configuration_options(args)
+configure <- function(args=commandArgs(TRUE)) {
+    parser <- OptionParser(paste("Program to make piecepack configurations.",
+                               "Set environmental variables PP_N_RANKS and/or PP_N_SUITS to configure individual ranks/suits"))
+    parser <- add_option(parser, "--deck_title", default=NULL, 
+                         help=sprintf('(default "%s")', get_deck_title()))
+    parser <- add_option(parser, "--deck_name", default=NULL, 
+                         help=sprintf('Filename prefix (default "%s")', get_deck_filename()))
+    #### Change to output_file?
+    parser <- add_option(parser, c("-f", "--file"), default=NULL, 
+                         help="Filename to write configuration to (default outputs to standard output)")
+    parser <- configuration_options(parser)
+    opts <- parse_configuration(parser, args)
     filename <- opts$file
     opts$file <- NULL
     opts$help <- NULL
@@ -191,85 +181,20 @@ configure_piecepack <- function(args=commandArgs(TRUE)) {
     }
 }
 
-#' Get collect piecepacks options
-#'
-#' Get collect piecepacks options.
-#' 
-#' @param args Character vector of command-line arguments.
-#' @export
-get_arrangement_opts <- function(args=commandArgs(TRUE)) { ####
-    parser <- OptionParser("Program to collect piecepacks")
-    parser <- add_option(parser, "--author", default=get_author(),
-                         help='Pdf author (default "")')
-    parser <- add_option(parser, "--filename", default="piecepack_collection", ####
-                         help='Filename prefix (default "%default")')
-    parser <- add_option(parser, "--keywords", default=get_keywords(),
-                         help='Pdf keywords (default "%default")')
-    parser <- add_option(parser, "--subject", default=get_subject(), 
-                         help='Pdf subject (default "%default")')
-    parser <- add_option(parser, "--title", default=get_title(), 
-                         help='Pdf title (default "%default")')
-    parser <- add_option(parser, "--decks", 
-                         help='Comma separated list of decks to collect (default collects all of them)')
-    parser <- add_option(parser, "--pdf_deck_dir", default=get_pdf_deck_dir(),
-                         help='(default "%default")')
-    parser <- add_option(parser, "--pdf_collection_dir", default=get_pdf_collection_dir(),
-                         help='(default "%default")')
-    parser <- add_option(parser, "--pdf_preview_dir", default=get_pdf_preview_dir(),
-                         help='(default "%default")')
-    parser <- add_option(parser, "--svg_preview_dir", default=get_svg_preview_dir(),
-                         help='(default "svg/previews")')
-    parser <- add_option(parser, "--paper", default=get_paper(),
-                         help='Pdf paper size, either "letter" or "A4" (default "%default")')
-    parser <- add_option(parser, "--font", default=get_font(),
-                         help='Default font family (default "%default")')
-
-    parse_args(parser, args)
-}
-
-
-process_configuration <- function(opts) {
-    ####
-    for(format in FORMATS) {
-        option_str <- paste0(format, "_component_dir")
-        if (is.null(opts[[option_str]]))
-            opts[[option_str]] <- file.path(format, "components")
-    }
-    if (is.null(opts[["component_formats"]]))
-        opts$component_formats <- "pdf,png,svg"
-    opts$component_formats <- split(opts$component_formats)
-    if (is.null(opts[["component_thetas"]]))
-        opts$component_thetas <- "0,90,180,270"
-    opts$component_thetas <- numeric_split(opts$component_thetas)
-
-    opts
-}
-
 #' Read piecepack configuration JSON
 #'
 #' Read in and process piecepack configuration JSON.
 #' 
-#' @param args Character vector of command-line arguments.
-#' @param description Description to pass to \code{OptionParser}.
+#' @param cfg_file Filename of json configuration.  If `NULL` read in from standard input.
 #' @export
-read_configuration <- function(args=commandArgs(TRUE), description="") {
-    parser <- OptionParser(description)
-    parser <- add_option(parser, c('-f', '--file'), default=NULL, help="Source of piecepack style information (default stdin input)")
-    parser <- add_option(parser, "--paper", default="letter",
-                         help='Default paper size, either "letter" or "A4" (default "letter")')
-    args <- parse_args(parser, args)
-
-    if (is.null(args$file)) 
+read_configuration <- function(cfg_file) {
+    if (is.null(cfg_file)) 
         con <- file("stdin")
     else 
-        con <- file(args$file)
+        con <- file(cfg_file)
     
     opts <- jsonlite::fromJSON(readLines(con, encoding="UTF-8"))
     close(con)
-
-    opts$paper <- args$paper
-
-    opts <- process_configuration(opts)
     opts
 }
 
@@ -278,7 +203,11 @@ read_configuration <- function(args=commandArgs(TRUE), description="") {
 #' Read piecepack configuration list from command-line arguments
 #' 
 #' @param args Character vector of command-line arguments.
+#' @param pp_n_suits Number of suits to create individual suit options for
+#' @param pp_n_ranks Number of ranks to create individual rank options for
 #' @export
-c2o <- function(args=NULL) {
-    process_configuration(configuration_options(args))
+c2o <- function(args=NULL, pp_n_suits=NULL, pp_n_ranks=NULL) {
+    parser <- OptionParser()
+    parser <- configuration_options(parser, pp_n_suits, pp_n_ranks)
+    parse_configuration(args)
 }

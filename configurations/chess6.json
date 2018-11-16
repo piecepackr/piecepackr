@@ -1,6 +1,6 @@
 {
-  "deck_title": ["Red-suits (checkered tile faces) (v0.9.1-1)"],
-  "deck_filename": ["chess6"],
+  "deck_title": ["Red-suits (checkered tile faces) (v0.10.0-0)"],
+  "deck_name": ["chess6"],
   "rank_symbols": ["♟,♞,♝,♜,♛,♚"],
   "suit_symbols": ["♥,♦,🌞,♚,,,★"],
   "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols"],

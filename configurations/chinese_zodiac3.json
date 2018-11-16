@@ -1,6 +1,6 @@
 {
-  "deck_title": ["Chinese zodiac #3 (v0.9.1-1)"],
-  "deck_filename": ["chinese_zodiac3"],
+  "deck_title": ["Chinese zodiac #3 (v0.10.0-0)"],
+  "deck_name": ["chinese_zodiac3"],
   "rank_symbols": ["鼠,龙,猴,牛,蛇,鸡"],
   "suit_symbols": ["木,火,土,金,水,"],
   "rank_symbols_font": ["Noto Sans CJK SC"],

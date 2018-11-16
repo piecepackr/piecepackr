@@ -1,6 +1,6 @@
 {
-  "deck_title": ["Chinese zodiac #4 (v0.9.1-1)"],
-  "deck_filename": ["chinese_zodiac4"],
+  "deck_title": ["Chinese zodiac #4 (v0.10.0-0)"],
+  "deck_name": ["chinese_zodiac4"],
   "rank_symbols": ["虎,马,狗,兔,羊,猪"],
   "suit_symbols": ["木,火,土,金,水,"],
   "rank_symbols_font": ["Noto Sans CJK SC"],

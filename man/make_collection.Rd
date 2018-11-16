@@ -4,10 +4,17 @@
 \alias{make_collection}
 \title{Collects print-and-play piecepack pdfs into one pdf}
 \usage{
-make_collection(cfg)
+make_collection(output_filename, input_filenames, size = "letter",
+  metadata = list())
 }
 \arguments{
-\item{cfg}{Piecepack configuration list}
+\item{output_filename}{Filename of PnP output}
+
+\item{input_filenames}{Vector of input filenames (starting with preview pdf)}
+
+\item{metadata}{List of metadata to embed}
+
+\item{PnP}{output size (currently either "letter" or "A4")}
 }
 \description{
 Collects print-and-play piecepack pdfs into one pdf

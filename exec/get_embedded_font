@@ -1,8 +1,7 @@
 #!/usr/bin/env Rscript
 
 suppressPackageStartupMessages(library("dplyr"))
-suppressPackageStartupMessages(library("optparse"))
-suppressPackageStartupMessages(library("piecepackr"))
+library("optparse")
 
 default_chars <- c(piecepackr:::get_suit_symbols(), 
                     piecepackr:::get_rank_symbols(), 
@@ -17,10 +16,10 @@ parser <- add_option(parser, c("-f", "--font"), default="sans", help='(comma sep
 parser <- add_option(parser, c("-c", "--char"), default=default_chars, help='(comma separated) list of Characters (default = "%default"')
 opts <- parse_args(parser)
 
-font <- piecepack:::split(opts$font)
-char <- piecepack:::split(opts$char)
+font <- piecepack::split(opts$font)
+char <- piecepack::split(opts$char)
 
 df <- expand.grid(char, font, stringsAsFactors=FALSE)
 names(df) <- c("char", "requested_font")
-df <- dplyr::mutate(df, embedded_font = get_embedded_font(requested_font, char))
+df <- dplyr::mutate(df, embedded_font = piecepackr::get_embedded_font(requested_font, char))
 print(as.data.frame(dplyr::select(df, requested_font, embedded_font, char)))

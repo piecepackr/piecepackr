@@ -1,4 +1,7 @@
 context("options work as expected")
+parser <- optparse::OptionParser()
+parser <- configuration_options(parser)
+
 test_that("options work as expected", {
     cfg <- list(invert_colors.suited = TRUE,
                 background_colors = "white",
@@ -51,14 +54,16 @@ test_that("options work as expected", {
     cfg <- list(dm_symbols.saucer_back="b")
     expect_equal(get_dm_symbol("saucer_back", 5, 1, cfg), "b")
 
-    cfg <- list(invert_colors.suited=TRUE, invert_colors.r1=FALSE)
+    cfg <- list(invert_colors.suited=TRUE, invert_colors.r1=FALSE,
+                suit_colors = "darkred,black,darkgreen,darkblue,grey")
     expect_equal(get_background_color("tile_face", 1, 2, cfg), "darkred")
     expect_equal(get_background_color("tile_face", 1, 1, cfg), "white")
 })
 
 context("get_component_opt works as expected")
 test_that("get_component_opt works as expected", {
-    opt <- get_component_opt("coin_face")
+    opt <- get_component_opt("coin_face", 
+                             cfg=list(suit_colors="darkred,black,darkgreen,darkblue,grey"))
     expect_equal(opt$bcol, "white")
     expect_equal(opt$scol, "grey")
     expect_equal(opt$border_col, "grey")

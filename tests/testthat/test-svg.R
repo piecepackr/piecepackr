@@ -1,7 +1,10 @@
 context("no regressions in figures")
 test_that("no regressions in figures", {
     # skip_on_cran()
-    dc <- function(...) { draw_component(...) }
+    dc <- function(..., cfg=NULL) {
+        cfg0 <- list(suit_colors="darkred,black,darkgreen,darkblue,grey")
+        draw_component(..., cfg=c(cfg0, cfg)) 
+    }
     vdiffr::expect_doppelganger("tile_back", function() dc("tile_back"))
     vdiffr::expect_doppelganger("tile_back-svg", function() dc("tile_back", svg=TRUE))
     vdiffr::expect_doppelganger("tile_back-hex", 
@@ -41,7 +44,7 @@ test_that("no regressions in figures", {
                                 function() dc("chip_back", cfg=list(shape.chip="star"), i_s=1))
 
     vdiffr::expect_doppelganger("preview", draw_preview)
-    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5")))
+    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5", suit_colors="darkred,black,darkgreen,darkblue,grey")))
     vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))
     vdiffr::expect_doppelganger("draw_suit_die-6suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
     expect_error(draw_suit_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 

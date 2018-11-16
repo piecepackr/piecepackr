@@ -1,6 +1,6 @@
 {
-  "deck_title": ["Red-suited  (v0.9.1-1)"],
-  "deck_filename": ["reversi5"],
+  "deck_title": ["Red-suited  (v0.10.0-0)"],
+  "deck_name": ["reversi5"],
   "rank_symbols": ["N,A,2,3,4,5"],
   "suit_symbols": ["♥,♦,🌞,♚,,,★"],
   "rank_symbols_font": ["Noto Sans"],

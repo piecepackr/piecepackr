@@ -20,11 +20,29 @@ PAWN_BASE <- 3/8
 # PAWN_HEIGHT <- 9/8
 # PAWN_WIDTH <- 5/8
 BELT_HEIGHT <- 1/2
-BELT_WIDTH <- 3 * DIE_WIDTH
+BELT_WIDTH <- 4 * DIE_WIDTH
 
-split <- function(x, sep=",") { stringr::str_split(x, sep)[[1]] } 
-col_split <- function(x, sep=",") { gsub("^$", "transparent", split(x, sep)) }
-numeric_split <- function(x, sep=",") { as.numeric(split(x, sep)) }
+#' Convert delimiter separated string to vector
+#'
+#' Converts delimiter separated string to a vector.
+#'
+#' @param x String to convert
+#' @param sep Delimiter (defaults to ",")
+#' @param float If `TRUE` cast to numeric
+#' @param color if `TRUE` convert empty strings to `"transparent"`
+#' @export
+split <- function(x, sep=",", float=FALSE, color=FALSE) {
+    vec <- stringr::str_split(x, sep)[[1]] 
+    if (float) {
+        as.numeric(vec)
+    } else if (color) {
+        gsub("^$", "transparent", vec)
+    } else {
+        vec
+    }
+} 
+col_split <- function(x, sep=",") { split(x, color=TRUE) }
+numeric_split <- function(x, sep=",") { split(x, sep, float=TRUE) }
 
 seg <- function(x, y, xend, yend, color="black", ...) {
     grid.segments(x0=x, y0=y, x1=xend, y1=yend, gp=gpar(col=color, ...))
@@ -160,7 +178,7 @@ get_background_color_helper <- function(component_side, i_s, i_r, cfg) {
 
 get_suit_colors <- function(component_side=NA, i_s, i_r, cfg=list(), expand=TRUE) {
     suit_colors <- col_split(get_style_element("suit_colors", component_side, cfg, 
-                                     "darkred,black,darkgreen,darkblue,grey"))
+                            "#D55E00,#000000,#009E73,#56B4E9,#E69F00"))
     if (expand)
         suit_colors <- expand_suit_elements(suit_colors, "suit_colors", component_side, cfg) 
     suit_colors
@@ -646,13 +664,17 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
 #' Make piecepack deck preview svg
 #'
 #' @param cfg Piecepack configuration list
+#' @param output_filename Filename of PnP output
 #' @export
-make_piecepack_preview <- function(cfg=list()) {
-    dir.create(get_svg_preview_dir(cfg), recursive=TRUE, showWarnings=FALSE)
+make_preview <- function(cfg=list(), output_filename="svg/previews/piecepack_deck.svg") {
+
+    unlink(output_filename)
+    directory <- dirname(output_filename)
+    dir.create(directory, recursive=TRUE, showWarnings=FALSE)
+
     pheight <- 3*TILE_WIDTH
     pwidth <- 3*TILE_WIDTH
-    svg(file.path(get_svg_preview_dir(cfg), paste0(get_deck_filename(cfg), ".svg")), 
-        family=get_font(cfg), width=3*TILE_WIDTH, height=pheight)
+    pp_device(output_filename, width=pwidth, height=pheight)
     draw_preview(cfg)
     invisible(dev.off())
 }
@@ -705,11 +727,14 @@ draw_preview <- function(cfg=list()) {
 
     # saucers
     seekViewport("main")
-    addViewport(x=inch(TILE_WIDTH+1.5*DIE_WIDTH), y=inch(0.5*TILE_WIDTH), 
-                width=inch(SAUCER_WIDTH), height=inch(2*SAUCER_WIDTH), name="saucers")
-    downViewport('saucers')
-    draw_component("saucer_face", cfg, i_s=1, x=0.5, y=0.25)
-    draw_component("saucer_back", cfg, x=0.5, y=0.75)
+    addViewport(x=inch(TILE_WIDTH+1.5*DIE_WIDTH), y=inch(0.5*TILE_WIDTH + 0.5*SAUCER_WIDTH), 
+                width=inch(SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="saucer.back")
+    addViewport(x=inch(TILE_WIDTH+1.5*DIE_WIDTH), y=inch(0.5*TILE_WIDTH - 0.5*SAUCER_WIDTH), 
+                width=inch(SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="saucer.face")
+    seekViewport('saucer.face')
+    draw_component("saucer_face", cfg, i_s=1)
+    seekViewport('saucer.back')
+    draw_component("saucer_back", cfg)
 
     # pawns
     seekViewport("main")
@@ -719,7 +744,6 @@ draw_preview <- function(cfg=list()) {
     draw_component("pawn_face", cfg, i_s=2, x=0.5, y=0.25)
     draw_component("pawn_back", cfg, i_s=2, x=0.5, y=0.75, angle=180)
 }
-
 
 get_pp_width <- function(component) {
     switch(component, 
@@ -747,15 +771,15 @@ get_pp_height <- function(component) {
            1)
 }
 
-pp_device <- function(filename, component, format, theta) {
-    width <- get_pp_width(component)
-    height <- get_pp_height(component)
+pp_device <- function(filename, component=NULL, theta=0, width=NULL, height=NULL, res=72) {
+    format <- tools::file_ext(filename)
+    if (is.null(width)) width <- get_pp_width(component)
+    if (is.null(height)) height <- get_pp_height(component)
     if (theta %in% c(90, 270)) {
         twidth <- height
         height <- width
         width <- twidth
     }
-    res <- 72
     bg <- "transparent"
     dev <- switch(format,
                 bmp = bmp(filename, width, height, "in", res=res, bg=bg),
@@ -769,30 +793,13 @@ pp_device <- function(filename, component, format, theta) {
     downViewport("main")
 }
 
-#' Make piecepack images
-#'
-#' Makes images of individual piecepack components.
-#'
-#' @param cfg Piecepack configuration list
-#' @export
-make_piecepack_images <- function(cfg) {
-    for (format in cfg$component_formats) {
-        directory <- component_directory(cfg, format)
-        dir.create(directory, recursive=TRUE, showWarnings=FALSE)
-        for (theta in cfg$component_thetas) {
-            make_images_helper(cfg, format, theta)
-        }
-    }
-}
 
 component_directory <- function(cfg, format) {
     file.path(cfg[[paste0(format, "_component_dir")]], get_deck_filename(cfg))
 }
 
-
-component_filename <- function(cfg, component_side, format, theta, 
+component_filename <- function(directory, cfg, component_side, format, theta, 
                                i_s=NULL, i_r=NULL) {
-    directory <- component_directory(cfg, format)
     filename <- paste0(component_side, 
                        ifelse(is.null(i_s), "", paste0("_s", i_s)),
                        ifelse(is.null(i_r), "", paste0("_r", i_r)),
@@ -800,11 +807,23 @@ component_filename <- function(cfg, component_side, format, theta,
     file.path(directory, filename)
 }
 
-make_images_helper <- function(cfg, format, theta) {
+#' Make piecepack images
+#'
+#' Makes images of individual piecepack components.
+#'
+#' @param cfg Piecepack configuration list
+#' @param directory Directory where to place images
+#' @param format Format
+#' @param theta Angle to rotate images
+#' @export
+make_images <- function(cfg=list(), directory=tempdir(), format="svg", thetas=0) {
+    for (theta in thetas) make_images_helper(directory, cfg, format, theta)
+}
+make_images_helper <- function(directory, cfg, format, theta) {
     suppressWarnings({
         for (component_side in c("saucer_back", "tile_back")) {
-            f <- component_filename(cfg, component_side, format, theta)
-            pp_device(f, get_component(component_side), format, theta)
+            f <- component_filename(directory, cfg, component_side, format, theta)
+            pp_device(f, get_component(component_side), theta)
             draw_component(component_side, cfg)
             invisible(dev.off())
         }
@@ -813,16 +832,16 @@ make_images_helper <- function(cfg, format, theta) {
             for (component_side in c("belt_face", "chip_back", "coin_back", 
                                        "pawn_back", "pawn_face",
                                        "saucer_face", "suitdie_face")) {
-                f <- component_filename(cfg, component_side, format, theta, i_s)
-                pp_device(f, get_component(component_side), format, theta)
+                f <- component_filename(directory, cfg, component_side, format, theta, i_s)
+                pp_device(f, get_component(component_side), theta)
                 draw_component(component_side, cfg, i_s)
                 invisible(dev.off())
             }
 
             for (i_r in 1:get_n_ranks(cfg)) {
                 for (component_side in c("chip_face", "ppdie_face", "tile_face")) {
-                    f <- component_filename(cfg, component_side, format, theta, i_s, i_r)
-                    pp_device(f, get_component(component_side), format, theta)
+                    f <- component_filename(directory, cfg, component_side, format, theta, i_s, i_r)
+                    pp_device(f, get_component(component_side), theta)
                     draw_component(component_side, cfg, i_s, i_r)
                     invisible(dev.off())
                 }
@@ -830,8 +849,8 @@ make_images_helper <- function(cfg, format, theta) {
         }
         for (i_r in 1:get_n_ranks(cfg)) {
             component_side <- "coin_face"
-            f <- component_filename(cfg, component_side, format, theta, i_r=i_r)
-            pp_device(f, get_component(component_side), format, theta)
+            f <- component_filename(directory, cfg, component_side, format, theta, i_r=i_r)
+            pp_device(f, get_component(component_side), theta)
             draw_component(component_side, cfg, i_r=i_r)
             invisible(dev.off())
         }
