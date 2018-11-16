@@ -12,7 +12,7 @@ make_collection_preview(output_filename, input_filenames,
 
 \item{input_filenames}{Vector of input filenames}
 
-\item{PnP}{output size (currently either "letter" or "A4")}
+\item{size}{PnP output size (currently either "letter" or "A4")}
 }
 \description{
 Makes a preview pdf of a collection of pnp decks.

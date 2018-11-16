@@ -27,5 +27,6 @@ addons:
     apt:
         packages:
             - ghostscript
+            - poppler-utils
 before_install:
     - if [ $TRAVIS_OS_NAME = osx ]; then brew install ghostscript; fi

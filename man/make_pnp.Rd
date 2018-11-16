@@ -12,7 +12,7 @@ make_pnp(cfg, output_filename = "pdf/decks/piecepack_deck.pdf",
 
 \item{output_filename}{Filename of PnP output}
 
-\item{PnP}{output size (currently either "letter" or "A4")}
+\item{size}{PnP output size (currently either "letter" or "A4")}
 }
 \description{
 Makes a print-and-play piecepack pdf.

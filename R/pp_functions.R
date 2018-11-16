@@ -257,7 +257,7 @@ pp_pdf <- function(filename, family, paper) {
 #'
 #' @param output_filename Filename of PnP output
 #' @param input_filenames Vector of input filenames
-#' @param PnP output size (currently either "letter" or "A4")
+#' @param size PnP output size (currently either "letter" or "A4")
 #' @export
 make_collection_preview <- function(output_filename, input_filenames, size="letter") {
     unlink(output_filename)
@@ -519,7 +519,7 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
 #'
 #' @param cfg Piecepack configuration list
 #' @param output_filename Filename of PnP output
-#' @param PnP output size (currently either "letter" or "A4")
+#' @param size PnP output size (currently either "letter" or "A4")
 #' @export
 make_pnp <- function(cfg, output_filename="pdf/decks/piecepack_deck.pdf", size="letter") {
     unlink(output_filename)
@@ -596,7 +596,7 @@ get_n_pages <- function(pdf_filename) {
 #'
 #' @param output_filename Filename of PnP output
 #' @param input_filenames Vector of input filenames (starting with preview pdf)
-#' @param PnP output size (currently either "letter" or "A4")
+#' @param size PnP output size (currently either "letter" or "A4")
 #' @param metadata List of metadata to embed
 #' @export
 make_collection <- function(output_filename, input_filenames, size="letter", metadata=list()) {

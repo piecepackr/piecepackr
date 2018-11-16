@@ -814,7 +814,7 @@ component_filename <- function(directory, cfg, component_side, format, theta,
 #' @param cfg Piecepack configuration list
 #' @param directory Directory where to place images
 #' @param format Format
-#' @param theta Angle to rotate images
+#' @param thetas Angle to rotate images
 #' @export
 make_images <- function(cfg=list(), directory=tempdir(), format="svg", thetas=0) {
     for (theta in thetas) make_images_helper(directory, cfg, format, theta)

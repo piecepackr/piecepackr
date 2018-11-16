@@ -12,9 +12,9 @@ make_collection(output_filename, input_filenames, size = "letter",
 
 \item{input_filenames}{Vector of input filenames (starting with preview pdf)}
 
-\item{metadata}{List of metadata to embed}
+\item{size}{PnP output size (currently either "letter" or "A4")}
 
-\item{PnP}{output size (currently either "letter" or "A4")}
+\item{metadata}{List of metadata to embed}
 }
 \description{
 Collects print-and-play piecepack pdfs into one pdf
