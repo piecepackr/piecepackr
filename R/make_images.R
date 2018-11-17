@@ -684,8 +684,6 @@ make_preview <- function(cfg=list(), output_filename="svg/previews/piecepack_dec
 draw_preview <- function(cfg=list()) {
     pheight <- 3*TILE_WIDTH
     pwidth <- 3*TILE_WIDTH
-    grid.newpage()
-
     pushViewport(viewport(name="main", width=inch(pwidth), height=inch(pheight)))
     # tiles
     addViewport(y=inch(pheight-TILE_WIDTH), width=inch(3 * TILE_WIDTH), height=inch(2 * TILE_WIDTH), name="tiles")

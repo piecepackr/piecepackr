@@ -26,6 +26,8 @@ piecepackr: A Piecepack Graphics R Package
 Demos
 -----
 
+.. image:: https://www.trevorldavis.com/share/piecepack/animation.gif
+
 chess
 ~~~~~
 
