@@ -1,8 +1,7 @@
-context("options work as expected")
-parser <- optparse::OptionParser()
-parser <- configuration_options(parser)
-
 test_that("options work as expected", {
+    parser <- optparse::OptionParser()
+    parser <- configuration_options(parser)
+
     cfg <- list(invert_colors.suited = TRUE,
                 background_colors = "white",
                 suit_colors = "darkred,black,darkgreen,darkblue,grey")
@@ -23,7 +22,6 @@ test_that("options work as expected", {
     expect_equal(should_invert("coin_face", 5, 1, list(invert_colors.coin_back = TRUE)), FALSE)
     expect_equal(should_invert("coin_face", 5, 1, list(invert_colors.coin_face = TRUE)), TRUE)
     expect_equal(should_invert("coin_face", 5, 1, list(invert_colors = FALSE)), FALSE)
-
 
     cfg <- list(suit_symbols="1,2,3,4,5",
                 rank_symbols="A,B,C,D,E,F",
@@ -70,7 +68,7 @@ test_that("get_component_opt works as expected", {
     expect_equal(opt$checker_col, "transparent")
     expect_equal(opt$gridline_col, "transparent") 
     expect_equal(opt$hexline_col, "transparent")
-    expect_equal(opt$ps_symbol, "N")
+    expect_equal(opt$ps_symbol, "n")
     expect_equal(opt$ps_fontsize, 28)
     expect_equal(opt$ps_font, "sans")
     # expect_equal(opt$suit_symbol, "\u2605")
@@ -100,4 +98,11 @@ test_that("get_component_opt works as expected", {
     # expect_equal(opt$dm_symbol, "\U0001f440")
     opt <- get_component_opt("pawn_back")
     expect_equal(opt$dm_symbol, "")
+})
+
+context("load_configurations works as expected")
+test_that("load_configurations works as expected", {
+    cfg <- load_configurations(internal_cfgs = c("french_suits_white", "swirl_s5"))
+    expect_equal(get_suit_symbol("saucer_face", 1, 1, cfg), "♡")
+    expect_equal(get_suit_symbol("saucer_back", 5, 1, cfg), "꩜")
 })

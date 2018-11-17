@@ -2,8 +2,7 @@
 
 options(error = quote(dump.frames("images_dump", TRUE)), warn=2)
 
-suppressPackageStartupMessages(library("optparse"))
-suppressPackageStartupMessages(library("piecepackr"))
+library("optparse")
 
 parser <- OptionParser(description="Program to make piecepack component images")
 parser <- add_option(parser, c('-c', '--cfg_file'), default=NULL, help="Source of piecepack style information (default stdin input)")
@@ -17,12 +16,12 @@ parser <- add_option(parser, "--dir_template", default="%format/components/%deck
 args <- parse_args(parser)
 cfg <- piecepackr::read_configuration(args$cfg_file)
                
-formats <- piecepackr::split(args$formats)
+formats <- piecepackr::cleave(args$formats)
 for (format in formats) {
     directory <- gsub("%deck_name", args$deck_name,
                         gsub("%format", format, args$dir_template))
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
-    thetas <- piecepackr::split(args$thetas, float=TRUE)
+    thetas <- piecepackr::cleave(args$thetas, float=TRUE)
     piecepackr::make_images(directory, cfg, format, thetas)
 }
 

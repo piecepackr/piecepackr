@@ -1,7 +1,6 @@
 {
-  "deck_title": ["Red-suited  (v0.10.0-0)"],
-  "deck_name": ["reversi5"],
-  "rank_symbols": ["N,A,2,3,4,5"],
+  "deck_title": ["Red-suited  (v0.10.1-0)"],
+  "rank_symbols": ["n,a,2,3,4,5"],
   "suit_symbols": ["♥,♦,🌞,♚,,,★"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Emoji,Noto Sans Symbols,Quivira,Quivira,Noto Sans Symbols"],

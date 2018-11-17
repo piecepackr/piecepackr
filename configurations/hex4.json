@@ -1,11 +1,7 @@
 {
-  "deck_title": ["Piecepack-suited (Hexpack-ish style) (v0.10.0-0)"],
-  "deck_name": ["hex4"],
-  "rank_symbols": ["N,A,2,3,4,5"],
-  "suit_symbols": ["♥,♠,♣,♦,꩜"],
+  "deck_title": ["Piecepack-suited (Hexpack-ish style) (v0.10.1-0)"],
+  "rank_symbols": ["n,a,2,3,4,5"],
   "rank_symbols_font": ["Noto Sans"],
-  "suit_symbols_font": ["Noto Sans Symbols"],
-  "suit_symbols_scale": ["1,1,1,1,0.9"],
   "suit_colors": ["darkred,black,darkgreen,darkblue,grey"],
   "gridline_colors": [""],
   "checker_colors.tile_back": ["grey"],
@@ -23,5 +19,10 @@
   "dm_symbols_scale.chip": ["0.7"],
   "dm_theta.chip": ["-90"],
   "shape.chip": ["3"],
-  "shape_theta.chip": ["-90"]
+  "shape_theta.chip": ["-90"],
+  "suit_symbols": ["♥,♠,♣,♦,"],
+  "suit_symbols_font": ["Noto Sans Symbols"],
+  "suit_symbols.s5": ["꩜"],
+  "suit_symbols_font.s5": ["Noto Sans Cham"],
+  "suit_symbols_scale.s5": [0.9]
 }

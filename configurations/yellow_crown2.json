@@ -1,7 +1,6 @@
 {
-  "deck_title": ["Inverted piecepack (v0.10.0-0)"],
-  "deck_name": ["yellow_crown2"],
-  "rank_symbols": ["O,A,2,3,4,5"],
+  "deck_title": ["Inverted piecepack (v0.10.1-0)"],
+  "rank_symbols": ["∅,A,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
   "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham"],
   "suit_symbols_scale": ["0.6,0.7,0.75,0.9,0.9"],

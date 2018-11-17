@@ -1,13 +1,11 @@
 {
-  "deck_title": ["Swiss-suited (White color scheme) (v0.10.0-0)"],
-  "deck_name": ["dual6"],
+  "deck_title": ["Swiss-suited (White color scheme) (v0.10.1-0)"],
   "rank_symbols": [",A,2,3,4,5"],
-  "suit_symbols": [",,,,"],
   "rank_symbols_font": ["Noto Sans"],
-  "suit_symbols_font": ["Quivira"],
-  "suit_symbols_scale": ["1"],
   "suit_colors": ["white,white,white,white,grey40"],
   "background_colors": ["grey70"],
   "use_suit_as_ace": [true],
-  "invert_colors.suited": [true]
+  "invert_colors.suited": [true],
+  "suit_symbols": [",,,,"],
+  "suit_symbols_font": ["Quivira"]
 }

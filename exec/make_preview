@@ -13,7 +13,7 @@ parser <- add_option(parser, "--formats", default="svg", help='Comma separated l
 
 args <- parse_args(parser)
 cfg <- piecepackr::read_configuration(args$cfg_file)
-formats <- piecepackr::split(args$formats)
+formats <- piecepackr::cleave(args$formats)
 
 for (format in formats) {
     directory <- gsub("%format", format, args$directory)

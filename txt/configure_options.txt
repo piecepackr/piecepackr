@@ -8,11 +8,14 @@ Options:
 	--deck_title=DECK_TITLE
 		(default "")
 
-	--deck_name=DECK_NAME
-		Filename prefix (default "piecepack_deck")
-
-	-f FILE, --file=FILE
+	-o OUTPUT_FILE, --output_file=OUTPUT_FILE
 		Filename to write configuration to (default outputs to standard output)
+
+	-c CFG_FILES, --cfg_files=CFG_FILES
+		Other JSON configuration files to import (default none)
+
+	-i INTERNAL_CFGS, --internal_cfgs=INTERNAL_CFGS
+		Internal piecepackr configurations to load (default none)
 
 	--rank_symbols=RANK_SYMBOLS
 		(default "N,A,2,3,4,5")

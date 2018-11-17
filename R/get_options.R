@@ -144,70 +144,62 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
     parser
 }
 
-parse_configuration <- function(parser, args) {
-    opts <- parse_args(parser, args)
-    opts
-}
-
-#' Generate piecepack configuration JSON
-#'
-#' Processes command-line options and writes to JSON.
-#' 
-#' @param args Character vector of command-line arguments.
-#' @export
-configure <- function(args=commandArgs(TRUE)) {
-    parser <- OptionParser(paste("Program to make piecepack configurations.",
-                               "Set environmental variables PP_N_RANKS and/or PP_N_SUITS to configure individual ranks/suits"))
-    parser <- add_option(parser, "--deck_title", default=NULL, 
-                         help=sprintf('(default "%s")', get_deck_title()))
-    parser <- add_option(parser, "--deck_name", default=NULL, 
-                         help=sprintf('Filename prefix (default "%s")', get_deck_filename()))
-    #### Change to output_file?
-    parser <- add_option(parser, c("-f", "--file"), default=NULL, 
-                         help="Filename to write configuration to (default outputs to standard output)")
-    parser <- configuration_options(parser)
-    opts <- parse_configuration(parser, args)
-    filename <- opts$file
-    opts$file <- NULL
-    opts$help <- NULL
-    .to_json(opts, filename)
-}
-
-.to_json <- function(opts, filename=NULL) {
-    if (is.null(filename)) {
-        writeLines(jsonlite::toJSON(opts, pretty=TRUE), stdout())
-    } else {
-        writeLines(jsonlite::toJSON(opts, pretty=TRUE), filename, useBytes=TRUE)
-    }
-}
 
 #' Read piecepack configuration JSON
 #'
 #' Read in and process piecepack configuration JSON.
 #' 
-#' @param cfg_file Filename of json configuration.  If `NULL` read in from standard input.
+#' @param cfg_file Filename of json configuration.  Default is to read in from standard input.
 #' @export
-read_configuration <- function(cfg_file) {
-    if (is.null(cfg_file)) 
-        con <- file("stdin")
-    else 
-        con <- file(cfg_file)
-    
+read_configuration <- function(cfg_file="stdin") {
+    con <- file(cfg_file)
     opts <- jsonlite::fromJSON(readLines(con, encoding="UTF-8"))
     close(con)
     opts
 }
 
-#' Read piecepack configuration list from command-line arguments
-#' 
-#' Read piecepack configuration list from command-line arguments
-#' 
-#' @param args Character vector of command-line arguments.
-#' @param pp_n_suits Number of suits to create individual suit options for
-#' @param pp_n_ranks Number of ranks to create individual rank options for
+swirl <- "\uaa5c" # ꩜
+star <- "\u2605" # ★
+french_suits <- "\u2665,\u2660,\u2663,\u2666," # ♥,♠,♣,♦,
+french_suits_white <- "\u2661,\u2664,\u2667,\u2662," # ♡,♤,♧,♢,
+chess_ranks <- "\u265f,\u265e,\u265d,\u265c,\u265b,\u265a" # ♟,♞,♝,♜,♛,♚
+# chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
+# chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
+ca_suits = "\u2665,\u2660,\u2663,\u2666,\u265a,\u2693," # ♥,♦,♣,♠,♚,⚓,
+swiss_suits = "\ue005,\ue004,\ue000,\ue003,\ue00a" # ,,,, 
+# swiss_suits = ' --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1'
+
+chess_ranks = "\u265f,\u265e,\u265d,\u265c,\u265b,\u265a" # ♟,♞,♝,♜,♛,♚
+
+CFG <- list(swirl_s5_noto = list(suit_symbols.s5 = swirl,
+                                suit_symbols_font.s5 = "Noto Sans Cham",
+                                suit_symbols_scale.s5 = 0.9),
+            swirl_s5 = list(suit_symbols.s5 = swirl), 
+            chess_ranks = list(rank_symbols = chess_ranks),
+            ca_suits_noto = list(suit_symbols = ca_suits, 
+                                suit_symbols.s7 = star,
+                               suit_symbols_scale=1,1,1,1,1,0.8,1,
+                               suit_symbols_font="Noto Sans Symbols"),
+            french_suits = list(suit_symbols = french_suits),
+            french_suits_noto = list(suit_symbols = french_suits, suit_symbols_font="Noto Sans Symbols"),
+            french_suits_white = list(suit_symbols = french_suits_white), 
+            french_suits_white_noto = list(suit_symbols = french_suits_white, suit_symbols_font="Noto Sans Symbols"),
+            swiss_suits_quivira = list(suit_symbols = swiss_suits, suit_symbols_font="Quivira")) 
+
+#' Load piecepack configurations
+#'
+#' Load in piecepack configurations
+#'
+#' @param cfg Configuration list to augment
+#' @param cfg_files Filenames of json configurations.
+#' @param internal_cfgs Strings of internal piecepackr configurations.
 #' @export
-c2o <- function(args=NULL, pp_n_suits=NULL, pp_n_ranks=NULL) {
-    parser <- OptionParser()
-    parser <- configuration_options(parser, pp_n_suits, pp_n_ranks)
-    parse_configuration(args)
+load_configurations <- function(cfg=list(), cfg_files=character(0), internal_cfgs=character(0)) {
+    for (cfg_file in cfg_files) {
+        cfg <- c(cfg, read_configuration(cfg_file))
+    }
+    for (internal_cfg in internal_cfgs) {
+        cfg <- c(cfg, CFG[[internal_cfg]])
+    }
+    cfg
 }

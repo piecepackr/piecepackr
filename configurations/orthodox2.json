@@ -1,11 +1,7 @@
 {
-  "deck_title": ["Orthodox-style 2-color french-suited piecepack (v0.10.0-0)"],
-  "deck_name": ["orthodox2"],
+  "deck_title": ["Orthodox-style 2-color french-suited piecepack (v0.10.1-0)"],
   "rank_symbols": [",A,2,3,4,5"],
-  "suit_symbols": ["♥,♠,♣,♦,꩜"],
   "rank_symbols_font": ["Noto Sans"],
-  "suit_symbols_font": ["Noto Sans Symbols"],
-  "suit_symbols_scale": ["1,1,1,1,0.9"],
   "suit_colors": ["darkred,black,black,darkred,black"],
   "use_suit_as_ace": [true],
   "suit_symbols.saucer_face": ["⚈,⚉,⚈,⚉,"],
@@ -27,5 +23,10 @@
   "dm_r.saucer": ["0.45"],
   "dm_colors.saucer": ["black"],
   "dm_symbols.chip": [""],
-  "shape.chip": ["kite"]
+  "shape.chip": ["kite"],
+  "suit_symbols": ["♥,♠,♣,♦,"],
+  "suit_symbols_font": ["Noto Sans Symbols"],
+  "suit_symbols.s5": ["꩜"],
+  "suit_symbols_font.s5": ["Noto Sans Cham"],
+  "suit_symbols_scale.s5": [0.9]
 }

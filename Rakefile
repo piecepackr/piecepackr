@@ -32,7 +32,7 @@ def make_piecepack (filename, extra_flags, n_suits=0, n_ranks=0)
     make_images = ENV.has_key?("make_images") # rake all make_images=
     configure_piecepack = "PP_N_RANKS=#{n_ranks} PP_N_SUITS=#{n_suits} Rscript exec/configure "
     json_file = "configurations/" + filename + ".json"
-    sh configure_piecepack + " --file=" + json_file + " --deck_name=" + filename + extra_flags
+    sh configure_piecepack + " --output_file=" + json_file + extra_flags
     sh "Rscript exec/make_pnp --cfg_file=" + json_file + " --deck_name=" + filename 
     sh "Rscript exec/make_preview --cfg_file=" + json_file + " --deck_name=" + filename 
     if make_images
@@ -66,19 +66,13 @@ rd_dark2 = "#ff0000,#ffc000,#008000,#0000ff,#800080,#000000,white"
 rd_light2 = "#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,white"
 
 # Suits
-ca_suits = ' --suit_symbols=♥,♦,♣,♠,♚,⚓,★ --suit_symbols_scale=1,1,1,1,1,0.8,1 --suit_symbols_font="Noto Sans Symbols"'
 jcd_suits = ' --suit_symbols=🌞,🌜,♚,⚓,꩜ --suit_symbols_scale=0.6,0.7,1,0.8,0.9 --suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham"'
-# french_suits = ' --suit_symbols=♥,♠,♣,♦,★ --suit_symbols_scale=1,1,1,1,1,1 --suit_symbols_font="Noto Sans Symbols"'
-french_suits_swirl = ' --suit_symbols=♥,♠,♣,♦,꩜ --suit_symbols_scale=1,1,1,1,0.9 --suit_symbols_font="Noto Sans Symbols"'
-french_suits_swirl_white = ' --suit_symbols=♡,♤,♧,♢,꩜ --suit_symbols_scale=1,1,1,1,0.9 --suit_symbols_font="Noto Sans Symbols"'
 all_french_suits = ' --suit_symbols=♥,♠,♣,♦,★,★,꩜ --suit_symbols_scale=1,1,1,1,1,1,0.9 --suit_symbols_font="Noto Sans Symbols"'
 # latin_suits_swirl = ' --suit_symbols=🏆,🗡️,⚕️,𐇛,꩜ --suit_symbols_scale=0.6,1,1,1.1,1'
 latin_suits_swirl = ' --suit_symbols=,,,,꩜ --suit_symbols_font=Quivira --suit_symbols_scale=0.9,1,1,1,0.9'
 piecepack_suits = ' --suit_symbols=🌞,🌜,👑,⚜,꩜ --suit_symbols_scale=0.6,0.7,0.75,0.9,0.9 --suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham"'
 all_piecepack_suits = ' --suit_symbols=🌞,🌜,👑,⚜,♚,⚓,꩜ --suit_symbols_scale=0.6,0.7,0.75,0.9,1,0.8,0.9 --suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,Noto Sans Cham"'
 rd_suits = ' --suit_symbols=♥,★,♣,♦,♛,♠,꩜ --suit_symbols_scale=1,1,1,1,0.85,1,0.9 --suit_symbols_font="Noto Sans Symbols"'
-# swiss_suits = ' --suit_symbols=🌹,⛊,🌰,🔔,★ --suit_symbols_scale=0.7,1.0,0.8,0.8,1'
-swiss_suits = ' --suit_symbols=,,,, --suit_symbols_font=Quivira --suit_symbols_scale=1'
 sixpack_suits = ' --suit_symbols=♥,♠,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=0.7,0.7,0.7,0.7,0.6,0.6,0.9 --suit_symbols_font="Noto Emoji"'
 sixpack_suits_black = ' --suit_symbols=♥,♠,♣,♦,☀,🌘,꩜ --suit_symbols_scale=1.2,1.2,1.2,1.2,1.2,0.7,0.9'
 sixpack_suits_white = ' --suit_symbols=♡,♤,♧,♢,☼,🌔,꩜ --suit_symbols_scale=1,1,1,1,1.4,0.7,0.9'
@@ -96,15 +90,11 @@ chinese_elements_emoji = ' --suit_symbols=🌲,🔥,⛰️,🏆,🌊, --suit_sym
 chinese_elements_sc = ' --suit_symbols=木,火,土,金,水, --suit_symbols_scale=0.7 --suit_symbols_font="Noto Sans CJK SC"' + chinese_elements_colors 
 
 # Ranks
-default_ranks = ' --rank_symbols=N,A,2,3,4,5'
-ibg_ranks = ' --rank_symbols=O,A,2,3,4,5'
+default_ranks = ' --rank_symbols=n,a,2,3,4,5'
+null_ace_ranks = ' --rank_symbols=∅,A,2,3,4,5'
 default_ranks_noto = default_ranks + ' --rank_symbols_font="Noto Sans"'
 orthodox_ranks = ' --rank_symbols=,A,2,3,4,5 --use_suit_as_ace'
 orthodox_ranks_noto = orthodox_ranks + ' --rank_symbols_font="Noto Sans"'
-# chess_ranks = " --rank_symbols=P,N,B,R,Q,K --rank_symbols_font='Chess Utrecht' --rank_symbols_scale=1.3"
-chess_ranks = " --rank_symbols=\u265f,\u265e,\u265d,\u265c,\u265b,\u265a" # ♟,♞,♝,♜,♛,♚
-chess_ranks_noto = chess_ranks + ' --rank_symbols_font="Noto Sans Symbols"' 
-# chess_ranks = " --rank_symbols=♘,♙,♗,♖,♕,♔"
 chinese_ranks_emoji1 = ' --rank_symbols=🐀,🐉,🐒,🐂,🐍,🐓 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
 chinese_ranks_emoji2 = ' --rank_symbols=🐅,🐎,🐕,🐇,🐏,🐖 --rank_symbols_scale=0.6 --rank_symbols_font="Noto Emoji"'
 chinese_ranks_sc1 = ' --rank_symbols=鼠,龙,猴,牛,蛇,鸡 --rank_symbols_font="Noto Sans CJK SC" --rank_symbols_scale=0.7'
@@ -136,32 +126,39 @@ desc "Chess demo"
 task :chess do
     deck_title = ' --deck_title="Piecepack-suits' + version_str
     file = "chess1"
-    make_piecepack file, deck_title + piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black" + chess_ranks
+    extra_flags = " --checker_colors.tile_face=grey --suit_colors=darkred,black,dimgrey,hotpink2,grey"
+    internal_cfgs = " --internal_cfgs=chess_ranks"
+    make_piecepack file, deck_title + piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black"
 
     deck_title = ' --deck_title="French-suits (checkered tile faces)' + version_str
     file = "chess2"
     extra_flags = " --checker_colors.tile_face=grey --suit_colors=darkred,black,dimgrey,hotpink2,grey"
-    make_piecepack file, deck_title + french_suits_swirl + chess_ranks + extra_flags 
+    internal_cfgs = " --internal_cfgs=chess_ranks,french_suits_noto,swirl_s5_noto"
+    make_piecepack file, deck_title + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Black-suits (checkered tile backs)' + version_str
     file = "chess3"
     extra_flags = " --checker_colors.tile_back=darkred --gridline_colors=  --suit_colors=black,black,black,black,darkred" + coin_black_suits4
-    make_piecepack file, deck_title + black_suits4 + chess_ranks + extra_flags 
+    internal_cfgs = " --internal_cfgs=chess_ranks"
+    make_piecepack file, deck_title + black_suits4 + + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Red-suits (checkered tile backs)' + version_str
     file = "chess4"
     extra_flags = " --checker_colors.tile_back=black --gridline_colors= --suit_colors=darkred,darkred,darkred,darkred,black" + coin_red_suits4
-    make_piecepack file, deck_title + red_suits4 + chess_ranks + extra_flags 
+    internal_cfgs = " --internal_cfgs=chess_ranks"
+    make_piecepack file, deck_title + red_suits4 + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Black-suits (checkered tile faces)' + version_str
     file = "chess5"
     extra_flags = " --checker_colors.tile_face=grey --suit_colors=black,black,black,black,black,black,darkred" + coin_black_suits6
-    make_piecepack file, deck_title + black_suits6 + chess_ranks + extra_flags 
+    internal_cfgs = " --internal_cfgs=chess_ranks"
+    make_piecepack file, deck_title + black_suits6 + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Red-suits (checkered tile faces)' + version_str
     file = "chess6"
     extra_flags = " --checker_colors.tile_face=grey --suit_colors=darkred,darkred,darkred,darkred,darkred,darkred,black " + coin_red_suits6
-    make_piecepack file, deck_title + red_suits6 + chess_ranks + extra_flags 
+    internal_cfgs = " --internal_cfgs=chess_ranks"
+    make_piecepack file, deck_title + red_suits6 + extra_flags + internal_cfgs
 
     decks = " --deck_names=chess1,chess2,chess3,chess4,chess5,chess6"
     sh collect_piecepacks + ' --collection_name=chess_demo --title="Chess ranked piecepack demo' + version_str + decks
@@ -197,32 +194,38 @@ task :crown_and_anchor do
     deck_title = ' --deck_title="Crown and anchor suits' + version_str
     file = "crown_and_anchor1"
     extra_flags = " --suit_colors=darkred,darkred,black,black,darkred,black,grey"
-    make_piecepack file,  deck_title + ca_suits + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=ca_suits_noto"
+    make_piecepack file,  deck_title + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Crown and anchor suits (Multicolor)' + version_str
     file = "crown_and_anchor2"
     extra_flags = " --suit_colors=darkred,darkblue,darkgreen,black,purple,orange2,grey"
-    make_piecepack file, deck_title + ca_suits + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs=ca_suits_noto"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="JCD piecepack suits (Monoscale)' + version_str
     file = "crown_and_anchor3"
     extra_flags = " --suit_colors=black,white,black,white,black --background_colors=white,black,white,black,white"
-    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="JCD piecepack suits (Black/Red)' + version_str
     file = "crown_and_anchor4"
     extra_flags = " --suit_colors=darkred,black,darkred,black,grey"
-    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="JCD piecepack suits (Multicolor)' + version_str
     file = "crown_and_anchor5"
     extra_flags = " --suit_colors=darkred,black,darkgreen,darkblue,grey"
-    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="JCD piecepack suits (Alternative Multicolor)' + version_str
     file = "crown_and_anchor6"
     extra_flags = " --suit_colors=yellow,white,purple,orange2,tan4 --background_colors=seashell3"
-    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + jcd_suits + default_ranks_noto + extra_flags+ internal_cfgs
 
     title = ' --title="Crown and anchor demo' + version_str
     decks = " --deck_names=crown_and_anchor1,crown_and_anchor2,crown_and_anchor3,crown_and_anchor4,crown_and_anchor5,crown_and_anchor6"
@@ -233,7 +236,8 @@ desc "Default piecepack demo"
 task :default do
     file = "default"
     extra_flags = '' + colorblind_friendly
-    make_piecepack file, extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, extra_flags+ internal_cfgs
 
     decks = " --deck_names=default"
     title = ' --title="Default piecepack deck demo' + version_str
@@ -246,35 +250,41 @@ task :dual do
     deck_title = ' --deck_title="Piecepack-suited (Un-inverted color scheme)' + version_str
     file = "dual1"
     extra_flags = " --suit_colors=" + dark_scheme
-    make_piecepack file, deck_title + piecepack_suits + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + piecepack_suits + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Latin-suited (Inverted color scheme)' + version_str
     file = "dual2"
     extra_flags = "  --background_colors=white --invert_colors.suited --suit_colors=" + dark_scheme
-    make_piecepack file, deck_title + latin_suits_swirl + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + latin_suits_swirl + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="French-suited (Dark color scheme)' + version_str
     file = "dual3"
     extra_flags = hexlines_dark + ' --suit_colors=' + dark_scheme
-    make_piecepack file, deck_title + french_suits_swirl + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=french_suits_noto,swirl_s5"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="French-suited (Light color scheme)' + version_str
     file = "dual4"
     # extra_flags = " --suit_colors=" + light_scheme + hexlines_light
     extra_flags = hexlines_dark + ' --suit_colors=' + dark_scheme
-    make_piecepack file, deck_title + french_suits_swirl_white + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs=french_suits_white_noto,swirl_s5"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="Swiss-suited (Black color scheme)' + version_str
     black_scheme = " --suit_colors=black,black,black,black,grey40 --background_colors=grey70"
     file = "dual5"
     extra_flags = " --invert_colors.suited --use_suit_as_ace" + black_scheme
-    make_piecepack file, deck_title + swiss_suits + orthodox_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs=swiss_suits_quivira"
+    make_piecepack file, deck_title + orthodox_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="Swiss-suited (White color scheme)' + version_str
     white_scheme = " --suit_colors=white,white,white,white,grey40 --background_colors=grey70"
     file = "dual6"
     extra_flags = " --invert_colors.suited --use_suit_as_ace" + white_scheme
-    make_piecepack file, deck_title + swiss_suits + orthodox_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs=swiss_suits_quivira"
+    make_piecepack file, deck_title + orthodox_ranks_noto + extra_flags+ internal_cfgs
 
     title = ' --title="Dual piecepacks proof of concept' + version_str
     decks = " --deck_names=dual1,dual2,dual3,dual4,dual5,dual6"
@@ -286,24 +296,26 @@ task :hex do
     deck_title = ' --deck_title="French-suited (Colored hexlines on tile faces)' + version_str
     file = "hex1"
     extra_flags = hexlines_dark + ' --suit_colors=' + dark_scheme
-    make_piecepack file, deck_title + french_suits_swirl + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=french_suits_noto,swirl_s5_noto"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="French-suited (Grey hexlines on tile faces/backs)' + version_str
     file = "hex2"
     extra_flags = " --hexline_colors.tile=grey" + ' --suit_colors=' + dark_scheme
-    make_piecepack file, deck_title + french_suits_swirl + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=french_suits_noto,swirl_s5_noto"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Piecepack-suited (Hex-shaped tile faces/backs)' + version_str
     file = "hex3" 
     extra_flags = " --dm_theta.tile_face=120" + hex_components + " --background_colors=hotpink2,grey,grey,hotpink2,white" + ' --suit_colors=' + dark_scheme
-
-    make_piecepack file, deck_title + french_suits_swirl + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=french_suits_noto,swirl_s5_noto"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Piecepack-suited (Hexpack-ish style)' + version_str
     file = "hex4"
     extra_flags = " --shape_theta.tile_face=0 --shape_theta.tile_back=0 --dm_theta.tile_face=-90 --gridline_colors= --checker_colors.tile_back=grey --suit_colors.chip_back=" + hex_components + ' --suit_colors=' + dark_scheme
-
-    make_piecepack file, deck_title + french_suits_swirl + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=french_suits_noto,swirl_s5_noto"
+    make_piecepack file, deck_title + default_ranks_noto + extra_flags + internal_cfgs
 
     decks = " --deck_names=hex1,hex2,hex3,hex4"
     sh collect_piecepacks + ' --collection_name=hex_demo --title="Hex-friendly piecepack demo' + version_str + decks
@@ -315,13 +327,15 @@ task :orthodox do
     suit_symbols = piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black"
     file = "orthodox1"
     extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers1 + orthodox_pawns
-    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="Orthodox-style 2-color french-suited piecepack' + version_str
-    suit_symbols = french_suits_swirl + " --suit_colors=darkred,black,black,darkred,black "
+    suit_symbols = " --suit_colors=darkred,black,black,darkred,black "
     file = "orthodox2"
     extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers2 + orthodox_pawns
-    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs=french_suits_noto,swirl_s5_noto"
+    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags + internal_cfgs
 
     decks = " --deck_names=orthodox1,orthodox2"
     sh collect_piecepacks + ' --collection_name=orthodox_demo --title="Orthodox demo' + version_str + decks
@@ -333,25 +347,29 @@ task :yellow_crown do
     suit_symbols = piecepack_suits + " --suit_colors=darkred,black,gold,darkblue,black"
     file = "yellow_crown1"
     extra_flags = " --use_suit_as_ace" + pyramid_configuration + orthodox_dm + orthodox_saucers1 + orthodox_pawns
-    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="Inverted piecepack' + version_str
     suit_symbols = piecepack_suits + " --suit_colors=darkred,black,gold,darkblue,black"
     file = "yellow_crown2"
     extra_flags = " --invert_colors.suited --uninvert_colors.r1 --invert_colors.s5.r1" 
-    make_piecepack file, deck_title + suit_symbols + ibg_ranks + extra_flags, 5, 1
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + null_ace_ranks + extra_flags + internal_cfgs, 5, 1
 
     deck_title = ' --deck_title="All piecepack suits' + version_str
     suit_symbols = all_piecepack_suits + " --suit_colors=red,black,green,dodgerblue2,yellow2,darkblue,sienna"
     file = "yellow_crown3"
     extra_flags = " --background_colors=black,white,white,black,black,white,grey"
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags+ internal_cfgs
 
     deck_title = ' --deck_title="All french suits' + version_str
     suit_symbols = all_french_suits + " --suit_colors=red,black,green,dodgerblue2,yellow2,darkblue,sienna"
     file = "yellow_crown4"
     extra_flags = " --background_colors=black,white,white,black,black,white,grey"
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags+ internal_cfgs
 
     decks = " --deck_names=yellow_crown1,yellow_crown2,yellow_crown3,yellow_crown4"
     sh collect_piecepacks + ' --collection_name=yellow_crown_demo --title="Yellow Crown demo' + version_str + decks
@@ -369,14 +387,16 @@ task :rd1 do
     suit_symbols = rd_suits + ' --suit_colors=' + rd_dark
     file = "rainbow_deck1"
     extra_flags = dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 end
 task :rd2 do
     deck_title = ' --deck_title="RD-suited piecepack (Light suits)' + version_str
     suit_symbols = rd_suits + ' --suit_colors=' + rd_light
     file = "rainbow_deck2"
     extra_flags = dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 end
 rd_background = " --background_colors=sienna"
 task :rd3 do
@@ -384,28 +404,32 @@ task :rd3 do
     suit_symbols = rd_suits + ' --suit_colors=' + rd_dark2
     file = "rainbow_deck3"
     extra_flags = "" + rd_background + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 end
 task :rd4 do
     deck_title = ' --deck_title="RD-suited piecepack (Light suits)' + version_str
     suit_symbols = rd_suits + ' --suit_colors=' + rd_light2
     file = "rainbow_deck4"
     extra_flags = "" + rd_background + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 end
 task :rd5 do
     deck_title = ' --deck_title="RD-suited piecepack (Dark suits)' + version_str
     suit_symbols = rd_suits + ' --suit_colors=' + rd_dark
     file = "rainbow_deck5"
     extra_flags = " --background_colors.unsuited=grey" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 end
 task :rd6 do
     deck_title = ' --deck_title="RD-suited piecepack (Light suits)' + version_str
     suit_symbols = rd_suits + ' --suit_colors=' + rd_light
     file = "rainbow_deck6"
     extra_flags = " --background_colors.suited=black --background_colors.unsuited=grey" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 end
 
 desc "Reversi-friendly piecepacks demo"
@@ -414,37 +438,43 @@ task :reversi do
     suit_symbols = piecepack_suits + ' --suit_colors=' + dark_scheme
     file = "reversi1"
     extra_flags = " --background_colors.suited=tan3 --background_colors.chip_back=white"
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Elements-suited' + version_str
     suit_symbols = alchemical_elements
     file = "reversi2"
     extra_flags = " --background_colors.suited=black --background_colors.chip_back=white"
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Sixpack (Black suits)' + version_str
     suit_symbols = sixpack_suits_black + " --suit_colors=black,black,black,black,black,black,grey"
     file = "reversi3"
     extra_flags = " --suit_colors.chip_back=grey" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Sixpack (White suits)' + version_str
     suit_symbols = sixpack_suits_white + " --suit_colors=black,black,black,black,black,black,grey"
     file = "reversi4"
     extra_flags = " --suit_colors.chip_back=grey" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Red-suited ' + version_str
     suit_symbols = red_suits6 + " --suit_colors=white --background_colors.suited=darkred --background_colors.unsuited=black"
     file = "reversi5"
     extra_flags = " --background_colors.chip_back=black" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Black-suited ' + version_str
     suit_symbols = black_suits6 + " --suit_colors=white --background_colors.suited=black --background_colors.unsuited=darkred"
     file = "reversi6"
     extra_flags = " --background_colors.chip_back=darkred" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     decks = " --deck_names=reversi1,reversi2,reversi3,reversi4,reversi5,reversi6"
     sh collect_piecepacks + ' --collection_name=reversi_demo --title="Reversi-friendly piecepacks demo' + version_str + decks
@@ -456,26 +486,30 @@ task :sixpack do
     suit_symbols = sixpack_suits + ' --suit_colors=darkred,black,black,darkred,darkred,black,grey'
     file = "sixpack1"
     extra_flags = ""
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Sixpack (Orthodox style)' + version_str
     suit_symbols = sixpack_suits + ' --suit_colors=darkred,black,black,darkred,darkred,black,black'
     file = "sixpack2"
     extra_flags = "" + pyramid_configuration + orthodox_dm + orthodox_saucers3 + orthodox_pawns6p
-    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + orthodox_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Sixpack (Dark multicolor scheme)' + version_str
     # sixpack_suits2 = " --suit_symbols=♥,♤,♣,♦,🌞,🌜,꩜ --suit_symbols_scale=1,1,1,1,0.7,0.8,1"
     suit_symbols = sixpack_suits + ' --suit_colors=darkred,black,darkgreen,darkblue,orange3,purple,tan4'
     file = "sixpack3"
     extra_flags = " --background_colors.unsuited=seashell3" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     deck_title = ' --deck_title="Sixpack (Light multicolor scheme)' + version_str
     suit_symbols = sixpack_suits + ' --suit_colors=hotpink2,grey,palegreen,lightblue1,yellow,white,tan4'
     file = "sixpack4"
     extra_flags = " --background_colors.unsuited=seashell3 --background_colors.suited=black" + dozenal_chips
-    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags 
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, deck_title + suit_symbols + default_ranks_noto + extra_flags + internal_cfgs
 
     decks = " --deck_names=sixpack1,sixpack2,sixpack3,sixpack4"
     sh collect_piecepacks + ' --collection_name=sixpack_demo --title="Sixpack demo' + version_str + decks
@@ -581,23 +615,27 @@ task :test => :clean
 task :test => :document
 task :test do
     sh 'Rscript -e "devtools::test()"'
-    extra_flags = " --use_suit_as_ace --rank_symbols.chip_face='A,B,C,D,E,F'"
     file = "test1"
-    make_piecepack file,  piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black" + orthodox_ranks_noto + extra_flags 
+    extra_flags = " --use_suit_as_ace --rank_symbols.chip_face='A,B,C,D,E,F' --suit_symbols.suited=^"
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file,  piecepack_suits + " --suit_colors=darkred,black,darkgreen,darkblue,black" + orthodox_ranks_noto + extra_flags + internal_cfgs
 
-    extra_flags = " --pp_die_arrangement=opposites_sum_to_5 --invert_colors.suited  --background_colors=white" + star_chips
     file = "test2"
-    make_piecepack file, latin_suits_swirl + default_ranks_noto + extra_flags
+    extra_flags = " --pp_die_arrangement=opposites_sum_to_5 --invert_colors.suited  --background_colors=white" + star_chips
+    internal_cfgs = " --internal_cfgs="
+    make_piecepack file, latin_suits_swirl + default_ranks_noto + extra_flags+ internal_cfgs
 
     # suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
-    # extra_flags = " --dm_symbols= --dm_symbols.tile_face=♥,♠,♣,♦,★ --background_colors.unsuited=orange" 
     # file = "test3"
-    # make_piecepack file, suit_symbols + default_ranks_noto + extra_flags
+    # extra_flags = " --dm_symbols= --dm_symbols.tile_face=♥,♠,♣,♦,★ --background_colors.unsuited=orange" 
+    # internal_cfgs = " --internal_cfgs="
+    # make_piecepack file, suit_symbols + default_ranks_noto + extra_flags+ internal_cfgs
 
     # suit_symbols = " --suit_symbols=♥,♠,♣,♦,★"
-    # extra_flags = " --suit_colors=" + light_scheme + " --invert_colors.unsuited --background_colors=white --font='Deja Vu Sans'" + hexlines_light
     # file = "test4"
-    # make_piecepack file, suit_symbols + default_ranks_noto + extra_flags
+    # extra_flags = " --suit_colors=" + light_scheme + " --invert_colors.unsuited --background_colors=white --font='Deja Vu Sans'" + hexlines_light
+    # internal_cfgs = " --internal_cfgs="
+    # make_piecepack file, suit_symbols + default_ranks_noto + extra_flags+ internal_cfgs
 
     # decks = " --deck_names=test1,test2,test3,test4"
     decks = " --deck_names=test1,test2"

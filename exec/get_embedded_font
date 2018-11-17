@@ -16,8 +16,8 @@ parser <- add_option(parser, c("-f", "--font"), default="sans", help='(comma sep
 parser <- add_option(parser, c("-c", "--char"), default=default_chars, help='(comma separated) list of Characters (default = "%default"')
 opts <- parse_args(parser)
 
-font <- piecepack::split(opts$font)
-char <- piecepack::split(opts$char)
+font <- piecepack::cleave(opts$font)
+char <- piecepack::cleave(opts$char)
 
 df <- expand.grid(char, font, stringsAsFactors=FALSE)
 names(df) <- c("char", "requested_font")

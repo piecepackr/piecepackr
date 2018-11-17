@@ -4,10 +4,10 @@
 \alias{read_configuration}
 \title{Read piecepack configuration JSON}
 \usage{
-read_configuration(cfg_file)
+read_configuration(cfg_file = "stdin")
 }
 \arguments{
-\item{cfg_file}{Filename of json configuration.  If `NULL` read in from standard input.}
+\item{cfg_file}{Filename of json configuration.  Default is to read in from standard input.}
 }
 \description{
 Read in and process piecepack configuration JSON.

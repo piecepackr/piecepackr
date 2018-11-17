@@ -1,4 +1,35 @@
 #!/usr/bin/env Rscript
 options(error = quote(dump.frames("configure_dump", TRUE)), warn=2)
 
-piecepackr::configure()
+library("optparse")
+
+parser <- OptionParser(paste("Program to make piecepack configurations.",
+                           "Set environmental variables PP_N_RANKS and/or PP_N_SUITS to configure individual ranks/suits"))
+
+#### Move deck_title elsewhere? Author/license metadata?
+parser <- add_option(parser, "--deck_title", default=NULL, 
+                     help=sprintf('(default "%s")', piecepackr:::get_deck_title()))
+
+parser <- add_option(parser, c("-o", "--output_file"), default=NULL, 
+                     help="Filename to write configuration to (default outputs to standard output)")
+parser <- add_option(parser, c("-c", "--cfg_files"), default=character(),
+                    help="Other JSON configuration files to import (default none)")
+parser <- add_option(parser, c("-i", "--internal_cfgs"), default="",
+                    help="Internal piecepackr configurations to load (default none)")
+
+parser <- piecepackr:::configuration_options(parser)
+
+cfg <- parse_args(parser)
+cfg <- piecepackr::load_configurations(cfg, piecepackr::cleave(cfg$cfg_files), piecepackr::cleave(cfg$internal_cfgs))
+
+filename <- cfg$output_file
+cfg$output_file <- NULL
+cfg$cfg_files <- NULL
+cfg$internal_cfgs <- NULL
+cfg$help <- NULL
+
+if (is.null(filename)) {
+    writeLines(jsonlite::toJSON(cfg, pretty=TRUE), stdout())
+} else {
+    writeLines(jsonlite::toJSON(cfg, pretty=TRUE), filename, useBytes=TRUE)
+}

@@ -1,7 +1,6 @@
 {
-  "deck_title": ["Sixpack (Black suits) (v0.10.0-0)"],
-  "deck_name": ["reversi3"],
-  "rank_symbols": ["N,A,2,3,4,5"],
+  "deck_title": ["Sixpack (Black suits) (v0.10.1-0)"],
+  "rank_symbols": ["n,a,2,3,4,5"],
   "suit_symbols": ["♥,♠,♣,♦,☀,🌘,꩜"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_scale": ["1.2,1.2,1.2,1.2,1.2,0.7,0.9"],

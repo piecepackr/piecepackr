@@ -1,7 +1,5 @@
 {
-  "deck_title": ["Black-suits (checkered tile faces) (v0.10.0-0)"],
-  "deck_name": ["chess5"],
-  "rank_symbols": ["♟,♞,♝,♜,♛,♚"],
+  "deck_title": ["Black-suits (checkered tile faces) (v0.10.1-0)"],
   "suit_symbols": ["♠,♣,🌜,⚓,,,★"],
   "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols"],
   "suit_symbols_scale": ["1,1,0.8,0.8,1,1,1"],
@@ -13,5 +11,6 @@
   "dm_symbols.coin_back": ["♠,♣,🌜,⚓,,,★"],
   "dm_symbols_font.coin_back": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols2,DejaVu Sans,Quivira,Quivira,Noto Sans Symbols"],
   "dm_symbols_scale.coin_back": ["1,1,0.8,1,1,1,1"],
-  "dm_symbols.coin_face": ["★"]
+  "dm_symbols.coin_face": ["★"],
+  "rank_symbols": ["♟,♞,♝,♜,♛,♚"]
 }

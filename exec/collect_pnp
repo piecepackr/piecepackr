@@ -43,7 +43,7 @@ parser <- add_option(parser, "--font", default=piecepackr:::get_font(),
 
 args <- parse_args(parser)
 
-decks <- piecepackr::split(args$deck_names)
+decks <- piecepackr::cleave(args$deck_names)
 output_preview_filename <- file.path(args$output_preview_dir, paste0(args$collection_name, ".", args$format))
 input_preview_filenames <- file.path(args$input_preview_dir, paste0(decks, ".svg"))
 piecepackr::make_collection_preview(output_preview_filename, input_preview_filenames, args$size)

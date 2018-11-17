@@ -1,7 +1,6 @@
 {
-  "deck_title": ["JCD piecepack suits (Black/Red) (v0.10.0-0)"],
-  "deck_name": ["crown_and_anchor4"],
-  "rank_symbols": ["N,A,2,3,4,5"],
+  "deck_title": ["JCD piecepack suits (Black/Red) (v0.10.1-0)"],
+  "rank_symbols": ["n,a,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,♚,⚓,꩜"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Sans Symbols,DejaVu Sans,Noto Sans Cham"],
