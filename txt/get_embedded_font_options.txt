@@ -9,6 +9,6 @@ Options:
 		(comma separated) list of Fonts (default "sans")
 
 	-c CHAR, --char=CHAR
-		(comma separated) list of Characters (default = "♥,♠,♣,♦,☼,N,A,2,3,4,5,,●,▲,ʘʘ"
+		(comma separated) list of Characters (default = "♥,♠,♣,♦,☼,n,a,2,3,4,5,,●,▲,ʘʘ"
 
 

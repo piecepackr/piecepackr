@@ -3,11 +3,14 @@ FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 #' @importFrom optparse OptionParser add_option parse_args
 configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
 
+    #### dm_thetas, ps_thetas? vectorize ps by suit or rank depending on context?
     # Symbols
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
                          help=sprintf('(default "%s")', paste(get_rank_symbols(expand=FALSE), collapse=",")))
     parser <- add_option(parser, "--suit_symbols", default=NULL, 
                          help=sprintf('(default "%s")', paste(get_suit_symbols(expand=FALSE), collapse=","))) 
+    parser <- add_option(parser, "--ps_symbol", default=NULL, 
+                         help='(default is to try to pick a reasonable primary symbol based on the component)')
     parser <- add_option(parser, "--dm_symbols", default=NULL, 
                          help='(default is to try to pick a reasonable directional mark symbol based on the component)')
     parser <- add_option(parser, "--header_font", default=NULL, 
@@ -18,12 +21,20 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
                          help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--dm_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
+    parser <- add_option(parser, "--ps_font", default=NULL, 
+                         help='(default is to use the value of the relevant suit/rank font)')
     parser <- add_option(parser, "--rank_symbols_scale", default=NULL, 
                          help='(default is not to adjust scale)')
     parser <- add_option(parser, "--suit_symbols_scale", default=NULL, 
                          help='(default is not to adjust scale)')
     parser <- add_option(parser, "--dm_symbols_scale", default=NULL, 
                          help='(default is not to adjust scale)')
+    parser <- add_option(parser, "--ps_scale", default=NULL, 
+                         help='(default is not to adjust scale)')
+    parser <- add_option(parser, "--ps_fontsize", default=NULL, 
+                         help='(default is to pick a reasonable fontsize based on the component)')
+    parser <- add_option(parser, "--dm_fontsize", default=NULL, 
+                         help='(default is to pick a reasonable fontsize based on the component)')
 
     # Style
     parser <- add_option(parser, "--shape", default=NULL,
@@ -57,6 +68,8 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
     parser <- add_option(parser, "--suit_colors", default=NULL, 
                          help=sprintf('(default "%s")', paste(get_suit_colors(expand=FALSE), collapse=",")))
     parser <- add_option(parser, "--dm_colors", default=NULL, 
+                         help='(default the value of the "suit_colors" option)')
+    parser <- add_option(parser, "--ps_color", default=NULL, 
                          help='(default the value of the "suit_colors" option)')
     parser <- add_option(parser, "--background_colors", default=NULL, 
                          help='(default "white")') 
@@ -114,9 +127,10 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
     affixes <- paste0(dfs$suit, dfs$rank, dfs$component)
     styles <- c("rank_symbols", "rank_symbols_font", "rank_symbols_scale",
                 "suit_symbols", "suit_symbols_font", "suit_symbols_scale",
-                "dm_symbols", "dm_symbols_font", "dm_symbols_scale",
+                "dm_symbols", "dm_symbols_font", "dm_symbols_scale", "dm_fontsize",
+                "ps_symbol", "ps_font", "ps_scale", "ps_fontsize",
                 "dm_theta", "dm_r", "ps_theta", "ps_r",
-                "dm_colors", "suit_colors", "background_colors",
+                "dm_colors", "ps_color", "suit_colors", "background_colors",
                 "hexline_colors", "checker_colors", "gridline_colors", "ribbon_colors",
                 "border_colors", 
                 "shape", "shape_theta")
