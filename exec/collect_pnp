@@ -11,12 +11,13 @@ parser <- add_option(parser, "--collection_name", default="piecepack_collection"
 parser <- add_option(parser, "--format", default="pdf", help='Currently only pdf is supported (default "%default")')
 
 # Metadata to include
-parser <- add_option(parser, "--author", default=piecepackr:::get_author(),
+parser <- add_option(parser, "--author", "",
                      help='Pdf author (default "")')
-parser <- add_option(parser, "--keywords", default=piecepackr:::get_keywords(),
+parser <- add_option(parser, "--keywords", default="piecepack",
                      help='Pdf keywords (default "%default")')
-parser <- add_option(parser, "--subject", default=piecepackr:::get_subject(), 
+parser <- add_option(parser, "--subject", default="", 
                      help='Pdf subject (default "%default")')
+####
 parser <- add_option(parser, "--title", default=piecepackr:::get_title(), 
                      help='Pdf title (default "%default")')
 
