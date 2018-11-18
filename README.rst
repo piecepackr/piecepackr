@@ -27,6 +27,7 @@ Demos
 -----
 
 .. image:: https://www.trevorldavis.com/share/piecepack/animation.gif
+   :alt: Previews of selected demo piecepack configurations
 
 chess
 ~~~~~
@@ -365,4 +366,8 @@ How do I use this package in piecepack rulesets?
 There are two main ways that this package could be used to help make piecepack rulesets:
 
 1) The ``make_images`` executable makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
-2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important functions for diagram drawing exported by the ``piecepack`` R package are ``load_configurations`` used to load various piecepack configurations and ``draw_component`` which draws piecepack components to the graphics device.
+2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important functions for diagram drawing exported by the ``piecepack`` R package are ``load_configurations`` used to load various piecepack configurations and ``draw_component`` which draws piecepack components to the graphics device.  Below is an animation demonstrating how to use the ``piecpackr`` and ``grid`` API's to make a simple tic-tac-toe game diagram (the animation itself was also made with the help of the `animation <https://cran.r-project.org/web/packages/animation/index.html>`_ package):
+
+
+.. image:: https://www.trevorldavis.com/share/piecepack/tictactoe.gif
+   :alt: Example animation of using piecepackr to create piecepack game diagrams
