@@ -2,11 +2,19 @@
 % Please edit documentation in R/make_images.R
 \name{draw_component}
 \alias{draw_component}
-\title{Draw piecepack component}
+\alias{draw_component_wrapper}
+\alias{draw_components}
+\title{Draw piecepack components}
 \usage{
 draw_component(component_side, cfg = list(), i_s = get_i_unsuit(cfg),
   i_r = 0, x = 0.5, y = 0.5, width = NULL, height = NULL,
   svg = FALSE, ...)
+
+draw_component_wrapper(..., component_side = "tile_back", x = 0.5,
+  y = 0.5, cfg_name = NA, i_s = NA, i_r = NA, width = NA,
+  height = NA, svg = FALSE, units = "npc", angle = 0)
+
+draw_components(df)
 }
 \arguments{
 \item{component_side}{A string with component and side separated by a underscore e.g. "coin_face"}
@@ -17,9 +25,9 @@ draw_component(component_side, cfg = list(), i_s = get_i_unsuit(cfg),
 
 \item{i_r}{Number of rank}
 
-\item{x}{Number between 0 and 1 of where to place component}
+\item{x}{Where to place component on x axis of viewport}
 
-\item{y}{Number between 0 and 1 of where to place component}
+\item{y}{Where to place component on y axis of viewport}
 
 \item{width}{Width of component}
 
@@ -31,7 +39,19 @@ This is useful if drawing really big or small and don't want
 to play with re-configuring fontsizes.}
 
 \item{...}{Extra arguments to pass to \code{grid::viewport} like \code{angle}.}
+
+\item{cfg_name}{String of R variable storing configuration}
+
+\item{units}{String specifying the units for the corresponding numeric values}
+
+\item{angle}{Angle to rotate component}
+
+\item{df}{A data frame specifying arguments to ``draw_component_wrapper``}
 }
 \description{
-Draws a piecepack component onto the graphics device
+\code{draw_component} Draws a single piecepack component onto the graphics device.  
+\code{draw_components} draws several piecepack components specified in a data frame  
+   applying \code{draw_component_wrapper} to each row.
+
+Draw piecepack components specified by a data frame
 }

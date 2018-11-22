@@ -4,13 +4,15 @@
 \alias{make_collection_preview}
 \title{Make collection preview}
 \usage{
-make_collection_preview(output_filename, input_filenames,
+make_collection_preview(output_filename, input_filenames, title = "",
   size = "letter")
 }
 \arguments{
 \item{output_filename}{Filename of PnP output}
 
 \item{input_filenames}{Vector of input filenames}
+
+\item{title}{Title of collection}
 
 \item{size}{PnP output size (currently either "letter" or "A4")}
 }

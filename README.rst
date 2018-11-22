@@ -47,7 +47,7 @@ A demo `print-and-play pdf <https://www.dropbox.com/s/pir2aau09yl11h5/crown_and_
 default
 ~~~~~~~
 
-A demo `print-and-play pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`__ of the default type of piecepack built by this software if the user does no configuration.  It currently builds a 4-suited piecepack using `multicolored french-suits <https://en.wikipedia.org/wiki/Four-color_deck>`_ so that it works on multiple OS platforms out of the box without the user first needing to install/configure fonts.  It also uses a `colorblind barrier-free color pallet <http://jfly.iam.u-tokyo.ac.jp/color/#see>`_ and a suit symbol on every suited component so it can be accessible for the color-blind (as well as being decipharable if printed in grayscale) and uses a white background so not a lot of toner needs to be used in printing out these default piecepack graphics.
+A demo `print-and-play pdf <https://www.dropbox.com/s/7k1nrhc0sgwm0e3/default_demo.pdf?dl=0>`__ of the default type of piecepack built by this software if the user does no configuration.  It currently builds a 4-suited piecepack using `multicolored french-suits <https://en.wikipedia.org/wiki/Four-color_deck>`_ so that it works on multiple OS platforms out of the box without the user first needing to install/configure fonts.  It also uses a `colorblind barrier-free color palette <http://jfly.iam.u-tokyo.ac.jp/color/#see>`_ and a suit symbol on every suited component so it can be accessible for the color-blind (as well as being decipharable if printed in grayscale) and uses a white background so not a lot of toner needs to be used in printing out these default piecepack graphics.
 
 dual
 ~~~~
@@ -204,6 +204,11 @@ If you want to help further **develop** the ``piecepackr`` R package you'll also
 
     $ sudo apt install -y libxml2-dev libcairo2-dev # system dependencies for roxygen2 and gdtools
     $ sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)"
+
+Windows Notes
++++++++++++++
+
+Although Windows users are highly recommended to install ``piecepackr`` on "Ubuntu on Bash On Windows" ``piecepackr`` will natively run in Windows with a few caveats.  `Issue #70 <https://github.com/trevorld/piecepackr/issues/70>`_ contains some native Windows installation notes using `Chocolately <https://chocolately.org/install>`_ in a Powershell. The default configuration has been carefully chosen to work with the default Windows font (Arial) and configurations also seem to work when all piecepack symbols come from a single (properly installed) font such as Quivira or DejaVu.  However you may run into problems with piecepack configurations combining symbols from multiple fonts (such as grabbing glyphs from multple Noto Sans fonts in the "orthodox" demos).  Also the Windows Powershell and/or Ruby sometimes mis-interprets the Unicode in the Rakefile as a Latin encoding so not all the demos contained in the Rakefile may work as expected.
 
 How to use executable Rscripts
 ------------------------------

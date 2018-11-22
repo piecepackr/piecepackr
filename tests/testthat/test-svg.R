@@ -53,4 +53,15 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("draw_suitrank_die-6suits", function() draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
     expect_error(draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 
                          "Don't know how to draw suit/rank die for 3 suits")
+
+    df <- tibble::tribble(~component_side, ~x, ~y, ~i_s, ~i_r,
+                          "tile_face", 0.25, 0.25, 1, 1,
+                          "tile_face", 0.75, 0.25, 2, 2,
+                          "tile_face", 0.25, 0.75, 3, 5,
+                          "tile_face", 0.75, 0.75, 4, 6)
+    vdiffr::expect_doppelganger("draw_components", function() {
+                                    pushViewport(viewport(width=inch(4), height=inch(4)))
+                                    draw_components(df)
+                          })
+
 })

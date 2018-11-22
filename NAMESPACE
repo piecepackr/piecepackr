@@ -2,6 +2,7 @@
 
 export(cleave)
 export(draw_component)
+export(draw_components)
 export(draw_preview)
 export(get_embedded_font)
 export(inch)

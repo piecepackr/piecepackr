@@ -11,10 +11,6 @@ is_odd <- function(x) { as.logical(x %% 2) }
 #' @export
 inch <- function(x) { unit(x, "in") }
 
-make_deck_header <- function(cfg=list()) {
-    make_header_helper(get_deck_title(cfg), cfg)
-}
-
 make_get_style_fn <- function(style, default) {
     function(cfg=list()) get_style_element(style, cfg=cfg, default=default)
 }
@@ -203,7 +199,7 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
 }
 
 #### Get rid of cfg?
-make_header_helper <- function(title, cfg) {
+make_header_helper <- function(cfg, title) {
     header_height <- 0.8
     y_header <- WIN_HEIGHT - header_height/2
     addViewport(y=inch(y_header), width=inch(6.0), height=inch(header_height), name="header")
@@ -232,10 +228,6 @@ make_header_helper <- function(title, cfg) {
     grid.text(title, just="center", gp=gp)
 }
 
-make_preview_header <- function(cfg) {
-    make_header_helper(get_title(cfg), cfg)
-}
-
 seekViewport <- function(...) { suppressWarnings(grid::seekViewport(...)) }
 
 pp_pdf <- function(filename, family, paper) {
@@ -254,9 +246,10 @@ pp_pdf <- function(filename, family, paper) {
 #'
 #' @param output_filename Filename of PnP output
 #' @param input_filenames Vector of input filenames
+#' @param title Title of collection
 #' @param size PnP output size (currently either "letter" or "A4")
 #' @export
-make_collection_preview <- function(output_filename, input_filenames, size="letter") {
+make_collection_preview <- function(output_filename, input_filenames, title="", size="letter") {
     unlink(output_filename)
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
@@ -286,7 +279,7 @@ make_collection_preview <- function(output_filename, input_filenames, size="lett
         gridExtra::grid.arrange(grobs=l_logos, ncol=2, newpage=FALSE, padding=0)
         gridExtra::grid.arrange(grobs=l_squares, ncol=2, newpage=FALSE, padding=0)
         upViewport()
-        make_preview_header(cfg)
+        make_header_helper(cfg, title)
     }
 
     if (is_odd(n_pages)) {
@@ -388,7 +381,7 @@ draw_suit_page <- function(i_s, cfg) {
     # grid.text("pawn", x=inch(3.25), y=inch(ypawn+0.5))
     # grid.text("pawn belt", x=inch(3.25), y=inch(ybelt+0.4))
     # grid.text("tiles", y=inch( 6.4))
-    make_deck_header(cfg)
+    make_header_helper(cfg, get_deck_title(cfg))
 
 }
 
@@ -507,7 +500,7 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
     # grid.text("suit die", x=inch(die_right), y=inch(ydh-0.3), rot=90)
     # grid.text("suit/rank die", x=inch(die_right), y=inch(ydl-0.3), rot=90)
     # grid.text("rank die", x=inch(die_right), y=inch(ydm-0.3), rot=90)
-    make_deck_header(cfg)
+    make_header_helper(cfg, get_deck_title(cfg))
 }
 
 #' Make print-and-play piecepack pdf

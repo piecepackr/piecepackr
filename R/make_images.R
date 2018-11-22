@@ -712,39 +712,42 @@ draw_preview <- function(cfg=list()) {
     pheight <- 3*TILE_WIDTH
     pwidth <- 3*TILE_WIDTH
     pushViewport(viewport(name="main", width=inch(pwidth), height=inch(pheight)))
-    # tiles
-    addViewport(y=inch(pheight-TILE_WIDTH), width=inch(3 * TILE_WIDTH), height=inch(2 * TILE_WIDTH), name="tiles")
-    downViewport("tiles")
-    x_tiles <- c(1/3, 3/3, 3/3, 1/3, 2/3, 2/3) - 1/6
-    y_tiles <- c(3/4, 3/4, 1/4, 1/4, 3/4, 1/4)
-    for (i_s in 1:get_n_suits(cfg)) {
-        draw_component("tile_face", cfg, i_s=i_s, i_r=2, x=x_tiles[i_s], y=y_tiles[i_s])
-    }
-    if (get_n_suits(cfg) < 5) {
-        draw_component("tile_back", cfg, x=x_tiles[5], y=y_tiles[5])
-    } 
-    if (get_n_suits(cfg) < 6) {
-        draw_component("tile_back", cfg, x=x_tiles[6], y=y_tiles[6])
-    } 
 
-    # coins
-    seekViewport("main")
-    addViewport(x=inch(1.5*COIN_WIDTH), y=inch(0.5*TILE_WIDTH), width=inch(3*COIN_WIDTH), height=inch(2*COIN_WIDTH), name="coins")
-    downViewport("coins")
-    x_coins <- rep(1:3, 2)/3 - 1/6
-    y_coins <- rep(c(3/4, 1/4), each=3)
-    draw_component("coin_face", cfg, i_r=1, x=x_coins[1], y=y_coins[1])
-    draw_component("coin_face", cfg, i_r=2, x=x_coins[2], y=y_coins[2])
-    if (get_n_suits(cfg) < 5)
-        draw_component("coin_back", cfg, i_s=4, x=x_coins[3], y=y_coins[3])
-    else
-        draw_component("coin_back", cfg, i_s=5, x=x_coins[3], y=y_coins[3])
-    draw_component("coin_face", cfg, i_r=3, x=x_coins[4], y=y_coins[4])
-    if (get_n_suits(cfg) < 6)
-        draw_component("coin_back", cfg, i_s=2, x=x_coins[5], y=y_coins[5])
-    else
-        draw_component("coin_back", cfg, i_s=6, x=x_coins[5], y=y_coins[5])
-    draw_component("coin_back", cfg, i_s=3, x=x_coins[6], y=y_coins[6])
+    df <- tibble::tribble(
+                ~component_side, ~i_s, ~i_r, ~x, ~y,
+                "tile_face", 1, 2, 1, 5,
+                "tile_face", 2, 2, 5, 5,
+                "tile_face", 3, 2, 5, 3,
+                "tile_face", 4, 2, 1, 3,
+                "tile_face", 5, 2, 3, 5,
+                "tile_face", 6, 2, 3, 3,
+                "coin_face", NA,  1, 1*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH + 0.5*COIN_WIDTH,
+                "coin_face", NA,  2, 2*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH + 0.5*COIN_WIDTH,
+                "coin_back",  4, NA, 3*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH + 0.5*COIN_WIDTH,
+                "coin_face", NA,  3, 1*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH - 0.5*COIN_WIDTH,
+                "coin_back",  2, NA, 2*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH - 0.5*COIN_WIDTH,
+                "coin_back",  3, NA, 3*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH - 0.5*COIN_WIDTH,
+                "saucer_back",  1, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH + 0.5 * SAUCER_WIDTH,
+                "saucer_face", NA, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH - 0.5 * SAUCER_WIDTH,
+                "pawn_face", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH + 0.5*PAWN_HEIGHT,
+                "pawn_back", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH - 0.5*PAWN_HEIGHT 
+          )
+    df$cfg_name <- "cfg"
+    df$units <- "inches"
+    df$angle <- 0
+
+    if (get_n_suits(cfg) < 5) {
+        df[5, "component_side"] <- "tile_back"
+        df[5, "i_s"] <- get_i_unsuit(cfg)
+    }
+    if (get_n_suits(cfg) < 6) {
+        df[6, "component_side"] <- "tile_back"
+        df[6, "i_s"] <- get_i_unsuit(cfg)
+    }
+    if (get_n_suits(cfg) > 4) df[11, "i_s"] <- 5
+    if (get_n_suits(cfg) > 5) df[12, "i_s"] <- 6
+    df[16, "angle"] <- 180
+    draw_components(df)
 
     # suitrank die
     seekViewport("main")
@@ -752,24 +755,6 @@ draw_preview <- function(cfg=list()) {
     seekViewport("suitrankdie")
     draw_suitrank_die(cfg)
 
-    # saucers
-    seekViewport("main")
-    addViewport(x=inch(TILE_WIDTH+1.5*DIE_WIDTH), y=inch(0.5*TILE_WIDTH + 0.5*SAUCER_WIDTH), 
-                width=inch(SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="saucer.back")
-    addViewport(x=inch(TILE_WIDTH+1.5*DIE_WIDTH), y=inch(0.5*TILE_WIDTH - 0.5*SAUCER_WIDTH), 
-                width=inch(SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="saucer.face")
-    seekViewport('saucer.face')
-    draw_component("saucer_face", cfg, i_s=1)
-    seekViewport('saucer.back')
-    draw_component("saucer_back", cfg)
-
-    # pawns
-    seekViewport("main")
-    addViewport(x=inch(TILE_WIDTH+3.0*DIE_WIDTH), y=inch(0.5*TILE_WIDTH),
-                width=inch(PAWN_WIDTH), height=inch(2*PAWN_HEIGHT), name="pawns")
-    downViewport("pawns")
-    draw_component("pawn_face", cfg, i_s=2, x=0.5, y=0.25)
-    draw_component("pawn_back", cfg, i_s=2, x=0.5, y=0.75, angle=180)
 }
 
 get_pp_width <- function(component) {
@@ -1054,16 +1039,19 @@ draw_pawn <- function(i_s, cfg) {
     seg(0.5, 1, 0.5, 1-ll, border_col)
 }
 
-#' Draw piecepack component
+#' Draw piecepack components
 #' 
-#' Draws a piecepack component onto the graphics device
+#' \code{draw_component} Draws a single piecepack component onto the graphics device.  
+#' \code{draw_components} draws several piecepack components specified in a data frame  
+#'    applying \code{draw_component_wrapper} to each row.
 #' 
+#' @rdname draw_component
 #' @param component_side A string with component and side separated by a underscore e.g. "coin_face"
 #' @param cfg Piecepack configuration list
 #' @param i_s Number of suit
 #' @param i_r Number of rank
-#' @param x Number between 0 and 1 of where to place component
-#' @param y Number between 0 and 1 of where to place component
+#' @param x Where to place component on x axis of viewport
+#' @param y Where to place component on y axis of viewport
 #' @param width Width of component
 #' @param height Height of component
 #' @param svg If \code{TRUE} instead of drawing directly into graphics device
@@ -1097,4 +1085,42 @@ draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_
         draw_component_helper(component_side, i_s, i_r, cfg)
         upViewport()
     }
+}
+
+#' @rdname draw_component
+#' @param units String specifying the units for the corresponding numeric values
+#' @param cfg_name String of R variable storing configuration
+#' @param angle  Angle to rotate component
+draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, cfg_name=NA, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=0) {
+    x <- unit(x, units)
+    y <- unit(y, units)
+
+    if (is.na(cfg_name))
+        cfg <- list()
+    else
+        cfg <- dynGet(cfg_name)
+    if (is.na(i_r)) i_r <- 0
+    if (is.na(i_s)) i_s <- get_i_unsuit(cfg)
+    if (is.na(width))
+        width <- NULL
+    else
+        width <- unit(width, units)
+    if (is.na(height))
+        height <- NULL
+    else
+        height <- unit(height, units)
+    draw_component(component_side, cfg, i_s, i_r, x, y, width, height, svg, angle=angle)
+    list(purrr_value=NA)
+}
+
+#' Draw piecepack components specified by a data frame
+#'
+#' Draw piecepack components specified by a data frame
+#'
+#' @rdname draw_component
+#' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
+#' @export
+draw_components <- function(df) {
+    ll <- purrr::pmap_dfr(df, draw_component_wrapper)
+    invisible(NULL)
 }

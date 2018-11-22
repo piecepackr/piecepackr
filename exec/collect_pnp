@@ -11,7 +11,7 @@ parser <- add_option(parser, "--collection_name", default="piecepack_collection"
 parser <- add_option(parser, "--format", default="pdf", help='Currently only pdf is supported (default "%default")')
 
 # Metadata to include
-parser <- add_option(parser, "--author", "",
+parser <- add_option(parser, "--author", default="",
                      help='Pdf author (default "")')
 parser <- add_option(parser, "--keywords", default="piecepack",
                      help='Pdf keywords (default "%default")')
@@ -21,8 +21,8 @@ parser <- add_option(parser, "--subject", default="",
 parser <- add_option(parser, "--title", default=piecepackr:::get_title(), 
                      help='Pdf title (default "%default")')
 
-parser <- add_option(parser, "--deck_names", 
-                     help='Comma separated list of decks to collect (default collects all of them)')
+parser <- add_option(parser, "--deck_names", default="",
+                     help='Comma separated list of decks to collect')
 
 parser <- add_option(parser, "--pdf_deck_dir", default=piecepackr:::get_pdf_deck_dir(),
                      help='(default "%default")')
@@ -45,9 +45,10 @@ parser <- add_option(parser, "--font", default=piecepackr:::get_font(),
 args <- parse_args(parser)
 
 decks <- piecepackr::cleave(args$deck_names)
+if(any(decks == "")) stop("Deck names unspecified") ####
 output_preview_filename <- file.path(args$output_preview_dir, paste0(args$collection_name, ".", args$format))
 input_preview_filenames <- file.path(args$input_preview_dir, paste0(decks, ".svg"))
-piecepackr::make_collection_preview(output_preview_filename, input_preview_filenames, args$size)
+piecepackr::make_collection_preview(output_preview_filename, input_preview_filenames, args$title, args$size)
 
 output_filename <- gsub("%format", args$format, args$output_filename)
 output_filename <- gsub("%collection_name", args$collection_name, output_filename)

@@ -2,10 +2,13 @@
 piecepackr 0.10.x
 =================
 
+* New ``draw_components`` function allows one to draw several piecepack components specified in a data frame (#96).
+* New ``load_configurations`` function allows one to load in several JSON configuration files and/or internal piecepackr configurations in a layered (cascading) manner (#81).
 * Made non-reverse-compatible API changes to configuration and piecepack image making functions and scripts.
 * Increased the width of a pawn belt from 1.5" to 2" (so can fit around a 5/8" diameter pawn).
 
 * Changed the "light"-french-suited symbols in the "dual" demo from "black" symbols to "white" symbols.  Thanks Ron-Hale Evans for the suggestion.
+* Changed default color scheme 
 
 piecepackr 0.9.x
 ================
