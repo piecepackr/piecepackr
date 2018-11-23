@@ -1,14 +1,15 @@
 #' @importFrom grDevices bmp cairo_pdf cairo_ps dev.off jpeg png svg tiff
 #' @import grid
 
-COMPONENTS <- c("tile", "coin", "ppdie", "suitdie", 
+COMPONENTS <- c("tile", "coin", "die", "suitdie", 
            "pawn", "belt", "saucer", "chip")
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
            "coin_back", "coin_face",
-           "ppdie_face", "suitdie_face", 
+           "die_face", "suitdie_face", 
            "pawn_face", "pawn_back", 
            "belt_face",  "saucer_face", "saucer_back",
            "chip_face", "chip_back")
+# layouts "pawn_layout", "die_layout", "suitdie_layout", "suitrankdie_layout", "pyramid_layout"
 COIN_WIDTH <- 3/4
 DIE_WIDTH <- 1/2
 TILE_WIDTH <- 2
@@ -206,7 +207,7 @@ get_shape <- function(component_side, i_s, i_r, cfg) {
                tile_face = "rect",
                coin_back = "circle",
                coin_face = "circle",
-               ppdie_face = "rect",
+               die_face = "rect",
                suitdie_face = "rect",
                saucer_face = "circle",
                saucer_back = "circle",
@@ -250,7 +251,7 @@ is_suited <- function(component_side, i_s, i_r, cfg) {
            tile_face = TRUE, 
            coin_back = TRUE,
            coin_face = FALSE,
-           ppdie_face = ifelse(i_s <= get_i_unsuit(cfg), TRUE, FALSE),
+           die_face = ifelse(i_s <= get_i_unsuit(cfg), TRUE, FALSE),
            suitdie_face = ifelse(i_s <= get_i_unsuit(cfg), TRUE, FALSE),
            saucer_face = TRUE,
            saucer_back = FALSE,
@@ -262,7 +263,7 @@ is_suited <- function(component_side, i_s, i_r, cfg) {
 }
 
 get_dm_theta <- function(component_side, i_s, i_r, cfg) {
-    default <- ifelse(component_side %in% c("tile_face", "ppdie_face", "suitdie_face"), 135, 90)
+    default <- ifelse(component_side %in% c("tile_face", "die_face", "suitdie_face"), 135, 90)
     theta <- numeric_cleave(get_style_element("dm_theta", component_side, cfg, default, i_s, i_r))
     expand_suit_elements(theta, "dm_theta", component_side, cfg)[i_s]
 }
@@ -433,7 +434,7 @@ expand_suit_elements <- function(elements, style, component_side, cfg) {
     if (length(elements) == get_i_unsuit(cfg)) {
         elements <- c(elements, switch(style, 
                            suit_symbols = switch(ifelse(is.na(component_side), "NA", component_side), 
-                                suitdie_face = "", ppdie_face = "", elements[get_i_unsuit(cfg)]),
+                                suitdie_face = "", die_face = "", elements[get_i_unsuit(cfg)]),
                            gridline_colors = NA,
                            elements[get_i_unsuit(cfg)]))
     }
@@ -571,7 +572,7 @@ get_dm_fontsize <- function(component_side, i_s, i_r, cfg) {
 
 get_rank_fontsize <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
-                 "ppdie_face" = 20,
+                 "die_face" = 20,
                  "chip_face" = 22,
                  "coin_face" = 28,
                  "tile_face" = 72,
@@ -596,7 +597,7 @@ to_y <- function(theta, r) {
 # }
 
 get_ps_element <- function(component_side, suit_element, rank_element) {
-    if (component_side %in% c("chip_face", "coin_face", "ppdie_face", "tile_face")) {
+    if (component_side %in% c("chip_face", "coin_face", "die_face", "tile_face")) {
         rank_element
     } else if (component_side == "tile_back") {
         NULL
@@ -647,11 +648,14 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     hexline_col <- get_hexline_color(component_side, i_s, i_r, cfg) 
     ribbon_col <- get_ribbon_color(component_side, i_s, i_r, cfg)
 
+    # Overall scaling factor
+    scale <- get_scale(cfg)
+
     # Directional mark symbol
     dm_col <- get_dm_color(component_side, i_s, i_r, cfg)
     dm_font <- get_dm_font(component_side, i_s, i_r, cfg)
     dm_scale <- get_dm_scale(component_side, i_s, i_r, cfg)
-    dm_fontsize <- dm_scale * get_dm_fontsize(component_side, i_s, i_r, cfg)
+    dm_fontsize <- scale * dm_scale * get_dm_fontsize(component_side, i_s, i_r, cfg)
     dm_symbol <- get_dm_symbol(component_side, i_s, i_r, cfg)
     dm_theta <- get_dm_theta(component_side, i_s, i_r, cfg)
     dm_r <- get_dm_r(component_side, i_s, i_r, cfg)
@@ -665,7 +669,7 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     if (is.null(ps_scale))
         ps_fontsize <- NULL
     else
-        ps_fontsize <- ps_scale * get_ps_fontsize(component_side, i_s, i_r, cfg)
+        ps_fontsize <- scale * ps_scale * get_ps_fontsize(component_side, i_s, i_r, cfg)
     ps_symbol <- get_ps_symbol(component_side, i_s, i_r, cfg)
     ps_theta <- get_ps_theta(component_side, i_s, i_r, cfg)
     ps_r <- get_ps_r(component_side, i_s, i_r, cfg)
@@ -732,8 +736,6 @@ draw_preview <- function(cfg=list()) {
                 "pawn_face", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH + 0.5*PAWN_HEIGHT,
                 "pawn_back", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH - 0.5*PAWN_HEIGHT 
           )
-    df$cfg_name <- "cfg"
-    df$units <- "inches"
     df$angle <- 0
 
     if (get_n_suits(cfg) < 5) {
@@ -747,7 +749,7 @@ draw_preview <- function(cfg=list()) {
     if (get_n_suits(cfg) > 4) df[11, "i_s"] <- 5
     if (get_n_suits(cfg) > 5) df[12, "i_s"] <- 6
     df[16, "angle"] <- 180
-    draw_components(df)
+    draw_components(df, cfg=cfg, units="inches")
 
     # suitrank die
     seekViewport("main")
@@ -763,7 +765,7 @@ get_pp_width <- function(component) {
            chip = CHIP_WIDTH,
            coin = COIN_WIDTH,
            pawn = PAWN_WIDTH,
-           ppdie = DIE_WIDTH,
+           die = DIE_WIDTH,
            saucer = SAUCER_WIDTH,
            suitdie = DIE_WIDTH,
            tile = TILE_WIDTH,
@@ -776,7 +778,7 @@ get_pp_height <- function(component) {
            chip = CHIP_WIDTH,
            coin = COIN_WIDTH,
            pawn = PAWN_HEIGHT,
-           ppdie = DIE_WIDTH,
+           die = DIE_WIDTH,
            saucer = SAUCER_WIDTH,
            suitdie = DIE_WIDTH,
            tile = TILE_WIDTH,
@@ -851,7 +853,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
             }
 
             for (i_r in 1:get_n_ranks(cfg)) {
-                for (component_side in c("chip_face", "ppdie_face", "tile_face")) {
+                for (component_side in c("chip_face", "die_face", "tile_face")) {
                     f <- component_filename(directory, cfg, component_side, format, theta, i_s, i_r)
                     pp_device(f, get_component(component_side), theta)
                     draw_component(component_side, cfg, i_s, i_r)
@@ -999,8 +1001,16 @@ add_ribbons <- function(opt) {
 }
 
 draw_component_helper <- function(component_side, i_s, i_r, cfg) {
-    opt <- get_component_opt(component_side, i_s, i_r, cfg)
+    default <- "draw_component_basic"
+    draw_fn <- get_style_element("draw_component_fn", component_side, cfg, default, i_s, i_r)
+    if (is.character(draw_fn))
+        draw_fn <- match.fun(draw_fn)
+    draw_fn(component_side, i_s, i_r, cfg)
+    invisible(NULL)
+}
 
+draw_component_basic <- function(component_side, i_s, i_r, cfg) {
+    opt <- get_component_opt(component_side, i_s, i_r, cfg)
     add_background(opt)
     add_checkers(opt)
     add_hexlines(opt)
@@ -1009,6 +1019,7 @@ draw_component_helper <- function(component_side, i_s, i_r, cfg) {
     add_primary_symbol(opt)
     add_dm_symbol(opt)
     add_border(opt)
+    invisible(NULL)
 }
 
 draw_pawn <- function(i_s, cfg) {
@@ -1058,7 +1069,7 @@ draw_pawn <- function(i_s, cfg) {
 #'            export to svg, re-import svg, and then draw it to graphics device.  
 #'            This is useful if drawing really big or small and don't want
 #'            to play with re-configuring fontsizes.
-#' @param ... Extra arguments to pass to \code{grid::viewport} like \code{angle}.
+#' @param ... With \code{draw_component} extra arguments to pass to \code{grid::viewport} like \code{angle}, with \code{draw_components} extra arguments to pass to \code{draw_component_wrapper}, with \code{draw_component_wrapper} ignored.
 #' @export
 draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_r=0, x=0.5, y=0.5, 
                            width=NULL, height=NULL, svg=FALSE, ...) {
@@ -1089,16 +1100,22 @@ draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_
 
 #' @rdname draw_component
 #' @param units String specifying the units for the corresponding numeric values
-#' @param cfg_name String of R variable storing configuration
-#' @param angle  Angle to rotate component
-draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, cfg_name=NA, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=0) {
+#' @param angle Angle to draw component at
+#' @param cfg_name String of list name storing configuration
+#' @param cfg_list List of configuration lists
+draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=0, cfg=NULL, cfg_name=NA, cfg_list=NULL) {
     x <- unit(x, units)
     y <- unit(y, units)
 
-    if (is.na(cfg_name))
-        cfg <- list()
-    else
-        cfg <- dynGet(cfg_name)
+    if (is.null(cfg)) {
+        if (is.na(cfg_name)) {
+            cfg <- list()
+        } else if (is.list(cfg_list)) {
+            cfg <- cfg_list[[cfg_name]]
+        } else {
+            cfg <- dynGet(cfg_name)
+        }
+    }
     if (is.na(i_r)) i_r <- 0
     if (is.na(i_s)) i_s <- get_i_unsuit(cfg)
     if (is.na(width))
@@ -1120,7 +1137,7 @@ draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5
 #' @rdname draw_component
 #' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
 #' @export
-draw_components <- function(df) {
-    ll <- purrr::pmap_dfr(df, draw_component_wrapper)
+draw_components <- function(df, ...) {
+    ll <- purrr::pmap_dfr(df, draw_component_wrapper, ...)
     invisible(NULL)
 }

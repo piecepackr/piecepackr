@@ -12,6 +12,8 @@ parser <- add_option(parser, "--deck_name", default="piecepack_deck", help='File
 parser <- add_option(parser, "--directory", default="%format/decks", help='Directory template (default "%default")')
 parser <- add_option(parser, "--format", default="pdf", help='Currently only pdf is supported (default "%default")')
 parser <- add_option(parser, "--size", default="letter", help='Either "letter" or "A4" (default "%default")')
+#### Move deck_title elsewhere? Author/license metadata?
+parser <- add_option(parser, "--deck_title", default="", help='(default "%default")')
 
 args <- parse_args(parser)
 directory <- gsub("%format", args$format, args$directory)
@@ -20,6 +22,6 @@ output_filename <- gsub("%deck_name", args$deck_name, output_filename)
 output_filename <- gsub("%format", args$format, output_filename)
 
 cfg <- piecepackr::read_configuration(args$cfg_file)
-piecepackr::make_pnp(cfg, output_filename, args$size)
+piecepackr::make_pnp(cfg, output_filename, args$size, args$deck_title)
 
 invisible(NULL)

@@ -11,10 +11,11 @@ draw_component(component_side, cfg = list(), i_s = get_i_unsuit(cfg),
   svg = FALSE, ...)
 
 draw_component_wrapper(..., component_side = "tile_back", x = 0.5,
-  y = 0.5, cfg_name = NA, i_s = NA, i_r = NA, width = NA,
-  height = NA, svg = FALSE, units = "npc", angle = 0)
+  y = 0.5, i_s = NA, i_r = NA, width = NA, height = NA,
+  svg = FALSE, units = "npc", angle = 0, cfg = NULL,
+  cfg_name = NA, cfg_list = NULL)
 
-draw_components(df)
+draw_components(df, ...)
 }
 \arguments{
 \item{component_side}{A string with component and side separated by a underscore e.g. "coin_face"}
@@ -38,13 +39,15 @@ export to svg, re-import svg, and then draw it to graphics device.
 This is useful if drawing really big or small and don't want
 to play with re-configuring fontsizes.}
 
-\item{...}{Extra arguments to pass to \code{grid::viewport} like \code{angle}.}
-
-\item{cfg_name}{String of R variable storing configuration}
+\item{...}{With \code{draw_component} extra arguments to pass to \code{grid::viewport} like \code{angle}, with \code{draw_components} extra arguments to pass to \code{draw_component_wrapper}, with \code{draw_component_wrapper} ignored.}
 
 \item{units}{String specifying the units for the corresponding numeric values}
 
-\item{angle}{Angle to rotate component}
+\item{angle}{Angle to draw component at}
+
+\item{cfg_name}{String of list name storing configuration}
+
+\item{cfg_list}{List of configuration lists}
 
 \item{df}{A data frame specifying arguments to ``draw_component_wrapper``}
 }

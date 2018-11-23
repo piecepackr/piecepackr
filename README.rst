@@ -234,16 +234,6 @@ Where ``demo_name`` is either:
 #. ``sixpack``
 #. ``yellow_crown``
 
-Executable options
-------------------
-
-* `configure --help <https://github.com/trevorld/piecepackr/blob/master/txt/configure_piecepack_options.txt>`_
-* `make_pnp --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_pnp_piecepack_options.txt>`_
-* `make_images --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_images_options.txt>`_
-* `make_preview --help <https://github.com/trevorld/piecepackr/blob/master/txt/make_piecepack_preview_options.txt>`_
-* `collect_pnp --help <https://github.com/trevorld/piecepackr/blob/master/txt/collect_pnp_piecepacks_options.txt>`_
-* `get_embedded_font --help <https://github.com/trevorld/piecepackr/blob/master/txt/get_embedded_font_options.txt>`_
-
 Piecepack configuration
 -----------------------
 

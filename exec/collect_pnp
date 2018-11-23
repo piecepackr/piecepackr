@@ -39,8 +39,7 @@ parser <- add_option(parser, "--input_preview_dir", default=piecepackr:::get_svg
 parser <- add_option(parser, "--size", default="letter",
                      help='Pdf paper size, either "letter" or "A4" (default "%default")')
 ####
-parser <- add_option(parser, "--font", default=piecepackr:::get_font(),
-                     help='Default font family (default "%default")')
+parser <- add_option(parser, "--font", default="sans", help='Default font family (default "%default")')
 
 args <- parse_args(parser)
 

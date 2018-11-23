@@ -19,16 +19,16 @@ get_pp_die_arrangement <- function(component_side=NA, cfg=list()) {
     get_style_element("pp_die_arrangement", component_side, cfg, "counter")
 }
 
+get_font <- make_get_style_fn("font", "sans")
+get_scale <- make_get_style_fn("scale", 1.0)
+
 #### 
-get_deck_title <- make_get_style_fn("deck_title", "")
 get_deck_filename <- make_get_style_fn("deck_filename", "piecepack_deck")
 get_pdf_deck_dir <- make_get_style_fn("pdf_deck_dir", "pdf/decks")
 get_pdf_collection_dir <- make_get_style_fn("pdf_collection_dir", "pdf/collections")
 get_pdf_preview_dir <- make_get_style_fn("pdf_preview_dir", "pdf/previews")
 get_svg_preview_dir <- make_get_style_fn("svg_preview_dir", "svg/previews")
 get_paper <- make_get_style_fn("paper", "letter")
-get_font <- make_get_style_fn("font", "sans")
-get_header_font <- make_get_style_fn("header_font", get_font())
 get_decks <- function(cfg=list()) {
     default <- paste(gsub(".pdf$", "", list.files(get_pdf_deck_dir(cfg))), collapse=",")
     cleave(make_get_style_fn("decks", default)(cfg))
@@ -105,7 +105,7 @@ draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
         for(i_face in 1:6) {
             i_r <- arrangement[i_face]
             downViewport(paste0(label, ".die.", i_face))
-            draw_component("ppdie_face", cfg, i_s, i_r)
+            draw_component("die_face", cfg, i_s, i_r)
             upViewport()
         }
     })
@@ -155,7 +155,7 @@ draw_rank_die <- function(cfg, flip=FALSE) {
         make_die_viewports(label, flip=flip)
         for (i_r in 1:6) {
             seekViewport(paste0(label, ".die.", i_r))
-            draw_component("ppdie_face", cfg, get_i_unsuit(cfg) + 1, i_r)
+            draw_component("die_face", cfg, get_i_unsuit(cfg) + 1, i_r)
         }
     })
 }
@@ -169,29 +169,29 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
         make_die_viewports(label, flip=flip)
         if (get_n_suits(cfg) == 4) {
             downViewport(paste0(label, ".die.1"))
-            draw_component("ppdie_face", cfg, 6, 1)
+            draw_component("die_face", cfg, 6, 1)
             upViewport()
             downViewport(paste0(label, ".die.2"))
-            draw_component("ppdie_face", cfg, 5, 2)
+            draw_component("die_face", cfg, 5, 2)
             upViewport()
             for (i_r in 3:6) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_component("ppdie_face", cfg, 5-(i_r-2), i_r)
+                draw_component("die_face", cfg, 5-(i_r-2), i_r)
                 upViewport()
             }
         } else if (get_n_suits(cfg) == 5) {
             downViewport(paste0(label, ".die.6"))
-            draw_component("ppdie_face", cfg, 6, 6)
+            draw_component("die_face", cfg, 6, 6)
             upViewport()
             for (i_r in 1:5) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_component("ppdie_face", cfg, 6-i_r, i_r)
+                draw_component("die_face", cfg, 6-i_r, i_r)
                 upViewport()
             }
         } else if (get_n_suits(cfg) == 6) {
             for (i_r in 1:6) {
                 downViewport(paste0(label, ".die.", i_r))
-                draw_component("ppdie_face", cfg, 7-i_r, i_r)
+                draw_component("die_face", cfg, 7-i_r, i_r)
                 upViewport()
             }
         } 
@@ -210,7 +210,7 @@ make_header_helper <- function(cfg, title) {
     addViewport(x=1-width_image/2, y=0.4, width=width_image, height=0.5, name="r_cc_image")
     addViewport(x=0.5, y=0.4, width=1-2*width_image, height=0.8, name="text")
     seekViewport("text")
-    gp <- gpar(fontsize=9, fontfamily=get_header_font(cfg))
+    gp <- gpar(fontsize=9, fontfamily="sans")
     # grid.text(get_program(cfg), x=0.0, y=0.8, just="left", gp=gp)
     # grid.text(get_copyright(cfg), x=0.0, y=0.6, just="left", gp=gp)
     # grid.text(get_license1(cfg), x=0.0, y=0.4, just="left", gp=gp)
@@ -224,7 +224,7 @@ make_header_helper <- function(cfg, title) {
     seekViewport("r_cc_image")
     grid.draw(cc_file)
     seekViewport("title")
-    gp <- gpar(fontsize=15, fontfamily=get_header_font(cfg), fontface="bold")
+    gp <- gpar(fontsize=15, fontfamily="sans", fontface="bold")
     grid.text(title, just="center", gp=gp)
 }
 
@@ -254,9 +254,9 @@ make_collection_preview <- function(output_filename, input_filenames, title="", 
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
-    #### Remove cfg?
-    cfg <- list()
-    pp_pdf(output_filename, get_font(cfg), size)
+    
+    cfg <- list() #### Remove cfg?
+    pp_pdf(output_filename, "sans", size)
 
     n_pages <- ceiling(length(input_filenames) / 6)
 
@@ -297,15 +297,38 @@ mainViewport <- function() {
     downViewport("main")
 }
 
-draw_suit_page <- function(i_s, cfg) {
-    grid.newpage()
-
+draw_suit_page <- function(i_s, cfg=list(), deck_title="") {
     # Build viewports
     mainViewport()
     addViewport(y=inch(1.5*TILE_WIDTH), width=inch(4*TILE_WIDTH), height=inch(3*TILE_WIDTH), name="tiles")
-    downViewport("tiles")
-    make_4by3_viewports("tile")
-    seekViewport("main")
+    ydie <- 3*TILE_WIDTH + 4*DIE_WIDTH/2
+    ydie2 <- ydie + 2*DIE_WIDTH 
+    ybelt <- ydie2 + 2*DIE_WIDTH + DIE_WIDTH/2
+    xbelt <- BELT_WIDTH/2
+    ysaucer <- 3*TILE_WIDTH + SAUCER_WIDTH/2
+    i_unsuit <- get_i_unsuit(cfg)
+    df <- tibble::tribble( ~component_side, ~x, ~y, ~i_s, ~i_r,
+                          "tile_face", 1, 5, i_s, 1,
+                          "tile_face", 5, 5, i_s, 2,
+                          "tile_face", 1, 3, i_s, 3,
+                          "tile_face", 5, 3, i_s, 4,
+                          "tile_face", 1, 1, i_s, 5,
+                          "tile_face", 5, 1, i_s, 6,
+                          "tile_back", 3, 1, i_unsuit, 0,
+                          "tile_back", 7, 1, i_unsuit, 0,
+                          "tile_back", 3, 3, i_unsuit, 0,
+                          "tile_back", 7, 3, i_unsuit, 0,
+                          "tile_back", 3, 5, i_unsuit, 0,
+                          "tile_back", 7, 5, i_unsuit, 0,
+                          "belt_face", xbelt, ybelt, i_s, 0,
+                          "belt_face", WIN_WIDTH-xbelt, ybelt, i_s, 0,
+                          "saucer_face", 4-0.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
+                          "saucer_face", 4+1.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
+                          "saucer_back", 4-1.5*SAUCER_WIDTH, ysaucer, i_s, 0,
+                          "saucer_back", 4+0.5*SAUCER_WIDTH, ysaucer, i_s, 0)
+    # downViewport("tiles")
+    # make_4by3_viewports("tile")
+    # seekViewport("main")
     xpawn <- PAWN_WIDTH/2
     # pheight <- 2.5 * PAWN_HEIGHT
     pheight <- 2 * PAWN_HEIGHT + 2 * PAWN_BASE
@@ -315,44 +338,37 @@ draw_suit_page <- function(i_s, cfg) {
 
     xdie <- PAWN_WIDTH + 3*DIE_WIDTH/2 
     # ydie <- WIN_WIDTH - 4*DIE_WIDTH/2 - 0.125
-    ydie <- 3*TILE_WIDTH + 4*DIE_WIDTH/2
     addViewport(x=inch(xdie) , y=inch(ydie), width=inch(2), height=inch(1.5), angle=-90, name="ldie")
     addViewport(x=inch(WIN_WIDTH-xdie) , y=inch(ydie), width=inch(2), height=inch(1.5),  angle=90, name="rdie")
 
-    ysaucer <- 3*TILE_WIDTH + SAUCER_WIDTH/2
-    addViewport(y=inch(ysaucer), height=inch(SAUCER_WIDTH), width=inch(4*SAUCER_WIDTH), name="saucers")
-    seekViewport("saucers")
-    draw_component("saucer_face", cfg, i_s, x=1/4-1/8)
-    draw_component("saucer_back", cfg, x=2/4-1/8)
-    draw_component("saucer_face", cfg, i_s, x=3/4-1/8)
-    draw_component("saucer_back", cfg, x=4/4-1/8)
+    # addViewport(y=inch(ysaucer), height=inch(SAUCER_WIDTH), width=inch(4*SAUCER_WIDTH), name="saucers")
+    # seekViewport("saucers")
+    # draw_component("saucer_face", cfg, i_s, x=1/4-1/8)
+    # draw_component("saucer_back", cfg, x=2/4-1/8)
+    # draw_component("saucer_face", cfg, i_s, x=3/4-1/8)
+    # draw_component("saucer_back", cfg, x=4/4-1/8)
     seekViewport("main")
     # addViewport(y=inch(ycoin), width=inch(7.5), height=inch(0.625), name="coinrow")
     # ycoin <- 6+ 3*COIN_WIDTH
     ycoin <- ysaucer + SAUCER_WIDTH/2 + 3*COIN_WIDTH/2
     addViewport(y=inch(ycoin), width=inch(4 * COIN_WIDTH), height=inch(3 * COIN_WIDTH), name="coins")
     seekViewport("main")
+    draw_components(df, cfg=cfg, units="inches")
 
 
-    # ydie2 <- ybelt - 1.5*DIE_WIDTH
-    ydie2 <- ydie + 2*DIE_WIDTH 
     addViewport(x=inch(xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5), angle=-90, name="ldie2")
     addViewport(x=inch(WIN_WIDTH-xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5),  angle=90, name="rdie2")
 
-    # ybelt <- ycoin + 3*COIN_WIDTH/2 + DIE_WIDTH/2
-    # xbelt <- WIN_WIDTH/2 - BELT_WIDTH/2
-    ybelt <- ydie2 + 2*DIE_WIDTH + DIE_WIDTH/2
-    xbelt <- BELT_WIDTH/2
-    draw_component("belt_face", cfg, i_s, x=inch(xbelt), y=inch(ybelt))
-    draw_component("belt_face", cfg, i_s, x=inch(WIN_WIDTH-xbelt), y=inch(ybelt))
+    # draw_component("belt_face", cfg, i_s, x=inch(xbelt), y=inch(ybelt))
+    # draw_component("belt_face", cfg, i_s, x=inch(WIN_WIDTH-xbelt), y=inch(ybelt))
 
     # Draw components
-    for (i_r in 1:6) {
-        seekViewport(paste0("tile.face.", i_r))
-        draw_component("tile_face", cfg, i_s, i_r)
-        seekViewport(paste0("tile.back.", i_r))
-        draw_component("tile_back", cfg)
-    }
+    # for (i_r in 1:6) {
+    #     seekViewport(paste0("tile.face.", i_r))
+    #     draw_component("tile_face", cfg, i_s, i_r)
+    #     seekViewport(paste0("tile.back.", i_r))
+    #     draw_component("tile_back", cfg)
+    # }
 
     # coins
     seekViewport("coins")
@@ -374,20 +390,13 @@ draw_suit_page <- function(i_s, cfg) {
     seekViewport("ldie2")
     draw_piecepack_die(i_s, cfg, flip=TRUE)
 
-    # annotations
+    # header
     seekViewport("main")
-    # grid.text("die", x=inch(xdie+0.5), y=inch(ydie+0.9))
-    # grid.text("coins", y=inch( ycoin + 0.4))
-    # grid.text("pawn", x=inch(3.25), y=inch(ypawn+0.5))
-    # grid.text("pawn belt", x=inch(3.25), y=inch(ybelt+0.4))
-    # grid.text("tiles", y=inch( 6.4))
-    make_header_helper(cfg, get_deck_title(cfg))
+    make_header_helper(cfg, deck_title)
 
 }
 
-draw_accessories_page <- function(cfg, odd=TRUE) {
-    grid.newpage()
-
+draw_accessories_page <- function(cfg, deck_title="", odd=TRUE) {
     # Build viewports
     mainViewport()
     y_joker <- 8.75
@@ -424,7 +433,7 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
     die_x <- c(die_xl, die_xm, die_xm, die_xl, die_xh, die_xh)
     die_y <- c(ydl, ydl, ydb, ydb, ydl, ydb)
     for (i_s in 1:get_n_suits(cfg)) {
-        addViewport(y=inch(die_y[i_s]), x=inch(die_x[i_s]), width=inch(2), height=inch(1.5), name=paste0("ppdie.", i_s))
+        addViewport(y=inch(die_y[i_s]), x=inch(die_x[i_s]), width=inch(2), height=inch(1.5), name=paste0("die.", i_s))
         addViewport(y=inch((get_n_suits(cfg) + 1 - i_s)*CHIP_WIDTH - 0.5*CHIP_WIDTH), 
                     width=inch(12*CHIP_WIDTH), height=inch(CHIP_WIDTH), name=paste0("chips.", i_s))
         seekViewport(paste0("chips.", i_s))
@@ -484,14 +493,14 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
         draw_rank_die(cfg, flip=TRUE)
     }
     for (i_s in 1:get_n_suits(cfg)) {
-        seekViewport(paste0("ppdie.", i_s))
+        seekViewport(paste0("die.", i_s))
         draw_piecepack_die(i_s, cfg, flip=TRUE)
     }
 
     # Annotations
     seekViewport("main")
     # for (i_s in 1:4) {
-    #     grid.text(paste0("ppdie", i_s))
+    #     grid.text(paste0("die", i_s))
     # }
     # grid.text("joker tile", x=inch(0.8), y=inch(8.5), rot=90)
     # grid.text("additional piecepack dice", x=inch(0.8), y=inch((ydm+ydl)/2), rot=90)
@@ -500,7 +509,7 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
     # grid.text("suit die", x=inch(die_right), y=inch(ydh-0.3), rot=90)
     # grid.text("suit/rank die", x=inch(die_right), y=inch(ydl-0.3), rot=90)
     # grid.text("rank die", x=inch(die_right), y=inch(ydm-0.3), rot=90)
-    make_header_helper(cfg, get_deck_title(cfg))
+    make_header_helper(cfg, deck_title)
 }
 
 #' Make print-and-play piecepack pdf
@@ -510,25 +519,36 @@ draw_accessories_page <- function(cfg, odd=TRUE) {
 #' @param cfg Piecepack configuration list
 #' @param output_filename Filename of PnP output
 #' @param size PnP output size (currently either "letter" or "A4")
+#' @param deck_title Title of deck
+#' @param components Character vector of desired PnP components (default everything)
 #' @export
-make_pnp <- function(cfg, output_filename="pdf/decks/piecepack_deck.pdf", size="letter") {
+make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf", size="letter", 
+                     deck_title = "",
+                     components=c("piecepack", "misc")) {
     unlink(output_filename)
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
     pp_pdf(output_filename, get_font(cfg), size)
 
-    for (i_s in 1:get_n_suits(cfg)) {
-        draw_suit_page(i_s, cfg)
-    }
-    if (is_odd(get_n_suits(cfg))) {
-        draw_suit_page(get_i_unsuit(cfg)+1, cfg)
+    if ("piecepack" %in% components) {
+        for (i_s in 1:get_n_suits(cfg)) {
+            grid.newpage()
+            draw_suit_page(i_s, cfg, deck_title)
+        }
+        if (is_odd(get_n_suits(cfg))) {
+            grid.newpage()
+            draw_suit_page(get_i_unsuit(cfg)+1, cfg, deck_title)
+        }
     }
 
-    # Accessories
-    if ((get_n_suits(cfg) >= 4) && (get_n_suits(cfg) <= 6)) {
-        draw_accessories_page(cfg)
-        draw_accessories_page(cfg, odd=FALSE)
+    if ("misc" %in% components) {
+        if ((get_n_suits(cfg) >= 4) && (get_n_suits(cfg) <= 6)) {
+            grid.newpage()
+            draw_accessories_page(cfg, deck_title)
+            grid.newpage()
+            draw_accessories_page(cfg, deck_title, odd=FALSE)
+        }
     }
     invisible(dev.off())
 }

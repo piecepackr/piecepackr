@@ -3,6 +3,12 @@ FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 #' @importFrom optparse OptionParser add_option parse_args
 configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
 
+    # Global configuration adjusters
+    parser <- add_option(parser, "--font", default=NULL,
+                         help=sprintf('Default font family (default "%s")', "sans"))
+    parser <- add_option(parser, "--scale", default=NULL,
+                         help=sprintf('Default is not to adjust scale (default "%s")', 1.0))
+
     #### dm_thetas, ps_thetas? vectorize ps by suit or rank depending on context?
     # Symbols
     parser <- add_option(parser, "--rank_symbols", default=NULL, 
@@ -13,8 +19,6 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
                          help='(default is to try to pick a reasonable primary symbol based on the component)')
     parser <- add_option(parser, "--dm_symbols", default=NULL, 
                          help='(default is to try to pick a reasonable directional mark symbol based on the component)')
-    parser <- add_option(parser, "--header_font", default=NULL, 
-                         help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--rank_symbols_font", default=NULL, 
                          help='(default is to use the value of "font" option)')
     parser <- add_option(parser, "--suit_symbols_font", default=NULL, 
@@ -60,9 +64,8 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
                                   'of polar coordinates of primary symbol',
                                   '(default "sqrt(.25^2+.25^2)" if its shape is "rect" or "circle" otherwise "0.3")'))
 
-    # Font
-    parser <- add_option(parser, "--font", default=NULL,
-                         help=sprintf('Default font family (default "%s")', get_font()))
+    parser <- add_option(parser, "--draw_component_fn", default=NULL, 
+                         help='Which function to use to draw component')
 
     # Color scheme
     parser <- add_option(parser, "--suit_colors", default=NULL, 
@@ -133,7 +136,7 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
                 "dm_colors", "ps_color", "suit_colors", "background_colors",
                 "hexline_colors", "checker_colors", "gridline_colors", "ribbon_colors",
                 "border_colors", 
-                "shape", "shape_theta")
+                "shape", "shape_theta", "draw_component_fn")
     for (affix in affixes) {
         if (affix == "") next
 
