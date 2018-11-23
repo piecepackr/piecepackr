@@ -1,5 +1,4 @@
 {
-  "deck_title": ["Black-suits (checkered tile backs) (v0.10.3-0)"],
   "suit_symbols": ["♠,♣,☽,⚓,★"],
   "suit_symbols_font": ["Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,DejaVu Sans,Noto Sans Symbols"],
   "suit_colors": ["black,black,black,black,darkred"],

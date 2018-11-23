@@ -1,5 +1,4 @@
 {
-  "deck_title": ["French-suits (checkered tile faces) (v0.10.3-0)"],
   "suit_colors": ["darkred,black,dimgrey,hotpink2,grey"],
   "checker_colors.tile_face": ["grey"],
   "rank_symbols": ["♟,♞,♝,♜,♛,♚"],

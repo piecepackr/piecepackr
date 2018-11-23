@@ -1,16 +1,15 @@
 {
-  "deck_title": ["Crown and anchor suits (v0.10.3-0)"],
   "rank_symbols": ["n,a,2,3,4,5"],
   "rank_symbols_font": ["Noto Sans"],
   "suit_colors": ["darkred,darkred,black,black,darkred,black,grey"],
   "suit_symbols": ["♥,♠,♣,♦,♚,⚓,"],
   "suit_symbols.s7": ["★"],
   "suit_symbols_scale": [1],
+  "7": [1],
   "8": [1],
   "9": [1],
   "10": [1],
-  "11": [1],
-  "12": [0.8],
-  "13": [1],
+  "11": [0.8],
+  "12": [1],
   "suit_symbols_font": ["Noto Sans Symbols"]
 }

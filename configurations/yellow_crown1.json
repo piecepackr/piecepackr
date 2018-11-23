@@ -1,5 +1,4 @@
 {
-  "deck_title": ["Orthodox piecepack (v0.10.3-0)"],
   "rank_symbols": [",A,2,3,4,5"],
   "suit_symbols": ["🌞,🌜,👑,⚜,꩜"],
   "rank_symbols_font": ["Noto Sans"],
@@ -17,7 +16,7 @@
   "dm_symbols_font.coin": ["Noto Sans"],
   "dm_r.coin": ["0.45"],
   "dm_colors.coin": ["black"],
-  "dm_symbols.ppdie": [""],
+  "dm_symbols.die": [""],
   "suit_symbols.pawn": [""],
   "dm_symbols.pawn": [""],
   "invert_colors.pawn": [true],
