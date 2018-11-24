@@ -53,6 +53,14 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("draw_suitrank_die-6suits", function() draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
     expect_error(draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 
                          "Don't know how to draw suit/rank die for 3 suits")
+    expect_error(draw_component("coin_face", list(gridline_colors = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
+    expect_error(draw_component("coin_face", list(checker_colors = "grey"), i_r = 3), "Don't know how to add checkers to shape circle")
+    expect_error(draw_component("coin_face", list(hexline_colors = "grey"), i_r = 3), "Don't know how to add hexlines to shape circle")
+    expect_error(draw_component("coin_face", list(ribbon_colors = "grey"), i_r = 3), "Don't know how to add ribbons to shape circle")
+
+    vdiffr::expect_doppelganger("tile_back.checkers", function() dc("tile_back", cfg=list(checker_colors.tile_back = "blue")))
+    vdiffr::expect_doppelganger("tile_back.checkers.hex", function() dc("tile_back", cfg=list(shape.tile_back = "6", checker_colors.tile_back = "blue")))
+    vdiffr::expect_doppelganger("tile_back.hexlines", function() dc("tile_back", cfg=list(hexline_colors.tile_back = "green")))
 
     df <- tibble::tribble(~component_side, ~x, ~y, ~i_s, ~i_r,
                           "tile_face", 0.25, 0.25, 1, 1,

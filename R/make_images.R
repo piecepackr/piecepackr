@@ -807,11 +807,6 @@ pp_device <- function(filename, component=NULL, theta=0, width=NULL, height=NULL
     downViewport("main")
 }
 
-
-component_directory <- function(cfg, format) {
-    file.path(cfg[[paste0(format, "_component_dir")]], get_deck_filename(cfg))
-}
-
 component_filename <- function(directory, cfg, component_side, format, theta, 
                                i_s=NULL, i_r=NULL) {
     filename <- paste0(component_side, 
