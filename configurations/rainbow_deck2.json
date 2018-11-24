@@ -5,5 +5,5 @@
   "suit_symbols_font": ["Noto Sans Symbols"],
   "suit_symbols_scale": ["1,1,1,1,0.85,1,0.9"],
   "suit_colors": ["#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,sienna"],
-  "shape.chip": ["5"]
+  "shape.chip": ["convex5"]
 }

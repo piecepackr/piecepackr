@@ -8,5 +8,5 @@
   "background_colors.suited": ["black"],
   "background_colors.unsuited": ["darkred"],
   "background_colors.chip_back": ["darkred"],
-  "shape.chip": ["5"]
+  "shape.chip": ["convex5"]
 }

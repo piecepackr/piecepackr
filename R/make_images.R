@@ -53,7 +53,7 @@ addViewport <- function(...) {
     upViewport()
 }
 
-grid.halma <- function(gp) {
+grid.halma <- function(gp=gpar()) {
     y_cutoff <- 0.55
     y_frac <- 0.5
     theta <- rev(seq(0, 360, length.out=100) - 90)
@@ -62,6 +62,10 @@ grid.halma <- function(gp) {
     y <- 1 + y_frac * (to_y(theta, r) - r)
     indices <- which(y >= y_cutoff)
     grid.polygon(x = c(0,0, x[indices],1,1), y=c(0,0.3,y[indices],0.3,0), gp=gp)
+}
+
+grid.pyramid <- function(gp=gpar()) {
+    grid.polygon(x = c(0, 0.5, 1), y = c(0, 1, 0), gp=gp)
 }
 
 # grid.inversecircle <- function() {
@@ -74,7 +78,7 @@ grid.halma <- function(gp) {
 #     grid.polygon(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white"))
 # }
 
-grid.kite <- function(gp) {
+grid.kite <- function(gp=gpar()) {
     x <- c(0.5, 0, 0.5, 1, 0.5)
     y <- c(0, 0.25, 1, 0.25, 0)
     grid.polygon(x, y, gp=gp)
@@ -85,7 +89,7 @@ grid.pp.polygon_fn <- function(n_vertices, theta) {
     r <- 0.5
     x <- to_x(theta, r) + 0.5
     y <- to_y(theta, r) + 0.5
-    function(gp) { grid.polygon(x, y, gp=gp) } 
+    function(gp=gpar()) { grid.polygon(x, y, gp=gp) } 
 }
 
 splice <- function(x0, x1) {
@@ -97,18 +101,19 @@ splice <- function(x0, x1) {
     append(vec, x0[ii+1])
 }
 
-grid.star_fn <- function(theta) {
-    theta_outer <- seq(0, 360, length.out=5+1) + theta
-    theta_inner <- seq(36, 360-36, length.out=5) + theta
+grid.concave_fn <- function(n_vertices, theta, r=0.2) {
+    theta_outer <- seq(0, 360, length.out=n_vertices+1) + theta
+    n_degrees <- 360 / n_vertices / 2
+    theta_inner <- seq(n_degrees, 360-n_degrees, length.out=n_vertices) + theta
     r_outer <- 0.5
-    r_inner <- 0.2
+    r_inner <- r
     x_outer <- to_x(theta_outer, r_outer) + 0.5
     x_inner <- to_x(theta_inner, r_inner) + 0.5
     y_outer <- to_y(theta_outer, r_outer) + 0.5
     y_inner <- to_y(theta_inner, r_inner) + 0.5
     x <- splice(x_outer, x_inner)
     y <- splice(y_outer, y_inner)
-    function(gp) { grid.polygon(x, y, gp=gp) }
+    function(gp=gpar()) { grid.polygon(x, y, gp=gp) }
 }
 
 get_component <- function(component_side) {
@@ -201,6 +206,12 @@ get_shape_theta <- function(component_side, i_s, i_r, cfg) {
     theta[i_s] 
 }
 
+get_shape_r <- function(component_side, i_s, i_r, cfg) {
+    r <- numeric_cleave(get_style_element("shape_r", component_side, cfg, 0.2, i_s, i_r))
+    r <- expand_suit_elements(r, "shape_r", component_side, cfg)
+    r[i_s] 
+}
+
 get_shape <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
                tile_back = "rect",
@@ -208,31 +219,56 @@ get_shape <- function(component_side, i_s, i_r, cfg) {
                coin_back = "circle",
                coin_face = "circle",
                die_face = "rect",
-               suitdie_face = "rect",
-               saucer_face = "circle",
-               saucer_back = "circle",
                pawn_face = "halma",
                pawn_back = "halma",
+               saucer_face = "circle",
+               saucer_back = "circle",
+               pyramid_face = "pyramid",
+               pyramid_left = "pyramid",
+               pyramid_right = "pyramid",
+               pyramid_back = "pyramid",
                belt_face = "rect",
+               suitdie_face = "rect",
                chip_face = "circle",
                chip_back = "circle")
     get_style_element("shape", component_side, cfg, default, i_s, i_r)
 }
 
-get_grid_shape <- function(shape, theta) {
-    switch(shape,
-           circle = grid.circle,
-           halma = grid.halma,
-           kite = grid.kite,
-           rect = grid.rect,
-           star = grid.star_fn(theta),
-           grid.pp.polygon_fn(as.numeric(shape), theta))
+get_n_vertices <- function(shape) {
+    as.numeric(gsub("convex|concave", "", shape))
+}
+
+get_grid_shape <- function(shape, theta=0, r=0.2) {
+    if (shape == "circle") {
+        grid.circle
+    } else if (shape == "rect") {
+        grid.rect
+    } else if (shape == "kite") {
+        grid.kite
+    } else if (shape == "halma") {
+        grid.halma
+    } else if (shape == "pyramid") {
+        grid.pyramid
+    } else if (grepl("^concave", shape)) {
+        grid.concave_fn(get_n_vertices(shape), theta, r) 
+    } else if (grepl("^convex", shape)) {
+        grid.pp.polygon_fn(get_n_vertices(shape), theta)
+    } else {
+        stop(paste("Don't know how to draw shape", shape))
+    }
 }
 
 get_shape_fn <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
-    theta <- get_shape_theta(component_side, i_s, i_r, cfg)
-    get_grid_shape(shape, theta)
+    if(grepl("^con", shape)) 
+        theta <- get_shape_theta(component_side, i_s, i_r, cfg)
+    else
+        theta <- 0
+    if(grepl("^concave", shape))
+        r <- get_shape_r(component_side, i_s, i_r, cfg)
+    else
+        r <- 0.2
+    get_grid_shape(shape, theta, r)
 }
 
 get_suit_color_helper <- function(component_side, i_s, i_r, cfg=list()) {
@@ -883,7 +919,7 @@ add_gridlines <- function(opt) {
     } else {
         o <- 0.01
         lwd <- 4
-        n_vertices <- as.numeric(opt$shape)
+        n_vertices <- get_n_vertices(shape)
         theta <- opt$shape_theta
         theta <- seq(0, 360, length.out=n_vertices+1) + theta
         theta <- theta[1:(length(theta)-1)]
@@ -911,7 +947,7 @@ add_checkers <- function(opt) {
     } else if (shape %in% c("circle", "kite", "halma")) {
         stop(paste("Don't know how to add checkers to shape", shape))
     } else {
-        n_vertices <- as.numeric(opt$shape)
+        n_vertices <- get_n_vertices(shape)
         theta <- opt$shape_theta
         theta <- seq(0, 360, length.out=n_vertices+1) + theta
         nt <- length(theta) - 1
@@ -964,8 +1000,8 @@ add_hexlines <- function(opt, omit_direction=FALSE) {
 }
 
 add_dm_symbol <- function(opt) {
-    dmgp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=dmgp)
+    gp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
+    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=gp)
 }
 add_primary_symbol <- function(opt) {
     gp <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, fontfamily=opt$ps_font)

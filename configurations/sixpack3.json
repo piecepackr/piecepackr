@@ -6,5 +6,5 @@
   "suit_symbols_scale": ["0.7,0.7,0.7,0.7,0.6,0.6,0.9"],
   "suit_colors": ["darkred,black,darkgreen,darkblue,orange3,purple,tan4"],
   "background_colors.unsuited": ["seashell3"],
-  "shape.chip": ["5"]
+  "shape.chip": ["convex5"]
 }

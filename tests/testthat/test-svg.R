@@ -15,7 +15,7 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("tile_back", function() dc("tile_back"))
     vdiffr::expect_doppelganger("tile_back-svg", function() dc("tile_back", svg=TRUE))
     vdiffr::expect_doppelganger("tile_back-hex", 
-                                function() dc("tile_back", cfg=list(shape.tile_back="6")))
+                                function() dc("tile_back", cfg=list(shape.tile_back="convex6")))
     # expect_error(dc("tile_back", cfg=list(shape.tile_back="halma")), "Don't know how to add")
     vdiffr::expect_doppelganger("tile_face.s1.r1", function() dc("tile_face", i_s=1, i_r=1))
     vdiffr::expect_doppelganger("tile_face.s3.r2", function() dc("tile_face", i_s=3, i_r=2))
@@ -28,6 +28,12 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("coin_face.r1", function() dc("coin_face", i_r=1))
     vdiffr::expect_doppelganger("coin_face.r2", function() dc("coin_face", i_r=2))
     vdiffr::expect_doppelganger("coin_face.r4", function() dc("coin_face", i_r=4))
+    vdiffr::expect_doppelganger("coin_face.r4pyramid", 
+                                function() dc("coin_face", i_r=4, cfg=list(shape.coin="pyramid")))
+    vdiffr::expect_doppelganger("coin_face.r4convex8", 
+                                function() dc("coin_face", i_r=4, cfg=list(shape.coin="convex8")))
+    vdiffr::expect_doppelganger("coin_face.r4concave8", 
+                                function() dc("coin_face", i_r=4, cfg=list(shape.coin="concave8", shape_r.coin=0.4)))
     vdiffr::expect_doppelganger("die_face.s4.r1", function() dc("die_face", i_s=4, i_r=1))
     vdiffr::expect_doppelganger("die_face.s3.r2", function() dc("die_face", i_s=3, i_r=2))
     vdiffr::expect_doppelganger("die_face.s2.r5", function() dc("die_face", i_s=2, i_r=5))
@@ -44,11 +50,11 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("chip_face.s3.r3", function() dc("chip_face", i_s=3, i_r=3))
     vdiffr::expect_doppelganger("chip_back.s4", function() dc("chip_back", i_s=4))
     vdiffr::expect_doppelganger("chip_back.s3-hex", 
-                                function() dc("chip_back", cfg=list(shape.chip="6"), i_s=3))
+                                function() dc("chip_back", cfg=list(shape.chip="convex6"), i_s=3))
     vdiffr::expect_doppelganger("chip_back.s2-kite", 
                                 function() dc("chip_back", cfg=list(shape.chip="kite"), i_s=2))
     vdiffr::expect_doppelganger("chip_back.s1-star", 
-                                function() dc("chip_back", cfg=list(shape.chip="star"), i_s=1))
+                                function() dc("chip_back", cfg=list(shape.chip="concave5"), i_s=1))
 
     vdiffr::expect_doppelganger("preview", draw_preview)
     vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5", suit_colors="darkred,black,darkgreen,darkblue,grey")))
@@ -66,7 +72,7 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", list(ribbon_colors = "grey"), i_r = 3), "Don't know how to add ribbons to shape circle")
 
     vdiffr::expect_doppelganger("tile_back.checkers", function() dc("tile_back", cfg=list(checker_colors.tile_back = "blue")))
-    vdiffr::expect_doppelganger("tile_back.checkers.hex", function() dc("tile_back", cfg=list(shape.tile_back = "6", checker_colors.tile_back = "blue")))
+    vdiffr::expect_doppelganger("tile_back.checkers.hex", function() dc("tile_back", cfg=list(shape.tile_back = "convex6", checker_colors.tile_back = "blue")))
     vdiffr::expect_doppelganger("tile_back.hexlines", function() dc("tile_back", cfg=list(hexline_colors.tile_back = "green")))
 
     df <- tibble::tribble(~component_side, ~x, ~y, ~i_s, ~i_r,

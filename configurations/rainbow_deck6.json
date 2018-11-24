@@ -7,5 +7,5 @@
   "suit_colors": ["#ff80c0,#ffff80,#80ff00,#80ffff,#c080ff,#c0c0c0,sienna"],
   "background_colors.suited": ["black"],
   "background_colors.unsuited": ["grey"],
-  "shape.chip": ["5"]
+  "shape.chip": ["convex5"]
 }

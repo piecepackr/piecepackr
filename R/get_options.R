@@ -42,12 +42,15 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
 
     # Style
     parser <- add_option(parser, "--shape", default=NULL,
-                         help=paste('either "rect", "circle", "halma", "kite", "star",',
-                                   "or a number representing number of sides of a regular polygon",
+                         help=paste('either "rect", "circle", "halma", "kite" or "concave#/convex#",',
+                                   "where # represents number of outside polygon vertices",
                                    "(default is to choose reasonable shape based on component)'"))
     parser <- add_option(parser, "--shape_theta", default=NULL, type="double",
-                         help=paste('If shape is a number or "star" then angle of first vertex',
+                         help=paste('If shape is "concave#" or "convex#" then angle of first vertex',
                                    '(in degrees) of polygon', '(default is "90")'))
+    parser <- add_option(parser, "--shape_r", default=NULL, type="double",
+                         help=paste('If shape is "concave#" then how far from center are inner vertices',
+                                   '(from 0 to 0.5)', '(default is "0.2")'))
 
     parser <- add_option(parser, "--dm_theta", default=NULL, type="double", 
                          help=paste('Angle (in degrees) of polar coordinates of direction mark',
@@ -136,7 +139,7 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
                 "dm_colors", "ps_color", "suit_colors", "background_colors",
                 "hexline_colors", "checker_colors", "gridline_colors", "ribbon_colors",
                 "border_colors", 
-                "shape", "shape_theta", "draw_component_fn")
+                "shape", "shape_theta", "shape_r", "draw_component_fn")
     for (affix in affixes) {
         if (affix == "") next
 

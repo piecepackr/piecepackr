@@ -6,5 +6,5 @@
   "rank_symbols_scale": ["0.6"],
   "suit_symbols_scale": ["0.6,0.5,0.6,0.6,0.5"],
   "suit_colors": ["darkgreen,red3,chocolate4,black,darkblue,grey"],
-  "shape.chip": ["5"]
+  "shape.chip": ["convex5"]
 }

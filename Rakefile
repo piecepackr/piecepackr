@@ -101,7 +101,7 @@ chinese_ranks_sc1 = ' --rank_symbols=鼠,龙,猴,牛,蛇,鸡 --rank_symbols_font
 chinese_ranks_sc2 = ' --rank_symbols=虎,马,狗,兔,羊,猪 --rank_symbols_font="Noto Sans CJK SC" --rank_symbols_scale=0.7'
 
 # Configurations
-dozenal_chips = " --shape.chip=5"
+dozenal_chips = " --shape.chip=convex5"
 pyramid_configuration = " --rank_symbols.chip_face='A,B,C,D,E,F' --use_ace_as_ace.chip_face --dm_symbols.chip= --shape.chip=kite"
 orthodox_dm = ' --dm_colors.coin=black --dm_symbols.die= --dm_symbols.coin="|" --dm_symbols_font.coin="Noto Sans" --dm_r.coin=0.45'
 # ○ ⚆ ⚇ ● ⚈ ⚉
@@ -112,8 +112,8 @@ orthodox_pawns6p = " --invert_colors.pawn --suit_symbols.pawn=⚈,⚈,⚉,⚉,, 
 orthodox_saucers1 = ' --suit_symbols.saucer_face=● --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
 orthodox_saucers2 = ' --suit_symbols.saucer_face=⚈,⚉,⚈,⚉, --suit_symbols_scale.saucer_face=0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
 orthodox_saucers3 = ' --suit_symbols.saucer_face=⚈,⚈,⚉,⚉,●,●, --suit_symbols_scale.saucer_face=0.7,0.7,0.7,0.7,0.7,0.7 --suit_symbols_font.saucer_face="Noto Sans Symbols"' + orthodox_saucers
-hex_components = " --shape.tile=6 --shape.coin=3 --shape.saucer=3 --shape.chip=3 --dm_symbols_scale.chip=0.7 --shape_theta.coin=-90 --shape_theta.saucer=-90 --shape_theta.chip=-90 --dm_theta.coin=-90 --dm_theta.saucer=-90 --dm_theta.chip=-90"
-star_chips  = " --shape.chip=star --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip=0.7"
+hex_components = " --shape.tile=convex6 --shape.coin=convex3 --shape.saucer=convex3 --shape.chip=convex3 --dm_symbols_scale.chip=0.7 --shape_theta.coin=-90 --shape_theta.saucer=-90 --shape_theta.chip=-90 --dm_theta.coin=-90 --dm_theta.saucer=-90 --dm_theta.chip=-90"
+star_chips  = " --shape.chip=concave5 --rank_symbols_scale.chip_face=0.7 --suit_symbols_scale.chip_back=0.7 --dm_symbols_scale.chip=0.7"
 
 ## Demos
 demos = ["chess", "chinese_zodiac", "crown_and_anchor", "default",

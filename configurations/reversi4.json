@@ -5,5 +5,5 @@
   "suit_symbols_scale": ["1,1,1,1,1.4,0.7,0.9"],
   "suit_colors": ["black,black,black,black,black,black,grey"],
   "suit_colors.chip_back": ["grey"],
-  "shape.chip": ["5"]
+  "shape.chip": ["convex5"]
 }

@@ -2,6 +2,7 @@
 piecepackr 0.10.x
 =================
 
+* Generalized star shape to ``concave#`` and ``#`` shape to ``convex#`` shape (#100).  Added "pyramid" triangle shape (progress on #37).
 * New ``draw_components`` function allows one to draw several piecepack components specified in a data frame (#96).
 * New ``load_configurations`` function allows one to load in several JSON configuration files and/or internal piecepackr configurations in a layered (cascading) manner (#81).
 * Made several non-reverse-compatible API changes to configuration and piecepack image making functions and scripts.
