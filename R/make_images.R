@@ -23,6 +23,10 @@ BELT_HEIGHT <- 1/2
 BELT_WIDTH <- 4 * DIE_WIDTH
 PYRAMID_WIDTHS <- 2:8 * 1/8
 PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
+W <- 3/16
+S <- 1
+MATCHSTICK_WIDTHS <- c(2*W, rep(W, 5))
+MATCHSTICK_HEIGHTS <- c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)
 
 #' Convert delimiter separated string to vector
 #'
@@ -806,38 +810,50 @@ draw_preview <- function(cfg=list()) {
 
 }
 
-get_pp_width <- function(component, i_r) {
-    switch(component, 
+get_pp_width <- function(component_side, i_r) {
+    switch(component_side,
+           pyramid_top = PYRAMID_WIDTHS[i_r],
+           { 
+        component <- get_component(component_side)
+        switch(component, 
            belt = BELT_WIDTH,
            chip = CHIP_WIDTH,
            coin = COIN_WIDTH,
            die = DIE_WIDTH,
+           matchstick = MATCHSTICK_WIDTHS[i_r],
            pawn = PAWN_WIDTH,
            pyramid = PYRAMID_WIDTHS[i_r],
            saucer = SAUCER_WIDTH,
            suitdie = DIE_WIDTH,
            tile = TILE_WIDTH,
            stop(paste("Don't know width of component", component)))
+    })
 }
 
-get_pp_height <- function(component, i_r) {
-    switch(component, 
-           belt = BELT_HEIGHT,
-           chip = CHIP_WIDTH,
-           coin = COIN_WIDTH,
-           die = DIE_WIDTH,
-           pawn = PAWN_HEIGHT,
-           pyramid = PYRAMID_HEIGHTS[i_r],
-           saucer = SAUCER_WIDTH,
-           suitdie = DIE_WIDTH,
-           tile = TILE_WIDTH,
-           stop(paste("Don't know height of component", component)))
+get_pp_height <- function(component_side, i_r) {
+    switch(component_side,
+           pyramid_top = PYRAMID_WIDTHS[i_r],
+           {
+        component <- get_component(component_side)
+        switch(component, 
+               belt = BELT_HEIGHT,
+               chip = CHIP_WIDTH,
+               coin = COIN_WIDTH,
+               die = DIE_WIDTH,
+               matchstick = MATCHSTICK_HEIGHTS[i_r],
+               pawn = PAWN_HEIGHT,
+               pyramid = PYRAMID_HEIGHTS[i_r],
+               saucer = SAUCER_WIDTH,
+               suitdie = DIE_WIDTH,
+               tile = TILE_WIDTH,
+               stop(paste("Don't know height of component", component)))
+    })
 }
 
-pp_device <- function(filename, component=NULL, theta=0, width=NULL, height=NULL, res=72) {
+pp_device <- function(filename, component_side=NULL, theta=0, width=NULL, height=NULL, res=72) {
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- get_pp_width(component, i_r)
-    if (is.null(height)) height <- get_pp_height(component, i_r)
+    if (is.null(width)) width <- get_pp_width(component_side, i_r)
+    if (is.null(height)) height <- get_pp_height(component_side, i_r)
     if (theta %in% c(90, 270)) {
         twidth <- height
         height <- width
@@ -852,8 +868,7 @@ pp_device <- function(filename, component=NULL, theta=0, width=NULL, height=NULL
                 ps = cairo_ps(filename, width, height, bg=bg),
                 svg = svg(filename, width, height, bg=bg),
                 tiff = tiff(filename, width, height, "in", res=res, bg=bg))
-    addViewport(angle=theta, name="main")
-    downViewport("main")
+    pushViewport(viewport(angle=theta, name="main"))
 }
 
 component_filename <- function(directory, cfg, component_side, format, theta, 
@@ -881,7 +896,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
     suppressWarnings({
         for (component_side in c("saucer_back", "tile_back")) {
             f <- component_filename(directory, cfg, component_side, format, theta)
-            pp_device(f, get_component(component_side), theta)
+            pp_device(f, component_side, theta)
             draw_component(component_side, cfg)
             invisible(dev.off())
         }
@@ -891,7 +906,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
                                        "pawn_back", "pawn_face",
                                        "saucer_face", "suitdie_face")) {
                 f <- component_filename(directory, cfg, component_side, format, theta, i_s)
-                pp_device(f, get_component(component_side), theta)
+                pp_device(f, component_side, theta)
                 draw_component(component_side, cfg, i_s)
                 invisible(dev.off())
             }
@@ -899,7 +914,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
             for (i_r in 1:get_n_ranks(cfg)) {
                 for (component_side in c("chip_face", "die_face", "tile_face")) {
                     f <- component_filename(directory, cfg, component_side, format, theta, i_s, i_r)
-                    pp_device(f, get_component(component_side), theta)
+                    pp_device(f, component_side, theta)
                     draw_component(component_side, cfg, i_s, i_r)
                     invisible(dev.off())
                 }
@@ -908,7 +923,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
         for (i_r in 1:get_n_ranks(cfg)) {
             component_side <- "coin_face"
             f <- component_filename(directory, cfg, component_side, format, theta, i_r=i_r)
-            pp_device(f, get_component(component_side), theta)
+            pp_device(f, component_side, theta)
             draw_component(component_side, cfg, i_r=i_r)
             invisible(dev.off())
         }
@@ -1045,7 +1060,9 @@ add_ribbons <- function(opt) {
 }
 
 draw_component_helper <- function(component_side, i_s, i_r, cfg) {
-    default <- "draw_component_basic"
+    default <- switch(component_side,
+                      pyramid_top = draw_pyramid_top,
+                      draw_component_basic)
     draw_fn <- get_style_element("draw_component_fn", component_side, cfg, default, i_s, i_r)
     if (is.character(draw_fn))
         draw_fn <- match.fun(draw_fn)
@@ -1064,6 +1081,14 @@ draw_component_basic <- function(component_side, i_s, i_r, cfg) {
     add_dm_symbol(opt)
     add_border(opt)
     invisible(NULL)
+}
+
+draw_pyramid_top <- function(component_side, i_s, i_r, cfg) {
+    cfg$scale <- 0.3 * get_scale(cfg)
+    draw_component("pyramid_face",  cfg, i_s, i_r, y=0.75, width=1.0, height=0.5, angle=180)
+    draw_component("pyramid_back",  cfg, i_s, i_r, y=0.25, width=1.0, height=0.5, angle=0)
+    draw_component("pyramid_left",  cfg, i_s, i_r, x=0.25, width=1.0, height=0.5, angle=-90)
+    draw_component("pyramid_right", cfg, i_s, i_r, x=0.75, width=1.0, height=0.5, angle=90)
 }
 
 draw_pawn <- function(i_s, cfg) {
@@ -1117,16 +1142,15 @@ draw_pawn <- function(i_s, cfg) {
 #' @export
 draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_r=0, x=0.5, y=0.5, 
                            width=NULL, height=NULL, svg=FALSE, ...) {
-    component <- get_component(component_side)
     if (is.null(width))
-        width=inch(get_pp_width(component, i_r))
+        width=inch(get_pp_width(component_side, i_r))
     if (is.null(height))
-        height=inch(get_pp_height(component, i_r))
+        height=inch(get_pp_height(component_side, i_r))
     if (svg) {
         svg_file <- tempfile(fileext=".svg")
         on.exit(unlink(svg_file))
-        pp_width=get_pp_width(component, i_r)
-        pp_height=get_pp_height(component, i_r)
+        pp_width=get_pp_width(component_side, i_r)
+        pp_height=get_pp_height(component_side, i_r)
 
         svg(svg_file, width=pp_width, height=pp_height)
         draw_component(component_side, cfg, i_s, i_r)

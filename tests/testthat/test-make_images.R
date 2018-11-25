@@ -4,6 +4,6 @@ test_that("make_images works as expected", {
     on.exit(unlink(directory))
     dir.create(directory)
     make_images(list(), directory)
-    expect_true(length(list.files(directory)) > 0)
+    expect_equal(length(list.files(directory)), 108)
 })
 

@@ -69,7 +69,7 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("pyramid_right.s3.r2", function() dc("pyramid_right", i_s=3, i_r=2))
     vdiffr::expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", i_s=4, i_r=1))
     vdiffr::expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", i_s=2, i_r=1))
-    # vdiffr::expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", i_s=4, i_r=3))
+    vdiffr::expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", i_s=4, i_r=3))
 
     # preview
     vdiffr::expect_doppelganger("preview", draw_preview)
