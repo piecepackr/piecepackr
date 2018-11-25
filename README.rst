@@ -129,7 +129,7 @@ System dependencies
 
 #. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you by R when you install the ``piecepackr`` R package.
 #. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
-#. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_piecepacks`` function/executable)
+#. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_pnp`` function/executable)
 #. `poppler-utils (aka xpdf-utils)  <https://poppler.freedesktop.org/>`_ (not needed if you won't be using the ``get_embedded_font`` function/executable)
 
 System suggestions
@@ -149,7 +149,7 @@ You'll need to install some system requirements to use this R package and its ex
 
     $ sudo apt install -y ghostscript poppler-utils r-base 
 
-The ``ghostscript`` system requirement can be dropped if you do not plan on using the ``collect_piecepacks`` function/executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  The ``poppler-utils`` system requirement can be dropped if you do not plan on using ``get_embedded_font`` function/executable to help figure out which fonts ``cairo_pdf`` actually embeds into output pdf's. 
+The ``ghostscript`` system requirement can be dropped if you do not plan on using the ``collect_pnp`` function/executable to collect several print-and-play pdf's into one pdf (with previews at the beginning).  The ``poppler-utils`` system requirement can be dropped if you do not plan on using ``get_embedded_font`` function/executable to help figure out which fonts ``cairo_pdf`` actually embeds into output pdf's. 
 
 You'll also need to install the development version of the ``piecepackr`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` or ``install_github`` functions from the ``devtools`` package ::
 
@@ -169,17 +169,17 @@ R does not add executables in an installed R package to a user's path.  If you p
 
 3. You can use a simple shell script wrapper like `Rbin <https://github.com/trevorld/Rbin>`_ to access them::
 
-    $ Rbin piecepackr configure_piecepack [options]
-    $ Rbin piecepackr make_piecepack [options]
+    $ Rbin piecepackr configure [options]
+    $ Rbin piecepackr make_pnp [options]
     $ Rbin piecepackr make_preview [options]
-    $ Rbin piecepackr collect_piecepacks [options]
+    $ Rbin piecepackr collect_pnp [options]
 
    If using ``Rbin`` you may want to create some aliases in your ``.bashrc`` file so it appears that the Rscript executables are on your path::
 
-    alias configure_piecepack="Rbin piecepackr configure_piecepack"
-    alias make_piecepack="Rbin piecepackr make_piecepack"
+    alias configure="Rbin piecepackr configure"
+    alias make_pnp="Rbin piecepackr make_pnp"
     alias make_preview="Rbin piecepackr make_preview"
-    alias collect_piecepacks="Rbin piecepackr collect_piecepacks"
+    alias collect_pnp="Rbin piecepackr collect_pnp"
 
 If you want to run the demos you'll also need to clone the git repository and you'll need ``rake``  and several fonts:: 
 
