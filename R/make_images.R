@@ -2,14 +2,15 @@
 #' @import grid
 
 COMPONENTS <- c("tile", "coin", "die", "suitdie", 
-           "pawn", "belt", "saucer", "chip")
+           "pawn", "belt", "saucer", "chip", "pyramid")
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
            "coin_back", "coin_face",
            "die_face", "suitdie_face", 
            "pawn_face", "pawn_back", 
            "belt_face",  "saucer_face", "saucer_back",
-           "chip_face", "chip_back")
-# layouts "pawn_layout", "die_layout", "suitdie_layout", "suitrankdie_layout", "pyramid_layout"
+           "chip_face", "chip_back", 
+           "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right")
+#### "pawn_layout", "die_layout", "suitdie_layout", "suitrankdie_layout", "pyramid_layout", "pyramid_top""
 COIN_WIDTH <- 3/4
 DIE_WIDTH <- 1/2
 TILE_WIDTH <- 2
@@ -20,6 +21,8 @@ PAWN_WIDTH <- 1/2
 PAWN_BASE <- 3/8
 BELT_HEIGHT <- 1/2
 BELT_WIDTH <- 4 * DIE_WIDTH
+PYRAMID_WIDTHS <- 2:8 * 1/8
+PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
 
 #' Convert delimiter separated string to vector
 #'
@@ -230,7 +233,8 @@ get_shape <- function(component_side, i_s, i_r, cfg) {
                belt_face = "rect",
                suitdie_face = "rect",
                chip_face = "circle",
-               chip_back = "circle")
+               chip_back = "circle",
+               stop(paste("Don't know correct shape for", component_side)))
     get_style_element("shape", component_side, cfg, default, i_s, i_r)
 }
 
@@ -309,6 +313,7 @@ get_dm_r <- function(component_side, i_s, i_r, cfg) {
                      rect = sqrt(0.25^2 + 0.25^2),
                      circle = sqrt(0.25^2 + 0.25^2),
                      halma = 0.25,
+                     pyramid = 0.1,
                      0.3)
     r <- numeric_cleave(get_style_element("dm_r", component_side, cfg, default, i_s, i_r))
     expand_suit_elements(r, "dm_r", component_side, cfg)[i_s]
@@ -316,13 +321,13 @@ get_dm_r <- function(component_side, i_s, i_r, cfg) {
 
 get_ps_theta <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
-    default <- ifelse(shape == "halma", -90, 0)
+    default <- switch(shape, halma=-90, pyramid=-90, 0)
     theta <- numeric_cleave(get_style_element("ps_theta", component_side, cfg, default, i_s, i_r))
     expand_suit_elements(theta, "ps_theta", component_side, cfg)[i_s]
 }
 get_ps_r <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
-    default <- switch(shape, halma = 0.25, 0.0)
+    default <- switch(shape, halma=0.25, pyramid=0.25, 0.0)
     r <- numeric_cleave(get_style_element("ps_r", component_side, cfg, default, i_s, i_r))
     expand_suit_elements(r, "ps_r", component_side, cfg)[i_s]
 }
@@ -355,13 +360,14 @@ get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
         } else if (component_side %in% c("saucer_back", "saucer_face")) {
             dm_symbols <- "\u25b2" # "▲"
             # dm_symbols <- "\u265f" # "♟"
-        } else if (component_side %in% c("pawn_face")) {
+        } else if (component_side %in% c("pawn_face", "pyramid_face")) {
             dm_symbols <- "\u0298\u0298" # "ʘʘ"
             # dm_symbols <- "\u2c7a\u2c7a" # "ⱺⱺ"
             # dm_symbols <- "\U0001f440" # "👀"
             # dm_symbols <- "\U0001f603" # "😃"
         } else if (component_side %in% c("suitdie_face", "pawn_back", 
-                                         "belt_face", "tile_back")) {
+                                         "belt_face", "tile_back",
+                                         "pyramid_left", "pyramid_right", "pyramid_back")) {
             dm_symbols <- ""
         } else {
             dm_symbols <- get_suit_symbols(component_side, i_s, i_r, cfg)
@@ -593,6 +599,8 @@ get_suit_fontsize <- function(component_side, i_s, i_r, cfg) {
                  "saucer_back" = 42,
                  "saucer_face" = 42,
                  "suitdie_face" = 32,
+                 "pyramid_face" = 60 * (i_r+1) / 8,
+                 "pyramid_back" = 60 * (i_r+1) / 8,
                  24)
     get_style_element("suit_symbols_fontsize", component_side, cfg, default, i_s, i_r)
 }
@@ -602,6 +610,7 @@ get_dm_fontsize <- function(component_side, i_s, i_r, cfg) {
                  "tile_face" = 40,
                  "pawn_face" = 12,
                  "pawn_back" = 12,
+                 "pyramid_face" = 12 * (i_r+1) / 8, 
                  12)
     get_style_element("dm_fontsize", component_side, cfg, default, i_s, i_r)
 }
@@ -612,6 +621,8 @@ get_rank_fontsize <- function(component_side, i_s, i_r, cfg) {
                  "chip_face" = 22,
                  "coin_face" = 28,
                  "tile_face" = 72,
+                 "pyramid_left"  = 60 * (i_r+1) / 8,
+                 "pyramid_right" = 60 * (i_r+1) / 8,
                  20)
     get_style_element("rank_symbols_fontsize", component_side, cfg, default, i_s, i_r)
 }
@@ -633,7 +644,7 @@ to_y <- function(theta, r) {
 # }
 
 get_ps_element <- function(component_side, suit_element, rank_element) {
-    if (component_side %in% c("chip_face", "coin_face", "die_face", "tile_face")) {
+    if (component_side %in% c("chip_face", "coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right")) {
         rank_element
     } else if (component_side == "tile_back") {
         NULL
@@ -795,36 +806,38 @@ draw_preview <- function(cfg=list()) {
 
 }
 
-get_pp_width <- function(component) {
+get_pp_width <- function(component, i_r) {
     switch(component, 
            belt = BELT_WIDTH,
            chip = CHIP_WIDTH,
            coin = COIN_WIDTH,
-           pawn = PAWN_WIDTH,
            die = DIE_WIDTH,
+           pawn = PAWN_WIDTH,
+           pyramid = PYRAMID_WIDTHS[i_r],
            saucer = SAUCER_WIDTH,
            suitdie = DIE_WIDTH,
            tile = TILE_WIDTH,
-           1)
+           stop(paste("Don't know width of component", component)))
 }
 
-get_pp_height <- function(component) {
+get_pp_height <- function(component, i_r) {
     switch(component, 
            belt = BELT_HEIGHT,
            chip = CHIP_WIDTH,
            coin = COIN_WIDTH,
-           pawn = PAWN_HEIGHT,
            die = DIE_WIDTH,
+           pawn = PAWN_HEIGHT,
+           pyramid = PYRAMID_HEIGHTS[i_r],
            saucer = SAUCER_WIDTH,
            suitdie = DIE_WIDTH,
            tile = TILE_WIDTH,
-           1)
+           stop(paste("Don't know height of component", component)))
 }
 
 pp_device <- function(filename, component=NULL, theta=0, width=NULL, height=NULL, res=72) {
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- get_pp_width(component)
-    if (is.null(height)) height <- get_pp_height(component)
+    if (is.null(width)) width <- get_pp_width(component, i_r)
+    if (is.null(height)) height <- get_pp_height(component, i_r)
     if (theta %in% c(90, 270)) {
         twidth <- height
         height <- width
@@ -1106,14 +1119,14 @@ draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_
                            width=NULL, height=NULL, svg=FALSE, ...) {
     component <- get_component(component_side)
     if (is.null(width))
-        width=inch(get_pp_width(component))
+        width=inch(get_pp_width(component, i_r))
     if (is.null(height))
-        height=inch(get_pp_height(component))
+        height=inch(get_pp_height(component, i_r))
     if (svg) {
         svg_file <- tempfile(fileext=".svg")
         on.exit(unlink(svg_file))
-        pp_width=get_pp_width(component)
-        pp_height=get_pp_height(component)
+        pp_width=get_pp_width(component, i_r)
+        pp_height=get_pp_height(component, i_r)
 
         svg(svg_file, width=pp_width, height=pp_height)
         draw_component(component_side, cfg, i_s, i_r)
