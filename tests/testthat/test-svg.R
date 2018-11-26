@@ -71,8 +71,17 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", i_s=2, i_r=1))
     vdiffr::expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", i_s=4, i_r=3))
 
+    # matchsticks
+    vdiffr::expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", i_s=1, i_r=1))
+    vdiffr::expect_doppelganger("matchstick_face.s2.r2", function() dc("matchstick_face", i_s=2, i_r=2))
+    vdiffr::expect_doppelganger("matchstick_face.s3.r3", function() dc("matchstick_face", i_s=3, i_r=3))
+    vdiffr::expect_doppelganger("matchstick_face.s4.r4", function() dc("matchstick_face", i_s=4, i_r=4))
+    vdiffr::expect_doppelganger("matchstick_face.s1.r5", function() dc("matchstick_face", i_s=1, i_r=5))
+    vdiffr::expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", i_s=2, i_r=6))
+    vdiffr::expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=list(invert_colors=TRUE), i_s=3, i_r=6))
+
     # preview
-    vdiffr::expect_doppelganger("preview", draw_preview)
+    # vdiffr::expect_doppelganger("preview", draw_preview)
     # dice
     vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5", suit_colors="darkred,black,darkgreen,darkblue,grey")))
     vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))

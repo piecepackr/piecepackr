@@ -226,6 +226,8 @@ get_shape <- function(component_side, i_s, i_r, cfg) {
                coin_back = "circle",
                coin_face = "circle",
                die_face = "rect",
+               matchstick_back = "rect",
+               matchstick_face = "rect",
                pawn_face = "halma",
                pawn_back = "halma",
                saucer_face = "circle",
@@ -308,14 +310,18 @@ is_suited <- function(component_side, i_s, i_r, cfg) {
 
 get_dm_theta <- function(component_side, i_s, i_r, cfg) {
     default <- ifelse(component_side %in% c("tile_face", "die_face", "suitdie_face"), 135, 90)
+    default <- ifelse(component_side == "matchstick_face" && i_r == 1, 135, default)
     theta <- numeric_cleave(get_style_element("dm_theta", component_side, cfg, default, i_s, i_r))
     expand_suit_elements(theta, "dm_theta", component_side, cfg)[i_s]
 }
 get_dm_r <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
+    r_corner <- sqrt(0.25^2 + 0.25^2)
     default <- switch(shape,
-                     rect = sqrt(0.25^2 + 0.25^2),
-                     circle = sqrt(0.25^2 + 0.25^2),
+                     rect = switch(component_side, 
+                                   matchstick_face = ifelse(i_r > 1, 0.4, r_corner),
+                                   r_corner),
+                     circle = r_corner,
                      halma = 0.25,
                      pyramid = 0.1,
                      0.3)
@@ -370,7 +376,7 @@ get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
             # dm_symbols <- "\U0001f440" # "👀"
             # dm_symbols <- "\U0001f603" # "😃"
         } else if (component_side %in% c("suitdie_face", "pawn_back", 
-                                         "belt_face", "tile_back",
+                                         "belt_face", "tile_back", "matchstick_back",
                                          "pyramid_left", "pyramid_right", "pyramid_back")) {
             dm_symbols <- ""
         } else {
@@ -648,9 +654,9 @@ to_y <- function(theta, r) {
 # }
 
 get_ps_element <- function(component_side, suit_element, rank_element) {
-    if (component_side %in% c("chip_face", "coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right")) {
+    if (component_side %in% c("chip_face", "coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
         rank_element
-    } else if (component_side == "tile_back") {
+    } else if (component_side %in% c("tile_back", "matchstick_back")) {
         NULL
     } else {
         suit_element
