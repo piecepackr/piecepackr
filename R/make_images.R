@@ -788,8 +788,8 @@ draw_preview <- function(cfg=list()) {
                 "coin_face", NA,  3, 1*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH - 0.5*COIN_WIDTH,
                 "coin_back",  2, NA, 2*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH - 0.5*COIN_WIDTH,
                 "coin_back",  3, NA, 3*COIN_WIDTH - 0.5*COIN_WIDTH, 0.5*TILE_WIDTH - 0.5*COIN_WIDTH,
-                "saucer_back",  1, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH + 0.5 * SAUCER_WIDTH,
-                "saucer_face", NA, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH - 0.5 * SAUCER_WIDTH,
+                "saucer_face",  1, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH + 0.5 * SAUCER_WIDTH,
+                "saucer_back", NA, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH - 0.5 * SAUCER_WIDTH,
                 "pawn_face", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH + 0.5*PAWN_HEIGHT,
                 "pawn_back", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH - 0.5*PAWN_HEIGHT 
           )
@@ -798,10 +798,12 @@ draw_preview <- function(cfg=list()) {
     if (get_n_suits(cfg) < 5) {
         df[5, "component_side"] <- "tile_back"
         df[5, "i_s"] <- get_i_unsuit(cfg)
+        df[5, "i_r"] <- NA
     }
     if (get_n_suits(cfg) < 6) {
         df[6, "component_side"] <- "tile_back"
         df[6, "i_s"] <- get_i_unsuit(cfg)
+        df[6, "i_r"] <- NA
     }
     if (get_n_suits(cfg) > 4) df[11, "i_s"] <- 5
     if (get_n_suits(cfg) > 5) df[12, "i_s"] <- 6
@@ -1076,8 +1078,47 @@ draw_component_helper <- function(component_side, i_s, i_r, cfg) {
     invisible(NULL)
 }
 
+#### Export and add documentation to load_configurations?
+add_opt_cache <- function(cfg=list()) {
+    if (is.list(cfg$cache)) return(cfg)
+    cfg$cache <- list()
+
+    n_ranks <- get_n_ranks(cfg)
+    n_suits <- get_n_suits(cfg)
+    i_unsuit <- n_suits + 1
+    cfg$cache[[paste0("tile_back", i_unsuit, 0)]] <- get_component_opt("tile_back", i_unsuit, 0, cfg)
+    cfg$cache[[paste0("saucer_back", i_unsuit, 0)]] <- get_component_opt("saucer_back", i_unsuit, 0, cfg)
+    cfg$cache[[paste0("tile_face", i_unsuit, n_ranks+1)]] <- get_component_opt("tile_face", i_unsuit, n_ranks+1, cfg) #### joker tile
+    for (i_r in 1:n_ranks) {
+        cfg$cache[[paste0("coin_face", i_unsuit, i_r)]] <- get_component_opt("coin_face", i_unsuit, i_r, cfg)
+    }
+    for (i_s in 1:n_suits) {
+        cfg$cache[[paste0("coin_back", i_s, 0)]] <- get_component_opt("coin_back", i_s, 0, cfg)
+        cfg$cache[[paste0("chip_back", i_s, 0)]] <- get_component_opt("chip_back", i_s, 0, cfg)
+        cfg$cache[[paste0("saucer_face", i_s, 0)]] <- get_component_opt("saucer_face", i_s, 0, cfg)
+        cfg$cache[[paste0("belt_face", i_s, 0)]] <- get_component_opt("belt_face", i_s, 0, cfg)
+        cfg$cache[[paste0("pawn_face", i_s, 0)]] <- get_component_opt("pawn_face", i_s, 0, cfg)
+        cfg$cache[[paste0("pawn_back", i_s, 0)]] <- get_component_opt("pawn_back", i_s, 0, cfg)
+    }
+    for (i_s in 1:(i_unsuit+1)) {
+        for (i_r in 1:n_ranks) {
+            cfg$cache[[paste0("chip_face", i_s, i_r)]] <- get_component_opt("chip_face", i_s, i_r, cfg)
+            cfg$cache[[paste0("die_face", i_s, i_r)]] <- get_component_opt("die_face", i_s, i_r, cfg)
+            cfg$cache[[paste0("tile_face", i_s, i_r)]] <- get_component_opt("tile_face", i_s, i_r, cfg)
+        }
+        cfg$cache[[paste0("suitdie_face", i_s, 0)]] <- get_component_opt("suitdie_face", i_s, 0, cfg)
+    }
+    cfg
+}
+
 draw_component_basic <- function(component_side, i_s, i_r, cfg) {
-    opt <- get_component_opt(component_side, i_s, i_r, cfg)
+    key <- paste0(component_side, i_s, i_r)
+    if(is.null(cfg[["cache"]][[key]])) {
+        # cat("missing", key, "\n")
+        opt <- get_component_opt(component_side, i_s, i_r, cfg)
+    } else {
+        opt <- cfg[["cache"]][[key]]
+    }
     add_background(opt)
     add_checkers(opt)
     add_hexlines(opt)

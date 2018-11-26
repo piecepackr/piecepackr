@@ -1,3 +1,5 @@
+cfg <- add_opt_cache()
+
 context("make_pnp works as expected")
 test_that("make_pnp works as expected", {
 
@@ -21,8 +23,8 @@ test_that("make_pnp works as expected", {
     pdf_collection_filename <- file.path(pdf_collection_dir, "piecepack_collection.pdf")
     on.exit(unlink(pdf_collection_filename))
 
-    make_pnp(list(), pdf_deck_filename, "letter")
-    make_preview(list(), svg_filename)
+    make_pnp(cfg, pdf_deck_filename, "letter")
+    make_preview(cfg, svg_filename)
 
     expect_true(file.exists(pdf_deck_filename))
     expect_equal(get_n_pages(pdf_deck_filename), 6)
@@ -34,5 +36,13 @@ test_that("make_pnp works as expected", {
     expect_equal(get_n_pages(pdf_preview_filename), 2)
     make_collection(pdf_collection_filename, c(pdf_preview_filename, pdf_deck_filename), "letter", list())
     expect_equal(get_n_pages(pdf_collection_filename), 8)
+})
 
+context("make_images works as expected")
+test_that("make_images works as expected", {
+    directory <- tempfile()
+    on.exit(unlink(directory))
+    dir.create(directory)
+    make_images(cfg, directory)
+    expect_equal(length(list.files(directory)), 108)
 })

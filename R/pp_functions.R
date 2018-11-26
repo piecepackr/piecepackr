@@ -322,10 +322,10 @@ draw_suit_page <- function(i_s, cfg=list(), deck_title="") {
                           "tile_back", 7, 5, i_unsuit, 0,
                           "belt_face", xbelt, ybelt, i_s, 0,
                           "belt_face", WIN_WIDTH-xbelt, ybelt, i_s, 0,
-                          "saucer_face", 4-0.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
-                          "saucer_face", 4+1.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
-                          "saucer_back", 4-1.5*SAUCER_WIDTH, ysaucer, i_s, 0,
-                          "saucer_back", 4+0.5*SAUCER_WIDTH, ysaucer, i_s, 0)
+                          "saucer_face", 4-0.5*SAUCER_WIDTH, ysaucer, i_s, 0,
+                          "saucer_face", 4+1.5*SAUCER_WIDTH, ysaucer, i_s, 0,
+                          "saucer_back", 4-1.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
+                          "saucer_back", 4+0.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0)
     # downViewport("tiles")
     # make_4by3_viewports("tile")
     # seekViewport("main")
@@ -402,7 +402,7 @@ draw_accessories_page <- function(cfg, deck_title="", odd=TRUE) {
     y_joker <- 8.75
     addViewport(y=inch(y_joker), x=0.5, width=inch(2*TILE_WIDTH), height=inch(TILE_WIDTH), name="joker.tiles")
     downViewport("joker.tiles")
-    draw_component("tile_face", cfg, get_i_unsuit(cfg), get_n_ranks(cfg) + 1, x=0.25)
+    draw_component("tile_face", cfg, get_i_unsuit(cfg), get_n_ranks(cfg) + 1, x=0.25) ####
     draw_component("tile_back", cfg, x=0.75)
     seekViewport("main")
     # dice
@@ -529,21 +529,24 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
+    n_suits <- get_n_suits(cfg)
+    cfg <- add_opt_cache(cfg)
+
     pp_pdf(output_filename, get_font(cfg), size)
 
     if ("piecepack" %in% components) {
-        for (i_s in 1:get_n_suits(cfg)) {
+        for (i_s in 1:n_suits) {
             grid.newpage()
             draw_suit_page(i_s, cfg, deck_title)
         }
-        if (is_odd(get_n_suits(cfg))) {
+        if (is_odd(n_suits)) {
             grid.newpage()
             draw_suit_page(get_i_unsuit(cfg)+1, cfg, deck_title)
         }
     }
 
     if ("misc" %in% components) {
-        if ((get_n_suits(cfg) >= 4) && (get_n_suits(cfg) <= 6)) {
+        if ((n_suits >= 4) && (n_suits <= 6)) {
             grid.newpage()
             draw_accessories_page(cfg, deck_title)
             grid.newpage()
