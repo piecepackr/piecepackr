@@ -93,81 +93,82 @@ draw_coin_4by3 <- function(i_s, cfg) {
     }
 }
 
+x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
+x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
+y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
+
+draw_die_layoutRF <- function(component_side, i_s, i_r, cfg) {
+    draw_piecepack_die(i_s, cfg)
+}
+
+draw_die_layoutLF <- function(component_side, i_s, i_r, cfg) {
+    draw_piecepack_die(i_s, cfg, flip=TRUE)
+}
+
 draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
-    suppressWarnings({
-        # label <- stringi::stri_rand_strings(n=1, length=4)
-        label <- "piecepack"
-        make_die_viewports(label, flip=flip)
-        if (get_pp_die_arrangement(cfg=cfg) == "opposites_sum_to_5")
-            arrangement <- c(1, 2, 3, 6, 5, 4)
-        else
-            arrangement <- 1:6
-        for(i_face in 1:6) {
-            i_r <- arrangement[i_face]
-            downViewport(paste0(label, ".die.", i_face))
-            draw_component("die_face", cfg, i_s, i_r)
-            upViewport()
-        }
-    })
+    angle <- rep(c(-90, 0), 3)
+    if (flip) {
+        x_die_layout <- x_die_layoutLF
+        angle <- -angle
+    } else {
+        x_die_layout <- x_die_layoutRF
+    }
+    if (get_pp_die_arrangement(cfg=cfg) == "opposites_sum_to_5")
+        arrangement <- c(1, 2, 3, 6, 5, 4)
+    else
+        arrangement <- 1:6
+    for(ii in 1:6) {
+        i_r <- arrangement[ii]
+        draw_component("die_face", cfg, i_s, i_r, 
+                       x=x_die_layout[ii], y=y_die_layout[ii], angle=angle[ii])
+    }
 }
 
 draw_suit_die <- function(cfg, flip=FALSE) {
-    suppressWarnings({
-        # label <- stringi::stri_rand_strings(n=1, length=4)
-        if (get_n_suits(cfg) < 4 || get_n_suits(cfg) > 6)
-            stop(paste("Don't know how to draw suit die for", get_n_suits(cfg), "suits"))
-        label <- "suit"
-        make_die_viewports(label, flip=flip)
-        if (get_n_suits(cfg) == 4) {
-            downViewport(paste0(label, ".die.1"))
-            draw_component("suitdie_face", cfg, 6)
+    n_suits <- get_n_suits(cfg)
+    if (n_suits < 4 || n_suits > 6)
+        stop(paste("Don't know how to draw suit die for", n_suits, "suits"))
+    label <- "suit"
+    make_die_viewports(label, flip=flip)
+    if (n_suits == 4) {
+        downViewport(paste0(label, ".die.1"))
+        draw_component("suitdie_face", cfg, 6)
+        upViewport()
+        for (i_s in 1:4) {
+            downViewport(paste0(label, ".die.", i_s+1))
+            draw_component("suitdie_face", cfg, 5-i_s)
             upViewport()
-            for (i_s in 1:4) {
-                downViewport(paste0(label, ".die.", i_s+1))
-                draw_component("suitdie_face", cfg, 5-i_s)
-                upViewport()
-            }
-            downViewport(paste0(label, ".die.6"))
-            draw_component("suitdie_face", cfg, 5)
-            upViewport()
-        } else if (get_n_suits(cfg) == 5) {
-            for (i_s in 1:5) {
-                downViewport(paste0(label, ".die.", i_s))
-                draw_component("suitdie_face", cfg, 6-i_s)
-                upViewport()
-            }
-            downViewport(paste0(label, ".die.6"))
-            draw_component("suitdie_face", cfg, 6)
-            upViewport()
-        } else if (get_n_suits(cfg) == 6) {
-            for (i_s in 1:6) {
-                downViewport(paste0(label, ".die.", i_s))
-                draw_component("suitdie_face", cfg, 7-i_s)
-                upViewport()
-            }
-        } 
-    })
-}
-
-draw_rank_die <- function(cfg, flip=FALSE) {
-    suppressWarnings({
-        label <- stringi::stri_rand_strings(n=1, length=4)
-        make_die_viewports(label, flip=flip)
-        for (i_r in 1:6) {
-            seekViewport(paste0(label, ".die.", i_r))
-            draw_component("die_face", cfg, get_i_unsuit(cfg) + 1, i_r)
         }
-    })
+        downViewport(paste0(label, ".die.6"))
+        draw_component("suitdie_face", cfg, 5)
+        upViewport()
+    } else if (n_suits == 5) {
+        for (i_s in 1:5) {
+            downViewport(paste0(label, ".die.", i_s))
+            draw_component("suitdie_face", cfg, 6-i_s)
+            upViewport()
+        }
+        downViewport(paste0(label, ".die.6"))
+        draw_component("suitdie_face", cfg, 6)
+        upViewport()
+    } else if (n_suits == 6) {
+        for (i_s in 1:6) {
+            downViewport(paste0(label, ".die.", i_s))
+            draw_component("suitdie_face", cfg, 7-i_s)
+            upViewport()
+        }
+    } 
 }
 
 draw_suitrank_die <- function(cfg, flip=FALSE) {
+    n_suits <- get_n_suits(cfg)
     suppressWarnings({
         # label <- stringi::stri_rand_strings(n=1, length=8)
-        if (get_n_suits(cfg) < 4 || get_n_suits(cfg) > 6)
-            stop(paste("Don't know how to draw suit/rank die for", get_n_suits(cfg), "suits"))
+        if (n_suits < 4 || n_suits > 6)
+            stop(paste("Don't know how to draw suit/rank die for", n_suits, "suits"))
         label <- "suitrank"
         make_die_viewports(label, flip=flip)
-        if (get_n_suits(cfg) == 4) {
+        if (n_suits == 4) {
             downViewport(paste0(label, ".die.1"))
             draw_component("die_face", cfg, 6, 1)
             upViewport()
@@ -179,7 +180,7 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
                 draw_component("die_face", cfg, 5-(i_r-2), i_r)
                 upViewport()
             }
-        } else if (get_n_suits(cfg) == 5) {
+        } else if (n_suits == 5) {
             downViewport(paste0(label, ".die.6"))
             draw_component("die_face", cfg, 6, 6)
             upViewport()
@@ -188,7 +189,7 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
                 draw_component("die_face", cfg, 6-i_r, i_r)
                 upViewport()
             }
-        } else if (get_n_suits(cfg) == 6) {
+        } else if (n_suits == 6) {
             for (i_r in 1:6) {
                 downViewport(paste0(label, ".die.", i_r))
                 draw_component("die_face", cfg, 7-i_r, i_r)
@@ -202,30 +203,29 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
 make_header_helper <- function(cfg, title) {
     header_height <- 0.8
     y_header <- WIN_HEIGHT - header_height/2
-    addViewport(y=inch(y_header), width=inch(6.0), height=inch(header_height), name="header")
-    seekViewport("header")
     width_image = 0.14
-    addViewport(y=0.85, height=0.2, name="title")
-    addViewport(x=width_image/2, y=0.4, width=width_image, height=0.5, name="l_cc_image")
-    addViewport(x=1-width_image/2, y=0.4, width=width_image, height=0.5, name="r_cc_image")
-    addViewport(x=0.5, y=0.4, width=1-2*width_image, height=0.8, name="text")
-    seekViewport("text")
     gp <- gpar(fontsize=9, fontfamily="sans")
-    # grid.text(get_program(cfg), x=0.0, y=0.8, just="left", gp=gp)
-    # grid.text(get_copyright(cfg), x=0.0, y=0.6, just="left", gp=gp)
-    # grid.text(get_license1(cfg), x=0.0, y=0.4, just="left", gp=gp)
-    # grid.text(get_license2(cfg), x=0.0, y=0.2, just="left", gp=gp)
+    gp_title <- gpar(fontsize=15, fontfamily="sans", fontface="bold")
+    pushViewport(viewport(y=inch(y_header), width=inch(6.0), height=inch(header_height)))
+    # title
+    pushViewport(viewport(y=0.85, height=0.2))
+    grid.text(title, just="center", gp=gp_title)
+    popViewport()
+    # CC images
+    pushViewport(viewport(x=width_image/2, y=0.4, width=width_image, height=0.5))
+    grid.draw(cc_file)
+    popViewport()
+    pushViewport(viewport(x=1-width_image/2, y=0.4, width=width_image, height=0.5))
+    grid.draw(cc_file)
+    popViewport()
+    # text
+    pushViewport(viewport(x=0.5, y=0.4, width=1-2*width_image, height=0.8))
     grid.text(get_program(cfg), x=0.5, y=0.8, just="center", gp=gp)
     grid.text(get_copyright(cfg), x=0.5, y=0.6, just="center", gp=gp)
     grid.text(get_license1(cfg), x=0.5, y=0.4, just="center", gp=gp)
     grid.text(get_license2(cfg), x=0.5, y=0.2, just="center", gp=gp)
-    seekViewport("l_cc_image")
-    grid.draw(cc_file)
-    seekViewport("r_cc_image")
-    grid.draw(cc_file)
-    seekViewport("title")
-    gp <- gpar(fontsize=15, fontfamily="sans", fontface="bold")
-    grid.text(title, just="center", gp=gp)
+    popViewport()
+    popViewport()
 }
 
 seekViewport <- function(...) { suppressWarnings(grid::seekViewport(...)) }
@@ -292,21 +292,20 @@ make_collection_preview <- function(output_filename, input_filenames, title="", 
 WIN_WIDTH <- 8
 WIN_HEIGHT <- 10.5
 
-mainViewport <- function() {
-    addViewport(width=inch(WIN_WIDTH), height=inch(WIN_HEIGHT), name="main")
-    downViewport("main")
-}
-
 draw_suit_page <- function(i_s, cfg=list(), deck_title="") {
-    # Build viewports
-    mainViewport()
-    addViewport(y=inch(1.5*TILE_WIDTH), width=inch(4*TILE_WIDTH), height=inch(3*TILE_WIDTH), name="tiles")
+    pushViewport(viewport(width=inch(WIN_WIDTH), height=inch(WIN_HEIGHT), name="main"))
+    make_header_helper(cfg, deck_title)
+
+    i_unsuit <- get_i_unsuit(cfg)
+    xdie <- PAWN_WIDTH + 3*DIE_WIDTH/2 
     ydie <- 3*TILE_WIDTH + 4*DIE_WIDTH/2
     ydie2 <- ydie + 2*DIE_WIDTH 
     ybelt <- ydie2 + 2*DIE_WIDTH + DIE_WIDTH/2
     xbelt <- BELT_WIDTH/2
     ysaucer <- 3*TILE_WIDTH + SAUCER_WIDTH/2
-    i_unsuit <- get_i_unsuit(cfg)
+    xpawn <- PAWN_WIDTH/2
+    pheight <- PAWN_LAYOUT_HEIGHT
+    ypawn <- 3*TILE_WIDTH + pheight/2 
     df <- tibble::tribble( ~component_side, ~x, ~y, ~i_s, ~i_r,
                           "tile_face", 1, 5, i_s, 1,
                           "tile_face", 5, 5, i_s, 2,
@@ -325,87 +324,42 @@ draw_suit_page <- function(i_s, cfg=list(), deck_title="") {
                           "saucer_face", 4-0.5*SAUCER_WIDTH, ysaucer, i_s, 0,
                           "saucer_face", 4+1.5*SAUCER_WIDTH, ysaucer, i_s, 0,
                           "saucer_back", 4-1.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
-                          "saucer_back", 4+0.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0)
-    # downViewport("tiles")
-    # make_4by3_viewports("tile")
-    # seekViewport("main")
-    xpawn <- PAWN_WIDTH/2
-    # pheight <- 2.5 * PAWN_HEIGHT
-    pheight <- 2 * PAWN_HEIGHT + 2 * PAWN_BASE
-    ypawn <- 3*TILE_WIDTH + pheight/2 
-    addViewport(x=inch(xpawn), y=inch(ypawn), width=inch(PAWN_WIDTH), height=inch(pheight), angle=180, name="lpawn")
-    addViewport(x=inch(WIN_WIDTH-xpawn), y=inch(ypawn), width=inch(PAWN_WIDTH), height=inch(pheight), name="rpawn")
-
-    xdie <- PAWN_WIDTH + 3*DIE_WIDTH/2 
-    # ydie <- WIN_WIDTH - 4*DIE_WIDTH/2 - 0.125
-    addViewport(x=inch(xdie) , y=inch(ydie), width=inch(2), height=inch(1.5), angle=-90, name="ldie")
-    addViewport(x=inch(WIN_WIDTH-xdie) , y=inch(ydie), width=inch(2), height=inch(1.5),  angle=90, name="rdie")
-
-    # addViewport(y=inch(ysaucer), height=inch(SAUCER_WIDTH), width=inch(4*SAUCER_WIDTH), name="saucers")
-    # seekViewport("saucers")
-    # draw_component("saucer_face", cfg, i_s, x=1/4-1/8)
-    # draw_component("saucer_back", cfg, x=2/4-1/8)
-    # draw_component("saucer_face", cfg, i_s, x=3/4-1/8)
-    # draw_component("saucer_back", cfg, x=4/4-1/8)
-    seekViewport("main")
-    # addViewport(y=inch(ycoin), width=inch(7.5), height=inch(0.625), name="coinrow")
-    # ycoin <- 6+ 3*COIN_WIDTH
-    ycoin <- ysaucer + SAUCER_WIDTH/2 + 3*COIN_WIDTH/2
-    addViewport(y=inch(ycoin), width=inch(4 * COIN_WIDTH), height=inch(3 * COIN_WIDTH), name="coins")
-    seekViewport("main")
+                          "saucer_back", 4+0.5*SAUCER_WIDTH, ysaucer, i_unsuit, 0,
+                          "pawn_layout", WIN_WIDTH-xpawn, ypawn, i_s, 0
+                          )
     draw_components(df, cfg=cfg, units="inches")
-
-
-    addViewport(x=inch(xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5), angle=-90, name="ldie2")
-    addViewport(x=inch(WIN_WIDTH-xdie) , y=inch(ydie2), width=inch(2), height=inch(1.5),  angle=90, name="rdie2")
-
-    # draw_component("belt_face", cfg, i_s, x=inch(xbelt), y=inch(ybelt))
-    # draw_component("belt_face", cfg, i_s, x=inch(WIN_WIDTH-xbelt), y=inch(ybelt))
-
-    # Draw components
-    # for (i_r in 1:6) {
-    #     seekViewport(paste0("tile.face.", i_r))
-    #     draw_component("tile_face", cfg, i_s, i_r)
-    #     seekViewport(paste0("tile.back.", i_r))
-    #     draw_component("tile_back", cfg)
-    # }
+    draw_component("pawn_layout", cfg, i_s, x=inch(xpawn), y=inch(ypawn), angle=180) 
+    draw_component("die_layoutLF", cfg, i_s, x=inch(xdie), y=inch(ydie), angle=-90)
+    draw_component("die_layoutRF", cfg, i_s, x=inch(WIN_WIDTH-xdie), y=inch(ydie), angle=90)
+    draw_component("die_layoutLF", cfg, i_s, x=inch(xdie), y=inch(ydie2), angle=-90)
+    draw_component("die_layoutRF", cfg, i_s, x=inch(WIN_WIDTH-xdie), y=inch(ydie2), angle=90)
 
     # coins
-    seekViewport("coins")
+    ycoin <- ysaucer + SAUCER_WIDTH/2 + 3*COIN_WIDTH/2
+    pushViewport(viewport(y=inch(ycoin), width=inch(4 * COIN_WIDTH), height=inch(3 * COIN_WIDTH)))
     draw_coin_4by3(i_s, cfg)
+    popViewport()
 
-    # pawn and belt
-    seekViewport("lpawn")
-    draw_pawn(i_s, cfg)
-    seekViewport("rpawn")
-    draw_pawn(i_s, cfg)
-
-    # die
-    seekViewport("rdie")
-    draw_piecepack_die(i_s, cfg)
-    seekViewport("ldie")
-    draw_piecepack_die(i_s, cfg, flip=TRUE)
-    seekViewport("rdie2")
-    draw_piecepack_die(i_s, cfg)
-    seekViewport("ldie2")
-    draw_piecepack_die(i_s, cfg, flip=TRUE)
-
-    # header
-    seekViewport("main")
-    make_header_helper(cfg, deck_title)
-
+    invisible(NULL)
 }
 
 draw_accessories_page <- function(cfg, deck_title="", odd=TRUE) {
-    # Build viewports
-    mainViewport()
+    pushViewport(viewport(width=inch(WIN_WIDTH), height=inch(WIN_HEIGHT), name="main"))
+    make_header_helper(cfg, deck_title)
+
+    n_ranks <- get_n_ranks(cfg)
+    n_suits <- get_n_suits(cfg)
+    i_unsuit <- n_suits + 1
+
+
+    # Joker Tile
     y_joker <- 8.75
-    addViewport(y=inch(y_joker), x=0.5, width=inch(2*TILE_WIDTH), height=inch(TILE_WIDTH), name="joker.tiles")
-    downViewport("joker.tiles")
-    draw_component("tile_face", cfg, get_i_unsuit(cfg), get_n_ranks(cfg) + 1, x=0.25) ####
+    pushViewport(viewport(y=inch(y_joker), x=0.5, width=inch(2*TILE_WIDTH), height=inch(TILE_WIDTH)))
+    draw_component("tile_face", cfg, i_unsuit, n_ranks + 1, x=0.25) ####
     draw_component("tile_back", cfg, x=0.75)
-    seekViewport("main")
-    # dice
+    popViewport()
+
+    ## dice
     ydh <- y_joker - DIE_WIDTH/2 + DIE_WIDTH
     ydm <- ydh - 3 * DIE_WIDTH
     ydl <- ydm - 3 * DIE_WIDTH
@@ -413,7 +367,27 @@ draw_accessories_page <- function(cfg, deck_title="", odd=TRUE) {
     die_xl = 2*DIE_WIDTH
     die_xm = die_xl + 2*DIE_WIDTH
     die_xh = die_xm + 2*DIE_WIDTH
-    die_right <- die_xl + 0.8
+
+    # extra standard piecepack dice
+    die_x <- c(die_xl, die_xm, die_xm, die_xl, die_xh, die_xh)
+    die_y <- c(ydl, ydl, ydb, ydb, ydl, ydb)
+    for (i_s in 1:n_suits) {
+        draw_component("die_layoutLF", cfg, i_s, y=inch(die_y[i_s]), x=inch(die_x[i_s]))
+    }
+
+    # rank dice
+    draw_component("die_layoutRF", cfg, i_unsuit+1, y=inch(ydl), x=inch(WIN_WIDTH-die_xl))
+    draw_component("die_layoutRF", cfg, i_unsuit+1, y=inch(ydl), x=inch(WIN_WIDTH-die_xm))
+    draw_component("die_layoutRF", cfg, i_unsuit+1, y=inch(ydl), x=inch(WIN_WIDTH-die_xh))
+    if (n_suits < 5) 
+        draw_component("die_layoutLF", cfg, i_unsuit+1, y=inch(ydl), x=inch(die_xh))
+    draw_component("die_layoutRF", cfg, i_unsuit+1, y=inch(ydb), x=inch(WIN_WIDTH-die_xl))
+    draw_component("die_layoutRF", cfg, i_unsuit+1, y=inch(ydb), x=inch(WIN_WIDTH-die_xm))
+    draw_component("die_layoutRF", cfg, i_unsuit+1, y=inch(ydb), x=inch(WIN_WIDTH-die_xh))
+    if (n_suits < 6) 
+        draw_component("die_layoutLF", cfg, i_unsuit+1, y=inch(ydb), x=inch(die_xh))
+
+    # suit dice and suit/rank dice
     addViewport(y=inch(ydh), x=inch(die_xl), width=inch(2), height=inch(1.5), name="lsuitdie")
     addViewport(y=inch(ydh), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="rsuitdie")
     addViewport(y=inch(ydm-DIE_WIDTH), width=inch(2), height=inch(1.5), name="suitdie3")
@@ -421,37 +395,25 @@ draw_accessories_page <- function(cfg, deck_title="", odd=TRUE) {
     addViewport(y=inch(ydm), x=inch(WIN_WIDTH-die_xm), width=inch(2), height=inch(1.5), name="suitrankdie2")
     addViewport(y=inch(ydm), x=inch(die_xl), width=inch(2), height=inch(1.5), name="suitrankdie3")
     addViewport(y=inch(ydm), x=inch(die_xm), width=inch(2), height=inch(1.5), name="suitrankdie4")
-    addViewport(y=inch(ydl), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="rankdie1")
-    addViewport(y=inch(ydl), x=inch(WIN_WIDTH-die_xm), width=inch(2), height=inch(1.5), name="rankdie2")
-    addViewport(y=inch(ydl), x=inch(WIN_WIDTH-die_xh), width=inch(2), height=inch(1.5), name="rankdie3")
-    addViewport(y=inch(ydl), x=inch(die_xh), width=inch(2), height=inch(1.5), name="rankdie4")
-    addViewport(y=inch(ydb), x=inch(WIN_WIDTH-die_xl), width=inch(2), height=inch(1.5), name="rankdie1l")
-    addViewport(y=inch(ydb), x=inch(WIN_WIDTH-die_xm), width=inch(2), height=inch(1.5), name="rankdie2l")
-    addViewport(y=inch(ydb), x=inch(WIN_WIDTH-die_xh), width=inch(2), height=inch(1.5), name="rankdie3l")
-    addViewport(y=inch(ydb), x=inch(die_xh), width=inch(2), height=inch(1.5), name="rankdie4l")
 
-    die_x <- c(die_xl, die_xm, die_xm, die_xl, die_xh, die_xh)
-    die_y <- c(ydl, ydl, ydb, ydb, ydl, ydb)
-    for (i_s in 1:get_n_suits(cfg)) {
-        addViewport(y=inch(die_y[i_s]), x=inch(die_x[i_s]), width=inch(2), height=inch(1.5), name=paste0("die.", i_s))
-        addViewport(y=inch((get_n_suits(cfg) + 1 - i_s)*CHIP_WIDTH - 0.5*CHIP_WIDTH), 
-                    width=inch(12*CHIP_WIDTH), height=inch(CHIP_WIDTH), name=paste0("chips.", i_s))
-        seekViewport(paste0("chips.", i_s))
+
+    for (i_s in 1:n_suits) {
+        pushViewport(viewport(y=inch((n_suits + 1 - i_s)*CHIP_WIDTH - 0.5*CHIP_WIDTH), 
+                    width=inch(12*CHIP_WIDTH), height=inch(CHIP_WIDTH)))
         for (i_r in 1:6) {
             draw_component("chip_back", cfg, i_s,      x=(2*i_r-1)/12-1/24)
             draw_component("chip_face", cfg, i_s, i_r, x=(2*i_r  )/12-1/24)
         }
-        seekViewport("main")
+        popViewport()
     }
-    if (get_n_suits(cfg) <= 4) {
+    if (n_suits <= 4) {
         saucer_y <- 4*CHIP_WIDTH + 0.5*SAUCER_WIDTH + 0.125
-        addViewport(y=inch(saucer_y),width=inch(8*SAUCER_WIDTH), height=inch(SAUCER_WIDTH), name="pawnsaucers")
-        seekViewport("pawnsaucers")
-        for (i_s in 1:get_n_suits(cfg)) {
+        pushViewport(viewport(y=inch(saucer_y),width=inch(8*SAUCER_WIDTH), height=inch(SAUCER_WIDTH)))
+        for (i_s in 1:n_suits) {
             draw_component("saucer_face", cfg, i_s, x=(2*i_s-1)/8-1/16)
             draw_component("saucer_back", cfg,      x=(2*i_s  )/8-1/16)
         }
-        seekViewport("main")
+        popViewport()
     }
 
     # Draw components
@@ -472,44 +434,8 @@ draw_accessories_page <- function(cfg, deck_title="", odd=TRUE) {
      draw_suitrank_die(cfg, flip=TRUE)
     seekViewport("suitrankdie4")
      draw_suitrank_die(cfg, flip=TRUE)
-    seekViewport("rankdie1")
-    draw_rank_die(cfg)
-    seekViewport("rankdie2")
-    draw_rank_die(cfg)
-    seekViewport("rankdie3")
-    draw_rank_die(cfg)
-    if (get_n_suits(cfg) < 5) {
-        seekViewport("rankdie4")
-        draw_rank_die(cfg, flip=TRUE)
-    }
-    seekViewport("rankdie1l")
-    draw_rank_die(cfg)
-    seekViewport("rankdie2l")
-    draw_rank_die(cfg)
-    seekViewport("rankdie3l")
-    draw_rank_die(cfg)
-    if (get_n_suits(cfg) < 6) {
-        seekViewport("rankdie4l")
-        draw_rank_die(cfg, flip=TRUE)
-    }
-    for (i_s in 1:get_n_suits(cfg)) {
-        seekViewport(paste0("die.", i_s))
-        draw_piecepack_die(i_s, cfg, flip=TRUE)
-    }
 
-    # Annotations
-    seekViewport("main")
-    # for (i_s in 1:4) {
-    #     grid.text(paste0("die", i_s))
-    # }
-    # grid.text("joker tile", x=inch(0.8), y=inch(8.5), rot=90)
-    # grid.text("additional piecepack dice", x=inch(0.8), y=inch((ydm+ydl)/2), rot=90)
-    # grid.text("pawn\nsaucers", x=inch(1), y=inch(3.8), rot=90)
-    # grid.text('chips', x=inch(0.4), y=inch(2), rot=90)
-    # grid.text("suit die", x=inch(die_right), y=inch(ydh-0.3), rot=90)
-    # grid.text("suit/rank die", x=inch(die_right), y=inch(ydl-0.3), rot=90)
-    # grid.text("rank die", x=inch(die_right), y=inch(ydm-0.3), rot=90)
-    make_header_helper(cfg, deck_title)
+    invisible(NULL)
 }
 
 #' Make print-and-play piecepack pdf
@@ -530,6 +456,7 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
     n_suits <- get_n_suits(cfg)
+    i_unsuit <- n_suits + 1
     cfg <- add_opt_cache(cfg)
 
     pp_pdf(output_filename, get_font(cfg), size)
@@ -541,7 +468,7 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
         }
         if (is_odd(n_suits)) {
             grid.newpage()
-            draw_suit_page(get_i_unsuit(cfg)+1, cfg, deck_title)
+            draw_suit_page(i_unsuit+1, cfg, deck_title)
         }
     }
 

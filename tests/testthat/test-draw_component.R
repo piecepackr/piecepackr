@@ -128,10 +128,11 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", i_s=2, i_r=6))
     vdiffr::expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=list(invert_colors=TRUE), i_s=3, i_r=6))
 
-    # preview
+    #### preview appears wrong #99
     # vdiffr::expect_doppelganger("preview", draw_preview)
     # dice
-    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", function() draw_piecepack_die(i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5", suit_colors="darkred,black,darkgreen,darkblue,grey")))
+    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", 
+        function() dc("die_layoutRF", i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5")))
     vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))
     vdiffr::expect_doppelganger("draw_suit_die-6suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
     expect_error(draw_suit_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 

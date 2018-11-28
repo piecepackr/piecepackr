@@ -19,6 +19,9 @@ CHIP_WIDTH <- 5/8
 PAWN_HEIGHT <- 7/8
 PAWN_WIDTH <- 1/2
 PAWN_BASE <- 3/8
+PAWN_LAYOUT_HEIGHT <- 2 * PAWN_HEIGHT + 2 * PAWN_BASE
+DIE_LAYOUT_WIDTH <- 4 * DIE_WIDTH
+DIE_LAYOUT_HEIGHT <- 3 * DIE_WIDTH
 BELT_HEIGHT <- 1/2
 BELT_WIDTH <- 4 * DIE_WIDTH
 PYRAMID_WIDTHS <- 2:8 * 1/8
@@ -55,8 +58,9 @@ seg <- function(x, y, xend, yend, color="black", ...) {
     grid.segments(x0=x, y0=y, x1=xend, y1=yend, gp=gpar(col=color, ...))
 }
 
+####
 addViewport <- function(...) { 
-    suppressWarnings(pushViewport(viewport(..., clip="on")))
+    pushViewport(viewport(...))
     upViewport()
 }
 
@@ -821,6 +825,9 @@ draw_preview <- function(cfg=list()) {
 get_pp_width <- function(component_side, i_r) {
     switch(component_side,
            pyramid_top = PYRAMID_WIDTHS[i_r],
+           pawn_layout = PAWN_WIDTH,
+           die_layoutLF = DIE_LAYOUT_WIDTH,
+           die_layoutRF = DIE_LAYOUT_WIDTH,
            { 
         component <- get_component(component_side)
         switch(component, 
@@ -841,6 +848,9 @@ get_pp_width <- function(component_side, i_r) {
 get_pp_height <- function(component_side, i_r) {
     switch(component_side,
            pyramid_top = PYRAMID_WIDTHS[i_r],
+           pawn_layout = PAWN_LAYOUT_HEIGHT,
+           die_layoutLF = DIE_LAYOUT_HEIGHT,
+           die_layoutRF = DIE_LAYOUT_HEIGHT,
            {
         component <- get_component(component_side)
         switch(component, 
@@ -1070,6 +1080,9 @@ add_ribbons <- function(opt) {
 draw_component_helper <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
                       pyramid_top = draw_pyramid_top,
+                      pawn_layout = draw_pawn_layout,
+                      die_layoutLF = draw_die_layoutLF,
+                      die_layoutRF = draw_die_layoutRF,
                       draw_component_basic)
     draw_fn <- get_style_element("draw_component_fn", component_side, cfg, default, i_s, i_r)
     if (is.character(draw_fn))
@@ -1138,25 +1151,21 @@ draw_pyramid_top <- function(component_side, i_s, i_r, cfg) {
     draw_component("pyramid_right", cfg, i_s, i_r, x=0.75, width=1.0, height=0.5, angle=90)
 }
 
-draw_pawn <- function(i_s, cfg) {
+draw_pawn_layout <- function(component_side, i_s, i_r, cfg) {
     suppressWarnings({
         denominator <- PAWN_HEIGHT + PAWN_BASE
         y <- (PAWN_HEIGHT/2 + PAWN_BASE) / denominator
         height = PAWN_HEIGHT / denominator
-        addViewport(y=0.25, height=0.5, name="pawn_front")
-        downViewport("pawn_front")
-        addViewport(y=y, height=height, name="pawn_face")
-        downViewport("pawn_face")
+        pushViewport(viewport(y=0.25, height=0.5))
+        pushViewport(viewport(y=y, height=height))
         draw_component("pawn_face", cfg, i_s)
-        upViewport()
-        upViewport()
-        addViewport(y=0.75, height=0.5, name="pawn_rear", angle=180)
-        downViewport("pawn_rear")
-        addViewport(y=y, height=height, name="pawn_back")
-        downViewport("pawn_back")
+        popViewport()
+        popViewport()
+        pushViewport(viewport(y=0.75, height=0.5, name="pawn_rear", angle=180))
+        pushViewport(viewport(y=y, height=height, name="pawn_back"))
         draw_component("pawn_back", cfg, i_s)
-        upViewport()
-        upViewport()
+        popViewport()
+        popViewport()
     })
     border_col <- get_border_color("pawn_face", i_s, 0, cfg)
     grid.lines(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
