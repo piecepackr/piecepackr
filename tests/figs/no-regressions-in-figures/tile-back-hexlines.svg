@@ -17,7 +17,7 @@
 <line x1='288.00' y1='324.00' x2='324.00' y2='360.00' style='stroke-width: 3.00; stroke: #00FF00;' />
 <line x1='432.00' y1='324.00' x2='396.00' y2='360.00' style='stroke-width: 3.00; stroke: #00FF00;' />
 <line x1='432.00' y1='252.00' x2='396.00' y2='216.00' style='stroke-width: 3.00; stroke: #00FF00;' />
-<polyline points='360.00,360.00 360.00,216.00 ' style='stroke-width: 6.00; stroke: #BEBEBE; stroke-linecap: butt;' />
-<polyline points='288.00,288.00 432.00,288.00 ' style='stroke-width: 6.00; stroke: #BEBEBE; stroke-linecap: butt;' />
+<polyline points='360.00,360.00 360.00,216.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<polyline points='288.00,288.00 432.00,288.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>

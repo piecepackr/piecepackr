@@ -13,7 +13,7 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text x='336.38' y='312.77' style='font-size: 72.00px; fill: #006400; font-family: Liberation Sans;' textLength='47.25px' lengthAdjust='spacingAndGlyphs'>♣</text>
-<text x='310.88' y='265.76' style='font-size: 40.00px; fill: #006400; font-family: Liberation Sans;' textLength='26.25px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='336.38' y='312.77' style='font-size: 72.00px; fill: #009E73; font-family: Liberation Sans;' textLength='47.25px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='310.88' y='265.76' style='font-size: 40.00px; fill: #009E73; font-family: Liberation Sans;' textLength='26.25px' lengthAdjust='spacingAndGlyphs'>♣</text>
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>

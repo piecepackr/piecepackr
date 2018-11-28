@@ -28,7 +28,7 @@
     <rect x='288.00' y='298.80' width='144.00' height='7.20' />
   </clipPath>
 </defs>
-<rect x='288.00' y='298.80' width='144.00' height='7.20' style='stroke-width: 0.75; stroke: none; fill: #8B0000;' clip-path='url(#cpMjg4LjAwfDQzMi4wMHwzMDYuMDB8Mjk4Ljgw)' />
+<rect x='288.00' y='298.80' width='144.00' height='7.20' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' clip-path='url(#cpMjg4LjAwfDQzMi4wMHwzMDYuMDB8Mjk4Ljgw)' />
 <defs>
   <clipPath id='cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA='>
     <rect x='0.00' y='0.00' width='720.00' height='576.00' />
@@ -49,12 +49,12 @@
     <rect x='288.00' y='270.00' width='144.00' height='7.20' />
   </clipPath>
 </defs>
-<rect x='288.00' y='270.00' width='144.00' height='7.20' style='stroke-width: 0.75; stroke: none; fill: #8B0000;' clip-path='url(#cpMjg4LjAwfDQzMi4wMHwyNzcuMjB8MjcwLjAw)' />
+<rect x='288.00' y='270.00' width='144.00' height='7.20' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' clip-path='url(#cpMjg4LjAwfDQzMi4wMHwyNzcuMjB8MjcwLjAw)' />
 <defs>
   <clipPath id='cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA='>
     <rect x='0.00' y='0.00' width='720.00' height='576.00' />
   </clipPath>
 </defs>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)'><text x='353.47' y='295.57' style='font-size: 22.00px; fill: #8B0000; font-family: Liberation Sans;' textLength='13.06px' lengthAdjust='spacingAndGlyphs'>♥</text></g>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)'><text x='353.47' y='295.57' style='font-size: 22.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='13.06px' lengthAdjust='spacingAndGlyphs'>♥</text></g>
 <rect x='288.00' y='270.00' width='144.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' clip-path='url(#cpMC4wMHw3MjAuMDB8NTc2LjAwfDAuMDA=)' />
 </svg>
