@@ -118,6 +118,7 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", i_s=4, i_r=1))
     vdiffr::expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", i_s=2, i_r=1))
     vdiffr::expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", i_s=4, i_r=3))
+    vdiffr::expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", i_s=3, i_r=4))
 
     # matchsticks
     vdiffr::expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", i_s=1, i_r=1))

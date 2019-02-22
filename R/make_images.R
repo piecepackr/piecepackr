@@ -26,6 +26,9 @@ BELT_HEIGHT <- 1/2
 BELT_WIDTH <- 4 * DIE_WIDTH
 PYRAMID_WIDTHS <- 2:8 * 1/8
 PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
+PYRAMID_DIAGONALS <- sqrt(PYRAMID_HEIGHTS^2 + (0.5*PYRAMID_WIDTHS)^2)
+PYRAMID_LAYOUT_WIDTHS <- PYRAMID_HEIGHTS
+PYRAMID_LAYOUT_HEIGHTS <- 2*PYRAMID_DIAGONALS
 W <- 3/16
 S <- 1
 MATCHSTICK_WIDTHS <- c(2*W, rep(W, 5))
@@ -824,10 +827,11 @@ draw_preview <- function(cfg=list()) {
 
 get_pp_width <- function(component_side, i_r) {
     switch(component_side,
-           pyramid_top = PYRAMID_WIDTHS[i_r],
-           pawn_layout = PAWN_WIDTH,
            die_layoutLF = DIE_LAYOUT_WIDTH,
            die_layoutRF = DIE_LAYOUT_WIDTH,
+           pawn_layout = PAWN_WIDTH,
+           pyramid_layout = PYRAMID_LAYOUT_WIDTHS[i_r],
+           pyramid_top = PYRAMID_WIDTHS[i_r],
            { 
         component <- get_component(component_side)
         switch(component, 
@@ -847,10 +851,11 @@ get_pp_width <- function(component_side, i_r) {
 
 get_pp_height <- function(component_side, i_r) {
     switch(component_side,
-           pyramid_top = PYRAMID_WIDTHS[i_r],
-           pawn_layout = PAWN_LAYOUT_HEIGHT,
            die_layoutLF = DIE_LAYOUT_HEIGHT,
            die_layoutRF = DIE_LAYOUT_HEIGHT,
+           pawn_layout = PAWN_LAYOUT_HEIGHT,
+           pyramid_top = PYRAMID_WIDTHS[i_r],
+           pyramid_layout = PYRAMID_LAYOUT_HEIGHTS[i_r],
            {
         component <- get_component(component_side)
         switch(component, 
@@ -1079,10 +1084,11 @@ add_ribbons <- function(opt) {
 
 draw_component_helper <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
-                      pyramid_top = draw_pyramid_top,
-                      pawn_layout = draw_pawn_layout,
                       die_layoutLF = draw_die_layoutLF,
                       die_layoutRF = draw_die_layoutRF,
+                      pawn_layout = draw_pawn_layout,
+                      pyramid_layout = draw_pyramid_layout,
+                      pyramid_top = draw_pyramid_top,
                       draw_component_basic)
     draw_fn <- get_style_element("draw_component_fn", component_side, cfg, default, i_s, i_r)
     if (is.character(draw_fn))
@@ -1173,6 +1179,22 @@ draw_pawn_layout <- function(component_side, i_s, i_r, cfg) {
     ll <- 0.07
     seg(0.5, 0, 0.5, ll, border_col)
     seg(0.5, 1, 0.5, 1-ll, border_col)
+}
+
+draw_pyramid_layout <- function(component_side, i_s, i_r, cfg) {
+    suppressWarnings({
+        thetas <- c(72, 36, 0, -36, -72)
+        r <- 0.5
+        x <- to_x(thetas, r)
+        y <- 0.5 + 0.5*to_y(thetas, r)
+        components <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
+        angles <- c(90+72, 90+36, 90, 90-36, 90-72)
+        for(ii in 1:5) {
+            pushViewport(viewport(width=inch(PYRAMID_WIDTHS[i_r]), height=inch(PYRAMID_HEIGHTS[i_r]), angle=angles[ii], x=x[ii], y=y[ii]))
+            draw_component(components[ii], cfg, i_s, i_r)
+            popViewport()
+        }
+    })
 }
 
 #' Draw piecepack components
