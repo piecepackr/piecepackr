@@ -798,7 +798,8 @@ draw_preview <- function(cfg=list()) {
                 "saucer_face",  1, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH + 0.5 * SAUCER_WIDTH,
                 "saucer_back", NA, NA, TILE_WIDTH + 1.5*DIE_WIDTH, 0.5 * TILE_WIDTH - 0.5 * SAUCER_WIDTH,
                 "pawn_face", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH + 0.5*PAWN_HEIGHT,
-                "pawn_back", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH - 0.5*PAWN_HEIGHT 
+                "pawn_back", 2, NA, TILE_WIDTH + 3*DIE_WIDTH, 0.5*TILE_WIDTH - 0.5*PAWN_HEIGHT,
+                "suitrankdie_layoutRF", NA, NA, pwidth - 2*DIE_WIDTH, 0.5*TILE_WIDTH 
           )
     df$angle <- 0
 
@@ -816,19 +817,16 @@ draw_preview <- function(cfg=list()) {
     if (get_n_suits(cfg) > 5) df[12, "i_s"] <- 6
     df[16, "angle"] <- 180
     draw_components(df, cfg=cfg, units="inches")
-
-    # suitrank die
-    seekViewport("main")
-    addViewport(x=3/3-1/6, y=inch(0.5*TILE_WIDTH), width=inch(4 * DIE_WIDTH), height=inch(3 * DIE_WIDTH), name="suitrankdie")
-    seekViewport("suitrankdie")
-    draw_suitrank_die(cfg)
-
 }
 
 get_pp_width <- function(component_side, i_r) {
     switch(component_side,
            die_layoutLF = DIE_LAYOUT_WIDTH,
            die_layoutRF = DIE_LAYOUT_WIDTH,
+           suitdie_layoutLF = DIE_LAYOUT_WIDTH,
+           suitdie_layoutRF = DIE_LAYOUT_WIDTH,
+           suitrankdie_layoutLF = DIE_LAYOUT_WIDTH,
+           suitrankdie_layoutRF = DIE_LAYOUT_WIDTH,
            pawn_layout = PAWN_WIDTH,
            pyramid_layout = PYRAMID_LAYOUT_WIDTHS[i_r],
            pyramid_top = PYRAMID_WIDTHS[i_r],
@@ -853,6 +851,10 @@ get_pp_height <- function(component_side, i_r) {
     switch(component_side,
            die_layoutLF = DIE_LAYOUT_HEIGHT,
            die_layoutRF = DIE_LAYOUT_HEIGHT,
+           suitdie_layoutLF = DIE_LAYOUT_HEIGHT,
+           suitdie_layoutRF = DIE_LAYOUT_HEIGHT,
+           suitrankdie_layoutLF = DIE_LAYOUT_HEIGHT,
+           suitrankdie_layoutRF = DIE_LAYOUT_HEIGHT,
            pawn_layout = PAWN_LAYOUT_HEIGHT,
            pyramid_top = PYRAMID_WIDTHS[i_r],
            pyramid_layout = PYRAMID_LAYOUT_HEIGHTS[i_r],
@@ -1086,6 +1088,10 @@ draw_component_helper <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
                       die_layoutLF = draw_die_layoutLF,
                       die_layoutRF = draw_die_layoutRF,
+                      suitdie_layoutLF = draw_suitdie_layoutLF,
+                      suitdie_layoutRF = draw_suitdie_layoutRF,
+                      suitrankdie_layoutLF = draw_suitrankdie_layoutLF,
+                      suitrankdie_layoutRF = draw_suitrankdie_layoutRF,
                       pawn_layout = draw_pawn_layout,
                       pyramid_layout = draw_pyramid_layout,
                       pyramid_top = draw_pyramid_top,

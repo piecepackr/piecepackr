@@ -6,7 +6,8 @@ New features
 
 * Can draw ``pyramid_face``, ``pyramid_left``, ``pyramid_left``, ``pyramid_right``, ``pyramid_top``, and ``pyramid_layout`` components  (progress on #37).
 * Can draw ``matchstick_face`` and ``matchstick_back`` components (progress on #69)
-* Can draw ``pawn_layout``, ``die_layoutLF``, ``die_layoutRF`` components (progress on #101)
+* Can draw ``pawn_layout``, ``die_layoutLF``, ``die_layoutRF``, ``suitdie_layoutLF``, ``suitdie_layoutRF`,
+   ``suitrankdie_layoutLF``, and ``suitrankdie_layoutRF`` components (#101)
 
 piecepackr 0.10.x
 =================

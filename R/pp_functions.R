@@ -105,98 +105,66 @@ draw_die_layoutLF <- function(component_side, i_s, i_r, cfg) {
     draw_piecepack_die(i_s, cfg, flip=TRUE)
 }
 
+draw_suitdie_layoutRF <- function(component_side, i_s, i_r, cfg) {
+    draw_suit_die(cfg)
+}
+
+draw_suitdie_layoutLF <- function(component_side, i_s, i_r, cfg) {
+    draw_suit_die(cfg, flip=TRUE)
+}
+
+draw_suitrankdie_layoutRF <- function(component_side, i_s, i_r, cfg) {
+    draw_suitrank_die(cfg)
+}
+draw_suitrankdie_layoutLF <- function(component_side, i_s, i_r, cfg) {
+    draw_suitrank_die(cfg, flip=TRUE)
+}
+
 draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
     angle <- rep(c(-90, 0), 3)
     if (flip) {
-        x_die_layout <- x_die_layoutLF
+        x <- x_die_layoutLF
         angle <- -angle
     } else {
-        x_die_layout <- x_die_layoutRF
+        x <- x_die_layoutRF
     }
-    if (get_pp_die_arrangement(cfg=cfg) == "opposites_sum_to_5")
-        arrangement <- c(1, 2, 3, 6, 5, 4)
-    else
-        arrangement <- 1:6
-    for(ii in 1:6) {
-        i_r <- arrangement[ii]
-        draw_component("die_face", cfg, i_s, i_r, 
-                       x=x_die_layout[ii], y=y_die_layout[ii], angle=angle[ii])
+    if (get_pp_die_arrangement(cfg=cfg) == "opposites_sum_to_5") {
+        i_r <- c(1, 2, 3, 6, 5, 4)
+        i_s <- rep(i_s, length.out=6)[i_r]
+    } else {
+        i_r <- 1:6
     }
+    df <- tibble::data_frame(component_side="die_face", i_s, i_r, x, y=y_die_layout, angle)
+    draw_components(df, cfg=cfg)
 }
 
 draw_suit_die <- function(cfg, flip=FALSE) {
+    angle <- rep(c(-90, 0), 3)
+    if (flip) {
+        x <- x_die_layoutLF
+        angle <- -angle
+    } else {
+        x <- x_die_layoutRF
+    }
+    i_s <- get_suit_die_suits(cfg)
+    df <- tibble::data_frame(component_side="suitdie_face", i_s, x, y=y_die_layout, angle)
+    draw_components(df, cfg=cfg)
+}
+
+get_suit_die_suits <- function(cfg) {
     n_suits <- get_n_suits(cfg)
-    if (n_suits < 4 || n_suits > 6)
-        stop(paste("Don't know how to draw suit die for", n_suits, "suits"))
-    label <- "suit"
-    make_die_viewports(label, flip=flip)
-    if (n_suits == 4) {
-        downViewport(paste0(label, ".die.1"))
-        draw_component("suitdie_face", cfg, 6)
-        upViewport()
-        for (i_s in 1:4) {
-            downViewport(paste0(label, ".die.", i_s+1))
-            draw_component("suitdie_face", cfg, 5-i_s)
-            upViewport()
-        }
-        downViewport(paste0(label, ".die.6"))
-        draw_component("suitdie_face", cfg, 5)
-        upViewport()
-    } else if (n_suits == 5) {
-        for (i_s in 1:5) {
-            downViewport(paste0(label, ".die.", i_s))
-            draw_component("suitdie_face", cfg, 6-i_s)
-            upViewport()
-        }
-        downViewport(paste0(label, ".die.6"))
-        draw_component("suitdie_face", cfg, 6)
-        upViewport()
-    } else if (n_suits == 6) {
-        for (i_s in 1:6) {
-            downViewport(paste0(label, ".die.", i_s))
-            draw_component("suitdie_face", cfg, 7-i_s)
-            upViewport()
-        }
+    if (n_suits < 4) {
+        rep(n_suits:1, length.out=6)
+    } else if (n_suits == 4) {
+        c(5,6,4:1)
+    } else if (n_suits > 4) {
+        6:1
     } 
 }
 
 draw_suitrank_die <- function(cfg, flip=FALSE) {
-    n_suits <- get_n_suits(cfg)
-    suppressWarnings({
-        # label <- stringi::stri_rand_strings(n=1, length=8)
-        if (n_suits < 4 || n_suits > 6)
-            stop(paste("Don't know how to draw suit/rank die for", n_suits, "suits"))
-        label <- "suitrank"
-        make_die_viewports(label, flip=flip)
-        if (n_suits == 4) {
-            downViewport(paste0(label, ".die.1"))
-            draw_component("die_face", cfg, 6, 1)
-            upViewport()
-            downViewport(paste0(label, ".die.2"))
-            draw_component("die_face", cfg, 5, 2)
-            upViewport()
-            for (i_r in 3:6) {
-                downViewport(paste0(label, ".die.", i_r))
-                draw_component("die_face", cfg, 5-(i_r-2), i_r)
-                upViewport()
-            }
-        } else if (n_suits == 5) {
-            downViewport(paste0(label, ".die.6"))
-            draw_component("die_face", cfg, 6, 6)
-            upViewport()
-            for (i_r in 1:5) {
-                downViewport(paste0(label, ".die.", i_r))
-                draw_component("die_face", cfg, 6-i_r, i_r)
-                upViewport()
-            }
-        } else if (n_suits == 6) {
-            for (i_r in 1:6) {
-                downViewport(paste0(label, ".die.", i_r))
-                draw_component("die_face", cfg, 7-i_r, i_r)
-                upViewport()
-            }
-        } 
-    })
+    i_s <- get_suit_die_suits(cfg)
+    draw_piecepack_die(i_s, cfg, flip)
 }
 
 #### Get rid of cfg?

@@ -132,14 +132,18 @@ test_that("no regressions in figures", {
     #### preview appears wrong #99
     # vdiffr::expect_doppelganger("preview", draw_preview)
     # dice
-    vdiffr::expect_doppelganger("draw_piecepack_die-opposites_sum_to_5", 
-        function() dc("die_layoutRF", i_s=3, cfg=list(pp_die_arrangement="opposites_sum_to_5")))
-    vdiffr::expect_doppelganger("draw_suit_die-5suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))
-    vdiffr::expect_doppelganger("draw_suit_die-6suits", function() draw_suit_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
-    expect_error(draw_suit_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 
-                         "Don't know how to draw suit die for 3 suits")
-    vdiffr::expect_doppelganger("draw_suitrank_die-5suits", function() draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")))
-    vdiffr::expect_doppelganger("draw_suitrank_die-6suits", function() draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")))
+    vdiffr::expect_doppelganger("suitdie_layoutRF", function() dc("suitdie_layoutRF"))
+    vdiffr::expect_doppelganger("suitrankdie_layoutLF", function() dc("suitrankdie_layoutLF"))
+
+    cfg <- list(pp_die_arrangement="opposites_sum_to_5")
+    vdiffr::expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", i_s=3, cfg=cfg))
+
+    cfg <- list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")
+    vdiffr::expect_doppelganger("suitdie_layoutRF-5suits", function() dc("suitdie_layoutRF", cfg=cfg))
+    vdiffr::expect_doppelganger("suitrankdie_layoutRF-5suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
+    cfg <- list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")
+    vdiffr::expect_doppelganger("suitdie_layoutRF-6suits", function() dc("suitdie_layoutRF", cfg=cfg))
+    vdiffr::expect_doppelganger("suitrankdie_layoutRF-6suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
 
     # draw_components
     df <- tibble::tribble(~component_side, ~x, ~y, ~i_s, ~i_r,
@@ -153,8 +157,6 @@ test_that("no regressions in figures", {
                           })
 
     # errors
-    expect_error(draw_suitrank_die(cfg=list(suit_symbols="A,B,C,D", suit_colors="red,black,green,blue")), 
-                         "Don't know how to draw suit/rank die for 3 suits")
     expect_error(dce("coin_face", list(gridline_colors = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
     expect_error(dce("coin_face", list(checker_colors = "grey"), i_r = 3), "Don't know how to add checkers to shape circle")
     expect_error(dce("coin_face", list(hexline_colors = "grey"), i_r = 3), "Don't know how to add hexlines to shape circle")
