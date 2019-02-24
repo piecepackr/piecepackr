@@ -132,6 +132,8 @@ test_that("no regressions in figures", {
     #### preview appears wrong #99
     # vdiffr::expect_doppelganger("preview", draw_preview)
     # dice
+    cfg <- list(suit_symbols="-,0,+,")
+    vdiffr::expect_doppelganger("suitdie_layoutLF", function() dc("suitdie_layoutLF", cfg=cfg))
     vdiffr::expect_doppelganger("suitdie_layoutRF", function() dc("suitdie_layoutRF"))
     vdiffr::expect_doppelganger("suitrankdie_layoutLF", function() dc("suitrankdie_layoutLF"))
 
