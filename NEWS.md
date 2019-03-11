@@ -1,4 +1,4 @@
-piecepackr 0.11.x
+piecepackr 0.11.0
 =================
 
 New features
@@ -6,10 +6,10 @@ New features
 
 * Can draw ``pyramid_face``, ``pyramid_left``, ``pyramid_left``, ``pyramid_right``, ``pyramid_top``, and ``pyramid_layout`` components  (progress on #37).
 * Can draw ``matchstick_face`` and ``matchstick_back`` components (progress on #69)
-* Can draw ``pawn_layout``, ``die_layoutLF``, ``die_layoutRF``, ``suitdie_layoutLF``, ``suitdie_layoutRF`,
+* Can draw ``pawn_layout``, ``die_layoutLF``, ``die_layoutRF``, ``suitdie_layoutLF``, ``suitdie_layoutRF`',
    ``suitrankdie_layoutLF``, and ``suitrankdie_layoutRF`` components (#101)
 
-piecepackr 0.10.x
+piecepackr 0.10.0
 =================
 
 * Generalized star shape to ``concave#`` and ``#`` shape to ``convex#`` shape (#100).  Added "pyramid" triangle shape (progress on #37).
@@ -21,7 +21,7 @@ piecepackr 0.10.x
 * Changed the "light"-french-suited symbols in the "dual" demo from "black" symbols to "white" symbols.  Thanks Ron-Hale Evans for the suggestion.
 * Changed default color scheme 
 
-piecepackr 0.9.x
+piecepackr 0.9.0
 ================
 
 * Added ``get_embedded_font`` function and executable (#80).
