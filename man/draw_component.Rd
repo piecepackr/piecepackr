@@ -2,20 +2,20 @@
 % Please edit documentation in R/make_images.R
 \name{draw_component}
 \alias{draw_component}
-\alias{draw_component_wrapper}
 \alias{draw_components}
+\alias{draw_component_wrapper}
 \title{Draw piecepack components}
 \usage{
 draw_component(component_side, cfg = list(), i_s = get_i_unsuit(cfg),
   i_r = 0, x = 0.5, y = 0.5, width = NULL, height = NULL,
   svg = FALSE, ...)
 
+draw_components(df, ...)
+
 draw_component_wrapper(..., component_side = "tile_back", x = 0.5,
   y = 0.5, i_s = NA, i_r = NA, width = NA, height = NA,
   svg = FALSE, units = "npc", angle = 0, cfg = NULL,
   cfg_name = NA, cfg_list = NULL)
-
-draw_components(df, ...)
 }
 \arguments{
 \item{component_side}{A string with component and side separated by a underscore e.g. "coin_face"}
@@ -41,6 +41,8 @@ to play with re-configuring fontsizes.}
 
 \item{...}{With \code{draw_component} extra arguments to pass to \code{grid::viewport} like \code{angle}, with \code{draw_components} extra arguments to pass to \code{draw_component_wrapper}, with \code{draw_component_wrapper} ignored.}
 
+\item{df}{A data frame specifying arguments to ``draw_component_wrapper``}
+
 \item{units}{String specifying the units for the corresponding numeric values}
 
 \item{angle}{Angle to draw component at}
@@ -48,13 +50,9 @@ to play with re-configuring fontsizes.}
 \item{cfg_name}{String of list name storing configuration}
 
 \item{cfg_list}{List of configuration lists}
-
-\item{df}{A data frame specifying arguments to ``draw_component_wrapper``}
 }
 \description{
 \code{draw_component} Draws a single piecepack component onto the graphics device.  
 \code{draw_components} draws several piecepack components specified in a data frame  
    applying \code{draw_component_wrapper} to each row.
-
-Draw piecepack components specified by a data frame
 }

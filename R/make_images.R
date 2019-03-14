@@ -1287,6 +1287,14 @@ draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_
 }
 
 #' @rdname draw_component
+#' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
+#' @export
+draw_components <- function(df, ...) {
+    ll <- purrr::pmap_dfr(df, draw_component_wrapper, ...)
+    invisible(NULL)
+}
+
+#' @rdname draw_component
 #' @param units String specifying the units for the corresponding numeric values
 #' @param angle Angle to draw component at
 #' @param cfg_name String of list name storing configuration
@@ -1318,14 +1326,3 @@ draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5
     list(purrr_value=NA)
 }
 
-#' Draw piecepack components specified by a data frame
-#'
-#' Draw piecepack components specified by a data frame
-#'
-#' @rdname draw_component
-#' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
-#' @export
-draw_components <- function(df, ...) {
-    ll <- purrr::pmap_dfr(df, draw_component_wrapper, ...)
-    invisible(NULL)
-}
