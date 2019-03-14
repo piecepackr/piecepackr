@@ -1103,46 +1103,82 @@ draw_component_helper <- function(component_side, i_s, i_r, cfg) {
     invisible(NULL)
 }
 
-#### Export and add documentation to load_configurations?
+opt_cache_key <- function(component_side, i_s, i_r) {
+    paste(component_side, i_s, i_r, sep=".")
+}
+
+#' Add component opt cache
+#'
+#' Adds a "cache" and "signature" attribute to the list of
+#' configuration options.  The cache stores pre-computed component opt lists.
+#' Once done this significantly speeds up the drawing of piecepack components
+#' with that configuration list.  If you later change the configuration list you
+#' should run this again to re-compute the cache.
+#' @param cfg List of configuration options
+#' @examples
+#'  \donttest{
+#'    cfg <- list()
+#'    system.time(replicate(500, draw_component("tile_face", cfg, 4, 4)))
+#'    system.time(cfg <- add_opt_cache(cfg))
+#'    system.time(replicate(500, draw_component("tile_face", cfg, 4, 4)))
+#'  }
+#'   
+#' @export
 add_opt_cache <- function(cfg=list()) {
-    if (is.list(cfg$cache)) return(cfg)
-    cfg$cache <- list()
+    signature <- paste(unlist(cfg), collapse='')
+    if (!is.null(attr(cfg, "signature"))) {
+        if (attr(cfg, "signature") == signature) return(cfg)
+    }
+    attr(cfg, "signature") <- signature
+    attr(cfg, "cache") <- list()
+    class(cfg) <- "ppcfg"
 
     n_ranks <- get_n_ranks(cfg)
     n_suits <- get_n_suits(cfg)
     i_unsuit <- n_suits + 1
-    cfg$cache[[paste0("tile_back", i_unsuit, 0)]] <- get_component_opt("tile_back", i_unsuit, 0, cfg)
-    cfg$cache[[paste0("saucer_back", i_unsuit, 0)]] <- get_component_opt("saucer_back", i_unsuit, 0, cfg)
-    cfg$cache[[paste0("tile_face", i_unsuit, n_ranks+1)]] <- get_component_opt("tile_face", i_unsuit, n_ranks+1, cfg) #### joker tile
+    key <- opt_cache_key("tile_back", i_unsuit, 0)
+    attr(cfg, "cache")[[key]] <- get_component_opt("tile_back", i_unsuit, 0, cfg)
+    key <- opt_cache_key("saucer_back", i_unsuit, 0)
+    attr(cfg, "cache")[[key]] <- get_component_opt("saucer_back", i_unsuit, 0, cfg)
+    key <- opt_cache_key("tile_face", i_unsuit, n_ranks+1)
+    attr(cfg, "cache")[[key]] <- get_component_opt("tile_face", i_unsuit, n_ranks+1, cfg) #### joker tile
     for (i_r in 1:n_ranks) {
-        cfg$cache[[paste0("coin_face", i_unsuit, i_r)]] <- get_component_opt("coin_face", i_unsuit, i_r, cfg)
+        key <- opt_cache_key("coin_face", i_unsuit, i_r)
+        attr(cfg, "cache")[[key]] <- get_component_opt("coin_face", i_unsuit, i_r, cfg)
     }
     for (i_s in 1:n_suits) {
-        cfg$cache[[paste0("coin_back", i_s, 0)]] <- get_component_opt("coin_back", i_s, 0, cfg)
-        cfg$cache[[paste0("chip_back", i_s, 0)]] <- get_component_opt("chip_back", i_s, 0, cfg)
-        cfg$cache[[paste0("saucer_face", i_s, 0)]] <- get_component_opt("saucer_face", i_s, 0, cfg)
-        cfg$cache[[paste0("belt_face", i_s, 0)]] <- get_component_opt("belt_face", i_s, 0, cfg)
-        cfg$cache[[paste0("pawn_face", i_s, 0)]] <- get_component_opt("pawn_face", i_s, 0, cfg)
-        cfg$cache[[paste0("pawn_back", i_s, 0)]] <- get_component_opt("pawn_back", i_s, 0, cfg)
+        for (cs in c("coin_back", "chip_back", "saucer_face", "belt_face", 
+                     "pawn_face", "pawn_back")) {
+        key <- opt_cache_key(cs, i_s, 0)
+        attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, 0, cfg)
+        }
     }
     for (i_s in 1:(i_unsuit+1)) {
         for (i_r in 1:n_ranks) {
-            cfg$cache[[paste0("chip_face", i_s, i_r)]] <- get_component_opt("chip_face", i_s, i_r, cfg)
-            cfg$cache[[paste0("die_face", i_s, i_r)]] <- get_component_opt("die_face", i_s, i_r, cfg)
-            cfg$cache[[paste0("tile_face", i_s, i_r)]] <- get_component_opt("tile_face", i_s, i_r, cfg)
+            for (cs in c("chip_face", "die_face", "tile_face")) {
+                key <- opt_cache_key(cs, i_s, i_r)
+                attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, i_r, cfg)
+            }
         }
-        cfg$cache[[paste0("suitdie_face", i_s, 0)]] <- get_component_opt("suitdie_face", i_s, 0, cfg)
+        key <- opt_cache_key("suitdie_face", i_s, 0)
+        attr(cfg, "cache")[[key]] <- get_component_opt("suitdie_face", i_s, 0, cfg)
     }
     cfg
 }
 
+print.ppcfg <- function(cfg) {
+    attributes(cfg) <- NULL
+    print(cfg)
+    cat("\ncontains a pre-computed component opt cache stored\n")
+}
+
 draw_component_basic <- function(component_side, i_s, i_r, cfg) {
-    key <- paste0(component_side, i_s, i_r)
-    if(is.null(cfg[["cache"]][[key]])) {
+    key <- opt_cache_key(component_side, i_s, i_r)
+    if(is.null(attr(cfg, "cache")[[key]])) {
         # cat("missing", key, "\n")
         opt <- get_component_opt(component_side, i_s, i_r, cfg)
     } else {
-        opt <- cfg[["cache"]][[key]]
+        opt <- attr(cfg, "cache")[[key]]
     }
     add_background(opt)
     add_checkers(opt)
