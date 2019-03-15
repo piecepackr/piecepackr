@@ -39,28 +39,6 @@ get_license1 <- function(cfg=list()) { "This work is licensed under a CC BY-SA 4
 get_license2 <- function(cfg=list()) { "https://creativecommons.org/licenses/by-sa/4.0/" }
 get_title <- make_get_style_fn("title", "Piecepack collection")
 
-make_die_viewports <- function(label, flip=FALSE) {
-    dvpl <- paste0("die.vp.", label)
-    addViewport(width=inch(4*DIE_WIDTH), height=inch(3*DIE_WIDTH), name=dvpl)
-    downViewport(dvpl)
-    if (flip) {
-        addViewport(x=4/4-1/8, y=1/3-1/6, width=1/4, height=1/3, angle= 90, name=paste0(label, ".die.1"))
-        addViewport(x=3/4-1/8, y=1/3-1/6, width=1/4, height=1/3, angle=  0, name=paste0(label, ".die.2"))
-        addViewport(x=3/4-1/8, y=2/3-1/6, width=1/4, height=1/3, angle= 90, name=paste0(label, ".die.3"))
-        addViewport(x=2/4-1/8, y=2/3-1/6, width=1/4, height=1/3, angle=  0, name=paste0(label, ".die.4"))
-        addViewport(x=2/4-1/8, y=3/3-1/6, width=1/4, height=1/3, angle= 90, name=paste0(label, ".die.5"))
-        addViewport(x=1/4-1/8, y=3/3-1/6, width=1/4, height=1/3, angle=  0, name=paste0(label, ".die.6"))
-    } else {
-        addViewport(x=1/4-1/8, y=1/3-1/6, width=1/4, height=1/3, angle=-90, name=paste0(label, ".die.1"))
-        addViewport(x=2/4-1/8, y=1/3-1/6, width=1/4, height=1/3, angle=  0, name=paste0(label, ".die.2"))
-        addViewport(x=2/4-1/8, y=2/3-1/6, width=1/4, height=1/3, angle=-90, name=paste0(label, ".die.3"))
-        addViewport(x=3/4-1/8, y=2/3-1/6, width=1/4, height=1/3, angle=  0, name=paste0(label, ".die.4"))
-        addViewport(x=3/4-1/8, y=3/3-1/6, width=1/4, height=1/3, angle=-90, name=paste0(label, ".die.5"))
-        addViewport(x=4/4-1/8, y=3/3-1/6, width=1/4, height=1/3, angle=  0, name=paste0(label, ".die.6"))
-    }
-    upViewport()
-}
-
 make_4by3_viewports <- function(label) {
     for (i_row in 1:3) {
         i_l_rank <- 2 * (i_row-1) + 1
@@ -74,13 +52,6 @@ make_4by3_viewports <- function(label) {
         upViewport()
     }
 }
-
-# make_coinrow_viewports <- function(label) {
-#     for (i_r in 1:6) {
-#         addViewport(x=(2*i_r-1)/12-1/24, width=1/12, name=paste0(label, ".back.", i_r))
-#         addViewport(x=(2*i_r)/12-1/24, width=1/12, name=paste0(label, ".face.", i_r))
-#     }
-# }
 
 draw_coin_4by3 <- function(i_s, cfg) {
     label <- stringi::stri_rand_strings(n=1, length=4)
