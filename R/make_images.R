@@ -1128,7 +1128,7 @@ opt_cache_key <- function(component_side, i_s, i_r) {
 #'   
 #' @exportClass pp_cfg
 #' @export
-pp_cfg <- function(cfg=list(), ...) {
+pp_cfg <- function(cfg=list()) {
     signature <- paste(unlist(cfg), collapse='')
     if (!is.null(attr(cfg, "signature"))) {
         if (attr(cfg, "signature") == signature) return(cfg)

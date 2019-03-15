@@ -4,7 +4,7 @@
 \alias{pp_cfg}
 \title{Create piecepack configuration list with a cache of component opts}
 \usage{
-pp_cfg(cfg = list(), ...)
+pp_cfg(cfg = list())
 }
 \arguments{
 \item{cfg}{List of configuration options}
