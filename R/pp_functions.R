@@ -396,7 +396,7 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
 
     n_suits <- get_n_suits(cfg)
     i_unsuit <- n_suits + 1
-    cfg <- add_opt_cache(cfg)
+    cfg <- pp_cfg(cfg)
 
     pp_pdf(output_filename, get_font(cfg), size)
 

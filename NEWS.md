@@ -4,7 +4,7 @@ piecepackr 0.12.0
 New features
 ------------
 
-* New ``add_opt_cache`` function allows one to add a pre-computed cache of component opt to configuration lists (#112). 
+* New ``pp_cfg`` function (and S3 class) allows one to add a pre-computed cache of component opt to configuration lists (#112). 
 
 piecepackr 0.11.0
 =================

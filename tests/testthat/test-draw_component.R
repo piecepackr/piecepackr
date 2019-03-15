@@ -1,4 +1,4 @@
-cfg_default <- add_opt_cache()
+cfg_default <- pp_cfg()
 
 context("make_pnp works as expected")
 test_that("make_pnp works as expected", {

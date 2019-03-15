@@ -1108,31 +1108,34 @@ opt_cache_key <- function(component_side, i_s, i_r) {
     paste(component_side, i_s, i_r, sep=".")
 }
 
-#' Add component opt cache
+#' Create piecepack configuration list with a cache of component opts
 #'
-#' Adds a "cache" and "signature" attribute to the list of
-#' configuration options.  The cache stores pre-computed component opt lists.
+#' Adds a \code{cache} and \code{signature} attribute and a \code{pp_cfg} class
+#' to a list of configuration options.  
+#' The cache stores pre-computed component opt lists.
 #' Once done this significantly speeds up the drawing of piecepack components
-#' with that configuration list.  If you later change the configuration list you
-#' should run this again to re-compute the cache.
+#' with that configuration list.  However if you later change the configuration list you
+#' should run this again to re-compute the cache otherwise \code{draw_component} may 
+#' not work as intended.
 #' @param cfg List of configuration options
 #' @examples
 #'  \donttest{
 #'    cfg <- list()
 #'    system.time(replicate(500, draw_component("tile_face", cfg, 4, 4)))
-#'    system.time(cfg <- add_opt_cache(cfg))
+#'    system.time(cfg <- pp_cfg(cfg))
 #'    system.time(replicate(500, draw_component("tile_face", cfg, 4, 4)))
 #'  }
 #'   
+#' @exportClass pp_cfg
 #' @export
-add_opt_cache <- function(cfg=list()) {
+pp_cfg <- function(cfg=list(), ...) {
     signature <- paste(unlist(cfg), collapse='')
     if (!is.null(attr(cfg, "signature"))) {
         if (attr(cfg, "signature") == signature) return(cfg)
     }
     attr(cfg, "signature") <- signature
     attr(cfg, "cache") <- list()
-    class(cfg) <- "ppcfg"
+    class(cfg) <- "pp_cfg"
 
     n_ranks <- get_n_ranks(cfg)
     n_suits <- get_n_suits(cfg)
@@ -1167,11 +1170,14 @@ add_opt_cache <- function(cfg=list()) {
     cfg
 }
 
-print.ppcfg <- function(cfg) {
-    attributes(cfg) <- NULL
-    print(cfg)
-    cat("\ncontains a pre-computed component opt cache stored\n")
+
+#' @export
+print.pp_cfg <- function(x, ...) {
+    attributes(x) <- NULL
+    print(x, ...)
+    cat("\nClass: pp_cfg; Contains a pre-computed component opt cache\n")
 }
+
 
 draw_component_basic <- function(component_side, i_s, i_r, cfg) {
     key <- opt_cache_key(component_side, i_s, i_r)
