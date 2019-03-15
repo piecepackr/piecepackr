@@ -875,7 +875,8 @@ get_pp_height <- function(component_side, i_r) {
     })
 }
 
-pp_device <- function(filename, component_side=NULL, theta=0, width=NULL, height=NULL, res=72) {
+pp_device <- function(filename, component_side=NULL, theta=0, i_r = 1,
+                      width=NULL, height=NULL, res=72) {
     format <- tools::file_ext(filename)
     if (is.null(width)) width <- get_pp_width(component_side, i_r)
     if (is.null(height)) height <- get_pp_height(component_side, i_r)
