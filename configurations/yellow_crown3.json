@@ -1,9 +1,0 @@
-{
-  "rank_symbols": ["n,a,2,3,4,5"],
-  "suit_symbols": ["🌞,🌜,👑,⚜,♚,⚓,꩜"],
-  "rank_symbols_font": ["Noto Sans"],
-  "suit_symbols_font": ["Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Symbols,Noto Sans Symbols,Noto Sans Cham"],
-  "suit_symbols_scale": ["0.6,0.7,0.75,0.9,1,0.8,0.9"],
-  "suit_colors": ["red,black,green,dodgerblue2,yellow2,darkblue,sienna"],
-  "background_colors": ["black,white,white,black,black,white,grey"]
-}

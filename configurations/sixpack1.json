@@ -1,8 +1,0 @@
-{
-  "rank_symbols": ["n,a,2,3,4,5"],
-  "suit_symbols": ["♥,♠,♣,♦,🌞,🌜,꩜"],
-  "rank_symbols_font": ["Noto Sans"],
-  "suit_symbols_font": ["Noto Emoji"],
-  "suit_symbols_scale": ["0.7,0.7,0.7,0.7,0.6,0.6,0.9"],
-  "suit_colors": ["darkred,black,black,darkred,darkred,black,grey"]
-}
