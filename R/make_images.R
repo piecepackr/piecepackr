@@ -1173,11 +1173,10 @@ pp_cfg <- function(cfg=list()) {
 
 #' @export
 print.pp_cfg <- function(x, ...) {
-    attributes(x) <- NULL
-    print(x, ...)
-    cat("\nClass: pp_cfg; Contains a pre-computed component opt cache\n")
+    for(name in names(x)) {
+        cat(paste0("$", name, " : ", x[[name]]), "\n")
+    }
 }
-
 
 draw_component_basic <- function(component_side, i_s, i_r, cfg) {
     key <- opt_cache_key(component_side, i_s, i_r)
