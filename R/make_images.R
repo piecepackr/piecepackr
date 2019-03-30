@@ -749,27 +749,6 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
          ps_x=ps_x, ps_y=ps_y)
 }
 
-#### Move function out, add support for stdout, option to not create directory?
-#' Make piecepack deck preview svg
-#'
-#' Make piecepack deck preview svg
-#'
-#' @param cfg Piecepack configuration list
-#' @param output_filename Filename of PnP output
-#' @export
-make_preview <- function(cfg=list(), output_filename="svg/previews/piecepack_deck.svg") {
-
-    unlink(output_filename)
-    directory <- dirname(output_filename)
-    dir.create(directory, recursive=TRUE, showWarnings=FALSE)
-
-    pheight <- 3*TILE_WIDTH
-    pwidth <- 3*TILE_WIDTH
-    pp_device(output_filename, width=pwidth, height=pheight)
-    draw_preview(cfg)
-    invisible(dev.off())
-}
-
 #' Draw piecepack deck preview 
 #'
 #' Draw piecepack deck preview
