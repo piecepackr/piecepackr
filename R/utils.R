@@ -1,5 +1,6 @@
 get_embedded_font_helper <- function(font, char) {
     file <- tempfile(fileext=".pdf")
+    on.exit(unlink(file))
     grDevices::cairo_pdf(file)
     grid::grid.text(char, gp=grid::gpar(fontsize=72, fontfamily=font))
     invisible(dev.off())
@@ -22,4 +23,12 @@ get_embedded_font_helper <- function(font, char) {
 #'        This either means that no font was found or that a color emoji font was found and instead of a font an image was embedded.
 #' @details This functions depends on \code{pdffonts} being on the system path.
 #' @export
-get_embedded_font <- Vectorize(get_embedded_font_helper)
+get_embedded_font <- function(font, char) {
+    df <- expand.grid(char, font, stringsAsFactors=FALSE)
+    names(df) <- c("char", "requested_font")
+    df$embedded_font <- NA
+    for (ii in seq(nrow(df))) {
+        df[ii, 3] <- get_embedded_font_helper(df[ii,2], df[ii,1])
+    }
+    df
+}
