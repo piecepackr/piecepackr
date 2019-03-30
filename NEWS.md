@@ -6,6 +6,11 @@ New features
 
 * New ``pp_cfg`` function (and S3 class) allows one to add a pre-computed cache of component opt to configuration lists (#112). 
 
+Breaking changes
+----------------
+
+* Executable Rscripts have been removed.
+
 piecepackr 0.11.0
 =================
 
