@@ -32,7 +32,7 @@ test_that("make_images works as expected", {
     on.exit(unlink(directory))
     dir.create(directory)
     make_images(cfg_default, directory)
-    expect_equal(length(list.files(directory)), 108)
+    expect_equal(length(list.files(directory)), 80)
 })
 
 context("no regressions in figures")
@@ -88,17 +88,6 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("belt_face.s1", function() dc("belt_face", i_s=1))
     vdiffr::expect_doppelganger("saucer_face.s4", function() dc("saucer_face", i_s=4))
     vdiffr::expect_doppelganger("saucer_back", function() dc("saucer_back"))
-    # chips
-    vdiffr::expect_doppelganger("chip_face.s1.r1", function() dc("chip_face", i_s=1, i_r=1))
-    vdiffr::expect_doppelganger("chip_face.s2.r2", function() dc("chip_face", i_s=2, i_r=2))
-    vdiffr::expect_doppelganger("chip_face.s3.r3", function() dc("chip_face", i_s=3, i_r=3))
-    vdiffr::expect_doppelganger("chip_back.s4", function() dc("chip_back", i_s=4))
-    vdiffr::expect_doppelganger("chip_back.s3-hex", 
-                                function() dc("chip_back", cfg=list(shape.chip="convex6"), i_s=3))
-    vdiffr::expect_doppelganger("chip_back.s2-kite", 
-                                function() dc("chip_back", cfg=list(shape.chip="kite"), i_s=2))
-    vdiffr::expect_doppelganger("chip_back.s1-star", 
-                                function() dc("chip_back", cfg=list(shape.chip="concave5"), i_s=1))
     # pyramids
     vdiffr::expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", i_s=1, i_r=6))
     vdiffr::expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", i_s=2, i_r=5))

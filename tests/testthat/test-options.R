@@ -23,15 +23,8 @@ test_that("options work as expected", {
     expect_equal(get_n_ranks(list(n_ranks = 7)), 7)
     expect_equal(get_n_suits(list(n_suits = 3)), 3)
 
-    cfg <- list(suit_symbols="1,2,3,4,5",
-                rank_symbols="A,B,C,D,E,F",
-                n_suits = 5,
-                use_suit_as_ace=TRUE)
-    expect_equal(get_rank_symbol("chip_face", 1, 2, cfg), "1")
     cfg <- list(rank_symbols="A,B,C,D,E,F",
-                use_suit_as_ace=TRUE,
-                use_suit_as_ace.chip_face=FALSE)
-    expect_equal(get_rank_symbol("chip_face", 1, 2, cfg), "B")
+                use_suit_as_ace=TRUE)
     expect_equal(get_rank_symbol("die_face", 6, 2, cfg), "\u263c")
 
     cfg <- list(background_colors.unsuited="orange")
@@ -87,10 +80,8 @@ test_that("get_component_opt works as expected", {
     expect_equal(opt$dm_y, to_y(90, sqrt(0.25^2 + 0.25^2)) + 0.5)
     expect_equal(opt$ps_x, 0.5)
     expect_equal(opt$ps_y, 0.5)
+    expect_equal(opt$dm_symbol, "\u25cf")
 
-    opt <- get_component_opt("chip_back", i_s=1)
-    # expect_equal(opt$dm_symbol, "\u2605")
-    expect_equal(opt$dm_symbol, "\u2665")
     opt <- get_component_opt("saucer_back")
     expect_equal(opt$dm_symbol, "\u25b2")
     # expect_equal(opt$dm_symbol, "\u265f")

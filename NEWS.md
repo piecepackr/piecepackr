@@ -5,21 +5,22 @@ New features
 ------------
 
 * New ``pp_cfg`` function (and S3 class) allows one to add a pre-computed cache of component opt to configuration lists (#112). 
-* ``make_pnp`` function now supports adding piecepack pyramids and matchsticks to the print-and-play layout.
+* ``make_pnp`` function now supports adding piecepack pyramids (#37) and matchsticks (#69) to the print-and-play layout.
 
 Breaking changes
 ----------------
 
-* All executable Rscripts have been removed.
+* All executable Rscripts have been removed (#113).
 * ``make_collection`` and ``make_preview`` functions removed.
 * ``load_configurations`` and ``read_configuration`` functions removed.
 * ``make_pnp`` print-and-play layouts have been radically re-configured.
+* Non-standard ``chip`` component no longer supported by piecepackr (#114)
 
 Bug fixes and minor improvements
 --------------------------------
 
 * Bug in ``get_embedded_font`` function fixed.
-* ``make_pnp`` function now supports the A5 page size and is more A4 page size friendly.
+* ``make_pnp`` function now supports the A5 page size and is more A4 page size friendly (#54).
 
 piecepackr 0.11.0
 =================

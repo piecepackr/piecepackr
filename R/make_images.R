@@ -2,20 +2,18 @@
 #' @import grid
 
 COMPONENTS <- c("tile", "coin", "die", "suitdie", 
-           "pawn", "belt", "saucer", "chip", "pyramid")
+           "pawn", "belt", "saucer", "pyramid")
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
            "coin_back", "coin_face",
            "die_face", "suitdie_face", 
            "pawn_face", "pawn_back", 
            "belt_face",  "saucer_face", "saucer_back",
-           "chip_face", "chip_back", 
            "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right")
 #### "pawn_layout", "die_layout", "suitdie_layout", "suitrankdie_layout", "pyramid_layout", "pyramid_top""
 COIN_WIDTH <- 3/4
 DIE_WIDTH <- 1/2
 TILE_WIDTH <- 2
 SAUCER_WIDTH <- 7/8
-CHIP_WIDTH <- 5/8
 PAWN_HEIGHT <- 7/8
 PAWN_WIDTH <- 1/2
 PAWN_BASE <- 3/8
@@ -245,8 +243,6 @@ get_shape <- function(component_side, i_s, i_r, cfg) {
                pyramid_back = "pyramid",
                belt_face = "rect",
                suitdie_face = "rect",
-               chip_face = "circle",
-               chip_back = "circle",
                stop(paste("Don't know correct shape for", component_side)))
     get_style_element("shape", component_side, cfg, default, i_s, i_r)
 }
@@ -310,9 +306,7 @@ is_suited <- function(component_side, i_s, i_r, cfg) {
            saucer_back = FALSE,
            pawn_face = TRUE,
            pawn_back = TRUE,
-           belt_face = TRUE,
-           chip_face = TRUE,
-           chip_back = TRUE)
+           belt_face = TRUE)
 }
 
 get_dm_theta <- function(component_side, i_s, i_r, cfg) {
@@ -371,9 +365,6 @@ get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
     default <- {
         if (component_side %in% c("coin_back", "coin_face")) {
             dm_symbols <- "\u25cf" # "●"
-        } else if (component_side %in% c("chip_back")) {
-            dm_symbols <- get_suit_symbols(component_side, i_s, i_r, cfg)
-            # dm_symbols <- "\u26c3" # "⛃"
         } else if (component_side %in% c("saucer_back", "saucer_face")) {
             dm_symbols <- "\u25b2" # "▲"
             # dm_symbols <- "\u265f" # "♟"
@@ -609,7 +600,6 @@ get_dm_scale <- function(component_side, i_s, i_r, cfg) {
 get_suit_fontsize <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
                  "belt_face" = 22,
-                 "chip_back" = 28,
                  "coin_back" = 34,
                  "pawn_face" = 28,
                  "pawn_back" = 28,
@@ -635,7 +625,6 @@ get_dm_fontsize <- function(component_side, i_s, i_r, cfg) {
 get_rank_fontsize <- function(component_side, i_s, i_r, cfg) {
     default <- switch(component_side,
                  "die_face" = 20,
-                 "chip_face" = 22,
                  "coin_face" = 28,
                  "tile_face" = 72,
                  "pyramid_left"  = 60 * (i_r+1) / 8,
@@ -661,7 +650,7 @@ to_y <- function(theta, r) {
 # }
 
 get_ps_element <- function(component_side, suit_element, rank_element) {
-    if (component_side %in% c("chip_face", "coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
+    if (component_side %in% c("coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
         rank_element
     } else if (component_side %in% c("tile_back", "matchstick_back")) {
         NULL
@@ -813,7 +802,6 @@ get_pp_width <- function(component_side, i_r) {
         component <- get_component(component_side)
         switch(component, 
            belt = BELT_WIDTH,
-           chip = CHIP_WIDTH,
            coin = COIN_WIDTH,
            die = DIE_WIDTH,
            matchstick = MATCHSTICK_WIDTHS[i_r],
@@ -841,7 +829,6 @@ get_pp_height <- function(component_side, i_r) {
         component <- get_component(component_side)
         switch(component, 
                belt = BELT_HEIGHT,
-               chip = CHIP_WIDTH,
                coin = COIN_WIDTH,
                die = DIE_WIDTH,
                matchstick = MATCHSTICK_HEIGHTS[i_r],
@@ -907,7 +894,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
         }
 
         for (i_s in 1:get_n_suits(cfg)) {
-            for (component_side in c("belt_face", "chip_back", "coin_back", 
+            for (component_side in c("belt_face", "coin_back", 
                                        "pawn_back", "pawn_face",
                                        "saucer_face", "suitdie_face")) {
                 f <- component_filename(directory, cfg, component_side, format, theta, i_s)
@@ -917,7 +904,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
             }
 
             for (i_r in 1:get_n_ranks(cfg)) {
-                for (component_side in c("chip_face", "die_face", "tile_face")) {
+                for (component_side in c("die_face", "tile_face")) {
                     f <- component_filename(directory, cfg, component_side, format, theta, i_s, i_r)
                     pp_device(f, component_side, theta)
                     draw_component(component_side, cfg, i_s, i_r)
@@ -1130,7 +1117,7 @@ pp_cfg <- function(cfg=list()) {
         attr(cfg, "cache")[[key]] <- get_component_opt("coin_face", i_unsuit, i_r, cfg)
     }
     for (i_s in 1:n_suits) {
-        for (cs in c("coin_back", "chip_back", "saucer_face", "belt_face", 
+        for (cs in c("coin_back", "saucer_face", "belt_face", 
                      "pawn_face", "pawn_back")) {
         key <- opt_cache_key(cs, i_s, 0)
         attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, 0, cfg)
@@ -1138,7 +1125,7 @@ pp_cfg <- function(cfg=list()) {
     }
     for (i_s in 1:(i_unsuit+1)) {
         for (i_r in 1:n_ranks) {
-            for (cs in c("chip_face", "die_face", "tile_face")) {
+            for (cs in c("die_face", "tile_face")) {
                 key <- opt_cache_key(cs, i_s, i_r)
                 attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, i_r, cfg)
             }
