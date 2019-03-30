@@ -1,7 +1,4 @@
 test_that("options work as expected", {
-    parser <- optparse::OptionParser()
-    parser <- configuration_options(parser)
-
     cfg <- list(invert_colors.suited = TRUE,
                 background_colors = "white",
                 suit_colors = "darkred,black,darkgreen,darkblue,grey")
@@ -102,11 +99,4 @@ test_that("get_component_opt works as expected", {
     # expect_equal(opt$dm_symbol, "\U0001f440")
     opt <- get_component_opt("pawn_back")
     expect_equal(opt$dm_symbol, "")
-})
-
-context("load_configurations works as expected")
-test_that("load_configurations works as expected", {
-    cfg <- load_configurations(internal_cfgs = c("french_suits_white", "swirl_s5"))
-    expect_equal(get_suit_symbol("saucer_face", 1, 1, cfg), "♡")
-    expect_equal(get_suit_symbol("saucer_back", 5, 1, cfg), "꩜")
 })

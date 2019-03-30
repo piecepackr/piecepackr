@@ -1,3 +1,4 @@
+#### Move to documentation document
 FORMATS <- c("bmp", "jpeg", "pdf", "png", "ps", "svg", "tiff")
 
 #' @importFrom optparse OptionParser add_option parse_args
@@ -164,20 +165,7 @@ configuration_options <- function(parser, pp_n_suits=NULL, pp_n_ranks=NULL) {
     parser
 }
 
-
-#' Read piecepack configuration JSON
-#'
-#' Read in and process piecepack configuration JSON.
-#' 
-#' @param cfg_file Filename of json configuration.  Default is to read in from standard input.
-#' @export
-read_configuration <- function(cfg_file="stdin") {
-    con <- file(cfg_file)
-    opts <- jsonlite::fromJSON(readLines(con, encoding="UTF-8"))
-    close(con)
-    opts
-}
-
+#### Remove and move to demos
 swirl <- "\uaa5c" # ꩜
 star <- "\u2605" # ★
 french_suits <- "\u2665,\u2660,\u2663,\u2666," # ♥,♠,♣,♦,
@@ -206,20 +194,3 @@ CFG <- list(swirl_s5_noto = list(suit_symbols.s5 = swirl,
             french_suits_white_noto = list(suit_symbols = french_suits_white, suit_symbols_font="Noto Sans Symbols"),
             swiss_suits_quivira = list(suit_symbols = swiss_suits, suit_symbols_font="Quivira")) 
 
-#' Load piecepack configurations
-#'
-#' Load in piecepack configurations
-#'
-#' @param cfg Configuration list to augment
-#' @param cfg_files Filenames of json configurations.
-#' @param internal_cfgs Strings of internal piecepackr configurations.
-#' @export
-load_configurations <- function(cfg=list(), cfg_files=character(0), internal_cfgs=character(0)) {
-    for (cfg_file in cfg_files) {
-        cfg <- c(cfg, read_configuration(cfg_file))
-    }
-    for (internal_cfg in internal_cfgs) {
-        cfg <- c(cfg, CFG[[internal_cfg]])
-    }
-    cfg
-}
