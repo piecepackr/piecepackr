@@ -32,3 +32,32 @@ get_embedded_font <- function(font, char) {
     }
     df
 }
+
+get_n_pages_pdfinfo <- function(pdf_filename) {
+    pdf_filename <- shQuote(normalizePath(pdf_filename))
+    pdfinfo <- system2("pdfinfo", pdf_filename, stdout=TRUE)
+    pdfinfo <- grep("^Pages:", pdfinfo, value=TRUE)
+    as.numeric(strsplit(pdfinfo, " +")[[1]][2])
+}
+get_n_pages_gs <- function(pdf_filename) {
+    pdf_filename <- normalizePath(pdf_filename, winslash="/")
+    cmd <- find_gs()
+    args <- c("-q", "-dNODISPLAY", "-c", paste(paste0('"(', pdf_filename, ")"),
+              "(r)", "file", "runpdfbegin", "pdfpagecount", "=", 'quit"'))
+    as.numeric(system2(cmd, args, stdout=TRUE))
+}
+get_n_pages <- function(pdf_filename) {
+    if (Sys.which("pdfinfo") != "") {
+        np <- get_n_pages_pdfinfo(pdf_filename)
+    } else {
+        np <- get_n_pages_gs(pdf_filename)
+    }
+    np
+}
+
+find_gs <- function() {
+    cmd <- tools::find_gs_cmd()
+    if (cmd == "") 
+        stop("Can't find system dependency ghostscript on PATH")
+    cmd
+}

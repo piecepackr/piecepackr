@@ -7,14 +7,22 @@ test_that("make_pnp works as expected", {
     on.exit(unlink(pdf_deck_dir, recursive=TRUE))
     pdf_deck_filename <- file.path(pdf_deck_dir, "piecepack_deck.pdf")
     on.exit(unlink(pdf_deck_filename))
+    pdf_deck_filename_a4 <- file.path(pdf_deck_dir, "piecepack_deck_a4.pdf")
+    on.exit(unlink(pdf_deck_filename_a4))
+    pdf_deck_filename_a5 <- file.path(pdf_deck_dir, "piecepack_deck_a5.pdf")
+    on.exit(unlink(pdf_deck_filename_a5))
 
     make_pnp(cfg_default, pdf_deck_filename, "letter")
+    make_pnp(cfg_default, pdf_deck_filename_a4, "A4")
+    make_pnp(cfg_default, pdf_deck_filename_a5, "A5")
 
     expect_true(file.exists(pdf_deck_filename))
-    expect_equal(get_n_pages(pdf_deck_filename), 6)
-    expect_equal(get_n_pages_gs(pdf_deck_filename), 6)
+    expect_equal(get_n_pages(pdf_deck_filename), 7)
+    expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
     if (Sys.which("pdfinfo") != "")
-        expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 6)
+        expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
+    expect_equal(get_n_pages(pdf_deck_filename_a4), 7)
+    expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
 
 })
 
