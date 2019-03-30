@@ -97,6 +97,46 @@ draw_suitrank_die <- function(cfg, flip=FALSE) {
     draw_piecepack_die(i_s, cfg, flip)
 }
 
+draw_pawn_layout <- function(component_side, i_s, i_r, cfg) {
+    suppressWarnings({
+        denominator <- PAWN_HEIGHT + PAWN_BASE
+        y <- (PAWN_HEIGHT/2 + PAWN_BASE) / denominator
+        height = PAWN_HEIGHT / denominator
+        pushViewport(viewport(y=0.25, height=0.5))
+        pushViewport(viewport(y=y, height=height))
+        draw_component("pawn_face", cfg, i_s)
+        popViewport()
+        popViewport()
+        pushViewport(viewport(y=0.75, height=0.5, name="pawn_rear", angle=180))
+        pushViewport(viewport(y=y, height=height, name="pawn_back"))
+        draw_component("pawn_back", cfg, i_s)
+        popViewport()
+        popViewport()
+    })
+    border_col <- get_border_color("pawn_face", i_s, 0, cfg)
+    grid.lines(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
+    grid.rect(gp=gpar(col=border_col, fill=NA))
+    ll <- 0.07
+    seg(0.5, 0, 0.5, ll, border_col)
+    seg(0.5, 1, 0.5, 1-ll, border_col)
+}
+
+draw_pyramid_layout <- function(component_side, i_s, i_r, cfg) {
+    suppressWarnings({
+        thetas <- c(72, 36, 0, -36, -72)
+        r <- 0.5
+        x <- to_x(thetas, r)
+        y <- 0.5 + 0.5*to_y(thetas, r)
+        components <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
+        angles <- c(90+72, 90+36, 90, 90-36, 90-72)
+        for(ii in 1:5) {
+            pushViewport(viewport(width=inch(PYRAMID_WIDTHS[i_r]), height=inch(PYRAMID_HEIGHTS[i_r]), angle=angles[ii], x=x[ii], y=y[ii]))
+            draw_component(components[ii], cfg, i_s, i_r)
+            popViewport()
+        }
+    })
+}
+
 LETTER_WIDTH <- 8.5
 LETTER_HEIGHT <- 11
 A4_WIDTH <- 8.27
@@ -106,7 +146,7 @@ A5H <- 7.5
 
 pp_pdf <- function(filename, family, paper) {
     if (paper == "letter") {
-        cairo_pdf(filename, onefile=TRUE, width=LETTER_WIDTH, height=LETTER_HEIGHT, family=family)
+        cairo_pdf(filename, onefile=TRUE, width=LETTER_HEIGHT, height=LETTER_WIDTH, family=family)
     } else if (paper == "A4") {
         cairo_pdf(filename, onefile=TRUE, width=A4_HEIGHT, height=A4_WIDTH, family=family)
     } else if (paper == "A5") {
