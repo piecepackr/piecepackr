@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Functions and Rscripts to Build Piecepack Decks
-Version: 0.12.0-2
+Version: 0.12.0-3
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: This is an R package designed to make configurable piecepack graphics. It can be used with the grid R package to make piecepack diagrams (i.e. for inclusion in rulesets) and custom Print & Play layouts.

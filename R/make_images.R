@@ -271,19 +271,6 @@ get_grid_shape <- function(shape, theta=0, r=0.2) {
     }
 }
 
-get_shape_fn <- function(component_side, i_s, i_r, cfg) {
-    shape <- get_shape(component_side, i_s, i_r, cfg)
-    if(grepl("^con", shape)) 
-        theta <- get_shape_theta(component_side, i_s, i_r, cfg)
-    else
-        theta <- 0
-    if(grepl("^concave", shape))
-        r <- get_shape_r(component_side, i_s, i_r, cfg)
-    else
-        r <- 0.2
-    get_grid_shape(shape, theta, r)
-}
-
 get_suit_color_helper <- function(component_side, i_s, i_r, cfg=list()) {
     suit_colors <- get_suit_colors(component_side, i_s, i_r, cfg)
     ifelse(i_s <= get_n_suits(cfg), suit_colors[i_s], suit_colors[get_i_unsuit(cfg)])
@@ -432,12 +419,6 @@ get_gridline_color <- function(component_side, i_s, i_r, cfg) {
     colors <- get_style_element("gridline_colors", component_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
     colors <- expand_suit_elements(colors, "gridline_colors", component_side, cfg)
-    colors[i_s]
-}
-get_hexline_color <- function(component_side, i_s, i_r, cfg) {
-    colors <- get_style_element("hexline_colors", component_side, cfg, "transparent", i_s, i_r)
-    colors <- col_cleave(colors)
-    colors <- expand_suit_elements(colors, "hexline_colors", component_side, cfg)
     colors[i_s]
 }
 get_ribbon_color <- function(component_side, i_s, i_r, cfg) {
@@ -690,7 +671,7 @@ get_ps_color <- function(component_side, i_s, i_r, cfg) {
 get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
     # Shape
     shape <- get_shape(component_side, i_s, i_r, cfg)
-    shape_fn <- get_shape_fn(component_side, i_s, i_r, cfg)
+    shape_r <- get_shape_r(component_side, i_s, i_r, cfg)
     shape_theta <- get_shape_theta(component_side, i_s, i_r, cfg)
 
     # Additional colors
@@ -698,7 +679,6 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     border_col <- get_border_color(component_side, i_s, i_r, cfg)
     checker_col <- get_checker_color(component_side, i_s, i_r, cfg)
     gridline_col <- get_gridline_color(component_side, i_s, i_r, cfg)
-    hexline_col <- get_hexline_color(component_side, i_s, i_r, cfg) 
     ribbon_col <- get_ribbon_color(component_side, i_s, i_r, cfg)
 
     # Overall scaling factor
@@ -729,12 +709,14 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     ps_x <- to_x(ps_theta, ps_r) + 0.5
     ps_y <- to_y(ps_theta, ps_r) + 0.5
 
-    list(shape=shape, shape_fn=shape_fn, shape_theta=shape_theta,
-         background_col=background_col, border_col=border_col, gridline_col=gridline_col,
-         checker_col=checker_col, hexline_col=hexline_col, ribbon_col=ribbon_col, 
-         dm_col=dm_col, dm_symbol=dm_symbol, dm_fontsize=dm_fontsize, dm_font=dm_font,
+    list(shape=shape, shape_r=shape_r, shape_theta=shape_theta, 
+         background_col=background_col, border_col=border_col, 
+         gridline_col=gridline_col, checker_col=checker_col, ribbon_col=ribbon_col,
+         dm_col=dm_col, dm_symbol=dm_symbol, 
+         dm_fontsize=dm_fontsize, dm_font=dm_font,
          dm_x=dm_x, dm_y=dm_y, 
-         ps_col=ps_col, ps_symbol=ps_symbol, ps_fontsize=ps_fontsize, ps_font=ps_font,
+         ps_col=ps_col, ps_symbol=ps_symbol, 
+         ps_fontsize=ps_fontsize, ps_font=ps_font,
          ps_x=ps_x, ps_y=ps_y)
 }
 
@@ -922,26 +904,23 @@ make_images_helper <- function(directory, cfg, format, theta) {
     })
 }
 
-add_gridlines <- function(opt) {
-    gridline_col <- opt$gridline_col
-    if (is_color_invisible(gridline_col)) return (invisible(NULL))
-    shape <- opt$shape
+add_gridlines <- function(col, shape, shape_theta) {
+    if (is_color_invisible(col)) return (invisible(NULL))
     o <- 0.02
     if (shape == "rect") {
         lwd <- 8
-        gp_gl <- gpar(col=gridline_col, lwd=lwd, lineend="butt")
+        gp_gl <- gpar(col=col, lwd=lwd, lineend="butt")
         grid.lines(x=0.5, gp=gp_gl)
         grid.lines(y=0.5, gp=gp_gl)
-        # seg(0.5, 0+o, 0.5, 1-o, gridline_col, lwd=lwd, lineend="square")
-        # seg(0+o, 0.5, 1-o, 0.5, gridline_col, lwd=lwd, lineend="square")
+        # seg(0.5, 0+o, 0.5, 1-o, col, lwd=lwd, lineend="square")
+        # seg(0+o, 0.5, 1-o, 0.5, col, lwd=lwd, lineend="square")
     } else if (shape %in% c("circle", "kite", "halma")) {
         stop(paste("Don't know how to add grid lines to shape", shape))
     } else {
         o <- 0.01
         lwd <- 4
         n_vertices <- get_n_vertices(shape)
-        theta <- opt$shape_theta
-        theta <- seq(0, 360, length.out=n_vertices+1) + theta
+        theta <- seq(0, 360, length.out=n_vertices+1) + shape_theta
         theta <- theta[1:(length(theta)-1)]
         nt <- length(theta)
         n <- floor(nt / 2)
@@ -952,24 +931,21 @@ add_gridlines <- function(opt) {
             i_next <- ii+n
             if (i_next > nt)
                 i_next <- i_next %% nt
-            seg(x[ii], y[ii], x[i_next], y[i_next] , gridline_col, lwd=lwd)
+            seg(x[ii], y[ii], x[i_next], y[i_next] , col, lwd=lwd)
         }
     }
 }
 
-add_checkers <- function(opt) {
-    checker_col <- opt$checker_col
-    if (is_color_invisible(checker_col)) return (invisible(NULL))
-    shape <- opt$shape
+add_checkers <- function(col, shape, shape_theta) {
+    if (is_color_invisible(col)) return (invisible(NULL))
     if (shape == "rect") {
-        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=checker_col))
-        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(col=NA, fill=checker_col))
+        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
+        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
     } else if (shape %in% c("circle", "kite", "halma")) {
         stop(paste("Don't know how to add checkers to shape", shape))
     } else {
         n_vertices <- get_n_vertices(shape)
-        theta <- opt$shape_theta
-        theta <- seq(0, 360, length.out=n_vertices+1) + theta
+        theta <- seq(0, 360, length.out=n_vertices+1) + shape_theta
         nt <- length(theta) - 1
         r <- 0.5
         x <- 0.5 + to_x(theta, r)
@@ -978,7 +954,7 @@ add_checkers <- function(opt) {
             if( ii %% 2) {
                 xs <- c(0.5, x[ii], x[ii+1])
                 ys <- c(0.5, y[ii], y[ii+1])
-                grid.polygon(xs, ys, gp=gpar(col=NA, fill=checker_col))
+                grid.polygon(xs, ys, gp=gpar(col=NA, fill=col))
             }
         }
     }
@@ -992,62 +968,42 @@ is_color_invisible <- function(color) {
     return (FALSE)
 }
 
-add_hexlines <- function(opt, omit_direction=FALSE) {
-    hl_col <- opt$hexline_col
-    if(is_color_invisible(hl_col)) return (invisible(NULL))
-    shape <- opt$shape
-    if (shape != "rect") {
-        stop(paste("Don't know how to add hexlines to shape", shape))
-    }
-    ho <- 0.25
-    hl_size <- 4
-    if (omit_direction %in% 1:2)  # upper left
-        NULL
-    else
-        seg(0, 1 - ho, ho, 1, hl_col, lwd=hl_size) 
-    if (omit_direction %in% 3:4)  # lower left
-        NULL
-    else
-        seg(0, ho, ho, 0, hl_col, lwd=hl_size) 
-    if (omit_direction %in% 5:6)  # lower right
-        NULL
-    else
-        seg(1, ho, 1 - ho, 0, hl_col, lwd=hl_size) 
-    if (omit_direction %in% 7:8)  # upper right
-        NULL
-    else
-        seg(1, 1 - ho, 1 - ho, 1, hl_col, lwd=hl_size) 
-}
+# add_hexlines <- function(col, shape, omit_direction=FALSE) {
+#     if(is_color_invisible(col)) return (invisible(NULL))
+#     if (shape != "rect") {
+#         stop(paste("Don't know how to add hexlines to shape", shape))
+#     }
+#     ho <- 0.25
+#     hl_size <- 4
+#     if (omit_direction %in% 1:2)  # upper left
+#         NULL
+#     else
+#         seg(0, 1 - ho, ho, 1, col, lwd=hl_size) 
+#     if (omit_direction %in% 3:4)  # lower left
+#         NULL
+#     else
+#         seg(0, ho, ho, 0, col, lwd=hl_size) 
+#     if (omit_direction %in% 5:6)  # lower right
+#         NULL
+#     else
+#         seg(1, ho, 1 - ho, 0, col, lwd=hl_size) 
+#     if (omit_direction %in% 7:8)  # upper right
+#         NULL
+#     else
+#         seg(1, 1 - ho, 1 - ho, 1, col, lwd=hl_size) 
+# }
 
-add_dm_symbol <- function(opt) {
-    gp <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=gp)
-}
-add_primary_symbol <- function(opt) {
-    gp <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, fontfamily=opt$ps_font)
-    grid.text(opt$ps_symbol, x=opt$ps_x, y=opt$ps_y, gp=gp)
-}
-
-add_background <- function(opt) {
-    opt$shape_fn(gp = gpar(col=NA, fill=opt$background_col))
-}
-
-add_border <- function(opt) {
-    opt$shape_fn(gp = gpar(col=opt$border_col, fill=NA))
-}
-add_ribbons <- function(opt) {
-    ribbon_col <- opt$ribbon_col
-    if (is_color_invisible(ribbon_col)) return (invisible(NULL))
-    shape <- opt$shape
+add_ribbons <- function(col, shape) {
+    if (is_color_invisible(col)) return (invisible(NULL))
     if (shape != "rect")
         stop(paste("Don't know how to add ribbons to shape", shape))
     addViewport(y=0.1, height=0.2, name="bottom_ribbon")
     downViewport("bottom_ribbon")
-    grid.rect(gp=gpar(col=NA, fill=ribbon_col))
+    grid.rect(gp=gpar(col=NA, fill=col))
     upViewport()
     addViewport(y=0.9, height=0.2, name="top_ribbon")
     downViewport("top_ribbon")
-    grid.rect(gp=gpar(col=NA, fill=ribbon_col))
+    grid.rect(gp=gpar(col=NA, fill=col))
     upViewport()
 }
 
@@ -1152,14 +1108,28 @@ draw_component_basic <- function(component_side, i_s, i_r, cfg) {
     } else {
         opt <- attr(cfg, "cache")[[key]]
     }
-    add_background(opt)
-    add_checkers(opt)
-    add_hexlines(opt)
-    add_gridlines(opt)
-    add_ribbons(opt)
-    add_primary_symbol(opt)
-    add_dm_symbol(opt)
-    add_border(opt)
+
+    shape_fn <- get_grid_shape(opt$shape, opt$shape_theta, opt$shape_r)
+
+    # Background
+    shape_fn(gp=gpar(col=NA, fill=opt$background_col))
+
+    # Checkers, Gridlines, Ribbons
+    add_checkers(opt$checker_col, opt$shape, opt$shape_theta)
+    add_gridlines(opt$gridline_col, opt$shape, opt$shape_theta)
+    add_ribbons(opt$ribbon_col, opt$shape)
+
+    # Primary symbol
+    gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, fontfamily=opt$ps_font)
+    grid.text(opt$ps_symbol, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
+
+    # Directional mark
+    gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
+    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
+
+    # Border col
+    shape_fn(gp=gpar(col=opt$border_col, fill=NA))
+
     invisible(NULL)
 }
 
