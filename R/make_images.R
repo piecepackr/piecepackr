@@ -1,14 +1,22 @@
 #' @importFrom grDevices bmp cairo_pdf cairo_ps dev.off jpeg png svg tiff
 #' @import grid
 
-COMPONENTS <- c("tile", "coin", "die", "suitdie", 
-           "pawn", "belt", "saucer", "pyramid")
-COMPONENT_AND_SIDES <- c("tile_back", "tile_face", 
-           "coin_back", "coin_face",
+COMPONENTS <- c("tile", "coin", 
+                "die", "suitdie", 
+                "pawn", "belt", "saucer", 
+                "pyramid", "matchstick")
+COMPONENT_AND_SIDES <- c("tile_back", "tile_face", "coin_back", "coin_face",
            "die_face", "suitdie_face", 
-           "pawn_face", "pawn_back", 
-           "belt_face",  "saucer_face", "saucer_back",
-           "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right")
+           "pawn_face", "pawn_back", "belt_face",  "saucer_face", "saucer_back",
+           "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right", 
+           "matchstick_face", "matchstick_back")
+COMPONENT_AND_SIDES_UNSUITED_UNRANKED <- c("tile_back", "saucer_back")
+COMPONENT_AND_SIDES_UNSUITED_RANKED <- c("coin_face")
+COMPONENT_AND_SIDES_SUITED_UNRANKED <- c("coin_back", "suitdie_face",
+                                         "pawn_face", "pawn_back", "saucer_face", "belt_face")
+COMPONENT_AND_SIDES_SUITED_RANKED <- c("die_face", "tile_face", 
+           "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right", 
+           "matchstick_face", "matchstick_back")
 #### "pawn_layout", "die_layout", "suitdie_layout", "suitrankdie_layout", "pyramid_layout", "pyramid_top""
 COIN_WIDTH <- 3/4
 DIE_WIDTH <- 1/2
@@ -868,38 +876,37 @@ make_images <- function(cfg=list(), directory=tempdir(), format="svg", thetas=0)
 }
 make_images_helper <- function(directory, cfg, format, theta) {
     suppressWarnings({
-        for (component_side in c("saucer_back", "tile_back")) {
-            f <- component_filename(directory, cfg, component_side, format, theta)
-            pp_device(f, component_side, theta)
-            draw_component(component_side, cfg)
+        for (cs in COMPONENT_AND_SIDES_UNSUITED_UNRANKED) {
+            f <- component_filename(directory, cfg, cs, format, theta)
+            pp_device(f, cs, theta)
+            draw_component(cs, cfg)
             invisible(dev.off())
         }
 
         for (i_s in 1:get_n_suits(cfg)) {
-            for (component_side in c("belt_face", "coin_back", 
-                                       "pawn_back", "pawn_face",
-                                       "saucer_face", "suitdie_face")) {
-                f <- component_filename(directory, cfg, component_side, format, theta, i_s)
-                pp_device(f, component_side, theta)
-                draw_component(component_side, cfg, i_s)
+            for (cs in COMPONENT_AND_SIDES_SUITED_UNRANKED) {
+                f <- component_filename(directory, cfg, cs, format, theta, i_s)
+                pp_device(f, cs, theta)
+                draw_component(cs, cfg, i_s)
                 invisible(dev.off())
             }
 
             for (i_r in 1:get_n_ranks(cfg)) {
-                for (component_side in c("die_face", "tile_face")) {
-                    f <- component_filename(directory, cfg, component_side, format, theta, i_s, i_r)
-                    pp_device(f, component_side, theta)
-                    draw_component(component_side, cfg, i_s, i_r)
+                for (cs in c(COMPONENT_AND_SIDES_SUITED_RANKED, "pyramid_top")) {
+                    f <- component_filename(directory, cfg, cs, format, theta, i_s, i_r)
+                    pp_device(f, cs, theta, i_r)
+                    draw_component(cs, cfg, i_s, i_r)
                     invisible(dev.off())
                 }
             }
         }
         for (i_r in 1:get_n_ranks(cfg)) {
-            component_side <- "coin_face"
-            f <- component_filename(directory, cfg, component_side, format, theta, i_r=i_r)
-            pp_device(f, component_side, theta)
-            draw_component(component_side, cfg, i_r=i_r)
-            invisible(dev.off())
+            for (cs in COMPONENT_AND_SIDES_UNSUITED_RANKED) {
+                f <- component_filename(directory, cfg, cs, format, theta, i_r=i_r)
+                pp_device(f, cs, theta)
+                draw_component(cs, cfg, i_r=i_r)
+                invisible(dev.off())
+            }
         }
     })
 }
@@ -1062,26 +1069,35 @@ pp_cfg <- function(cfg=list()) {
     n_ranks <- get_n_ranks(cfg)
     n_suits <- get_n_suits(cfg)
     i_unsuit <- n_suits + 1
-    key <- opt_cache_key("tile_back", i_unsuit, 0)
-    attr(cfg, "cache")[[key]] <- get_component_opt("tile_back", i_unsuit, 0, cfg)
-    key <- opt_cache_key("saucer_back", i_unsuit, 0)
-    attr(cfg, "cache")[[key]] <- get_component_opt("saucer_back", i_unsuit, 0, cfg)
+
     key <- opt_cache_key("tile_face", i_unsuit, n_ranks+1)
     attr(cfg, "cache")[[key]] <- get_component_opt("tile_face", i_unsuit, n_ranks+1, cfg) #### joker tile
+
+    for (cs in COMPONENT_AND_SIDES_UNSUITED_UNRANKED) {
+        key <- opt_cache_key(cs, i_unsuit, 0)
+        attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_unsuit, 0, cfg)
+    }
     for (i_r in 1:n_ranks) {
-        key <- opt_cache_key("coin_face", i_unsuit, i_r)
-        attr(cfg, "cache")[[key]] <- get_component_opt("coin_face", i_unsuit, i_r, cfg)
+        for (cs in COMPONENT_AND_SIDES_UNSUITED_RANKED) {
+            key <- opt_cache_key(cs, i_unsuit, i_r)
+            attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_unsuit, i_r, cfg)
+        }
     }
     for (i_s in 1:n_suits) {
-        for (cs in c("coin_back", "saucer_face", "belt_face", 
-                     "pawn_face", "pawn_back")) {
+        for (cs in COMPONENT_AND_SIDES_SUITED_UNRANKED) {
         key <- opt_cache_key(cs, i_s, 0)
         attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, 0, cfg)
         }
-    }
-    for (i_s in 1:(i_unsuit+1)) {
         for (i_r in 1:n_ranks) {
-            for (cs in c("die_face", "tile_face")) {
+            for (cs in COMPONENT_AND_SIDES_SUITED_RANKED) {
+                key <- opt_cache_key(cs, i_s, i_r)
+                attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, i_r, cfg)
+            }
+        }
+    }
+    for (i_s in i_unsuit:(i_unsuit+1)) {
+        for (i_r in 1:n_ranks) {
+            for (cs in c("die_face")) {
                 key <- opt_cache_key(cs, i_s, i_r)
                 attr(cfg, "cache")[[key]] <- get_component_opt(cs, i_s, i_r, cfg)
             }
