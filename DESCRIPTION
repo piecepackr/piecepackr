@@ -1,7 +1,7 @@
 Encoding: UTF-8
 Package: piecepackr
 Type: Package
-Title: Functions and Rscripts to Build Piecepack Decks
+Title: Piecepack Graphics in R
 Version: 0.12.0-3
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
@@ -16,7 +16,6 @@ Imports:
     gridExtra,
     grImport2,
     grDevices,
-    optparse,
     purrr,
     jsonlite,
     stringi,

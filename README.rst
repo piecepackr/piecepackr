@@ -1,5 +1,5 @@
-piecepackr: A Piecepack Graphics R Package
-==========================================
+piecepackr: Piecepack Graphics in R
+===================================
 
 .. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
     :target: https://travis-ci.org/trevorld/piecepackr
