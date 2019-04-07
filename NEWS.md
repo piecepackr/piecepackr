@@ -16,6 +16,7 @@ Breaking changes
 * ``make_pnp`` print-and-play layouts have been radically re-configured.
 * Non-standard ``chip`` component no longer supported by piecepackr (#114)
 * 'hexlines' no longer supported by base piecepackr configuration (#115).  NB. Can still add hexlines via a custom drawing function.
+* ``make_pnp`` now gets deck title from the configuration element ``title``
 
 Bug fixes and minor improvements
 --------------------------------

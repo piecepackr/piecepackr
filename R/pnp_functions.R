@@ -163,11 +163,9 @@ pp_pdf <- function(filename, family, paper) {
 #' @param cfg Piecepack configuration list
 #' @param output_filename Filename of PnP output
 #' @param size PnP output size (currently either "letter" or "A4")
-#' @param deck_title Title of deck
 #' @param components Character vector of desired PnP components (default everything)
 #' @export
 make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf", size="letter", 
-                     deck_title = "",
                      components=c("piecepack", "misc")) {
     unlink(output_filename)
     directory <- dirname(output_filename)
@@ -191,7 +189,7 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
 
     grid.newpage()
     pushViewport(viewport(x=xl, width=A5W))
-    draw_a5_title(deck_title)
+    draw_a5_title(cfg$title)
     popViewport()
     if (size == "A5") { grid.newpage() }
     pushViewport(viewport(x=xr, width=A5W))

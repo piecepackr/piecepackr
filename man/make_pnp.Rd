@@ -6,7 +6,7 @@
 \usage{
 make_pnp(cfg = list(),
   output_filename = "pdf/decks/piecepack_deck.pdf", size = "letter",
-  deck_title = "", components = c("piecepack", "misc"))
+  components = c("piecepack", "misc"))
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}
@@ -14,8 +14,6 @@ make_pnp(cfg = list(),
 \item{output_filename}{Filename of PnP output}
 
 \item{size}{PnP output size (currently either "letter" or "A4")}
-
-\item{deck_title}{Title of deck}
 
 \item{components}{Character vector of desired PnP components (default everything)}
 }
