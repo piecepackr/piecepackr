@@ -1,4 +1,19 @@
 cfg_default <- pp_cfg()
+context("test pp_cfg")
+test_that("pp_cfg works as expected", {
+    expect_equal(class(as.list(cfg_default)), "list")
+
+    cfg2 <- cfg_default
+    expect_equal(class(cfg2), "pp_cfg")
+    cfg2$suit_symbols <- "a,b,c,d,e"
+    expect_equal(cfg2$suit_symbols, "a,b,c,d,e")
+    expect_equal(class(cfg2), "list")
+    cfg3 <- cfg_default
+    cfg3[["suit_symbols"]] <- "a,b,c,d,e"
+    expect_equal(cfg3$suit_symbols, "a,b,c,d,e")
+    expect_equal(class(cfg3), "list")
+
+})
 
 context("make_pnp works as expected")
 test_that("make_pnp works as expected", {

@@ -677,6 +677,11 @@ get_ps_color <- function(component_side, i_s, i_r, cfg) {
 }
 
 get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+    key <- opt_cache_key(component_side, i_s, i_r)
+    if(!is.null(attr(cfg, "cache")[[key]])) {
+        return(attr(cfg, "cache")[[key]])
+    }
+
     # Shape
     shape <- get_shape(component_side, i_s, i_r, cfg)
     shape_r <- get_shape_r(component_side, i_s, i_r, cfg)
@@ -1116,14 +1121,30 @@ print.pp_cfg <- function(x, ...) {
     }
 }
 
+#' @export
+as.list.pp_cfg <- function(x) {
+    attr(x, "cache") <- NULL
+    attr(x, "signature") <- NULL
+    x <- unclass(x)
+    x
+}
+
+#' @export
+`$<-.pp_cfg` <- function(x, name, value) {
+    x <- as.list(x)
+    x[[name]] <- value
+    x
+}
+
+#' @export
+`[[<-.pp_cfg` <- function(x, name, value) {
+    x <- as.list(x)
+    x[[name]] <- value
+    x
+}
+
 draw_component_basic <- function(component_side, i_s, i_r, cfg) {
-    key <- opt_cache_key(component_side, i_s, i_r)
-    if(is.null(attr(cfg, "cache")[[key]])) {
-        # cat("missing", key, "\n")
-        opt <- get_component_opt(component_side, i_s, i_r, cfg)
-    } else {
-        opt <- attr(cfg, "cache")[[key]]
-    }
+    opt <- get_component_opt(component_side, i_s, i_r, cfg)
 
     shape_fn <- get_grid_shape(opt$shape, opt$shape_theta, opt$shape_r)
 
