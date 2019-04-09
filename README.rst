@@ -172,15 +172,14 @@ The `Piecepack Wiki <www.ludism.org/ppwiki>`_ has a page on `making piecepacks <
 What are the dimensions of the components?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts" and "chips") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes:
+Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes:
 
 - tiles (default "rect") are drawn into a 2" by 2" square 
 - coins (default "circle") are drawn into a ¾" by ¾" square
 - dice (default "rect") faces are drawn into a ½" by ½" square
 - pawn sides (default "halma") are drawn into a ½" by ⅞" rectangle
-- "pawn belts" (default "rect") are drawn into a 2" by ½" rectangle
+- "pawn belts" (default "rect") are drawn into a ¾π" by ½" rectangle
 - "pawn saucers" (default "circle") are drawn into a ⅞" by ⅞" square
-- "chips" (default "circle") are drawn into a ⅝" by ⅝" square
        
 Components are drawn into rectangular drawing spaces (which are always squares except for pawn components).  The program allows one to customize piecepack component shapes.  If a components shape is ``rect`` it will fill up the entire rectangular drawing space, if it is a ``circle`` then the rectangular drawing space will be circumscribed around the circle.  If a components shape is a ``convex#`` or ``concave#``  where ``#`` is the number of exterior vertices then the rectangular drawing space will be circumscribed around a circle that will be circumscribed around that convex/concave polygon.  The rectangular drawing space also is circumscribed around the special ``halma``, ``kite``, and ``pyramid`` shapes.
 
@@ -195,11 +194,6 @@ I have some images I want to use as suit/rank/directional mark symbols, how can 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You'll need to take them and put them into a font.  `FontForge <https://fontforge.github.io/en-US/>`_ is a popular open-source program suitable for this task.  `fontcustom <https://github.com/FontCustom/fontcustom>`_ is a popular command-line wrapper around FontForge.  You may need to convert your images from one format to another format first.  To guarantee dispatch by ``fontconfig`` you might want to put the symbols in a part of the "Private Use Area" of Unicode not used by any other fonts on your system.  If you do that you won't need to specify your font otherwise you'll need to configure the ``suit_symbols_font``, ``rank_symbols_font``, and/or ``dm_symbols_font`` options.
-
-What is the purpose of the "hex lines" that can be configured onto the tiles by the ``hexline_colors`` option?
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-It you use the tiles to build a hex board the hexlines will visually show four of the six hexagon cell sides.
 
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -248,7 +242,7 @@ How do I use this package in piecepack rulesets?
 There are two main ways that this package could be used to help make piecepack rulesets:
 
 1) The ``make_images`` function makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
-2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``draw_omponent`` which draws piecepack components to the graphics device.  Below is an animation demonstrating how to use the ``piecpackr`` and ``grid`` API's to make a simple tic-tac-toe game diagram (the animation itself was also made with the help of the `animation <https://cran.r-project.org/web/packages/animation/index.html>`_ package):
+2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``draw_omponent`` which draws piecepack components to the graphics device.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__:
 
-.. image:: https://www.trevorldavis.com/share/piecepack/tictactoe.gif
+.. image:: https://www.trevorldavis.com//piecepackr/images/knitr/tictactoe.gif
    :alt: Example animation of using piecepackr to create piecepack game diagrams

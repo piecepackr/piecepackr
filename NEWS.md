@@ -13,10 +13,11 @@ Breaking changes
 * All executable Rscripts have been removed (#113).
 * ``make_collection`` and ``make_preview`` functions removed.
 * ``load_configurations`` and ``read_configuration`` functions removed.
-* ``make_pnp`` print-and-play layouts have been radically re-configured.
+* ``make_pnp`` print-and-play layouts have been radically re-configured (#54).
 * Non-standard ``chip`` component no longer supported by piecepackr (#114)
 * 'hexlines' no longer supported by base piecepackr configuration (#115).  NB. Can still add hexlines via a custom drawing function.
-* ``make_pnp`` now gets deck title from the configuration element ``title``
+* ``make_pnp`` now gets deck title from the configuration element ``title`` (#118)
+* Default pawn "belt" width is now ¾π" (#105)
 
 Bug fixes and minor improvements
 --------------------------------

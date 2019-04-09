@@ -351,8 +351,8 @@ draw_a5_piecepack <- function(i_s, cfg=list(), front=TRUE) {
     yd <- A5H - 1.5 * DIE_WIDTH
     xp <- DIE_LAYOUT_WIDTH + 0.5 * PAWN_LAYOUT_HEIGHT
     yp <- A5H - 0.5 * PAWN_WIDTH
-    xb <- A5W - 1 - 0.5 * BELT_WIDTH
-    yb <- A5H - PAWN_WIDTH - DIE_WIDTH - 0.5 * BELT_HEIGHT
+    xb <- DIE_LAYOUT_WIDTH + 0.5 * BELT_WIDTH
+    yb <- A5H - PAWN_WIDTH - 0.5 * BELT_HEIGHT
     xsl <- A5W - 0.75 * TILE_WIDTH
     xsr <- A5W - 0.25 * TILE_WIDTH
     ysb <- 2.75 * TILE_WIDTH 
@@ -370,7 +370,7 @@ draw_a5_piecepack <- function(i_s, cfg=list(), front=TRUE) {
                             rep("die_layoutLF", 1), "pawn_layout", "belt_face", "saucer_back")
         i_ss <- c(rep(NA, 12), rep(i_s, 3), i_unsuit)
         i_r <- c(rep(NA, 6), 1:6, rep(NA, 4))
-        angle = c(rep(0, 13), -90, rep(0, 2))
+        angle = c(rep(0, 13), 90, rep(0, 2))
     }
     df <- tibble::data_frame(component_side, x, y, i_s=i_ss, i_r, angle)
     draw_components(df, cfg=cfg, units="inches")
