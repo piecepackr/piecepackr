@@ -17,7 +17,7 @@ piecepackr: Piecepack Graphics in R
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-``piecepackr`` is an R package designed to make configurable `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ graphics.  The API can be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `"Print & Play  <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ layouts.  
+``piecepackr`` is an R package designed to make configurable `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ graphics.  The API can be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `"Print & Play"  <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ layouts.  
 
 .. image:: https://www.trevorldavis.com/share/piecepack/animation.gif
    :alt: Previews of selected demo piecepack configurations
@@ -46,6 +46,16 @@ The default piecepackr configuration should work out on the box on most modern O
     unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
+
+**Note**  ``piecpackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
+
+.. code:: r
+
+   > capabilities("cairo")
+   cairo
+    TRUE
+
+Also although most users won't need them ``piecpackr`` contains utility functions that depend on the system dependencies ``ghostscript`` and ``poppler-utils``.
 
 API Intro
 ---------
@@ -199,7 +209,7 @@ How do I use this package in piecepack rulesets?
 There are two main ways that this package could be used to help make piecepack rulesets:
 
 1) The ``make_images`` function makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
-2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``draw_omponent`` which draws piecepack components to the graphics device.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__:
+2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``draw_component`` which draws piecepack components to the graphics device.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__:
 
 .. image:: https://www.trevorldavis.com//piecepackr/images/knitr/tictactoe.gif
    :alt: Example animation of using piecepackr to create piecepack game diagrams
