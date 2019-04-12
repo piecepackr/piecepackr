@@ -19,83 +19,22 @@ piecepackr: Piecepack Graphics in R
 
 ``piecepackr`` is an R package designed to make configurable `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ graphics.  The API can be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `"Print & Play  <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ layouts.  
 
-.. contents::
-
-.. _`Demo descriptions`:
-
-Demos
------
-
 .. image:: https://www.trevorldavis.com/share/piecepack/animation.gif
    :alt: Previews of selected demo piecepack configurations
 
-Some `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ are available at the `piecepackr companion website <https://trevorldavis.com/piecepackr/>`_.
+.. contents::
 
 Installation
 ------------
 
-Short instructions using Rakefile on Ubuntu (16.04+) including "Bash on Ubuntu on Windows (10)"
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+To install the development version of ``piecepackr`` use the following commands in R:
 
-The below commands clones the ``piecepackr`` R package github repo, installs a bunch of system dependencies, fonts, and R packages (often using ``sudo``) and then installs the ``piecepackr`` R package.  Should set up everything needed to build all the demos on a recent version of Ubuntu (i.e. more things are installed than what a strictly minimal install would need).  These short instructions have been lightly tested on both Ubuntu Linux as well as `Bash on Ubuntu on Windows <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_:
+.. code:: r
 
-.. code:: bash
+   install.packages("remotes")
+   remotes::install_github("trevorld/piecepackr")
 
-    sudo apt install -y git rake 
-    git clone https://github.com/trevorld/piecepackr
-    cd piecepackr
-    rake apt_install_dependencies sudo= yes=
-    rake install sudo=
-
-To update a previously cloned repo to the newest version and re-install the piecepackr R package:
-
-.. code:: bash
-
-    cd piecepackr
-    git pull
-    rake install sudo=
-
-Detailed instructions
-~~~~~~~~~~~~~~~~~~~~~
-
-System dependencies
-+++++++++++++++++++
-
-#. `R <https://cran.r-project.org/>`_ compiled with support for Cairo plus several R packages file available on CRAN which are usually installed for you by R when you install the ``piecepackr`` R package.
-#. Unicode font(s) (installed where Cairo can find them) that (altogether) have all your required glyphs
-#. `ghostscript <https://www.ghostscript.com/>`_ (not needed if you won't be using the ``collect_pnp`` function)
-#. `poppler-utils (aka xpdf-utils)  <https://poppler.freedesktop.org/>`_ (not needed if you won't be using the ``get_embedded_font`` function)
-
-System suggestions
-++++++++++++++++++
-
-#. `Rake - Ruby Make <https://github.com/ruby/rake>`_ (needed for running demos and other developer build commands)
-#. Several `Noto <https://www.google.com/get/noto/>`_ fonts (in particular "Noto Sans", "Noto Sans Symbols", "Noto Sans Symbols2", "Noto Emoji", "Noto Sans Cham", "Noto Sans CJK SC")
-#. `Quivira <http://quivira-font.com/>`_ font
-#. `DejaVu Sans <https://dejavu-fonts.github.io/>`_ font
-
-Installation Notes
-++++++++++++++++++
-
-This package is developed and tested on Ubuntu Linux.  Instructions are given below for installation on Ubuntu Linux but installing on another \*nix OS should be a straightforward substitution of the ``apt`` package manager with your OS's preferred package manager like ``brew`` for OSX (you may also need to tweak the package names to match what is in your repos and to manually install some software/fonts not in your repos).  The system dependencies/suggestions are all *theoretically* installable on Windows but it is likely easier on recent versions of Windows to `install and run an Ubuntu terminal <https://www.microsoft.com/en-us/store/p/ubuntu/9nblggh4msv6>`_ or to (freely) run Ubuntu in a virtual machine or possibly even in a ``chroot``.  
-
-You'll need to install some system requirements to use this R package:
-
-.. code:: bash
-
-    sudo apt install -y ghostscript poppler-utils r-base 
-
-The ``ghostscript`` system requirement can be dropped if you do not plan on using the ``collect_pnp`` function to collect several print-and-play pdf's into one pdf (with previews at the beginning).  The ``poppler-utils`` system requirement can be dropped if you do not plan on using ``get_embedded_font`` function to help figure out which fonts ``cairo_pdf`` actually embeds into output pdf's. 
-
-You'll also need to install the development version of the ``piecepackr`` R package and its R package dependencies.  These can easily be installed with help of the ``install`` or ``install_github`` functions from the ``devtools`` package:
-
-.. code:: bash
-
-    sudo apt install -y libcurl4-openssl-dev libssl-dev # system dependencies to install devtools's R package dependencies
-    sudo Rscript -e "install.packages('devtools', repos='https://cran.rstudio.com/')" 
-    sudo Rscript -e "devtools::install_github('trevorld/piecepackr')"
-
-Although the `default piecepackr configuration <https://trevorldavis.com/piecepackr/default-demo.html>`_ should work out of the box without out the user messing with their system fonts if you want to try reproducing some of the fancier `piecepackr demos`_ you may need to install several additional fonts:
+The default piecepackr configuration should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However if you wish to use advanced piecepackr configurations you'll need to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
 
 .. code:: bash
 
@@ -108,25 +47,43 @@ Although the `default piecepackr configuration <https://trevorldavis.com/piecepa
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
 
-..    $ curl -O http://www.chessvariants.com/d.font/chess1.ttf
-..    $ mv chess1.ttf $fonts_dir/ChessUtrecht.ttf
+API Intro
+---------
 
-If you have an older version of Ubuntu you may need to manually install additional `Noto fonts <https://www.google.com/get/noto/>`_ if you want to run the demos.
+``draw_component`` is the core function that can be used used to draw any piecepack component:
 
-**Warning**: This program embeds (subsets of) fonts into the print-and-play pdf's.  Not all fonts can be legally distributed this way!  Be careful with which ones you use!  The DejaVu, Noto and Quivira fonts used in the demos are legal to embed into CC-BY-SA-4.0 licensed print-and-play pdf's as are all fonts licensed under the SIL Open Font License (OFL).
+.. code:: r
 
-If you want to help further **develop** the ``piecepackr`` R package you'll also need to install the suggested packages so you can run the unit tests and re-build the documentation and you may want to:
+   library("piecpackr")
+   draw_component("tile_face", i_s=1, i_r=4)
 
-.. code:: bash
+.. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1-1.svg
+   :alt: 3 of Hearts Tile Face
 
-    sudo rake # To be able to use utility commands in the Rakefile
-    sudo apt install -y libxml2-dev libcairo2-dev # system dependencies for roxygen2 and gdtools
-    sudo Rscript -e "devtools::install(dependencies=\"Suggests\", upgrade_dependencies=FALSE)"
+One can use lists to configure the appearance of the piecepack graphics drawn by ``draw_component``:
 
-Windows Notes
-+++++++++++++
+.. code:: r
 
-Although Windows users are highly recommended to install ``piecepackr`` on "Ubuntu on Bash On Windows" ``piecepackr`` will natively run in Windows with a few caveats.  `Issue #70 <https://github.com/trevorld/piecepackr/issues/70>`_ contains some native Windows installation notes using `Chocolately <https://chocolately.org/install>`_ in a Powershell. The default configuration has been carefully chosen to work with the default Windows font (Arial) and configurations also seem to work when all piecepack symbols come from a single (properly installed) font such as Quivira or DejaVu.  However you may run into problems with piecepack configurations combining symbols from multiple fonts (such as grabbing glyphs from multple Noto Sans fonts in the "orthodox" demos).  
+    dark_colorscheme <- list(suit_colors="darkred,black,darkgreen,darkblue,black",
+                         invert_colors.suited=TRUE)
+    piecepack_suits <- list(suit_symbols="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+                        suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+                        suit_symbols_scale="0.6,0.7,0.75,0.9,0.9")
+    traditional_ranks <- list(use_suit_as_ace=TRUE, rank_symbols=",a,2,3,4,5")
+    cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
+    draw_component("tile_face", i_s=1, i_r=4, cfg=cfg)
+
+.. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1t-1.svg
+   :alt: 3 of Suns Tile Face
+
+``make_pnp`` makes a "Print & Play" pdf of a configured piecepack, ``make_images`` makes individual images of each piecepack component:
+
+.. code:: r
+
+   make_pnp(cfg, "my_piecepack.pdf", size="letter")
+   make_images(cfg)
+
+A basic `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ are available at piecepackr `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.
 
 Piecepack configuration
 -----------------------
