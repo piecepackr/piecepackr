@@ -1122,7 +1122,7 @@ print.pp_cfg <- function(x, ...) {
 }
 
 #' @export
-as.list.pp_cfg <- function(x) {
+as.list.pp_cfg <- functione(x, ...) {
     attr(x, "cache") <- NULL
     attr(x, "signature") <- NULL
     x <- unclass(x)
