@@ -381,7 +381,7 @@ get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
     dm_symbols
 }
 
-get_dm_symbol <- function(component_side, i_s, i_r, cfg) {
+get_dm_text <- function(component_side, i_s, i_r, cfg) {
     get_dm_symbols(component_side, i_s, i_r, cfg)[i_s]
 }
 
@@ -669,7 +669,7 @@ get_ps_scale <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list(
     default <- get_ps_element(component_side, suit_scale, rank_scale)
     get_style_element("ps_scale", component_side, cfg, default, i_s, i_r)
 }
-get_ps_symbol <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+get_ps_text <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
     rank_symbol <- get_rank_symbol(component_side, i_s, i_r, cfg)
     suit_symbol <- get_suit_symbol(component_side, i_s, i_r, cfg)
     default <- get_ps_element(component_side, suit_symbol, rank_symbol)
@@ -706,7 +706,7 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     dm_font <- get_dm_font(component_side, i_s, i_r, cfg)
     dm_scale <- get_dm_scale(component_side, i_s, i_r, cfg)
     dm_fontsize <- scale * dm_scale * get_dm_fontsize(component_side, i_s, i_r, cfg)
-    dm_symbol <- get_dm_symbol(component_side, i_s, i_r, cfg)
+    dm_text <- get_dm_text(component_side, i_s, i_r, cfg)
     dm_t <- get_dm_t(component_side, i_s, i_r, cfg)
     dm_r <- get_dm_r(component_side, i_s, i_r, cfg)
     dm_x <- to_x(dm_t, dm_r) + 0.5
@@ -720,7 +720,7 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
         ps_fontsize <- NULL
     else
         ps_fontsize <- scale * ps_scale * get_ps_fontsize(component_side, i_s, i_r, cfg)
-    ps_symbol <- get_ps_symbol(component_side, i_s, i_r, cfg)
+    ps_text <- get_ps_text(component_side, i_s, i_r, cfg)
     ps_t <- get_ps_t(component_side, i_s, i_r, cfg)
     ps_r <- get_ps_r(component_side, i_s, i_r, cfg)
     ps_x <- to_x(ps_t, ps_r) + 0.5
@@ -729,10 +729,10 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
          background_col=background_col, border_col=border_col, 
          gridline_col=gridline_col,  mat_col=mat_col, mat_width=mat_width,
-         dm_col=dm_col, dm_symbol=dm_symbol, 
+         dm_col=dm_col, dm_text=dm_text, 
          dm_fontsize=dm_fontsize, dm_font=dm_font,
          dm_x=dm_x, dm_y=dm_y, 
-         ps_col=ps_col, ps_symbol=ps_symbol, 
+         ps_col=ps_col, ps_text=ps_text, 
          ps_fontsize=ps_fontsize, ps_font=ps_font,
          ps_x=ps_x, ps_y=ps_y)
 }
@@ -1171,11 +1171,11 @@ draw_component_basic <- function(component_side, i_s, i_r, cfg) {
 
     # Primary symbol
     gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, fontfamily=opt$ps_font)
-    grid.text(opt$ps_symbol, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
+    grid.text(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
 
     # Directional mark
     gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
-    grid.text(opt$dm_symbol, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
+    grid.text(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
 
     # Border col
     shape_fn(gp=gpar(col=opt$border_col, fill=NA))
