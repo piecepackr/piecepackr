@@ -885,7 +885,7 @@ component_filename <- function(directory, cfg, component_side, format, angle,
 #' @param cfg Piecepack configuration list
 #' @param directory Directory where to place images
 #' @param format Format
-#' @param angle Angle to rotate images (in degrees)
+#' @param angles Angle to rotate images (in degrees)
 #' @export
 make_images <- function(cfg=list(), directory=tempdir(), format="svg", angles=0) {
     for (angle in angles) make_images_helper(directory, cfg, format, angle)
