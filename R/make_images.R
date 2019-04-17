@@ -68,12 +68,6 @@ seg <- function(x, y, xend, yend, color="black", ...) {
     grid.segments(x0=x, y0=y, x1=xend, y1=yend, gp=gpar(col=color, ...))
 }
 
-####
-addViewport <- function(...) { 
-    pushViewport(viewport(...))
-    upViewport()
-}
-
 grid.halma <- function(gp=gpar()) {
     y_cutoff <- 0.55
     y_frac <- 0.5
