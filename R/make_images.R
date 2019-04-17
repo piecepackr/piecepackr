@@ -780,6 +780,7 @@ draw_preview <- function(cfg=list()) {
     if (get_n_suits(cfg) > 5) df[12, "i_s"] <- 6
     df[16, "angle"] <- 180
     draw_components(df, cfg=cfg, units="inches")
+    popViewport()
 }
 
 get_pp_width <- function(component_side, i_r) {
