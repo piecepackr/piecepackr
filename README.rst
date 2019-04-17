@@ -19,8 +19,8 @@ piecepackr: Piecepack Graphics in R
 
 ``piecepackr`` is an R package designed to make configurable `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ graphics.  The API can be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `"Print & Play"  <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ layouts.  
 
-.. image:: https://www.trevorldavis.com/share/piecepack/animation.gif
-   :alt: Previews of selected demo piecepack configurations
+.. image:: https://trevorldavis.com/piecepackr/images/knitr/pnp-previews.gif
+   :alt: Previews of demo piecepack configurations
 
 .. contents::
 
