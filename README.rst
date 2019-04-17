@@ -70,7 +70,7 @@ API Intro
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1-1.svg
    :alt: 3 of Hearts Tile Face
 
-One can use lists to configure the appearance of the piecepack graphics drawn by ``draw_component``:
+One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the piecepack graphics drawn by ``draw_component``:
 
 .. code:: r
 
@@ -93,32 +93,12 @@ One can use lists to configure the appearance of the piecepack graphics drawn by
    make_pnp(cfg, "my_piecepack.pdf", size="letter")
    make_images(cfg)
 
-A basic `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ are available at piecepackr `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.
-
-Piecepack configuration
------------------------
-
-One can override the piecepackr defaults by manually creating/modifying a list of configuration options.  
-
-This program uses the abstraction that every piecepack component has a "component_side" name (like ``belt_face``), a suit, a rank, a primary symbol, a directional mark symbol, and embellishments like border lines, grid lines, and matting.  On top of the normal "suited" piecepack suits this program also recognizes an extra "unsuit" suit which is used to configure "neutral" components like tile backs and coin faces.  Although the primary and directional mark symbols can be configured directly they are often configured indirectly by specifying various "suit" and "rank" symbol configurations.
-
-The configurations in this program "cascade" (sort of like in "Cascading Style Sheets").  A style configuration has the following format::
-
-    style_name(.suit)(.rank)(.component)
-
-The configuration "cascade" priorities are as follows:
-
-#. Direct styles have priority over indirect styles e.g. ``dm_symbols`` has priority over ``suit_symbols.tile_face`` for which symbol is used in the corner of the tile face and in turn ``suit_symbols_font`` has priority over ``font`` for which fonts are used on the coin back.  This is because indirect styles are only used to a generate reasonable default if a direct style cannot be found.
-#. Then if there is a tie ``.component_side`` has priority over ``.component`` which has priority over no component specification e.g. ``dm_symbols.saucer_back`` has priority over ``dm_symbols.saucer`` which has priority over just ``dm_symbols``.
-#. Then if there is still a tie ``.r#`` has priority over no rank specification e.g. ``invert_colors.r1`` has priority over ``invert_colors``.
-#. Then if there is still a tie ``.s#`` has priority over ``.suited`` / ``.unsuited`` which has priority over no suit specification e.g. ``invert_colors.s2`` has priority over ``invert_colors.suited`` has priority over just ``invert_colors``.
-
-Configurations are *often* allowed to be comma-separated to be able to specify different values for different suits or ranks e.g. ``background_colors=white`` or ``background_colors=pink,grey,grey,pink,white`` (note how the last [5th] element specifies that the "unsuit" background color should be "white").  
+A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.
 
 Licence
 -------
 
-This software package and the piecepack pdf's created by it are released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file LICENSE.md for more info.  This license is compatible with version 3 of the Gnu Public License (GPL-3).
+This software package and the images created by it are released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file ``LICENSE.md`` for more info.  This license is compatible with version 3 of the GNU Public License (GPL-3).
 
 Frequently Asked Questions
 --------------------------

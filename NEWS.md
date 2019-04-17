@@ -19,7 +19,9 @@ Breaking changes
 * 'hexlines' and 'checkers' no longer supported by base piecepackr configuration (#115).  
   NB. Can still add checkers and hexlines via a custom drawing function.
 * ``make_pnp`` now gets deck title from the configuration element ``title`` (#118)
-* Default pawn "belt" width is now ¾π" (#105)
+* ``ribbons`` are now ``mat`` (as in picture frame 'matting') (#117)
+* Default pawn "belt" width is now ¾π" (#105).  
+* Default pawn "saucer" width is now ¾" and they now have a 'mat' coloring on the edge (#105)
 
 Bug fixes and minor improvements
 --------------------------------
