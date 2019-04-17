@@ -64,7 +64,7 @@ draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
     } else {
         i_r <- 1:6
     }
-    df <- tibble::data_frame(component_side="die_face", i_s, i_r, x, y=y_die_layout, angle)
+    df <- tibble::tibble(component_side="die_face", i_s, i_r, x, y=y_die_layout, angle)
     draw_components(df, cfg=cfg)
 }
 
@@ -77,7 +77,7 @@ draw_suit_die <- function(cfg, flip=FALSE) {
         x <- x_die_layoutRF
     }
     i_s <- get_suit_die_suits(cfg)
-    df <- tibble::data_frame(component_side="suitdie_face", i_s, x, y=y_die_layout, angle)
+    df <- tibble::tibble(component_side="suitdie_face", i_s, x, y=y_die_layout, angle)
     draw_components(df, cfg=cfg)
 }
 
@@ -123,10 +123,10 @@ draw_pawn_layout <- function(component_side, i_s, i_r, cfg) {
 
 draw_pyramid_layout <- function(component_side, i_s, i_r, cfg) {
     suppressWarnings({
-        thetas <- c(72, 36, 0, -36, -72)
+        t <- c(72, 36, 0, -36, -72)
         r <- 0.5
-        x <- to_x(thetas, r)
-        y <- 0.5 + 0.5*to_y(thetas, r)
+        x <- to_x(t, r)
+        y <- 0.5 + 0.5*to_y(t, r)
         components <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
         angles <- c(90+72, 90+36, 90, 90-36, 90-72)
         for(ii in 1:5) {
@@ -328,7 +328,7 @@ draw_a5_matchsticks <- function(cfg=list(), front=TRUE) {
         component_side = "matchstick_back"
 
     }
-    df <- tibble::data_frame(component_side, x, y, i_s, i_r)
+    df <- tibble::tibble(component_side, x, y, i_s, i_r)
     draw_components(df, cfg=cfg, units="inches")
     popViewport()
 }
@@ -372,7 +372,7 @@ draw_a5_piecepack <- function(i_s, cfg=list(), front=TRUE) {
         i_r <- c(rep(NA, 6), 1:6, rep(NA, 4))
         angle = c(rep(0, 13), 90, rep(0, 2))
     }
-    df <- tibble::data_frame(component_side, x, y, i_s=i_ss, i_r, angle)
+    df <- tibble::tibble(component_side, x, y, i_s=i_ss, i_r, angle)
     draw_components(df, cfg=cfg, units="inches")
     popViewport()
 }
@@ -391,7 +391,7 @@ draw_a5_pyramids <- function(i_s=1:2, cfg=list(), front=TRUE) {
     i_s <- rep(i_s, 6)
     i_r <- rep(1:6, each=2)
     angle <- c(rep(c(180, 0), 4), rep(c(0, 180), 2))
-    df <- tibble::data_frame(component_side, x, y, i_s, i_r, angle)
+    df <- tibble::tibble(component_side, x, y, i_s, i_r, angle)
     draw_components(df, cfg=cfg, units="inches")
     popViewport()
 }

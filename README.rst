@@ -100,7 +100,7 @@ Piecepack configuration
 
 One can override the piecepackr defaults by manually creating/modifying a list of configuration options.  
 
-This program uses the abstraction that every piecepack component has a "component_side" name (like ``belt_face``), a suit, a rank, a primary symbol, a directional mark symbol, and embellishments like border lines, grid lines, hex lines, checkers, and ribbons.  On top of the normal "suited" piecepack suits this program also recognizes an extra "unsuit" suit which is used to configure "neutral" components like tile backs and coin faces.  Although the primary and directional mark symbols can be configured directly they are often configured indirectly by specifying various "suit" and "rank" symbol configurations.
+This program uses the abstraction that every piecepack component has a "component_side" name (like ``belt_face``), a suit, a rank, a primary symbol, a directional mark symbol, and embellishments like border lines, grid lines, and matting.  On top of the normal "suited" piecepack suits this program also recognizes an extra "unsuit" suit which is used to configure "neutral" components like tile backs and coin faces.  Although the primary and directional mark symbols can be configured directly they are often configured indirectly by specifying various "suit" and "rank" symbol configurations.
 
 The configurations in this program "cascade" (sort of like in "Cascading Style Sheets").  A style configuration has the following format::
 

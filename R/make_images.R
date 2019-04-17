@@ -21,7 +21,8 @@ COMPONENT_AND_SIDES_SUITED_RANKED <- c("die_face", "tile_face",
 COIN_WIDTH <- 3/4
 DIE_WIDTH <- 1/2
 TILE_WIDTH <- 2
-SAUCER_WIDTH <- 7/8
+# SAUCER_WIDTH <- 7/8
+SAUCER_WIDTH <- 3/4 # better for diagrams of hex games played with coin+pawn
 PAWN_HEIGHT <- 7/8
 PAWN_WIDTH <- 1/2
 PAWN_BASE <- 3/8
@@ -76,10 +77,10 @@ addViewport <- function(...) {
 grid.halma <- function(gp=gpar()) {
     y_cutoff <- 0.55
     y_frac <- 0.5
-    theta <- rev(seq(0, 360, length.out=100) - 90)
+    t <- rev(seq(0, 360, length.out=100) - 90)
     r <- 0.5
-    x <- 0.5 + to_x(theta, r)
-    y <- 1 + y_frac * (to_y(theta, r) - r)
+    x <- 0.5 + to_x(t, r)
+    y <- 1 + y_frac * (to_y(t, r) - r)
     indices <- which(y >= y_cutoff)
     grid.polygon(x = c(0,0, x[indices],1,1), y=c(0,0.3,y[indices],0.3,0), gp=gp)
 }
@@ -88,27 +89,17 @@ grid.pyramid <- function(gp=gpar()) {
     grid.polygon(x = c(0, 0.5, 1), y = c(0, 1, 0), gp=gp)
 }
 
-# grid.inversecircle <- function() {
-#     theta <- seq(0, 2*pi, length.out=100)
-#     r <- 0.5
-#     x_c <- 0.5 + to_x(theta, r)
-#     y_c <- 0.5 + to_y(theta, r)
-#     x_r <- c(1, 1, 0, 0, 1, 1)
-#     y_r <- c(0.5, 0, 0, 1, 1, 0.5)
-#     grid.polygon(x = c(x_c, x_r), y=c(y_c, y_r), gp=gpar(fill="white", col="white"))
-# }
-
 grid.kite <- function(gp=gpar()) {
     x <- c(0.5, 0, 0.5, 1, 0.5)
     y <- c(0, 0.25, 1, 0.25, 0)
     grid.polygon(x, y, gp=gp)
 }
 
-grid.pp.polygon_fn <- function(n_vertices, theta) { 
-    theta <- seq(0, 360, length.out=n_vertices+1) + theta
+grid.pp.convex_fn <- function(n_vertices, t) { 
+    t <- seq(0, 360, length.out=n_vertices+1) + t
     r <- 0.5
-    x <- to_x(theta, r) + 0.5
-    y <- to_y(theta, r) + 0.5
+    x <- to_x(t, r) + 0.5
+    y <- to_y(t, r) + 0.5
     function(gp=gpar()) { grid.polygon(x, y, gp=gp) } 
 }
 
@@ -121,19 +112,30 @@ splice <- function(x0, x1) {
     append(vec, x0[ii+1])
 }
 
-grid.concave_fn <- function(n_vertices, theta, r=0.2) {
-    theta_outer <- seq(0, 360, length.out=n_vertices+1) + theta
+grid.concave_fn <- function(n_vertices, t, r=0.2) {
+    t_outer <- seq(0, 360, length.out=n_vertices+1) + t
     n_degrees <- 360 / n_vertices / 2
-    theta_inner <- seq(n_degrees, 360-n_degrees, length.out=n_vertices) + theta
-    r_outer <- 0.5
-    r_inner <- r
-    x_outer <- to_x(theta_outer, r_outer) + 0.5
-    x_inner <- to_x(theta_inner, r_inner) + 0.5
-    y_outer <- to_y(theta_outer, r_outer) + 0.5
-    y_inner <- to_y(theta_inner, r_inner) + 0.5
+    t_inner <- seq(n_degrees, 360-n_degrees, length.out=n_vertices) + t
+    x_outer <- to_x(t_outer, 0.5) + 0.5
+    x_inner <- to_x(t_inner,   r) + 0.5
+    y_outer <- to_y(t_outer, 0.5) + 0.5
+    y_inner <- to_y(t_inner,   r) + 0.5
     x <- splice(x_outer, x_inner)
     y <- splice(y_outer, y_inner)
     function(gp=gpar()) { grid.polygon(x, y, gp=gp) }
+}
+
+grid.convex_mat_fn <- function(n_vertices, t=90, width=0.2) {
+    t <- seq(0, 360, length.out=n_vertices+1) + t
+    r <- 0.5-width[1]
+    x_in <- 0.5 + to_x(t, r)
+    y_in <- 0.5 + to_y(t, r)
+    x_out <- 0.5 + to_x(t, 0.5)
+    y_out <- 0.5 + to_y(t, 0.5)
+    x <- c(x_in, x_out)
+    y <- c(y_in, y_out)
+    id <- rep(1:2, each=n_vertices+1)
+    function(gp=gpar()) { grid.path(x, y, id=id, rule="evenodd", gp=gp) }
 }
 
 get_component <- function(component_side) {
@@ -197,7 +199,7 @@ get_style_element <- function(style, component_side=NA, cfg=list(), default=NULL
 }
 
 get_background_color_helper <- function(component_side, i_s, i_r, cfg) {
-    colors <- col_cleave(get_style_element("background_colors", component_side, cfg, "white", i_s, i_r))
+    colors <- col_cleave(get_style_element("background_color", component_side, cfg, "white", i_s, i_r))
     expand_suit_elements(colors, "background_colors", component_side, cfg)[i_s]
 }
 
@@ -210,7 +212,7 @@ get_suit_colors <- function(component_side=NA, i_s, i_r, cfg=list(), expand=TRUE
 }
 
 get_border_colors <- function(component_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
-    border_colors <- col_cleave(get_style_element("border_colors", component_side, cfg, "grey", i_s, i_r))
+    border_colors <- col_cleave(get_style_element("border_color", component_side, cfg, "grey", i_s, i_r))
     if (expand)
         border_colors <- expand_suit_elements(border_colors, "border_colors", component_side, cfg)
     border_colors
@@ -220,10 +222,10 @@ get_border_color <- function(component_side, i_s, i_r, cfg) {
     get_border_colors(component_side, i_s, i_r, cfg)[i_s]
 }
 
-get_shape_theta <- function(component_side, i_s, i_r, cfg) {
-    theta <- numeric_cleave(get_style_element("shape_theta", component_side, cfg, 90, i_s, i_r))
-    theta <- expand_suit_elements(theta, "shape_theta", component_side, cfg)
-    theta[i_s] 
+get_shape_t <- function(component_side, i_s, i_r, cfg) {
+    t <- numeric_cleave(get_style_element("shape_t", component_side, cfg, 90, i_s, i_r))
+    t <- expand_suit_elements(t, "shape_t", component_side, cfg)
+    t[i_s] 
 }
 
 get_shape_r <- function(component_side, i_s, i_r, cfg) {
@@ -259,7 +261,7 @@ get_n_vertices <- function(shape) {
     as.numeric(gsub("convex|concave", "", shape))
 }
 
-get_grid_shape <- function(shape, theta=0, r=0.2) {
+get_grid_shape <- function(shape, t=0, r=0.2) {
     if (shape == "circle") {
         grid.circle
     } else if (shape == "rect") {
@@ -271,9 +273,9 @@ get_grid_shape <- function(shape, theta=0, r=0.2) {
     } else if (shape == "pyramid") {
         grid.pyramid
     } else if (grepl("^concave", shape)) {
-        grid.concave_fn(get_n_vertices(shape), theta, r) 
+        grid.concave_fn(get_n_vertices(shape), t, r) 
     } else if (grepl("^convex", shape)) {
-        grid.pp.polygon_fn(get_n_vertices(shape), theta)
+        grid.pp.convex_fn(get_n_vertices(shape), t)
     } else {
         stop(paste("Don't know how to draw shape", shape))
     }
@@ -304,11 +306,11 @@ is_suited <- function(component_side, i_s, i_r, cfg) {
            belt_face = TRUE)
 }
 
-get_dm_theta <- function(component_side, i_s, i_r, cfg) {
+get_dm_t <- function(component_side, i_s, i_r, cfg) {
     default <- ifelse(component_side %in% c("tile_face", "die_face", "suitdie_face"), 135, 90)
     default <- ifelse(component_side == "matchstick_face" && i_r == 1, 135, default)
-    theta <- numeric_cleave(get_style_element("dm_theta", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(theta, "dm_theta", component_side, cfg)[i_s]
+    t <- numeric_cleave(get_style_element("dm_t", component_side, cfg, default, i_s, i_r))
+    expand_suit_elements(t, "dm_t", component_side, cfg)[i_s]
 }
 get_dm_r <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
@@ -317,7 +319,10 @@ get_dm_r <- function(component_side, i_s, i_r, cfg) {
                      rect = switch(component_side, 
                                    matchstick_face = ifelse(i_r > 1, 0.4, r_corner),
                                    r_corner),
-                     circle = r_corner,
+                     circle = switch(component_side,
+                                     saucer_face = 0.3,
+                                     saucer_back = 0.3,
+                                     r_corner),
                      halma = 0.25,
                      pyramid = 0.1,
                      0.3)
@@ -325,11 +330,11 @@ get_dm_r <- function(component_side, i_s, i_r, cfg) {
     expand_suit_elements(r, "dm_r", component_side, cfg)[i_s]
 }
 
-get_ps_theta <- function(component_side, i_s, i_r, cfg) {
+get_ps_t <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
     default <- switch(shape, halma=-90, pyramid=-90, 0)
-    theta <- numeric_cleave(get_style_element("ps_theta", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(theta, "ps_theta", component_side, cfg)[i_s]
+    t <- numeric_cleave(get_style_element("ps_t", component_side, cfg, default, i_s, i_r))
+    expand_suit_elements(t, "ps_t", component_side, cfg)[i_s]
 }
 get_ps_r <- function(component_side, i_s, i_r, cfg) {
     shape <- get_shape(component_side, i_s, i_r, cfg)
@@ -377,7 +382,7 @@ get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
         }
     }
     default <- paste(default, collapse=",")
-    dm_symbols <- cleave(get_style_element("dm_symbols", component_side, cfg, default, i_s, i_r))
+    dm_symbols <- cleave(get_style_element("dm_text", component_side, cfg, default, i_s, i_r))
     dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", component_side, cfg)
     dm_symbols
 }
@@ -388,7 +393,7 @@ get_dm_symbol <- function(component_side, i_s, i_r, cfg) {
 
 get_dm_color <- function(component_side, i_s, i_r, cfg) {
     default <- get_suit_color(component_side, i_s, i_r, cfg)
-    colors <- get_style_element("dm_colors", component_side, cfg, default, i_s, i_r)
+    colors <- get_style_element("dm_color", component_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
     colors <- expand_suit_elements(colors, "suit_colors", component_side, cfg)
     colors[i_s]
@@ -411,11 +416,6 @@ get_suit_color <- function(component_side, i_s, i_r, cfg) {
     else
         scol
 }
-get_checker_color <- function(component_side, i_s, i_r, cfg) {
-    colors <- col_cleave(get_style_element("checker_colors", component_side, cfg, "transparent", i_s, i_r))
-    colors <- expand_suit_elements(colors, "checker_colors", component_side, cfg)
-    colors[i_s]
-}
 get_gridline_color <- function(component_side, i_s, i_r, cfg) {
     if (component_side == "tile_back") {
         default <- c(rep("transparent", get_n_suits(cfg)), 
@@ -424,23 +424,36 @@ get_gridline_color <- function(component_side, i_s, i_r, cfg) {
         default <- "transparent"
     }
     default <- paste(default, collapse=",")
-    colors <- get_style_element("gridline_colors", component_side, cfg, default, i_s, i_r)
+    colors <- get_style_element("gridline_color", component_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
     colors <- expand_suit_elements(colors, "gridline_colors", component_side, cfg)
     colors[i_s]
 }
-get_ribbon_color <- function(component_side, i_s, i_r, cfg) {
+get_mat_color <- function(component_side, i_s, i_r, cfg) {
     default <- {
-        if (component_side == "belt_face") {
+        if (component_side %in% c("belt_face", "saucer_face", "saucer_back")) {
             get_suit_color(component_side, i_s, i_r, cfg)
         } else {
             "transparent"
         }
     }
-    colors <- get_style_element("ribbon_colors", component_side, cfg, default, i_s, i_r)
+    colors <- get_style_element("mat_color", component_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
     colors <- expand_suit_elements(colors, "suit_colors", component_side, cfg)
     colors[i_s]
+}
+get_mat_width <- function(component_side, i_s, i_r, cfg) {
+    default <- {
+        if (component_side == "belt_face") {
+            "0.2,0"
+        } else if (component_side %in% c("saucer_face", "saucer_back")) {
+            "0.1428571"  # 1/7 which mimics 5/8" pawn in 7/8" saucer
+        } else {
+            "0"
+        }
+    }
+    widths <- get_style_element("mat_width", component_side, cfg, default, i_s, i_r)
+    widths <- numeric_cleave(widths)
 }
 
 get_suit_symbol <- function(component_side, i_s, i_r, cfg) {
@@ -550,7 +563,7 @@ get_dm_fonts <- function(component_side, i_s, i_r, cfg) {
         }
     }
     default <- paste(default, collapse=",")
-    fonts <- cleave(get_style_element("dm_symbols_font", component_side, cfg, default))
+    fonts <- cleave(get_style_element("dm_font", component_side, cfg, default))
     expand_suit_elements(fonts, "font", component_side, cfg)
 }
 get_dm_font <- function(component_side, i_s, i_r, cfg) {
@@ -579,7 +592,7 @@ get_dm_scales <- function(component_side, i_s, i_r, cfg) {
         }
     }
     default <- paste(default, collapse=",")
-    scales <- numeric_cleave(get_style_element("dm_symbols_scale", component_side, cfg, default, i_s, i_r))
+    scales <- numeric_cleave(get_style_element("dm_scale", component_side, cfg, default, i_s, i_r))
     expand_suit_elements(scales, "scale", component_side, cfg)
 }
 get_dm_scale <- function(component_side, i_s, i_r, cfg) {
@@ -622,21 +635,18 @@ get_rank_fontsize <- function(component_side, i_s, i_r, cfg) {
     get_style_element("rank_symbols_fontsize", component_side, cfg, default, i_s, i_r)
 }
 
-to_x <- function(theta, r) { 
-    r * cos(pi * theta / 180) 
+to_x <- function(t, r) { 
+    r * cos(pi * t / 180) 
 }
-
-to_y <- function(theta, r) {
-    r * sin(pi * theta / 180)
+to_y <- function(t, r) {
+    r * sin(pi * t / 180)
 }
-
-# to_r <- function(x, y) {
-#     sqrt(x^2 + y^2)
-# }
-# 
-# to_theta <- function(x, y) {
-#     atan2(y, x)
-# }
+to_r <- function(x, y) {
+    sqrt(x^2 + y^2)
+}
+to_t <- function(x, y) {
+    atan2(y, x)
+}
 
 get_ps_element <- function(component_side, suit_element, rank_element) {
     if (component_side %in% c("coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
@@ -669,7 +679,7 @@ get_ps_symbol <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list
     rank_symbol <- get_rank_symbol(component_side, i_s, i_r, cfg)
     suit_symbol <- get_suit_symbol(component_side, i_s, i_r, cfg)
     default <- get_ps_element(component_side, suit_symbol, rank_symbol)
-    get_style_element("ps_symbol", component_side, cfg, default, i_s, i_r)
+    get_style_element("ps_text", component_side, cfg, default, i_s, i_r)
 }
 get_ps_color <- function(component_side, i_s, i_r, cfg) {
     default <- get_suit_color(component_side, i_s, i_r, cfg)
@@ -685,14 +695,14 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     # Shape
     shape <- get_shape(component_side, i_s, i_r, cfg)
     shape_r <- get_shape_r(component_side, i_s, i_r, cfg)
-    shape_theta <- get_shape_theta(component_side, i_s, i_r, cfg)
+    shape_t <- get_shape_t(component_side, i_s, i_r, cfg)
 
     # Additional colors
     background_col <- get_background_color(component_side, i_s, i_r, cfg)
     border_col <- get_border_color(component_side, i_s, i_r, cfg)
-    checker_col <- get_checker_color(component_side, i_s, i_r, cfg)
     gridline_col <- get_gridline_color(component_side, i_s, i_r, cfg)
-    ribbon_col <- get_ribbon_color(component_side, i_s, i_r, cfg)
+    mat_col <- get_mat_color(component_side, i_s, i_r, cfg)
+    mat_width <- get_mat_width(component_side, i_s, i_r, cfg)
 
     # Overall scaling factor
     scale <- get_scale(cfg)
@@ -703,10 +713,10 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     dm_scale <- get_dm_scale(component_side, i_s, i_r, cfg)
     dm_fontsize <- scale * dm_scale * get_dm_fontsize(component_side, i_s, i_r, cfg)
     dm_symbol <- get_dm_symbol(component_side, i_s, i_r, cfg)
-    dm_theta <- get_dm_theta(component_side, i_s, i_r, cfg)
+    dm_t <- get_dm_t(component_side, i_s, i_r, cfg)
     dm_r <- get_dm_r(component_side, i_s, i_r, cfg)
-    dm_x <- to_x(dm_theta, dm_r) + 0.5
-    dm_y <- to_y(dm_theta, dm_r) + 0.5
+    dm_x <- to_x(dm_t, dm_r) + 0.5
+    dm_y <- to_y(dm_t, dm_r) + 0.5
 
     # Primary symbol
     ps_col <- get_ps_color(component_side, i_s, i_r, cfg)
@@ -717,14 +727,14 @@ get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=
     else
         ps_fontsize <- scale * ps_scale * get_ps_fontsize(component_side, i_s, i_r, cfg)
     ps_symbol <- get_ps_symbol(component_side, i_s, i_r, cfg)
-    ps_theta <- get_ps_theta(component_side, i_s, i_r, cfg)
+    ps_t <- get_ps_t(component_side, i_s, i_r, cfg)
     ps_r <- get_ps_r(component_side, i_s, i_r, cfg)
-    ps_x <- to_x(ps_theta, ps_r) + 0.5
-    ps_y <- to_y(ps_theta, ps_r) + 0.5
+    ps_x <- to_x(ps_t, ps_r) + 0.5
+    ps_y <- to_y(ps_t, ps_r) + 0.5
 
-    list(shape=shape, shape_r=shape_r, shape_theta=shape_theta, 
+    list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
          background_col=background_col, border_col=border_col, 
-         gridline_col=gridline_col, checker_col=checker_col, ribbon_col=ribbon_col,
+         gridline_col=gridline_col,  mat_col=mat_col, mat_width=mat_width,
          dm_col=dm_col, dm_symbol=dm_symbol, 
          dm_fontsize=dm_fontsize, dm_font=dm_font,
          dm_x=dm_x, dm_y=dm_y, 
@@ -837,12 +847,12 @@ get_pp_height <- function(component_side, i_r) {
     })
 }
 
-pp_device <- function(filename, component_side=NULL, theta=0, i_r = 1,
+pp_device <- function(filename, component_side=NULL, angle=0, i_r = 1,
                       width=NULL, height=NULL, res=72) {
     format <- tools::file_ext(filename)
     if (is.null(width)) width <- get_pp_width(component_side, i_r)
     if (is.null(height)) height <- get_pp_height(component_side, i_r)
-    if (theta %in% c(90, 270)) {
+    if (angle %in% c(90, 270)) {
         twidth <- height
         height <- width
         width <- twidth
@@ -856,15 +866,15 @@ pp_device <- function(filename, component_side=NULL, theta=0, i_r = 1,
                 ps = cairo_ps(filename, width, height, bg=bg),
                 svg = svg(filename, width, height, bg=bg),
                 tiff = tiff(filename, width, height, "in", res=res, bg=bg))
-    pushViewport(viewport(angle=theta, name="main"))
+    pushViewport(viewport(angle=angle, name="main"))
 }
 
-component_filename <- function(directory, cfg, component_side, format, theta, 
+component_filename <- function(directory, cfg, component_side, format, angle, 
                                i_s=NULL, i_r=NULL) {
     filename <- paste0(component_side, 
                        ifelse(is.null(i_s), "", paste0("_s", i_s)),
                        ifelse(is.null(i_r), "", paste0("_r", i_r)),
-                       paste0("_t", theta), paste0(".", format))
+                       paste0("_t", angle), paste0(".", format))
     file.path(directory, filename)
 }
 
@@ -875,32 +885,32 @@ component_filename <- function(directory, cfg, component_side, format, theta,
 #' @param cfg Piecepack configuration list
 #' @param directory Directory where to place images
 #' @param format Format
-#' @param thetas Angle to rotate images
+#' @param angle Angle to rotate images (in degrees)
 #' @export
-make_images <- function(cfg=list(), directory=tempdir(), format="svg", thetas=0) {
-    for (theta in thetas) make_images_helper(directory, cfg, format, theta)
+make_images <- function(cfg=list(), directory=tempdir(), format="svg", angles=0) {
+    for (angle in angles) make_images_helper(directory, cfg, format, angle)
 }
-make_images_helper <- function(directory, cfg, format, theta) {
+make_images_helper <- function(directory, cfg, format, angle) {
     suppressWarnings({
         for (cs in COMPONENT_AND_SIDES_UNSUITED_UNRANKED) {
-            f <- component_filename(directory, cfg, cs, format, theta)
-            pp_device(f, cs, theta)
+            f <- component_filename(directory, cfg, cs, format, angle)
+            pp_device(f, cs, angle)
             draw_component(cs, cfg)
             invisible(dev.off())
         }
 
         for (i_s in 1:get_n_suits(cfg)) {
             for (cs in COMPONENT_AND_SIDES_SUITED_UNRANKED) {
-                f <- component_filename(directory, cfg, cs, format, theta, i_s)
-                pp_device(f, cs, theta)
+                f <- component_filename(directory, cfg, cs, format, angle, i_s)
+                pp_device(f, cs, angle)
                 draw_component(cs, cfg, i_s)
                 invisible(dev.off())
             }
 
             for (i_r in 1:get_n_ranks(cfg)) {
                 for (cs in c(COMPONENT_AND_SIDES_SUITED_RANKED, "pyramid_top")) {
-                    f <- component_filename(directory, cfg, cs, format, theta, i_s, i_r)
-                    pp_device(f, cs, theta, i_r)
+                    f <- component_filename(directory, cfg, cs, format, angle, i_s, i_r)
+                    pp_device(f, cs, angle, i_r)
                     draw_component(cs, cfg, i_s, i_r)
                     invisible(dev.off())
                 }
@@ -908,8 +918,8 @@ make_images_helper <- function(directory, cfg, format, theta) {
         }
         for (i_r in 1:get_n_ranks(cfg)) {
             for (cs in COMPONENT_AND_SIDES_UNSUITED_RANKED) {
-                f <- component_filename(directory, cfg, cs, format, theta, i_r=i_r)
-                pp_device(f, cs, theta)
+                f <- component_filename(directory, cfg, cs, format, angle, i_r=i_r)
+                pp_device(f, cs, angle)
                 draw_component(cs, cfg, i_r=i_r)
                 invisible(dev.off())
             }
@@ -917,7 +927,7 @@ make_images_helper <- function(directory, cfg, format, theta) {
     })
 }
 
-add_gridlines <- function(col, shape, shape_theta) {
+add_gridlines <- function(col, shape, shape_t) {
     if (is_color_invisible(col)) return (invisible(NULL))
     o <- 0.02
     if (shape == "rect") {
@@ -933,13 +943,13 @@ add_gridlines <- function(col, shape, shape_theta) {
         o <- 0.01
         lwd <- 4
         n_vertices <- get_n_vertices(shape)
-        theta <- seq(0, 360, length.out=n_vertices+1) + shape_theta
-        theta <- theta[1:(length(theta)-1)]
-        nt <- length(theta)
+        t <- seq(0, 360, length.out=n_vertices+1) + shape_t
+        t <- t[1:(length(t)-1)]
+        nt <- length(t)
         n <- floor(nt / 2)
         r <- 0.5 - o
-        x <- 0.5 + to_x(theta, r)
-        y <- 0.5 + to_y(theta, r)
+        x <- 0.5 + to_x(t, r)
+        y <- 0.5 + to_y(t, r)
         for (ii in 1:nt) {
             i_next <- ii+n
             if (i_next > nt)
@@ -949,7 +959,7 @@ add_gridlines <- function(col, shape, shape_theta) {
     }
 }
 
-add_checkers <- function(col, shape, shape_theta) {
+add_checkers <- function(col, shape, shape_t) {
     if (is_color_invisible(col)) return (invisible(NULL))
     if (shape == "rect") {
         grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
@@ -958,11 +968,11 @@ add_checkers <- function(col, shape, shape_theta) {
         stop(paste("Don't know how to add checkers to shape", shape))
     } else {
         n_vertices <- get_n_vertices(shape)
-        theta <- seq(0, 360, length.out=n_vertices+1) + shape_theta
-        nt <- length(theta) - 1
+        t <- seq(0, 360, length.out=n_vertices+1) + shape_t
+        nt <- length(t) - 1
         r <- 0.5
-        x <- 0.5 + to_x(theta, r)
-        y <- 0.5 + to_y(theta, r)
+        x <- 0.5 + to_x(t, r)
+        y <- 0.5 + to_y(t, r)
         for (ii in 1:nt) {
             if( ii %% 2) {
                 xs <- c(0.5, x[ii], x[ii+1])
@@ -1006,18 +1016,27 @@ is_color_invisible <- function(color) {
 #         seg(1, 1 - ho, 1 - ho, 1, col, lwd=hl_size) 
 # }
 
-add_ribbons <- function(col, shape) {
-    if (is_color_invisible(col)) return (invisible(NULL))
-    if (shape != "rect")
-        stop(paste("Don't know how to add ribbons to shape", shape))
-    addViewport(y=0.1, height=0.2, name="bottom_ribbon")
-    downViewport("bottom_ribbon")
-    grid.rect(gp=gpar(col=NA, fill=col))
-    upViewport()
-    addViewport(y=0.9, height=0.2, name="top_ribbon")
-    downViewport("top_ribbon")
-    grid.rect(gp=gpar(col=NA, fill=col))
-    upViewport()
+add_mat <- function(col, shape, t, width) {
+    if (is_color_invisible(col) || all(width==0))
+        return (invisible(NULL))
+    gp_mat <- gpar(col=NA, fill=col)
+    if (shape == "rect") {
+        width = rep(width, length.out=4)
+        x_out <- c(0, 1, 1, 0)
+        y_out <- c(1, 1, 0, 0)
+        x_in <- c(width[4], 1-width[2], 1-width[2], width[4])
+        y_in <- c(1-width[1], 1-width[1], width[3], width[3])
+        x <- c(x_in, x_out)
+        y <- c(y_in, y_out)
+        id <- rep(1:2, each=4)
+        grid.path(x, y, id=id, rule="evenodd", gp=gp_mat)
+    } else if (shape == "circle") {
+        grid.convex_mat_fn(60, 0, width[1])(gp=gp_mat)
+    } else if (grepl("^convex", shape)) {
+        grid.convex_mat_fn(get_n_vertices(shape), t, width[1])(gp=gp_mat)
+    } else {
+        stop(paste("Don't know how to add mat to shape", shape))
+    }
 }
 
 draw_component_helper <- function(component_side, i_s, i_r, cfg) {
@@ -1147,15 +1166,14 @@ as.list.pp_cfg <- function(x, ...) {
 draw_component_basic <- function(component_side, i_s, i_r, cfg) {
     opt <- get_component_opt(component_side, i_s, i_r, cfg)
 
-    shape_fn <- get_grid_shape(opt$shape, opt$shape_theta, opt$shape_r)
+    shape_fn <- get_grid_shape(opt$shape, opt$shape_t, opt$shape_r)
 
     # Background
     shape_fn(gp=gpar(col=NA, fill=opt$background_col))
 
-    # Checkers, Gridlines, Ribbons
-    add_checkers(opt$checker_col, opt$shape, opt$shape_theta)
-    add_gridlines(opt$gridline_col, opt$shape, opt$shape_theta)
-    add_ribbons(opt$ribbon_col, opt$shape)
+    # Gridlines, Mat
+    add_gridlines(opt$gridline_col, opt$shape, opt$shape_t)
+    add_mat(opt$mat_col, opt$shape, opt$shape_t, opt$mat_width)
 
     # Primary symbol
     gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, fontfamily=opt$ps_font)

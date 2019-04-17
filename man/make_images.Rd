@@ -5,7 +5,7 @@
 \title{Make piecepack images}
 \usage{
 make_images(cfg = list(), directory = tempdir(), format = "svg",
-  thetas = 0)
+  angles = 0)
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}
@@ -14,7 +14,7 @@ make_images(cfg = list(), directory = tempdir(), format = "svg",
 
 \item{format}{Format}
 
-\item{thetas}{Angle to rotate images}
+\item{angle}{Angle to rotate images (in degrees)}
 }
 \description{
 Makes images of individual piecepack components.

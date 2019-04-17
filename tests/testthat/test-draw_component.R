@@ -67,8 +67,6 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("tile_back-svg", function() dc("tile_back", svg=TRUE))
     vdiffr::expect_doppelganger("tile_back-hex", 
                                 function() dc("tile_back", cfg=list(shape.tile_back="convex6")))
-    vdiffr::expect_doppelganger("tile_back.checkers", function() dc("tile_back", cfg=list(checker_colors.tile_back = "blue")))
-    vdiffr::expect_doppelganger("tile_back.checkers.hex", function() dc("tile_back", cfg=list(shape.tile_back = "convex6", checker_colors.tile_back = "blue")))
     # tile face
     vdiffr::expect_doppelganger("tile_face.s1.r1", function() dc("tile_face", i_s=1, i_r=1))
     vdiffr::expect_doppelganger("tile_face.s3.r2", function() dc("tile_face", i_s=3, i_r=2))
@@ -150,7 +148,5 @@ test_that("no regressions in figures", {
                           })
 
     # errors
-    expect_error(dce("coin_face", list(gridline_colors = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
-    expect_error(dce("coin_face", list(checker_colors = "grey"), i_r = 3), "Don't know how to add checkers to shape circle")
-    expect_error(dce("coin_face", list(ribbon_colors = "grey"), i_r = 3), "Don't know how to add ribbons to shape circle")
+    expect_error(dce("coin_face", list(gridline_color = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
 })
