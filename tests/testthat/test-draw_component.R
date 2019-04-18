@@ -1,13 +1,15 @@
-cfg_default <- pp_cfg()
+cfg_default <- pp_cfg(list(title="default cfg"))
 context("test pp_cfg")
 test_that("pp_cfg works as expected", {
+    expect_equal(class(cfg_default), "pp_cfg")
     expect_equal(class(as.list(cfg_default)), "list")
+    expect_output(print(cfg_default), "default cfg")
 
     cfg2 <- cfg_default
-    expect_equal(class(cfg2), "pp_cfg")
     cfg2$suit_symbols <- "a,b,c,d,e"
     expect_equal(cfg2$suit_symbols, "a,b,c,d,e")
     expect_equal(class(cfg2), "list")
+
     cfg3 <- cfg_default
     cfg3[["suit_symbols"]] <- "a,b,c,d,e"
     expect_equal(cfg3$suit_symbols, "a,b,c,d,e")
@@ -30,6 +32,7 @@ test_that("make_pnp works as expected", {
     make_pnp(cfg_default, pdf_deck_filename, "letter")
     make_pnp(cfg_default, pdf_deck_filename_a4, "A4")
     make_pnp(cfg_default, pdf_deck_filename_a5, "A5")
+    expect_error(make_pnp(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
 
     expect_true(file.exists(pdf_deck_filename))
     expect_equal(get_n_pages(pdf_deck_filename), 7)
@@ -38,6 +41,11 @@ test_that("make_pnp works as expected", {
         expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
     expect_equal(get_n_pages(pdf_deck_filename_a4), 7)
     expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
+
+    pdf_deck_filename_5s <- file.path(pdf_deck_dir, "piecepack_deck_5s.pdf")
+    on.exit(unlink(pdf_deck_filename_5s))
+    cfg_5s <- list(suit_symbols="♥,★,♣,♦,♠,꩜", suit_colors="darkred,gold,darkgreen,darkblue,black,grey")
+    make_pnp(cfg_5s, pdf_deck_filename_5s, "A5")
 
 })
 
@@ -91,6 +99,10 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("die_face.s4.r1", function() dc("die_face", i_s=4, i_r=1))
     vdiffr::expect_doppelganger("die_face.s3.r2", function() dc("die_face", i_s=3, i_r=2))
     vdiffr::expect_doppelganger("die_face.s2.r5", function() dc("die_face", i_s=2, i_r=5))
+    vdiffr::expect_doppelganger("die_face.s2.r5.kite", 
+            function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="kite", dm_t=90, suit_symbols_scale="1,1,1,1")))
+    vdiffr::expect_doppelganger("die_face.s2.r5.convex5mat", 
+            function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="convex5", mat_width.die_face=0.1, mat_color="pink")))
     vdiffr::expect_doppelganger("suitdie_face.s1", function() dc("suitdie_face", i_s=1))
     vdiffr::expect_doppelganger("suitdie_face.s5", function() dc("suitdie_face", i_s=5))
     vdiffr::expect_doppelganger("suitdie_face.s6", function() dc("suitdie_face", i_s=6))
@@ -149,4 +161,6 @@ test_that("no regressions in figures", {
 
     # errors
     expect_error(dce("coin_face", list(gridline_color = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
+    expect_error(dce("coin_face", list(shape = "meeple"), i_r = 3), "Don't know how to draw shape meeple")
+    expect_error(dce("coin_face", list(mat_width=0.2, mat_color="green", shape="kite"), i_r = 3), "Don't know how to add mat to shape kite")
 })

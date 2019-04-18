@@ -61,3 +61,41 @@ find_gs <- function() {
         stop("Can't find system dependency ghostscript on PATH")
     cmd
 }
+
+# Polar coordinates helpers
+to_x <- function(t, r) { 
+    r * cos(pi * t / 180) 
+}
+to_y <- function(t, r) {
+    r * sin(pi * t / 180)
+}
+to_r <- function(x, y) {
+    sqrt(x^2 + y^2)
+}
+to_t <- function(x, y) {
+    180 * atan2(y, x) / pi
+}
+
+#' Convert delimiter separated string to vector
+#'
+#' Converts delimiter separated string to a vector.
+#'
+#' @param x String to convert
+#' @param sep Delimiter (defaults to ",")
+#' @param float If `TRUE` cast to numeric
+#' @param color if `TRUE` convert empty strings to `"transparent"`
+#' @export
+cleave <- function(x, sep=",", float=FALSE, color=FALSE) {
+    vec <- stringr::str_split(x, sep)
+    if (length(vec)) vec <- vec[[1]]
+    if (float) {
+        as.numeric(vec)
+    } else if (color) {
+        gsub("^$", "transparent", vec)
+    } else {
+        vec
+    }
+} 
+col_cleave <- function(x, sep=",") { cleave(x, color=TRUE) }
+numeric_cleave <- function(x, sep=",") { cleave(x, sep, float=TRUE) }
+

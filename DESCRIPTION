@@ -13,11 +13,9 @@ LazyLoad: yes
 Imports:
     dplyr,
     grid,
-    gridExtra,
     grImport2,
     grDevices,
     purrr,
-    jsonlite,
     stringi,
     stringr,
     tibble,
