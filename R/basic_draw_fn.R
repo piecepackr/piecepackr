@@ -115,11 +115,13 @@ draw_component_basic <- function(component_side, i_s, i_r, cfg) {
     add_mat(opt$mat_col, opt$shape, opt$shape_t, opt$mat_width)
 
     # Primary symbol
-    gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, fontfamily=opt$ps_font)
+    gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, 
+                  fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
     grid.text(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
 
     # Directional mark
-    gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, fontfamily=opt$dm_font)
+    gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, 
+                  fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
     grid.text(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
 
     # Border col

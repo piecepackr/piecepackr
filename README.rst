@@ -17,17 +17,27 @@ piecepackr: Piecepack Graphics in R
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-``piecepackr`` is an R package designed to make configurable `piecepack <http://www.ludism.org/ppwiki/HomePage>`_ graphics.  The API can be used with the ``grid`` R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `"Print & Play"  <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ layouts.  
+``piecepackr`` is an R_ package designed to make configurable piecepack_ graphics.  The API can be used with the grid_ R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `Print & Play layouts`_.  
 
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/pnp-previews.gif
    :alt: Previews of demo piecepack configurations
+
+.. _piecepack: http://www.ludism.org/ppwiki/HomePage
+
+.. _grid: https://www.rdocumentation.org/packages/grid
+
+.. _R: https://www.r-project.org/
+
+.. _Print & Play layouts: https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html
+
+.. _man pages: https://rdrr.io/github/trevorld/piecepackr/man/
 
 .. contents::
 
 Installation
 ------------
 
-To install the development version of ``piecepackr`` use the following commands in R:
+To install the development version of ``piecepackr`` use the following commands in R_:
 
 .. code:: r
 
@@ -60,7 +70,7 @@ Also although most users won't need them ``piecpackr`` contains utility function
 API Intro
 ---------
 
-``draw_component`` is the core function that can be used used to draw any piecepack component:
+``draw_component`` is the core function that can be used used to draw any piecepack_ component:
 
 .. code:: r
 
@@ -74,12 +84,12 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 
 .. code:: r
 
-    dark_colorscheme <- list(suit_colors="darkred,black,darkgreen,darkblue,black",
+    dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
                          invert_colors.suited=TRUE)
-    piecepack_suits <- list(suit_symbols="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
-                        suit_symbols_font="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
-                        suit_symbols_scale="0.6,0.7,0.75,0.9,0.9")
-    traditional_ranks <- list(use_suit_as_ace=TRUE, rank_symbols=",a,2,3,4,5")
+    piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+                        suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+                        suit_scale="0.6,0.7,0.75,0.9,0.9")
+    traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
     cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
     draw_component("tile_face", i_s=1, i_r=4, cfg=cfg)
 
@@ -93,7 +103,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
    make_pnp(cfg, "my_piecepack.pdf", size="letter")
    make_images(cfg)
 
-A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.
+A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's `man pages`_.
 
 Licence
 -------

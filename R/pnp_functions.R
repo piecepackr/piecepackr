@@ -11,16 +11,9 @@ is_odd <- function(x) { as.logical(x %% 2) }
 #' @export
 inch <- function(x) { unit(x, "in") }
 
-make_get_style_fn <- function(style, default) {
-    function(cfg=list()) get_style_element(style, cfg=cfg, default=default)
-}
-
 get_pp_die_arrangement <- function(component_side=NA, cfg=list()) {
     get_style_element("pp_die_arrangement", component_side, cfg, "counter")
 }
-
-get_font <- make_get_style_fn("font", "sans")
-get_scale <- make_get_style_fn("scale", 1.0)
 
 ## Layout functions
 x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
@@ -185,7 +178,7 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
         xr <- 0.5
     }
 
-    pp_pdf(output_filename, get_font(cfg), size)
+    pp_pdf(output_filename, get_fontfamily(cfg), size)
 
     grid.newpage()
     pushViewport(viewport(x=xl, width=A5W))

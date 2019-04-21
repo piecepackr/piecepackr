@@ -6,13 +6,13 @@ test_that("pp_cfg works as expected", {
     expect_output(print(cfg_default), "default cfg")
 
     cfg2 <- cfg_default
-    cfg2$suit_symbols <- "a,b,c,d,e"
-    expect_equal(cfg2$suit_symbols, "a,b,c,d,e")
+    cfg2$suit_text <- "a,b,c,d,e"
+    expect_equal(cfg2$suit_text, "a,b,c,d,e")
     expect_equal(class(cfg2), "list")
 
     cfg3 <- cfg_default
-    cfg3[["suit_symbols"]] <- "a,b,c,d,e"
-    expect_equal(cfg3$suit_symbols, "a,b,c,d,e")
+    cfg3[["suit_text"]] <- "a,b,c,d,e"
+    expect_equal(cfg3$suit_text, "a,b,c,d,e")
     expect_equal(class(cfg3), "list")
 
 })
@@ -44,7 +44,7 @@ test_that("make_pnp works as expected", {
 
     pdf_deck_filename_5s <- file.path(pdf_deck_dir, "piecepack_deck_5s.pdf")
     on.exit(unlink(pdf_deck_filename_5s))
-    cfg_5s <- list(suit_symbols="♥,★,♣,♦,♠,꩜", suit_colors="darkred,gold,darkgreen,darkblue,black,grey")
+    cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
     make_pnp(cfg_5s, pdf_deck_filename_5s, "A5")
 
 })
@@ -89,6 +89,7 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("coin_face.r1", function() dc("coin_face", i_r=1))
     vdiffr::expect_doppelganger("coin_face.r2", function() dc("coin_face", i_r=2))
     vdiffr::expect_doppelganger("coin_face.r4", function() dc("coin_face", i_r=4))
+    vdiffr::expect_doppelganger("coin_face.r4italic", function() dc("coin_face", cfg=list(ps_fontface.coin_face="italic"), i_r=4))
     vdiffr::expect_doppelganger("coin_face.r4pyramid", 
                                 function() dc("coin_face", i_r=4, cfg=list(shape.coin="pyramid")))
     vdiffr::expect_doppelganger("coin_face.r4convex8", 
@@ -100,7 +101,7 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("die_face.s3.r2", function() dc("die_face", i_s=3, i_r=2))
     vdiffr::expect_doppelganger("die_face.s2.r5", function() dc("die_face", i_s=2, i_r=5))
     vdiffr::expect_doppelganger("die_face.s2.r5.kite", 
-            function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="kite", dm_t=90, suit_symbols_scale="1,1,1,1")))
+            function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="kite", dm_t=90, suit_scale="1,1,1,1")))
     vdiffr::expect_doppelganger("die_face.s2.r5.convex5mat", 
             function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="convex5", mat_width.die_face=0.1, mat_color="pink")))
     vdiffr::expect_doppelganger("suitdie_face.s1", function() dc("suitdie_face", i_s=1))
@@ -133,7 +134,7 @@ test_that("no regressions in figures", {
     #### preview appears wrong #99
     # vdiffr::expect_doppelganger("preview", draw_preview)
     # dice
-    cfg <- list(suit_symbols="-,0,+,")
+    cfg <- list(suit_text="-,0,+,")
     vdiffr::expect_doppelganger("suitdie_layoutLF", function() dc("suitdie_layoutLF", cfg=cfg))
     vdiffr::expect_doppelganger("suitdie_layoutRF", function() dc("suitdie_layoutRF"))
     vdiffr::expect_doppelganger("suitrankdie_layoutLF", function() dc("suitrankdie_layoutLF"))
@@ -141,10 +142,10 @@ test_that("no regressions in figures", {
     cfg <- list(pp_die_arrangement="opposites_sum_to_5")
     vdiffr::expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", i_s=3, cfg=cfg))
 
-    cfg <- list(suit_symbols="A,B,C,D,E,F", suit_colors="red,black,green,blue,orange,grey")
+    cfg <- list(suit_text="A,B,C,D,E,F", suit_color="red,black,green,blue,orange,grey")
     vdiffr::expect_doppelganger("suitdie_layoutRF-5suits", function() dc("suitdie_layoutRF", cfg=cfg))
     vdiffr::expect_doppelganger("suitrankdie_layoutRF-5suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
-    cfg <- list(suit_symbols="A,B,C,D,E,F,G", suit_colors="red,black,green,blue,orange,purple,grey")
+    cfg <- list(suit_text="A,B,C,D,E,F,G", suit_color="red,black,green,blue,orange,purple,grey")
     vdiffr::expect_doppelganger("suitdie_layoutRF-6suits", function() dc("suitdie_layoutRF", cfg=cfg))
     vdiffr::expect_doppelganger("suitrankdie_layoutRF-6suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
 

@@ -1,7 +1,7 @@
 test_that("options work as expected", {
     cfg <- list(invert_colors.suited = TRUE,
                 background_color = "white",
-                suit_colors = "darkred,black,darkgreen,darkblue,grey")
+                suit_color = "darkred,black,darkgreen,darkblue,grey")
     expect_equal(get_suit_color("coin_back", 1, 1, cfg), "white")
     expect_equal(get_suit_color("coin_face", 5, 1, cfg), "grey")
 
@@ -47,7 +47,7 @@ test_that("options work as expected", {
     expect_equal(get_dm_text("saucer_back", 5, 1, cfg), "b")
 
     cfg <- list(invert_colors.suited=TRUE, invert_colors.r1=FALSE,
-                suit_colors = "darkred,black,darkgreen,darkblue,grey")
+                suit_color = "darkred,black,darkgreen,darkblue,grey")
     expect_equal(get_background_color("tile_face", 1, 2, cfg), "darkred")
     expect_equal(get_background_color("tile_face", 1, 1, cfg), "white")
 })
@@ -55,14 +55,15 @@ test_that("options work as expected", {
 context("get_component_opt works as expected")
 test_that("get_component_opt works as expected", {
     opt <- get_component_opt("coin_face", 
-                             cfg=list(suit_colors="darkred,black,darkgreen,darkblue,grey"))
+                             cfg=list(suit_color="darkred,black,darkgreen,darkblue,grey"))
     expect_equal(opt$background_col, "white")
     expect_equal(opt$border_col, "grey")
     expect_equal(opt$gridline_col, "transparent") 
     expect_equal(opt$ps_col, "grey")
     expect_equal(opt$ps_text, "n")
     expect_equal(opt$ps_fontsize, 28)
-    expect_equal(opt$ps_font, "sans")
+    expect_equal(opt$ps_fontfamily, "sans")
+    expect_equal(opt$ps_fontface, "plain")
     # expect_equal(opt$suit_symbol, "\u2605")
     # expect_equal(opt$suit_symbol, "\u263c")
     # expect_equal(opt$suit_fontsize, 24)
@@ -73,7 +74,8 @@ test_that("get_component_opt works as expected", {
     expect_equal(opt$shape_r, 0.2)
     expect_equal(opt$shape_t, 90)
     expect_equal(opt$dm_fontsize, 12)
-    expect_equal(opt$dm_font, "sans")
+    expect_equal(opt$dm_fontfamily, "sans")
+    expect_equal(opt$dm_fontface, "plain")
     expect_equal(opt$dm_x, 0.5)
     expect_equal(opt$dm_y, to_y(90, sqrt(0.25^2 + 0.25^2)) + 0.5)
     expect_equal(opt$ps_x, 0.5)

@@ -10,7 +10,7 @@ New features
 Breaking changes
 ----------------
 
-* Lots of configuration list style names were changed (#95).
+* Lots of configuration list style names were changed (#95, #121).
 * All executable Rscripts have been removed (#113).
 * ``make_collection`` and ``make_preview`` functions removed.
 * ``load_configurations`` and ``read_configuration`` functions removed.
@@ -29,6 +29,7 @@ Bug fixes and minor improvements
 * Bug in ``get_embedded_font`` function fixed.
 * ``make_pnp`` function now supports the A5 page size and is more A4 page size friendly (#54).
 * Missing ``popViewport()`` added to ``draw_preview``.
+* Can now specify ``fontface``in configuration lists (#121).
 
 piecepackr 0.11.0
 =================
