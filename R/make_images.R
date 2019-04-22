@@ -304,13 +304,14 @@ draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_
         draw_component_helper(component_side, i_s, i_r, cfg)
         upViewport()
     }
+    invisible(NULL)
 }
 
 #' @rdname draw_component
 #' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
 #' @export
 draw_components <- function(df, ...) {
-    ll <- purrr::pmap_dfr(df, draw_component_wrapper, ...)
+    ll <- purrr::pmap(df, draw_component_wrapper, ...)
     invisible(NULL)
 }
 
@@ -344,6 +345,5 @@ draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5
     else
         height <- unit(height, units)
     draw_component(component_side, cfg, i_s, i_r, x, y, width, height, svg, angle=angle)
-    list(purrr_value=NA)
 }
 
