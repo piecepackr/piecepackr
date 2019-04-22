@@ -81,6 +81,14 @@ test_that("no regressions in figures", {
     vdiffr::expect_doppelganger("tile_face.s3.r2-suit_as_ace", 
                                 function() dc("tile_face", cfg=list(use_suit_as_ace=TRUE), i_s=3, i_r=2))
     vdiffr::expect_doppelganger("tile_face.s2.r3", function() dc("tile_face", i_s=2, i_r=3))
+    df_tile <- tibble::tribble( ~x, ~y, ~i_s, ~i_r,
+                               1, 1, NA, NA,
+                               3, 1, 3, NA,
+                               1, 3, NA, 3,
+                               3, 3, 3, 3)
+    df_tile$component_side <- "tile_back"
+    df_tile$angle <- NA
+    vdiffr::expect_doppelganger("tiles_faces", function() draw_components(df_tile, units="inches"))
     # coin back
     vdiffr::expect_doppelganger("coin_back.s4", function() dc("coin_back", i_s=4))
     vdiffr::expect_doppelganger("coin_back.s4-inverted",

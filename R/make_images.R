@@ -276,6 +276,12 @@ draw_pyramid_top <- function(component_side, i_s, i_r, cfg) {
 #' @export
 draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_r=0, x=0.5, y=0.5, 
                            width=NULL, height=NULL, svg=FALSE, ...) {
+
+    if (component_side %in% c(COMPONENT_AND_SIDES_UNSUITED_UNRANKED, COMPONENT_AND_SIDES_UNSUITED_RANKED)) 
+        i_s <- get_i_unsuit(cfg)
+    if (component_side %in% c(COMPONENT_AND_SIDES_UNSUITED_UNRANKED, COMPONENT_AND_SIDES_SUITED_UNRANKED))
+        i_r <- 0
+
     if (is.null(width))
         width=inch(get_pp_width(component_side, i_r))
     if (is.null(height))
@@ -313,7 +319,7 @@ draw_components <- function(df, ...) {
 #' @param angle Angle to draw component at
 #' @param cfg_name String of list name storing configuration
 #' @param cfg_list List of configuration lists
-draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=0, cfg=NULL, cfg_name=NA, cfg_list=NULL) {
+draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=NA, cfg=NULL, cfg_name=NA, cfg_list=NULL) {
     x <- unit(x, units)
     y <- unit(y, units)
 
@@ -328,6 +334,7 @@ draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5
     }
     if (is.na(i_r)) i_r <- 0
     if (is.na(i_s)) i_s <- get_i_unsuit(cfg)
+    if (is.na(angle)) angle <- 0
     if (is.na(width))
         width <- NULL
     else

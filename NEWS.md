@@ -30,6 +30,9 @@ Bug fixes and minor improvements
 * ``make_pnp`` function now supports the A5 page size and is more A4 page size friendly (#54).
 * Missing ``popViewport()`` added to ``draw_preview``.
 * Can now specify ``fontface``in configuration lists (#121).
+* Removed some package dependencies.
+* ``draw_components`` now supports ``angle=NA`` and ``draw_component`` no longer draws different output
+  for components like ``tile_back`` if you specify a suit or rank (#120).
 
 piecepackr 0.11.0
 =================

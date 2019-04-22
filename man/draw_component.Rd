@@ -14,7 +14,7 @@ draw_components(df, ...)
 
 draw_component_wrapper(..., component_side = "tile_back", x = 0.5,
   y = 0.5, i_s = NA, i_r = NA, width = NA, height = NA,
-  svg = FALSE, units = "npc", angle = 0, cfg = NULL,
+  svg = FALSE, units = "npc", angle = NA, cfg = NULL,
   cfg_name = NA, cfg_list = NULL)
 }
 \arguments{
