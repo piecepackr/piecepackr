@@ -237,8 +237,8 @@ draw_component_helper <- function(component_side, i_s, i_r, cfg) {
                       pawn_layout = draw_pawn_layout,
                       pyramid_layout = draw_pyramid_layout,
                       pyramid_top = draw_pyramid_top,
-                      draw_component_basic)
-    draw_fn <- get_style_element("draw_component_fn", component_side, cfg, default, i_s, i_r)
+                      basic_draw_fn)
+    draw_fn <- get_style_element("draw_fn", component_side, cfg, default, i_s, i_r)
     if (is.character(draw_fn))
         draw_fn <- match.fun(draw_fn)
     draw_fn(component_side, i_s, i_r, cfg)
@@ -252,98 +252,3 @@ draw_pyramid_top <- function(component_side, i_s, i_r, cfg) {
     draw_component("pyramid_left",  cfg, i_s, i_r, x=0.25, width=1.0, height=0.5, angle=-90)
     draw_component("pyramid_right", cfg, i_s, i_r, x=0.75, width=1.0, height=0.5, angle=90)
 }
-
-#' Draw piecepack components
-#' 
-#' \code{draw_component} Draws a single piecepack component onto the graphics device.  
-#' \code{draw_components} draws several piecepack components specified in a data frame  
-#'    applying \code{draw_component_wrapper} to each row.
-#' 
-#' @rdname draw_component
-#' @param component_side A string with component and side separated by a underscore e.g. "coin_face"
-#' @param cfg Piecepack configuration list
-#' @param i_s Number of suit
-#' @param i_r Number of rank
-#' @param x Where to place component on x axis of viewport
-#' @param y Where to place component on y axis of viewport
-#' @param width Width of component
-#' @param height Height of component
-#' @param svg If \code{TRUE} instead of drawing directly into graphics device
-#'            export to svg, re-import svg, and then draw it to graphics device.  
-#'            This is useful if drawing really big or small and don't want
-#'            to play with re-configuring fontsizes.
-#' @param ... With \code{draw_component} extra arguments to pass to \code{grid::viewport} like \code{angle}, with \code{draw_components} extra arguments to pass to \code{draw_component_wrapper}, with \code{draw_component_wrapper} ignored.
-#' @export
-draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_r=0, x=0.5, y=0.5, 
-                           width=NULL, height=NULL, svg=FALSE, ...) {
-
-    if (component_side %in% c(COMPONENT_AND_SIDES_UNSUITED_UNRANKED, COMPONENT_AND_SIDES_UNSUITED_RANKED)) 
-        i_s <- get_i_unsuit(cfg)
-    if (component_side %in% c(COMPONENT_AND_SIDES_UNSUITED_UNRANKED, COMPONENT_AND_SIDES_SUITED_UNRANKED))
-        i_r <- 0
-
-    if (is.null(width))
-        width=inch(get_pp_width(component_side, i_r))
-    if (is.null(height))
-        height=inch(get_pp_height(component_side, i_r))
-    if (svg) {
-        svg_file <- tempfile(fileext=".svg")
-        on.exit(unlink(svg_file))
-        pp_width=get_pp_width(component_side, i_r)
-        pp_height=get_pp_height(component_side, i_r)
-
-        svg(svg_file, width=pp_width, height=pp_height)
-        draw_component(component_side, cfg, i_s, i_r)
-        invisible(dev.off())
-
-        pushViewport(viewport(x=x, y=y, width=width, height=height, ...))
-        grid.draw(pictureGrob(readPicture(svg_file, warn=FALSE)))
-        upViewport()
-    } else {
-        pushViewport(viewport(x=x, y=y, width=width, height=height, ...))
-        draw_component_helper(component_side, i_s, i_r, cfg)
-        upViewport()
-    }
-    invisible(NULL)
-}
-
-#' @rdname draw_component
-#' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
-#' @export
-draw_components <- function(df, ...) {
-    ll <- purrr::pmap(df, draw_component_wrapper, ...)
-    invisible(NULL)
-}
-
-#' @rdname draw_component
-#' @param units String specifying the units for the corresponding numeric values
-#' @param angle Angle to draw component at
-#' @param cfg_name String of list name storing configuration
-#' @param cfg_list List of configuration lists
-draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=NA, cfg=NULL, cfg_name=NA, cfg_list=NULL) {
-    x <- unit(x, units)
-    y <- unit(y, units)
-
-    if (is.null(cfg)) {
-        if (is.na(cfg_name)) {
-            cfg <- list()
-        } else if (is.list(cfg_list)) {
-            cfg <- cfg_list[[cfg_name]]
-        } else {
-            cfg <- dynGet(cfg_name)
-        }
-    }
-    if (is.na(i_r)) i_r <- 0
-    if (is.na(i_s)) i_s <- get_i_unsuit(cfg)
-    if (is.na(angle)) angle <- 0
-    if (is.na(width))
-        width <- NULL
-    else
-        width <- unit(width, units)
-    if (is.na(height))
-        height <- NULL
-    else
-        height <- unit(height, units)
-    draw_component(component_side, cfg, i_s, i_r, x, y, width, height, svg, angle=angle)
-}
-

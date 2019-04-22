@@ -3,14 +3,6 @@ cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package=
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
-#' Inch utility function
-#'
-#' This utility function is equivalent to \code{grid::unit(x, "in")}.
-#' 
-#' @param x Number representing number of inches
-#' @export
-inch <- function(x) { unit(x, "in") }
-
 get_pp_die_arrangement <- function(component_side=NA, cfg=list()) {
     get_style_element("pp_die_arrangement", component_side, cfg, "counter")
 }

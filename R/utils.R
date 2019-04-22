@@ -13,15 +13,22 @@ get_embedded_font_helper <- function(font, char) {
     embedded_font
 }
 
-#' Get embedded font utility function
+#' \code{piecepackr} utility functions
 #'
-#' This (vectorized) function returns which font is actually embedded by \code{cairo_pdf}.
+#' \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
+#' \code{cleave} converts a delimiter separated string into a vector.
+#' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
+#' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) and Cartesian coordinates.
 #' 
+#' @name pp_utils
+NULL
+
+#' @rdname pp_utils
 #' @param font A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.
 #' @param char A character vector of character(s) to be embedded by \code{grid::grid.text}
-#' @return A character vector of fonts that were actually embedded by \code{cairo_pdf}.  \code{NA}'s means no embedded font detected. 
+#' @return \code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.  \code{NA}'s means no embedded font detected. 
 #'        This either means that no font was found or that a color emoji font was found and instead of a font an image was embedded.
-#' @details This functions depends on \code{pdffonts} being on the system path.
+#' @details \code{get_embedded_font} depends on \code{pdffonts} being on the system path (on many OSes found in a \code{poppler-utils} package).
 #' @export
 get_embedded_font <- function(font, char) {
     df <- expand.grid(char, font, stringsAsFactors=FALSE)
@@ -32,6 +39,12 @@ get_embedded_font <- function(font, char) {
     }
     df
 }
+
+#' @rdname pp_utils
+#' @param inches Number representing number of inches
+#' @export
+inch <- function(inches) { unit(inches, "in") }
+
 
 get_n_pages_pdfinfo <- function(pdf_filename) {
     pdf_filename <- shQuote(normalizePath(pdf_filename))
@@ -62,31 +75,42 @@ find_gs <- function() {
     cmd
 }
 
-# Polar coordinates helpers
+#' @rdname pp_utils
+#' @param t Polar angle in degrees
+#' @param r Radial distance
+#' @export
 to_x <- function(t, r) { 
     r * cos(pi * t / 180) 
 }
+
+#' @rdname pp_utils
+#' @export
 to_y <- function(t, r) {
     r * sin(pi * t / 180)
 }
+
+#' @rdname pp_utils
+#' @param x Cartesian x coordinate
+#' @param y Cartesian y coordinate
+#' @export
 to_r <- function(x, y) {
     sqrt(x^2 + y^2)
 }
+
+#' @rdname pp_utils
+#' @export
 to_t <- function(x, y) {
     180 * atan2(y, x) / pi
 }
 
-#' Convert delimiter separated string to vector
-#'
-#' Converts delimiter separated string to a vector.
-#'
-#' @param x String to convert
+#' @rdname pp_utils
+#' @param s String to convert
 #' @param sep Delimiter (defaults to ",")
 #' @param float If `TRUE` cast to numeric
 #' @param color if `TRUE` convert empty strings to `"transparent"`
 #' @export
-cleave <- function(x, sep=",", float=FALSE, color=FALSE) {
-    vec <- stringr::str_split(x, sep)
+cleave <- function(s, sep=",", float=FALSE, color=FALSE) {
+    vec <- stringr::str_split(s, sep)
     if (length(vec)) vec <- vec[[1]]
     if (float) {
         as.numeric(vec)
@@ -96,6 +120,6 @@ cleave <- function(x, sep=",", float=FALSE, color=FALSE) {
         vec
     }
 } 
-col_cleave <- function(x, sep=",") { cleave(x, color=TRUE) }
-numeric_cleave <- function(x, sep=",") { cleave(x, sep, float=TRUE) }
+col_cleave <- function(s, sep=",") { cleave(s, sep, color=TRUE) }
+numeric_cleave <- function(s, sep=",") { cleave(s, sep, float=TRUE) }
 

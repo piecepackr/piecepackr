@@ -120,26 +120,6 @@ get_n_vertices <- function(shape) {
     as.numeric(gsub("convex|concave", "", shape))
 }
 
-get_grid_shape <- function(shape, t=0, r=0.2) {
-    if (shape == "circle") {
-        grid.circle
-    } else if (shape == "rect") {
-        grid.rect
-    } else if (shape == "kite") {
-        grid.kite
-    } else if (shape == "halma") {
-        grid.halma
-    } else if (shape == "pyramid") {
-        grid.pyramid
-    } else if (grepl("^concave", shape)) {
-        grid.concave_fn(get_n_vertices(shape), t, r) 
-    } else if (grepl("^convex", shape)) {
-        grid.pp.convex_fn(get_n_vertices(shape), t)
-    } else {
-        stop(paste("Don't know how to draw shape", shape)) 
-    }
-}
-
 get_suit_color_helper <- function(component_side, i_s, i_r, cfg=list()) {
     suit_colors <- col_cleave(get_style_element("suit_color", component_side, cfg, 
                             "#D55E00,#000000,#009E73,#56B4E9,#E69F00"))
@@ -342,7 +322,7 @@ expand_suit_elements <- function(elements, style, component_side, cfg) {
     if (length(elements) < get_n_suits(cfg)) {
         elements <- rep(elements, length.out=get_n_suits(cfg) + 1)
     } else if (length(elements) == get_n_suits(cfg)) {
-        elements <- c(elements, switch(style, scale=1.0, ""))
+        elements <- c(elements, switch(style, scale=1.0, suit_colors="grey", ""))
     }
     if (length(elements) == get_i_unsuit(cfg)) {
         elements <- c(elements, switch(style, 
@@ -532,60 +512,3 @@ get_ps_color <- function(component_side, i_s, i_r, cfg) {
     get_style_element("ps_color", component_side, cfg, default, i_s, i_r)
 }
 
-get_component_opt <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
-    key <- opt_cache_key(component_side, i_s, i_r)
-    if(!is.null(attr(cfg, "cache")[[key]])) {
-        return(attr(cfg, "cache")[[key]])
-    }
-
-    # Shape
-    shape <- get_shape(component_side, i_s, i_r, cfg)
-    shape_r <- get_shape_r(component_side, i_s, i_r, cfg)
-    shape_t <- get_shape_t(component_side, i_s, i_r, cfg)
-
-    # Additional colors
-    background_col <- get_background_color(component_side, i_s, i_r, cfg)
-    border_col <- get_border_color(component_side, i_s, i_r, cfg)
-    gridline_col <- get_gridline_color(component_side, i_s, i_r, cfg)
-    mat_col <- get_mat_color(component_side, i_s, i_r, cfg)
-    mat_width <- get_mat_width(component_side, i_s, i_r, cfg)
-
-    # Overall scaling factor
-    scale <- get_scale(cfg)
-
-    # Directional mark symbol
-    dm_col <- get_dm_color(component_side, i_s, i_r, cfg)
-    dm_scale <- get_dm_scale(component_side, i_s, i_r, cfg)
-    dm_fontfamily <- get_dm_fontfamily(component_side, i_s, i_r, cfg)
-    dm_fontface <- get_dm_fontface(component_side, i_s, i_r, cfg)
-    dm_fontsize <- scale * dm_scale * get_dm_fontsize(component_side, i_s, i_r, cfg)
-    dm_text <- get_dm_text(component_side, i_s, i_r, cfg)
-    dm_t <- get_dm_t(component_side, i_s, i_r, cfg)
-    dm_r <- get_dm_r(component_side, i_s, i_r, cfg)
-    dm_x <- to_x(dm_t, dm_r) + 0.5
-    dm_y <- to_y(dm_t, dm_r) + 0.5
-
-    # Primary symbol
-    ps_col <- get_ps_color(component_side, i_s, i_r, cfg)
-    ps_scale <- get_ps_scale(component_side, i_s, i_r, cfg)
-    ps_fontfamily <- get_ps_fontfamily(component_side, i_s, i_r, cfg)
-    ps_fontface <- get_ps_fontface(component_side, i_s, i_r, cfg)
-    ps_fontsize <- scale * ps_scale * get_ps_fontsize(component_side, i_s, i_r, cfg)
-    ps_text <- get_ps_text(component_side, i_s, i_r, cfg)
-    ps_t <- get_ps_t(component_side, i_s, i_r, cfg)
-    ps_r <- get_ps_r(component_side, i_s, i_r, cfg)
-    ps_x <- to_x(ps_t, ps_r) + 0.5
-    ps_y <- to_y(ps_t, ps_r) + 0.5
-
-    list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
-         background_col=background_col, border_col=border_col, 
-         gridline_col=gridline_col,  mat_col=mat_col, mat_width=mat_width,
-         dm_col=dm_col, dm_text=dm_text, 
-         dm_fontsize=dm_fontsize, 
-         dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,
-         dm_x=dm_x, dm_y=dm_y, 
-         ps_col=ps_col, ps_text=ps_text, 
-         ps_fontsize=ps_fontsize, 
-         ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
-         ps_x=ps_x, ps_y=ps_y)
-}

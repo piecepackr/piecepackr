@@ -1,4 +1,22 @@
-add_gridlines <- function(col, shape, shape_t) {
+#' \code{basic_draw_fn} helper functions
+#' 
+#' \code{add_gridlines} adds gridlines.
+#' \code{add_mat} adds a mat.
+#' \code{add_checkers} adds checkers.
+#' \code{add_hexlines} adds hexlines.
+#' \code{get_grid_shape} returns a function that draws the component shape.
+#' \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
+#' @param col Color
+#' @param shape String of the shape
+#' @param shape_t Angle (in degrees) of first vertex of shape (ignored by many shapes).
+#' @param shape_r Radial distance (from 0 to 0.5) (ignored by most shapes)
+#' 
+#' @name draw_fn_helpers
+NULL
+
+#' @rdname draw_fn_helpers
+#' @export
+add_gridlines <- function(col, shape = "rect", shape_t = 90) {
     if (is_color_invisible(col)) return (invisible(NULL))
     o <- 0.02
     if (shape == "rect") {
@@ -30,36 +48,48 @@ add_gridlines <- function(col, shape, shape_t) {
     }
 }
 
-# add_checkers <- function(col, shape, shape_t) {
-#     if (is_color_invisible(col)) return (invisible(NULL))
-#     if (shape == "rect") {
-#         grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
-#         grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
-#     } else if (shape %in% c("circle", "kite", "halma")) {
-#         stop(paste("Don't know how to add checkers to shape", shape))
-#     } else {
-#         n_vertices <- get_n_vertices(shape)
-#         t <- seq(0, 360, length.out=n_vertices+1) + shape_t
-#         nt <- length(t) - 1
-#         r <- 0.5
-#         x <- 0.5 + to_x(t, r)
-#         y <- 0.5 + to_y(t, r)
-#         for (ii in 1:nt) {
-#             if( ii %% 2) {
-#                 xs <- c(0.5, x[ii], x[ii+1])
-#                 ys <- c(0.5, y[ii], y[ii+1])
-#                 grid.polygon(xs, ys, gp=gpar(col=NA, fill=col))
-#             }
-#         }
-#     }
-# }
+#' @rdname draw_fn_helpers
+#' @param mat_width Numeric vector of mat widths
+#' @export
+add_mat <- function(col, shape = "rect", shape_t = 90, mat_width = 0) {
+    if (is_color_invisible(col) || all(mat_width==0))
+        return (invisible(NULL))
+    gp_mat <- gpar(col=NA, fill=col)
+    if (shape == "rect") {
+        grid.rect_mat_fn(mat_width)(gp=gp_mat)
+    } else if (shape == "circle") {
+        grid.convex_mat_fn(60, 0, mat_width[1])(gp=gp_mat)
+    } else if (grepl("^convex", shape)) {
+        grid.convex_mat_fn(get_n_vertices(shape), shape_t, mat_width[1])(gp=gp_mat)
+    } else {
+        stop(paste("Don't know how to add mat to shape", shape))
+    }
+}
 
-is_color_invisible <- function(color) {
-    if (is.na(color))
-        return (TRUE)
-    if (color == "transparent")
-        return (TRUE)
-    return (FALSE)
+#' @rdname draw_fn_helpers
+#' @export
+add_checkers <- function(col, shape = "rect", shape_t=90) {
+    if (is_color_invisible(col)) return (invisible(NULL))
+    if (shape == "rect") {
+        grid.rect(x=0.25, y=0.25, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
+        grid.rect(x=0.75, y=0.75, width=0.5, height=0.5, gp=gpar(col=NA, fill=col))
+    } else if (grepl("^concave", shape) || grepl("^convex", shape)) {
+        n_vertices <- get_n_vertices(shape)
+        t <- seq(0, 360, length.out=n_vertices+1) + shape_t
+        nt <- length(t) - 1
+        r <- 0.5
+        x <- 0.5 + to_x(t, r)
+        y <- 0.5 + to_y(t, r)
+        for (ii in 1:nt) {
+            if( ii %% 2) {
+                xs <- c(0.5, x[ii], x[ii+1])
+                ys <- c(0.5, y[ii], y[ii+1])
+                grid.polygon(xs, ys, gp=gpar(col=NA, fill=col))
+            }
+        }
+    } else {
+        stop(paste("Don't know how to add checkers to shape", shape))
+    }
 }
 
 # add_hexlines <- function(col, shape, omit_direction=FALSE) {
@@ -87,45 +117,51 @@ is_color_invisible <- function(color) {
 #         seg(1, 1 - ho, 1 - ho, 1, col, lwd=hl_size) 
 # }
 
-add_mat <- function(col, shape, t, width) {
-    if (is_color_invisible(col) || all(width==0))
-        return (invisible(NULL))
-    gp_mat <- gpar(col=NA, fill=col)
+#' @rdname draw_fn_helpers
+#' @export
+add_hexlines <- function(col, shape = "rect") {
+    if(is_color_invisible(col)) return (invisible(NULL))
     if (shape == "rect") {
-        grid.rect_mat_fn(width)(gp=gp_mat)
-    } else if (shape == "circle") {
-        grid.convex_mat_fn(60, 0, width[1])(gp=gp_mat)
-    } else if (grepl("^convex", shape)) {
-        grid.convex_mat_fn(get_n_vertices(shape), t, width[1])(gp=gp_mat)
+        ho <- 0.25
+        hl_size <- 4
+        seg(0, 1 - ho, ho, 1, col, lwd=hl_size) 
+        seg(0, ho, ho, 0, col, lwd=hl_size) 
+        seg(1, ho, 1 - ho, 0, col, lwd=hl_size) 
+        seg(1, 1 - ho, 1 - ho, 1, col, lwd=hl_size) 
     } else {
-        stop(paste("Don't know how to add mat to shape", shape))
+        stop(paste("Don't know how to add hexlines to shape", shape))
     }
 }
 
-draw_component_basic <- function(component_side, i_s, i_r, cfg) {
-    opt <- get_component_opt(component_side, i_s, i_r, cfg)
-
-    shape_fn <- get_grid_shape(opt$shape, opt$shape_t, opt$shape_r)
-
-    # Background
-    shape_fn(gp=gpar(col=NA, fill=opt$background_col))
-
-    # Gridlines, Mat
-    add_gridlines(opt$gridline_col, opt$shape, opt$shape_t)
-    add_mat(opt$mat_col, opt$shape, opt$shape_t, opt$mat_width)
-
-    # Primary symbol
-    gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, 
-                  fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
-    grid.text(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
-
-    # Directional mark
-    gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, 
-                  fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
-    grid.text(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
-
-    # Border col
-    shape_fn(gp=gpar(col=opt$border_col, fill=NA))
-
-    invisible(NULL)
+#' @rdname draw_fn_helpers
+#' @export
+get_grid_shape <- function(shape, shape_t=90, shape_r=0.2) {
+    if (shape == "circle") {
+        grid.circle
+    } else if (shape == "rect") {
+        grid.rect
+    } else if (shape == "kite") {
+        grid.kite
+    } else if (shape == "halma") {
+        grid.halma
+    } else if (shape == "pyramid") {
+        grid.pyramid
+    } else if (grepl("^concave", shape)) {
+        grid.concave_fn(get_n_vertices(shape), shape_t, shape_r) 
+    } else if (grepl("^convex", shape)) {
+        grid.pp.convex_fn(get_n_vertices(shape), shape_t)
+    } else {
+        stop(paste("Don't know how to draw shape", shape)) 
+    }
 }
+
+#' @rdname draw_fn_helpers
+#' @export
+is_color_invisible <- function(col) {
+    if (is.na(col))
+        return (TRUE)
+    if (col == "transparent")
+        return (TRUE)
+    return (FALSE)
+}
+
