@@ -110,6 +110,14 @@ test_that("no regressions in figures", {
     expect_doppelganger("tiles_faces", function() draw_components(df_tile, 
                                                                   width=2, height=2,
                                                                   units="inches", cfg_name="cfg_default"))
+    # 106
+    expect_doppelganger("different_sizes", function() {
+                            pushViewport(viewport(width=inch(6), height=inch(6)))
+                            dc("tile_face", i_s=2, i_r=3, x=inch(1), y=inch(5))
+                            dc("tile_face", i_s=2, i_r=3, x=inch(4), y=inch(4.5), cfg=list(width.tile=3))
+                            dc("tile_face", i_s=2, i_r=3, x=inch(4), y=inch(1.5), cfg=list(width.tile=4, height.tile=3))
+                            dc("coin_back", i_s=3, x=inch(1), y=inch(1), cfg=list(mat_width.coin=0.1))
+                            dc("coin_back", i_s=3, x=inch(2), y=inch(1), cfg=list(width.coin=1, mat_width.coin=0.1))})
 
     #### coins appear wrong #99
     # coin back
@@ -165,7 +173,7 @@ test_that("no regressions in figures", {
 
     #### preview appears wrong #99
     expect_doppelganger("preview", function() draw_preview(cfg_default))
-    expect_doppelganger("preview.5s", function() draw_preview(list(suit_text="A,B,C,D,E,")))
+    expect_doppelganger("preview.5s", function() draw_preview(list(suit_text="A,B,C,D,E,", die_arrangement="counter_up")))
     expect_doppelganger("preview.6s", function() draw_preview(list(suit_text="I,II,III,IV,V,VI,")))
 
     # dice
@@ -174,7 +182,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("suitdie_layoutRF", function() dc("suitdie_layoutRF"))
     expect_doppelganger("suitrankdie_layoutLF", function() dc("suitrankdie_layoutLF"))
 
-    cfg <- list(pp_die_arrangement="opposites_sum_to_5")
+    cfg <- list(die_arrangement="opposites_sum_to_5")
     expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", i_s=3, cfg=cfg))
 
     cfg <- list(suit_text="A,B,C,D,E,F", suit_color="red,black,green,blue,orange,grey")
@@ -204,7 +212,6 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", list(shape = "meeple"), i_r = 3), "Don't know how to draw shape meeple")
     expect_error(dce("coin_face", list(mat_width=0.2, mat_color="green", shape="kite"), i_r = 3), "Don't know how to add mat to shape kite")
     expect_error(get_pp_width("boo_back", 0), "Don't know width of component boo")
-    expect_error(get_pp_height("boo_back", 0), "Don't know height of component boo")
 })
 
 

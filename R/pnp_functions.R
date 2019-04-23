@@ -3,8 +3,8 @@ cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package=
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
-get_pp_die_arrangement <- function(component_side=NA, cfg=list()) {
-    get_style_element("pp_die_arrangement", component_side, cfg, "counter")
+get_die_arrangement <- function(component_side=NA, cfg=list()) {
+    get_style_element("die_arrangement", component_side, cfg, "counter_down")
 }
 
 ## Layout functions
@@ -36,16 +36,20 @@ draw_suitrankdie_layoutLF <- function(component_side, i_s, i_r, cfg) {
 }
 
 draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
-    angle <- rep(c(-90, 0), 3)
+    angle <- rep(c(0, -90), 3)
     if (flip) {
         x <- x_die_layoutLF
         angle <- -angle
     } else {
         x <- x_die_layoutRF
     }
-    if (get_pp_die_arrangement(cfg=cfg) == "opposites_sum_to_5") {
+    arrangement <- get_die_arrangement(cfg=cfg)
+    if (arrangement == "opposites_sum_to_5") {
         i_r <- c(1, 2, 3, 6, 5, 4)
         i_s <- rep(i_s, length.out=6)[i_r]
+    } else if (arrangement == "counter_up") {
+        i_r <- 6:1
+        i_s <- rev(i_s)
     } else {
         i_r <- 1:6
     }
@@ -150,8 +154,8 @@ pp_pdf <- function(filename, family, paper) {
 #' @param size PnP output size (currently either "letter" or "A4")
 #' @param components Character vector of desired PnP components (default everything)
 #' @export
-make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf", size="letter", 
-                     components=c("piecepack", "misc")) {
+make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter", 
+                     components=c("piecepack", "matchsticks", "pyramids")) {
     unlink(output_filename)
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
@@ -206,7 +210,7 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
 
     #### Fine-tune between pyramids, matchsticks, and misc.
     #### Add misc. accessories
-    if ("misc" %in% components) {
+    if ("matchsticks" %in% components) {
         if (n_suits <= 6) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
@@ -217,6 +221,8 @@ make_pnp <- function(cfg=list(), output_filename="pdf/decks/piecepack_deck.pdf",
             draw_a5_matchsticks(cfg, FALSE)
             popViewport()
         }
+    }
+    if ("pyramids" %in% components) {
         if (n_suits >= 4) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))

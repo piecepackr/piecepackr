@@ -92,20 +92,17 @@ draw_preview <- function(cfg=list()) {
     popViewport()
 }
 
-get_pp_width <- function(component_side, i_r) {
-    switch(component_side,
-           die_layoutLF = DIE_LAYOUT_WIDTH,
-           die_layoutRF = DIE_LAYOUT_WIDTH,
-           suitdie_layoutLF = DIE_LAYOUT_WIDTH,
-           suitdie_layoutRF = DIE_LAYOUT_WIDTH,
-           suitrankdie_layoutLF = DIE_LAYOUT_WIDTH,
-           suitrankdie_layoutRF = DIE_LAYOUT_WIDTH,
-           pawn_layout = PAWN_WIDTH,
-           pyramid_layout = PYRAMID_LAYOUT_WIDTHS[i_r],
-           pyramid_top = PYRAMID_WIDTHS[i_r],
-           { 
-        component <- get_component(component_side)
-        switch(component, 
+get_pp_width <- function(component_side, cfg=list(), i_r=1) {
+    if (grepl("die_layout", component_side)) {
+        die_width <- get_style_element("width", "die_face", cfg, DIE_WIDTH)
+        return (4 * die_width)
+    }
+    if (grepl("pyramid_layout", component_side)) {
+        pyramid_height <- get_style_element("height", "pyramid_face", cfg, PYRAMID_HEIGHTS[i_r], i_r=i_r)
+        return (pyramid_height)
+    }
+    component <- get_component(component_side)
+    default <- switch(component, 
            belt = BELT_WIDTH,
            coin = COIN_WIDTH,
            die = DIE_WIDTH,
@@ -116,41 +113,50 @@ get_pp_width <- function(component_side, i_r) {
            suitdie = DIE_WIDTH,
            tile = TILE_WIDTH,
            stop(paste("Don't know width of component", component)))
-    })
+    get_style_element("width", component_side, cfg, default, i_r=i_r)
 }
 
-get_pp_height <- function(component_side, i_r) {
-    switch(component_side,
-           die_layoutLF = DIE_LAYOUT_HEIGHT,
-           die_layoutRF = DIE_LAYOUT_HEIGHT,
-           suitdie_layoutLF = DIE_LAYOUT_HEIGHT,
-           suitdie_layoutRF = DIE_LAYOUT_HEIGHT,
-           suitrankdie_layoutLF = DIE_LAYOUT_HEIGHT,
-           suitrankdie_layoutRF = DIE_LAYOUT_HEIGHT,
-           pawn_layout = PAWN_LAYOUT_HEIGHT,
-           pyramid_top = PYRAMID_WIDTHS[i_r],
-           pyramid_layout = PYRAMID_LAYOUT_HEIGHTS[i_r],
-           {
-        component <- get_component(component_side)
-        switch(component, 
+get_pp_height <- function(component_side, cfg=list(), i_r=1) {
+    if (grepl("die_layout", component_side)) {
+        die_height <- get_style_element("height", "die_face", cfg, DIE_WIDTH)
+        return (3 * die_height)
+    }
+    if (grepl("pyramid_layout", component_side)) {
+        pyramid_width <- get_style_element("width", "pyramid_face", cfg, PYRAMID_WIDTHS[i_r], i_r=i_r)
+        pyramid_height <- get_style_element("height", "pyramid_face", cfg, PYRAMID_HEIGHTS[i_r], i_r=i_r)
+        pyramid_diagonal <- sqrt(pyramid_height^2 + (0.5*pyramid_width)^2)
+        return (2 * pyramid_diagonal)
+    }
+    if (grepl("pawn_layout", component_side)) {
+        pawn_height <- get_style_element("height", "pawn_face", cfg, PAWN_HEIGHT)
+        return((2.5 / (7/8)) * pawn_height)
+    }
+    width <- get_pp_width(component_side, cfg, i_r)
+    component <- get_component(component_side)
+    if (component == "matchstick") {
+        W <- ifelse(i_r == 1, 0.5*width, width)
+        S <- 0.5 * get_pp_width("tile_face", cfg)
+        default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[i_r])
+    }
+    default <- switch(component, 
                belt = BELT_HEIGHT,
-               coin = COIN_WIDTH,
-               die = DIE_WIDTH,
-               matchstick = MATCHSTICK_HEIGHTS[i_r],
+               coin = width,
+               die = width,
+               matchstick = default,
                pawn = PAWN_HEIGHT,
-               pyramid = PYRAMID_HEIGHTS[i_r],
-               saucer = SAUCER_WIDTH,
-               suitdie = DIE_WIDTH,
-               tile = TILE_WIDTH,
-               stop(paste("Don't know height of component", component)))
-    })
+               pyramid = 1.538842 * width,
+               saucer = width,
+               suitdie = width,
+               tile = width,
+               stop(paste("Don't know height of component", component))) #nocov
+    get_style_element("height", component_side, cfg, default, i_r=i_r)
 }
 
-pp_device <- function(filename, component_side=NULL, angle=0, i_r = 1,
+pp_device <- function(filename, component_side=NULL, cfg=list(), angle=0, i_r = 1,
                       width=NULL, height=NULL, res=72) {
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- get_pp_width(component_side, i_r)
-    if (is.null(height)) height <- get_pp_height(component_side, i_r)
+    if (is.null(width)) width <- get_pp_width(component_side, cfg, i_r)
+    if (is.null(height)) height <- get_pp_height(component_side, cfg, i_r)
     if (angle %in% c(90, 270)) {
         twidth <- height
         height <- width
@@ -193,7 +199,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
     suppressWarnings({
         for (cs in COMPONENT_AND_SIDES_UNSUITED_UNRANKED) {
             f <- component_filename(directory, cfg, cs, format, angle)
-            pp_device(f, cs, angle)
+            pp_device(f, cs, cfg, angle)
             draw_component(cs, cfg)
             invisible(dev.off())
         }
@@ -201,7 +207,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
         for (i_s in 1:get_n_suits(cfg)) {
             for (cs in COMPONENT_AND_SIDES_SUITED_UNRANKED) {
                 f <- component_filename(directory, cfg, cs, format, angle, i_s)
-                pp_device(f, cs, angle)
+                pp_device(f, cs, cfg, angle)
                 draw_component(cs, cfg, i_s)
                 invisible(dev.off())
             }
@@ -209,7 +215,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
             for (i_r in 1:get_n_ranks(cfg)) {
                 for (cs in c(COMPONENT_AND_SIDES_SUITED_RANKED, "pyramid_top")) {
                     f <- component_filename(directory, cfg, cs, format, angle, i_s, i_r)
-                    pp_device(f, cs, angle, i_r)
+                    pp_device(f, cs, cfg, angle, i_r)
                     draw_component(cs, cfg, i_s, i_r)
                     invisible(dev.off())
                 }
@@ -218,7 +224,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
         for (i_r in 1:get_n_ranks(cfg)) {
             for (cs in COMPONENT_AND_SIDES_UNSUITED_RANKED) {
                 f <- component_filename(directory, cfg, cs, format, angle, i_r=i_r)
-                pp_device(f, cs, angle)
+                pp_device(f, cs, cfg, angle)
                 draw_component(cs, cfg, i_r=i_r)
                 invisible(dev.off())
             }

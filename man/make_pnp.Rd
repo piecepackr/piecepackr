@@ -4,9 +4,9 @@
 \alias{make_pnp}
 \title{Make print-and-play piecepack pdf}
 \usage{
-make_pnp(cfg = list(),
-  output_filename = "pdf/decks/piecepack_deck.pdf", size = "letter",
-  components = c("piecepack", "misc"))
+make_pnp(cfg = list(), output_filename = "piecepack.pdf",
+  size = "letter", components = c("piecepack", "matchsticks",
+  "pyramids"))
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}

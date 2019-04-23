@@ -34,14 +34,14 @@ draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_
         i_r <- 0
 
     if (is.null(width))
-        width=inch(get_pp_width(component_side, i_r))
+        width=inch(get_pp_width(component_side, cfg, i_r))
     if (is.null(height))
-        height=inch(get_pp_height(component_side, i_r))
+        height=inch(get_pp_height(component_side, cfg, i_r))
     if (svg) {
         svg_file <- tempfile(fileext=".svg")
         on.exit(unlink(svg_file))
-        pp_width=get_pp_width(component_side, i_r)
-        pp_height=get_pp_height(component_side, i_r)
+        pp_width=get_pp_width(component_side, cfg, i_r)
+        pp_height=get_pp_height(component_side, cfg, i_r)
 
         svg(svg_file, width=pp_width, height=pp_height)
         draw_component(component_side, cfg, i_s, i_r)
