@@ -9,12 +9,16 @@ Config <- R6Class("pp_cfg",
         n_suits = NULL,
         n_ranks = NULL,
         die_arrangement = NULL,
+        title = NULL,
+        fontfamily = NULL,
         initialize = function(cfg=list()) {
             private$cfg <- cfg
             self$n_suits <- get_n_suits(cfg)
             self$n_ranks <- get_n_ranks(cfg)
             self$i_unsuit <- self$n_suits + 1
             self$die_arrangement <- get_die_arrangement(cfg)
+            self$fontfamily <- get_fontfamily(cfg)
+            self$title <- cfg$title
         },
         as_list = function() { private$cfg },
         print = function() {

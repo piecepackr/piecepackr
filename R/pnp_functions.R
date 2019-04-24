@@ -172,7 +172,7 @@ make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter",
         xr <- 0.5
     }
 
-    pp_pdf(output_filename, get_fontfamily(cfg), size)
+    pp_pdf(output_filename, cfg$fontfamily, size)
 
     grid.newpage()
     pushViewport(viewport(x=xl, width=A5W))
