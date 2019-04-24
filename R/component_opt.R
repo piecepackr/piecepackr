@@ -202,6 +202,14 @@ get_n_ranks <- function(cfg=list()) {
 
 get_i_unsuit <- function(cfg=list()) { get_n_suits(cfg) + 1 }
 
+get_die_arrangement <- function(cfg=list()) {
+    if (is.null(cfg[["die_arrangement"]])) {
+        "counter_down"
+    } else {
+        cfg[["die_arrangement"]]
+    }
+}
+
 get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
     default <- {
         if (component_side %in% c("coin_back", "coin_face")) {

@@ -3,9 +3,6 @@ cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package=
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
-get_die_arrangement <- function(component_side=NA, cfg=list()) {
-    get_style_element("die_arrangement", component_side, cfg, "counter_down")
-}
 
 ## Layout functions
 x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
@@ -36,6 +33,7 @@ draw_suitrankdie_layoutLF <- function(component_side, i_s, i_r, cfg) {
 }
 
 draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
+    cfg <- as_pp_cfg(cfg)
     angle <- rep(c(0, -90), 3)
     if (flip) {
         x <- x_die_layoutLF
@@ -43,7 +41,7 @@ draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
     } else {
         x <- x_die_layoutRF
     }
-    arrangement <- get_die_arrangement(cfg=cfg)
+    arrangement <- cfg$die_arrangement
     if (arrangement == "opposites_sum_to_5") {
         i_r <- c(1, 2, 3, 6, 5, 4)
         i_s <- rep(i_s, length.out=6)[i_r]
@@ -160,9 +158,9 @@ make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter",
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
-    n_suits <- get_n_suits(cfg)
-    i_unsuit <- n_suits + 1
-    cfg <- pp_cfg(cfg)
+    cfg <- as_pp_cfg(cfg)
+    n_suits <- cfg$n_suits
+
     if (size == "letter") {
         xl <- inch(LETTER_HEIGHT / 2 - A5W / 2)
         xr <- inch(LETTER_HEIGHT / 2 + A5W / 2)
@@ -199,11 +197,11 @@ make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter",
         if (is_odd(n_suits)) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
-            draw_a5_piecepack(i_unsuit+1, cfg, front=TRUE)
+            draw_a5_piecepack(cfg$i_unsuit+1, cfg, front=TRUE)
             popViewport()
             if (size == "A5") { grid.newpage() }
             pushViewport(viewport(x=xr, width=A5W))
-            draw_a5_piecepack(i_unsuit+1, cfg, front=FALSE)
+            draw_a5_piecepack(cfg$i_unsuit+1, cfg, front=FALSE)
             popViewport()
         }
     }
@@ -293,8 +291,8 @@ draw_a5_blank <- function() {
     popViewport()
 }
 
-draw_a5_matchsticks <- function(cfg=list(), front=TRUE) {
-    n_suits <- get_n_suits(cfg) 
+draw_a5_matchsticks <- function(cfg=pp_cfg(), front=TRUE) {
+    n_suits <- cfg$n_suits
     pushViewport(viewport(width=inch(A5W), height=inch(A5H)))
     grid.rect(gp=gpar(color="brown"))
     y1t <- A5H - 0.5* MATCHSTICK_HEIGHTS[1]
@@ -324,8 +322,7 @@ draw_a5_matchsticks <- function(cfg=list(), front=TRUE) {
     popViewport()
 }
 
-draw_a5_piecepack <- function(i_s, cfg=list(), front=TRUE) {
-    i_unsuit <- get_i_unsuit(cfg)
+draw_a5_piecepack <- function(i_s, cfg=pp_cfg(), front=TRUE) {
     pushViewport(viewport(width=inch(A5W), height=inch(A5H)))
     grid.rect(gp=gpar(color="brown"))
     xtl <- 1.5 * TILE_WIDTH
@@ -359,7 +356,7 @@ draw_a5_piecepack <- function(i_s, cfg=list(), front=TRUE) {
     } else {
         component_side <- c(rep("tile_back", 6), rep("coin_face", 6),
                             rep("die_layoutLF", 1), "pawn_layout", "belt_face", "saucer_back")
-        i_ss <- c(rep(NA, 12), rep(i_s, 3), i_unsuit)
+        i_ss <- c(rep(NA, 12), rep(i_s, 3), cfg$i_unsuit)
         i_r <- c(rep(NA, 6), 1:6, rep(NA, 4))
         angle = c(rep(0, 13), 90, rep(0, 2))
     }
@@ -368,9 +365,9 @@ draw_a5_piecepack <- function(i_s, cfg=list(), front=TRUE) {
     popViewport()
 }
 
-draw_a5_pyramids <- function(i_s=1:2, cfg=list(), front=TRUE) {
-    n_ranks <- get_n_ranks(cfg)
-    n_suits <- get_n_suits(cfg) 
+draw_a5_pyramids <- function(i_s=1:2, cfg=pp_cfg(), front=TRUE) {
+    n_ranks <- cfg$n_ranks
+    n_suits <- cfg$n_suits
     pushViewport(viewport(width=inch(A5W), height=inch(A5H)))
     grid.rect(gp=gpar(color="brown"))
     y_up <- rep(cumsum(PYRAMID_LAYOUT_HEIGHTS) - 0.5*PYRAMID_LAYOUT_HEIGHTS, each=2)

@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Piecepack Graphics in R
-Version: 0.12.0-12
+Version: 0.12.0-13
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: This is an R package designed to make configurable piecepack graphics. It can be used with the grid R package to make piecepack diagrams (i.e. for inclusion in rulesets) and custom Print & Play layouts.
@@ -15,6 +15,7 @@ Imports:
     grImport2,
     grDevices,
     purrr,
+    R6,
     stringr,
     tibble,
     tools

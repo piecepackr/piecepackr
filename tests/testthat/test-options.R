@@ -54,8 +54,8 @@ test_that("options work as expected", {
 
 context("get_component_opt works as expected")
 test_that("get_component_opt works as expected", {
-    opt <- get_component_opt("coin_face", 
-                             cfg=list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+    cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+    opt <- cfg$get_component_opt("coin_face")
     expect_equal(opt$background_col, "white")
     expect_equal(opt$border_col, "grey")
     expect_equal(opt$gridline_col, "transparent") 
@@ -82,12 +82,13 @@ test_that("get_component_opt works as expected", {
     expect_equal(opt$ps_y, 0.5)
     expect_equal(opt$dm_text, "\u25cf")
 
-    opt <- get_component_opt("saucer_back")
+    cfg <- pp_cfg()
+    opt <- cfg$get_component_opt("saucer_back")
     expect_equal(opt$dm_text, "\u25b2")
     # expect_equal(opt$dm_text, "\u265f")
-    opt <- get_component_opt("pawn_face")
+    opt <- cfg$get_component_opt("pawn_face")
     expect_equal(opt$dm_text, "\u0298\u0298")
     # expect_equal(opt$dm_text, "\U0001f440")
-    opt <- get_component_opt("pawn_back")
+    opt <- cfg$get_component_opt("pawn_back")
     expect_equal(opt$dm_text, "")
 })

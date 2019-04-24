@@ -2,21 +2,23 @@
 % Please edit documentation in R/pp_cfg.R
 \name{pp_cfg}
 \alias{pp_cfg}
-\title{Create piecepack configuration list with a cache of component opts}
+\alias{is_pp_cfg}
+\alias{as_pp_cfg}
+\title{Configuration list R6 object}
 \usage{
 pp_cfg(cfg = list())
+
+is_pp_cfg(cfg)
+
+as_pp_cfg(cfg = list())
 }
 \arguments{
 \item{cfg}{List of configuration options}
 }
 \description{
-Adds a \code{cache} and \code{signature} attribute and a \code{pp_cfg} class
-to a list of configuration options.  
-The cache stores pre-computed component opt lists.
-Once done this significantly speeds up the drawing of piecepack components
-with that configuration list.  However if you later change the configuration list you
-should run this again to re-compute the cache otherwise \code{draw_component} may 
-not work as intended.
+\code{pp_cfg} and \code{as_pp_cfg} creates piecepack configuration list R6 object.
+\code{is_pp_cfg} returns \code{TRUE} if object is a piecepack configuration list R6 object.
+\code{as.list} will convert it into a list.
 }
 \examples{
  \donttest{

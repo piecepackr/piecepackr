@@ -5,7 +5,6 @@
 \alias{draw_components}
 \alias{draw_component_wrapper}
 \alias{basic_draw_fn}
-\alias{get_component_opt}
 \title{Draw piecepack components}
 \usage{
 draw_component(component_side, cfg = list(), i_s = get_i_unsuit(cfg),
@@ -20,9 +19,6 @@ draw_component_wrapper(..., component_side = "tile_back", x = 0.5,
   cfg_name = NA, cfg_list = NULL)
 
 basic_draw_fn(component_side, i_s, i_r, cfg)
-
-get_component_opt(component_side, i_s = get_i_unsuit(cfg), i_r = 1,
-  cfg = list())
 }
 \arguments{
 \item{component_side}{A string with component and side separated by a underscore e.g. "coin_face"}
@@ -64,5 +60,4 @@ to play with re-configuring fontsizes.}
    applying \code{draw_component_wrapper} to each row.
 By default \code{draw_component} sets up a viewport and then uses \code{basic_draw_fn} to 
   draw the component.
-\code{basic_draw_fn} uses \code{get_component_opt} to parse the configuration list.
 }

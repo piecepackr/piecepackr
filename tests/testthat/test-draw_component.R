@@ -2,20 +2,9 @@ library("vdiffr")
 cfg_default <- pp_cfg(list(title="default cfg"))
 context("test pp_cfg")
 test_that("pp_cfg works as expected", {
-    expect_equal(class(cfg_default), "pp_cfg")
+    expect_true("pp_cfg" %in% class(cfg_default))
     expect_equal(class(as.list(cfg_default)), "list")
     expect_output(print(cfg_default), "default cfg")
-
-    cfg2 <- cfg_default
-    cfg2$suit_text <- "a,b,c,d,e"
-    expect_equal(cfg2$suit_text, "a,b,c,d,e")
-    expect_equal(class(cfg2), "list")
-
-    cfg3 <- cfg_default
-    cfg3[["suit_text"]] <- "a,b,c,d,e"
-    expect_equal(cfg3$suit_text, "a,b,c,d,e")
-    expect_equal(class(cfg3), "list")
-
 })
 
 context("make_pnp works as expected")
@@ -211,7 +200,7 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", list(gridline_color = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
     expect_error(dce("coin_face", list(shape = "meeple"), i_r = 3), "Don't know how to draw shape meeple")
     expect_error(dce("coin_face", list(mat_width=0.2, mat_color="green", shape="kite"), i_r = 3), "Don't know how to add mat to shape kite")
-    expect_error(get_pp_width("boo_back", 0), "Don't know width of component boo")
+    expect_error(cfg_default$get_pp_width("boo_back"), "Don't know width of component boo")
 })
 
 

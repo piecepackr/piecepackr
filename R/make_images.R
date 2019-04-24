@@ -92,71 +92,13 @@ draw_preview <- function(cfg=list()) {
     popViewport()
 }
 
-get_pp_width <- function(component_side, cfg=list(), i_r=1) {
-    if (grepl("die_layout", component_side)) {
-        die_width <- get_style_element("width", "die_face", cfg, DIE_WIDTH)
-        return (4 * die_width)
-    }
-    if (grepl("pyramid_layout", component_side)) {
-        pyramid_height <- get_style_element("height", "pyramid_face", cfg, PYRAMID_HEIGHTS[i_r], i_r=i_r)
-        return (pyramid_height)
-    }
-    component <- get_component(component_side)
-    default <- switch(component, 
-           belt = BELT_WIDTH,
-           coin = COIN_WIDTH,
-           die = DIE_WIDTH,
-           matchstick = MATCHSTICK_WIDTHS[i_r],
-           pawn = PAWN_WIDTH,
-           pyramid = PYRAMID_WIDTHS[i_r],
-           saucer = SAUCER_WIDTH,
-           suitdie = DIE_WIDTH,
-           tile = TILE_WIDTH,
-           stop(paste("Don't know width of component", component)))
-    get_style_element("width", component_side, cfg, default, i_r=i_r)
-}
-
-get_pp_height <- function(component_side, cfg=list(), i_r=1) {
-    if (grepl("die_layout", component_side)) {
-        die_height <- get_style_element("height", "die_face", cfg, DIE_WIDTH)
-        return (3 * die_height)
-    }
-    if (grepl("pyramid_layout", component_side)) {
-        pyramid_width <- get_style_element("width", "pyramid_face", cfg, PYRAMID_WIDTHS[i_r], i_r=i_r)
-        pyramid_height <- get_style_element("height", "pyramid_face", cfg, PYRAMID_HEIGHTS[i_r], i_r=i_r)
-        pyramid_diagonal <- sqrt(pyramid_height^2 + (0.5*pyramid_width)^2)
-        return (2 * pyramid_diagonal)
-    }
-    if (grepl("pawn_layout", component_side)) {
-        pawn_height <- get_style_element("height", "pawn_face", cfg, PAWN_HEIGHT)
-        return((2.5 / (7/8)) * pawn_height)
-    }
-    width <- get_pp_width(component_side, cfg, i_r)
-    component <- get_component(component_side)
-    if (component == "matchstick") {
-        W <- ifelse(i_r == 1, 0.5*width, width)
-        S <- 0.5 * get_pp_width("tile_face", cfg)
-        default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[i_r])
-    }
-    default <- switch(component, 
-               belt = BELT_HEIGHT,
-               coin = width,
-               die = width,
-               matchstick = default,
-               pawn = PAWN_HEIGHT,
-               pyramid = 1.538842 * width,
-               saucer = width,
-               suitdie = width,
-               tile = width,
-               stop(paste("Don't know height of component", component))) #nocov
-    get_style_element("height", component_side, cfg, default, i_r=i_r)
-}
 
 pp_device <- function(filename, component_side=NULL, cfg=list(), angle=0, i_r = 1,
                       width=NULL, height=NULL, res=72) {
+    cfg <- as_pp_cfg(cfg)
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- get_pp_width(component_side, cfg, i_r)
-    if (is.null(height)) height <- get_pp_height(component_side, cfg, i_r)
+    if (is.null(width)) width <- cfg$get_pp_width(component_side, i_r)
+    if (is.null(height)) height <- cfg$get_pp_height(component_side, i_r)
     if (angle %in% c(90, 270)) {
         twidth <- height
         height <- width
@@ -233,18 +175,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
 }
 
 draw_component_helper <- function(component_side, i_s, i_r, cfg) {
-    default <- switch(component_side,
-                      die_layoutLF = draw_die_layoutLF,
-                      die_layoutRF = draw_die_layoutRF,
-                      suitdie_layoutLF = draw_suitdie_layoutLF,
-                      suitdie_layoutRF = draw_suitdie_layoutRF,
-                      suitrankdie_layoutLF = draw_suitrankdie_layoutLF,
-                      suitrankdie_layoutRF = draw_suitrankdie_layoutRF,
-                      pawn_layout = draw_pawn_layout,
-                      pyramid_layout = draw_pyramid_layout,
-                      pyramid_top = draw_pyramid_top,
-                      basic_draw_fn)
-    draw_fn <- get_style_element("draw_fn", component_side, cfg, default, i_s, i_r)
+    draw_fn <- cfg$get_draw_fn(component_side, i_s, i_r)
     if (is.character(draw_fn))
         draw_fn <- match.fun(draw_fn)
     draw_fn(component_side, i_s, i_r, cfg)
@@ -252,6 +183,7 @@ draw_component_helper <- function(component_side, i_s, i_r, cfg) {
 }
 
 draw_pyramid_top <- function(component_side, i_s, i_r, cfg) {
+    cfg <- as.list(cfg)
     cfg$scale <- 0.3 * get_scale(cfg)
     draw_component("pyramid_face",  cfg, i_s, i_r, y=0.75, width=1.0, height=0.5, angle=180)
     draw_component("pyramid_back",  cfg, i_s, i_r, y=0.25, width=1.0, height=0.5, angle=0)
