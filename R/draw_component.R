@@ -1,133 +1,169 @@
-#' Draw piecepack components
+#' Draw piecepack pieces using grid
 #' 
-#' \code{draw_component} Draws a single piecepack component onto the graphics device.  
-#' \code{draw_components} draws several piecepack components specified in a data frame  
-#'    applying \code{draw_component_wrapper} to each row.
-#' By default \code{draw_component} sets up a viewport and then uses \code{basic_draw_fn} to 
-#'   draw the component.
+#' \code{grid.piece} draws a piecepack pieces onto the graphics device.  
+#' \code{grobpiece} is its \code{grid} \code{grob} counterpart.
+#' \code{pmap_piece} operates on the rows of a data frame  
+#'     applying \code{grid.piece} to each row.
 #' 
-#' @param component_side A string with component and side separated by a underscore e.g. "coin_face"
-#' @param cfg Piecepack configuration list
+#' @param piece_side A string with piece and side separated by a underscore e.g. "coin_face"
+#' @param cfg Piecepack configuration list or \code{pp_cfg} object, 
+#'        a list of \code{pp_cfg} objects,
+#'        or a character vector of \code{pp_cfg} objects
 #' @param i_s Number of suit
 #' @param i_r Number of rank
-#' @param x Where to place component on x axis of viewport
-#' @param y Where to place component on y axis of viewport
-#' @param width Width of component
-#' @param height Height of component
+#' @param x Where to place piece on x axis of viewport
+#' @param y Where to place piece on y axis of viewport
+#' @param rot Angle to draw piece at
 #' @param svg If \code{TRUE} instead of drawing directly into graphics device
 #'            export to svg, re-import svg, and then draw it to graphics device.  
 #'            This is useful if drawing really big or small and don't want
 #'            to play with re-configuring fontsizes.
-#' @param ... With \code{draw_component} extra arguments to pass to \code{grid::viewport} like \code{angle}, with \code{draw_components} extra arguments to pass to \code{draw_component_wrapper}, with \code{draw_component_wrapper} ignored.
-#' @name draw_component
+#' @param width Width of piece
+#' @param height Height of piece
+#' @param default.units  A string indicating the default units to use if 
+#'   'x', 'y', 'width', and/or 'height' are only given as numeric vectors.
+#' @param envir Environment (or named list) containing configuration list(s).
+#' @param name A character identifier (for grid)
+#' @param gp An object of class ‘gpar’, typically the output from a call
+#'        to the function ‘gpar’.  This is basically a list of
+#'        graphical parameter settings.
+#' @param draw A logical value indicating whether graphics output should be produced.
+#' @param vp A \code{grid} viewport object (or NULL).
+#' @param .l A list of vectors, such as a data frame. The length of \code{.l}
+#'           determines the number of arguments that \code{grid.piece_wrapper}
+#'           will be called  with. List names will be used if present.
+#' @param ... For \code{pmap_piece} extra arguments to pass to \code{grid.piece_wrapper},
+#'            for \code{grid.piece_wrapper} any extra arguments are ignored.
+#' @return A \code{grob} object.  If \code{draw} is \code{TRUE} will also draw it to the graphics device.
+#' @name grid.piece
 NULL
 
-#' @rdname draw_component
+#' @rdname grid.piece
 #' @export
-draw_component <- function(component_side, cfg=list(), i_s=get_i_unsuit(cfg), i_r=0, x=0.5, y=0.5, 
-                           width=NULL, height=NULL, svg=FALSE, ...) {
+pmap_piece <- function(.l, ..., draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+    ll <- purrr::pmap(.l, grid.piece_wrapper, ..., draw=FALSE)
+    grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp)
+    if (draw)
+        grid.draw(grob)
+    else
+        grob
+}
 
+as.gList <- function(ll) {
+    gl <- gList()
+    for (ii in seq(ll)) {
+        gl[[ii]] <- ll[[ii]]
+    }
+    gl
+}
+
+grid.piece_wrapper <- function(..., piece_side="tile_back", i_s=NA, i_r=NA, 
+                                   cfg=pp_cfg(), envir=NULL, 
+                                   x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                                   rot=NA, svg=FALSE, 
+                                   width=NA, height=NA, default.units="npc", draw=TRUE) {
+    grid.piece(piece_side, i_s, i_r, cfg, x, y, 
+                   rot, svg, width, height, default.units, envir, draw=draw)
+}
+
+
+pieceGrobHelper <- function(piece_side="tile_back", i_s=NA, i_r=NA, cfg=pp_cfg(), 
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                           rot=0, svg=FALSE,
+                           width=NA, height=NA, default.units = "npc") {
     cfg <- as_pp_cfg(cfg)
+    i_s <- ifelse(has_suit(piece_side), ifelse(is.na(i_s), 1, i_s), cfg$i_unsuit)
+    i_r <- ifelse(has_rank(piece_side), ifelse(is.na(i_r), 1, i_r), 0)
+    if(!is.unit(x)) { x <- unit(x, default.units) }
+    if(!is.unit(y)) { y <- unit(y, default.units) }
+    if(is.na(rot)) { rot <- 0 }
+    if(is.na(width)) { width <- inch(cfg$get_pp_width(piece_side, i_r)) }
+    if(is.na(height)) { height <- inch(cfg$get_pp_height(piece_side, i_r)) }
+    if(!is.unit(width)) { width <- unit(width, default.units) }
+    if(!is.unit(height)) { height <- unit(height, default.units) }
 
-    if (component_side %in% c(COMPONENT_AND_SIDES_UNSUITED_UNRANKED, COMPONENT_AND_SIDES_UNSUITED_RANKED)) 
-        i_s <- cfg$i_unsuit
-    if (component_side %in% c(COMPONENT_AND_SIDES_UNSUITED_UNRANKED, COMPONENT_AND_SIDES_SUITED_UNRANKED))
-        i_r <- 0
-
-    if (is.null(width))
-        width=inch(cfg$get_pp_width(component_side, i_r))
-    if (is.null(height))
-        height=inch(cfg$get_pp_height(component_side, i_r))
+    grob <- cfg$get_grob(piece_side, i_s, i_r)
     if (svg) {
         svg_file <- tempfile(fileext=".svg")
         on.exit(unlink(svg_file))
-        pp_width=cfg$get_pp_width(component_side, i_r)
-        pp_height=cfg$get_pp_height(component_side, i_r)
+        pp_width=cfg$get_pp_width(piece_side, i_r)
+        pp_height=cfg$get_pp_height(piece_side, i_r)
 
         svg(svg_file, width=pp_width, height=pp_height)
-        draw_component(component_side, cfg, i_s, i_r)
+        grid.draw(grob)
         invisible(dev.off())
 
-        pushViewport(viewport(x=x, y=y, width=width, height=height, ...))
-        grid.draw(pictureGrob(readPicture(svg_file, warn=FALSE)))
-        upViewport()
-    } else {
-        pushViewport(viewport(x=x, y=y, width=width, height=height, ...))
-        draw_component_helper(component_side, i_s, i_r, cfg)
-        upViewport()
+        grob <- pictureGrob(readPicture(svg_file, warn=FALSE))
     }
-    invisible(NULL)
+    cvp <- viewport(x, y, width, height, angle=rot)
+    grobTree(grob, vp=cvp)
+    
 }
 
-#' @rdname draw_component
-#' @param df A data frame specifying arguments to ``draw_component_wrapper`` 
+#' @rdname grid.piece
 #' @export
-draw_components <- function(df, ...) {
-    ll <- purrr::pmap(df, draw_component_wrapper, ...)
-    invisible(NULL)
-}
+pieceGrob <- function(piece_side="tile_back", i_s=NA, i_r=NA, 
+                         cfg=pp_cfg(), 
+                         x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                         rot=0, svg=FALSE,
+                         width=NA, height=NA, 
+                         default.units = "npc", envir=NULL,
+                         name=NULL, gp=NULL, vp=NULL) {
 
-#' @rdname draw_component
-#' @param units String specifying the units for the corresponding numeric values
-#' @param angle Angle to draw component at
-#' @param cfg_name String of list name storing configuration
-#' @param cfg_list Named list (or environment) of configuration lists
-draw_component_wrapper <- function(..., component_side="tile_back", x=0.5, y=0.5, i_s=NA, i_r=NA, width=NA, height=NA, svg=FALSE, units="npc", angle=NA, cfg=NULL, cfg_name=NA, cfg_list=NULL) {
-    x <- unit(x, units)
-    y <- unit(y, units)
+    nn <- max(lengths(list(piece_side, i_s, i_r, x, y, rot, svg, width, height)))
+    piece_side <- rep(piece_side, length.out=nn)
+    i_s <- rep(i_s, length.out=nn)
+    i_r <- rep(i_r, length.out=nn)
+    x <- rep(x, length.out=nn)
+    y <- rep(y, length.out=nn)
+    rot <- rep(rot, length.out=nn)
+    svg <- rep(svg, length.out=nn)
+    width <- rep(width, length.out=nn)
+    height <- rep(height, length.out=nn)
 
-    if (is.null(cfg)) {
-        if (is.na(cfg_name)) {
-            cfg <- list()
-        } else if (!is.null(cfg_list)) {
-            cfg <- cfg_list[[cfg_name]]
+    if (is_pp_cfg(cfg)) {
+        cfg <- rep(c(cfg), length.out=nn)
+    } else if (is.character(cfg)) {
+        if(!is.null(envir)) { 
+            envir=as.environment(envir) 
+            cfg <- lapply(cfg, function(cc) as_pp_cfg(envir[[cc]]))
         } else {
-            cfg <- dynGet(cfg_name)
+            cfg <- lapply(cfg, function(cc) as_pp_cfg(dynGet(cc)))
+        }
+        cfg <- rep(cfg, length.out=nn)
+    } else {
+        if (is.list(cfg)) {
+            if (!("pp_cfg" %in% sapply(cfg, class)))
+                cfg <- c(pp_cfg(cfg))
+            cfg <- rep(cfg, length.out=nn)
+        } else {
+            stop("Don't know how to parse cfg argument") # nocov
         }
     }
-    if (is.na(i_r)) i_r <- 0
-    if (is.na(i_s)) i_s <- get_i_unsuit(cfg)
-    if (is.na(angle)) angle <- 0
-    if (is.na(width))
-        width <- NULL
-    else
-        width <- unit(width, units)
-    if (is.na(height))
-        height <- NULL
-    else
-        height <- unit(height, units)
-    draw_component(component_side, cfg, i_s, i_r, x, y, width, height, svg, angle=angle)
+
+    gl <- gList()
+    for(ii in seq(nn)) {
+        gl[[ii]] <- pieceGrobHelper(piece_side[ii], i_s[ii], i_r[ii], cfg[[ii]],
+                                        x[ii], y[ii], rot[ii], svg[ii],
+                                        width[ii], height[ii], default.units)
+    }
+    gTree(children=gl, name=name, gp=gp, vp=vp)
 }
 
-#' @rdname draw_component
-#' @name draw_component
+#' @rdname grid.piece
 #' @export
-basic_draw_fn <- function(component_side, i_s, i_r, cfg) {
-    cfg <- as_pp_cfg(cfg)
-    opt <- cfg$get_component_opt(component_side, i_s, i_r)
-
-    shape_fn <- get_grid_shape(opt$shape, opt$shape_t, opt$shape_r)
-
-    # Background
-    shape_fn(gp=gpar(col=NA, fill=opt$background_col))
-
-    # Gridlines, Mat
-    add_gridlines(opt$gridline_col, opt$shape, opt$shape_t)
-    add_mat(opt$mat_col, opt$shape, opt$shape_t, opt$mat_width)
-
-    # Primary symbol
-    gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, 
-                  fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
-    grid.text(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
-
-    # Directional mark
-    gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, 
-                  fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
-    grid.text(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
-
-    # Border 
-    shape_fn(gp=gpar(col=opt$border_col, fill=NA))
-
-    invisible(NULL)
+grid.piece <- function(piece_side="tile_back", i_s=NA, i_r=NA, cfg=list(), 
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                           rot=0, svg=FALSE,
+                           width=NA, height=NA, 
+                           default.units = "npc", envir=NULL,
+                           name=NULL, gp=NULL, draw=TRUE, vp=NULL) {
+    grob <- pieceGrob(piece_side, i_s, i_r, cfg, 
+                          x, y, rot, svg, width, height, default.units, 
+                          envir, name, gp, vp)
+    if (draw) { 
+        grid.draw(grob)
+    } else {
+        grob
+    }
 }
-

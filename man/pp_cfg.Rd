@@ -23,9 +23,9 @@ as_pp_cfg(cfg = list())
 \examples{
  \donttest{
    cfg <- list()
-   system.time(replicate(500, draw_component("tile_face", cfg, 4, 4)))
-   system.time(cfg <- pp_cfg(cfg))
-   system.time(replicate(500, draw_component("tile_face", cfg, 4, 4)))
+   system.time(replicate(500, grid.piece("tile_face", 4, 4, cfg)))
+   cfg <- pp_cfg(cfg)
+   system.time(replicate(500, grid.piece("tile_face", 4, 4, cfg)))
  }
   
 }

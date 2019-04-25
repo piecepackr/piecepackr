@@ -1,54 +1,54 @@
-get_component <- function(component_side) {
-    cleave(component_side, "_")[1]
+get_piece <- function(piece_side) {
+    cleave(piece_side, "_")[1]
 }
 
-# component_side="pawn_face"
+# piece_side="pawn_face"
 # i_s=0
 # i_r=0
 # style="font"
 # 
-# if(is.na(component_side)) {
-#     component <- NULL
+# if(is.na(piece_side)) {
+#     piece <- NULL
 # } else {
-#     component <- get_component(component_side)
+#     piece <- get_piece(piece_side)
 # }
-# suited <- is_suited(component_side, i_s, cfg)
+# suited <- is_suited(piece_side, i_s, cfg)
 # if (is.null(suited)) suited <- FALSE
-# component_affixes <- c(paste0(".", component_side), paste0(".", component), "")
-# component_score <- c(2, 1, 0)
+# piece_affixes <- c(paste0(".", piece_side), paste0(".", piece), "")
+# piece_score <- c(2, 1, 0)
 # rank_affixes <- c(paste0(".r", i_r), "")
 # rank_score <- c(1, 0)
 # suit_affixes <- c(paste0(".s", i_s), ifelse(suited, ".suited", ".unsuited"), "")
 # suit_score <- c(2, 1, 0)
-# dfs <- expand.grid(component_affixes, rank_affixes, suit_affixes, stringsAsFactors=FALSE)
-# names(dfs) <- c("component", "rank", "suit")
+# dfs <- expand.grid(piece_affixes, rank_affixes, suit_affixes, stringsAsFactors=FALSE)
+# names(dfs) <- c("piece", "rank", "suit")
 # dfs$order <- 1:nrow(dfs)
-# dfs <- left_join(dfs, data.frame(component=component_affixes, component_score, stringsAsFactors=FALSE), by="component")
+# dfs <- left_join(dfs, data.frame(piece=piece_affixes, piece_score, stringsAsFactors=FALSE), by="piece")
 # dfs <- left_join(dfs, data.frame(rank=rank_affixes, rank_score, stringsAsFactors=FALSE), by="rank")
 # dfs <- left_join(dfs, data.frame(suit=suit_affixes, suit_score, stringsAsFactors=FALSE), by="suit")
-# dfs <- mutate(dfs, score = 1e3 * component_score + 1e2 * rank_score + 1e1 * suit_score,
-#               affix = paste0(suit, rank, component))
+# dfs <- mutate(dfs, score = 1e3 * piece_score + 1e2 * rank_score + 1e1 * suit_score,
+#               affix = paste0(suit, rank, piece))
 # dfs <- arrange(dfs, desc(score))
 # dfs$order
 
 style_ordering <- c(1, 7, 13, 4, 10, 16, 2, 8, 14, 5, 11, 17, 3, 9, 15, 6, 12, 18)
 
-get_style_element <- function(style, component_side=NA, cfg=list(), default=NULL, i_s=0, i_r=0) {
+get_style_element <- function(style, piece_side=NA, cfg=list(), default=NULL, i_s=0, i_r=0) {
 
-    if(is.na(component_side)) {
-        component <- NULL
+    if(is.na(piece_side)) {
+        piece <- NULL
     } else {
-        component <- get_component(component_side)
+        piece <- get_piece(piece_side)
     }
-    suited <- is_suited(component_side, i_s, i_r, cfg)
+    suited <- is_suited(piece_side, i_s, i_r, cfg)
     if (is.null(suited)) suited <- FALSE
 
-    component_affixes <- c(paste0(".", component_side), paste0(".", component), "")
+    piece_affixes <- c(paste0(".", piece_side), paste0(".", piece), "")
     rank_affixes <- c(paste0(".r", i_r), "")
     suit_affixes <- c(paste0(".s", i_s), ifelse(suited, ".suited", ".unsuited"), "")
-    dfs <- expand.grid(component_affixes, rank_affixes, suit_affixes, stringsAsFactors=FALSE)
-    names(dfs) <- c("component", "rank", "suit")
-    affixes <- paste0(dfs$suit, dfs$rank, dfs$component)[style_ordering]
+    dfs <- expand.grid(piece_affixes, rank_affixes, suit_affixes, stringsAsFactors=FALSE)
+    names(dfs) <- c("piece", "rank", "suit")
+    affixes <- paste0(dfs$suit, dfs$rank, dfs$piece)[style_ordering]
 
     for (affix in affixes) {
         string <- paste0(style, affix)
@@ -65,36 +65,36 @@ get_fontfamily <- make_get_style_fn("fontfamily", "sans")
 get_fontface <- make_get_style_fn("fontface", "plain")
 get_scale <- make_get_style_fn("scale", 1.0)
 
-get_background_color_helper <- function(component_side, i_s, i_r, cfg) {
-    colors <- col_cleave(get_style_element("background_color", component_side, cfg, "white", i_s, i_r))
-    expand_suit_elements(colors, "background_colors", component_side, cfg)[i_s]
+get_background_color_helper <- function(piece_side, i_s, i_r, cfg) {
+    colors <- col_cleave(get_style_element("background_color", piece_side, cfg, "white", i_s, i_r))
+    expand_suit_elements(colors, "background_colors", piece_side, cfg)[i_s]
 }
 
-get_border_colors <- function(component_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
-    border_colors <- col_cleave(get_style_element("border_color", component_side, cfg, "grey", i_s, i_r))
+get_border_colors <- function(piece_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
+    border_colors <- col_cleave(get_style_element("border_color", piece_side, cfg, "grey", i_s, i_r))
     if (expand)
-        border_colors <- expand_suit_elements(border_colors, "border_colors", component_side, cfg)
+        border_colors <- expand_suit_elements(border_colors, "border_colors", piece_side, cfg)
     border_colors
 }
 
-get_border_color <- function(component_side, i_s, i_r, cfg) {
-    get_border_colors(component_side, i_s, i_r, cfg)[i_s]
+get_border_color <- function(piece_side, i_s, i_r, cfg) {
+    get_border_colors(piece_side, i_s, i_r, cfg)[i_s]
 }
 
-get_shape_t <- function(component_side, i_s, i_r, cfg) {
-    t <- numeric_cleave(get_style_element("shape_t", component_side, cfg, 90, i_s, i_r))
-    t <- expand_suit_elements(t, "shape_t", component_side, cfg)
+get_shape_t <- function(piece_side, i_s, i_r, cfg) {
+    t <- numeric_cleave(get_style_element("shape_t", piece_side, cfg, 90, i_s, i_r))
+    t <- expand_suit_elements(t, "shape_t", piece_side, cfg)
     t[i_s] 
 }
 
-get_shape_r <- function(component_side, i_s, i_r, cfg) {
-    r <- numeric_cleave(get_style_element("shape_r", component_side, cfg, 0.2, i_s, i_r))
-    r <- expand_suit_elements(r, "shape_r", component_side, cfg)
+get_shape_r <- function(piece_side, i_s, i_r, cfg) {
+    r <- numeric_cleave(get_style_element("shape_r", piece_side, cfg, 0.2, i_s, i_r))
+    r <- expand_suit_elements(r, "shape_r", piece_side, cfg)
     r[i_s] 
 }
 
-get_shape <- function(component_side, i_s, i_r, cfg) {
-    default <- switch(component_side,
+get_shape <- function(piece_side, i_s, i_r, cfg) {
+    default <- switch(piece_side,
                tile_back = "rect",
                tile_face = "rect",
                coin_back = "circle",
@@ -112,28 +112,28 @@ get_shape <- function(component_side, i_s, i_r, cfg) {
                pyramid_back = "pyramid",
                belt_face = "rect",
                suitdie_face = "rect",
-               stop(paste("Don't know correct shape for", component_side)))
-    get_style_element("shape", component_side, cfg, default, i_s, i_r)
+               stop(paste("Don't know correct shape for", piece_side)))
+    get_style_element("shape", piece_side, cfg, default, i_s, i_r)
 }
 
 get_n_vertices <- function(shape) {
     as.numeric(gsub("convex|concave", "", shape))
 }
 
-get_suit_color_helper <- function(component_side, i_s, i_r, cfg=list()) {
-    suit_colors <- col_cleave(get_style_element("suit_color", component_side, cfg, 
+get_suit_color_helper <- function(piece_side, i_s, i_r, cfg=list()) {
+    suit_colors <- col_cleave(get_style_element("suit_color", piece_side, cfg, 
                             "#D55E00,#000000,#009E73,#56B4E9,#E69F00"))
-    suit_colors <- expand_suit_elements(suit_colors, "suit_colors", component_side, cfg) 
+    suit_colors <- expand_suit_elements(suit_colors, "suit_colors", piece_side, cfg) 
     ifelse(i_s <= get_n_suits(cfg), suit_colors[i_s], suit_colors[get_i_unsuit(cfg)])
 }
 
-should_invert <- function(component_side, i_s, i_r, cfg) {
-    should_inverts <- get_style_element("invert_colors", component_side, cfg, FALSE, i_s, i_r)
-    expand_suit_elements(should_inverts, "should_inverts", component_side, cfg)[i_s]
+should_invert <- function(piece_side, i_s, i_r, cfg) {
+    should_inverts <- get_style_element("invert_colors", piece_side, cfg, FALSE, i_s, i_r)
+    expand_suit_elements(should_inverts, "should_inverts", piece_side, cfg)[i_s]
 }
 
-is_suited <- function(component_side, i_s, i_r, cfg) {
-    switch(component_side,
+is_suited <- function(piece_side, i_s, i_r, cfg) {
+    switch(piece_side,
            tile_back = FALSE,
            tile_face = TRUE, 
            coin_back = TRUE,
@@ -147,41 +147,41 @@ is_suited <- function(component_side, i_s, i_r, cfg) {
            belt_face = TRUE)
 }
 
-get_dm_t <- function(component_side, i_s, i_r, cfg) {
-    default <- ifelse(component_side %in% c("tile_face", "die_face", "suitdie_face"), 135, 90)
-    default <- ifelse(component_side == "matchstick_face" && i_r == 1, 135, default)
-    t <- numeric_cleave(get_style_element("dm_t", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(t, "dm_t", component_side, cfg)[i_s]
+get_dm_t <- function(piece_side, i_s, i_r, cfg) {
+    default <- ifelse(piece_side %in% c("tile_face", "die_face", "suitdie_face"), 135, 90)
+    default <- ifelse(piece_side == "matchstick_face" && i_r == 1, 135, default)
+    t <- numeric_cleave(get_style_element("dm_t", piece_side, cfg, default, i_s, i_r))
+    expand_suit_elements(t, "dm_t", piece_side, cfg)[i_s]
 }
-get_dm_r <- function(component_side, i_s, i_r, cfg) {
-    shape <- get_shape(component_side, i_s, i_r, cfg)
+get_dm_r <- function(piece_side, i_s, i_r, cfg) {
+    shape <- get_shape(piece_side, i_s, i_r, cfg)
     r_corner <- sqrt(0.25^2 + 0.25^2)
     default <- switch(shape,
-                     rect = switch(component_side, 
+                     rect = switch(piece_side, 
                                    matchstick_face = ifelse(i_r > 1, 0.4, r_corner),
                                    r_corner),
-                     circle = switch(component_side,
+                     circle = switch(piece_side,
                                      saucer_face = 0.3,
                                      saucer_back = 0.3,
                                      r_corner),
                      halma = 0.25,
                      pyramid = 0.1,
                      0.3)
-    r <- numeric_cleave(get_style_element("dm_r", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(r, "dm_r", component_side, cfg)[i_s]
+    r <- numeric_cleave(get_style_element("dm_r", piece_side, cfg, default, i_s, i_r))
+    expand_suit_elements(r, "dm_r", piece_side, cfg)[i_s]
 }
 
-get_ps_t <- function(component_side, i_s, i_r, cfg) {
-    shape <- get_shape(component_side, i_s, i_r, cfg)
+get_ps_t <- function(piece_side, i_s, i_r, cfg) {
+    shape <- get_shape(piece_side, i_s, i_r, cfg)
     default <- switch(shape, halma=-90, pyramid=-90, 0)
-    t <- numeric_cleave(get_style_element("ps_t", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(t, "ps_t", component_side, cfg)[i_s]
+    t <- numeric_cleave(get_style_element("ps_t", piece_side, cfg, default, i_s, i_r))
+    expand_suit_elements(t, "ps_t", piece_side, cfg)[i_s]
 }
-get_ps_r <- function(component_side, i_s, i_r, cfg) {
-    shape <- get_shape(component_side, i_s, i_r, cfg)
+get_ps_r <- function(piece_side, i_s, i_r, cfg) {
+    shape <- get_shape(piece_side, i_s, i_r, cfg)
     default <- switch(shape, halma=0.25, pyramid=0.25, 0.0)
-    r <- numeric_cleave(get_style_element("ps_r", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(r, "ps_r", component_side, cfg)[i_s]
+    r <- numeric_cleave(get_style_element("ps_r", piece_side, cfg, default, i_s, i_r))
+    expand_suit_elements(r, "ps_r", piece_side, cfg)[i_s]
 }
 
 get_n_suits <- function(cfg=list()) {
@@ -210,123 +210,123 @@ get_die_arrangement <- function(cfg=list()) {
     }
 }
 
-get_dm_symbols <- function(component_side, i_s=0, i_r=0, cfg=list()) {
+get_dm_symbols <- function(piece_side, i_s=0, i_r=0, cfg=list()) {
     default <- {
-        if (component_side %in% c("coin_back", "coin_face")) {
+        if (piece_side %in% c("coin_back", "coin_face")) {
             dm_symbols <- "\u25cf" # "●"
-        } else if (component_side %in% c("saucer_back", "saucer_face")) {
+        } else if (piece_side %in% c("saucer_back", "saucer_face")) {
             dm_symbols <- "\u25b2" # "▲"
             # dm_symbols <- "\u265f" # "♟"
-        } else if (component_side %in% c("pawn_face", "pyramid_face")) {
+        } else if (piece_side %in% c("pawn_face", "pyramid_face")) {
             dm_symbols <- "\u0298\u0298" # "ʘʘ"
             # dm_symbols <- "\u2c7a\u2c7a" # "ⱺⱺ"
             # dm_symbols <- "\U0001f440" # "👀"
             # dm_symbols <- "\U0001f603" # "😃"
-        } else if (component_side %in% c("suitdie_face", "pawn_back", 
+        } else if (piece_side %in% c("suitdie_face", "pawn_back", 
                                          "belt_face", "tile_back", "matchstick_back",
                                          "pyramid_left", "pyramid_right", "pyramid_back")) {
             dm_symbols <- ""
         } else {
-            dm_symbols <- get_suit_symbols(component_side, i_s, i_r, cfg)
+            dm_symbols <- get_suit_symbols(piece_side, i_s, i_r, cfg)
         }
     }
     default <- paste(default, collapse=",")
-    dm_symbols <- cleave(get_style_element("dm_text", component_side, cfg, default, i_s, i_r))
-    dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", component_side, cfg)
+    dm_symbols <- cleave(get_style_element("dm_text", piece_side, cfg, default, i_s, i_r))
+    dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", piece_side, cfg)
     dm_symbols
 }
 
-get_dm_text <- function(component_side, i_s, i_r, cfg) {
-    get_dm_symbols(component_side, i_s, i_r, cfg)[i_s]
+get_dm_text <- function(piece_side, i_s, i_r, cfg) {
+    get_dm_symbols(piece_side, i_s, i_r, cfg)[i_s]
 }
 
-get_dm_color <- function(component_side, i_s, i_r, cfg) {
-    default <- get_suit_color(component_side, i_s, i_r, cfg)
-    colors <- get_style_element("dm_color", component_side, cfg, default, i_s, i_r)
+get_dm_color <- function(piece_side, i_s, i_r, cfg) {
+    default <- get_suit_color(piece_side, i_s, i_r, cfg)
+    colors <- get_style_element("dm_color", piece_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
-    colors <- expand_suit_elements(colors, "suit_colors", component_side, cfg)
+    colors <- expand_suit_elements(colors, "suit_colors", piece_side, cfg)
     colors[i_s]
 }
 
-get_background_color <- function(component_side, i_s, i_r, cfg) {
-    bcol <- get_background_color_helper(component_side, i_s, i_r, cfg)
-    scol <- get_suit_color_helper(component_side, i_s, i_r, cfg)
-    if (should_invert(component_side, i_s, i_r, cfg))
+get_background_color <- function(piece_side, i_s, i_r, cfg) {
+    bcol <- get_background_color_helper(piece_side, i_s, i_r, cfg)
+    scol <- get_suit_color_helper(piece_side, i_s, i_r, cfg)
+    if (should_invert(piece_side, i_s, i_r, cfg))
         scol
     else
         bcol
 }
 
-get_suit_color <- function(component_side, i_s, i_r, cfg) {
-    bcol <- get_background_color_helper(component_side, i_s, i_r, cfg)
-    scol <- get_suit_color_helper(component_side, i_s, i_r, cfg)
-    if (should_invert(component_side, i_s, i_r, cfg))
+get_suit_color <- function(piece_side, i_s, i_r, cfg) {
+    bcol <- get_background_color_helper(piece_side, i_s, i_r, cfg)
+    scol <- get_suit_color_helper(piece_side, i_s, i_r, cfg)
+    if (should_invert(piece_side, i_s, i_r, cfg))
         bcol
     else
         scol
 }
-get_gridline_color <- function(component_side, i_s, i_r, cfg) {
-    if (component_side == "tile_back") {
+get_gridline_color <- function(piece_side, i_s, i_r, cfg) {
+    if (piece_side == "tile_back") {
         default <- c(rep("transparent", get_n_suits(cfg)), 
-                     get_suit_color(component_side, get_i_unsuit(cfg), i_r, cfg))
+                     get_suit_color(piece_side, get_i_unsuit(cfg), i_r, cfg))
     } else {
         default <- "transparent"
     }
     default <- paste(default, collapse=",")
-    colors <- get_style_element("gridline_color", component_side, cfg, default, i_s, i_r)
+    colors <- get_style_element("gridline_color", piece_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
-    colors <- expand_suit_elements(colors, "gridline_colors", component_side, cfg)
+    colors <- expand_suit_elements(colors, "gridline_colors", piece_side, cfg)
     colors[i_s]
 }
-get_mat_color <- function(component_side, i_s, i_r, cfg) {
+get_mat_color <- function(piece_side, i_s, i_r, cfg) {
     default <- {
-        if (component_side %in% c("belt_face", "saucer_face", "saucer_back")) {
-            get_suit_color(component_side, i_s, i_r, cfg)
+        if (piece_side %in% c("belt_face", "saucer_face", "saucer_back")) {
+            get_suit_color(piece_side, i_s, i_r, cfg)
         } else {
             "transparent"
         }
     }
-    colors <- get_style_element("mat_color", component_side, cfg, default, i_s, i_r)
+    colors <- get_style_element("mat_color", piece_side, cfg, default, i_s, i_r)
     colors <- col_cleave(colors)
-    colors <- expand_suit_elements(colors, "suit_colors", component_side, cfg)
+    colors <- expand_suit_elements(colors, "suit_colors", piece_side, cfg)
     colors[i_s]
 }
-get_mat_width <- function(component_side, i_s, i_r, cfg) {
+get_mat_width <- function(piece_side, i_s, i_r, cfg) {
     default <- {
-        if (component_side == "belt_face") {
+        if (piece_side == "belt_face") {
             "0.2,0"
-        } else if (component_side %in% c("saucer_face", "saucer_back")) {
+        } else if (piece_side %in% c("saucer_face", "saucer_back")) {
             "0.1428571"  # 1/7 which mimics 5/8" pawn in 7/8" saucer
         } else {
             "0"
         }
     }
-    widths <- get_style_element("mat_width", component_side, cfg, default, i_s, i_r)
+    widths <- get_style_element("mat_width", piece_side, cfg, default, i_s, i_r)
     widths <- numeric_cleave(widths)
 }
 
-get_suit_symbol <- function(component_side, i_s, i_r, cfg) {
-    get_suit_symbols(component_side, i_s, i_r, cfg)[i_s]
+get_suit_symbol <- function(piece_side, i_s, i_r, cfg) {
+    get_suit_symbols(piece_side, i_s, i_r, cfg)[i_s]
 }
 
-get_rank_symbols <- function(component_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
+get_rank_symbols <- function(piece_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
     default <- "n,a,2,3,4,5"
-    rank_symbols <- cleave(get_style_element("rank_text", component_side, cfg, default, i_s, i_r))
+    rank_symbols <- cleave(get_style_element("rank_text", piece_side, cfg, default, i_s, i_r))
     if (expand)
-        rank_symbols <- expand_rank_elements(rank_symbols, "rank_symbols", component_side, cfg)
+        rank_symbols <- expand_rank_elements(rank_symbols, "rank_symbols", piece_side, cfg)
     rank_symbols
 }
-get_suit_symbols <- function(component_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
+get_suit_symbols <- function(piece_side=NA, i_s=0, i_r=0, cfg=list(), expand=TRUE) {
     default <- "\u2665,\u2660,\u2663,\u2666,\u263c" # "♥,♠,♣,♦,☼"
         # "\u2665,\u2660,\u2663,\u2666,\u2302" # "♥,♠,♣,♦,⌂"
         # "\u2665,\u2660,\u2663,\u2666,\u2605" # "♥,♠,♣,♦,★"
-    suit_symbols <- cleave(get_style_element("suit_text", component_side, cfg, default, i_s, i_r))
+    suit_symbols <- cleave(get_style_element("suit_text", piece_side, cfg, default, i_s, i_r))
     if (expand) 
-        suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", component_side, cfg)
+        suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", piece_side, cfg)
     suit_symbols
 }
 
-expand_suit_elements <- function(elements, style, component_side, cfg) {
+expand_suit_elements <- function(elements, style, piece_side, cfg) {
     if (length(elements) < get_n_suits(cfg)) {
         elements <- rep(elements, length.out=get_n_suits(cfg) + 1)
     } else if (length(elements) == get_n_suits(cfg)) {
@@ -334,7 +334,7 @@ expand_suit_elements <- function(elements, style, component_side, cfg) {
     }
     if (length(elements) == get_i_unsuit(cfg)) {
         elements <- c(elements, switch(style, 
-                           suit_symbols = switch(ifelse(is.na(component_side), "NA", component_side), 
+                           suit_symbols = switch(ifelse(is.na(piece_side), "NA", piece_side), 
                                 suitdie_face = "", die_face = "", elements[get_i_unsuit(cfg)]),
                            gridline_colors = NA,
                            elements[get_i_unsuit(cfg)]))
@@ -342,7 +342,7 @@ expand_suit_elements <- function(elements, style, component_side, cfg) {
     elements
 }
 
-expand_rank_elements <- function(elements, style, component_side, cfg) {
+expand_rank_elements <- function(elements, style, piece_side, cfg) {
     if (length(elements) < get_n_ranks(cfg)) {
         elements <- rep(elements, length.out=get_n_ranks(cfg))
     } 
@@ -351,96 +351,96 @@ expand_rank_elements <- function(elements, style, component_side, cfg) {
     elements
 }
 
-use_suit_as_ace <- function(component_side=NA, i_s=0, i_r=0, cfg=list()) {
-    use_suit_as_ace <- get_style_element("use_suit_as_ace", component_side, cfg, FALSE, i_s, i_r)
+use_suit_as_ace <- function(piece_side=NA, i_s=0, i_r=0, cfg=list()) {
+    use_suit_as_ace <- get_style_element("use_suit_as_ace", piece_side, cfg, FALSE, i_s, i_r)
     ifelse(use_suit_as_ace && i_r == 2, TRUE, FALSE)
 }
 
-get_rank_symbol <- function(component_side, i_s, i_r, cfg) {
-    if (use_suit_as_ace(component_side, i_s, i_r, cfg)) {
-        suit_symbols <- get_suit_symbols(component_side, i_s, i_r, cfg, expand=FALSE)
-        expand_suit_elements(suit_symbols, "rank_suit_symbols", component_side, cfg)[i_s]
+get_rank_symbol <- function(piece_side, i_s, i_r, cfg) {
+    if (use_suit_as_ace(piece_side, i_s, i_r, cfg)) {
+        suit_symbols <- get_suit_symbols(piece_side, i_s, i_r, cfg, expand=FALSE)
+        expand_suit_elements(suit_symbols, "rank_suit_symbols", piece_side, cfg)[i_s]
     } else {
-        get_rank_symbols(component_side, i_s, i_r, cfg)[i_r]
+        get_rank_symbols(piece_side, i_s, i_r, cfg)[i_r]
     }
 } 
 
-get_rank_scale <- function(component_side, i_s, i_r, cfg) {
-    if (use_suit_as_ace(component_side, i_s, i_r, cfg)) {
-        get_suit_scale(component_side, i_s, i_r, cfg)
+get_rank_scale <- function(piece_side, i_s, i_r, cfg) {
+    if (use_suit_as_ace(piece_side, i_s, i_r, cfg)) {
+        get_suit_scale(piece_side, i_s, i_r, cfg)
     } else {
-        scales <- numeric_cleave(get_style_element("rank_scale", component_side, cfg, 1.0, i_s, i_r))
-        expand_rank_elements(scales, "scale", component_side, cfg)[i_r]
+        scales <- numeric_cleave(get_style_element("rank_scale", piece_side, cfg, 1.0, i_s, i_r))
+        expand_rank_elements(scales, "scale", piece_side, cfg)[i_r]
     }
 }
-get_rank_fontfamily <- function(component_side, i_s, i_r, cfg) {
-    if (use_suit_as_ace(component_side, i_s, i_r, cfg)) {
-        get_suit_fontfamily(component_side, i_s,  i_r, cfg)
+get_rank_fontfamily <- function(piece_side, i_s, i_r, cfg) {
+    if (use_suit_as_ace(piece_side, i_s, i_r, cfg)) {
+        get_suit_fontfamily(piece_side, i_s,  i_r, cfg)
     } else {
-        fontfamilies <- cleave(get_style_element("rank_fontfamily", component_side, cfg, get_fontfamily(cfg), i_s, i_r))
-        expand_rank_elements(fontfamilies, "font", component_side, cfg)[i_r]
+        fontfamilies <- cleave(get_style_element("rank_fontfamily", piece_side, cfg, get_fontfamily(cfg), i_s, i_r))
+        expand_rank_elements(fontfamilies, "font", piece_side, cfg)[i_r]
     }
 }
-get_rank_fontface <- function(component_side, i_s, i_r, cfg) {
-    if (use_suit_as_ace(component_side, i_s, i_r, cfg)) {
-        get_suit_fontface(component_side, i_s,  i_r, cfg)
+get_rank_fontface <- function(piece_side, i_s, i_r, cfg) {
+    if (use_suit_as_ace(piece_side, i_s, i_r, cfg)) {
+        get_suit_fontface(piece_side, i_s,  i_r, cfg)
     } else {
-        fontfaces <- cleave(get_style_element("rank_fontface", component_side, cfg, get_fontface(cfg), i_s, i_r))
-        expand_rank_elements(fontfaces, "fontface", component_side, cfg)[i_r]
+        fontfaces <- cleave(get_style_element("rank_fontface", piece_side, cfg, get_fontface(cfg), i_s, i_r))
+        expand_rank_elements(fontfaces, "fontface", piece_side, cfg)[i_r]
     }
 }
-get_suit_fonts <- function(component_side, i_s, i_r, cfg) {
-    fonts <- cleave(get_style_element("suit_fontfamily", component_side, cfg, get_fontfamily(cfg), i_s, i_r))
-    expand_suit_elements(fonts, "font", component_side, cfg)
+get_suit_fonts <- function(piece_side, i_s, i_r, cfg) {
+    fonts <- cleave(get_style_element("suit_fontfamily", piece_side, cfg, get_fontfamily(cfg), i_s, i_r))
+    expand_suit_elements(fonts, "font", piece_side, cfg)
 }
-get_suit_fontfamily <- function(component_side, i_s, i_r, cfg) {
-    get_suit_fonts(component_side, i_s, i_r, cfg)[i_s]
+get_suit_fontfamily <- function(piece_side, i_s, i_r, cfg) {
+    get_suit_fonts(piece_side, i_s, i_r, cfg)[i_s]
 }
-get_suit_fontface <- function(component_side, i_s, i_r, cfg) {
-    fontfaces <- cleave(get_style_element("suit_fontface", component_side, cfg, get_fontface(cfg), i_s, i_r))
-    expand_suit_elements(fontfaces, "fontface", component_side, cfg)[i_s]
+get_suit_fontface <- function(piece_side, i_s, i_r, cfg) {
+    fontfaces <- cleave(get_style_element("suit_fontface", piece_side, cfg, get_fontface(cfg), i_s, i_r))
+    expand_suit_elements(fontfaces, "fontface", piece_side, cfg)[i_s]
 }
-get_suit_scales <- function(component_side, i_s, i_r, cfg) {
-    scales <- numeric_cleave(get_style_element("suit_scale", component_side, cfg, 1.0, i_s, i_r))
-    expand_suit_elements(scales, "scale", component_side, cfg)
+get_suit_scales <- function(piece_side, i_s, i_r, cfg) {
+    scales <- numeric_cleave(get_style_element("suit_scale", piece_side, cfg, 1.0, i_s, i_r))
+    expand_suit_elements(scales, "scale", piece_side, cfg)
 }
-get_suit_scale <- function(component_side, i_s, i_r, cfg) {
-    get_suit_scales(component_side, i_s, i_r, cfg)[i_s]
+get_suit_scale <- function(piece_side, i_s, i_r, cfg) {
+    get_suit_scales(piece_side, i_s, i_r, cfg)[i_s]
 }
-are_suits_dm <- function(component_side, i_s, i_r, cfg) {
-    identical(get_dm_symbols(component_side, i_s, i_r, cfg),
-              get_suit_symbols(component_side, i_s, i_r, cfg))
+are_suits_dm <- function(piece_side, i_s, i_r, cfg) {
+    identical(get_dm_symbols(piece_side, i_s, i_r, cfg),
+              get_suit_symbols(piece_side, i_s, i_r, cfg))
 }
-get_dm_fontface <- function(component_side, i_s, i_r, cfg) {
-    if (are_suits_dm(component_side, i_s, i_r, cfg)) { 
-        default <- get_suit_fontface(component_side, i_s, i_r, cfg)
+get_dm_fontface <- function(piece_side, i_s, i_r, cfg) {
+    if (are_suits_dm(piece_side, i_s, i_r, cfg)) { 
+        default <- get_suit_fontface(piece_side, i_s, i_r, cfg)
     } else {
         default <- get_fontface(cfg)
     }
-    fonts <- cleave(get_style_element("dm_fontface", component_side, cfg, default))
-    expand_suit_elements(fonts, "fontface", component_side, cfg)[i_s]
+    fonts <- cleave(get_style_element("dm_fontface", piece_side, cfg, default))
+    expand_suit_elements(fonts, "fontface", piece_side, cfg)[i_s]
 }
-get_dm_fontfamily <- function(component_side, i_s, i_r, cfg) {
-    if (are_suits_dm(component_side, i_s, i_r, cfg)) { 
-        default <- get_suit_fontfamily(component_side, i_s, i_r, cfg)
+get_dm_fontfamily <- function(piece_side, i_s, i_r, cfg) {
+    if (are_suits_dm(piece_side, i_s, i_r, cfg)) { 
+        default <- get_suit_fontfamily(piece_side, i_s, i_r, cfg)
     } else {
         default <- get_fontfamily(cfg)
     }
-    fonts <- cleave(get_style_element("dm_fontfamily", component_side, cfg, default))
-    expand_suit_elements(fonts, "font", component_side, cfg)[i_s]
+    fonts <- cleave(get_style_element("dm_fontfamily", piece_side, cfg, default))
+    expand_suit_elements(fonts, "font", piece_side, cfg)[i_s]
 }
-get_dm_scale <- function(component_side, i_s, i_r, cfg) {
-    if (are_suits_dm(component_side, i_s, i_r, cfg)) { 
-        default <- get_suit_scale(component_side, i_s, i_r, cfg)
+get_dm_scale <- function(piece_side, i_s, i_r, cfg) {
+    if (are_suits_dm(piece_side, i_s, i_r, cfg)) { 
+        default <- get_suit_scale(piece_side, i_s, i_r, cfg)
     } else {
         default <- 1.0
     }
-    scales <- numeric_cleave(get_style_element("dm_scale", component_side, cfg, default, i_s, i_r))
-    expand_suit_elements(scales, "scale", component_side, cfg)[i_s]
+    scales <- numeric_cleave(get_style_element("dm_scale", piece_side, cfg, default, i_s, i_r))
+    expand_suit_elements(scales, "scale", piece_side, cfg)[i_s]
 }
 
-get_suit_fontsize <- function(component_side, i_s, i_r, cfg) {
-    default <- switch(component_side,
+get_suit_fontsize <- function(piece_side, i_s, i_r, cfg) {
+    default <- switch(piece_side,
                  "belt_face" = 22,
                  "coin_back" = 34,
                  "pawn_face" = 28,
@@ -451,72 +451,72 @@ get_suit_fontsize <- function(component_side, i_s, i_r, cfg) {
                  "pyramid_face" = 60 * (i_r+1) / 8,
                  "pyramid_back" = 60 * (i_r+1) / 8,
                  24)
-    get_style_element("suit_fontsize", component_side, cfg, default, i_s, i_r)
+    get_style_element("suit_fontsize", piece_side, cfg, default, i_s, i_r)
 }
 
-get_dm_fontsize <- function(component_side, i_s, i_r, cfg) {
-    default <- switch(component_side,
+get_dm_fontsize <- function(piece_side, i_s, i_r, cfg) {
+    default <- switch(piece_side,
                  "tile_face" = 40,
                  "pawn_face" = 12,
                  "pawn_back" = 12,
                  "pyramid_face" = 12 * (i_r+1) / 8, 
                  12)
-    get_style_element("dm_fontsize", component_side, cfg, default, i_s, i_r)
+    get_style_element("dm_fontsize", piece_side, cfg, default, i_s, i_r)
 }
 
-get_rank_fontsize <- function(component_side, i_s, i_r, cfg) {
-    default <- switch(component_side,
+get_rank_fontsize <- function(piece_side, i_s, i_r, cfg) {
+    default <- switch(piece_side,
                  "die_face" = 20,
                  "coin_face" = 28,
                  "tile_face" = 72,
                  "pyramid_left"  = 60 * (i_r+1) / 8,
                  "pyramid_right" = 60 * (i_r+1) / 8,
                  20)
-    get_style_element("rank_fontsize", component_side, cfg, default, i_s, i_r)
+    get_style_element("rank_fontsize", piece_side, cfg, default, i_s, i_r)
 }
 
 
-get_ps_element <- function(component_side, suit_element, rank_element, neither_element=NA) {
-    if (component_side %in% c("coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
+get_ps_element <- function(piece_side, suit_element, rank_element, neither_element=NA) {
+    if (piece_side %in% c("coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
         rank_element
-    } else if (component_side %in% c("tile_back", "matchstick_back")) {
+    } else if (piece_side %in% c("tile_back", "matchstick_back")) {
         neither_element
     } else {
         suit_element
     }
 }
-get_ps_fontface <- function(component_side=NA, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
-    rank_fontface <- get_rank_fontface(component_side, i_s, i_r, cfg)
-    suit_fontface <- get_suit_fontface(component_side, i_s, i_r, cfg)
-    default <- get_ps_element(component_side, suit_fontface, rank_fontface, "plain")
-    get_style_element("ps_fontface", component_side, cfg, default, i_s, i_r)
+get_ps_fontface <- function(piece_side=NA, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+    rank_fontface <- get_rank_fontface(piece_side, i_s, i_r, cfg)
+    suit_fontface <- get_suit_fontface(piece_side, i_s, i_r, cfg)
+    default <- get_ps_element(piece_side, suit_fontface, rank_fontface, "plain")
+    get_style_element("ps_fontface", piece_side, cfg, default, i_s, i_r)
 }
-get_ps_fontfamily <- function(component_side=NA, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
-    rank_font <- get_rank_fontfamily(component_side, i_s, i_r, cfg)
-    suit_font <- get_suit_fontfamily(component_side, i_s, i_r, cfg)
-    default <- get_ps_element(component_side, suit_font, rank_font)
-    get_style_element("ps_fontfamily", component_side, cfg, default, i_s, i_r)
+get_ps_fontfamily <- function(piece_side=NA, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+    rank_font <- get_rank_fontfamily(piece_side, i_s, i_r, cfg)
+    suit_font <- get_suit_fontfamily(piece_side, i_s, i_r, cfg)
+    default <- get_ps_element(piece_side, suit_font, rank_font)
+    get_style_element("ps_fontfamily", piece_side, cfg, default, i_s, i_r)
 }
-get_ps_fontsize <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
-    rank_fontsize <- get_rank_fontsize(component_side, i_s, i_r, cfg)
-    suit_fontsize <- get_suit_fontsize(component_side, i_s, i_r, cfg)
-    default <- get_ps_element(component_side, suit_fontsize, rank_fontsize)
-    get_style_element("ps_fontsize", component_side, cfg, default, i_s, i_r)
+get_ps_fontsize <- function(piece_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+    rank_fontsize <- get_rank_fontsize(piece_side, i_s, i_r, cfg)
+    suit_fontsize <- get_suit_fontsize(piece_side, i_s, i_r, cfg)
+    default <- get_ps_element(piece_side, suit_fontsize, rank_fontsize)
+    get_style_element("ps_fontsize", piece_side, cfg, default, i_s, i_r)
 }
-get_ps_scale <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
-    rank_scale <- get_rank_scale(component_side, i_s, i_r, cfg)
-    suit_scale <- get_suit_scale(component_side, i_s, i_r, cfg)
-    default <- get_ps_element(component_side, suit_scale, rank_scale)
-    get_style_element("ps_scale", component_side, cfg, default, i_s, i_r)
+get_ps_scale <- function(piece_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+    rank_scale <- get_rank_scale(piece_side, i_s, i_r, cfg)
+    suit_scale <- get_suit_scale(piece_side, i_s, i_r, cfg)
+    default <- get_ps_element(piece_side, suit_scale, rank_scale)
+    get_style_element("ps_scale", piece_side, cfg, default, i_s, i_r)
 }
-get_ps_text <- function(component_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
-    rank_symbol <- get_rank_symbol(component_side, i_s, i_r, cfg)
-    suit_symbol <- get_suit_symbol(component_side, i_s, i_r, cfg)
-    default <- get_ps_element(component_side, suit_symbol, rank_symbol, NULL)
-    get_style_element("ps_text", component_side, cfg, default, i_s, i_r)
+get_ps_text <- function(piece_side, i_s=get_i_unsuit(cfg), i_r=1, cfg=list()) {
+    rank_symbol <- get_rank_symbol(piece_side, i_s, i_r, cfg)
+    suit_symbol <- get_suit_symbol(piece_side, i_s, i_r, cfg)
+    default <- get_ps_element(piece_side, suit_symbol, rank_symbol, NULL)
+    get_style_element("ps_text", piece_side, cfg, default, i_s, i_r)
 }
-get_ps_color <- function(component_side, i_s, i_r, cfg) {
-    default <- get_suit_color(component_side, i_s, i_r, cfg)
-    get_style_element("ps_color", component_side, cfg, default, i_s, i_r)
+get_ps_color <- function(piece_side, i_s, i_r, cfg) {
+    default <- get_suit_color(piece_side, i_s, i_r, cfg)
+    get_style_element("ps_color", piece_side, cfg, default, i_s, i_r)
 }
 

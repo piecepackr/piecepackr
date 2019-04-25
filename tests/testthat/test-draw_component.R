@@ -51,32 +51,32 @@ test_that("make_images works as expected", {
 context("draw_fn_helpers works as expected")
 test_that("draw_fn_helpers works as expected", {
     expect_doppelganger("add_checkers", function() {
-                    add_checkers("purple", "rect")
-                    add_hexlines("yellow", "rect") 
+                    grid.draw(checkersGrob("purple", "rect"))
+                    grid.draw(hexlinesGrob("yellow", "rect"))
     })
     expect_doppelganger("add_checkers.transparent", function() {
-                    add_checkers("transparent", "rect")
-                    add_hexlines("transparent", "rect") 
+                    grid.draw(checkersGrob("transparent", "rect"))
+                    grid.draw(hexlinesGrob("transparent", "rect"))
     })
     expect_doppelganger("add_checkers.convex8", function() {
-                    add_checkers("purple", "convex8")
+                    grid.draw(checkersGrob("purple", "convex8"))
     })
-    expect_error(add_checkers("blue", "circle"))
-    expect_error(add_hexlines("blue", "circle"))
+    expect_error(checkersGrob("blue", "circle"))
+    expect_error(hexlinesGrob("blue", "circle"))
 })
 
 
 context("no regressions in figures")
 test_that("no regressions in figures", {
     dc <- function(..., cfg=cfg_default) {
-        draw_component(..., cfg=cfg) 
+        grid.piece(..., cfg=cfg) 
     }
     dce <- function(...) {
         tmpfile <- tempfile(fileext=".svg")
         on.exit(unlink(tmpfile))
         svg(tmpfile)
         on.exit(dev.off())
-        draw_component(...)
+        grid.piece(...)
     }
     # tile back
     expect_doppelganger("tile_back", function() dc("tile_back"))
@@ -94,11 +94,12 @@ test_that("no regressions in figures", {
                                3, 1, 3, NA,
                                1, 3, NA, 3,
                                3, 3, 3, 3)
-    df_tile$component_side <- "tile_back"
-    df_tile$angle <- NA
-    expect_doppelganger("tiles_faces", function() draw_components(df_tile, 
-                                                                  width=2, height=2,
-                                                                  units="inches", cfg_name="cfg_default"))
+    df_tile$piece_side <- "tile_back"
+    df_tile$please_ignore <- "what"
+    df_tile$id <- 1:4
+    expect_doppelganger("tiles_faces", function() 
+        pmap_piece(df_tile, width=2, height=2, default.units="inches", cfg="cfg_default")
+    )
     # 106
     expect_doppelganger("different_sizes", function() {
                             pushViewport(viewport(width=inch(6), height=inch(6)))
@@ -157,7 +158,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("matchstick_face.s4.r4", function() dc("matchstick_face", i_s=4, i_r=4))
     expect_doppelganger("matchstick_face.s1.r5", function() dc("matchstick_face", i_s=1, i_r=5))
     expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", i_s=2, i_r=6))
-    cfg <- list(invert_colors=TRUE, draw_fn="basic_draw_fn")
+    cfg <- list(invert_colors=TRUE, draw_fn="basic~ieceGrobFn")
     expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, i_s=3, i_r=6))
 
     #### preview appears wrong #99
@@ -181,26 +182,29 @@ test_that("no regressions in figures", {
     expect_doppelganger("suitdie_layoutRF-6suits", function() dc("suitdie_layoutRF", cfg=cfg))
     expect_doppelganger("suitrankdie_layoutRF-6suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
 
-    # draw_components
-    df <- tibble::tribble(~component_side, ~x, ~y, ~i_s, ~i_r,
+    # draw_pieces
+    df <- tibble::tribble(~piece_side, ~x, ~y, ~i_s, ~i_r,
                           "tile_face", 0.25, 0.25, 1, 1,
                           "tile_face", 0.75, 0.25, 2, 2,
                           "tile_face", 0.25, 0.75, 3, 5,
                           "tile_face", 0.75, 0.75, 4, 6)
     expect_doppelganger("draw_components", function() {
                                     pushViewport(viewport(width=inch(4), height=inch(4)))
-                                    draw_components(df, cfg_name="default", cfg_list=list(default=cfg_default))
+                                    pmap_piece(df, cfg="default", envir=list(default=cfg_default))
                           })
     expect_doppelganger("draw_components.default", function() {
                                     pushViewport(viewport(width=inch(4), height=inch(4)))
-                                    draw_components(df)
+                                    pmap_piece(df)
                           })
 
     # errors
-    expect_error(dce("coin_face", list(gridline_color = "grey"), i_r = 3), "Don't know how to add grid lines to shape circle")
-    expect_error(dce("coin_face", list(shape = "meeple"), i_r = 3), "Don't know how to draw shape meeple")
-    expect_error(dce("coin_face", list(mat_width=0.2, mat_color="green", shape="kite"), i_r = 3), "Don't know how to add mat to shape kite")
-    expect_error(cfg_default$get_pp_width("boo_back"), "Don't know width of component boo")
+    expect_error(dce("coin_face", i_r = 3, cfg=list(gridline_color = "grey")),
+                 "Don't know how to add grid lines to shape circle")
+    expect_error(dce("coin_face", i_r = 3, cfg=list(shape = "meeple")),
+                 "Don't know how to draw shape meeple")
+    expect_error(dce("coin_face", i_r = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
+                 "Don't know how to add mat to shape kite")
+    expect_error(cfg_default$get_pp_width("boo_back"), "Don't know width of piece boo")
 })
 
 

@@ -3,127 +3,6 @@ cc_file <- pictureGrob(readPicture(system.file("extdata/by-sa-svg.svg", package=
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
-
-## Layout functions
-x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
-x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
-y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
-
-draw_die_layoutRF <- function(component_side, i_s, i_r, cfg) {
-    draw_piecepack_die(i_s, cfg)
-}
-
-draw_die_layoutLF <- function(component_side, i_s, i_r, cfg) {
-    draw_piecepack_die(i_s, cfg, flip=TRUE)
-}
-
-draw_suitdie_layoutRF <- function(component_side, i_s, i_r, cfg) {
-    draw_suit_die(cfg)
-}
-
-draw_suitdie_layoutLF <- function(component_side, i_s, i_r, cfg) {
-    draw_suit_die(cfg, flip=TRUE)
-}
-
-draw_suitrankdie_layoutRF <- function(component_side, i_s, i_r, cfg) {
-    draw_suitrank_die(cfg)
-}
-draw_suitrankdie_layoutLF <- function(component_side, i_s, i_r, cfg) {
-    draw_suitrank_die(cfg, flip=TRUE)
-}
-
-draw_piecepack_die <- function(i_s, cfg, flip=FALSE) {
-    cfg <- as_pp_cfg(cfg)
-    angle <- rep(c(0, -90), 3)
-    if (flip) {
-        x <- x_die_layoutLF
-        angle <- -angle
-    } else {
-        x <- x_die_layoutRF
-    }
-    arrangement <- cfg$die_arrangement
-    if (arrangement == "opposites_sum_to_5") {
-        i_r <- c(1, 2, 3, 6, 5, 4)
-        i_s <- rep(i_s, length.out=6)[i_r]
-    } else if (arrangement == "counter_up") {
-        i_r <- 6:1
-        i_s <- rev(i_s)
-    } else {
-        i_r <- 1:6
-    }
-    df <- tibble::tibble(component_side="die_face", i_s, i_r, x, y=y_die_layout, angle)
-    draw_components(df, cfg=cfg)
-}
-
-draw_suit_die <- function(cfg, flip=FALSE) {
-    angle <- rep(c(-90, 0), 3)
-    if (flip) {
-        x <- x_die_layoutLF
-        angle <- -angle
-    } else {
-        x <- x_die_layoutRF
-    }
-    i_s <- get_suit_die_suits(cfg)
-    df <- tibble::tibble(component_side="suitdie_face", i_s, x, y=y_die_layout, angle)
-    draw_components(df, cfg=cfg)
-}
-
-get_suit_die_suits <- function(cfg) {
-    n_suits <- get_n_suits(cfg)
-    if (n_suits < 4) {
-        rep(n_suits:1, length.out=6)
-    } else if (n_suits == 4) {
-        c(5,6,4:1)
-    } else if (n_suits > 4) {
-        6:1
-    } 
-}
-
-draw_suitrank_die <- function(cfg, flip=FALSE) {
-    i_s <- get_suit_die_suits(cfg)
-    draw_piecepack_die(i_s, cfg, flip)
-}
-
-draw_pawn_layout <- function(component_side, i_s, i_r, cfg) {
-    suppressWarnings({
-        denominator <- PAWN_HEIGHT + PAWN_BASE
-        y <- (PAWN_HEIGHT/2 + PAWN_BASE) / denominator
-        height = PAWN_HEIGHT / denominator
-        pushViewport(viewport(y=0.25, height=0.5))
-        pushViewport(viewport(y=y, height=height))
-        draw_component("pawn_face", cfg, i_s)
-        popViewport()
-        popViewport()
-        pushViewport(viewport(y=0.75, height=0.5, name="pawn_rear", angle=180))
-        pushViewport(viewport(y=y, height=height, name="pawn_back"))
-        draw_component("pawn_back", cfg, i_s)
-        popViewport()
-        popViewport()
-    })
-    border_col <- get_border_color("pawn_face", i_s, 0, cfg)
-    grid.lines(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
-    grid.rect(gp=gpar(col=border_col, fill=NA))
-    ll <- 0.07
-    seg(0.5, 0, 0.5, ll, border_col)
-    seg(0.5, 1, 0.5, 1-ll, border_col)
-}
-
-draw_pyramid_layout <- function(component_side, i_s, i_r, cfg) {
-    suppressWarnings({
-        t <- c(72, 36, 0, -36, -72)
-        r <- 0.5
-        x <- to_x(t, r)
-        y <- 0.5 + 0.5*to_y(t, r)
-        components <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
-        angles <- c(90+72, 90+36, 90, 90-36, 90-72)
-        for(ii in 1:5) {
-            pushViewport(viewport(width=inch(PYRAMID_WIDTHS[i_r]), height=inch(PYRAMID_HEIGHTS[i_r]), angle=angles[ii], x=x[ii], y=y[ii]))
-            draw_component(components[ii], cfg, i_s, i_r)
-            popViewport()
-        }
-    })
-}
-
 LETTER_WIDTH <- 8.5
 LETTER_HEIGHT <- 11
 A4_WIDTH <- 8.27
@@ -150,10 +29,10 @@ pp_pdf <- function(filename, family, paper) {
 #' @param cfg Piecepack configuration list
 #' @param output_filename Filename of PnP output
 #' @param size PnP output size (currently either "letter" or "A4")
-#' @param components Character vector of desired PnP components (default everything)
+#' @param pieces Character vector of desired PnP pieces (default everything)
 #' @export
 make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter", 
-                     components=c("piecepack", "matchsticks", "pyramids")) {
+                     pieces=c("piecepack", "matchsticks", "pyramids")) {
     unlink(output_filename)
     directory <- dirname(output_filename)
     dir.create(directory, recursive=TRUE, showWarnings=FALSE)
@@ -177,69 +56,69 @@ make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter",
     grid.newpage()
     pushViewport(viewport(x=xl, width=A5W))
     draw_a5_title(cfg$title)
-    popViewport()
+    upViewport()
     if (size == "A5") { grid.newpage() }
     pushViewport(viewport(x=xr, width=A5W))
     draw_a5_blank()
-    popViewport()
+    upViewport()
 
-    if ("piecepack" %in% components) {
+    if ("piecepack" %in% pieces) {
         for (i_s in 1:n_suits) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
             draw_a5_piecepack(i_s, cfg, front=TRUE)
-            popViewport()
+            upViewport()
             if (size == "A5") { grid.newpage() }
             pushViewport(viewport(x=xr, width=A5W))
             draw_a5_piecepack(i_s, cfg, front=FALSE)
-            popViewport()
+            upViewport()
         }
         if (is_odd(n_suits)) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
             draw_a5_piecepack(cfg$i_unsuit+1, cfg, front=TRUE)
-            popViewport()
+            upViewport()
             if (size == "A5") { grid.newpage() }
             pushViewport(viewport(x=xr, width=A5W))
             draw_a5_piecepack(cfg$i_unsuit+1, cfg, front=FALSE)
-            popViewport()
+            upViewport()
         }
     }
 
     #### Fine-tune between pyramids, matchsticks, and misc.
     #### Add misc. accessories
-    if ("matchsticks" %in% components) {
+    if ("matchsticks" %in% pieces) {
         if (n_suits <= 6) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
             draw_a5_matchsticks(cfg, TRUE)
-            popViewport()
+            upViewport()
             if (size == "A5") { grid.newpage() }
             pushViewport(viewport(x=xr, width=A5W))
             draw_a5_matchsticks(cfg, FALSE)
-            popViewport()
+            upViewport()
         }
     }
-    if ("pyramids" %in% components) {
+    if ("pyramids" %in% pieces) {
         if (n_suits >= 4) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
             draw_a5_pyramids(1:2, cfg, TRUE)
-            popViewport()
+            upViewport()
             if (size == "A5") { grid.newpage() }
             pushViewport(viewport(x=xr, width=A5W))
             draw_a5_pyramids(3:4, cfg, FALSE)
-            popViewport()
+            upViewport()
         }
         if (n_suits > 4) {
             grid.newpage()
             pushViewport(viewport(x=xl, width=A5W))
             draw_a5_pyramids(5:6, cfg, TRUE)
-            popViewport()
+            upViewport()
             if (size == "A5") { grid.newpage() }
             pushViewport(viewport(x=xr, width=A5W))
             draw_a5_blank()
-            popViewport()
+            upViewport()
         }
     }
     invisible(dev.off())
@@ -261,16 +140,16 @@ draw_a5_title <- function(title="Piecepack collection") {
     pushViewport(viewport(y=0.85, height=0.2))
     gp_title <- gpar(fontsize=15, fontfamily="sans", fontface="bold")
     grid.text(title, just="center", gp=gp_title)
-    popViewport()
+    upViewport()
 
     # CC images
     width_image = 0.14
     pushViewport(viewport(x=width_image/2, y=0.4, width=width_image, height=0.5))
     grid.draw(cc_file)
-    popViewport()
+    upViewport()
     pushViewport(viewport(x=1-width_image/2, y=0.4, width=width_image, height=0.5))
     grid.draw(cc_file)
-    popViewport()
+    upViewport()
 
     # text
     pushViewport(viewport(x=0.5, y=0.4, width=1-2*width_image, height=0.8))
@@ -278,17 +157,17 @@ draw_a5_title <- function(title="Piecepack collection") {
     title_text("\u00a9 2016-2019 Trevor L Davis. Some Rights Reserved.", x=0.5, y=0.6)
     title_text("This work is licensed under a CC BY-SA 4.0 license:", x=0.5, y=0.4)
     title_text("https://creativecommons.org/licenses/by-sa/4.0", x=0.5, y=0.2)
-    popViewport()
+    upViewport()
 
-    popViewport()
-    popViewport()
+    upViewport()
+    upViewport()
 }
 
 draw_a5_blank <- function() {
     pushViewport(viewport(width=inch(A5W), height=inch(A5H)))
     grid.rect(gp=gpar(color="brown"))
     grid.text("Intentionally left blank")
-    popViewport()
+    upViewport()
 }
 
 draw_a5_matchsticks <- function(cfg=pp_cfg(), front=TRUE) {
@@ -311,15 +190,15 @@ draw_a5_matchsticks <- function(cfg=pp_cfg(), front=TRUE) {
     i_s = rep(rep(1:n_suits, each=4), 6)
     i_r = rep(c(1:3,5:6,4), each=4*n_suits)
     if (front) {
-        component_side = "matchstick_face"
+        piece_side = "matchstick_face"
     } else {
         x <- A5W - x
-        component_side = "matchstick_back"
+        piece_side = "matchstick_back"
 
     }
-    df <- tibble::tibble(component_side, x, y, i_s, i_r)
-    draw_components(df, cfg=cfg, units="inches")
-    popViewport()
+    df <- tibble::tibble(piece_side, x, y, i_s, i_r)
+    pmap_piece(df, cfg=cfg, default.units="inches")
+    upViewport()
 }
 
 draw_a5_piecepack <- function(i_s, cfg=pp_cfg(), front=TRUE) {
@@ -348,21 +227,21 @@ draw_a5_piecepack <- function(i_s, cfg=pp_cfg(), front=TRUE) {
     y <- c(rep(c(ytt, ytm, ytb), each=2), ycs, yd, yp, yb, ysb)
     if (front) {
         x <- A5W - x
-        component_side <- c(rep("tile_face", 6), rep("coin_back", 6),
+        piece_side <- c(rep("tile_face", 6), rep("coin_back", 6),
                             rep("die_layoutRF", 1), "pawn_layout", "belt_face", "saucer_face")
         i_ss <- c(rep(i_s, 16))
         i_r <- c(1:6, rep(NA, 6), rep(NA, 4))
-        angle = c(rep(0, 13), 90, rep(0, 2))
+        rot = c(rep(0, 13), 90, rep(0, 2))
     } else {
-        component_side <- c(rep("tile_back", 6), rep("coin_face", 6),
+        piece_side <- c(rep("tile_back", 6), rep("coin_face", 6),
                             rep("die_layoutLF", 1), "pawn_layout", "belt_face", "saucer_back")
         i_ss <- c(rep(NA, 12), rep(i_s, 3), cfg$i_unsuit)
         i_r <- c(rep(NA, 6), 1:6, rep(NA, 4))
-        angle = c(rep(0, 13), 90, rep(0, 2))
+        rot = c(rep(0, 13), 90, rep(0, 2))
     }
-    df <- tibble::tibble(component_side, x, y, i_s=i_ss, i_r, angle)
-    draw_components(df, cfg=cfg, units="inches")
-    popViewport()
+    df <- tibble::tibble(piece_side, x, y, i_s=i_ss, i_r, rot)
+    pmap_piece(df, cfg=cfg, default.units="inches")
+    upViewport()
 }
 
 draw_a5_pyramids <- function(i_s=1:2, cfg=pp_cfg(), front=TRUE) {
@@ -375,13 +254,13 @@ draw_a5_pyramids <- function(i_s=1:2, cfg=pp_cfg(), front=TRUE) {
     x <- c(x_up[1:8], A5W - x_up[9:12]- rep(c(0.75,1),each=2))
     p5h <- PYRAMID_LAYOUT_HEIGHTS[5]; p6h <- PYRAMID_LAYOUT_HEIGHTS[6]
     y <- c(y_up[1:8], rep(c(p6h+0.5*p5h, 0.5*p6h), each=2))
-    component_side <- "pyramid_layout"
-    i_s <- rep(i_s, 6)
+    piece_side <- "pyramid_layout"
+    i_s <- rep(i_s, 6, length.out=12)
     i_r <- rep(1:6, each=2)
-    angle <- c(rep(c(180, 0), 4), rep(c(0, 180), 2))
-    df <- tibble::tibble(component_side, x, y, i_s, i_r, angle)
-    draw_components(df, cfg=cfg, units="inches")
-    popViewport()
+    rot <- c(rep(c(180, 0), 4), rep(c(0, 180), 2))
+    df <- tibble::tibble(piece_side, x, y, i_s, i_r, rot)
+    pmap_piece(df, cfg=cfg, default.units="inches")
+    upViewport()
 }
 
 #### Separate out add_metadata and remove

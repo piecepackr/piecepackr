@@ -5,8 +5,7 @@
 \title{Make print-and-play piecepack pdf}
 \usage{
 make_pnp(cfg = list(), output_filename = "piecepack.pdf",
-  size = "letter", components = c("piecepack", "matchsticks",
-  "pyramids"))
+  size = "letter", pieces = c("piecepack", "matchsticks", "pyramids"))
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}
@@ -15,7 +14,7 @@ make_pnp(cfg = list(), output_filename = "piecepack.pdf",
 
 \item{size}{PnP output size (currently either "letter" or "A4")}
 
-\item{components}{Character vector of desired PnP components (default everything)}
+\item{pieces}{Character vector of desired PnP pieces (default everything)}
 }
 \description{
 Makes a print-and-play piecepack pdf.
