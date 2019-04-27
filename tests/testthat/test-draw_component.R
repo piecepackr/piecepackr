@@ -80,16 +80,16 @@ test_that("no regressions in figures", {
     }
     # tile back
     expect_doppelganger("tile_back", function() dc("tile_back"))
-    expect_doppelganger("tile_back-svg", function() dc("tile_back", svg=TRUE))
+    expect_doppelganger("tile_back-svg", function() dc("tile_back", picture=TRUE))
     expect_doppelganger("tile_back-hex", 
                                 function() dc("tile_back", cfg=list(shape.tile_back="convex6")))
     # tile face
-    expect_doppelganger("tile_face.s1.r1", function() dc("tile_face", i_s=1, i_r=1))
-    expect_doppelganger("tile_face.s3.r2", function() dc("tile_face", i_s=3, i_r=2))
+    expect_doppelganger("tile_face.s1.r1", function() dc("tile_face", suit=1, rank=1))
+    expect_doppelganger("tile_face.s3.r2", function() dc("tile_face", suit=3, rank=2))
     expect_doppelganger("tile_face.s3.r2-suit_as_ace", 
-                                function() dc("tile_face", cfg=list(use_suit_as_ace=TRUE), i_s=3, i_r=2))
-    expect_doppelganger("tile_face.s2.r3", function() dc("tile_face", i_s=2, i_r=3))
-    df_tile <- tibble::tribble( ~x, ~y, ~i_s, ~i_r,
+                                function() dc("tile_face", cfg=list(use_suit_as_ace=TRUE), suit=3, rank=2))
+    expect_doppelganger("tile_face.s2.r3", function() dc("tile_face", suit=2, rank=3))
+    df_tile <- tibble::tribble( ~x, ~y, ~suit, ~rank,
                                1, 1, NA, NA,
                                3, 1, 3, NA,
                                1, 3, NA, 3,
@@ -103,63 +103,63 @@ test_that("no regressions in figures", {
     # 106
     expect_doppelganger("different_sizes", function() {
                             pushViewport(viewport(width=inch(6), height=inch(6)))
-                            dc("tile_face", i_s=2, i_r=3, x=inch(1), y=inch(5))
-                            dc("tile_face", i_s=2, i_r=3, x=inch(4), y=inch(4.5), cfg=list(width.tile=3))
-                            dc("tile_face", i_s=2, i_r=3, x=inch(4), y=inch(1.5), cfg=list(width.tile=4, height.tile=3))
-                            dc("coin_back", i_s=3, x=inch(1), y=inch(1), cfg=list(mat_width.coin=0.1))
-                            dc("coin_back", i_s=3, x=inch(2), y=inch(1), cfg=list(width.coin=1, mat_width.coin=0.1))})
+                            dc("tile_face", suit=2, rank=3, x=inch(1), y=inch(5))
+                            dc("tile_face", suit=2, rank=3, x=inch(4), y=inch(4.5), cfg=list(width.tile=3))
+                            dc("tile_face", suit=2, rank=3, x=inch(4), y=inch(1.5), cfg=list(width.tile=4, height.tile=3))
+                            dc("coin_back", suit=3, x=inch(1), y=inch(1), cfg=list(mat_width.coin=0.1))
+                            dc("coin_back", suit=3, x=inch(2), y=inch(1), cfg=list(width.coin=1, mat_width.coin=0.1))})
 
     #### coins appear wrong #99
     # coin back
-    expect_doppelganger("coin_back.s4", function() dc("coin_back", i_s=4))
+    expect_doppelganger("coin_back.s4", function() dc("coin_back", suit=4))
     expect_doppelganger("coin_back.s4-inverted",
-                                function() dc("coin_back", cfg=list(invert_colors=TRUE), i_s=4))
+                                function() dc("coin_back", cfg=list(invert_colors=TRUE), suit=4))
     # coin face
-    expect_doppelganger("coin_face.r1", function() dc("coin_face", i_r=1))
-    expect_doppelganger("coin_face.r2", function() dc("coin_face", i_r=2))
-    expect_doppelganger("coin_face.r4", function() dc("coin_face", i_r=4))
-    expect_doppelganger("coin_face.r4italic", function() dc("coin_face", cfg=list(ps_fontface.coin_face="italic"), i_r=4))
+    expect_doppelganger("coin_face.r1", function() dc("coin_face", rank=1))
+    expect_doppelganger("coin_face.r2", function() dc("coin_face", rank=2))
+    expect_doppelganger("coin_face.r4", function() dc("coin_face", rank=4))
+    expect_doppelganger("coin_face.r4italic", function() dc("coin_face", cfg=list(ps_fontface.coin_face="italic"), rank=4))
     expect_doppelganger("coin_face.r4pyramid", 
-                                function() dc("coin_face", i_r=4, cfg=list(shape.coin="pyramid")))
+                                function() dc("coin_face", rank=4, cfg=list(shape.coin="pyramid")))
     expect_doppelganger("coin_face.r4convex8", 
-                                function() dc("coin_face", i_r=4, cfg=list(shape.coin="convex8")))
+                                function() dc("coin_face", rank=4, cfg=list(shape.coin="convex8")))
     expect_doppelganger("coin_face.r4concave8", 
-                                function() dc("coin_face", i_r=4, cfg=list(shape.coin="concave8", shape_r.coin=0.4)))
+                                function() dc("coin_face", rank=4, cfg=list(shape.coin="concave8", shape_r.coin=0.4)))
     # die faces
-    expect_doppelganger("die_face.s4.r1", function() dc("die_face", i_s=4, i_r=1))
-    expect_doppelganger("die_face.s3.r2", function() dc("die_face", i_s=3, i_r=2))
-    expect_doppelganger("die_face.s2.r5", function() dc("die_face", i_s=2, i_r=5))
+    expect_doppelganger("die_face.s4.r1", function() dc("die_face", suit=4, rank=1))
+    expect_doppelganger("die_face.s3.r2", function() dc("die_face", suit=3, rank=2))
+    expect_doppelganger("die_face.s2.r5", function() dc("die_face", suit=2, rank=5))
     expect_doppelganger("die_face.s2.r5.kite", 
-            function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="kite", dm_t=90, suit_scale="1,1,1,1")))
+            function() dc("die_face", suit=2, rank=5, cfg=list(shape.die_face="kite", dm_t=90, suit_scale="1,1,1,1")))
     expect_doppelganger("die_face.s2.r5.convex5mat", 
-            function() dc("die_face", i_s=2, i_r=5, cfg=list(shape.die_face="convex5", mat_width.die_face=0.1, mat_color="pink")))
-    expect_doppelganger("suitdie_face.s1", function() dc("suitdie_face", i_s=1))
-    expect_doppelganger("suitdie_face.s5", function() dc("suitdie_face", i_s=5))
-    expect_doppelganger("suitdie_face.s6", function() dc("suitdie_face", i_s=6))
+            function() dc("die_face", suit=2, rank=5, cfg=list(shape.die_face="convex5", mat_width.die_face=0.1, mat_color="pink")))
+    expect_doppelganger("suitdie_face.s1", function() dc("suitdie_face", suit=1))
+    expect_doppelganger("suitdie_face.s5", function() dc("suitdie_face", suit=5))
+    expect_doppelganger("suitdie_face.s6", function() dc("suitdie_face", suit=6))
     # pawns
-    expect_doppelganger("pawn_face.s3", function() dc("pawn_face", i_s=3))
-    expect_doppelganger("pawn_back.s2", function() dc("pawn_back", i_s=2))
-    expect_doppelganger("belt_face.s1", function() dc("belt_face", i_s=1))
-    expect_doppelganger("saucer_face.s4", function() dc("saucer_face", i_s=4))
+    expect_doppelganger("pawn_face.s3", function() dc("pawn_face", suit=3))
+    expect_doppelganger("pawn_back.s2", function() dc("pawn_back", suit=2))
+    expect_doppelganger("belt_face.s1", function() dc("belt_face", suit=1))
+    expect_doppelganger("saucer_face.s4", function() dc("saucer_face", suit=4))
     expect_doppelganger("saucer_back", function() dc("saucer_back"))
     # pyramids
-    expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", i_s=1, i_r=6))
-    expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", i_s=2, i_r=5))
-    expect_doppelganger("pyramid_right.s3.r2", function() dc("pyramid_right", i_s=3, i_r=2))
-    expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", i_s=4, i_r=1))
-    expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", i_s=2, i_r=1))
-    # expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", i_s=4, i_r=3)) # svglite bug?
-    expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", i_s=3, i_r=4))
+    expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", suit=1, rank=6))
+    expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", suit=2, rank=5))
+    expect_doppelganger("pyramid_right.s3.r2", function() dc("pyramid_right", suit=3, rank=2))
+    expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", suit=4, rank=1))
+    expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", suit=2, rank=1))
+    expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", suit=4, rank=3)) 
+    expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", suit=3, rank=4))
 
     # matchsticks
-    expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", i_s=1, i_r=1))
-    expect_doppelganger("matchstick_face.s2.r2", function() dc("matchstick_face", i_s=2, i_r=2))
-    expect_doppelganger("matchstick_face.s3.r3", function() dc("matchstick_face", i_s=3, i_r=3))
-    expect_doppelganger("matchstick_face.s4.r4", function() dc("matchstick_face", i_s=4, i_r=4))
-    expect_doppelganger("matchstick_face.s1.r5", function() dc("matchstick_face", i_s=1, i_r=5))
-    expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", i_s=2, i_r=6))
+    expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", suit=1, rank=1))
+    expect_doppelganger("matchstick_face.s2.r2", function() dc("matchstick_face", suit=2, rank=2))
+    expect_doppelganger("matchstick_face.s3.r3", function() dc("matchstick_face", suit=3, rank=3))
+    expect_doppelganger("matchstick_face.s4.r4", function() dc("matchstick_face", suit=4, rank=4))
+    expect_doppelganger("matchstick_face.s1.r5", function() dc("matchstick_face", suit=1, rank=5))
+    expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", suit=2, rank=6))
     cfg <- list(invert_colors=TRUE, draw_fn="basic~ieceGrobFn")
-    expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, i_s=3, i_r=6))
+    expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, suit=3, rank=6))
 
     #### preview appears wrong #99
     expect_doppelganger("preview", function() draw_preview(cfg_default))
@@ -173,7 +173,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("suitrankdie_layoutLF", function() dc("suitrankdie_layoutLF"))
 
     cfg <- list(die_arrangement="opposites_sum_to_5")
-    expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", i_s=3, cfg=cfg))
+    expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", suit=3, cfg=cfg))
 
     cfg <- list(suit_text="A,B,C,D,E,F", suit_color="red,black,green,blue,orange,grey")
     expect_doppelganger("suitdie_layoutRF-5suits", function() dc("suitdie_layoutRF", cfg=cfg))
@@ -183,7 +183,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("suitrankdie_layoutRF-6suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
 
     # draw_pieces
-    df <- tibble::tribble(~piece_side, ~x, ~y, ~i_s, ~i_r,
+    df <- tibble::tribble(~piece_side, ~x, ~y, ~suit, ~rank,
                           "tile_face", 0.25, 0.25, 1, 1,
                           "tile_face", 0.75, 0.25, 2, 2,
                           "tile_face", 0.25, 0.75, 3, 5,
@@ -198,11 +198,11 @@ test_that("no regressions in figures", {
                           })
 
     # errors
-    expect_error(dce("coin_face", i_r = 3, cfg=list(gridline_color = "grey")),
+    expect_error(dce("coin_face", rank = 3, cfg=list(gridline_color = "grey")),
                  "Don't know how to add grid lines to shape circle")
-    expect_error(dce("coin_face", i_r = 3, cfg=list(shape = "meeple")),
+    expect_error(dce("coin_face", rank = 3, cfg=list(shape = "meeple")),
                  "Don't know how to draw shape meeple")
-    expect_error(dce("coin_face", i_r = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
+    expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
     expect_error(cfg_default$get_pp_width("boo_back"), "Don't know width of piece boo")
 })

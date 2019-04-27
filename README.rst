@@ -75,7 +75,7 @@ API Intro
 .. code:: r
 
    library("piecpackr")
-   draw_component("tile_face", i_s=1, i_r=4)
+   draw_component("tile_face", suit=1, rank=4)
 
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1-1.svg
    :alt: 3 of Hearts Tile Face
@@ -91,7 +91,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
                         suit_scale="0.6,0.7,0.75,0.9,0.9")
     traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
     cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
-    draw_component("tile_face", i_s=1, i_r=4, cfg=cfg)
+    draw_component("tile_face", suit=1, rank=4, cfg=cfg)
 
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1t-1.svg
    :alt: 3 of Suns Tile Face

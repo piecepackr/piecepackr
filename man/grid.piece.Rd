@@ -8,15 +8,15 @@
 \usage{
 pmap_piece(.l, ..., draw = TRUE, name = NULL, gp = NULL, vp = NULL)
 
-pieceGrob(piece_side = "tile_back", i_s = NA, i_r = NA,
+pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  rot = 0, svg = FALSE, width = NA, height = NA,
+  angle = 0, picture = FALSE, width = NA, height = NA,
   default.units = "npc", envir = NULL, name = NULL, gp = NULL,
   vp = NULL)
 
-grid.piece(piece_side = "tile_back", i_s = NA, i_r = NA,
+grid.piece(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = list(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  rot = 0, svg = FALSE, width = NA, height = NA,
+  angle = 0, picture = FALSE, width = NA, height = NA,
   default.units = "npc", envir = NULL, name = NULL, gp = NULL,
   draw = TRUE, vp = NULL)
 }
@@ -25,8 +25,7 @@ grid.piece(piece_side = "tile_back", i_s = NA, i_r = NA,
 determines the number of arguments that \code{grid.piece_wrapper}
 will be called  with. List names will be used if present.}
 
-\item{...}{For \code{pmap_piece} extra arguments to pass to \code{grid.piece_wrapper},
-for \code{grid.piece_wrapper} any extra arguments are ignored.}
+\item{...}{Extra arguments to pass to \code{pieceGrob}.}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 
@@ -40,9 +39,11 @@ graphical parameter settings.}
 
 \item{piece_side}{A string with piece and side separated by a underscore e.g. "coin_face"}
 
-\item{i_s}{Number of suit}
+\item{suit}{Number of suit (highest rank starting from 1).
+The number above the total number of suits is the neutral "unsuit".
+and the next number above that is "no suits".}
 
-\item{i_r}{Number of rank}
+\item{rank}{Number of rank (lowest rank starting from 1)}
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
 a list of \code{pp_cfg} objects,
@@ -52,11 +53,11 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{y}{Where to place piece on y axis of viewport}
 
-\item{rot}{Angle to draw piece at}
+\item{angle}{Angle to draw piece at}
 
-\item{svg}{If \code{TRUE} instead of drawing directly into graphics device
-export to svg, re-import svg, and then draw it to graphics device.  
-This is useful if drawing really big or small and don't want
+\item{picture}{If \code{TRUE} instead of directly returning the grob first 
+export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.  
+This is useful if drawing pieces really big or small and don't want
 to play with re-configuring fontsizes.}
 
 \item{width}{Width of piece}
@@ -69,11 +70,12 @@ to play with re-configuring fontsizes.}
 \item{envir}{Environment (or named list) containing configuration list(s).}
 }
 \value{
-A \code{grob} object.  If \code{draw} is \code{TRUE} will also draw it to the graphics device.
+A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
+        will also draw it to the graphics device.
 }
 \description{
 \code{grid.piece} draws a piecepack pieces onto the graphics device.  
-\code{grobpiece} is its \code{grid} \code{grob} counterpart.
+\code{pieceGrob} is its \code{grid} \code{grob} counterpart.
 \code{pmap_piece} operates on the rows of a data frame  
-    applying \code{grid.piece} to each row.
+    applying \code{pieceGrob} to each row.
 }

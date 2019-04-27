@@ -2,24 +2,24 @@
 % Please edit documentation in R/componentGrobFns.R
 \name{pieceGrobFns}
 \alias{pieceGrobFns}
-\alias{basicPieceGrobFn}
+\alias{basicPieceGrob}
 \alias{pyramidTopGrob}
 \title{Piece Grob Functions}
 \usage{
-basicPieceGrobFn(piece_side, i_s, i_r, cfg)
+basicPieceGrob(piece_side, suit, rank, cfg = pp_cfg())
 
-pyramidTopGrob(piece_side, i_s, i_r, cfg)
+pyramidTopGrob(piece_side, suit, rank, cfg = pp_cfg())
 }
 \arguments{
 \item{piece_side}{A string with piece and side separated by a underscore e.g. "coin_face"}
 
-\item{i_s}{Number of suit}
+\item{suit}{Number of suit (highest rank starting from 1).
+The number above the total number of suits is the neutral "unsuit".
+and the next number above that is "no suits".}
 
-\item{i_r}{Number of rank}
+\item{rank}{Number of rank (lowest rank starting from 1)}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
-a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,}
 }
 \description{
 Default functions \code{grid.piece} uses to create \code{grid} 

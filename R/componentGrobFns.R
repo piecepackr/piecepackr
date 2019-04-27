@@ -5,11 +5,12 @@
 #' 
 #' @rdname pieceGrobFns
 #' @name pieceGrobFns
+#' @param cfg Piecepack configuration list or \code{pp_cfg} object, 
 #' @inheritParams grid.piece
 #' @export
-basicPieceGrobFn <- function(piece_side, i_s, i_r, cfg) {
+basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
-    opt <- cfg$get_piece_opt(piece_side, i_s, i_r)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
     shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
 
@@ -36,52 +37,48 @@ basicPieceGrobFn <- function(piece_side, i_s, i_r, cfg) {
     gl <- gList(background_grob, gl_grob, mat_grob, ps_grob,
                 dm_grob, border_grob)
 
-    gTree(children=gl)
+    gTree(children=gl, name=piece_side)
 }
 
 #' @rdname pieceGrobFns
 #' @export
-pyramidTopGrob <- function(piece_side, i_s, i_r, cfg) {
+pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as.list(cfg)
     cfg$scale <- 0.3 * get_scale(cfg)
-    g1 <- pieceGrob("pyramid_face", i_s, i_r, cfg)
-    vp1 <- viewport(y=0.75, width=1.0, height=0.5, angle=180)
-    g2 <- pieceGrob("pyramid_back", i_s, i_r, cfg)
-    vp2 <- viewport(y=0.25, width=1.0, height=0.5, angle=0)
-    g3 <- pieceGrob("pyramid_left", i_s, i_r, cfg)
-    vp3 <- viewport(x=0.25, width=1.0, height=0.5, angle=-90)
-    g4 <- pieceGrob("pyramid_right", i_s, i_r, cfg)
-    vp4 <- viewport(x=0.75, width=1.0, height=0.5, angle=90)
-    gl <- gList(gTree(g1, vp=vp1, name="face"),
-        gTree(g2, vp=vp2, name="back"),
-        gTree(g3, vp=vp3, name="left"),
-        gTree(g4, vp=vp4, name="right"))
-    gTree(children=gl)
+    g1 <- pieceGrob("pyramid_face",  suit, rank, cfg, 
+                    y=0.75, width=1.0, height=0.5, angle=180, name="face")
+    g2 <- pieceGrob("pyramid_back",  suit, rank, cfg, 
+                    y=0.25, width=1.0, height=0.5, angle=  0, name="back")
+    g3 <- pieceGrob("pyramid_left",  suit, rank, cfg, 
+                    x=0.25, width=1.0, height=0.5, angle=-90, name="left")
+    g4 <- pieceGrob("pyramid_right", suit, rank, cfg,
+                    x=0.75, width=1.0, height=0.5, angle= 90, name="right")
+    gTree(children=gList(g1, g2, g3, g4), name="pyramid_top")
 }
 
-dieLayoutGrobRF <- function(piece_side, i_s, i_r, cfg) {
-    piecepackDieGrob(i_s, cfg)
+dieLayoutGrobRF <- function(piece_side, suit, rank, cfg) {
+    piecepackDieGrob(suit, cfg)
 }
 
-dieLayoutGrobLF <- function(piece_side, i_s, i_r, cfg) {
-    piecepackDieGrob(i_s, cfg, flip=TRUE)
+dieLayoutGrobLF <- function(piece_side, suit, rank, cfg) {
+    piecepackDieGrob(suit, cfg, flip=TRUE)
 }
 
-suitdieLayoutGrobRF <- function(piece_side, i_s, i_r, cfg) {
+suitdieLayoutGrobRF <- function(piece_side, suit, rank, cfg) {
     suitdieGrob(cfg)
 }
 
-suitdieLayouGrobtLF <- function(piece_side, i_s, i_r, cfg) {
+suitdieLayouGrobtLF <- function(piece_side, suit, rank, cfg) {
     suitdieGrob(cfg, flip=TRUE)
 }
 
-suitrankdieLayoutGrobRF <- function(piece_side, i_s, i_r, cfg) {
-    i_s <- get_suit_die_suits(cfg)
-    piecepackDieGrob(i_s, cfg)
+suitrankdieLayoutGrobRF <- function(piece_side, suit, rank, cfg) {
+    suit <- get_suit_die_suits(cfg)
+    piecepackDieGrob(suit, cfg)
 }
-suitrankdieLayoutGrobLF <- function(piece_side, i_s, i_r, cfg) {
-    i_s <- get_suit_die_suits(cfg)
-    piecepackDieGrob(i_s, cfg, flip=TRUE)
+suitrankdieLayoutGrobLF <- function(piece_side, suit, rank, cfg) {
+    suit <- get_suit_die_suits(cfg)
+    piecepackDieGrob(suit, cfg, flip=TRUE)
 }
 
 ## Layout functions
@@ -89,7 +86,7 @@ x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
 x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
 y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
 
-piecepackDieGrob <- function(i_s, cfg, flip=FALSE) {
+piecepackDieGrob <- function(suit, cfg, flip=FALSE) {
     cfg <- as_pp_cfg(cfg)
     angle <- rep(c(0, -90), 3)
     if (flip) {
@@ -99,20 +96,20 @@ piecepackDieGrob <- function(i_s, cfg, flip=FALSE) {
         x <- x_die_layoutRF
     }
     arrangement <- cfg$die_arrangement
-    i_s <- rep(i_s, length.out=6)
+    suit <- rep(suit, length.out=6)
     if (arrangement == "opposites_sum_to_5") {
-        i_r <- c(1, 2, 3, 6, 5, 4)
-        i_s <- i_s[i_r]
+        rank <- c(1, 2, 3, 6, 5, 4)
+        suit <- suit[rank]
     } else if (arrangement == "counter_up") {
-        i_r <- 6:1
-        i_s <- rev(i_s)
+        rank <- 6:1
+        suit <- rev(suit)
     } else {
-        i_r <- 1:6
+        rank <- 1:6
     }
     gl <- gList()
     for (ii in 1:6) {
         vp <- viewport(x=x[ii], y=y_die_layout[ii], angle=angle[ii])
-        gl[[ii]] <- pieceGrob("die_face", i_s[ii], i_r[ii], cfg, vp=vp)
+        gl[[ii]] <- pieceGrob("die_face", suit[ii], rank[ii], cfg, vp=vp)
     }
     gTree(children=gl)
 }
@@ -125,11 +122,11 @@ suitdieGrob <- function(cfg, flip=FALSE) {
     } else {
         x <- x_die_layoutRF
     }
-    i_s <- get_suit_die_suits(cfg)
+    suit <- get_suit_die_suits(cfg)
     gl <- gList()
     for (ii in 1:6) {
         vp <- viewport(x=x[ii], y=y_die_layout[ii], angle=angle[ii])
-        gl[[ii]] <- pieceGrob("suitdie_face", i_s[ii], NA, cfg, vp=vp)
+        gl[[ii]] <- pieceGrob("suitdie_face", suit[ii], NA, cfg, vp=vp)
     }
     gTree(children=gl)
 }
@@ -145,30 +142,30 @@ get_suit_die_suits <- function(cfg) {
     } 
 }
 
-pawnLayoutGrob <- function(piece_side, i_s, i_r, cfg) {
+pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
     gl <- gList()
     suppressWarnings({
         ph <- cfg$get_pp_height("pawn_face")
-        pb <- 3/8 ####
+        pb <- 3/7 * ph
         denominator <- 2*(ph + pb)
         yf <- 0.5*ph / denominator
-        height = 0.5*ph / denominator
-        vp <- viewport(y=1/2-yf, height=0.5*height)
-        gl[[1]] <- pieceGrob("pawn_face", i_s, NA, cfg, vp=vp, name="pawn_face")
-        vp <- viewport(y=1/2+yf, height=0.5*height, angle=180)
-        gl[[2]] <- pieceGrob("pawn_back", i_s, NA, cfg, vp=vp, name="pawn_back")
+        height = ph / denominator
+        gl[[1]] <- pieceGrob("pawn_face", suit, NA, cfg, 
+                             y=1/2-yf, height=height, name="pawn_face")
+        gl[[2]] <- pieceGrob("pawn_back", suit, NA, cfg, 
+                             y=1/2+yf, height=height, angle=180, name="pawn_back")
     })
-    opt <- cfg$get_piece_opt("pawn_face", i_s, 0)
+    opt <- cfg$get_piece_opt("pawn_face", suit, 0)
     border_col <- opt$border_col
     gl[[3]] <- linesGrob(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
     gl[[4]] <- rectGrob(gp=gpar(col=border_col, fill=NA))
     ll <- 0.07
     gl[[5]] <- segmentsGrob(0.5, 0, 0.5, ll, gp=gpar(col=border_col))
     gl[[6]] <- segmentsGrob(0.5, 1, 0.5, 1-ll, gp=gpar(border_col))
-    gTree(children=gl)
+    gTree(children=gl, name="pawn_layout")
 }
 
-pyramidLayoutGrob <- function(piece_side, i_s, i_r, cfg) {
+pyramidLayoutGrob <- function(piece_side, suit, rank, cfg) {
     gl <- gList()
     suppressWarnings({
         t <- c(72, 36, 0, -36, -72)
@@ -179,10 +176,10 @@ pyramidLayoutGrob <- function(piece_side, i_s, i_r, cfg) {
         angles <- c(90+72, 90+36, 90, 90-36, 90-72)
         for(ii in 1:5) {
             cs <- pieces[ii]
-            vp <- viewport(width=inch(cfg$get_pp_width(cs, i_r)), 
-                           height=inch(cfg$get_pp_height(cs, i_r)), 
+            vp <- viewport(width=inch(cfg$get_pp_width(cs, rank)), 
+                           height=inch(cfg$get_pp_height(cs, rank)), 
                            angle=angles[ii], x=x[ii], y=y[ii])
-            grob <- pieceGrob(cs, i_s, i_r, cfg, vp=vp)
+            grob <- pieceGrob(cs, suit, rank, cfg, vp=vp)
             gl[[ii]] <- grob
         }
     })

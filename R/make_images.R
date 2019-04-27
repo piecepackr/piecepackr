@@ -23,8 +23,6 @@ TILE_WIDTH <- 2
 SAUCER_WIDTH <- 3/4 # better for diagrams of hex games played with coin+pawn
 PAWN_HEIGHT <- 7/8
 PAWN_WIDTH <- 1/2
-PAWN_BASE <- 3/8
-PAWN_LAYOUT_HEIGHT <- 2 * PAWN_HEIGHT + 2 * PAWN_BASE
 DIE_LAYOUT_WIDTH <- 4 * DIE_WIDTH
 DIE_LAYOUT_HEIGHT <- 3 * DIE_WIDTH
 BELT_HEIGHT <- 1/2
@@ -59,32 +57,32 @@ draw_preview <- function(cfg=list()) {
     gl <- gList()
 
     cs_tiles <- rep("tile_face", 6)
-    i_s_tiles <- 1:6
-    i_r_tiles <- rep(2, 6)
+    suit_tiles <- 1:6
+    rank_tiles <- rep(2, 6)
     if (get_n_suits(cfg) < 5) {
         cs_tiles[5] <- "tile_back"
-        i_s_tiles[5] <- NA
-        i_r_tiles[5] <- NA
+        suit_tiles[5] <- NA
+        rank_tiles[5] <- NA
     }
     if (get_n_suits(cfg) < 6) {
         cs_tiles[6] <- "tile_back"
-        i_s_tiles[6] <- NA
-        i_r_tiles[6] <- NA
+        suit_tiles[6] <- NA
+        rank_tiles[6] <- NA
     }
     x_tiles <- c(1, 5, 5, 1, 3, 3)
     y_tiles <- c(5, 5, 3, 3, 5, 3)
-    gl[["tiles"]] <- pieceGrob(cs_tiles, i_s_tiles, i_r_tiles, cfg, x_tiles, y_tiles, 
+    gl[["tiles"]] <- pieceGrob(cs_tiles, suit_tiles, rank_tiles, cfg, x_tiles, y_tiles, 
                    default.units="in", name="tiles")
 
     cs_coins <- rep(c("coin_face", "coin_back"), each=3)
-    i_s_coins <- c(rep(NA, 3), 4:2)
-    i_r_coins <- c(1:3, rep(NA, 3))
+    suit_coins <- c(rep(NA, 3), 4:2)
+    rank_coins <- c(1:3, rep(NA, 3))
     x_coins <- rep(1:3, 2)*c_width - 0.5*c_width
     y_coins <- 0.5*t_width + rep(c(0.5, -0.5), each=3)*c_width
-    if (get_n_suits(cfg) > 4) i_s_coins[5] <- 5
-    if (get_n_suits(cfg) > 5) i_s_coins[6] <- 6
+    if (get_n_suits(cfg) > 4) suit_coins[5] <- 5
+    if (get_n_suits(cfg) > 5) suit_coins[6] <- 6
 
-    gl[["coins"]] <- pieceGrob(cs_coins, i_s_coins, i_r_coins, cfg, x_coins, y_coins, 
+    gl[["coins"]] <- pieceGrob(cs_coins, suit_coins, rank_coins, cfg, x_coins, y_coins, 
                    default.units="in", name="coins")
 
     gl[["saucers"]] <- pieceGrob(c("saucer_face", "saucer_back"), c(1, NA), NA, cfg,
@@ -103,12 +101,12 @@ draw_preview <- function(cfg=list()) {
     grid.draw(grob)
 }
 
-pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, i_r = 1,
+pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, rank = 1,
                       width=NULL, height=NULL, res=72) {
     cfg <- as_pp_cfg(cfg)
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- cfg$get_pp_width(piece_side, i_r)
-    if (is.null(height)) height <- cfg$get_pp_height(piece_side, i_r)
+    if (is.null(width)) width <- cfg$get_pp_width(piece_side, rank)
+    if (is.null(height)) height <- cfg$get_pp_height(piece_side, rank)
     if (angle %in% c(90, 270)) {
         twidth <- height
         height <- width
@@ -127,10 +125,10 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, i_r = 1,
 }
 
 piece_filename <- function(directory, cfg, piece_side, format, angle, 
-                               i_s=NULL, i_r=NULL) {
+                               suit=NULL, rank=NULL) {
     filename <- paste0(piece_side, 
-                       ifelse(is.null(i_s), "", paste0("_s", i_s)),
-                       ifelse(is.null(i_r), "", paste0("_r", i_r)),
+                       ifelse(is.null(suit), "", paste0("_s", suit)),
+                       ifelse(is.null(rank), "", paste0("_r", rank)),
                        paste0("_t", angle), paste0(".", format))
     file.path(directory, filename)
 }
@@ -157,27 +155,27 @@ make_images_helper <- function(directory, cfg, format, angle) {
                 invisible(dev.off())
             }
             if(has_suit(cs) && !has_rank(cs)) {
-                for (i_s in 1:get_n_suits(cfg)) {
-                    f <- piece_filename(directory, cfg, cs, format, angle, i_s)
+                for (suit in 1:get_n_suits(cfg)) {
+                    f <- piece_filename(directory, cfg, cs, format, angle, suit)
                     pp_device(f, cs, cfg, angle)
-                    grid.piece(cs, i_s, NA, cfg)
+                    grid.piece(cs, suit, NA, cfg)
                     invisible(dev.off())
                 }
             }
             if(!has_suit(cs) && has_rank(cs)) {
-                for (i_r in 1:get_n_ranks(cfg)) {
-                    f <- piece_filename(directory, cfg, cs, format, angle, i_r=i_r)
+                for (rank in 1:get_n_ranks(cfg)) {
+                    f <- piece_filename(directory, cfg, cs, format, angle, rank=rank)
                     pp_device(f, cs, cfg, angle)
-                    grid.piece(cs, NA, i_r, cfg)
+                    grid.piece(cs, NA, rank, cfg)
                     invisible(dev.off())
                 }
             }
             if(has_suit(cs) && has_rank(cs)) {
-                for (i_s in 1:get_n_suits(cfg)) {
-                    for (i_r in 1:get_n_ranks(cfg)) {
-                        f <- piece_filename(directory, cfg, cs, format, angle, i_s, i_r)
-                        pp_device(f, cs, cfg, angle, i_r)
-                        grid.piece(cs, i_s, i_r, cfg)
+                for (suit in 1:get_n_suits(cfg)) {
+                    for (rank in 1:get_n_ranks(cfg)) {
+                        f <- piece_filename(directory, cfg, cs, format, angle, suit, rank)
+                        pp_device(f, cs, cfg, angle, rank)
+                        grid.piece(cs, suit, rank, cfg)
                         invisible(dev.off())
                     }
                 }
