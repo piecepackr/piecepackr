@@ -11,6 +11,8 @@ Config <- R6Class("pp_cfg",
         die_arrangement = NULL,
         title = NULL,
         fontfamily = NULL,
+        copyright = NULL,
+        credit = NULL,
         initialize = function(cfg=list()) {
             private$cfg <- cfg
             self$n_suits <- get_n_suits(cfg)
@@ -19,6 +21,8 @@ Config <- R6Class("pp_cfg",
             self$die_arrangement <- get_die_arrangement(cfg)
             self$fontfamily <- get_fontfamily(cfg)
             self$title <- cfg$title
+            self$copyright <- cfg$copyright
+            self$credit <- cfg$credit
         },
         as_list = function() { private$cfg },
         print = function() {

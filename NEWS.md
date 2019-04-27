@@ -6,11 +6,15 @@ New features
 
 * New ``pp_cfg`` function (and R6 class) which on-the-fly builds a cache to speed up component drawing (#112, #122). 
 * ``make_pnp`` function now supports adding piecepack pyramids (#37) and matchsticks (#69) to the print-and-play layout.
-* Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("draw_fn_helpers")``, and ``help("draw_component")`` for more info.
+* Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("draw_fn_helpers")``, and ``help("grid.piece")`` for more info.
 
 Breaking changes
 ----------------
 
+* ``draw_component`` has been renamed ``grid.piece`` (and many of its arguments vectorized) and
+  ``draw_components`` has been renamed ``pmap_piece``(#123).
+* The function arguments ``component_side``, ``i_r``, and ``i_s`` have been 
+  renamed ``piece_side``, ``rank``, and ``suit``.
 * Lots of configuration list style names were changed (#95, #121).
 * All executable Rscripts have been removed (#113).
 * ``make_collection`` and ``make_preview`` functions removed.
@@ -32,8 +36,10 @@ Bug fixes and minor improvements
 * Missing ``popViewport()`` added to ``draw_preview``.
 * Can now specify ``fontface`` (#121) as well as ``width`` and ``height`` (#106) in configuration lists.
 * Removed some package dependencies.
-* ``draw_components`` now supports ``angle=NA`` and ``draw_component`` no longer draws different output
+* ``pmap_piece`` now supports ``angle=NA`` and ``grid.piece`` no longer draws different output
   for components like ``tile_back`` if you specify a suit or rank (#120).
+* "configuration lists" now support ``credit`` and ``copyright`` fields which add 
+  extra info to the new "credit" and "copyright" sections of the print-and-play layout.
 
 piecepackr 0.11.0
 =================
