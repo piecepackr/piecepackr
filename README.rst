@@ -70,17 +70,17 @@ Also although most users won't need them ``piecpackr`` contains utility function
 API Intro
 ---------
 
-``draw_component`` is the core function that can be used used to draw any piecepack_ component:
+``grid.piece`` is the core function that can be used used to draw any piecepack_ component:
 
 .. code:: r
 
    library("piecpackr")
-   draw_component("tile_face", suit=1, rank=4)
+   grid.piece("tile_face", suit=1, rank=4)
 
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1-1.svg
    :alt: 3 of Hearts Tile Face
 
-One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the piecepack graphics drawn by ``draw_component``:
+One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the piecepack graphics drawn by ``grid.piece``:
 
 .. code:: r
 
@@ -91,7 +91,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
                         suit_scale="0.6,0.7,0.75,0.9,0.9")
     traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
     cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
-    draw_component("tile_face", suit=1, rank=4, cfg=cfg)
+    grid.piece("tile_face", suit=1, rank=4, cfg=cfg)
 
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1t-1.svg
    :alt: 3 of Suns Tile Face
@@ -199,7 +199,7 @@ How do I use this package in piecepack rulesets?
 There are two main ways that this package could be used to help make piecepack rulesets:
 
 1) The ``make_images`` function makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
-2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``draw_component`` which draws piecepack components to the graphics device.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__:
+2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``grid.piece`` which draws piecepack components to the graphics device.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__:
 
 .. image:: https://www.trevorldavis.com//piecepackr/images/knitr/tictactoe.gif
    :alt: Example animation of using piecepackr to create piecepack game diagrams
