@@ -27,13 +27,13 @@ Breaking changes
 * ``ribbons`` are now ``mat`` (as in picture frame 'matting') (#117)
 * Default pawn "belt" width is now ¾π" (#105).  
 * Default pawn "saucer" width is now ¾" and they now have a 'mat' coloring on the edge (#105)
+* ``draw_preview`` has been removed.  Can now do ``grid.piece("preview_layout", cfg=cfg)``.
 
 Bug fixes and minor improvements
 --------------------------------
 
 * Bug in ``get_embedded_font`` function fixed.
 * ``make_pnp`` function now supports the A5 page size and is more A4 page size friendly (#54).
-* Missing ``popViewport()`` added to ``draw_preview``.
 * Can now specify ``fontface`` (#121) as well as ``width`` and ``height`` (#106) in configuration lists.
 * Removed some package dependencies.
 * ``pmap_piece`` now supports ``angle=NA`` and ``grid.piece`` no longer draws different output

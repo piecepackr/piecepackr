@@ -1,5 +1,5 @@
-piecepackr: Piecepack Graphics in R
-===================================
+piecepackr: Board Game Graphics in R
+====================================
 
 .. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
     :target: https://travis-ci.org/trevorld/piecepackr
@@ -17,7 +17,7 @@ piecepackr: Piecepack Graphics in R
    :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
    :target: http://www.repostatus.org/#wip
 
-``piecepackr`` is an R_ package designed to make configurable piecepack_ graphics.  The API can be used with the grid_ R package to make piecepack diagrams (i.e. for inclusion in rulesets) as well as a customized `Print & Play layouts`_.  
+``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_ R package to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other game systems.
 
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/pnp-previews.gif
    :alt: Previews of demo piecepack configurations

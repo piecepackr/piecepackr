@@ -38,68 +38,6 @@ MATCHSTICK_WIDTHS <- c(2*W, rep(W, 5))
 MATCHSTICK_HEIGHTS <- c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)
 
 
-#' Draw piecepack deck preview 
-#'
-#' Draw piecepack deck preview
-#'
-#' @param cfg Piecepack configuration list
-#' @export
-draw_preview <- function(cfg=list()) {
-    cfg <- as_pp_cfg(cfg)
-    t_width <- cfg$get_pp_width("tile_face")
-    c_width <- cfg$get_pp_width("coin_face")
-    d_width <- cfg$get_pp_width("die_face")
-    s_width <-  cfg$get_pp_width("saucer_face")
-    p_height <- cfg$get_pp_height("pawn_face")
-    preview_height <- 3*t_width
-    preview_width <- 3*t_width
-    vp <- viewport(name="preview", width=inch(preview_width), height=inch(preview_height))
-    gl <- gList()
-
-    cs_tiles <- rep("tile_face", 6)
-    suit_tiles <- 1:6
-    rank_tiles <- rep(2, 6)
-    if (get_n_suits(cfg) < 5) {
-        cs_tiles[5] <- "tile_back"
-        suit_tiles[5] <- NA
-        rank_tiles[5] <- NA
-    }
-    if (get_n_suits(cfg) < 6) {
-        cs_tiles[6] <- "tile_back"
-        suit_tiles[6] <- NA
-        rank_tiles[6] <- NA
-    }
-    x_tiles <- c(1, 5, 5, 1, 3, 3)
-    y_tiles <- c(5, 5, 3, 3, 5, 3)
-    gl[["tiles"]] <- pieceGrob(cs_tiles, suit_tiles, rank_tiles, cfg, x_tiles, y_tiles, 
-                   default.units="in", name="tiles")
-
-    cs_coins <- rep(c("coin_face", "coin_back"), each=3)
-    suit_coins <- c(rep(NA, 3), 4:2)
-    rank_coins <- c(1:3, rep(NA, 3))
-    x_coins <- rep(1:3, 2)*c_width - 0.5*c_width
-    y_coins <- 0.5*t_width + rep(c(0.5, -0.5), each=3)*c_width
-    if (get_n_suits(cfg) > 4) suit_coins[5] <- 5
-    if (get_n_suits(cfg) > 5) suit_coins[6] <- 6
-
-    gl[["coins"]] <- pieceGrob(cs_coins, suit_coins, rank_coins, cfg, x_coins, y_coins, 
-                   default.units="in", name="coins")
-
-    gl[["saucers"]] <- pieceGrob(c("saucer_face", "saucer_back"), c(1, NA), NA, cfg,
-                   t_width+1.5*d_width, 0.5*t_width + c(0.5, -0.5)*s_width,
-                   default.units="in", name="saucers")
-
-    gl[["pawns"]] <- pieceGrob(c("pawn_face", "pawn_back"), 2, NA, cfg,
-                   t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height, c(0, 180),
-                   default.units="in", name="pawns")
-
-    gl[["suitrankdie"]] <- pieceGrob("suitrankdie_layoutRF", NA, NA, cfg,
-                   preview_width-2*d_width, 0.5*t_width,
-                   default.units="in", name="suitrankdie")
-
-    grob <- gTree(children=gl, vp=vp)
-    grid.draw(grob)
-}
 
 pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, rank = 1,
                       width=NULL, height=NULL, res=72) {

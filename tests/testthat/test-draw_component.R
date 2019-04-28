@@ -162,9 +162,9 @@ test_that("no regressions in figures", {
     expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, suit=3, rank=6))
 
     #### preview appears wrong #99
-    expect_doppelganger("preview", function() draw_preview(cfg_default))
-    expect_doppelganger("preview.5s", function() draw_preview(list(suit_text="A,B,C,D,E,", die_arrangement="counter_up")))
-    expect_doppelganger("preview.6s", function() draw_preview(list(suit_text="I,II,III,IV,V,VI,")))
+    expect_doppelganger("preview", function() dc("preview_layout"))
+    expect_doppelganger("preview.5s", function() dc("preview_layout", cfg=list(suit_text="A,B,C,D,E,", die_arrangement="counter_up")))
+    expect_doppelganger("preview.6s", function() dc("preview_layout", cfg=list(suit_text="I,II,III,IV,V,VI,")))
 
     # dice
     cfg <- list(suit_text="-,0,+,")
