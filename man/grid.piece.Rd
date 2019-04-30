@@ -10,13 +10,13 @@ pmap_piece(.l, ..., draw = TRUE, name = NULL, gp = NULL, vp = NULL)
 
 pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  angle = 0, picture = FALSE, width = NA, height = NA,
+  angle = 0, use_pictureGrob = FALSE, width = NA, height = NA,
   default.units = "npc", envir = NULL, name = NULL, gp = NULL,
   vp = NULL)
 
 grid.piece(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = list(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  angle = 0, picture = FALSE, width = NA, height = NA,
+  angle = 0, use_pictureGrob = FALSE, width = NA, height = NA,
   default.units = "npc", envir = NULL, name = NULL, gp = NULL,
   draw = TRUE, vp = NULL)
 }
@@ -55,7 +55,7 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{angle}{Angle to draw piece at}
 
-\item{picture}{If \code{TRUE} instead of directly returning the grob first 
+\item{use_pictureGrob}{If \code{TRUE} instead of directly returning the grob first 
 export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.  
 This is useful if drawing pieces really big or small and don't want
 to play with re-configuring fontsizes.}

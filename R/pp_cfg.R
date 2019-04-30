@@ -116,21 +116,21 @@ Config <- R6Class("pp_cfg",
             private$cache[[key]] <- opt
             opt
         },
-        get_pp_width = function(piece_side, rank=1) {
-            key <- opt_cache_key(piece_side, NA, rank, "pp_width")
+        get_width = function(piece_side, rank=1) {
+            key <- opt_cache_key(piece_side, NA, rank, "width")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
             if (grepl("die_layout", piece_side)) {
-                die_width <- self$get_pp_width("die_face")
+                die_width <- self$get_width("die_face")
                 return (4 * die_width)
             }
             if (grepl("pyramid_layout", piece_side)) {
-                pyramid_height <- self$get_pp_height("pyramid_face", rank=rank)
+                pyramid_height <- self$get_height("pyramid_face", rank=rank)
                 return (pyramid_height)
             }
             if (piece_side == "preview_layout") {
-                tile_width <- self$get_pp_width("tile_face")
+                tile_width <- self$get_width("tile_face")
                 return (3 * tile_width)
             }
             piece <- get_piece(piece_side)
@@ -149,38 +149,38 @@ Config <- R6Class("pp_cfg",
             private$cache[[key]] <- width
             width
         },
-        get_pp_height = function(piece_side, rank=1) {
-            key <- opt_cache_key(piece_side, NA, rank, "pp_height")
+        get_height = function(piece_side, rank=1) {
+            key <- opt_cache_key(piece_side, NA, rank, "height")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
             if (grepl("die_layout", piece_side)) {
-                die_height <- self$get_pp_height("die_face")
+                die_height <- self$get_height("die_face")
                 return (3 * die_height)
             }
             if (grepl("pyramid_layout", piece_side)) {
-                pyramid_height <- self$get_pp_height("pyramid_face", rank=rank)
-                pyramid_width <- self$get_pp_width("pyramid_face", rank=rank)
+                pyramid_height <- self$get_height("pyramid_face", rank=rank)
+                pyramid_width <- self$get_width("pyramid_face", rank=rank)
                 pyramid_diagonal <- sqrt(pyramid_height^2 + (0.5*pyramid_width)^2)
                 return (2 * pyramid_diagonal)
             }
             if (grepl("pyramid_top", piece_side)) {
-                pyramid_width <- self$get_pp_width("pyramid_face", rank=rank)
+                pyramid_width <- self$get_width("pyramid_face", rank=rank)
                 return(pyramid_width)
             }
             if (grepl("pawn_layout", piece_side)) {
-                pawn_height <- self$get_pp_height("pawn_face")
+                pawn_height <- self$get_height("pawn_face")
                 return((2.5 / (7/8)) * pawn_height)
             }
             if (piece_side == "preview_layout") {
-                tile_height <- self$get_pp_height("tile_face")
+                tile_height <- self$get_height("tile_face")
                 return (3 * tile_height)
             }
-            width <- self$get_pp_width(piece_side, rank)
+            width <- self$get_width(piece_side, rank)
             piece <- get_piece(piece_side)
             if (piece == "matchstick") {
                 W <- ifelse(rank == 1, 0.5*width, width)
-                S <- 0.5 * self$get_pp_width("tile_face")
+                S <- 0.5 * self$get_width("tile_face")
                 default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[rank])
             }
             default <- switch(piece, 

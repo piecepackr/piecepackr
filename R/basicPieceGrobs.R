@@ -61,11 +61,11 @@ pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
 
-    t_width <- cfg$get_pp_width("tile_face")
-    c_width <- cfg$get_pp_width("coin_face")
-    d_width <- cfg$get_pp_width("die_face")
-    s_width <-  cfg$get_pp_width("saucer_face")
-    p_height <- cfg$get_pp_height("pawn_face")
+    t_width <- cfg$get_width("tile_face")
+    c_width <- cfg$get_width("coin_face")
+    d_width <- cfg$get_width("die_face")
+    s_width <-  cfg$get_width("saucer_face")
+    p_height <- cfg$get_height("pawn_face")
     preview_height <- 3*t_width
     preview_width <- 3*t_width
 
@@ -203,7 +203,7 @@ get_suit_die_suits <- function(cfg) {
 pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
     gl <- gList()
     suppressWarnings({
-        ph <- cfg$get_pp_height("pawn_face")
+        ph <- cfg$get_height("pawn_face")
         pb <- 3/7 * ph
         denominator <- 2*(ph + pb)
         yf <- 0.5*ph / denominator
@@ -234,8 +234,8 @@ pyramidLayoutGrob <- function(piece_side, suit, rank, cfg) {
         angles <- c(90+72, 90+36, 90, 90-36, 90-72)
         for(ii in 1:5) {
             cs <- pieces[ii]
-            vp <- viewport(width=inch(cfg$get_pp_width(cs, rank)), 
-                           height=inch(cfg$get_pp_height(cs, rank)), 
+            vp <- viewport(width=inch(cfg$get_width(cs, rank)), 
+                           height=inch(cfg$get_height(cs, rank)), 
                            angle=angles[ii], x=x[ii], y=y[ii])
             grob <- pieceGrob(cs, suit, rank, cfg, vp=vp)
             gl[[ii]] <- grob

@@ -80,7 +80,7 @@ test_that("no regressions in figures", {
     }
     # tile back
     expect_doppelganger("tile_back", function() dc("tile_back"))
-    expect_doppelganger("tile_back-svg", function() dc("tile_back", picture=TRUE))
+    expect_doppelganger("tile_back-svg", function() dc("tile_back", use_pictureGrob=TRUE))
     expect_doppelganger("tile_back-hex", 
                                 function() dc("tile_back", cfg=list(shape.tile_back="convex6")))
     # tile face
@@ -204,7 +204,7 @@ test_that("no regressions in figures", {
                  "Don't know how to draw shape meeple")
     expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
-    expect_error(cfg_default$get_pp_width("boo_back"), "Don't know width of piece boo")
+    expect_error(cfg_default$get_width("boo_back"), "Don't know width of piece boo")
 })
 
 

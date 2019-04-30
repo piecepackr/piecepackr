@@ -235,7 +235,7 @@ draw_a5_piecepack <- function(suit, cfg=pp_cfg(), front=TRUE) {
     # xdm <- A5W - 6 * DIE_WIDTH
     xdr <- A5W - 8 * DIE_WIDTH
     yd <- A5H - 1.5 * DIE_WIDTH
-    xp <- DIE_LAYOUT_WIDTH + 0.5 * cfg$get_pp_height("pawn_layout")
+    xp <- DIE_LAYOUT_WIDTH + 0.5 * cfg$get_height("pawn_layout")
     yp <- A5H - 0.5 * PAWN_WIDTH
     xb <- DIE_LAYOUT_WIDTH + 0.5 * BELT_WIDTH
     yb <- A5H - PAWN_WIDTH - 0.5 * BELT_HEIGHT
