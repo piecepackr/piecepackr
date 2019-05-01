@@ -116,7 +116,7 @@ Config <- R6Class("pp_cfg",
             private$cache[[key]] <- opt
             opt
         },
-        get_width = function(piece_side, rank=1) {
+        get_width = function(piece_side, suit=1, rank=1) {
             key <- opt_cache_key(piece_side, NA, rank, "width")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
@@ -145,11 +145,11 @@ Config <- R6Class("pp_cfg",
                               suitdie = DIE_WIDTH,
                               tile = TILE_WIDTH,
                               stop(paste("Don't know width of piece", piece)))
-            width <- get_style_element("width", piece_side, private$cfg, default, rank=rank)
+            width <- get_style_element("width", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- width
             width
         },
-        get_height = function(piece_side, rank=1) {
+        get_height = function(piece_side, suit=1, rank=1) {
             key <- opt_cache_key(piece_side, NA, rank, "height")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
@@ -176,7 +176,7 @@ Config <- R6Class("pp_cfg",
                 tile_height <- self$get_height("tile_face")
                 return (3 * tile_height)
             }
-            width <- self$get_width(piece_side, rank)
+            width <- self$get_width(piece_side, suit, rank)
             piece <- get_piece(piece_side)
             if (piece == "matchstick") {
                 W <- ifelse(rank == 1, 0.5*width, width)
@@ -194,7 +194,7 @@ Config <- R6Class("pp_cfg",
                               suitdie = width,
                               tile = width,
                               stop(paste("Don't know height of piece", piece))) #nocov
-            height <- get_style_element("height", piece_side, private$cfg, default, rank=rank)
+            height <- get_style_element("height", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- height
             height
         }

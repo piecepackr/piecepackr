@@ -234,8 +234,8 @@ pyramidLayoutGrob <- function(piece_side, suit, rank, cfg) {
         angles <- c(90+72, 90+36, 90, 90-36, 90-72)
         for(ii in 1:5) {
             cs <- pieces[ii]
-            vp <- viewport(width=inch(cfg$get_width(cs, rank)), 
-                           height=inch(cfg$get_height(cs, rank)), 
+            vp <- viewport(width=inch(cfg$get_width(cs, rank=rank)), 
+                           height=inch(cfg$get_height(cs, rank=rank)), 
                            angle=angles[ii], x=x[ii], y=y[ii])
             grob <- pieceGrob(cs, suit, rank, cfg, vp=vp)
             gl[[ii]] <- grob

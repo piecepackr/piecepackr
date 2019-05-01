@@ -87,15 +87,15 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if(!is.unit(x)) { x <- unit(x, default.units) }
     if(!is.unit(y)) { y <- unit(y, default.units) }
     if(is.na(angle)) { angle <- 0 }
-    if(is.na(width)) { width <- inch(cfg$get_width(piece_side, rank)) }
-    if(is.na(height)) { height <- inch(cfg$get_height(piece_side, rank)) }
+    if(is.na(width)) { width <- inch(cfg$get_width(piece_side, suit, rank)) }
+    if(is.na(height)) { height <- inch(cfg$get_height(piece_side, suit, rank)) }
     if(!is.unit(width)) { width <- unit(width, default.units) }
     if(!is.unit(height)) { height <- unit(height, default.units) }
 
     grob <- cfg$get_grob(piece_side, suit, rank)
     if (use_pictureGrob) {
-        pp_width <- cfg$get_width(piece_side, rank)
-        pp_height <- cfg$get_height(piece_side, rank)
+        pp_width <- cfg$get_width(piece_side, suit, rank)
+        pp_height <- cfg$get_height(piece_side, suit, rank)
         grob <- as_picture(grob, pp_width, pp_height)
     }
     cvp <- viewport(x, y, width, height, angle=angle)

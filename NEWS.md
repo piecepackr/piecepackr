@@ -5,14 +5,15 @@ New features
 ------------
 
 * New ``pp_cfg`` function (and R6 class) which on-the-fly builds a cache to speed up component drawing (#112, #122). 
-* ``make_pnp`` function now supports adding piecepack pyramids (#37) and matchsticks (#69) to the print-and-play layout.
-* Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("draw_fn_helpers")``, and ``help("grid.piece")`` for more info.
+* ``save_print_and_play`` function now supports adding piecepack pyramids (#37) and matchsticks (#69) to the print-and-play layout.
+* Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("grob_fn_helpers")``, and ``help("grid.piece")`` for more info.
 
 Breaking changes
 ----------------
 
 * ``draw_component`` has been renamed ``grid.piece`` (and many of its arguments vectorized) and
   ``draw_components`` has been renamed ``pmap_piece``(#123).
+* ``make_images`` has been renamed ``save_piece_images`` and ``make_pnp`` has been renamed ``save_print_and_play``.
 * The function arguments ``component_side``, ``i_r``, and ``i_s`` have been 
   renamed ``piece_side``, ``rank``, and ``suit``.
 * Lots of configuration list style names were changed (#95, #121).
@@ -27,7 +28,8 @@ Breaking changes
 * ``ribbons`` are now ``mat`` (as in picture frame 'matting') (#117)
 * Default pawn "belt" width is now ¾π" (#105).  
 * Default pawn "saucer" width is now ¾" and they now have a 'mat' coloring on the edge (#105)
-* ``draw_preview`` has been removed.  Can now do ``grid.piece("preview_layout", cfg=cfg)``.
+* ``draw_preview`` function has been removed.  Can now do ``grid.piece("preview_layout", cfg=cfg)``.
+* Demos moved to companion website: trevorldavis.com/piecepackr
 
 Bug fixes and minor improvements
 --------------------------------
@@ -40,6 +42,8 @@ Bug fixes and minor improvements
   for components like ``tile_back`` if you specify a suit or rank (#120).
 * "configuration lists" now support ``credit`` and ``copyright`` fields which add 
   extra info to the new "credit" and "copyright" sections of the print-and-play layout.
+* ``save_piece_images``'s ``format`` argument is now vectorized.  
+* ``save_print_and_play`` can now save a print-and-play "svg" and "ps" file (besides "pdf").
 
 piecepackr 0.11.0
 =================

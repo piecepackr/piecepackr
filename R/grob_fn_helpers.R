@@ -1,4 +1,4 @@
-#' \code{basic_draw_fn} helper functions
+#' \code{pieceGrob} helper functions
 #' 
 #' \code{gridlinesGrob} returns a grob that produces gridlines.
 #' \code{matGrob} returns a grob that produces a mat.
@@ -12,10 +12,10 @@
 #' @param shape_r Radial distance (from 0 to 0.5) (ignored by most shapes)
 #' @param name A character identifier (for grid)
 #' 
-#' @name draw_fn_helpers
+#' @name grob_fn_helpers
 NULL
 
-#' @rdname draw_fn_helpers
+#' @rdname grob_fn_helpers
 #' @export
 gridlinesGrob <- function(col, shape = "rect", shape_t = 90, name = NULL) {
     if (is_color_invisible(col)) return (nullGrob())
@@ -50,7 +50,7 @@ gridlinesGrob <- function(col, shape = "rect", shape_t = 90, name = NULL) {
     gl
 }
 
-#' @rdname draw_fn_helpers
+#' @rdname grob_fn_helpers
 #' @param mat_width Numeric vector of mat widths
 #' @export
 matGrob <- function(col, shape = "rect", shape_t = 90, mat_width = 0, name = NULL) {
@@ -68,7 +68,7 @@ matGrob <- function(col, shape = "rect", shape_t = 90, mat_width = 0, name = NUL
     }
 }
 
-#' @rdname draw_fn_helpers
+#' @rdname grob_fn_helpers
 #' @export
 checkersGrob <- function(col, shape = "rect", shape_t=90, name = NULL) {
     if (is_color_invisible(col)) return (nullGrob(name=name))
@@ -125,7 +125,7 @@ checkersGrob <- function(col, shape = "rect", shape_t=90, name = NULL) {
 #         grid.segments(1, 1 - ho, 1 - ho, 1, gp=gp) 
 # }
 
-#' @rdname draw_fn_helpers
+#' @rdname grob_fn_helpers
 #' @export
 hexlinesGrob <- function(col, shape = "rect", name = NULL) {
     if(is_color_invisible(col)) return (nullGrob(name=name))
@@ -145,7 +145,7 @@ hexlinesGrob <- function(col, shape = "rect", name = NULL) {
     }
 }
 
-#' @rdname draw_fn_helpers
+#' @rdname grob_fn_helpers
 #' @export
 get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2) {
     if (shape == "circle") {
@@ -167,7 +167,7 @@ get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2) {
     }
 }
 
-#' @rdname draw_fn_helpers
+#' @rdname grob_fn_helpers
 #' @export
 is_color_invisible <- function(col) {
     if (is.na(col))

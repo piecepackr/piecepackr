@@ -7,10 +7,11 @@ test_that("pp_cfg works as expected", {
     expect_output(print(cfg_default), "default cfg")
 })
 
-context("make_pnp works as expected")
-test_that("make_pnp works as expected", {
+context("save_print_and_play works as expected")
+test_that("save_print_and_play works as expected", {
 
     pdf_deck_dir = tempfile()
+    dir.create(pdf_deck_dir)
     on.exit(unlink(pdf_deck_dir, recursive=TRUE))
     pdf_deck_filename <- file.path(pdf_deck_dir, "piecepack_deck.pdf")
     on.exit(unlink(pdf_deck_filename))
@@ -19,10 +20,10 @@ test_that("make_pnp works as expected", {
     pdf_deck_filename_a5 <- file.path(pdf_deck_dir, "piecepack_deck_a5.pdf")
     on.exit(unlink(pdf_deck_filename_a5))
 
-    make_pnp(cfg_default, pdf_deck_filename, "letter")
-    make_pnp(cfg_default, pdf_deck_filename_a4, "A4")
-    make_pnp(cfg_default, pdf_deck_filename_a5, "A5")
-    expect_error(make_pnp(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
+    save_print_and_play(cfg_default, pdf_deck_filename, "letter")
+    save_print_and_play(cfg_default, pdf_deck_filename_a4, "A4")
+    save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
+    expect_error(save_print_and_play(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
 
     expect_true(file.exists(pdf_deck_filename))
     expect_equal(get_n_pages(pdf_deck_filename), 7)
@@ -35,21 +36,21 @@ test_that("make_pnp works as expected", {
     pdf_deck_filename_5s <- file.path(pdf_deck_dir, "piecepack_deck_5s.pdf")
     on.exit(unlink(pdf_deck_filename_5s))
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
-    make_pnp(cfg_5s, pdf_deck_filename_5s, "A5")
+    save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5")
 
 })
 
-context("make_images works as expected")
-test_that("make_images works as expected", {
+context("save_piece_images works as expected")
+test_that("save_piece_images works as expected", {
     directory <- tempfile()
     on.exit(unlink(directory))
     dir.create(directory)
-    make_images(cfg_default, directory, angles=90)
+    save_piece_images(cfg_default, directory, angle=90)
     expect_equal(length(list.files(directory)), 248)
 })
 
-context("draw_fn_helpers works as expected")
-test_that("draw_fn_helpers works as expected", {
+context("grob_fn_helpers works as expected")
+test_that("grob_fn_helpers works as expected", {
     expect_doppelganger("add_checkers", function() {
                     grid.draw(checkersGrob("purple", "rect"))
                     grid.draw(hexlinesGrob("yellow", "rect"))
@@ -158,7 +159,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("matchstick_face.s4.r4", function() dc("matchstick_face", suit=4, rank=4))
     expect_doppelganger("matchstick_face.s1.r5", function() dc("matchstick_face", suit=1, rank=5))
     expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", suit=2, rank=6))
-    cfg <- list(invert_colors=TRUE, draw_fn="basic~ieceGrobFn")
+    cfg <- list(invert_colors=TRUE, grob_fn="basicPieceGrob")
     expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, suit=3, rank=6))
 
     #### preview appears wrong #99

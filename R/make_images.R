@@ -39,12 +39,12 @@ MATCHSTICK_HEIGHTS <- c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S
 
 
 
-pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, rank = 1,
+pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, rank=1,
                       width=NULL, height=NULL, res=72) {
     cfg <- as_pp_cfg(cfg)
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- cfg$get_width(piece_side, rank)
-    if (is.null(height)) height <- cfg$get_height(piece_side, rank)
+    if (is.null(width)) width <- cfg$get_width(piece_side, suit, rank)
+    if (is.null(height)) height <- cfg$get_height(piece_side, suit, rank)
     if (angle %in% c(90, 270)) {
         twidth <- height
         height <- width
@@ -71,18 +71,21 @@ piece_filename <- function(directory, cfg, piece_side, format, angle,
     file.path(directory, filename)
 }
 
-#' Make piecepack images
+#' Save piecepack images
 #'
-#' Makes images of individual piecepack pieces.
+#' Saves images of all individual piecepack pieces.
 #'
 #' @param cfg Piecepack configuration list
 #' @param directory Directory where to place images
-#' @param format Format
-#' @param angles Angle to rotate images (in degrees)
+#' @param format Character vector of formats to save images in
+#' @param angle Numeric vector of angles to rotate images (in degrees)
 #' @export
-make_images <- function(cfg=list(), directory=tempdir(), format="svg", angles=0) {
-    for (angle in angles) make_images_helper(directory, cfg, format, angle)
+save_piece_images <- function(cfg=list(), directory=tempdir(), format="svg", angle=0) {
+    for (f in format) {
+        for (a in angle) make_images_helper(directory, cfg, f, a)
+    }
 }
+
 make_images_helper <- function(directory, cfg, format, angle) {
     suppressWarnings({
         for (cs in COMPONENT_AND_SIDES) {
@@ -112,7 +115,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
                 for (suit in 1:get_n_suits(cfg)) {
                     for (rank in 1:get_n_ranks(cfg)) {
                         f <- piece_filename(directory, cfg, cs, format, angle, suit, rank)
-                        pp_device(f, cs, cfg, angle, rank)
+                        pp_device(f, cs, cfg, angle, rank=rank)
                         grid.piece(cs, suit, rank, cfg)
                         invisible(dev.off())
                     }

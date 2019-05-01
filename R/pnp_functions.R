@@ -10,32 +10,33 @@ A4_HEIGHT <- 11.69
 A5W <- 5
 A5H <- 7.5
 
-pp_pdf <- function(filename, family, paper) {
+dev_onefile <- function(filename, family, paper) {
+    dev <- switch(tools::file_ext(filename),
+                  pdf = grDevices::cairo_pdf,
+                  ps = grDevices::cairo_ps,
+                  svg = grDevices::svg)
     if (paper == "letter") {
-        cairo_pdf(filename, onefile=TRUE, width=LETTER_HEIGHT, height=LETTER_WIDTH, family=family)
+        dev(filename, onefile=TRUE, width=LETTER_HEIGHT, height=LETTER_WIDTH, family=family)
     } else if (paper == "A4") {
-        cairo_pdf(filename, onefile=TRUE, width=A4_HEIGHT, height=A4_WIDTH, family=family)
+        dev(filename, onefile=TRUE, width=A4_HEIGHT, height=A4_WIDTH, family=family)
     } else if (paper == "A5") {
-        cairo_pdf(filename, onefile=TRUE, width=A4_HEIGHT/2, height=A4_WIDTH, family=family)
+        dev(filename, onefile=TRUE, width=A4_HEIGHT/2, height=A4_WIDTH, family=family)
     } else {
         stop(paste("Don't know how to handle paper", paper))
     }
 }
 
-#' Make print-and-play piecepack pdf
+#' Save piecepack print-and-play (PnP) file
 #'
-#' Makes a print-and-play piecepack pdf.
+#' Save piecepack print-and-play (PnP) file
 #'
 #' @param cfg Piecepack configuration list
-#' @param output_filename Filename of PnP output
-#' @param size PnP output size (currently either "letter" or "A4")
-#' @param pieces Character vector of desired PnP pieces (default everything)
+#' @param output_filename Filename for print-and-play file
+#' @param size PnP output size (currently either "letter", "A4", or "A5")
+#' @param pieces Character vector of desired PnP pieces
 #' @export
-make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter", 
+save_print_and_play <- function(cfg=list(), output_filename="piecepack.pdf", size="letter", 
                      pieces=c("piecepack", "matchsticks", "pyramids")) {
-    unlink(output_filename)
-    directory <- dirname(output_filename)
-    dir.create(directory, recursive=TRUE, showWarnings=FALSE)
 
     cfg <- as_pp_cfg(cfg)
     n_suits <- cfg$n_suits
@@ -51,7 +52,7 @@ make_pnp <- function(cfg=list(), output_filename="piecepack.pdf", size="letter",
         xr <- 0.5
     }
 
-    pp_pdf(output_filename, cfg$fontfamily, size)
+    dev_onefile(output_filename, cfg$fontfamily, size)
 
     grid.newpage()
     pushViewport(viewport(x=xl, width=A5W))
