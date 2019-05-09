@@ -71,9 +71,12 @@ Config <- R6Class("pp_cfg",
             # Additional colors
             background_col <- get_background_color(piece_side, suit, rank, private$cfg)
             border_col <- get_border_color(piece_side, suit, rank, private$cfg)
+	    border_lex <- get_border_lex(piece_side, suit, rank, private$cfg)
             gridline_col <- get_gridline_color(piece_side, suit, rank, private$cfg)
+	    gridline_lex <- get_gridline_lex(piece_side, suit, rank, private$cfg)
             mat_col <- get_mat_color(piece_side, suit, rank, private$cfg)
             mat_width <- get_mat_width(piece_side, suit, rank, private$cfg)
+
 
             # Overall scaling factor
             scale <- get_scale(private$cfg)
@@ -103,8 +106,10 @@ Config <- R6Class("pp_cfg",
             ps_y <- to_y(ps_t, ps_r) + 0.5
 
             opt <- list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
-                 background_col=background_col, border_col=border_col, 
-                 gridline_col=gridline_col,  mat_col=mat_col, mat_width=mat_width,
+                 background_col=background_col, 
+		 border_col=border_col, border_lex=border_lex,
+                 gridline_col=gridline_col, gridline_lex=gridline_lex,
+		 mat_col=mat_col, mat_width=mat_width,
                  dm_col=dm_col, dm_text=dm_text, 
                  dm_fontsize=dm_fontsize, 
                  dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,

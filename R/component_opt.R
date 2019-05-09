@@ -81,6 +81,13 @@ get_border_color <- function(piece_side, suit, rank, cfg) {
     get_border_colors(piece_side, suit, rank, cfg)[suit]
 }
 
+get_border_lex <- function(piece_side, suit, rank, cfg) {
+    lex <- get_style_element("border_lex", piece_side, cfg, 1, suit, rank)
+    lex <- numeric_cleave(lex)
+    lex <- expand_suit_elements(lex, "border_lex", piece_side, cfg)
+    lex[suit]
+}
+
 get_shape_t <- function(piece_side, suit, rank, cfg) {
     t <- numeric_cleave(get_style_element("shape_t", piece_side, cfg, 90, suit, rank))
     t <- expand_suit_elements(t, "shape_t", piece_side, cfg)
@@ -278,6 +285,14 @@ get_gridline_color <- function(piece_side, suit, rank, cfg) {
     colors <- expand_suit_elements(colors, "gridline_colors", piece_side, cfg)
     colors[suit]
 }
+
+get_gridline_lex <- function(piece_side, suit, rank, cfg) {
+    lex <- get_style_element("gridline_lex", piece_side, cfg, 1, suit, rank)
+    lex <- numeric_cleave(lex)
+    lex <- expand_suit_elements(lex, "gridline_lex", piece_side, cfg)
+    lex[suit]
+}
+
 get_mat_color <- function(piece_side, suit, rank, cfg) {
     default <- {
         if (piece_side %in% c("belt_face", "saucer_face", "saucer_back")) {

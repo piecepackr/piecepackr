@@ -11,19 +11,20 @@
 #' @param shape_t Angle (in degrees) of first vertex of shape (ignored by many shapes).
 #' @param shape_r Radial distance (from 0 to 0.5) (ignored by most shapes)
 #' @param name A character identifier (for grid)
+#' @param lex Multiplier to apply to the line width
 #' 
 #' @name grob_fn_helpers
 NULL
 
 #' @rdname grob_fn_helpers
 #' @export
-gridlinesGrob <- function(col, shape = "rect", shape_t = 90, name = NULL) {
+gridlinesGrob <- function(col, shape = "rect", shape_t = 90, lex = 1, name = NULL) {
     if (is_color_invisible(col)) return (nullGrob())
     gl <- gList()
     o <- 0.02
     if (shape == "rect") {
         lwd <- 8
-        gp_gl <- gpar(col=col, lwd=lwd, lineend="butt")
+        gp_gl <- gpar(col=col, lwd=lwd, lineend="butt", lex=lex)
         gl[[1]] <- linesGrob(x=0.5, gp=gp_gl)
         gl[[2]] <- linesGrob(y=0.5, gp=gp_gl)
     } else if (shape %in% c("circle", "kite", "halma")) {
@@ -43,7 +44,7 @@ gridlinesGrob <- function(col, shape = "rect", shape_t = 90, name = NULL) {
             i_next <- ii+n
             if (i_next > nt)
                 i_next <- i_next %% nt
-            gp = gpar(col=col, lwd=lwd)
+            gp = gpar(col=col, lwd=lwd, lex=lex)
             gl[[ii]] <- segmentsGrob(x[ii], y[ii], x[i_next], y[i_next], gp=gp)
         }
     }

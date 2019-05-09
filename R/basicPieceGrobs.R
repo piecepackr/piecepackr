@@ -18,7 +18,7 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_col))
 
     # Gridlines, Mat
-    gl_grob <- gridlinesGrob(opt$gridline_col, opt$shape, opt$shape_t)
+    gl_grob <- gridlinesGrob(opt$gridline_col, opt$shape, opt$shape_t, opt$gridline_lex)
 
     mat_grob <- matGrob(opt$mat_col, opt$shape, opt$shape_t, opt$mat_width)
 
@@ -33,7 +33,7 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
 
     # Border 
-    border_grob <- shape_fn(gp=gpar(col=opt$border_col, fill=NA))
+    border_grob <- shape_fn(gp=gpar(col=opt$border_col, fill=NA, lex=opt$border_lex))
     gl <- gList(background_grob, gl_grob, mat_grob, ps_grob,
                 dm_grob, border_grob)
 

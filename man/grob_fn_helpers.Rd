@@ -10,7 +10,8 @@
 \alias{is_color_invisible}
 \title{\code{pieceGrob} helper functions}
 \usage{
-gridlinesGrob(col, shape = "rect", shape_t = 90, name = NULL)
+gridlinesGrob(col, shape = "rect", shape_t = 90, lex = 1,
+  name = NULL)
 
 matGrob(col, shape = "rect", shape_t = 90, mat_width = 0,
   name = NULL)
@@ -29,6 +30,8 @@ is_color_invisible(col)
 \item{shape}{String of the shape}
 
 \item{shape_t}{Angle (in degrees) of first vertex of shape (ignored by many shapes).}
+
+\item{lex}{Multiplier to apply to the line width}
 
 \item{name}{A character identifier (for grid)}
 
