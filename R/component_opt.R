@@ -83,9 +83,7 @@ get_border_color <- function(piece_side, suit, rank, cfg) {
 
 get_border_lex <- function(piece_side, suit, rank, cfg) {
     lex <- get_style_element("border_lex", piece_side, cfg, 1, suit, rank)
-    lex <- numeric_cleave(lex)
-    lex <- expand_suit_elements(lex, "border_lex", piece_side, cfg)
-    lex[suit]
+    lex
 }
 
 get_shape_t <- function(piece_side, suit, rank, cfg) {
@@ -288,9 +286,7 @@ get_gridline_color <- function(piece_side, suit, rank, cfg) {
 
 get_gridline_lex <- function(piece_side, suit, rank, cfg) {
     lex <- get_style_element("gridline_lex", piece_side, cfg, 1, suit, rank)
-    lex <- numeric_cleave(lex)
-    lex <- expand_suit_elements(lex, "gridline_lex", piece_side, cfg)
-    lex[suit]
+    lex
 }
 
 get_mat_color <- function(piece_side, suit, rank, cfg) {

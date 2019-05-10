@@ -42,6 +42,7 @@ Bug fixes and minor improvements
   for components like ``tile_back`` if you specify a suit or rank (#120).
 * "configuration lists" now support ``credit`` and ``copyright`` fields which add 
   extra info to the new "credit" and "copyright" sections of the print-and-play layout.
+* "configuration lists" now support ``border_lex`` and ``gridline_lex`` to allow customizing the width of the border and grid lines.
 * ``save_piece_images``'s ``format`` argument is now vectorized.  
 * ``save_print_and_play`` can now save a print-and-play "svg" and "ps" file (besides "pdf").
 
