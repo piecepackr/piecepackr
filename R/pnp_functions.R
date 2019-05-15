@@ -40,11 +40,11 @@ gappend <- function(ll, g) {
 #' @param size PnP output size (currently either "letter", "A4", or "A5")
 #' @param pieces Character vector of desired PnP pieces.  
 #'        Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
-#' @param arrangement Either "label" or "double-sided".
+#' @param arrangement Either "single-sided" or "double-sided".
 #' @export
 save_print_and_play <- function(cfg=list(), output_filename="piecepack.pdf", size="letter", 
                      pieces=c("piecepack", "matchsticks", "pyramids"),
-                     arrangement="label") {
+                     arrangement="single-sided") {
 
     cfg <- as_pp_cfg(cfg)
     n_suits <- cfg$n_suits
@@ -197,7 +197,6 @@ a5_vp <- viewport(width=unit(A5W, "in"), height=unit(A5H, "in"))
 gp_title <- gpar(fontsize=15, fontfamily="sans", fontface="bold")
 gp_header <- gpar(fontsize=12, fontfamily="sans", fontface="bold")
 gp_text <- gpar(fontsize=9, fontfamily="sans")
-
 
 htg <- function(label, x, y, just="center", ...) {
     textGrob(label, x=inch(x), y=inch(y), just=just,
@@ -410,7 +409,7 @@ a5_matchsticks_grob <- function(suits=1:5, cfg=pp_cfg(), front=TRUE) {
     pmap_piece(df, cfg=cfg, default.units="inches", draw=FALSE)
 }
 
-a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="label") {
+a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="single-sided") {
     die_width <- cfg$get_width("die_width")
     pawn_width <- cfg$get_width("pawn_width")
     tile_width <- cfg$get_width("tile_back")
