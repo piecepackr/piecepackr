@@ -5,7 +5,8 @@
 \title{Save piecepack print-and-play (PnP) file}
 \usage{
 save_print_and_play(cfg = list(), output_filename = "piecepack.pdf",
-  size = "letter", pieces = c("piecepack", "matchsticks", "pyramids"))
+  size = "letter", pieces = c("piecepack", "matchsticks", "pyramids"),
+  arrangement = "label")
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}
@@ -14,7 +15,10 @@ save_print_and_play(cfg = list(), output_filename = "piecepack.pdf",
 
 \item{size}{PnP output size (currently either "letter", "A4", or "A5")}
 
-\item{pieces}{Character vector of desired PnP pieces}
+\item{pieces}{Character vector of desired PnP pieces.
+Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".}
+
+\item{arrangement}{Either "label" or "double-sided".}
 }
 \description{
 Save piecepack print-and-play (PnP) file

@@ -13,6 +13,7 @@ Config <- R6Class("pp_cfg",
         fontfamily = NULL,
         copyright = NULL,
         credit = NULL,
+        description = NULL, 
         initialize = function(cfg=list()) {
             private$cfg <- cfg
             self$n_suits <- get_n_suits(cfg)
@@ -23,6 +24,7 @@ Config <- R6Class("pp_cfg",
             self$title <- cfg$title
             self$copyright <- cfg$copyright
             self$credit <- cfg$credit
+            self$description <- cfg$description
         },
         as_list = function() { private$cfg },
         print = function() {

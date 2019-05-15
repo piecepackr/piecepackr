@@ -44,7 +44,6 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 #' @export
 pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as.list(cfg)
-    cfg$scale <- 0.3 * get_scale(cfg)
     g1 <- pieceGrob("pyramid_face",  suit, rank, cfg, 
                     y=0.75, width=1.0, height=0.5, angle=180, name="face")
     g2 <- pieceGrob("pyramid_back",  suit, rank, cfg, 
@@ -53,7 +52,8 @@ pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
                     x=0.25, width=1.0, height=0.5, angle=-90, name="left")
     g4 <- pieceGrob("pyramid_right", suit, rank, cfg,
                     x=0.75, width=1.0, height=0.5, angle= 90, name="right")
-    gTree(children=gList(g1, g2, g3, g4), name="pyramid_top")
+    gTree(children=gList(g1, g2, g3, g4), name="pyramid_top", 
+          gp=gpar(cex=0.3))
 }
 
 #' @rdname basicPieceGrobs
@@ -144,7 +144,8 @@ x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
 x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
 y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
 
-piecepackDieGrob <- function(suit, cfg, flip=FALSE) {
+piecepackDieGrob <- function(suit, cfg, flip=FALSE, 
+                             arrangement=cfg$die_arrangement) {
     cfg <- as_pp_cfg(cfg)
     angle <- rep(c(0, -90), 3)
     if (flip) {
@@ -153,7 +154,6 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE) {
     } else {
         x <- x_die_layoutRF
     }
-    arrangement <- cfg$die_arrangement
     suit <- rep(suit, length.out=6)
     if (arrangement == "opposites_sum_to_5") {
         rank <- c(1, 2, 3, 6, 5, 4)
@@ -215,11 +215,12 @@ pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
     })
     opt <- cfg$get_piece_opt("pawn_face", suit, 0)
     border_col <- opt$border_col
+    gp <- gpar(col=opt$border_col, fill=NA)
     gl[[3]] <- linesGrob(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
-    gl[[4]] <- rectGrob(gp=gpar(col=border_col, fill=NA))
+    gl[[4]] <- rectGrob(gp=gp)
     ll <- 0.07
-    gl[[5]] <- segmentsGrob(0.5, 0, 0.5, ll, gp=gpar(col=border_col))
-    gl[[6]] <- segmentsGrob(0.5, 1, 0.5, 1-ll, gp=gpar(border_col))
+    gl[[5]] <- segmentsGrob(0.5, 0, 0.5, ll, gp=gp)
+    gl[[6]] <- segmentsGrob(0.5, 1, 0.5, 1-ll, gp=gp)
     gTree(children=gl, name="pawn_layout")
 }
 

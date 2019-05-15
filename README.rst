@@ -65,7 +65,16 @@ The default piecepackr configuration should work out on the box on most modern O
    cairo
     TRUE
 
-Also although most users won't need them ``piecpackr`` contains utility functions that depend on the system dependencies ``ghostscript`` and ``poppler-utils``.
+Also although most users won't need them ``piecpackr`` contains utility functions that depend on the system dependencies ``ghostscript`` and ``poppler-utils``:
+
+1. ``save_print_and_play`` will embed additional metadata into the pdf if ``ghostscript`` is available.
+2. ``get_embedded_font`` (a debugging helper function) needs ``pdffonts`` (usually found in ``poppler-utils``)
+
+You can install these utilities on Ubuntu with
+
+.. code:: bash
+
+    sudo apt install ghostscript poppler-utils
 
 API Intro
 ---------

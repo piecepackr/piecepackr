@@ -37,7 +37,6 @@ test_that("save_print_and_play works as expected", {
     on.exit(unlink(pdf_deck_filename_5s))
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
     save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5")
-
 })
 
 context("save_piece_images works as expected")
@@ -164,7 +163,6 @@ test_that("no regressions in figures", {
     cfg <- list(invert_colors=TRUE, grob_fn="basicPieceGrob")
     expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, suit=3, rank=6))
 
-    #### preview appears wrong #99
     expect_doppelganger("preview", function() dc("preview_layout"))
     expect_doppelganger("preview.5s", function() dc("preview_layout", cfg=list(suit_text="A,B,C,D,E,", die_arrangement="counter_up")))
     expect_doppelganger("preview.6s", function() dc("preview_layout", cfg=list(suit_text="I,II,III,IV,V,VI,")))

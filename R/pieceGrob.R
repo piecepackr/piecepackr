@@ -83,6 +83,7 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
                            width=NA, height=NA, default.units = "npc") {
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
+    suit <- ifelse(suit > cfg$i_unsuit+1, cfg$i_unsuit+1, suit)
     rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
     if(!is.unit(x)) { x <- unit(x, default.units) }
     if(!is.unit(y)) { y <- unit(y, default.units) }
