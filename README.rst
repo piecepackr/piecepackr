@@ -105,12 +105,12 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 .. image:: https://trevorldavis.com/piecepackr/images/knitr/docs-intro-dc1t-1.svg
    :alt: 3 of Suns Tile Face
 
-``make_pnp`` makes a "Print & Play" pdf of a configured piecepack, ``make_images`` makes individual images of each piecepack component:
+``save_print_and_play`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images`` makes individual images of each piecepack component:
 
 .. code:: r
 
-   make_pnp(cfg, "my_piecepack.pdf", size="letter")
-   make_images(cfg)
+   save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
+   save_piece_images(cfg)
 
 A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's `man pages`_.
 
@@ -125,11 +125,13 @@ Frequently Asked Questions
 How should I Print & Play my piecepack?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The Print-and-Play pdf's produced by the ``make_pnp`` function are designed to be used in three different ways:
+The Print-and-Play pdf's produced by the ``save_print_and_play`` function can be configured in two different ways:
 
-- Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice).  
-- Print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice and pawns.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
-- Print double-sided on paper(board) and cut out the components.  One will need to do some additional folding and application of adhesive/tape in order to construct the dice and pawns.
+single-sided
+    Print single-sided on label paper, cut out the labels, and apply to components (in the material of your choice) or print single-sided on paper(board), apply adhesive to the back, fold over in half "hot-dog-style", and cut out the components.  One will need to to some additional folding and application of adhesive/tape in order to construct the dice, pawns, and pyramids.  One can build more dice/pawns/pawn belts if you cut them out *before* folding the paper(board) in half but if you don't do so you should still have all the "standard" piecepack components.
+
+double-sided
+    Print double-sided on paper(board) and cut out the components.  One will need to do some additional folding and application of adhesive/tape in order to construct the dice, pawns, and pyramids.
 
 The `Piecepack Wiki <www.ludism.org/ppwiki>`_ has a page on `making piecepacks <http://www.ludism.org/ppwiki/MakingPiecepacks>`_. The BoardGameGeek `Print-and-Play Wiki <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ also has lots of good info like how to `quickly make coins uisng an arch punch <https://boardgamegeek.com/thread/507240/making-circular-tokens-and-counters-arch-punch>`_.  
 
@@ -138,7 +140,7 @@ The `Piecepack Wiki <www.ludism.org/ppwiki>`_ has a page on `making piecepacks <
 What are the dimensions of the components?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes:
+Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes and sizes:
 
 - tiles (default "rect") are drawn into a 2" by 2" square 
 - coins (default "circle") are drawn into a ¾" by ¾" square
@@ -159,7 +161,10 @@ You can specify colors either by `RGB hex color codes <http://www.color-hex.com/
 I have some images I want to use as suit/rank/directional mark symbols, how can I use them with this program?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You'll need to take them and put them into a font.  `FontForge <https://fontforge.github.io/en-US/>`_ is a popular open-source program suitable for this task.  `fontcustom <https://github.com/FontCustom/fontcustom>`_ is a popular command-line wrapper around FontForge.  You may need to convert your images from one format to another format first.  To guarantee dispatch by ``fontconfig`` you might want to put the symbols in a part of the "Private Use Area" of Unicode not used by any other fonts on your system.  If you do that you won't need to specify your font otherwise you'll need to configure the ``suit_symbols_font``, ``rank_symbols_font``, and/or ``dm_font`` options.
+There are a couple of approaches one can take:
+
+1. Take them and put them into a font.  `FontForge <https://fontforge.github.io/en-US/>`_ is a popular open-source program suitable for this task.  `fontcustom <https://github.com/FontCustom/fontcustom>`_ is a popular command-line wrapper around FontForge.  You may need to convert your images from one format to another format first.  To guarantee dispatch by ``fontconfig`` you might want to put the symbols in a part of the "Private Use Area" of Unicode not used by any other fonts on your system.  If you do that you won't need to specify your font otherwise you'll need to configure the ``suit_symbols_font``, ``rank_symbols_font``, and/or ``dm_font`` options.
+2. Write a custom grob function to insert the desired symbols using such ``grid``'s ``rasterGrob`` or ``grImport2``'s ``pictureGrob``.
 
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -207,7 +212,7 @@ How do I use this package in piecepack rulesets?
 
 There are two main ways that this package could be used to help make piecepack rulesets:
 
-1) The ``make_images`` function makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
+1) The ``save_piece_images`` function makes individual images of components.  By default it makes them in the pdf, png, and svg formats with rotations of 0, 90, 180, and 270 degrees but with configuration can also make them in the bmp, jpeg, tiff, and ps formats and other rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename (and directory) is ``pdf/components/orthodox1/tile_face_s1_r5_t180.pdf`` where ``orthodox1`` is the configuration used to build that image, ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
 2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  Here is a link to a `shogi diagram making example <https://github.com/trevorld/piecepack_rules/blob/master/R/make_shogi_diagrams.R>`_.  The important function for diagram drawing exported by the ``piecepack`` R package is ``grid.piece`` which draws piecepack components to the graphics device.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__:
 
 .. image:: https://www.trevorldavis.com//piecepackr/images/knitr/tictactoe.gif

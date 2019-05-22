@@ -123,6 +123,10 @@ Config <- R6Class("pp_cfg",
             private$cache[[key]] <- opt
             opt
         },
+        get_suit_color = function(suit=1) {
+            get_suit_color_helper("pawn_face", suit, 
+                                  rank=1, private$cfg) 
+        },
         get_width = function(piece_side, suit=1, rank=1) {
             key <- opt_cache_key(piece_side, NA, rank, "width")
             if(!is.null(private$cache[[key]])) {

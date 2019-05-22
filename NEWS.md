@@ -5,7 +5,7 @@ New features
 ------------
 
 * New ``pp_cfg`` function (and R6 class) which on-the-fly builds a cache to speed up component drawing (#112, #122). 
-* ``save_print_and_play`` function now supports adding piecepack pyramids (#37) and matchsticks (#69) to the print-and-play layout.
+* ``save_print_and_play`` function now supports adding piecepack pyramids (#37), matchsticks (#69), and subpacks (aka "travel" piecepacks) (#129) to the print-and-play layout.
 * Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("grob_fn_helpers")``, and ``help("grid.piece")`` for more info.
 
 Breaking changes
@@ -40,8 +40,9 @@ Bug fixes and minor improvements
 * Removed some package dependencies.
 * ``pmap_piece`` now supports ``angle=NA`` and ``grid.piece`` no longer draws different output
   for components like ``tile_back`` if you specify a suit or rank (#120).
-* "configuration lists" now support ``credit`` and ``copyright`` fields which add 
-  extra info to the new "credit" and "copyright" sections of the print-and-play layout.
+* "configuration lists" now support ``credit``, ``copyright``, and ``description`` fields  
+  which add extra info to the new "credit", "copyright", and "description" sections of the print-and-play layout.  
+*  Also if ``ghostscript`` installed will automatically embed metadata in the print-and-play pdf (#93).
 * "configuration lists" now support ``border_lex`` and ``gridline_lex`` to allow customizing the width of the border and grid lines.
 * ``save_piece_images``'s ``format`` argument is now vectorized.  
 * ``save_print_and_play`` can now save a print-and-play "svg" and "ps" file (besides "pdf").
