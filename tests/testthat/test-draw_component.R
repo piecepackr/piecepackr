@@ -36,7 +36,7 @@ test_that("save_print_and_play works as expected", {
     expect_equal(get_n_pages(pdf_deck_filename_a4), 7)
     expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
     expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
-    skip_if(Sys.which("pdfinfo") != "", "Doesn't have pdfinfo binary")
+    skip_if(Sys.which("pdfinfo") == "", "Doesn't have pdfinfo binary")
     expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
 
 })
