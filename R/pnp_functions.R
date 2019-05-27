@@ -419,7 +419,7 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
     ytm <- 1.5 * tile_width
     ytt <- 2.5 * tile_width
     xc <-A5W - 0.25 * tile_width
-    ycs <- (0.50 + seq(0, 5)) * 0.8
+    ycs <- rev((0.50 + seq(0, 5)) * 0.8)
     xdr <- c(0.5,1.5,2.5) * die_width
     ydt <- A5H - 0.5 * die_width
     ydb <- A5H - 1.5 * die_width
@@ -430,7 +430,7 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
     xsr <- A5W - 0.25 * tile_width
     ysb <- 2.75 * tile_width
     #### Adjust angle of coins and saucers?
-    dft <- tibble(piece_side="tile_face", x=rep(c(xtl,xtr),3),
+    dft <- tibble(piece_side="tile_face", x=rep(c(xtr,xtl),3),
                   y=rep(c(ytt,ytm,ytb),each=2), 
                   suit, rank=1:6, angle=0)
     dfc <- tibble(piece_side="coin_back", x=rep(xc,6),

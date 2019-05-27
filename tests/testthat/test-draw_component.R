@@ -19,24 +19,26 @@ test_that("save_print_and_play works as expected", {
     on.exit(unlink(pdf_deck_filename_a4))
     pdf_deck_filename_a5 <- file.path(pdf_deck_dir, "piecepack_deck_a5.pdf")
     on.exit(unlink(pdf_deck_filename_a5))
-
-    save_print_and_play(cfg_default, pdf_deck_filename, "letter")
-    save_print_and_play(cfg_default, pdf_deck_filename_a4, "A4")
-    save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
-    expect_error(save_print_and_play(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
-
-    expect_true(file.exists(pdf_deck_filename))
-    expect_equal(get_n_pages(pdf_deck_filename), 7)
-    expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
-    if (Sys.which("pdfinfo") != "")
-        expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
-    expect_equal(get_n_pages(pdf_deck_filename_a4), 7)
-    expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
-
     pdf_deck_filename_5s <- file.path(pdf_deck_dir, "piecepack_deck_5s.pdf")
     on.exit(unlink(pdf_deck_filename_5s))
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
     save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5")
+
+    save_print_and_play(cfg_default, pdf_deck_filename, "letter")
+    save_print_and_play(cfg_default, pdf_deck_filename_a4, "A4")
+    save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
+
+    expect_error(save_print_and_play(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
+    expect_true(file.exists(pdf_deck_filename))
+
+    skip_if(!has_gs(), "Doesn't have ghostscript binary")
+    expect_equal(get_n_pages(pdf_deck_filename), 7)
+    expect_equal(get_n_pages(pdf_deck_filename_a4), 7)
+    expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
+    expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
+    skip_if(Sys.which("pdfinfo") != "", "Doesn't have pdfinfo binary")
+    expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
+
 })
 
 context("save_piece_images works as expected")
