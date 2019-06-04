@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics in R
-Version: 0.12.0-18
+Version: 0.12.0-19
 Author: Trevor L Davis. 
 Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
 Description: This is an R package designed to make configurable board game graphics. It can be used with the grid R package to make board game diagrams, board game animations, and custom Print & Play layouts.  By default it is configured to make 'piecepack' game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other game systems.

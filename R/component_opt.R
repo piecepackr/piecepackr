@@ -138,18 +138,10 @@ should_invert <- function(piece_side, suit, rank, cfg) {
 }
 
 is_suited <- function(piece_side, suit, rank, cfg) {
-    switch(piece_side,
-           tile_back = FALSE,
-           tile_face = TRUE, 
-           coin_back = TRUE,
-           coin_face = FALSE,
-           die_face = ifelse(suit <= get_i_unsuit(cfg), TRUE, FALSE),
-           suitdie_face = ifelse(suit <= get_i_unsuit(cfg), TRUE, FALSE),
-           saucer_face = TRUE,
-           saucer_back = FALSE,
-           pawn_face = TRUE,
-           pawn_back = TRUE,
-           belt_face = TRUE)
+    if (is.na(piece_side))
+        FALSE
+    else
+        has_suit(piece_side) && (suit <= get_i_unsuit(cfg))
 }
 
 get_dm_t <- function(piece_side, suit, rank, cfg) {

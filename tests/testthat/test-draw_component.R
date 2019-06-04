@@ -153,7 +153,8 @@ test_that("no regressions in figures", {
     expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", suit=4, rank=1))
     expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", suit=2, rank=1))
     expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", suit=4, rank=3)) 
-    expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", suit=3, rank=4))
+    cfg <- list(invert_colors.suited=TRUE, grob_fn="basicPieceGrob")
+    expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", cfg=cfg, suit=3, rank=4))
 
     # matchsticks
     expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", suit=1, rank=1))
@@ -162,7 +163,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("matchstick_face.s4.r4", function() dc("matchstick_face", suit=4, rank=4))
     expect_doppelganger("matchstick_face.s1.r5", function() dc("matchstick_face", suit=1, rank=5))
     expect_doppelganger("matchstick_face.s2.r6", function() dc("matchstick_face", suit=2, rank=6))
-    cfg <- list(invert_colors=TRUE, grob_fn="basicPieceGrob")
+    cfg <- list(invert_colors.suited=TRUE, grob_fn="basicPieceGrob")
     expect_doppelganger("matchstick_back.s3.r6", function() dc("matchstick_back", cfg=cfg, suit=3, rank=6))
 
     expect_doppelganger("preview", function() dc("preview_layout"))
