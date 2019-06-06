@@ -117,7 +117,7 @@ A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepack
 Licence
 -------
 
-This software package and the images created by it are released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file ``LICENSE.md`` for more info.  This license is compatible with version 3 of the GNU Public License (GPL-3).
+This software package is released under a Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0).  You can see file ``LICENSE.md`` for more info.  This license is compatible with version 3 of the GNU Public License (GPL-3).
 
 Frequently Asked Questions
 --------------------------

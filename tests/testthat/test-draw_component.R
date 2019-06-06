@@ -178,6 +178,8 @@ test_that("no regressions in figures", {
 
     cfg <- list(die_arrangement="opposites_sum_to_5")
     expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", suit=3, cfg=cfg))
+    # 102
+    expect_doppelganger("rankdie_layoutRF_suitasace", function() dc("die_layoutRF", suit=6, cfg=list(use_suit_as_ace=TRUE)))
 
     cfg <- list(suit_text="A,B,C,D,E,F", suit_color="red,black,green,blue,orange,grey")
     expect_doppelganger("suitdie_layoutRF-5suits", function() dc("suitdie_layoutRF", cfg=cfg))
