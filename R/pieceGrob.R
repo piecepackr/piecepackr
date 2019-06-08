@@ -74,7 +74,7 @@ as_picture <- function(grob, width, height) {
     svg(svg_file, width=width, height=height)
     grid.draw(grob)
     invisible(dev.off())
-    pictureGrob(readPicture(svg_file, warn=FALSE))
+    pictureGrob(readPicture(svg_file, warn=FALSE), expansion=0)
 }
 
 pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(), 
