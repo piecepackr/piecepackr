@@ -7,6 +7,7 @@ New features
 * New ``pp_cfg`` function (and R6 class) which on-the-fly builds a cache to speed up component drawing (#112, #122). 
 * ``save_print_and_play`` function now supports adding piecepack pyramids (#37), matchsticks (#69), and subpacks (aka "travel" piecepacks) (#129) to the print-and-play layout.
 * Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("grob_fn_helpers")``, and ``help("grid.piece")`` for more info.
+* Now supports drawing most pieces with a simple 3D oblique projection (#76).
 
 Breaking changes
 ----------------

@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    line, polyline, polygon, path, rect, circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<polygon points='340.91,268.91 339.27,270.70 337.81,272.62 336.52,274.68 335.42,276.83 334.52,279.08 333.82,281.40 333.33,283.78 333.06,286.18 333.01,288.61 333.17,291.02 333.55,293.42 334.14,295.77 334.94,298.05 335.94,300.26 337.14,302.36 338.52,304.36 340.07,306.22 341.78,307.93 343.64,309.48 345.64,310.86 347.74,312.06 349.95,313.06 352.23,313.86 354.58,314.45 356.98,314.83 359.39,314.99 361.82,314.94 364.22,314.67 366.60,314.18 368.92,313.48 371.17,312.58 373.32,311.48 375.38,310.19 377.30,308.73 379.09,307.09 382.27,303.91 380.49,305.54 378.56,307.01 376.51,308.30 374.35,309.40 372.10,310.30 369.78,311.00 367.41,311.49 365.00,311.76 362.58,311.81 360.16,311.65 357.77,311.27 355.42,310.68 353.13,309.88 350.92,308.88 348.82,307.68 346.83,306.30 344.97,304.75 343.25,303.03 341.70,301.17 340.32,299.18 339.12,297.08 338.12,294.87 337.32,292.58 336.73,290.23 336.35,287.84 336.19,285.42 336.24,283.00 336.51,280.59 337.00,278.22 337.70,275.90 338.60,273.65 339.70,271.49 340.99,269.44 342.46,267.51 344.09,265.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<circle cx='363.18' cy='284.82' r='27.00pt' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='355.39' y='294.45' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='15.58px' lengthAdjust='spacingAndGlyphs'>n</text>
+<text x='359.56' y='269.85' style='font-size: 12.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<circle cx='363.18' cy='284.82' r='27.00pt' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+</svg>

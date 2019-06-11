@@ -9,22 +9,24 @@
 \alias{concaveGrobFn}
 \title{Grid shape grob utility functions}
 \usage{
-halmaGrob(gp = gpar(), name = NULL)
+halmaGrob(name = NULL, gp = gpar(), vp = NULL)
 
-pyramidGrob(gp = gpar(), name = NULL)
+pyramidGrob(name = NULL, gp = gpar(), vp = NULL)
 
-kiteGrob(gp = gpar(), name = NULL)
+kiteGrob(name = NULL, gp = gpar(), vp = NULL)
 
 convexGrobFn(n_vertices, t)
 
 concaveGrobFn(n_vertices, t, r = 0.2)
 }
 \arguments{
+\item{name}{A character identifier (for grid)}
+
 \item{gp}{An object of class ‘gpar’, typically the output from a call
 to the function ‘gpar’.  This is basically a list of
 graphical parameter settings.}
 
-\item{name}{A character identifier (for grid)}
+\item{vp}{A \code{grid} viewport object (or NULL).}
 
 \item{n_vertices}{Number of vertices}
 

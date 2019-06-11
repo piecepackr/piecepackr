@@ -308,6 +308,24 @@ get_mat_width <- function(piece_side, suit, rank, cfg) {
     widths <- numeric_cleave(widths)
 }
 
+get_edge_color <- function(piece_side, suit, rank, cfg) {
+    neutral_col <- get_background_color_helper("tile_back", suit=get_i_unsuit(cfg), rank=0, cfg) 
+    # border_col <- get_border_color("tile_back", suit, rank, cfg)
+    suit_col <- get_suit_color_helper("pawn_face", suit=suit, rank=0, cfg) 
+
+    piece <- get_piece(piece_side)
+    default <- switch(piece,
+                    pawn = suit_col,
+                    die = suit_col,
+                    matchstick = suit_col,
+                    pyramid = suit_col,
+                    neutral_col)
+    colors <- get_style_element("edge_color", piece_side, cfg, default, suit, rank)
+    colors <- col_cleave(colors)
+    colors <- expand_suit_elements(colors, "suit_colors", piece_side, cfg)
+    colors[suit]
+}
+
 get_suit_symbol <- function(piece_side, suit, rank, cfg) {
     get_suit_symbols(piece_side, suit, rank, cfg)[suit]
 }

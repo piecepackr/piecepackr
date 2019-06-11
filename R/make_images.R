@@ -19,14 +19,9 @@ has_rank <- function(cs) {
 COIN_WIDTH <- 3/4
 DIE_WIDTH <- 1/2
 TILE_WIDTH <- 2
-# SAUCER_WIDTH <- 7/8
-SAUCER_WIDTH <- 3/4 # better for diagrams of hex games played with coin+pawn
 PAWN_HEIGHT <- 7/8
-PAWN_WIDTH <- 1/2
 DIE_LAYOUT_WIDTH <- 4 * DIE_WIDTH
 DIE_LAYOUT_HEIGHT <- 3 * DIE_WIDTH
-BELT_HEIGHT <- 1/2
-BELT_WIDTH <- 0.75 * pi # so can wrap around 3/4" diameter pawns
 PYRAMID_WIDTHS <- 2:8 * 1/8
 PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
 PYRAMID_DIAGONALS <- sqrt(PYRAMID_HEIGHTS^2 + (0.5*PYRAMID_WIDTHS)^2)

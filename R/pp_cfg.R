@@ -58,6 +58,35 @@ Config <- R6Class("pp_cfg",
                 grob
             }
         },
+        get_shadow_fn = function(piece_side, suit, rank) {
+            key <- opt_cache_key(piece_side, suit, rank, "shadow")
+            if(!is.null(private$cache[[key]])) {
+                private$cache[[key]]
+            } else {
+                default_fn <- get_style_element("shadow_fn", piece_side, private$cfg, 
+                                                basicShadowGrob, suit, rank)
+                grobFn <- default_fn
+                private$cache[[key]] <- grobFn
+                grobFn
+            }
+        },
+        get_pictureGrob = function(piece_side, suit, rank) {
+            grob <- self$get_grob(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            as_picture(grob, width, height)
+        }, 
+        get_raster = function(piece_side, suit, rank, res=72) {
+            grob <- self$get_grob(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            png_file <- tempfile(fileext=".png")
+            on.exit(unlink(png_file))
+            png(png_file, width=width, height=height, units="in", res=res)
+            grid.draw(grob)
+            invisible(dev.off())
+            as.raster(png::readPNG(png_file))
+        }, 
         get_piece_opt = function(piece_side, suit=NULL, rank=NULL) {
             if(is.null(rank)) { rank <- 1 }
             if(is.null(suit)) { suit <- self$i_unsuit }
@@ -78,7 +107,7 @@ Config <- R6Class("pp_cfg",
 	    gridline_lex <- get_gridline_lex(piece_side, suit, rank, private$cfg)
             mat_col <- get_mat_color(piece_side, suit, rank, private$cfg)
             mat_width <- get_mat_width(piece_side, suit, rank, private$cfg)
-
+            edge_col <- get_edge_color(piece_side, suit, rank, private$cfg)
 
             # Overall scaling factor
             scale <- get_scale(private$cfg)
@@ -109,9 +138,9 @@ Config <- R6Class("pp_cfg",
 
             opt <- list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
                  background_col=background_col, 
-		 border_col=border_col, border_lex=border_lex,
+		 border_col=border_col, border_lex=border_lex, edge_col=edge_col,
                  gridline_col=gridline_col, gridline_lex=gridline_lex,
-		 mat_col=mat_col, mat_width=mat_width,
+		 mat_col=mat_col, mat_width=mat_width, 
                  dm_col=dm_col, dm_text=dm_text, 
                  dm_fontsize=dm_fontsize, 
                  dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,
@@ -124,11 +153,10 @@ Config <- R6Class("pp_cfg",
             opt
         },
         get_suit_color = function(suit=1) {
-            get_suit_color_helper("pawn_face", suit, 
-                                  rank=1, private$cfg) 
+            get_suit_color_helper("pawn_face", suit, rank=1, private$cfg) 
         },
         get_width = function(piece_side, suit=1, rank=1) {
-            key <- opt_cache_key(piece_side, NA, rank, "width")
+            key <- opt_cache_key(piece_side, suit, rank, "width")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
@@ -146,22 +174,22 @@ Config <- R6Class("pp_cfg",
             }
             piece <- get_piece(piece_side)
             default <- switch(piece, 
-                              belt = BELT_WIDTH,
-                              coin = COIN_WIDTH,
-                              die = DIE_WIDTH,
+                              belt = 0.75 * pi, # so can wrap around 3/4" diameter pawns
+                              coin = 3/4,
+                              die = 1/2,
                               matchstick = MATCHSTICK_WIDTHS[rank],
-                              pawn = PAWN_WIDTH,
+                              pawn = 1/2,
                               pyramid = PYRAMID_WIDTHS[rank],
-                              saucer = SAUCER_WIDTH,
-                              suitdie = DIE_WIDTH,
-                              tile = TILE_WIDTH,
+                              saucer = 3/4, # better than 7/8" for diagrams of hex games played with coin+pawn
+                              suitdie = 1/2,
+                              tile = 2,
                               stop(paste("Don't know width of piece", piece)))
             width <- get_style_element("width", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- width
             width
         },
         get_height = function(piece_side, suit=1, rank=1) {
-            key <- opt_cache_key(piece_side, NA, rank, "height")
+            key <- opt_cache_key(piece_side, suit, rank, "height")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
@@ -192,13 +220,13 @@ Config <- R6Class("pp_cfg",
             if (piece == "matchstick") {
                 W <- ifelse(rank == 1, 0.5*width, width)
                 S <- 0.5 * self$get_width("tile_face")
-                default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[rank])
+                ms_default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[rank])
             }
             default <- switch(piece, 
-                              belt = BELT_HEIGHT,
+                              belt = 1/2,
                               coin = width,
                               die = width,
-                              matchstick = default,
+                              matchstick = ms_default,
                               pawn = PAWN_HEIGHT,
                               pyramid = 1.538842 * width,
                               saucer = width,
@@ -208,6 +236,32 @@ Config <- R6Class("pp_cfg",
             height <- get_style_element("height", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- height
             height
+        },
+        get_depth = function(piece_side, suit=1, rank=1) {
+            key <- opt_cache_key(piece_side, suit, rank, "depth")
+            if(!is.null(private$cache[[key]])) {
+                return(private$cache[[key]])
+            }
+            ####
+            # if (grepl("pyramid_top", piece_side)) {
+            #     pyramid_width <- self$get_width("pyramid_face", rank=rank)
+            #     return(pyramid_width)
+            # }
+            width <- self$get_width(piece_side, suit, rank)
+            piece <- get_piece(piece_side)
+            default <- switch(piece, 
+                              coin = 1/8,
+                              die = width,
+                              matchstick = width,
+                              pawn = 1/4,
+                              #### pyramid = 1.538842 * width,
+                              saucer = 1/8,
+                              suitdie = width,
+                              tile = 1/4,
+                              0) 
+            depth <- get_style_element("depth", piece_side, private$cfg, default, suit, rank)
+            private$cache[[key]] <- depth
+            depth
         }
         ),
     private = list(cfg = NULL, cache = list())
@@ -224,7 +278,7 @@ Config <- R6Class("pp_cfg",
 #'  \donttest{
 #'    cfg <- list()
 #'    system.time(replicate(500, grid.piece("tile_face", 4, 4, cfg)))
-#'    cfg <- pp_cfg(cfg)
+#'    cfg <- pp_cfg(list())
 #'    system.time(replicate(500, grid.piece("tile_face", 4, 4, cfg)))
 #'  }
 #'   

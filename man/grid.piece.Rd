@@ -10,15 +10,17 @@ pmap_piece(.l, ..., draw = TRUE, name = NULL, gp = NULL, vp = NULL)
 
 pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  angle = 0, use_pictureGrob = FALSE, width = NA, height = NA,
-  default.units = "npc", envir = NULL, name = NULL, gp = NULL,
-  vp = NULL)
+  z = unit(0, "npc"), angle = 0, use_pictureGrob = FALSE,
+  width = NA, height = NA, depth = NA, op_scale = 0,
+  op_angle = 45, default.units = "npc", envir = NULL, name = NULL,
+  gp = NULL, vp = NULL)
 
 grid.piece(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = list(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  angle = 0, use_pictureGrob = FALSE, width = NA, height = NA,
-  default.units = "npc", envir = NULL, name = NULL, gp = NULL,
-  draw = TRUE, vp = NULL)
+  z = unit(0, "npc"), angle = 0, use_pictureGrob = FALSE,
+  width = NA, height = NA, depth = NA, op_scale = 0,
+  op_angle = 45, default.units = "npc", envir = NULL, name = NULL,
+  gp = NULL, draw = TRUE, vp = NULL)
 }
 \arguments{
 \item{.l}{A list of vectors, such as a data frame. The length of \code{.l}
@@ -53,7 +55,9 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{y}{Where to place piece on y axis of viewport}
 
-\item{angle}{Angle to draw piece at}
+\item{z}{z-coordinate of the bottom of the piece.  Has no effect if \code{op_scale} is \code{0}.}
+
+\item{angle}{Angle (on xy plane) to draw piece at}
 
 \item{use_pictureGrob}{If \code{TRUE} instead of directly returning the grob first 
 export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.  
@@ -63,6 +67,15 @@ to play with re-configuring fontsizes.}
 \item{width}{Width of piece}
 
 \item{height}{Height of piece}
+
+\item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
+
+\item{op_scale}{How much to scale the depth of the piece in the oblique projection (viewed from the top of the board).
+\code{0} (the default) leads to an \dQuote{orthographic} projection,
+\code{0.5} is the most common scale used in the \dQuote{cabinet} projection, 
+ and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
+
+\item{op_angle}{What is the angle of the oblique projection?  Has no effect if \code{op_scale} is \code{0}.}
 
 \item{default.units}{A string indicating the default units to use if 
 'x', 'y', 'width', and/or 'height' are only given as numeric vectors.}

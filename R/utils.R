@@ -127,3 +127,11 @@ cleave <- function(s, sep=",", float=FALSE, color=FALSE) {
 col_cleave <- function(s, sep=",") { cleave(s, sep, color=TRUE) }
 numeric_cleave <- function(s, sep=",") { cleave(s, sep, float=TRUE) }
 
+as_picture <- function(grob, width, height) {
+    svg_file <- tempfile(fileext=".svg")
+    on.exit(unlink(svg_file))
+    svg(svg_file, width=width, height=height)
+    grid.draw(grob)
+    invisible(dev.off())
+    pictureGrob(readPicture(svg_file, warn=FALSE))
+}

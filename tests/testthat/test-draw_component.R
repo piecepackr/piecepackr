@@ -67,7 +67,6 @@ test_that("grob_fn_helpers works as expected", {
     expect_error(hexlinesGrob("blue", "circle"))
 })
 
-
 context("no regressions in figures")
 test_that("no regressions in figures", {
     dc <- function(..., cfg=cfg_default) {
@@ -211,6 +210,34 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
     expect_error(cfg_default$get_width("boo_back"), "Don't know width of piece boo")
+})
+
+context("oblique projection works")
+test_that("oblique projection works", {
+    dc <- function(..., cfg=cfg_default) {
+        grid.piece(..., cfg=cfg, op_scale=0.5) 
+    }
+    expect_doppelganger("tile_face_op", function() dc("tile_face"))
+    expect_doppelganger("coin_face_op", function() dc("coin_face"))
+    expect_doppelganger("pawn_face_op", function() dc("pawn_face"))
+    expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))
+    expect_doppelganger("pyramid_face_op", function() dc("pyramid_face"))
+    expect_doppelganger("die_face_op", function() dc("die_face"))
+    g.p <- function(...) { 
+        grid.piece(..., op_scale=0.5, default.units="in") 
+    }
+    cfg <- pp_cfg(list(depth.pawn=2, width.pawn=0.75, height.pawn=0.75,
+                       dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE))
+    expect_doppelganger("diagram_op", function() {
+        g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4, cfg=cfg)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4, cfg=cfg)
+        g.p("die_face", x=1, y=1, z=1/4, cfg=cfg)
+        g.p("pawn_face", x=1, y=4, z=1/4, angle=90, cfg=cfg)
+        g.p("coin_back", x=3, y=4, z=1/4, angle=180, cfg=cfg)
+        g.p("coin_back", x=3, y=4, z=3/8, angle=180, cfg=cfg)
+        g.p("coin_back", x=3, y=1, z=3/4, angle=90, cfg=cfg)
+    })
 })
 
 

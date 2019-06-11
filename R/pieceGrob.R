@@ -15,13 +15,20 @@
 #' @param rank Number of rank (lowest rank starting from 1)
 #' @param x Where to place piece on x axis of viewport
 #' @param y Where to place piece on y axis of viewport
-#' @param angle Angle to draw piece at
+#' @param z z-coordinate of the bottom of the piece.  Has no effect if \code{op_scale} is \code{0}.
+#' @param angle Angle (on xy plane) to draw piece at
 #' @param use_pictureGrob If \code{TRUE} instead of directly returning the grob first 
 #'            export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.  
 #'            This is useful if drawing pieces really big or small and don't want
 #'            to play with re-configuring fontsizes.
 #' @param width Width of piece
 #' @param height Height of piece
+#' @param depth Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.
+#' @param op_scale How much to scale the depth of the piece in the oblique projection (viewed from the top of the board).
+#'              \code{0} (the default) leads to an \dQuote{orthographic} projection,
+#'              \code{0.5} is the most common scale used in the \dQuote{cabinet} projection, 
+#'               and \code{1.0} is the scale used in the \dQuote{cavalier} projection.
+#' @param op_angle What is the angle of the oblique projection?  Has no effect if \code{op_scale} is \code{0}.
 #' @param default.units  A string indicating the default units to use if 
 #'   'x', 'y', 'width', and/or 'height' are only given as numeric vectors.
 #' @param envir Environment (or named list) containing configuration list(s).
@@ -59,71 +66,95 @@ as.gList <- function(ll) {
     gl
 }
 
-pieceGrob_wrapper <- function(piece_side="tile_back", suit=NA, rank=NA, 
-                           cfg=pp_cfg(), x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+pieceGrob_wrapper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(), 
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                            angle=NA, use_pictureGrob=FALSE, 
-                           width=NA, height=NA, 
+                           width=NA, height=NA, depth=NA,
+                           op_scale=0, op_angle=45,
                            default.units="npc", envir=NULL, ...) {
-    pieceGrob(piece_side, suit, rank, cfg, x, y, 
-                   angle, use_pictureGrob, width, height, default.units, envir)
+    pieceGrob(piece_side, suit, rank, cfg, x, y, z, 
+                   angle, use_pictureGrob, width, height, depth,
+                   op_scale, op_angle, default.units, envir)
 }
 
-as_picture <- function(grob, width, height) {
-    svg_file <- tempfile(fileext=".svg")
-    on.exit(unlink(svg_file))
-    svg(svg_file, width=width, height=height)
-    grid.draw(grob)
-    invisible(dev.off())
-    pictureGrob(readPicture(svg_file, warn=FALSE), expansion=0)
-}
 
 pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(), 
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                            angle=0, use_pictureGrob=FALSE,
-                           width=NA, height=NA, default.units = "npc") {
+                           width=NA, height=NA, depth=NA, 
+                           op_scale=0, op_angle=45,
+                           default.units = "npc") {
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
     suit <- ifelse(suit > cfg$i_unsuit+1, cfg$i_unsuit+1, suit)
     rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
     if(!is.unit(x)) { x <- unit(x, default.units) }
     if(!is.unit(y)) { y <- unit(y, default.units) }
+    if(!is.unit(z)) { z <- unit(z, default.units) }
     if(is.na(angle)) { angle <- 0 }
     if(is.na(width)) { width <- inch(cfg$get_width(piece_side, suit, rank)) }
     if(is.na(height)) { height <- inch(cfg$get_height(piece_side, suit, rank)) }
+    if(is.na(depth)) { depth <- inch(cfg$get_depth(piece_side, suit, rank)) }
     if(!is.unit(width)) { width <- unit(width, default.units) }
     if(!is.unit(height)) { height <- unit(height, default.units) }
-
-    grob <- cfg$get_grob(piece_side, suit, rank)
-    if (use_pictureGrob) {
-        pp_width <- cfg$get_width(piece_side, suit, rank)
-        pp_height <- cfg$get_height(piece_side, suit, rank)
-        grob <- as_picture(grob, pp_width, pp_height)
+    if(!is.unit(depth)) { depth <- unit(depth, default.units) }
+    if (use_pictureGrob) 
+        grob <- cfg$get_pictureGrob(piece_side, suit, rank)
+    else
+        grob <- cfg$get_grob(piece_side, suit, rank)
+    if (op_scale < 0.01) {
+        cvp <- viewport(x, y, width, height, angle=angle)
+        grobTree(grob, vp=cvp)
+    } else {
+        xp <- op_x(x, y, z+depth, op_angle, op_scale)
+        yp <- op_y(x, y, z+depth, op_angle, op_scale)
+        cvp <- viewport(xp, yp, width, height, angle=angle)
+        grob <- grobTree(grob, vp=cvp)
+        # shadow <-  cfg$get_shadow(piece_side, suit, rank, 
+        #                 x, y, z, angle, width, height, depth,
+        #                 op_scale, op_angle) 
+        # shadow <- basicShadowGrob(piece_side, suit, rank, cfg, 
+        #                     x, y, z, angle, width, height, depth,
+        #                     op_scale, op_angle, default.units) 
+        shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
+        shadow <- shadow_fn(piece_side, suit, rank, cfg, 
+                            x, y, z, angle, width, height, depth,
+                            op_scale, op_angle, default.units) 
+        grobTree(shadow, grob)
     }
-    cvp <- viewport(x, y, width, height, angle=angle)
-    grobTree(grob, vp=cvp)
-    
+}
+
+op_x <- function(x, y, z, op_angle=45, op_scale=0) {
+    x + op_scale * z* cos((op_angle) * 2 * pi / 360)  
+
+}
+op_y <- function(x, y, z, op_angle=45, op_scale=0) {
+    y + op_scale * z * sin((op_angle) * 2 * pi / 360) 
 }
 
 #' @rdname grid.piece
 #' @export
 pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA, 
                          cfg=pp_cfg(), 
-                         x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                         x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                          angle=0, use_pictureGrob=FALSE,
-                         width=NA, height=NA, 
+                         width=NA, height=NA, depth=NA,
+                         op_scale=0, op_angle=45,
                          default.units = "npc", envir=NULL,
                          name=NULL, gp=NULL, vp=NULL) {
 
-    nn <- max(lengths(list(piece_side, suit, rank, x, y, angle, use_pictureGrob, width, height)))
+    nn <- max(lengths(list(piece_side, suit, rank, x, y, angle, use_pictureGrob, width, height, depth)))
     piece_side <- rep(piece_side, length.out=nn)
     suit <- rep(suit, length.out=nn)
     rank <- rep(rank, length.out=nn)
     x <- rep(x, length.out=nn)
     y <- rep(y, length.out=nn)
+    z <- rep(z, length.out=nn)
     angle <- rep(angle, length.out=nn)
     use_pictureGrob <- rep(use_pictureGrob, length.out=nn)
     width <- rep(width, length.out=nn)
     height <- rep(height, length.out=nn)
+    depth <- rep(depth, length.out=nn)
 
     if (is_pp_cfg(cfg)) {
         cfg <- rep(c(cfg), length.out=nn)
@@ -148,8 +179,9 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
     gl <- gList()
     for(ii in seq(nn)) {
         gl[[ii]] <- pieceGrobHelper(piece_side[ii], suit[ii], rank[ii], cfg[[ii]],
-                                        x[ii], y[ii], angle[ii], use_pictureGrob[ii],
-                                        width[ii], height[ii], default.units)
+                                        x[ii], y[ii], z[ii], angle[ii], use_pictureGrob[ii],
+                                        width[ii], height[ii], depth[ii], 
+                                        op_scale, op_angle, default.units)
     }
     gTree(children=gl, name=name, gp=gp, vp=vp)
 }
@@ -157,13 +189,15 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
 #' @rdname grid.piece
 #' @export
 grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=list(), 
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                            angle=0, use_pictureGrob=FALSE,
-                           width=NA, height=NA, 
+                           width=NA, height=NA, depth=NA,
+                           op_scale=0, op_angle=45,
                            default.units = "npc", envir=NULL,
                            name=NULL, gp=NULL, draw=TRUE, vp=NULL) {
     grob <- pieceGrob(piece_side, suit, rank, cfg, 
-                          x, y, angle, use_pictureGrob, width, height, default.units, 
+                          x, y, z, angle, use_pictureGrob, width, height, depth,
+                          op_scale, op_angle, default.units, 
                           envir, name, gp, vp)
     if (draw) { 
         grid.draw(grob)

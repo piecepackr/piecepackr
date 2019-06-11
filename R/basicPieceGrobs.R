@@ -104,8 +104,8 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
                    default.units="in", name="saucers")
 
     gl[["pawns"]] <- pieceGrob(c("pawn_face", "pawn_back"), 2, NA, cfg,
-                   t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height, c(0, 180),
-                   default.units="in", name="pawns")
+                   t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height, 
+                   angle=c(0, 180), default.units="in", name="pawns")
 
     gl[["suitrankdie"]] <- pieceGrob("suitrankdie_layoutRF", NA, NA, cfg,
                    preview_width-2*d_width, 0.5*t_width,

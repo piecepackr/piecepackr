@@ -168,6 +168,24 @@ get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2) {
     }
 }
 
+# get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
+#     if (shape == "rect") {
+#         rect_xy()
+#     } else if (shape == "kite") {
+#         kite_xy()
+#     } else if (shape == "halma") {
+#         halma_xy()
+#     } else if (shape == "pyramid") {
+#         pyramid_xy()
+#     } else if (grepl("^concave", shape)) {
+#         concave_xy(get_n_vertices(shape), shape_t, shape_r) 
+#     } else if (grepl("^convex", shape)) {
+#         convex_xy(get_n_vertices(shape), shape_t)
+#     } else {
+#         stop(paste("Don't know how to get xy-coords for shape", shape)) 
+#     }
+# }
+
 #' @rdname grob_fn_helpers
 #' @export
 is_color_invisible <- function(col) {

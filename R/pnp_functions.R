@@ -468,15 +468,16 @@ pyramid_grob_helper <- function(suit, cfg=pp_cfg(), xleft=0) {
     n_suits <- cfg$n_suits
     rank <- c(1:2,4,3,5:6)
     plh <- PYRAMID_LAYOUT_HEIGHTS[rank]
+    pawn_width <- cfg$get_width("pawn_face")
     y_up <- cumsum(plh) - 0.5*plh
     x_up <- 0.5*PYRAMID_LAYOUT_WIDTHS[rank]
-    x <- xleft+c(x_up[1:4], A5W/2 - x_up[5:6] - PAWN_WIDTH)
+    x <- xleft+c(x_up[1:4], A5W/2 - x_up[5:6] - pawn_width)
     y <- c(y_up[1:4], c(plh[6]+0.5*plh[5], 0.5*plh[6]))
     piece_side <- "pyramid_layout"
     angle <- c(rep(0, 4), rep(180,2))
     df <- tibble::tibble(piece_side, x, y, suit, rank, angle)
     dfp <- tibble::tibble(piece_side="pawn_layout", 
-                          x=xleft+A5W/2-0.5*PAWN_WIDTH,
+                          x=xleft+A5W/2-0.5*pawn_width,
                           y=c(0.5,1.5)*cfg$get_height("pawn_layout"),
                           suit, rank=NA, angle=0)
     dfd <- tibble::tibble(piece_side="die_layoutLF",
