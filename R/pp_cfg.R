@@ -65,7 +65,9 @@ Config <- R6Class("pp_cfg",
             } else {
                 default_fn <- get_style_element("shadow_fn", piece_side, private$cfg, 
                                                 basicShadowGrob, suit, rank)
-                grobFn <- default_fn
+                grobFn <- switch(piece_side,
+                                 pyramid_top = function(...) nullGrob(),
+                                 default_fn)
                 private$cache[[key]] <- grobFn
                 grobFn
             }
