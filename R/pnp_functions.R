@@ -224,59 +224,65 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
                           #           curvature=0.2, square=FALSE, arrow=arrow(),
                           #           default.units="in"))
     # Coin
-    cw <- cfg$get_width("coin_face")
+    cwr <- 0.75 / cfg$get_width("coin_face")
+    cw <- 0.75
     yc <- yt - 0.5 - cw
     xc <- 0.5 + 2*cw
     df <- tibble(piece_side = rep(c("coin_back", "coin_face"), 2), 
                          x=xc+c(1.7, 0.7,-0.7, -1.7)*cw, 
                          y=rep(yc,4),
+                         width=0.75, height=0.75,
                          angle=c(0,180,0,0))
     grob_coin <- grobTree(htg("Coin", xc, yc+0.5*cw+0.2),
                           tg("Back", xc+c(1.7, -0.7)*cw, yc+0.5*cw+0.1),
                           tg("Face", xc+c(0.7, -1.7)*cw, yc+0.5*cw+0.1),
                           pmap_piece(df, default.units="in", 
-                                     cfg=cfg, draw=FALSE),
+                                     cfg=cfg, draw=FALSE, gp=gpar(lex=cwr, cex=cwr)),
                           textGrob("or", x=xc, y=yc, default.units="in"))
     # Saucer
-    sw <- cfg$get_width("saucer_face")
+    swr <- 0.75 / cfg$get_width("saucer_face") 
+    sw <- 0.75
     ys <- yt - 1.6 - sw
     xs <- 0.5 + 2*cw
     df <- tibble(piece_side = rep(c("saucer_back", "saucer_face"), 2), 
                          x=xs+c(1.7, 0.7,-0.7, -1.7)*sw,
                          y=rep(ys,4),
+                         width=0.75, height=0.75,
                          angle=c(0,180,0,0))
     grob_saucer <- grobTree(htg("(Pawn) Saucer", xs, ys+0.5*sw+0.25),
                             tg("Back", xs+c(1.7, -0.7)*sw, ys+0.5*sw+0.1),
                             tg("Face", xs+c(0.7, -1.7)*sw, ys+0.5*sw+0.1),
                             pmap_piece(df, default.units="in", 
-                                       cfg=cfg, draw=FALSE),
+                                       cfg=cfg, draw=FALSE, gp=gpar(lex=swr, cex=swr)),
                           textGrob("or", x=xs, y=ys, default.units="in"))
 
     # Dice
-    dw <- cfg$get_width("die_face")
+    dwr <- 0.5 / cfg$get_width("die_face")
+    dw <- 0.5
     yd <- 1.4
     d1 <- grobTree(piecepackDieGrob(1, cfg, arrangement="counter_down"),
                    vp=viewport(x=0.2, y=inch(yd), 
-                   width=inch(4*dw), height=inch(3*dw)))
+                   width=inch(4*dw), height=inch(3*dw), gp=gpar(lex=dwr, cex=dwr)))
     d2 <- grobTree(piecepackDieGrob(1, cfg, arrangement="counter_up"),
                    vp=viewport(x=0.5, y=inch(yd),
-                       width=inch(4*dw), height=inch(3*dw)))
+                       width=inch(4*dw), height=inch(3*dw), gp=gpar(lex=dwr, cex=dwr)))
     d3 <- grobTree(piecepackDieGrob(1, cfg, arrangement="opposites_sum_to_5"),
                    vp=viewport(x=0.8, y=inch(yd),
-                       width=inch(4*dw), height=inch(3*dw)))
+                       width=inch(4*dw), height=inch(3*dw), gp=gpar(lex=dwr, cex=dwr)))
     grob_die <- grobTree(htg("Die", A5W/2, yd+1.2), 
                          tg('"counter_down"\narrangement', 0.3*A5W, yd+0.9),
                          tg('"counter_up"\narrangement', 0.6*A5W, yd+0.9),
                          tg('"opposites_sum_to_5"\narrangement', 0.85*A5W, yd+0.9),
                          d1, d2, d3)
     # Pawn
-    grob_pawn <- grobTree(htg("Pawn", A5W-0.5, 5.2),
-                          tg("Back", A5W-0.85, 4.3, rot=90),
-                          tg("Face", A5W-0.85, 3.3, rot=90),
-                          tg("Stand", A5W-0.85, 2.7, rot=90),
-                          tg("Stand", A5W-0.85, 4.8, rot=90),
+    y_pawn <- 4.0
+    grob_pawn <- grobTree(htg("Pawn", A5W-0.5, y_pawn+1.4),
+                          tg("Back", A5W-0.85, y_pawn+0.5, rot=90),
+                          tg("Face", A5W-0.85, y_pawn-0.5, rot=90),
+                          tg("Stand", A5W-0.85, y_pawn-1.1, rot=90),
+                          tg("Stand", A5W-0.85, y_pawn+1.0, rot=90),
                           pieceGrob("pawn_layout", 1, cfg=cfg,
-                                     x=inch(A5W-0.5), y=inch(3.8)))
+                                     x=inch(A5W-0.5), y=inch(y_pawn)))
     # Belt
     yb <- yt - 2.0 - sw - 0.5
     xb <- 2

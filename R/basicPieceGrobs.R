@@ -166,8 +166,9 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE,
     }
     gl <- gList()
     for (ii in 1:6) {
-        vp <- viewport(x=x[ii], y=y_die_layout[ii], angle=angle[ii])
-        gl[[ii]] <- pieceGrob("die_face", suit[ii], rank[ii], cfg, vp=vp)
+        gl[[ii]] <- pieceGrob("die_face", suit[ii], rank[ii], cfg,
+                            x=x[ii], y=y_die_layout[ii], 
+                            width=1/4, height=1/3, angle=angle[ii])
     }
     gTree(children=gl)
 }
