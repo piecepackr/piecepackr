@@ -15,6 +15,7 @@ Config <- R6Class("pp_cfg",
         credit = NULL,
         description = NULL, 
         initialize = function(cfg=list()) {
+            warn_cfg(cfg)
             private$cfg <- cfg
             self$n_suits <- get_n_suits(cfg)
             self$n_ranks <- get_n_ranks(cfg)

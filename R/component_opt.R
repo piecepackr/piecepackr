@@ -58,6 +58,58 @@ get_style_element <- function(style, piece_side=NA, cfg=list(), default=NULL, su
     return (default)
 }
 
+is_legit_cfg_style <- function(cfg_style) {
+    # style
+    # style.suit
+    # style.rank
+    # style.piece
+    # style.suit.rank
+    # style.suit.piece
+    # style.rank.piece
+    # style.suit.rank.piece
+    ss = cleave(cfg_style, sep="\\.")
+    if (!is_legit_style(ss[1])) { return(FALSE) }
+    if (length(ss) == 2) {
+        return (is_legit_suit(ss[2]) || is_legit_rank(ss[2]) || is_legit_piece(ss[2]))
+    }
+    if (length(ss) == 3) {
+        return ( (is_legit_suit(ss[2]) && (is_legit_rank(ss[3]) || is_legit_piece(ss[3]))) ||
+                  (is_legit_rank(ss[2]) && is_legit_piece(ss[3])) )
+    }
+    if (length(ss) == 4) { 
+        return (is_legit_suit(ss[2]) && is_legit_rank(ss[3]) && is_legit_piece(ss[4]))
+    }
+    if (length(ss) > 4) { return(FALSE) }
+    TRUE
+}
+styles <- c(paste(c("ps", "dm"), rep(c("text", "fontface", "fontfamily", "fontsize", "scale", "t", "r", "color"), each=2), sep="_"),
+            "shape", "shape_t", "shape_r", "background_color", "invert_colors", "border_color", "border_lex", 
+            "gridline_color", "gridline_lex", "edge_color", "mat_color", "mat_width", "suit_color",
+            paste(c("rank", "suit"), rep(c("text", "fontface", "fontfamily", "scale"), each=2), sep="_"),
+            "use_suit_as_ace", "fontfamily", "fontface", "scale", "n_ranks", "n_suits", "die_arrangement",
+            "width", "height", "depth", "grob_fn", "shadow_fn", "title", "description", "credit", "copyright")
+is_legit_style <- function(style) {
+    style %in% styles
+}
+is_legit_rank <- function(rank) {
+    grepl("r[[:digit:]]+", rank)
+}
+is_legit_suit <- function(suit) {
+    (suit %in% c("suited", "unsuited")) || grepl("s[[:digit:]]", suit)
+}
+pieces <- c(paste0(rep(c("tile", "coin", "pawn", "saucer", "matchstick", "pyramid"), 3),
+            rep(c("", "_face", "_back"), each=6)), "die", "belt", "die_face", "belt_face", "pyramid_left", "pyramid_right")
+is_legit_piece <- function(piece) {
+    piece %in% pieces
+}
+warn_cfg <- function(cfg) {
+    for(nn in names(cfg)) {
+        if(!is_legit_cfg_style(nn)) {
+            warning(paste(nn, "is not a recognized configuration"))
+        }
+    }
+}
+
 make_get_style_fn <- function(style, default) {
     function(cfg=list()) get_style_element(style, cfg=cfg, default=default)
 }
