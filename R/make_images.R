@@ -75,7 +75,7 @@ piece_filename <- function(directory, cfg, piece_side, format, angle,
 #' @param format Character vector of formats to save images in
 #' @param angle Numeric vector of angles to rotate images (in degrees)
 #' @export
-save_piece_images <- function(cfg=list(), directory=tempdir(), format="svg", angle=0) {
+save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", angle=0) {
     for (f in format) {
         for (a in angle) make_images_helper(directory, cfg, f, a)
     }

@@ -133,7 +133,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("die_face.s3.r2", function() dc("die_face", suit=3, rank=2))
     expect_doppelganger("die_face.s2.r5", function() dc("die_face", suit=2, rank=5))
     expect_doppelganger("die_face.s2.r5.kite", 
-            function() dc("die_face", suit=2, rank=5, cfg=list(shape.die_face="kite", dm_t=90, suit_scale="1,1,1,1")))
+            function() dc("die_face", suit=2, rank=5, cfg=list(shape.die_face="kite", dm_t=90, suit_cex="1,1,1,1")))
     expect_doppelganger("die_face.s2.r5.convex5mat", 
             function() dc("die_face", suit=2, rank=5, cfg=list(shape.die_face="convex5", mat_width.die_face=0.1, mat_color="pink")))
     expect_doppelganger("suitdie_face.s1", function() dc("suitdie_face", suit=1))

@@ -4,7 +4,7 @@
 \alias{save_piece_images}
 \title{Save piecepack images}
 \usage{
-save_piece_images(cfg = list(), directory = tempdir(),
+save_piece_images(cfg = pp_cfg(), directory = tempdir(),
   format = "svg", angle = 0)
 }
 \arguments{

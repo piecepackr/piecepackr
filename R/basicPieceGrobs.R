@@ -15,25 +15,25 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
 
     # Background
-    background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_col))
+    background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
 
     # Gridlines, Mat
-    gl_grob <- gridlinesGrob(opt$gridline_col, opt$shape, opt$shape_t, opt$gridline_lex)
+    gl_grob <- gridlinesGrob(opt$gridline_color, opt$shape, opt$shape_t, opt$gridline_lex)
 
-    mat_grob <- matGrob(opt$mat_col, opt$shape, opt$shape_t, opt$mat_width)
+    mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
 
     # Primary symbol
-    gp_ps <- gpar(col=opt$ps_col, fontsize=opt$ps_fontsize, 
+    gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize, 
                   fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
     ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
 
     # Directional mark
-    gp_dm <- gpar(col=opt$dm_col, fontsize=opt$dm_fontsize, 
+    gp_dm <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize, 
                   fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
     dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
 
     # Border 
-    border_grob <- shape_fn(gp=gpar(col=opt$border_col, fill=NA, lex=opt$border_lex))
+    border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
     gl <- gList(background_grob, gl_grob, mat_grob, ps_grob,
                 dm_grob, border_grob)
 
@@ -215,9 +215,8 @@ pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
                              y=1/2+yf, height=height, angle=180, name="pawn_back")
     })
     opt <- cfg$get_piece_opt("pawn_face", suit, 0)
-    border_col <- opt$border_col
-    gp <- gpar(col=opt$border_col, fill=NA)
-    gl[[3]] <- linesGrob(y=0.5, gp=gpar(col=border_col, fill=NA, lty="dashed"))
+    gp <- gpar(col=opt$border_color, fill=NA)
+    gl[[3]] <- linesGrob(y=0.5, gp=gpar(col=opt$border_color, fill=NA, lty="dashed"))
     gl[[4]] <- rectGrob(gp=gp)
     ll <- 0.07
     gl[[5]] <- segmentsGrob(0.5, 0, 0.5, ll, gp=gp)

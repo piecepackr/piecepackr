@@ -92,3 +92,28 @@ test_that("get_piece_opt works as expected", {
     opt <- cfg$get_piece_opt("pawn_back")
     expect_equal(opt$dm_text, "")
 })
+
+context("pp_cfg querying variables work as expected")
+test_that("pp_cfg querying variables work as expected", {
+    cfg <- pp_cfg()
+    expect_true(cfg$has_piecepack)
+
+    expect_true(cfg$has_pawns)
+    expect_true(cfg$has_coins)
+    expect_true(cfg$has_tiles)
+    expect_true(cfg$has_dice)
+
+    cfg$has_dice <- FALSE
+    cfg$has_tiles <- FALSE
+    expect_false(cfg$has_tiles)
+    expect_false(cfg$has_dice)
+    expect_false(cfg$has_piecepack)
+    cfg$has_piecepack <- TRUE
+    expect_true(cfg$has_tiles)
+    expect_true(cfg$has_dice)
+    expect_true(cfg$has_piecepack)
+
+    expect_false(cfg$has_saucers)
+    expect_false(cfg$has_pyramids)
+    expect_false(cfg$has_matchsticks)
+})

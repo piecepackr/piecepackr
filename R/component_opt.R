@@ -82,12 +82,20 @@ is_legit_cfg_style <- function(cfg_style) {
     if (length(ss) > 4) { return(FALSE) }
     TRUE
 }
-styles <- c(paste(c("ps", "dm"), rep(c("text", "fontface", "fontfamily", "fontsize", "scale", "t", "r", "color"), each=2), sep="_"),
-            "shape", "shape_t", "shape_r", "background_color", "invert_colors", "border_color", "border_lex", 
-            "gridline_color", "gridline_lex", "edge_color", "mat_color", "mat_width", "suit_color",
-            paste(c("rank", "suit"), rep(c("text", "fontface", "fontfamily", "scale"), each=2), sep="_"),
-            "use_suit_as_ace", "fontfamily", "fontface", "scale", "n_ranks", "n_suits", "die_arrangement",
-            "width", "height", "depth", "grob_fn", "shadow_fn", "title", "description", "credit", "copyright")
+styles <- c(paste(c("ps", "dm"), 
+                  rep(c("text", "fontface", "fontfamily", "fontsize", "cex", "t", "r", "color"), each=2),
+                  sep="_"),
+            "shape", "shape_t", "shape_r", "background_color", 
+            "invert_colors", "border_color", "border_lex", 
+            "gridline_color", "gridline_lex", "edge_color", "annotation_color", 
+            "mat_color", "mat_width", "suit_color",
+            paste(c("rank", "suit"), 
+                  rep(c("text", "fontface", "fontfamily", "cex"), each=2),
+                  sep="_"),
+            "use_suit_as_ace", "fontfamily", "fontface", "cex", "n_ranks", "n_suits",
+            "coin_arrangement", "die_arrangement",
+            "width", "height", "depth", "grob_fn", "shadow_fn", 
+            "title", "description", "credit", "copyright")
 is_legit_style <- function(style) {
     style %in% styles
 }
@@ -115,7 +123,7 @@ make_get_style_fn <- function(style, default) {
 }
 get_fontfamily <- make_get_style_fn("fontfamily", "sans")
 get_fontface <- make_get_style_fn("fontface", "plain")
-get_scale <- make_get_style_fn("scale", 1.0)
+get_cex <- make_get_style_fn("cex", 1.0)
 
 get_background_color_helper <- function(piece_side, suit, rank, cfg) {
     colors <- col_cleave(get_style_element("background_color", piece_side, cfg, "white", suit, rank))
@@ -256,6 +264,13 @@ get_die_arrangement <- function(cfg=list()) {
         "counter_down"
     } else {
         cfg[["die_arrangement"]]
+    }
+}
+get_coin_arrangement <- function(cfg=list()) {
+    if (is.null(cfg[["coin_arrangement"]])) {
+        180
+    } else {
+        as.numeric(cfg[["coin_arrangement"]])
     }
 }
 
@@ -403,7 +418,7 @@ expand_suit_elements <- function(elements, style, piece_side, cfg) {
     if (length(elements) < get_n_suits(cfg)) {
         elements <- rep(elements, length.out=get_n_suits(cfg) + 1)
     } else if (length(elements) == get_n_suits(cfg)) {
-        elements <- c(elements, switch(style, scale=1.0, suit_colors="grey", ""))
+        elements <- c(elements, switch(style, cex=1.0, suit_colors="grey", ""))
     }
     if (length(elements) == get_i_unsuit(cfg)) {
         elements <- c(elements, switch(style, 
@@ -438,12 +453,12 @@ get_rank_symbol <- function(piece_side, suit, rank, cfg) {
     }
 } 
 
-get_rank_scale <- function(piece_side, suit, rank, cfg) {
+get_rank_cex <- function(piece_side, suit, rank, cfg) {
     if (use_suit_as_ace(piece_side, suit, rank, cfg)) {
-        get_suit_scale(piece_side, suit, rank, cfg)
+        get_suit_cex(piece_side, suit, rank, cfg)
     } else {
-        scales <- numeric_cleave(get_style_element("rank_scale", piece_side, cfg, 1.0, suit, rank))
-        expand_rank_elements(scales, "scale", piece_side, cfg)[rank]
+        cex <- numeric_cleave(get_style_element("rank_cex", piece_side, cfg, 1.0, suit, rank))
+        expand_rank_elements(cex, "cex", piece_side, cfg)[rank]
     }
 }
 get_rank_fontfamily <- function(piece_side, suit, rank, cfg) {
@@ -473,12 +488,9 @@ get_suit_fontface <- function(piece_side, suit, rank, cfg) {
     fontfaces <- cleave(get_style_element("suit_fontface", piece_side, cfg, get_fontface(cfg), suit, rank))
     expand_suit_elements(fontfaces, "fontface", piece_side, cfg)[suit]
 }
-get_suit_scales <- function(piece_side, suit, rank, cfg) {
-    scales <- numeric_cleave(get_style_element("suit_scale", piece_side, cfg, 1.0, suit, rank))
-    expand_suit_elements(scales, "scale", piece_side, cfg)
-}
-get_suit_scale <- function(piece_side, suit, rank, cfg) {
-    get_suit_scales(piece_side, suit, rank, cfg)[suit]
+get_suit_cex <- function(piece_side, suit, rank, cfg) {
+    cex <- numeric_cleave(get_style_element("suit_cex", piece_side, cfg, 1.0, suit, rank))
+    expand_suit_elements(cex, "cex", piece_side, cfg)[suit]
 }
 are_suits_dm <- function(piece_side, suit, rank, cfg) {
     identical(get_dm_symbols(piece_side, suit, rank, cfg),
@@ -502,14 +514,14 @@ get_dm_fontfamily <- function(piece_side, suit, rank, cfg) {
     fonts <- cleave(get_style_element("dm_fontfamily", piece_side, cfg, default))
     expand_suit_elements(fonts, "font", piece_side, cfg)[suit]
 }
-get_dm_scale <- function(piece_side, suit, rank, cfg) {
+get_dm_cex <- function(piece_side, suit, rank, cfg) {
     if (are_suits_dm(piece_side, suit, rank, cfg)) { 
-        default <- get_suit_scale(piece_side, suit, rank, cfg)
+        default <- get_suit_cex(piece_side, suit, rank, cfg)
     } else {
         default <- 1.0
     }
-    scales <- numeric_cleave(get_style_element("dm_scale", piece_side, cfg, default, suit, rank))
-    expand_suit_elements(scales, "scale", piece_side, cfg)[suit]
+    cex <- numeric_cleave(get_style_element("dm_cex", piece_side, cfg, default, suit, rank))
+    expand_suit_elements(cex, "cex", piece_side, cfg)[suit]
 }
 
 get_suit_fontsize <- function(piece_side, suit, rank, cfg) {
@@ -576,11 +588,11 @@ get_ps_fontsize <- function(piece_side, suit=get_i_unsuit(cfg), rank=1, cfg=list
     default <- get_ps_element(piece_side, suit_fontsize, rank_fontsize)
     get_style_element("ps_fontsize", piece_side, cfg, default, suit, rank)
 }
-get_ps_scale <- function(piece_side, suit=get_i_unsuit(cfg), rank=1, cfg=list()) {
-    rank_scale <- get_rank_scale(piece_side, suit, rank, cfg)
-    suit_scale <- get_suit_scale(piece_side, suit, rank, cfg)
-    default <- get_ps_element(piece_side, suit_scale, rank_scale)
-    get_style_element("ps_scale", piece_side, cfg, default, suit, rank)
+get_ps_cex <- function(piece_side, suit=get_i_unsuit(cfg), rank=1, cfg=list()) {
+    rank_cex <- get_rank_cex(piece_side, suit, rank, cfg)
+    suit_cex <- get_suit_cex(piece_side, suit, rank, cfg)
+    default <- get_ps_element(piece_side, suit_cex, rank_cex)
+    get_style_element("ps_cex", piece_side, cfg, default, suit, rank)
 }
 get_ps_text <- function(piece_side, suit=get_i_unsuit(cfg), rank=1, cfg=list()) {
     rank_symbol <- get_rank_symbol(piece_side, suit, rank, cfg)

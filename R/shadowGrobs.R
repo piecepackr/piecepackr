@@ -36,12 +36,12 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
     yp <- op_y(x, y, zs, op_angle, op_scale)
     gl <- gList()
     vp <- viewport(xp[1], yp[1], width, height, angle=angle)
-    gp <- gpar(col=opt$border_col, fill=opt$edge_col, lex=opt$border_lex)
+    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     gl[[1]] <- shape_fn(gp=gp, vp=vp)
     for (ii in 2:n_shadows) { 
         vp <- viewport(xp[ii], yp[ii], width, height, angle=angle)
-        gps <- gpar(col=NA, fill=opt$edge_col)
-        # gpp <- gpar(col=opt$border_col)
+        gps <- gpar(col=NA, fill=opt$edge_color)
+        # gpp <- gpar(col=opt$border_color)
         gl[[ii]] <- grobTree(shape_fn(gp=gps), vp=vp)
                            # pointsGrob(x=shape_xy$x, y=shape_xy$y, gp=gpp),
                            
@@ -62,7 +62,7 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     ycl <- yl + to_y(thetas, r)
     xcu <- rev(xu + to_x(thetas, r))
     ycu <- rev(yu + to_y(thetas, r))
-    gp <- gpar(col=opt$border_col, fill=opt$edge_col, lex=opt$border_lex)
+    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     polygonGrob(x=unit.c(xcl, xcu), y=unit.c(ycl, ycu), gp=gp)
 }
 
@@ -88,7 +88,7 @@ rectShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, 
     # face angles
     fas <- c(180, 90, 0, -90) + angle + 180
 
-    gp <- gpar(col=opt$border_col, fill=opt$edge_col, lex=opt$border_lex)
+    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     gl <- gList()
     for (ii in 1:4) {
         xf <- c(xl[ii],xl[ii%%4+1],xu[ii%%4+1],xu[ii])
@@ -120,7 +120,7 @@ convexShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     # face angles
     fas <- thetas + 360 / n_vertices / 2 + 180
 
-    gp <- gpar(col=opt$border_col, fill=opt$edge_col, lex=opt$border_lex)
+    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     gl <- gList()
     for (ii in 1:n_vertices) {
         xf <- unit.c(xl[ii],xl[ii+1],xu[ii+1],xu[ii])

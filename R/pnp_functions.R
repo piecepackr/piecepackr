@@ -435,12 +435,12 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
     yb <- A5H - pawn_width - 0.5 * cfg$get_height("belt_face") - 0.25
     xsr <- A5W - 0.25 * tile_width
     ysb <- 2.75 * tile_width
-    #### Adjust angle of coins and saucers?
     dft <- tibble(piece_side="tile_face", x=rep(c(xtr,xtl),3),
                   y=rep(c(ytt,ytm,ytb),each=2), 
                   suit, rank=1:6, angle=0)
     dfc <- tibble(piece_side="coin_back", x=rep(xc,6),
-                  y=ycs, suit, rank=1:6, angle=0)
+                  y=ycs, suit, rank=1:6, 
+                  angle=ifelse(front, cfg$coin_arrangement, 0))
     dfd <- tibble(piece_side="die_face", x=rep(xdr,2), 
                   y=rep(c(ydt,ydb),each=3), 
                   suit, rank=1:6, angle=0)
@@ -449,14 +449,13 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
     dfb <- tibble(piece_side="belt_face", x=xb, y=yb,
                   suit, rank=NA, angle=0)
     dfs <- tibble(piece_side="saucer_face", x=xsr, y=ysb,
-                  suit, rank=NA, angle=0)
-    df <- rbind(dft, dfc, dfd, dfp, dfb, dfs)
+                  suit, rank=NA, 
+                  angle=ifelse(front, 0, cfg$coin_arrangement))
+    df <- rbind(dfc, dfd, dfp, dfb, dfs, dft)
     if (!front) {
         df$x <- A5W - df$x
-        df$piece_side <- c(rep("tile_back", 6), 
-                           rep("coin_face", 6),
-                           rep("die_face", 6),
-                           "pawn_layout", "belt_face", "saucer_back")
+        df$piece_side <- c(rep("coin_face", 6), rep("die_face", 6),
+                           "pawn_layout", "belt_face", "saucer_back", rep("tile_back", 6))
     }
     if (!front && arrangement == "double-sided") {
         df <- df[df$piece_side %in% c("tile_back", "coin_face", "saucer_back"),]
@@ -486,10 +485,20 @@ pyramid_grob_helper <- function(suit, cfg=pp_cfg(), xleft=0) {
                           x=xleft+A5W/2-0.5*pawn_width,
                           y=c(0.5,1.5)*cfg$get_height("pawn_layout"),
                           suit, rank=NA, angle=0)
-    dfd <- tibble::tibble(piece_side="die_layoutLF",
-                          x=xleft+c(0.5)*cfg$get_width("die_layoutLF"), 
-                          y=A5H-c(0.5)*cfg$get_height("die_layoutLF"),
-                          suit, rank=NA, angle=0)
+    if (cfg$get_width("die_face") <= 0.6) {
+        dfd <- tibble::tibble(piece_side="die_layoutLF",
+                              x=xleft+c(0.5)*cfg$get_width("die_layoutLF"), 
+                              y=A5H-c(0.5)*cfg$get_height("die_layoutLF"),
+                              suit, rank=NA, angle=0)
+    } else {
+        die_width <- cfg$get_width("die_width")
+        xdr <- c(0.5,1.5,2.5) * die_width
+        ydt <- A5H - 0.5 * die_width
+        ydb <- A5H - 1.5 * die_width
+        dfd <- tibble(piece_side="die_face", x=xleft+rep(xdr,2), 
+                      y=rep(c(ydt,ydb),each=3), 
+                      suit, rank=1:6, angle=0)
+    }
     df <- rbind(dfp, dfd, df)
     pmap_piece(df, cfg=cfg, default.units="inches", draw=FALSE)
 }

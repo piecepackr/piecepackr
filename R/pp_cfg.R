@@ -8,24 +8,36 @@ Config <- R6Class("pp_cfg",
         i_unsuit = NULL,
         n_suits = NULL,
         n_ranks = NULL,
+        coin_arrangement = NULL,
         die_arrangement = NULL,
         title = NULL,
         fontfamily = NULL,
         copyright = NULL,
         credit = NULL,
         description = NULL, 
+        annotation_color = NULL,
+        has_pawns = TRUE,
+        has_dice = TRUE,
+        has_coins = TRUE,
+        has_tiles = TRUE,
+        has_saucers = FALSE,
+        has_pyramids = FALSE,
+        has_matchsticks = FALSE, 
         initialize = function(cfg=list()) {
             warn_cfg(cfg)
             private$cfg <- cfg
             self$n_suits <- get_n_suits(cfg)
             self$n_ranks <- get_n_ranks(cfg)
             self$i_unsuit <- self$n_suits + 1
+            self$coin_arrangement <- get_coin_arrangement(cfg)
             self$die_arrangement <- get_die_arrangement(cfg)
             self$fontfamily <- get_fontfamily(cfg)
             self$title <- cfg$title
             self$copyright <- cfg$copyright
             self$credit <- cfg$credit
             self$description <- cfg$description
+            self$annotation_color <- ifelse(is.null(cfg$annotation_color), 
+                                            "black", cfg$annotation_color)
         },
         as_list = function() { private$cfg },
         print = function() {
@@ -103,24 +115,24 @@ Config <- R6Class("pp_cfg",
             shape_t <- get_shape_t(piece_side, suit, rank, private$cfg)
 
             # Additional colors
-            background_col <- get_background_color(piece_side, suit, rank, private$cfg)
-            border_col <- get_border_color(piece_side, suit, rank, private$cfg)
+            background_color <- get_background_color(piece_side, suit, rank, private$cfg)
+            border_color <- get_border_color(piece_side, suit, rank, private$cfg)
 	    border_lex <- get_border_lex(piece_side, suit, rank, private$cfg)
-            gridline_col <- get_gridline_color(piece_side, suit, rank, private$cfg)
+            gridline_color <- get_gridline_color(piece_side, suit, rank, private$cfg)
 	    gridline_lex <- get_gridline_lex(piece_side, suit, rank, private$cfg)
-            mat_col <- get_mat_color(piece_side, suit, rank, private$cfg)
+            mat_color <- get_mat_color(piece_side, suit, rank, private$cfg)
             mat_width <- get_mat_width(piece_side, suit, rank, private$cfg)
-            edge_col <- get_edge_color(piece_side, suit, rank, private$cfg)
+            edge_color <- get_edge_color(piece_side, suit, rank, private$cfg)
 
             # Overall scaling factor
-            scale <- get_scale(private$cfg)
+            cex <- get_cex(private$cfg)
 
             # Directional mark symbol
-            dm_col <- get_dm_color(piece_side, suit, rank, private$cfg)
-            dm_scale <- get_dm_scale(piece_side, suit, rank, private$cfg)
+            dm_color <- get_dm_color(piece_side, suit, rank, private$cfg)
+            dm_cex <- get_dm_cex(piece_side, suit, rank, private$cfg)
             dm_fontfamily <- get_dm_fontfamily(piece_side, suit, rank, private$cfg)
             dm_fontface <- get_dm_fontface(piece_side, suit, rank, private$cfg)
-            dm_fontsize <- scale * dm_scale * get_dm_fontsize(piece_side, suit, rank, private$cfg)
+            dm_fontsize <- cex * dm_cex * get_dm_fontsize(piece_side, suit, rank, private$cfg)
             dm_text <- get_dm_text(piece_side, suit, rank, private$cfg)
             dm_t <- get_dm_t(piece_side, suit, rank, private$cfg)
             dm_r <- get_dm_r(piece_side, suit, rank, private$cfg)
@@ -128,11 +140,11 @@ Config <- R6Class("pp_cfg",
             dm_y <- to_y(dm_t, dm_r) + 0.5
 
             # Primary symbol
-            ps_col <- get_ps_color(piece_side, suit, rank, private$cfg)
-            ps_scale <- get_ps_scale(piece_side, suit, rank, private$cfg)
+            ps_color <- get_ps_color(piece_side, suit, rank, private$cfg)
+            ps_cex <- get_ps_cex(piece_side, suit, rank, private$cfg)
             ps_fontfamily <- get_ps_fontfamily(piece_side, suit, rank, private$cfg)
             ps_fontface <- get_ps_fontface(piece_side, suit, rank, private$cfg)
-            ps_fontsize <- scale * ps_scale * get_ps_fontsize(piece_side, suit, rank, private$cfg)
+            ps_fontsize <- cex * ps_cex * get_ps_fontsize(piece_side, suit, rank, private$cfg)
             ps_text <- get_ps_text(piece_side, suit, rank, private$cfg)
             ps_t <- get_ps_t(piece_side, suit, rank, private$cfg)
             ps_r <- get_ps_r(piece_side, suit, rank, private$cfg)
@@ -140,15 +152,15 @@ Config <- R6Class("pp_cfg",
             ps_y <- to_y(ps_t, ps_r) + 0.5
 
             opt <- list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
-                 background_col=background_col, 
-		 border_col=border_col, border_lex=border_lex, edge_col=edge_col,
-                 gridline_col=gridline_col, gridline_lex=gridline_lex,
-		 mat_col=mat_col, mat_width=mat_width, 
-                 dm_col=dm_col, dm_text=dm_text, 
+                 background_color=background_color, 
+		 border_color=border_color, border_lex=border_lex, edge_color=edge_color,
+                 gridline_color=gridline_color, gridline_lex=gridline_lex,
+		 mat_color=mat_color, mat_width=mat_width, 
+                 dm_color=dm_color, dm_text=dm_text, 
                  dm_fontsize=dm_fontsize, 
                  dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,
                  dm_x=dm_x, dm_y=dm_y, 
-                 ps_col=ps_col, ps_text=ps_text, 
+                 ps_color=ps_color, ps_text=ps_text, 
                  ps_fontsize=ps_fontsize, 
                  ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
                  ps_x=ps_x, ps_y=ps_y)
@@ -267,6 +279,18 @@ Config <- R6Class("pp_cfg",
             depth
         }
         ),
+    active = list(
+        has_piecepack = function(value) {
+            if (missing(value)) {
+                return (self$has_coins && self$has_tiles && self$has_pawns && self$has_dice)
+            } else {
+               if (!is.logical(value)) stop(paste(value, " is not logical")) 
+                self$has_coins <- value
+                self$has_tiles <- value
+                self$has_pawns <- value
+                self$has_dice  <- value
+            }
+        }),
     private = list(cfg = NULL, cache = list())
 )
 
