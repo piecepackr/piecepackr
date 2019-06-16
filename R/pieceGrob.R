@@ -144,7 +144,7 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                          default.units = "npc", envir=NULL,
                          name=NULL, gp=NULL, vp=NULL) {
 
-    nn <- max(lengths(list(piece_side, suit, rank, x, y, angle, use_pictureGrob, width, height, depth)))
+    nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, use_pictureGrob, width, height, depth)))
     piece_side <- rep(piece_side, length.out=nn)
     suit <- rep(suit, length.out=nn)
     rank <- rep(rank, length.out=nn)
