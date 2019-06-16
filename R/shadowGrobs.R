@@ -31,7 +31,7 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
     ns <- n_shadows-1
     zs <- rep((1/ns)*depth, ns)
     for (ii in 2:ns) { zs[ii] <- zs[ii] + zs[ii-1] } # cumsum doesn't work with units
-    zs <- unit.c(z, z + zs)
+    zs <- unit.c(z-0.5*depth, z-0.5*depth + zs)
     xp <- op_x(x, y, zs, op_angle, op_scale)
     yp <- op_y(x, y, zs, op_angle, op_scale)
     gl <- gList()
@@ -39,12 +39,9 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
     gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     gl[[1]] <- shape_fn(gp=gp, vp=vp)
     for (ii in 2:n_shadows) { 
-        vp <- viewport(xp[ii], yp[ii], width, height, angle=angle)
+        vps <- viewport(xp[ii], yp[ii], width, height, angle=angle)
         gps <- gpar(col=NA, fill=opt$edge_color)
-        # gpp <- gpar(col=opt$border_color)
-        gl[[ii]] <- grobTree(shape_fn(gp=gps), vp=vp)
-                           # pointsGrob(x=shape_xy$x, y=shape_xy$y, gp=gpp),
-                           
+        gl[[ii]] <- shape_fn(gp=gps, vp=vps)
     }
     return(gl)
 }
@@ -54,10 +51,10 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     n_points <- 36
     thetas <- seq(op_angle+90, op_angle+270, length.out=n_points)
     r <- min(0.5*width, 0.5*height)
-    xl <- op_x(x, y, z, op_angle, op_scale)
-    yl <- op_y(x, y, z, op_angle, op_scale)
-    xu <- op_x(x, y, z+depth, op_angle, op_scale)
-    yu <- op_y(x, y, z+depth, op_angle, op_scale)
+    xl <- op_x(x, y, z-0.5*depth, op_angle, op_scale)
+    yl <- op_y(x, y, z-0.5*depth, op_angle, op_scale)
+    xu <- op_x(x, y, z+0.5*depth, op_angle, op_scale)
+    yu <- op_y(x, y, z+0.5*depth, op_angle, op_scale)
     xcl <- xl + to_x(thetas, r)
     ycl <- yl + to_y(thetas, r)
     xcu <- rev(xu + to_x(thetas, r))
@@ -80,10 +77,10 @@ rectShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, 
     xs <- x + to_x(thetas, rs)
     ys <- y + to_y(thetas, rs)
     # rotated, projected corners of the bottom and top of the solid
-    xl <- op_x(xs, ys, z, op_angle, op_scale)
-    yl <- op_y(xs, ys, z, op_angle, op_scale)
-    xu <- op_x(xs, ys, z+depth, op_angle, op_scale)
-    yu <- op_y(xs, ys, z+depth, op_angle, op_scale)
+    xl <- op_x(xs, ys, z-0.5*depth, op_angle, op_scale)
+    yl <- op_y(xs, ys, z-0.5*depth, op_angle, op_scale)
+    xu <- op_x(xs, ys, z+0.5*depth, op_angle, op_scale)
+    yu <- op_y(xs, ys, z+0.5*depth, op_angle, op_scale)
 
     # face angles
     fas <- c(180, 90, 0, -90) + angle + 180
@@ -112,10 +109,10 @@ convexShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     xs <- x + to_x(thetas, r)
     ys <- y + to_y(thetas, r)
     # rotated, projected vertices at the bottom and top of the solid
-    xl <- op_x(xs, ys, z, op_angle, op_scale)
-    yl <- op_y(xs, ys, z, op_angle, op_scale)
-    xu <- op_x(xs, ys, z+depth, op_angle, op_scale)
-    yu <- op_y(xs, ys, z+depth, op_angle, op_scale)
+    xl <- op_x(xs, ys, z-0.5*depth, op_angle, op_scale)
+    yl <- op_y(xs, ys, z-0.5*depth, op_angle, op_scale)
+    xu <- op_x(xs, ys, z+0.5*depth, op_angle, op_scale)
+    yu <- op_y(xs, ys, z+0.5*depth, op_angle, op_scale)
 
     # face angles
     fas <- thetas + 360 / n_vertices / 2 + 180

@@ -226,17 +226,17 @@ test_that("oblique projection works", {
     g.p <- function(...) { 
         grid.piece(..., op_scale=0.5, default.units="in") 
     }
-    cfg <- pp_cfg(list(depth.pawn=2, width.pawn=0.75, height.pawn=0.75,
+    cfg <- pp_cfg(list(depth.pawn=1, width.pawn=0.75, height.pawn=0.75,
                        dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE))
     expect_doppelganger("diagram_op", function() {
         g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
-        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4, cfg=cfg)
-        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4, cfg=cfg)
-        g.p("die_face", x=1, y=1, z=1/4, cfg=cfg)
-        g.p("pawn_face", x=1, y=4, z=1/4, angle=90, cfg=cfg)
-        g.p("coin_back", x=3, y=4, z=1/4, angle=180, cfg=cfg)
-        g.p("coin_back", x=3, y=4, z=3/8, angle=180, cfg=cfg)
-        g.p("coin_back", x=3, y=1, z=3/4, angle=90, cfg=cfg)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8, cfg=cfg)
+        g.p("die_face", x=1, y=1, z=1/4+1/4, cfg=cfg)
+        g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90, cfg=cfg)
+        g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
+        g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
+        g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
     })
 })
 

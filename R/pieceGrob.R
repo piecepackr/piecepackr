@@ -15,7 +15,7 @@
 #' @param rank Number of rank (lowest rank starting from 1)
 #' @param x Where to place piece on x axis of viewport
 #' @param y Where to place piece on y axis of viewport
-#' @param z z-coordinate of the bottom of the piece.  Has no effect if \code{op_scale} is \code{0}.
+#' @param z z-coordinate of the piece.  Has no effect if \code{op_scale} is \code{0}.
 #' @param angle Angle (on xy plane) to draw piece at
 #' @param use_pictureGrob If \code{TRUE} instead of directly returning the grob first 
 #'            export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.  
@@ -67,7 +67,7 @@ as.gList <- function(ll) {
 }
 
 pieceGrob_wrapper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(), 
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
                            angle=NA, use_pictureGrob=FALSE, 
                            width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
@@ -79,7 +79,7 @@ pieceGrob_wrapper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_c
 
 
 pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(), 
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
                            angle=0, use_pictureGrob=FALSE,
                            width=NA, height=NA, depth=NA, 
                            op_scale=0, op_angle=45,
@@ -88,13 +88,14 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
     suit <- ifelse(suit > cfg$i_unsuit+1, cfg$i_unsuit+1, suit)
     rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
-    if(!is.unit(x)) { x <- unit(x, default.units) }
-    if(!is.unit(y)) { y <- unit(y, default.units) }
-    if(!is.unit(z)) { z <- unit(z, default.units) }
     if(is.na(angle)) { angle <- 0 }
     if(is.na(width)) { width <- inch(cfg$get_width(piece_side, suit, rank)) }
     if(is.na(height)) { height <- inch(cfg$get_height(piece_side, suit, rank)) }
     if(is.na(depth)) { depth <- inch(cfg$get_depth(piece_side, suit, rank)) }
+    if(is.na(z)) { z <- 0.5 * depth }
+    if(!is.unit(x)) { x <- unit(x, default.units) }
+    if(!is.unit(y)) { y <- unit(y, default.units) }
+    if(!is.unit(z)) { z <- unit(z, default.units) }
     if(!is.unit(width)) { width <- unit(width, default.units) }
     if(!is.unit(height)) { height <- unit(height, default.units) }
     if(!is.unit(depth)) { depth <- unit(depth, default.units) }
@@ -106,8 +107,8 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
         cvp <- viewport(x, y, width, height, angle=angle)
         grobTree(grob, vp=cvp)
     } else {
-        xp <- op_x(x, y, z+depth, op_angle, op_scale)
-        yp <- op_y(x, y, z+depth, op_angle, op_scale)
+        xp <- op_x(x, y, z+0.5*depth, op_angle, op_scale)
+        yp <- op_y(x, y, z+0.5*depth, op_angle, op_scale)
         cvp <- viewport(xp, yp, width, height, angle=angle)
         grob <- grobTree(grob, vp=cvp)
         # shadow <-  cfg$get_shadow(piece_side, suit, rank, 
@@ -136,7 +137,7 @@ op_y <- function(x, y, z, op_angle=45, op_scale=0) {
 #' @export
 pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA, 
                          cfg=pp_cfg(), 
-                         x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                         x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
                          angle=0, use_pictureGrob=FALSE,
                          width=NA, height=NA, depth=NA,
                          op_scale=0, op_angle=45,
@@ -189,7 +190,7 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
 #' @rdname grid.piece
 #' @export
 grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=list(), 
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
                            angle=0, use_pictureGrob=FALSE,
                            width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,

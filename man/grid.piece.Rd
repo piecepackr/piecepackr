@@ -10,17 +10,16 @@ pmap_piece(.l, ..., draw = TRUE, name = NULL, gp = NULL, vp = NULL)
 
 pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  z = unit(0, "npc"), angle = 0, use_pictureGrob = FALSE,
-  width = NA, height = NA, depth = NA, op_scale = 0,
-  op_angle = 45, default.units = "npc", envir = NULL, name = NULL,
-  gp = NULL, vp = NULL)
+  z = NA, angle = 0, use_pictureGrob = FALSE, width = NA,
+  height = NA, depth = NA, op_scale = 0, op_angle = 45,
+  default.units = "npc", envir = NULL, name = NULL, gp = NULL,
+  vp = NULL)
 
 grid.piece(piece_side = "tile_back", suit = NA, rank = NA,
-  cfg = list(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  z = unit(0, "npc"), angle = 0, use_pictureGrob = FALSE,
-  width = NA, height = NA, depth = NA, op_scale = 0,
-  op_angle = 45, default.units = "npc", envir = NULL, name = NULL,
-  gp = NULL, draw = TRUE, vp = NULL)
+  cfg = list(), x = unit(0.5, "npc"), y = unit(0.5, "npc"), z = NA,
+  angle = 0, use_pictureGrob = FALSE, width = NA, height = NA,
+  depth = NA, op_scale = 0, op_angle = 45, default.units = "npc",
+  envir = NULL, name = NULL, gp = NULL, draw = TRUE, vp = NULL)
 }
 \arguments{
 \item{.l}{A list of vectors, such as a data frame. The length of \code{.l}
@@ -55,7 +54,7 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{y}{Where to place piece on y axis of viewport}
 
-\item{z}{z-coordinate of the bottom of the piece.  Has no effect if \code{op_scale} is \code{0}.}
+\item{z}{z-coordinate of the piece.  Has no effect if \code{op_scale} is \code{0}.}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
