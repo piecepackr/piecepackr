@@ -188,24 +188,23 @@ cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE
             width.pawn=0.5, height.pawn=0.5, depth.pawn=0.8, shape.pawn="circle",
             edge_color="white,tan4", border_lex=2,
             edge_color.tile="tan", border_color.tile="black"))
+g.p <- function(...) { 
+    grid.piece(..., op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+}
 draw_tak_board <- function(x, y) { 
-    grid.piece("tile_back", x=x+0.5, y=y+0.5, 
-               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in") 
+    g.p("tile_back", x=x+0.5, y=y+0.5) 
 }
 draw_flat_stone <- function(x, y, suit=1) { 
     z <- 1/4*seq(along=suit)+1/8
-    grid.piece("coin_back", x=x+0.5, y=y+0.5, z=z, suit=suit,
-               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+    g.p("coin_back", x=x+0.5, y=y+0.5, z=z, suit=suit)
 }
 draw_standing_stone <- function(x, y, suit=1, n_beneath=0, angle=0) {
     z <- (n_beneath+1)*1/4+0.3
-    grid.piece("saucer_face", x=x+0.5, y=y+0.5, z=z, suit=suit, angle=angle, 
-               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+    g.p("saucer_face", x=x+0.5, y=y+0.5, z=z, suit=suit, angle=angle)
 }
 draw_capstone <- function(x, y, suit=1, n_beneath=0) {
     z <- (n_beneath+1)*1/4+0.4
-    grid.piece("pawn_back", x=x+0.5, y=y+0.5, z=z, suit=suit, 
-               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+    g.p("pawn_back", x=x+0.5, y=y+0.5, z=z, suit=suit)
 }
 .. ..
 
@@ -217,10 +216,10 @@ draw_tak_board(3, 3)
 draw_flat_stone(1, 1, 1)
 draw_flat_stone(1, 2, 2)
 draw_flat_stone(2, 4, 1)
-draw_capstone(2, 4, 2, 1)
+draw_capstone(2, 4, 2, n_beneath=1)
 draw_flat_stone(2, 5, 2)
 draw_flat_stone(3, 4, 1:2)
-draw_flat_stone(3, 3, c(2, 1, 1, 2))
+draw_flat_stone(3, 3, c(2,1,1,2))
 draw_flat_stone(3, 2, 1:2)
 draw_flat_stone(3, 1, 2)
 draw_standing_stone(4, 2, 2, angle=90)
@@ -248,7 +247,7 @@ single-sided
 double-sided
     Print double-sided on paper(board) and cut out the components.  One will need to do some additional folding and application of adhesive/tape in order to construct the dice, pawns, and pyramids.
 
-The `Piecepack Wiki <www.ludism.org/ppwiki>`_ has a page on `making piecepacks <http://www.ludism.org/ppwiki/MakingPiecepacks>`_. The BoardGameGeek `Print-and-Play Wiki <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ also has lots of good info like how to `quickly make coins uisng an arch punch <https://boardgamegeek.com/thread/507240/making-circular-tokens-and-counters-arch-punch>`_.  
+The `Piecepack Wiki <http://www.ludism.org/ppwiki/HomePage>`_ has a page on `making piecepacks <http://www.ludism.org/ppwiki/MakingPiecepacks>`_. The BoardGameGeek `Print-and-Play Wiki <https://boardgamegeek.com/wiki/page/Print_and_Play_Games#>`_ also has lots of good info like how to `quickly make coins uisng an arch punch <https://boardgamegeek.com/thread/507240/making-circular-tokens-and-counters-arch-punch>`_.  
 
 **Warning:**  Generally it is advisable to uncheck 'fit to size' when printing PDF files otherwise your components maybe re-sized by the printer.
 

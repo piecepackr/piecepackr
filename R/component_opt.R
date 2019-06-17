@@ -277,15 +277,11 @@ get_coin_arrangement <- function(cfg=list()) {
 get_dm_symbols <- function(piece_side, suit=0, rank=0, cfg=list()) {
     default <- {
         if (piece_side %in% c("coin_back", "coin_face")) {
-            dm_symbols <- "\u25cf" # "●"
+            dm_symbols <- "\u25cf" 
         } else if (piece_side %in% c("saucer_back", "saucer_face")) {
-            dm_symbols <- "\u25b2" # "▲"
-            # dm_symbols <- "\u265f" # "♟"
+            dm_symbols <- "\u25b2" 
         } else if (piece_side %in% c("pawn_face", "pyramid_face")) {
-            dm_symbols <- "\u0298\u0298" # "ʘʘ"
-            # dm_symbols <- "\u2c7a\u2c7a" # "ⱺⱺ"
-            # dm_symbols <- "\U0001f440" # "👀"
-            # dm_symbols <- "\U0001f603" # "😃"
+            dm_symbols <- "\u0298\u0298" 
         } else if (piece_side %in% c("suitdie_face", "pawn_back", 
                                          "belt_face", "tile_back", "matchstick_back",
                                          "pyramid_left", "pyramid_right", "pyramid_back")) {
@@ -405,9 +401,7 @@ get_rank_symbols <- function(piece_side=NA, suit=0, rank=0, cfg=list(), expand=T
     rank_symbols
 }
 get_suit_symbols <- function(piece_side=NA, suit=0, rank=0, cfg=list(), expand=TRUE) {
-    default <- "\u2665,\u2660,\u2663,\u2666,\u263c" # "♥,♠,♣,♦,☼"
-        # "\u2665,\u2660,\u2663,\u2666,\u2302" # "♥,♠,♣,♦,⌂"
-        # "\u2665,\u2660,\u2663,\u2666,\u2605" # "♥,♠,♣,♦,★"
+    default <- "\u2665,\u2660,\u2663,\u2666,\u263c" 
     suit_symbols <- cleave(get_style_element("suit_text", piece_side, cfg, default, suit, rank))
     if (expand) 
         suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", piece_side, cfg)
