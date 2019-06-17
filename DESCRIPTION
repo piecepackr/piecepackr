@@ -25,4 +25,4 @@ Suggests:
     testthat,
     vdiffr
 SystemRequirements: ghostscript
-RoxygenNote: 6.1.1
+RoxygenNote: 6.1.1.9000
