@@ -13,11 +13,9 @@ piecepackr: Board Game Graphics in R
     :target: https://codecov.io/github/trevorld/piecepackr?branch=master
     :alt: Coverage Status
 
-.. image:: http://www.repostatus.org/badges/latest/wip.svg
-   :alt: Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.
-   :target: http://www.repostatus.org/#wip
-
-``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_ R package to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other game systems.
+.. image:: https://www.repostatus.org/badges/latest/active.svg
+   :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
+   :target: https://www.repostatus.org/#active
 
 .. _piecepack: http://www.ludism.org/ppwiki/HomePage
 
@@ -35,52 +33,12 @@ piecepackr: Board Game Graphics in R
 knitr::opts_chunk$set(fig.path = "man/figures/README-")
 .. ..
 
-Installation
-------------
-
-To install the development version of ``piecepackr`` use the following commands in R_:
-
-.. code:: r
-
-   install.packages("remotes")
-   remotes::install_github("trevorld/piecepackr")
-
-The default piecepackr configuration should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However if you wish to use advanced piecepackr configurations you'll need to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
-
-.. code:: bash
-
-    sudo apt install fonts-dejavu fonts-noto 
-    fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
-    curl -O http://www.quivira-font.com/files/Quivira.otf
-    mv Quivira.otf $fonts_dir/
-    curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip
-    unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
-    mv NotoEmoji-Regular.ttf $fonts_dir/
-    rm NotoEmoji-unhinted.zip
-
-**Note**  ``piecpackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
-
-.. code:: r
-
-   > capabilities("cairo")
-   cairo
-    TRUE
-
-Also although most users won't need them ``piecpackr`` contains utility functions that depend on the system dependencies ``ghostscript`` and ``poppler-utils``:
-
-1. ``save_print_and_play`` will embed additional metadata into the pdf if ``ghostscript`` is available.
-2. ``get_embedded_font`` (a debugging helper function) needs ``pdffonts`` (usually found in ``poppler-utils``)
-
-You can install these utilities on Ubuntu with
-
-.. code:: bash
-
-    sudo apt install ghostscript poppler-utils
+``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with R's grid_ graphics system to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
 API Intro
 ---------
 
-``grid.piece`` is the core function that can be used used to draw any piecepack_ component:
+``grid.piece`` is the core function that is used used to draw board game components (by default piecepack_ game components):
 
 .. {r intro1, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with default configuration"}
 library("piecepackr")
@@ -95,11 +53,11 @@ g.p("coin_back", suit=4, x=3, y=4, angle=180)
 g.p("coin_back", suit=2, x=3, y=1, angle=90)
 .. ..
 
-One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the piecepack graphics drawn by ``grid.piece``:
+One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the game components drawn by ``grid.piece``:
 
 .. {r config, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with custom configuration"}
 dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
-                     invert_colors.suited=TRUE)
+                     invert_colors.suited=TRUE, border_color="black", border_lex=2)
 piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
                     suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
                     suit_cex="0.6,0.7,0.75,0.9,0.9")
@@ -116,13 +74,12 @@ g.p("coin_back", suit=4, x=3, y=4, angle=180)
 g.p("coin_back", suit=2, x=3, y=1, angle=90)
 .. ..
 
-There is even some support for a `oblique projections <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
+``grid.pieces`` even has some support for drawing components with an `oblique projection <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
 
 .. {r proj, fig.width=5, fig.height=5, fig.cap="Piecepack diagram in an oblique projection"}
 cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
                    dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
-                   edge_color.coin="black", edge_color.tile="black",
-                   border_lex=2)
+                   edge_color.coin="tan", edge_color.tile="tan")
 cfg <- pp_cfg(c(cfg, cfg3d))
 g.p <- function(...) { 
     grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in") 
@@ -144,12 +101,24 @@ g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
    save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
    save_piece_images(cfg)
 
+If you are comfortable using R data frames there is also ``pmap_piece`` which is wrapper for ``grid.piece`` that processes data frame input:
+
+.. {r pmap, fig.width=5, fig.height=5, fig.cap="'pmap_piece' lets you use data frames as input"}
+library("tibble")
+df_tiles <- tibble(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+df_coins <- tibble(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
+                       suit=1:16%%2+rep(c(1,3), each=8),
+                       angle=rep(c(180,0), each=8), z=1/4+1/16)
+df <- dplyr::bind_rows(df_tiles, df_coins)
+pmap_piece(df, cfg=cfg, op_scale=0.5, default.units="in")
+.. ..
+
 A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's `man pages`_.
 
-Extended Tak Example
---------------------
+Tak Example
+-----------
 
-Although the game of `Tak <https://en.wikipedia.org/wiki/Tak_(game)>`_ can be played with a Stackpack here we'll show an example of configuring piecepackr to draw standard Tak game pieces.
+Although the game of `Tak <https://en.wikipedia.org/wiki/Tak_(game)>`_ can be played with a piecepack stackpack here we'll show an example of configuring piecepackr to draw more traditional Tak game pieces.
 
 Since one often plays Tak on differently sized boards one common Tak board design is to have boards made with colored cells arranged in rings from the center plus extra symbols in rings placed at the points so it is easy to see smaller sub-boards.  To start we'll write a function to draw the Tak board.
 
@@ -157,14 +126,15 @@ Since one often plays Tak on differently sized boards one common Tak board desig
 library("grid")
 library("piecepackr")
 grobTakBoard <- function(...) {
-    g <- "darkgreen"; w <- "grey"
+    g <- "darkgreen"
+    w <- "grey"
     fill <- c(rep(g, 5),
               rep(c(g, rep(w, 3), g),3),
               rep(g, 5))
     inner <- rectGrob(x = rep(1:5, 5), y = rep(5:1, each=5),
                  width=1, height=1, default.units="in", 
                  gp=gpar(col="gold", fill=fill, lwd=3))
-    outer <- rectGrob(gp=gpar(col=NA, fill="grey"))
+    outer <- rectGrob(gp=gpar(col="black", fill="grey", gp=gpar(lex=2)))
     circles <- circleGrob(x=0.5+rep(1:4, 4), y=0.5+rep(4:1, each=4), r=0.1, 
                          gp=gpar(col=NA, fill="gold"), default.units="in")
     rects <- rectGrob(x=0.5+c(0:5, rep(c(0,5), 4), 0:5), 
@@ -228,13 +198,55 @@ draw_capstone(5, 3, 1)
 popViewport()
 .. ..
 
-Licence
--------
+Installation
+------------
 
-This software package is released under a `Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0) <https://creativecommons.org/licenses/by-sa/4.0/>`_.  This license is compatible with version 3 of the GNU Public License (GPL-3).
+To install the development version of ``piecepackr`` use the following commands in R_:
+
+.. code:: r
+
+   install.packages("remotes")
+   remotes::install_github("trevorld/piecepackr")
+
+The default piecepackr configuration should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However if you wish to use advanced piecepackr configurations you'll need to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
+
+.. code:: bash
+
+    sudo apt install fonts-dejavu fonts-noto 
+    fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
+    curl -O http://www.quivira-font.com/files/Quivira.otf
+    mv Quivira.otf $fonts_dir/
+    curl -O https://noto-website-2.storage.googleapis.com/pkgs/NotoEmoji-unhinted.zip
+    unzip NotoEmoji-unhinted.zip NotoEmoji-Regular.ttf
+    mv NotoEmoji-Regular.ttf $fonts_dir/
+    rm NotoEmoji-unhinted.zip
+
+**Note**  ``piecpackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
+
+.. code:: r
+
+   > capabilities("cairo")
+   cairo
+    TRUE
+
+Also although most users won't need them ``piecpackr`` contains utility functions that depend on the system dependencies ``ghostscript`` and ``poppler-utils``:
+
+1. ``save_print_and_play`` will embed additional metadata into the pdf if ``ghostscript`` is available.
+2. ``get_embedded_font`` (a debugging helper function) needs ``pdffonts`` (usually found in ``poppler-utils``)
+
+You can install these utilities on Ubuntu with
+
+.. code:: bash
+
+    sudo apt install ghostscript poppler-utils
 
 Frequently Asked Questions
 --------------------------
+
+What is the package licence?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This software package is released under a `Creative Commons Attribution-ShareAlike 4.0 International license (CC BY-SA 4.0) <https://creativecommons.org/licenses/by-sa/4.0/>`_.  This license is compatible with version 3 of the GNU Public License (GPL-3).
 
 How should I Print & Play my piecepack?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,7 +290,7 @@ I have some images I want to use as suit/rank/directional mark symbols, how can 
 There are a couple of approaches one can take:
 
 1. Take them and put them into a font.  `FontForge <https://fontforge.github.io/en-US/>`_ is a popular open-source program suitable for this task.  `fontcustom <https://github.com/FontCustom/fontcustom>`_ is a popular command-line wrapper around FontForge.  You may need to convert your images from one format to another format first.  To guarantee dispatch by ``fontconfig`` you might want to put the symbols in a part of the "Private Use Area" of Unicode not used by any other fonts on your system.  If you do that you won't need to specify your font otherwise you'll need to configure the ``suit_symbols_font``, ``rank_symbols_font``, and/or ``dm_font`` options.
-2. Write a custom grob function to insert the desired symbols using such ``grid``'s ``rasterGrob`` or ``grImport2``'s ``pictureGrob``.
+2. Write a custom grob function to insert the desired symbols using functions like ``grid``'s ``rasterGrob`` or ``grImport2``'s ``pictureGrob``.
 
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
