@@ -31,7 +31,9 @@ piecepackr: Board Game Graphics in R
 
 .. contents::
 
-
+.. {r setup, echo = FALSE}
+knitr::opts_chunk$set(fig.path = "man/figures/README-")
+.. ..
 
 Installation
 ------------
@@ -80,81 +82,60 @@ API Intro
 
 ``grid.piece`` is the core function that can be used used to draw any piecepack_ component:
 
-
-.. sourcecode:: r
-    
-
-    library("piecepackr")
-    g.p <- function(...) { grid.piece(..., default.units="in") }
-    g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-    g.p("tile_back", x=0.5+3, y=0.5+1)
-    g.p("tile_back", x=0.5+3, y=0.5+1)
-    g.p("die_face", suit=3, rank=5, x=1, y=1)
-    g.p("pawn_face", x=1, y=4, angle=90)
-    g.p("coin_back", x=3, y=4, angle=180)
-    g.p("coin_back", suit=4, x=3, y=4, angle=180)
-    g.p("coin_back", suit=2, x=3, y=1, angle=90)
-
-.. figure:: man/figures/README-intro1-1.png
-    :alt: Piecepack diagram with default configuration
-
-    Piecepack diagram with default configuration
+.. {r intro1, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with default configuration"}
+library("piecepackr")
+g.p <- function(...) { grid.piece(..., default.units="in") }
+g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("die_face", suit=3, rank=5, x=1, y=1)
+g.p("pawn_face", x=1, y=4, angle=90)
+g.p("coin_back", x=3, y=4, angle=180)
+g.p("coin_back", suit=4, x=3, y=4, angle=180)
+g.p("coin_back", suit=2, x=3, y=1, angle=90)
+.. ..
 
 One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the piecepack graphics drawn by ``grid.piece``:
 
-
-.. sourcecode:: r
-    
-
-    dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
-                         invert_colors.suited=TRUE)
-    piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
-                        suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
-                        suit_cex="0.6,0.7,0.75,0.9,0.9")
-    traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
-    cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
-    g.p <- function(...) { grid.piece(..., default.units="in", cfg=pp_cfg(cfg)) }
-    g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-    g.p("tile_back", x=0.5+3, y=0.5+1)
-    g.p("tile_back", x=0.5+3, y=0.5+1)
-    g.p("die_face", suit=3, rank=5, x=1, y=1)
-    g.p("pawn_face", x=1, y=4, angle=90)
-    g.p("coin_back", x=3, y=4, angle=180)
-    g.p("coin_back", suit=4, x=3, y=4, angle=180)
-    g.p("coin_back", suit=2, x=3, y=1, angle=90)
-
-.. figure:: man/figures/README-config-1.png
-    :alt: Piecepack diagram with custom configuration
-
-    Piecepack diagram with custom configuration
+.. {r config, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with custom configuration"}
+dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
+                     invert_colors.suited=TRUE)
+piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+                    suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+                    suit_cex="0.6,0.7,0.75,0.9,0.9")
+traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
+cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
+g.p <- function(...) { grid.piece(..., default.units="in", cfg=pp_cfg(cfg)) }
+g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("die_face", suit=3, rank=5, x=1, y=1)
+g.p("pawn_face", x=1, y=4, angle=90)
+g.p("coin_back", x=3, y=4, angle=180)
+g.p("coin_back", suit=4, x=3, y=4, angle=180)
+g.p("coin_back", suit=2, x=3, y=1, angle=90)
+.. ..
 
 There is even some support for a `oblique projections <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
 
-
-.. sourcecode:: r
-    
-
-    cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
-                       dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
-                       edge_color.coin="black", edge_color.tile="black",
-                       border_lex=2)
-    cfg <- pp_cfg(c(cfg, cfg3d))
-    g.p <- function(...) { 
-        grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in") 
-    }
-    g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-    g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
-    g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8)
-    g.p("die_face", suit=3, rank=5, x=1, y=1, z=1/4+1/4)
-    g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90)
-    g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180)
-    g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
-    g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
-
-.. figure:: man/figures/README-proj-1.png
-    :alt: Piecepack diagram in an oblique projection
-
-    Piecepack diagram in an oblique projection
+.. {r proj, fig.width=5, fig.height=5, fig.cap="Piecepack diagram in an oblique projection"}
+cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
+                   dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
+                   edge_color.coin="black", edge_color.tile="black",
+                   border_lex=2)
+cfg <- pp_cfg(c(cfg, cfg3d))
+g.p <- function(...) { 
+    grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in") 
+}
+g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
+g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8)
+g.p("die_face", suit=3, rank=5, x=1, y=1, z=1/4+1/4)
+g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90)
+g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180)
+g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
+g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
+.. ..
 
 ``save_print_and_play`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images`` makes individual images of each piecepack component:
 
@@ -172,94 +153,81 @@ Although the game of `Tak <https://en.wikipedia.org/wiki/Tak_(game)>`_ can be pl
 
 Since one often plays Tak on differently sized boards one common Tak board design is to have boards made with colored cells arranged in rings from the center plus extra symbols in rings placed at the points so it is easy to see smaller sub-boards.  To start we'll write a function to draw the Tak board.
 
-
-.. sourcecode:: r
-    
-
-    library("grid")
-    library("piecepackr")
-    grobTakBoard <- function(...) {
-        g <- "darkgreen"; w <- "grey"
-        fill <- c(rep(g, 5),
-                  rep(c(g, rep(w, 3), g),3),
-                  rep(g, 5))
-        inner <- rectGrob(x = rep(1:5, 5), y = rep(5:1, each=5),
-                     width=1, height=1, default.units="in", 
-                     gp=gpar(col="gold", fill=fill, lwd=3))
-        outer <- rectGrob(gp=gpar(col=NA, fill="grey"))
-        circles <- circleGrob(x=0.5+rep(1:4, 4), y=0.5+rep(4:1, each=4), r=0.1, 
-                             gp=gpar(col=NA, fill="gold"), default.units="in")
-        rects <- rectGrob(x=0.5+c(0:5, rep(c(0,5), 4), 0:5), 
-                          y=0.5+c(rep(5,6), rep(c(4:1), each=2), rep(0, 6)),
-                          width=0.2, height=0.2,
-                          gp=gpar(col=NA, fill="orange"), default.units="in")
-        grobTree(outer, inner, circles, rects)
-    }
-
+.. {r board}
+library("grid")
+library("piecepackr")
+grobTakBoard <- function(...) {
+    g <- "darkgreen"; w <- "grey"
+    fill <- c(rep(g, 5),
+              rep(c(g, rep(w, 3), g),3),
+              rep(g, 5))
+    inner <- rectGrob(x = rep(1:5, 5), y = rep(5:1, each=5),
+                 width=1, height=1, default.units="in", 
+                 gp=gpar(col="gold", fill=fill, lwd=3))
+    outer <- rectGrob(gp=gpar(col=NA, fill="grey"))
+    circles <- circleGrob(x=0.5+rep(1:4, 4), y=0.5+rep(4:1, each=4), r=0.1, 
+                         gp=gpar(col=NA, fill="gold"), default.units="in")
+    rects <- rectGrob(x=0.5+c(0:5, rep(c(0,5), 4), 0:5), 
+                      y=0.5+c(rep(5,6), rep(c(4:1), each=2), rep(0, 6)),
+                      width=0.2, height=0.2,
+                      gp=gpar(col=NA, fill="orange"), default.units="in")
+    grobTree(outer, inner, circles, rects)
+}
+.. ..
 
 Then we'll configure a Tak set and write some helper functions to draw Tak_ pieces with it.
 
-
-.. sourcecode:: r
-    
-
-    cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
-                ps_text="", dm_text="",
-                width.tile=6, height.tile=6, depth.tile=1/4,
-                grob_fn.tile=grobTakBoard,
-                width.coin=0.6, height.coin=0.6, depth.coin=1/4, shape.coin="rect",
-                width.saucer=0.6, height.saucer=1/4, depth.saucer=0.6, 
-                shape.saucer="rect", mat_width.saucer=0,
-                width.pawn=0.5, height.pawn=0.5, depth.pawn=0.8, shape.pawn="circle",
-                edge_color="white,tan4", border_lex=2,
-                edge_color.tile="tan", border_color.tile="black"))
-    draw_tak_board <- function(x, y) { 
-        grid.piece("tile_back", x=x+0.5, y=y+0.5, 
-                   op_scale=0.7, op_angle=45, cfg=cfg, default.units="in") 
-    }
-    draw_flat_stone <- function(x, y, suit=1) { 
-        z <- 1/4*seq(along=suit)+1/8
-        grid.piece("coin_back", x=x+0.5, y=y+0.5, z=z, suit=suit,
-                   op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
-    }
-    draw_standing_stone <- function(x, y, suit=1, n_beneath=0, angle=0) {
-        z <- (n_beneath+1)*1/4+0.3
-        grid.piece("saucer_face", x=x+0.5, y=y+0.5, z=z, suit=suit, angle=angle, 
-                   op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
-    }
-    draw_capstone <- function(x, y, suit=1, n_beneath=0) {
-        z <- (n_beneath+1)*1/4+0.4
-        grid.piece("pawn_back", x=x+0.5, y=y+0.5, z=z, suit=suit, 
-                   op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
-    }
-
+.. {r configure_tak}
+cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
+            ps_text="", dm_text="",
+            width.tile=6, height.tile=6, depth.tile=1/4,
+            grob_fn.tile=grobTakBoard,
+            width.coin=0.6, height.coin=0.6, depth.coin=1/4, shape.coin="rect",
+            width.saucer=0.6, height.saucer=1/4, depth.saucer=0.6, 
+            shape.saucer="rect", mat_width.saucer=0,
+            width.pawn=0.5, height.pawn=0.5, depth.pawn=0.8, shape.pawn="circle",
+            edge_color="white,tan4", border_lex=2,
+            edge_color.tile="tan", border_color.tile="black"))
+draw_tak_board <- function(x, y) { 
+    grid.piece("tile_back", x=x+0.5, y=y+0.5, 
+               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in") 
+}
+draw_flat_stone <- function(x, y, suit=1) { 
+    z <- 1/4*seq(along=suit)+1/8
+    grid.piece("coin_back", x=x+0.5, y=y+0.5, z=z, suit=suit,
+               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+}
+draw_standing_stone <- function(x, y, suit=1, n_beneath=0, angle=0) {
+    z <- (n_beneath+1)*1/4+0.3
+    grid.piece("saucer_face", x=x+0.5, y=y+0.5, z=z, suit=suit, angle=angle, 
+               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+}
+draw_capstone <- function(x, y, suit=1, n_beneath=0) {
+    z <- (n_beneath+1)*1/4+0.4
+    grid.piece("pawn_back", x=x+0.5, y=y+0.5, z=z, suit=suit, 
+               op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
+}
+.. ..
 
 Then we'll draw an example Tak game diagram:
 
-
-.. sourcecode:: r
-    
-
-    pushViewport(viewport(width=inch(6), height=inch(6)))
-    draw_tak_board(3, 3)
-    draw_flat_stone(1, 1, 1)
-    draw_flat_stone(1, 2, 2)
-    draw_flat_stone(2, 4, 1)
-    draw_capstone(2, 4, 2, 1)
-    draw_flat_stone(2, 5, 2)
-    draw_flat_stone(3, 4, 1:2)
-    draw_flat_stone(3, 3, c(2, 1, 1, 2))
-    draw_flat_stone(3, 2, 1:2)
-    draw_flat_stone(3, 1, 2)
-    draw_standing_stone(4, 2, 2, angle=90)
-    draw_flat_stone(5, 2, 1)
-    draw_capstone(5, 3, 1)
-    popViewport()
-
-.. figure:: man/figures/README-diagram-1.png
-    :alt: Tak game diagram
-
-    Tak game diagram
+.. {r diagram, fig.width=7.5, fig.height=7.5, fig.cap="Tak game diagram"}
+pushViewport(viewport(width=inch(6), height=inch(6)))
+draw_tak_board(3, 3)
+draw_flat_stone(1, 1, 1)
+draw_flat_stone(1, 2, 2)
+draw_flat_stone(2, 4, 1)
+draw_capstone(2, 4, 2, 1)
+draw_flat_stone(2, 5, 2)
+draw_flat_stone(3, 4, 1:2)
+draw_flat_stone(3, 3, c(2, 1, 1, 2))
+draw_flat_stone(3, 2, 1:2)
+draw_flat_stone(3, 1, 2)
+draw_standing_stone(4, 2, 2, angle=90)
+draw_flat_stone(5, 2, 1)
+draw_capstone(5, 3, 1)
+popViewport()
+.. ..
 
 Licence
 -------
