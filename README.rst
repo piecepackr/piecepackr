@@ -197,7 +197,7 @@ Since one often plays Tak on differently sized boards one common Tak board desig
     }
 
 
-Then we'll configure a Tak set and write some helper functions to draw Tak_ pieces with it.
+Then we'll configure a Tak set and write some helper functions to draw Tak pieces with it.
 
 
 .. sourcecode:: r

@@ -175,7 +175,7 @@ grobTakBoard <- function(...) {
 }
 .. ..
 
-Then we'll configure a Tak set and write some helper functions to draw Tak_ pieces with it.
+Then we'll configure a Tak set and write some helper functions to draw Tak pieces with it.
 
 .. {r configure_tak}
 cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,

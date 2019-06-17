@@ -23,6 +23,9 @@ Config <- R6Class("pp_cfg",
         has_saucers = FALSE,
         has_pyramids = FALSE,
         has_matchsticks = FALSE, 
+        cache_grob = TRUE,
+        cache_piece_opt = TRUE,
+        cache_shadow = TRUE,
         initialize = function(cfg=list()) {
             warn_cfg(cfg)
             private$cfg <- cfg
@@ -67,7 +70,7 @@ Config <- R6Class("pp_cfg",
                 if (is.character(grobFn))
                     grobFn <- match.fun(grobFn)
                 grob <- grobFn(piece_side, suit, rank, self)
-                private$cache[[key]] <- grob
+                if (self$cache_grob) { private$cache[[key]] <- grob }
                 grob
             }
         },
@@ -81,7 +84,7 @@ Config <- R6Class("pp_cfg",
                 grobFn <- switch(piece_side,
                                  pyramid_top = function(...) nullGrob(),
                                  default_fn)
-                private$cache[[key]] <- grobFn
+                if (self$cache_shadow) { private$cache[[key]] <- grobFn }
                 grobFn
             }
         },
@@ -164,7 +167,7 @@ Config <- R6Class("pp_cfg",
                  ps_fontsize=ps_fontsize, 
                  ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
                  ps_x=ps_x, ps_y=ps_y)
-            private$cache[[key]] <- opt
+            if (self$cache_piece_opt) { private$cache[[key]] <- opt }
             opt
         },
         get_suit_color = function(suit=1) {
