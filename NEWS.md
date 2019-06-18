@@ -1,3 +1,8 @@
+piecepackr 1.0.0
+================
+
+* Initial "stable" release.
+
 piecepackr 0.12.0
 =================
 

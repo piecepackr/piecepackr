@@ -111,12 +111,6 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
         yp <- op_y(x, y, z+0.5*depth, op_angle, op_scale)
         cvp <- viewport(xp, yp, width, height, angle=angle)
         grob <- grobTree(grob, vp=cvp)
-        # shadow <-  cfg$get_shadow(piece_side, suit, rank, 
-        #                 x, y, z, angle, width, height, depth,
-        #                 op_scale, op_angle) 
-        # shadow <- basicShadowGrob(piece_side, suit, rank, cfg, 
-        #                     x, y, z, angle, width, height, depth,
-        #                     op_scale, op_angle, default.units) 
         shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
         shadow <- shadow_fn(piece_side, suit, rank, cfg, 
                             x, y, z, angle, width, height, depth,

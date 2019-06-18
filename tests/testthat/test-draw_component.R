@@ -10,6 +10,7 @@ test_that("pp_cfg works as expected", {
 context("save_print_and_play works as expected")
 test_that("save_print_and_play works as expected", {
 
+    skip_on_cran()
     pdf_deck_dir = tempfile()
     dir.create(pdf_deck_dir)
     on.exit(unlink(pdf_deck_dir, recursive=TRUE))
