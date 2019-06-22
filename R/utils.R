@@ -19,6 +19,24 @@ get_embedded_font_helper <- function(font, char) {
 #' \code{cleave} converts a delimiter separated string into a vector.
 #' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
 #' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) and Cartesian coordinates.
+#'
+#' @examples
+#'  to_x(90, 1)
+#'  to_y(180, 0.5)
+#'  to_t(0, -1)
+#'  to_r(0.5, 0)
+#'
+#'  cleave("0.5,0.2,0.4,0.5", float=TRUE)
+#'  cleave("black,darkred,#050EAA,,", color=TRUE)
+#'  
+#'  if (require("grid")) {
+#'      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
+#'  }
+#'  if ((Sys.which("pdffonts") != "") && capabilities("cairo")) {
+#'      chars <- c("a", "\u2666")
+#'      fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
+#'      get_embedded_font(fonts, chars)
+#'  }
 #' 
 #' @name pp_utils
 NULL

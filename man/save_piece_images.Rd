@@ -19,3 +19,13 @@ save_piece_images(cfg = pp_cfg(), directory = tempdir(),
 \description{
 Saves images of all individual piecepack pieces.
 }
+\examples{
+  \dontrun{
+    cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+    directory <- tempdir()
+    format <- c("png", "svg")
+    angle <- c(0, 90, 180, 270)
+    save_piece_images(cfg, directory, format, angle)
+  }
+  
+}

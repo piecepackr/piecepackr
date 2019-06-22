@@ -21,11 +21,23 @@ as_pp_cfg(cfg = list())
 \code{as.list} will convert it into a list.
 }
 \examples{
+ cfg <- pp_cfg(list(invert_colors=TRUE))
+ as.list(cfg)
+ is_pp_cfg(cfg)
+ as_pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+ cfg$get_suit_color(suit=3)
+ cfg$annotation_color
+ cfg$has_matchsticks
+ cfg$has_matchsticks <- TRUE
+ cfg$has_matchsticks
+ cfg$get_width("tile_back")
+ cfg$get_height("die_face")
+ cfg$get_depth("coin_face")
  \donttest{
    cfg <- list()
-   system.time(replicate(500, grid.piece("tile_face", 4, 4, cfg)))
+   system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
    cfg <- pp_cfg(list())
-   system.time(replicate(500, grid.piece("tile_face", 4, 4, cfg)))
+   system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
  }
   
 }

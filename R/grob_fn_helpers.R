@@ -12,6 +12,35 @@
 #' @param shape_r Radial distance (from 0 to 0.5) (ignored by most shapes)
 #' @param name A character identifier (for grid)
 #' @param lex Multiplier to apply to the line width
+#' @examples
+#'  is_color_invisible("transparent")
+#'  is_color_invisible(NA)
+#'  is_color_invisible("blue")
+#'  is_color_invisible("#05AE9C")
+#' 
+#'  if (require("grid")) {
+#'      gp <- gpar(col="black", fill="yellow")
+#'      pushViewport(viewport(x=0.25, y=0.75, width=1/2, height=1/2))
+#'      grid.draw(get_shape_grob_fn("rect")(gp=gp))
+#'      grid.draw(gridlinesGrob("blue", lex=4))
+#'      grid.draw(hexlinesGrob("green"))
+#'      popViewport()
+#'
+#'      pushViewport(viewport(x=0.75, y=0.75, width=1/2, height=1/2))
+#'      grid.draw(get_shape_grob_fn("convex6")(gp=gp))
+#'      grid.draw(checkersGrob("blue", shape="convex6"))
+#'      popViewport()
+#'
+#'      pushViewport(viewport(x=0.25, y=0.25, width=1/2, height=1/2))
+#'      grid.draw(get_shape_grob_fn("circle")(gp=gp))
+#'      grid.draw(matGrob("blue", shape="circle", mat_width=0.2))
+#'      popViewport()
+#'
+#'      pushViewport(viewport(x=0.75, y=0.25, width=1/2, height=1/2))
+#'      grid.draw(get_shape_grob_fn("rect")(gp=gp))
+#'      grid.draw(matGrob("blue", shape="rect", mat_width=c(0.2, 0.1, 0.3, 0.4)))
+#'      popViewport()
+#'  }
 #' 
 #' @name grob_fn_helpers
 NULL

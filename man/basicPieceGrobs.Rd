@@ -28,3 +28,28 @@ and the next number above that is "no suits".}
 Default functions \code{grid.piece} uses to create \code{grid} 
 graphical \code{grob} objects.
 }
+\examples{
+
+ if (require("grid")) {
+    cfg <- pp_cfg(list(invert_colors=TRUE))
+
+    pushViewport(viewport(width=unit(2, "in"), height=unit(2, "in")))
+    grid.draw(basicPieceGrob("tile_face", suit=1, rank=3))
+    popViewport()
+
+    grid.newpage()
+    pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
+    grid.draw(basicPieceGrob("coin_back", suit=2, rank=0, cfg=cfg))
+    popViewport()
+
+    grid.newpage()
+    pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
+    grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5))
+    popViewport()
+
+    grid.newpage()
+    pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
+    grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
+    popViewport()
+ }
+}

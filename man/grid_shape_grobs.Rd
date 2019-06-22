@@ -39,3 +39,36 @@ Utility functions that produce grobs of various shapes
 or function that returns a function that produces a grob.
 These are usually wrappers of \code{polygonGrob} or \code{pathGrob}.
 }
+\examples{
+  if(require("grid")) {
+      gp <- gpar(col="black", fill="yellow")
+
+      vp <- viewport(x=1/3-1/6, width=1/3)
+      grid.draw(halmaGrob(gp=gp, vp=vp))
+      vp <- viewport(x=2/3-1/6, width=1/3)
+      grid.draw(pyramidGrob(gp=gp, vp=vp))
+      vp <- viewport(x=3/3-1/6, width=1/3)
+      grid.draw(kiteGrob(gp=gp, vp=vp))
+
+      grid.newpage()
+      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+      grid.draw(convexGrobFn(3, 0)(gp=gp, vp=vp))
+      vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+      grid.draw(convexGrobFn(4, 90)(gp=gp, vp=vp))
+      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+      grid.draw(convexGrobFn(5, 180)(gp=gp, vp=vp))
+      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+      grid.draw(convexGrobFn(6, 270)(gp=gp, vp=vp))
+
+      grid.newpage()
+      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+      grid.draw(concaveGrobFn(3, 0, 0.1)(gp=gp, vp=vp))
+      vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+      grid.draw(concaveGrobFn(4, 90, 0.2)(gp=gp, vp=vp))
+      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+      grid.draw(concaveGrobFn(5, 180, 0.3)(gp=gp, vp=vp))
+      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+      grid.draw(concaveGrobFn(6, 270)(gp=gp, vp=vp))
+  }
+
+}

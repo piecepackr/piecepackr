@@ -74,6 +74,15 @@ piece_filename <- function(directory, cfg, piece_side, format, angle,
 #' @param directory Directory where to place images
 #' @param format Character vector of formats to save images in
 #' @param angle Numeric vector of angles to rotate images (in degrees)
+#' @examples
+#'   \dontrun{
+#'     cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+#'     directory <- tempdir()
+#'     format <- c("png", "svg")
+#'     angle <- c(0, 90, 180, 270)
+#'     save_piece_images(cfg, directory, format, angle)
+#'   }
+#'   
 #' @export
 save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", angle=0) {
     for (f in format) {

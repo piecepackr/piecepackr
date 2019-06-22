@@ -1,5 +1,5 @@
-piecepackr: Board Game Graphics in R
-====================================
+piecepackr: Board Game Graphics
+===============================
 
 .. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
     :target: https://travis-ci.org/trevorld/piecepackr
@@ -306,7 +306,9 @@ Also as a sanity check use the command-line tool ``fc-match`` to make sure you s
 
 .. code:: r
 
-    get_embedded_font(c('Noto Sans Symbols2', 'Noto Emoji', 'sans'), c('♥', '♠', '♣', '♦', '🌞' ,'🌜' ,'꩜'))
+    fonts <- c('Noto Sans Symbols2', 'Noto Emoji', 'sans')
+    chars <- c('♥', '♠', '♣', '♦', '🌞' ,'🌜' ,'꩜')
+    get_embedded_font(fonts, chars)
 
 ::
 

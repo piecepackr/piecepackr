@@ -1,13 +1,12 @@
 Encoding: UTF-8
 Package: piecepackr
 Type: Package
-Title: Board Game Graphics in R
-Version: 1.0.0
-Author: Trevor L Davis. 
-Maintainer: Trevor L Davis <trevor.l.davis@gmail.com>
-Description: This is an R package designed to make configurable board game graphics. It can be used with R's grid graphics system to make board game diagrams, board game animations, and custom Print & Play layouts.  By default it is configured to make 'piecepack' game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
+Title: Board Game Graphics
+Version: 1.0.1
+Description: Functions to make board game graphics.  By default makes game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <http://www.ludism.org/ppwiki> but can be configured to make graphics for other board game systems.
+Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"))
 License: CC BY-SA 4.0
-URL: https://github.com/trevorld/piecepackr
+URL: https://trevorldavis.com/piecepackr
 BugReports: https://github.com/trevorld/piecepackr/issues
 LazyLoad: yes
 Imports:

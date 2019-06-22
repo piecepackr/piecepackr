@@ -4,7 +4,7 @@
 \alias{save_print_and_play}
 \title{Save piecepack print-and-play (PnP) file}
 \usage{
-save_print_and_play(cfg = list(), output_filename = "piecepack.pdf",
+save_print_and_play(cfg = pp_cfg(), output_filename = "piecepack.pdf",
   size = "letter", pieces = c("piecepack", "matchsticks", "pyramids"),
   arrangement = "single-sided")
 }
@@ -22,4 +22,13 @@ Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".}
 }
 \description{
 Save piecepack print-and-play (PnP) file
+}
+\examples{
+  \dontrun{
+    cfg <- pp_cfg(list(invert_colors.suited=TRUE))
+    save_print_and_play(cfg, "my_pnp_file.pdf")
+    save_print_and_play(cfg, "my_pnp_file_ds.pdf", arrangement="double-sided")
+    save_print_and_play(cfg, "my_pnp_file_A4.pdf", size="A4", pieces="all")
+    save_print_and_play(cfg, "my_pnp_file_A5.pdf", size="A5")
+  }
 }
