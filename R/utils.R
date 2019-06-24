@@ -151,5 +151,5 @@ as_picture <- function(grob, width, height) {
     svg(svg_file, width=width, height=height)
     grid.draw(grob)
     invisible(dev.off())
-    pictureGrob(readPicture(svg_file, warn=FALSE), expansion=0)
+    pictureGrob(readPicture(svg_file, warn=FALSE), expansion=0, clip="off")
 }
