@@ -1,8 +1,6 @@
-Re-submission with the fixes requested by Ing. Schmirl:
+Re-submission with the fixes requested by Dr. Herbrandt:
 
-1. Removed redundant references to R in DESCRIPTION title and description fields.
-2. Added a link to the piecepack in description field.
-3. Added more examples to Rd-files.
+1. File creating examples (that take more than 5 seconds to run) changed from \dontrun to \donttest
 
 **Test environments**
 

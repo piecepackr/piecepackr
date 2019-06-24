@@ -86,7 +86,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 
     Piecepack diagram with custom configuration
 
-``grid.pieces`` even has some support for drawing components with an `oblique projection <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
+``grid.piece`` even has some support for drawing components with an `oblique projection <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
 
 
 .. sourcecode:: r

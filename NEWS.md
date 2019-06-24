@@ -1,10 +1,7 @@
-piecepackr 1.0.1
+piecepackr 1.0.2
 ================
 
 * Initial "stable" release.
-
-piecepackr 0.12.0
-=================
 
 New features
 ------------
@@ -37,7 +34,7 @@ Breaking changes
 * Default pawn "belt" width is now ¾π" (#105).  
 * Default pawn "saucer" width is now ¾" and they now have a 'mat' coloring on the edge (#105)
 * ``draw_preview`` function has been removed.  Can now do ``grid.piece("preview_layout", cfg=cfg)``.
-* Demos moved to companion website: trevorldavis.com/piecepackr
+* Demos moved to companion website: https://trevorldavis.com/piecepackr
 
 Bug fixes and minor improvements
 --------------------------------
@@ -55,6 +52,7 @@ Bug fixes and minor improvements
 * "configuration lists" now support ``border_lex`` and ``gridline_lex`` to allow customizing the width of the border and grid lines.
 * ``save_piece_images``'s ``format`` argument is now vectorized.  
 * ``save_print_and_play`` can now save a print-and-play "svg" and "ps" file (besides "pdf").
+* ``grid.piece`` no longer throws a warning when ``use_pictureGrob==TRUE`` and ``angle!=0`` (#148).
 
 piecepackr 0.11.0
 =================

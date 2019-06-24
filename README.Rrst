@@ -74,7 +74,7 @@ g.p("coin_back", suit=4, x=3, y=4, angle=180)
 g.p("coin_back", suit=2, x=3, y=1, angle=90)
 .. ..
 
-``grid.pieces`` even has some support for drawing components with an `oblique projection <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
+``grid.piece`` even has some support for drawing components with an `oblique projection <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
 
 .. {r proj, fig.width=5, fig.height=5, fig.cap="Piecepack diagram in an oblique projection"}
 cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
