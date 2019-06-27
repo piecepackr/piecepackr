@@ -36,7 +36,7 @@ piecepackr: Board Game Graphics
 API Intro
 ---------
 
-``grid.piece`` is the core function that is used used to draw board game components (by default piecepack_ game components):
+``grid.piece`` is the core function that is used to draw board game components (by default piecepack_ game components):
 
 
 .. sourcecode:: r

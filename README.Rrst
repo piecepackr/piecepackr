@@ -38,7 +38,7 @@ knitr::opts_chunk$set(fig.path = "man/figures/README-")
 API Intro
 ---------
 
-``grid.piece`` is the core function that is used used to draw board game components (by default piecepack_ game components):
+``grid.piece`` is the core function that is used to draw board game components (by default piecepack_ game components):
 
 .. {r intro1, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with default configuration"}
 library("piecepackr")
