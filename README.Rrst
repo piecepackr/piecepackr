@@ -1,6 +1,10 @@
 piecepackr: Board Game Graphics
 ===============================
 
+.. image:: https://www.r-pkg.org/badges/version/piecepackr
+    :target: https://cran.r-project.org/package=piecepackr
+    :alt: CRAN Status Badge
+
 .. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
     :target: https://travis-ci.org/trevorld/piecepackr
     :alt: Build Status
@@ -201,7 +205,14 @@ popViewport()
 Installation
 ------------
 
-To install the development version of ``piecepackr`` use the following commands in R_:
+To install the last version released on CRAN use the following command in R_:
+
+.. code:: r
+
+    install.packages("piecepackr")
+
+
+To install the development version use the following commands:
 
 .. code:: r
 

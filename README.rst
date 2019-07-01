@@ -1,6 +1,10 @@
 piecepackr: Board Game Graphics
 ===============================
 
+.. image:: https://www.r-pkg.org/badges/version/piecepackr
+    :target: https://cran.r-project.org/package=piecepackr
+    :alt: CRAN Status Badge
+
 .. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
     :target: https://travis-ci.org/trevorld/piecepackr
     :alt: Build Status
@@ -28,8 +32,6 @@ piecepackr: Board Game Graphics
 .. _man pages: https://rdrr.io/github/trevorld/piecepackr/man/
 
 .. contents::
-
-
 
 ``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with R's grid_ graphics system to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
@@ -240,7 +242,14 @@ Then we'll draw an example Tak game diagram:
 Installation
 ------------
 
-To install the development version of ``piecepackr`` use the following commands in R_:
+To install the last version released on CRAN use the following command in R_:
+
+.. code:: r
+
+    install.packages("piecepackr")
+
+
+To install the development version use the following commands:
 
 .. code:: r
 
