@@ -46,14 +46,14 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, ra
         width <- twidth
     }
     bg <- "transparent"
-    dev <- switch(format,
-                bmp = bmp(filename, width, height, "in", res=res, bg=bg),
-                jpeg = jpeg(filename, width, height, "in", res=res, bg=bg),
-                pdf = cairo_pdf(filename, width, height, bg=bg),
-                png = png(filename, width, height, "in", res=res, bg=bg),
-                ps = cairo_ps(filename, width, height, bg=bg),
-                svg = svg(filename, width, height, bg=bg),
-                tiff = tiff(filename, width, height, "in", res=res, bg=bg))
+    switch(format,
+           bmp = bmp(filename, width, height, "in", res=res, bg=bg),
+           jpeg = jpeg(filename, width, height, "in", res=res, bg=bg),
+           pdf = cairo_pdf(filename, width, height, bg=bg),
+           png = png(filename, width, height, "in", res=res, bg=bg),
+           ps = cairo_ps(filename, width, height, bg=bg),
+           svg = svg(filename, width, height, bg=bg),
+           tiff = tiff(filename, width, height, "in", res=res, bg=bg))
     pushViewport(viewport(angle=angle, name="main"))
 }
 
