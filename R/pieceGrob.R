@@ -97,11 +97,16 @@ NULL
 
 #' @rdname grid.piece
 #' @export
-pmap_piece <- function(.l, ..., trans=NULL, draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+pmap_piece <- function(.l, ..., cfg=pp_cfg(), envir=NULL, trans=NULL, 
+                       draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
     if (is.function(trans)) { 
-        .l <- trans(.l, ...)
+        .l <- trans(.l, ..., cfg=cfg, envir=envir)
     }
-    ll <- purrr::pmap(.l, pieceGrob_wrapper, ..., draw=FALSE)
+    if (has_name(.l, "cfg")) {
+        ll <- purrr::pmap(.l, pieceGrob_wrapper, ..., envir=envir, draw=FALSE)
+    } else {
+        ll <- purrr::pmap(.l, pieceGrob_wrapper, ..., cfg=cfg, envir=envir, draw=FALSE)
+    }
     grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp)
     if (draw)
         grid.draw(grob)

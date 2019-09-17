@@ -69,6 +69,10 @@ add_bounding_box <- function(df) {
 #' under an oblique projection.
 #' @param df A data frame with coordinates and dimensions in inches
 #' @param ... Ignored
+#' @param cfg Piecepack configuration list or \code{pp_cfg} object, 
+#'        a list of \code{pp_cfg} objects,
+#'        or a character vector of \code{pp_cfg} objects
+#' @param envir Environment (or named list) containing configuration list(s).
 #' @param op_angle Intended oblique projection angle (used for re-sorting)
 #' @return A tibble with extra columns added 
 #'         and re-sorted rows
@@ -80,15 +84,15 @@ add_bounding_box <- function(df) {
 #'            op_scale=0.5, default.units="in")
 #'  
 #' @export
-op_transform <- function(df, ..., op_angle=45) {
-    df <- add_3d_info(df)
+op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45) {
+    df <- add_3d_info(df, cfg, envir)
     df <- op_sort(df, op_angle)
     df
 }
 
-add_3d_info <- function(df) {
+add_3d_info <- function(df, cfg=pp_cfg(), envir=NULL) {
     # Do more stuff if units aren't in inches?
-    df <- add_cfg(df)
+    df <- add_cfg(df, cfg, envir)
     df <- add_measurements(df)
     df <- add_bounding_box(df)
     if(!has_name(df, "z")) {

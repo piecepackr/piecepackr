@@ -4,12 +4,18 @@
 \alias{op_transform}
 \title{Oblique projection helper function}
 \usage{
-op_transform(df, ..., op_angle = 45)
+op_transform(df, ..., cfg = pp_cfg(), envir = NULL, op_angle = 45)
 }
 \arguments{
 \item{df}{A data frame with coordinates and dimensions in inches}
 
 \item{...}{Ignored}
+
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
+a list of \code{pp_cfg} objects,
+or a character vector of \code{pp_cfg} objects}
+
+\item{envir}{Environment (or named list) containing configuration list(s).}
 
 \item{op_angle}{Intended oblique projection angle (used for re-sorting)}
 }

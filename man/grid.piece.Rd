@@ -6,8 +6,8 @@
 \alias{pieceGrob}
 \title{Draw piecepack pieces using grid}
 \usage{
-pmap_piece(.l, ..., trans = NULL, draw = TRUE, name = NULL,
-  gp = NULL, vp = NULL)
+pmap_piece(.l, ..., cfg = pp_cfg(), envir = NULL, trans = NULL,
+  draw = TRUE, name = NULL, gp = NULL, vp = NULL)
 
 pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
@@ -28,6 +28,12 @@ determines the number of arguments that \code{grid.piece_wrapper}
 will be called  with. List names will be used if present.}
 
 \item{...}{Extra arguments to pass to \code{pieceGrob}.}
+
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
+a list of \code{pp_cfg} objects,
+or a character vector of \code{pp_cfg} objects}
+
+\item{envir}{Environment (or named list) containing configuration list(s).}
 
 \item{trans}{Function to modify \code{.l} before drawing.
 Default (\code{NULL}) is to not modify \code{.l}.  \code{op_transform}
@@ -50,10 +56,6 @@ The number above the total number of suits is the neutral "unsuit".
 and the next number above that is "no suits".}
 
 \item{rank}{Number of rank (lowest rank starting from 1)}
-
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
-a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
 
 \item{x}{Where to place piece on x axis of viewport}
 
@@ -83,8 +85,6 @@ to play with re-configuring fontsizes.}
 
 \item{default.units}{A string indicating the default units to use if 
 'x', 'y', 'width', and/or 'height' are only given as numeric vectors.}
-
-\item{envir}{Environment (or named list) containing configuration list(s).}
 }
 \value{
 A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
