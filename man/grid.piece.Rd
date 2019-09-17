@@ -6,7 +6,8 @@
 \alias{pieceGrob}
 \title{Draw piecepack pieces using grid}
 \usage{
-pmap_piece(.l, ..., draw = TRUE, name = NULL, gp = NULL, vp = NULL)
+pmap_piece(.l, ..., trans = NULL, draw = TRUE, name = NULL,
+  gp = NULL, vp = NULL)
 
 pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
   cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
@@ -27,6 +28,10 @@ determines the number of arguments that \code{grid.piece_wrapper}
 will be called  with. List names will be used if present.}
 
 \item{...}{Extra arguments to pass to \code{pieceGrob}.}
+
+\item{trans}{Function to modify \code{.l} before drawing.
+Default (\code{NULL}) is to not modify \code{.l}.  \code{op_transform}
+can help with using an oblique projection (i.e. \code{op_scale} over 0).}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 

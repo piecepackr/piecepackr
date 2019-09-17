@@ -1,3 +1,9 @@
+piecepackr 1.1.0
+================
+
+* New helper function ``op_transform`` and new ``pmap_piece`` argument ``trans``
+  to facilitate making graphics with an oblique projection (#138).
+
 piecepackr 1.0.2
 ================
 

@@ -42,6 +42,9 @@
 #'           determines the number of arguments that \code{grid.piece_wrapper}
 #'           will be called  with. List names will be used if present.
 #' @param ... Extra arguments to pass to \code{pieceGrob}.
+#' @param trans Function to modify \code{.l} before drawing.  
+#'        Default (\code{NULL}) is to not modify \code{.l}.  \code{op_transform}
+#'        can help with using an oblique projection (i.e. \code{op_scale} over 0).
 #' @return A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
 #'         will also draw it to the graphics device.
 #' @examples
@@ -94,7 +97,10 @@ NULL
 
 #' @rdname grid.piece
 #' @export
-pmap_piece <- function(.l, ..., draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+pmap_piece <- function(.l, ..., trans=NULL, draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+    if (is.function(trans)) { 
+        .l <- trans(.l, ...)
+    }
     ll <- purrr::pmap(.l, pieceGrob_wrapper, ..., draw=FALSE)
     grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp)
     if (draw)
@@ -196,25 +202,8 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
     height <- rep(height, length.out=nn)
     depth <- rep(depth, length.out=nn)
 
-    if (is_pp_cfg(cfg)) {
-        cfg <- rep(c(cfg), length.out=nn)
-    } else if (is.character(cfg)) {
-        if(!is.null(envir)) { 
-            envir=as.environment(envir) 
-            cfg <- lapply(cfg, function(cc) as_pp_cfg(envir[[cc]]))
-        } else {
-            cfg <- lapply(cfg, function(cc) as_pp_cfg(dynGet(cc)))
-        }
-        cfg <- rep(cfg, length.out=nn)
-    } else {
-        if (is.list(cfg)) {
-            if (!("pp_cfg" %in% sapply(cfg, class)))
-                cfg <- c(pp_cfg(cfg))
-            cfg <- rep(cfg, length.out=nn)
-        } else {
-            stop("Don't know how to parse cfg argument") # nocov
-        }
-    }
+    cfg <- get_cfg(cfg, envir)
+    cfg <- rep(c(cfg), length.out=nn)
 
     gl <- gList()
     for(ii in seq(nn)) {
@@ -224,6 +213,27 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                                         op_scale, op_angle, default.units)
     }
     gTree(children=gl, name=name, gp=gp, vp=vp)
+}
+
+get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
+    if (is_pp_cfg(cfg)) {
+        cfg <- cfg
+    } else if (is.character(cfg)) {
+        if(!is.null(envir)) { 
+            envir=as.environment(envir) 
+            cfg <- lapply(cfg, function(cc) as_pp_cfg(envir[[cc]]))
+        } else {
+            cfg <- lapply(cfg, function(cc) as_pp_cfg(dynGet(cc)))
+        }
+    } else {
+        if (is.list(cfg)) {
+            if (!("pp_cfg" %in% sapply(cfg, class)))
+                cfg <- pp_cfg(cfg)
+        } else {
+            stop("Don't know how to parse cfg argument") # nocov
+        }
+    }
+    cfg
 }
 
 #' @rdname grid.piece
