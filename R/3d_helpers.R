@@ -104,13 +104,13 @@ add_3d_info <- function(df, cfg=pp_cfg(), envir=NULL) {
 op_sort <- function(df, op_angle=45) {
     op_angle <- op_angle %% 360
     if ((0 <= op_angle) && (op_angle < 90)) {
-        df <- df[order(df$z, -df$y, -df$x),]
+        df <- df[order(df$zt, -df$yb, -df$xl),]
     } else if ((90 <= op_angle) && (op_angle < 180)) {
-        df <- df[order(df$z, -df$y, df$x),]
+        df <- df[order(df$zt, -df$yb, df$xr),]
     } else if ((180 <= op_angle) && (op_angle < 270)) {
-        df <- df[order(df$z, df$y, df$x),]
+        df <- df[order(df$zt, df$yt, df$xr),]
     } else {
-        df <- df[order(df$z, df$y, -df$x),]
+        df <- df[order(df$zt, df$yt, -df$xl),]
     }
     df
 }
@@ -136,6 +136,7 @@ less_than_equal <- function(x, y) { 0 < y - x + 1e-6 }  # in case of trigonometr
 
 add_z <- function(df) {
     df$z <- 0.5*df$depth
+    df$zt <- df$depth
     for (ii in seq(length.out=nrow(df))) {
         dfi <- df[ii,]
         dfs <- df[0:(ii-1),]
@@ -144,6 +145,7 @@ add_z <- function(df) {
             
             if (are_overlapping(dfi, dfs[jj,])) {
                 df[ii,"z"] <- dfs[jj,"z"] + 0.5*df[jj,"depth"] + 0.5*df[ii,"depth"]
+                df[ii,"zt"] <- dfs[jj,"zt"] + df[ii,"depth"]
                 break
             }
         } 

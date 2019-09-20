@@ -230,6 +230,9 @@ get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
         } else {
             cfg <- lapply(cfg, function(cc) as_pp_cfg(dynGet(cc)))
         }
+        if (length(cfg) == 1) {
+            cfg <- cfg[[1]]
+        }
     } else {
         if (is.list(cfg)) {
             if (!("pp_cfg" %in% sapply(cfg, class)))
