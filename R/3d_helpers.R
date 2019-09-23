@@ -14,21 +14,20 @@ gwh <- function(piece_side, cfg, ...) { cfg$get_width(piece_side) }
 ghh <- function(piece_side, cfg, ...) { cfg$get_height(piece_side) }
 gdh <- function(piece_side, cfg, ...) { cfg$get_depth(piece_side) }
 
-add_measurements <- function(df) {
-    if (!has_name(df, "width")) {
-        df$width <- an_pmap(df, gwh)
-    }
-    if (!has_name(df, "height")) {
-        df$height <- an_pmap(df, ghh)
-    }
-    if (!has_name(df, "depth")) {
-        df$depth <- an_pmap(df, gdh)
-    }
-    if (has_name(df, "angle")) {
-        df$angle <- ifelse(is.na(df$angle), 0, df$angle)
+add_field <- function(df, key, value) {
+    if (has_name(df, key)) {
+        df[[key]] <- ifelse(is.na(df[[key]]), value, df[[key]])
     } else {
-        df$angle <- 0
-    }
+        df[[key]] <- value
+    } 
+    df
+}
+
+add_measurements <- function(df) {
+    df <- add_field(df, "width", an_pmap(df, gwh))
+    df <- add_field(df, "height", an_pmap(df, ghh))
+    df <- add_field(df, "depth", an_pmap(df, gdh))
+    df <- add_field(df, "angle", 0)
     df
 }
 
@@ -95,9 +94,8 @@ add_3d_info <- function(df, cfg=pp_cfg(), envir=NULL) {
     df <- add_cfg(df, cfg, envir)
     df <- add_measurements(df)
     df <- add_bounding_box(df)
-    if(!has_name(df, "z")) {
-        df <- add_z(df)
-    }
+    df <- add_z(df)
+    df <- add_field(df, "zt", df$z + 0.5*df$depth)
     df
 }
 
@@ -135,23 +133,23 @@ less_than <- function(x, y) { 1e-6 < y - x }  # in case of trigonometric precisi
 less_than_equal <- function(x, y) { 0 < y - x + 1e-6 }  # in case of trigonometric precision issues
 
 add_z <- function(df) {
-    df$z <- 0.5*df$depth
-    df$zt <- df$depth
+    zp <- 0.5*df$depth
     for (ii in seq(length.out=nrow(df))) {
         dfi <- df[ii,]
         dfs <- df[0:(ii-1),]
         for (jj in which_projections_overlap(dfi$xl, dfi$xr, dfi$yb, dfi$yt, 
                                              dfs$xl, dfs$xr, dfs$yb, dfs$yt)) {
             
-            if (are_overlapping(dfi, dfs[jj,])) {
-                df[ii,"z"] <- dfs[jj,"z"] + 0.5*df[jj,"depth"] + 0.5*df[ii,"depth"]
-                df[ii,"zt"] <- dfs[jj,"zt"] + df[ii,"depth"]
+            if (are_overlapping(dfi, df[jj,])) {
+                zp[ii] <- as.numeric(zp[jj] + 0.5*df[jj,"depth"] + 0.5*df[ii,"depth"])
                 break
             }
         } 
     }
+    df <- add_field(df, "z", zp)
     df
 }
+
 
 # Heuristic - pieces are overlapping if projections onto the x and y axes are overlapping
 #    If pieces are actually overlapping then both projections are overlapping
