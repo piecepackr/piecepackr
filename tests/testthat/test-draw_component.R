@@ -146,6 +146,10 @@ test_that("no regressions in figures", {
     expect_doppelganger("belt_face.s1", function() dc("belt_face", suit=1))
     expect_doppelganger("saucer_face.s4", function() dc("saucer_face", suit=4))
     expect_doppelganger("saucer_back", function() dc("saucer_back"))
+    cfg <- list(shape.pawn="convex6", height.pawn=1, width.pawn=0.5)
+    expect_doppelganger("pawn_face.irregular_convex", 
+                        function() dc("pawn_face", cfg=cfg, op_scale=0.5))
+
     # pyramids
     expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", suit=1, rank=6))
     expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", suit=2, rank=5))

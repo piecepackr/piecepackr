@@ -3,6 +3,8 @@ piecepackr 1.1.0
 
 * New helper function ``op_transform`` and new ``pmap_piece`` argument ``trans``
   to facilitate making graphics with an oblique projection (#138).
+* Fixes bug when drawing non-regular-dimensioned "convex" shapes in an
+  oblique 3D projection (#149)
 
 piecepackr 1.0.2
 ================

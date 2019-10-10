@@ -100,7 +100,7 @@ rectShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, 
 
 convexShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
     if (as.numeric(convertX(width, "in")) != as.numeric(convertY(height, "in")))
-        return (basicShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle))
+        return (genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle))
 
     n_vertices <- get_n_vertices(opt$shape)
     r <- convertX(min(0.5*width, 0.5*height), "in")

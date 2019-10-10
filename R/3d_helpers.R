@@ -96,6 +96,7 @@ add_3d_info <- function(df, cfg=pp_cfg(), envir=NULL) {
     df <- add_bounding_box(df)
     df <- add_z(df)
     df <- add_field(df, "zt", df$z + 0.5*df$depth)
+    df <- add_field(df, "zb", df$z - 0.5*df$depth)
     df
 }
 
