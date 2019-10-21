@@ -26,8 +26,14 @@ A tibble with extra columns added
 \description{
 Guesses \code{z} coordinates and 
 sorting order to more easily 
-make graphics with \code{pmap_piece} 
-under an oblique projection.
+make 3D graphics with \code{pmap_piece}.
+}
+\details{
+The heuristics used to generate guesses 
+for \code{z} coordinates and sorting order
+aren't guaranteed to work in every case.
+In some cases you may get better sorting results
+by changing the \code{op_angle} or the dimensions of pieces.
 }
 \examples{
 df <- tibble::tibble(piece_side="tile_back",  
@@ -36,4 +42,8 @@ df <- tibble::tibble(piece_side="tile_back",
 pmap_piece(df, op_angle=135, trans=op_transform, 
            op_scale=0.5, default.units="in")
  
+}
+\seealso{
+<https://trevorldavis.com/piecepackr/3d-projections.html> for more details
+  and examples of oblique projections in \code{piecepackr}.
 }

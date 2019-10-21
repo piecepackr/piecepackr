@@ -41,3 +41,7 @@ as_pp_cfg(cfg = list())
  }
   
 }
+\seealso{
+<https://trevorldavis.com/piecepackr/configuration-lists.html> for more details 
+     about \code{piecepackr} configuration lists.
+}

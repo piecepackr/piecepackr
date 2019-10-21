@@ -303,6 +303,8 @@ Config <- R6Class("pp_cfg",
 #' \code{is_pp_cfg} returns \code{TRUE} if object is a piecepack configuration list R6 object.
 #' \code{as.list} will convert it into a list.
 #'
+#' @seealso <https://trevorldavis.com/piecepackr/configuration-lists.html> for more details 
+#'      about \code{piecepackr} configuration lists.
 #' @param cfg List of configuration options
 #' @examples
 #'  cfg <- pp_cfg(list(invert_colors=TRUE))

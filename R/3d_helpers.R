@@ -64,8 +64,15 @@ add_bounding_box <- function(df) {
 #' 
 #' Guesses \code{z} coordinates and 
 #' sorting order to more easily 
-#' make graphics with \code{pmap_piece} 
-#' under an oblique projection.
+#' make 3D graphics with \code{pmap_piece}.
+#'
+#' The heuristics used to generate guesses 
+#' for \code{z} coordinates and sorting order
+#' aren't guaranteed to work in every case.
+#' In some cases you may get better sorting results
+#' by changing the \code{op_angle} or the dimensions of pieces.
+#' @seealso <https://trevorldavis.com/piecepackr/3d-projections.html> for more details
+#'   and examples of oblique projections in \code{piecepackr}.
 #' @param df A data frame with coordinates and dimensions in inches
 #' @param ... Ignored
 #' @param cfg Piecepack configuration list or \code{pp_cfg} object, 
