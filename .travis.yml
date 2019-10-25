@@ -29,4 +29,4 @@ addons:
             - ghostscript
             - poppler-utils
 before_install:
-    - if [ $TRAVIS_OS_NAME = osx ]; then brew install ghostscript xpdf; fi
+    - if [ $TRAVIS_OS_NAME = osx ]; then brew install xpdf; fi
