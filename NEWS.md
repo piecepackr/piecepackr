@@ -1,4 +1,4 @@
-piecepackr 1.1.0
+piecepackr 1.1.1
 ================
 
 * New helper function ``op_transform`` and new ``pmap_piece`` argument ``trans``

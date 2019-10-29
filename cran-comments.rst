@@ -1,7 +1,3 @@
-Re-submission with the fixes requested by Dr. Herbrandt:
-
-1. File creating examples (that take more than 5 seconds to run) changed from \dontrun to \donttest
-
 **Test environments**
 
 * local (linux, R 3.4.4) 
@@ -14,4 +10,4 @@ Re-submission with the fixes requested by Dr. Herbrandt:
 
 **R CMD check --as-cran results**
 
-Status: 1 NOTE (that this is a new submission)
+Status: OK
