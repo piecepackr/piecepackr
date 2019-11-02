@@ -27,7 +27,7 @@ test_that("3d helper functions work", {
                          x=2+to_x(-45, 0.19*1:4),
                          y=2+to_y(-45, 0.19*1:4),
                          angle=-45, rank=4, suit=2)
-    df <- dplyr::bind_rows(df1, df2, df1, df2, df1, df2)
+    df <- rbind(df1, df2, df1, df2, df1, df2)
     expect_doppelganger("matchsticks_045", opf( 45))
 
     # close circles
