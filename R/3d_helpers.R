@@ -10,9 +10,9 @@ add_cfg <- function(df, cfg=pp_cfg(), envir=NULL) {
     df
 }
 
-gwh <- function(piece_side, cfg, ...) { cfg$get_width(piece_side) }
-ghh <- function(piece_side, cfg, ...) { cfg$get_height(piece_side) }
-gdh <- function(piece_side, cfg, ...) { cfg$get_depth(piece_side) }
+gwh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_width(piece_side, suit, rank) }
+ghh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_height(piece_side, suit, rank) }
+gdh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_depth(piece_side, suit, rank) }
 
 add_field <- function(df, key, value) {
     if (has_name(df, key)) {
@@ -34,31 +34,17 @@ add_measurements <- function(df) {
 an_pmap <- function(...) { as.numeric(purrr::pmap(...)) }
 
 get_r <- function(width, height) { sqrt((width/2)^2+(height/2)^2) }
+get_a <- function(width, height) { 90 - 360 * acos((height/2)/get_r(width, height)) / (2*pi) }
 
-get_xll <- function(x, angle, width, height, ...) { x + to_x((angle+225)%%360, get_r(width, height)) }
-get_xul <- function(x, angle, width, height, ...) { x + to_x((angle+135)%%360, get_r(width, height)) }
-get_xur <- function(x, angle, width, height, ...) { x + to_x((angle+45)%%360, get_r(width, height)) }
-get_xlr <- function(x, angle, width, height, ...) { x + to_x((angle-45)%%360, get_r(width, height)) }
-get_yll <- function(y, angle, width, height, ...) { y + to_y((angle+225)%%360, get_r(width, height)) }
-get_yul <- function(y, angle, width, height, ...) { y + to_y((angle+135)%%360, get_r(width, height)) }
-get_yur <- function(y, angle, width, height, ...) { y + to_y((angle+45)%%360, get_r(width, height)) }
-get_ylr <- function(y, angle, width, height, ...) { y + to_y((angle-45)%%360, get_r(width, height)) }
+get_xll <- function(x, angle, width, height, ...) { x + to_x((angle+180+get_a(width, height))%%360, get_r(width, height)) }
+get_xul <- function(x, angle, width, height, ...) { x + to_x((angle+180-get_a(width, height))%%360, get_r(width, height)) }
+get_xur <- function(x, angle, width, height, ...) { x + to_x((angle+get_a(width, height))%%360, get_r(width, height)) }
+get_xlr <- function(x, angle, width, height, ...) { x + to_x((angle-get_a(width, height))%%360, get_r(width, height)) }
+get_yll <- function(y, angle, width, height, ...) { y + to_y((angle+180+get_a(width, height))%%360, get_r(width, height)) }
+get_yul <- function(y, angle, width, height, ...) { y + to_y((angle+180-get_a(width, height))%%360, get_r(width, height)) }
+get_yur <- function(y, angle, width, height, ...) { y + to_y((angle+get_a(width, height))%%360, get_r(width, height)) }
+get_ylr <- function(y, angle, width, height, ...) { y + to_y((angle-get_a(width, height))%%360, get_r(width, height)) }
 
-add_bounding_box <- function(df) { 
-    df$xll <- an_pmap(df, get_xll)   
-    df$xul <- an_pmap(df, get_xul)   
-    df$xur <- an_pmap(df, get_xur)   
-    df$xlr <- an_pmap(df, get_xlr)   
-    df$yll <- an_pmap(df, get_yll)   
-    df$yul <- an_pmap(df, get_yul)   
-    df$yur <- an_pmap(df, get_yur)   
-    df$ylr <- an_pmap(df, get_ylr)   
-    df$xl <- pmin(df$xll, df$xul, df$xur, df$xlr)
-    df$xr <- pmax(df$xll, df$xul, df$xur, df$xlr)
-    df$yb <- pmin(df$yll, df$yul, df$yur, df$ylr)
-    df$yt <- pmax(df$yll, df$yul, df$yur, df$ylr)
-    df
-}
 
 #' Oblique projection helper function
 #' 
@@ -121,34 +107,44 @@ op_sort <- function(df, op_angle=45) {
     df
 }
 
-x_projections_overlap <- function(xl1, xr1, xl2, xr2) {
-    (less_than_equal(xl1, xl2) & less_than(xl2, xr1)) |
-    (less_than_equal(xl2, xl1) & less_than(xl1, xr2))
+# Axis-Aligned Bounding Box (AABB)
+add_bounding_box <- function(df) { 
+    df$xll <- an_pmap(df, get_xll)   
+    df$xul <- an_pmap(df, get_xul)   
+    df$xur <- an_pmap(df, get_xur)   
+    df$xlr <- an_pmap(df, get_xlr)   
+    df$yll <- an_pmap(df, get_yll)   
+    df$yul <- an_pmap(df, get_yul)   
+    df$yur <- an_pmap(df, get_yur)   
+    df$ylr <- an_pmap(df, get_ylr)   
+    df$xl <- pmin(df$xll, df$xul, df$xur, df$xlr)
+    df$xr <- pmax(df$xll, df$xul, df$xur, df$xlr)
+    df$yb <- pmin(df$yll, df$yul, df$yur, df$ylr)
+    df$yt <- pmax(df$yll, df$yul, df$yur, df$ylr)
+    df
 }
-y_projections_overlap <- function(yb1, yt1, yb2, yt2) {
-    (less_than_equal(yb1, yb2) & less_than(yb2, yt1)) |
-    (less_than_equal(yb2, yb1) & less_than(yb1, yt2))
+
+do_ranges_overlap <- function(l1, r1, l2, r2) {
+    (less_than_equal(l1, l2) & less_than(l2, r1)) |
+    (less_than_equal(l2, l1) & less_than(l1, r2))
 }
-both_projections_overlap <- function(xl1, xr1, yb1, yt1, xl2, xr2, yb2, yt2) {
-    x_projections_overlap(xl1, xr1, xl2, xr2) &
-    y_projections_overlap(yb1, yt1, yb2, yt2)
-}
-which_projections_overlap <- function(xl1, xr1, yb1, yt1, xl2, xr2, yb2, yt2) {
-    rev(which(both_projections_overlap(xl1, xr1, yb1, yt1, xl2, xr2, yb2, yt2)))
+
+which_AABB_overlap <- function(dfi, dfs) {
+    rev(which(do_ranges_overlap(dfi$xl, dfi$xr, dfs$xl, dfs$xr) & 
+              do_ranges_overlap(dfi$yb, dfi$yt, dfs$yb, dfs$yt)))
 }
 
 less_than <- function(x, y) { 1e-6 < y - x }  # in case of trigonometric precision issues
 less_than_equal <- function(x, y) { 0 < y - x + 1e-6 }  # in case of trigonometric precision issues
 
 add_z <- function(df) {
+    shapes <- get_shapes(df)
     zp <- 0.5*df$depth
     for (ii in seq(length.out=nrow(df))) {
         dfi <- df[ii,]
         dfs <- df[0:(ii-1),]
-        for (jj in which_projections_overlap(dfi$xl, dfi$xr, dfi$yb, dfi$yt, 
-                                             dfs$xl, dfs$xr, dfs$yb, dfs$yt)) {
-            
-            if (are_overlapping(dfi, df[jj,])) {
+        for (jj in which_AABB_overlap(dfi, dfs)) { 
+            if (do_shapes_overlap(shapes[[ii]], shapes[[jj]])) {
                 zp[ii] <- as.numeric(zp[jj] + 0.5*df[jj,"depth"] + 0.5*df[ii,"depth"])
                 break
             }
@@ -158,11 +154,21 @@ add_z <- function(df) {
     df
 }
 
-
-# Heuristic - pieces are overlapping if projections onto the x and y axes are overlapping
-#    If pieces are actually overlapping then both projections are overlapping
-#    If projection onto x and/or y axes not overlapping then pieces are not overlapping
-#    However one can have cases where both projections are overlapping but pieces are not overlapping
-are_overlapping <- function(p1, p2) {
-    TRUE
+get_shapes <- function(df) {
+    shapes <- vector("list", nrow(df))
+    for (ii in seq(length.out=nrow(df))) {
+        dfi <- df[ii,]
+        cfg <- df$cfg[[ii]]
+        piece_side <- df$piece_side[ii]
+        suit <- ifelse(has_name(df, "suit"), df$suit[ii], NA)
+        rank <- ifelse(has_name(df, "rank"), df$rank[ii], NA)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        if (opt$shape == "circle") {
+            shapes[[ii]] <- Circle$new(x=dfi$x, y=dfi$y, r=min(dfi$width/2, dfi$height/2))
+        } else { # rect, others
+            shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
+                                              y=c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr))
+        }
+    }
+    shapes
 }

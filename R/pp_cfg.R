@@ -105,9 +105,9 @@ Config <- R6Class("pp_cfg",
             invisible(dev.off())
             as.raster(png::readPNG(png_file))
         }, 
-        get_piece_opt = function(piece_side, suit=NULL, rank=NULL) {
-            if(is.null(rank)) { rank <- 1 }
-            if(is.null(suit)) { suit <- self$i_unsuit }
+        get_piece_opt = function(piece_side, suit=NA, rank=NA) {
+            if(is.na(rank)) { rank <- 1 }
+            if(is.na(suit)) { suit <- self$i_unsuit }
             key <- opt_cache_key(piece_side, suit, rank, "piece_opt")
             if(!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
