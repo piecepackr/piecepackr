@@ -56,9 +56,8 @@ halma_xy <- function() {
     indices <- which(y >= y_cutoff)
     list(x = c(0,0, x[indices],1,1), y=c(0,0.3,y[indices],0.3,0))
 }
-# pyramid_xy <- function() { list(x = c(0, 0.5, 1), y = c(0, 1, 0)) }
-# kite_xy <- function() { list(x = c(0.5, 0, 0.5, 1, 0.5), 
-#                              y = c(0, 0.25, 1, 0.25, 0)) } 
+pyramid_xy <- list(x = c(0, 0.5, 1), y = c(0, 1, 0))
+kite_xy <- list(x = c(0.5, 0, 0.5, 1, 0.5), y = c(0, 0.25, 1, 0.25, 0))
 # rect_xy <- function() { list(x = c(0, 0, 1, 1), y=c(0, 1, 1, 0)) }
 
 #' @rdname grid_shape_grobs
@@ -71,15 +70,13 @@ halmaGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
 #' @rdname grid_shape_grobs
 #' @export
 pyramidGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
-    polygonGrob(x = c(0, 0.5, 1), y = c(0, 1, 0), name=name, gp=gp, vp=vp)
+    polygonGrob(x = pyramid_xy$x, y = pyramid_xy$y, name=name, gp=gp, vp=vp)
 }
 
 #' @rdname grid_shape_grobs
 #' @export
 kiteGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
-    x <- c(0.5, 0, 0.5, 1, 0.5)
-    y <- c(0, 0.25, 1, 0.25, 0)
-    polygonGrob(x, y, name=name, gp=gp, vp=vp)
+    polygonGrob(kite_xy$x, kite_xy$y, name=name, gp=gp, vp=vp)
 }
 
 polygonGrobFn <- function(x, y) {

@@ -1,12 +1,12 @@
 piecepackr 1.1.2
 ================
 
+* Guesses made by ``op_transform`` for whether two pieces
+  overlap are now more accurate (#150).
 * Fixes bug in ``op_transform`` when computing bounding box for shapes 
   when width and height are not equal.
 * Fixes bug in ``op_transform`` for inferring width/height
   of piecepack matchsticks.
-* Guesses made by ``op_transform`` for whether two pieces
-  overlap are now more accurate (#150).
 
 piecepackr 1.1.1
 ================

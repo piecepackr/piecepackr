@@ -34,9 +34,21 @@ test_that("3d helper functions work", {
     df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
     expect_equal(op_transform(df)$zt, rep(0.125, 5))
 
-    # close regular polygons
-    # df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    # expect_equal(op_transform(df, cfg=list(shape.coin="convex6"))$zt, rep(0.125, 5))
+    # close regular convex polygons
+    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
+    expect_equal(op_transform(df, cfg=list(shape.coin="convex6"))$zt, rep(0.125, 5))
+
+    # close concave polygons (stars)
+    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
+    expect_equal(op_transform(df, cfg=list(shape.coin="concave5"))$zt, rep(0.125, 5))
+
+    # close "kites"
+    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
+    expect_equal(op_transform(df, cfg=list(shape.coin="kite"))$zt, rep(0.125, 5))
+
+    # close "pyramids"
+    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
+    expect_equal(op_transform(df, cfg=list(shape.coin="pyramid"))$zt, rep(0.125, 5))
 })
 
 test_that("SAT functions work", {

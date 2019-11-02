@@ -10,10 +10,6 @@ add_cfg <- function(df, cfg=pp_cfg(), envir=NULL) {
     df
 }
 
-gwh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_width(piece_side, suit, rank) }
-ghh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_height(piece_side, suit, rank) }
-gdh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_depth(piece_side, suit, rank) }
-
 add_field <- function(df, key, value) {
     if (has_name(df, key)) {
         df[[key]] <- ifelse(is.na(df[[key]]), value, df[[key]])
@@ -32,19 +28,9 @@ add_measurements <- function(df) {
 }
 
 an_pmap <- function(...) { as.numeric(purrr::pmap(...)) }
-
-get_r <- function(width, height) { sqrt((width/2)^2+(height/2)^2) }
-get_a <- function(width, height) { 90 - 360 * acos((height/2)/get_r(width, height)) / (2*pi) }
-
-get_xll <- function(x, angle, width, height, ...) { x + to_x((angle+180+get_a(width, height))%%360, get_r(width, height)) }
-get_xul <- function(x, angle, width, height, ...) { x + to_x((angle+180-get_a(width, height))%%360, get_r(width, height)) }
-get_xur <- function(x, angle, width, height, ...) { x + to_x((angle+get_a(width, height))%%360, get_r(width, height)) }
-get_xlr <- function(x, angle, width, height, ...) { x + to_x((angle-get_a(width, height))%%360, get_r(width, height)) }
-get_yll <- function(y, angle, width, height, ...) { y + to_y((angle+180+get_a(width, height))%%360, get_r(width, height)) }
-get_yul <- function(y, angle, width, height, ...) { y + to_y((angle+180-get_a(width, height))%%360, get_r(width, height)) }
-get_yur <- function(y, angle, width, height, ...) { y + to_y((angle+get_a(width, height))%%360, get_r(width, height)) }
-get_ylr <- function(y, angle, width, height, ...) { y + to_y((angle-get_a(width, height))%%360, get_r(width, height)) }
-
+gwh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_width(piece_side, suit, rank) }
+ghh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_height(piece_side, suit, rank) }
+gdh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_depth(piece_side, suit, rank) }
 
 #' Oblique projection helper function
 #' 
@@ -107,16 +93,30 @@ op_sort <- function(df, op_angle=45) {
     df
 }
 
+unit_coords_to_cartesian_coords <- function(x, y, x0=0.5, y0=0.5, width=1, height=1, angle=0) {
+    # re-center to origin and re-scale by width/height
+    x <- width * (x - 0.5)
+    y <- height * (y - 0.5)
+    # rotate and re-center to (x0, y0)
+    xr <- x0 + x * cos(to_radians(angle)) - y * sin(to_radians(angle))
+    yr <- y0 + x * sin(to_radians(angle)) + y * cos(to_radians(angle))
+    list(x=xr, y=yr)
+}
+
 # Axis-Aligned Bounding Box (AABB)
 add_bounding_box <- function(df) { 
-    df$xll <- an_pmap(df, get_xll)   
-    df$xul <- an_pmap(df, get_xul)   
-    df$xur <- an_pmap(df, get_xur)   
-    df$xlr <- an_pmap(df, get_xlr)   
-    df$yll <- an_pmap(df, get_yll)   
-    df$yul <- an_pmap(df, get_yul)   
-    df$yur <- an_pmap(df, get_yur)   
-    df$ylr <- an_pmap(df, get_ylr)   
+    ll <- unit_coords_to_cartesian_coords(0, 0, df$x, df$y, df$width, df$height, df$angle)
+    ul <- unit_coords_to_cartesian_coords(0, 1, df$x, df$y, df$width, df$height, df$angle)
+    ur <- unit_coords_to_cartesian_coords(1, 1, df$x, df$y, df$width, df$height, df$angle)
+    lr <- unit_coords_to_cartesian_coords(1, 0, df$x, df$y, df$width, df$height, df$angle)
+    df$xll <- ll$x
+    df$yll <- ll$y
+    df$xul <- ul$x
+    df$yul <- ul$y
+    df$xlr <- lr$x
+    df$ylr <- lr$y
+    df$xur <- ur$x
+    df$yur <- ur$y
     df$xl <- pmin(df$xll, df$xul, df$xur, df$xlr)
     df$xr <- pmax(df$xll, df$xul, df$xur, df$xlr)
     df$yb <- pmin(df$yll, df$yul, df$yur, df$ylr)
@@ -154,6 +154,8 @@ add_z <- function(df) {
     df
 }
 
+# plot_polygon <- function(o) { grid.newpage(); grid.polygon(x=o$x, y=o$y, default.units="in") }
+
 get_shapes <- function(df) {
     shapes <- vector("list", nrow(df))
     for (ii in seq(length.out=nrow(df))) {
@@ -165,9 +167,22 @@ get_shapes <- function(df) {
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
         if (opt$shape == "circle") {
             shapes[[ii]] <- Circle$new(x=dfi$x, y=dfi$y, r=min(dfi$width/2, dfi$height/2))
-        } else { # rect, others
+        } else if (opt$shape %in% c("rect", "halma")) {
             shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
                                               y=c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr))
+        } else {
+            if (grepl("convex|concave", opt$shape)) {
+                xy_u <- convex_xy(get_n_vertices(opt$shape), opt$shape_t)
+            } else if (opt$shape == "kite") {
+                xy_u <- kite_xy
+            } else if (opt$shape == "pyramid") {
+                xy_u <- pyramid_xy
+            } else { 
+                stop(paste("Don't know how to bound", opt$shape))
+            }
+            xy_c <- unit_coords_to_cartesian_coords(xy_u$x, xy_u$y, x0=dfi$x, y0=dfi$y, 
+                                                    width=dfi$width, height=dfi$height, angle=dfi$angle)
+            shapes[[ii]] <- ConvexPolygon$new(x=xy_c$x, y=xy_c$y)
         }
     }
     shapes

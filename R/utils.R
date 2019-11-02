@@ -97,18 +97,21 @@ gs <- function() {
     cmd
 }
 
+to_radians <- function(t) { pi * t / 180 }
+to_degrees <- function(t) { 180 * t / pi }
+
 #' @rdname pp_utils
 #' @param t Polar angle in degrees
 #' @param r Radial distance
 #' @export
 to_x <- function(t, r) { 
-    r * cos(pi * t / 180) 
+    r * cos(to_radians(t)) 
 }
 
 #' @rdname pp_utils
 #' @export
 to_y <- function(t, r) {
-    r * sin(pi * t / 180)
+    r * sin(to_radians(t))
 }
 
 #' @rdname pp_utils
@@ -122,7 +125,7 @@ to_r <- function(x, y) {
 #' @rdname pp_utils
 #' @export
 to_t <- function(x, y) {
-    180 * atan2(y, x) / pi
+    to_degrees(atan2(y, x))
 }
 
 #' @rdname pp_utils
