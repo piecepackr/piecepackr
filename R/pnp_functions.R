@@ -1,5 +1,4 @@
 #' @importFrom grImport2 pictureGrob readPicture symbolsGrob
-cc_picture <- readPicture(system.file("extdata/by-sa-svg.svg", package="piecepackr"))
 
 is_odd <- function(x) { as.logical(x %% 2) }
 
@@ -333,6 +332,8 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
 }
 
 a5_title_grob <- function(cfg=pp_cfg(), pieces) {
+    cc_picture <- readPicture(system.file("extdata/by-sa.svgz", package="piecepackr"))
+
     # Title
     y_title <- unit(0.97, "npc")
     grob_title <- textGrob(cfg$title, y=y_title, just="center", gp=gp_title, name="title")
