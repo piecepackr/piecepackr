@@ -46,6 +46,7 @@ context("save_piece_images works as expected")
 test_that("save_piece_images works as expected", {
     directory <- tempfile()
     on.exit(unlink(directory))
+    expect_error(save_piece_images(cfg_default, directory), paste("directory", directory, "does not exist"))
     dir.create(directory)
     save_piece_images(cfg_default, directory, angle=90)
     expect_equal(length(list.files(directory)), 248)
