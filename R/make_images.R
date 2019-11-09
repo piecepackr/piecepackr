@@ -53,11 +53,12 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, ra
            png = png(filename, width, height, "in", res=res, bg=bg),
            ps = cairo_ps(filename, width, height, bg=bg),
            svg = svg(filename, width, height, bg=bg),
+           svgz = svg(filename, width, height, bg=bg),
            tiff = tiff(filename, width, height, "in", res=res, bg=bg))
     pushViewport(viewport(angle=angle, name="main"))
 }
 
-piece_filename <- function(directory, cfg, piece_side, format, angle, 
+piece_filename <- function(directory, piece_side, format, angle, 
                                suit=NULL, rank=NULL) {
     filename <- paste0(piece_side, 
                        ifelse(is.null(suit), "", paste0("_s", suit)),
@@ -91,38 +92,47 @@ save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", a
     }
 }
 
+pp_dev_off <- function(f, format) {
+    v <- dev.off()
+    if (format == "svgz") {
+        svg <- readLines(file(f, "r"))
+        writeLines(svg, gzfile(f, "w"))
+    }
+    invisible(v)
+}
+
 make_images_helper <- function(directory, cfg, format, angle) {
     suppressWarnings({
         for (cs in COMPONENT_AND_SIDES) {
             if(!has_suit(cs) && !has_rank(cs)) {
-                f <- piece_filename(directory, cfg, cs, format, angle)
+                f <- piece_filename(directory, cs, format, angle)
                 pp_device(f, cs, cfg, angle)
                 grid.piece(cs, NA, NA, cfg)
-                invisible(dev.off())
+                pp_dev_off(f, format)
             }
             if(has_suit(cs) && !has_rank(cs)) {
                 for (suit in 1:get_n_suits(cfg)) {
-                    f <- piece_filename(directory, cfg, cs, format, angle, suit)
+                    f <- piece_filename(directory, cs, format, angle, suit)
                     pp_device(f, cs, cfg, angle)
                     grid.piece(cs, suit, NA, cfg)
-                    invisible(dev.off())
+                    pp_dev_off(f, format)
                 }
             }
             if(!has_suit(cs) && has_rank(cs)) {
                 for (rank in 1:get_n_ranks(cfg)) {
-                    f <- piece_filename(directory, cfg, cs, format, angle, rank=rank)
+                    f <- piece_filename(directory, cs, format, angle, rank=rank)
                     pp_device(f, cs, cfg, angle)
                     grid.piece(cs, NA, rank, cfg)
-                    invisible(dev.off())
+                    pp_dev_off(f, format)
                 }
             }
             if(has_suit(cs) && has_rank(cs)) {
                 for (suit in 1:get_n_suits(cfg)) {
                     for (rank in 1:get_n_ranks(cfg)) {
-                        f <- piece_filename(directory, cfg, cs, format, angle, suit, rank)
+                        f <- piece_filename(directory, cs, format, angle, suit, rank)
                         pp_device(f, cs, cfg, angle, rank=rank)
                         grid.piece(cs, suit, rank, cfg)
-                        invisible(dev.off())
+                        pp_dev_off(f, format)
                     }
                 }
             }
