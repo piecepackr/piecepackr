@@ -11,7 +11,7 @@ install:
   ps: Bootstrap
 
 cache:
-  - C:\RLibrary
+  - C:\RLibrary -> .appveyor.yml
 
 # Adapt as necessary starting from here
 environment:
@@ -30,9 +30,6 @@ test_script:
   - cmd: set "PATH=%GSPATH%;%PATH%"
   - cmd: gswin64c --version
   - travis-tool.sh run_tests
-# - Rscript -e "devtools::install()"
-# - Rscript exec/make_pnp_piecepack --file=configurations/nothing.json
-# - appveyor PushArtifact pdf/decks/piecepack_deck.pdf'
 
 on_failure:
   - 7z a failure.zip *.Rcheck\*

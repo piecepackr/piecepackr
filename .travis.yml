@@ -26,6 +26,7 @@ after_success:
 addons:
     apt:
         packages:
+            - libmagick++-dev
             - ghostscript
             - poppler-utils
 before_install:

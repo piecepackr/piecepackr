@@ -56,7 +56,8 @@ cleave(s, sep = ",", float = FALSE, color = FALSE)
 \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 \code{cleave} converts a delimiter separated string into a vector.
 \code{inch(x)} is equivalent to \code{unit(x, "in")}.
-\code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) and Cartesian coordinates.
+\code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) 
+and Cartesian coordinates.
 }
 \details{
 \code{get_embedded_font} depends on \code{pdffonts} being on the system path (on many OSes found in a \code{poppler-utils} package).
