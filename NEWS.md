@@ -1,5 +1,14 @@
-piecepackr 1.1.2
+piecepackr 1.2.0
 ================
+
+New features
+------------
+
+* New function ``picturePieceGrobFn`` which returns a "grob" function that imports graphics
+  from files found in its ``directory`` argument (#152).
+
+Bug fixes and minor improvements
+--------------------------------
 
 * Guesses made by ``op_transform`` for whether two pieces
   overlap are now more accurate (#150).

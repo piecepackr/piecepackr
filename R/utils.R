@@ -3,7 +3,7 @@ get_embedded_font_helper <- function(font, char) {
     on.exit(unlink(file))
     grDevices::cairo_pdf(file)
     grid::grid.text(char, gp=grid::gpar(fontsize=72, fontfamily=font))
-    invisible(dev.off())
+    invisible(grDevices::dev.off())
 
     pf_output <- system2("pdffonts", file, stdout=TRUE)
     if (length(pf_output) == 2)
@@ -18,7 +18,8 @@ get_embedded_font_helper <- function(font, char) {
 #' \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 #' \code{cleave} converts a delimiter separated string into a vector.
 #' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
-#' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) and Cartesian coordinates.
+#' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) 
+#' and Cartesian coordinates.
 #'
 #' @examples
 #'  to_x(90, 1)
@@ -151,8 +152,25 @@ numeric_cleave <- function(s, sep=",") { cleave(s, sep, float=TRUE) }
 as_picture <- function(grob, width, height) {
     svg_file <- tempfile(fileext=".svg")
     on.exit(unlink(svg_file))
-    svg(svg_file, width=width, height=height)
+    grDevices::svg(svg_file, width=width, height=height, bg="transparent")
     grid.draw(grob)
-    invisible(dev.off())
-    pictureGrob(readPicture(svg_file, warn=FALSE), expansion=0, clip="off")
+    invisible(grDevices::dev.off())
+    to_pictureGrob(grImport2::readPicture(svg_file, warn=FALSE))
 }
+
+filename2grob <- function(f) {
+    format <- tools::file_ext(f)
+    if (format %in% c("svgz", "svg")) {
+        return(to_pictureGrob(grImport2::readPicture(f, warn=FALSE)))
+    } else if (format == "png") {
+        return(to_rasterGrob(grDevices::as.raster(png::readPNG(f))))
+    } else if (format %in% c("jpg", "jpeg")) {
+        return(to_rasterGrob(grDevices::as.raster(jpeg::readJPEG(f))))
+    } else {
+        return(to_rasterGrob(magick::image_read(f)))
+    }
+}
+
+to_rasterGrob <- function(obj) { rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc")) }
+to_pictureGrob <- function(obj) { grImport2::pictureGrob(obj, expansion=0, clip="off", distort=TRUE) }
+

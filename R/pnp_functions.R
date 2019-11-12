@@ -1,5 +1,3 @@
-#' @importFrom grImport2 pictureGrob readPicture symbolsGrob
-
 is_odd <- function(x) { as.logical(x %% 2) }
 
 LETTER_WIDTH <- 8.5
@@ -192,7 +190,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
             draw_a5_page(gl[[ii]], vpr)
         }
     }
-    invisible(dev.off())
+    invisible(grDevices::dev.off())
     if (tools::file_ext(output_filename) == "pdf" && has_gs()) {
         add_pdf_metadata(output_filename, cfg, pl)
     }
@@ -332,7 +330,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
 }
 
 a5_title_grob <- function(cfg=pp_cfg(), pieces) {
-    cc_picture <- readPicture(system.file("extdata/by-sa.svgz", package="piecepackr"))
+    cc_picture <- grImport2::readPicture(system.file("extdata/by-sa.svgz", package="piecepackr"))
 
     # Title
     y_title <- unit(0.97, "npc")
@@ -353,7 +351,7 @@ a5_title_grob <- function(cfg=pp_cfg(), pieces) {
                 ), collapse="\n")
     grob_lh <- textGrob("License", x=0.1, y=y_license, just="left", gp=gp_header)
     grob_l <- textGrob(license, x=0.1, y=y_license-unit(0.02, "npc"), just=c(0,1), gp=gp_text)
-    grob_cc <- symbolsGrob(cc_picture, x=0.75, y=y_license-unit(0.065, "npc"), size=inch(0.9))
+    grob_cc <- grImport2::symbolsGrob(cc_picture, x=0.75, y=y_license-unit(0.065, "npc"), size=inch(0.9))
 
     grob_license <- grobTree(grob_lh, grob_l, grob_cc, name="license")
 

@@ -13,7 +13,6 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <polyline points='360.00,360.00 360.00,216.00 360.00,360.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt;' />
 <polyline points='360.00,360.00 360.00,216.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polyline points='288.00,288.00 432.00,288.00 288.00,288.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt;' />

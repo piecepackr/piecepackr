@@ -46,10 +46,28 @@ context("save_piece_images works as expected")
 test_that("save_piece_images works as expected", {
     directory <- tempfile()
     on.exit(unlink(directory))
+    cfg <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
+    g.p <- function(...) { 
+        grid.piece(..., op_scale=0.5, default.units="in") 
+    }
+
     expect_error(save_piece_images(cfg_default, directory), paste("does not exist"))
+    expect_error(pieceGrob("tile_back", cfg=cfg), "Couldn't find suitable")
     dir.create(directory)
-    save_piece_images(cfg_default, directory, angle=90)
-    expect_equal(length(list.files(directory)), 248)
+
+    save_piece_images(cfg_default, directory, format="svgz", angle=c(0,90))
+    expect_equal(length(list.files(directory)), 496)
+
+    expect_doppelganger("diagram_op_ppgf", function() {
+        g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8, cfg=cfg)
+        g.p("die_face", x=1, y=1, z=1/4+1/4, cfg=cfg)
+        g.p("pawn_face", x=1, y=4, z=1/4+1/8, angle=90, cfg=cfg)
+        g.p("coin_face", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
+        g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
+        g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
+    })
 })
 
 context("grob_fn_helpers works as expected")

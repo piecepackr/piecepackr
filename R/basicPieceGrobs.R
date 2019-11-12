@@ -1,11 +1,14 @@
 #' Piece Grob Functions
 #'
-#' Default functions \code{grid.piece} uses to create \code{grid} 
-#' graphical \code{grob} objects.
+#' \code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob} 
+#'  are the default \dQuote{grob} functions that \code{grid.piece} uses 
+#' to create \code{grid} #' graphical \code{grob} objects.  \code{picturePieceGrobFn}
+#' is a function that returns a \dQuote{grob} function that imports graphics from files
+#' found in its \code{directory} argument.
 #' 
 #' @rdname basicPieceGrobs
 #' @name basicPieceGrobs
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object, 
+#' @param cfg Piecepack configuration list or \code{pp_cfg} object. 
 #' @inheritParams grid.piece
 #' @examples
 #'
@@ -22,14 +25,25 @@
 #'     popViewport()
 #'
 #'     grid.newpage()
+#'     pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
+#'     grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
+#'     popViewport()
+#'    
+#'     grid.newpage()
 #'     pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
 #'     grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5))
 #'     popViewport()
 #' 
-#'     grid.newpage()
-#'     pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
-#'     grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
-#'     popViewport()
+#'     \donttest{
+#'         directory <- tempdir()
+#'         save_piece_images(cfg, directory=directory, format="svg", angle=0)
+#'         cfg2 <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
+#'
+#'         grid.newpage()
+#'         pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
+#'         grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5, cfg=cfg2))
+#'         popViewport()
+#'     }
 #'  }
 #' @export
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
@@ -65,19 +79,48 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 }
 
 #' @rdname basicPieceGrobs
+#' @param directory Directory that \code{picturePieceGrobFn} will look in for piece graphics.
+#' @param filename_fn Function that takes arguments \code{directory}, \code{piece_side}, \code{suit}, 
+#'        and \code{rank} and returns the (full path) filename of the image that the 
+#'        function returned by \code{picturePieceGrobFn} should import.
+#' @export
+picturePieceGrobFn <- function(directory, filename_fn=find_pp_file) {
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        f <- filename_fn(directory, piece_side, suit, rank)
+        filename2grob(f)
+    }
+}
+
+find_pp_file <- function(directory, piece_side, suit, rank) {
+    for(format in c("svgz", "svg", "png", "jpg", "jpeg")) {
+        if (!has_suit(piece_side) && !has_rank(piece_side)) {
+            f <- piece_filename(directory, piece_side, format, 0)
+        } else if (has_suit(piece_side) && !has_rank(piece_side)) {
+            f <- piece_filename(directory, piece_side, format, 0, suit)
+        } else if (!has_suit(piece_side) && has_rank(piece_side)) {
+            f <- piece_filename(directory, piece_side, format, 0, rank=rank)
+        } else if (has_suit(piece_side) && has_rank(piece_side)) {
+            f <- piece_filename(directory, piece_side, format, 0, suit, rank)
+        }
+        if (file.exists(f)) {
+            return(f)
+        }
+    }
+    stop(paste("Couldn't find suitable", piece_side, "image in", directory))
+}
+
+#' @rdname basicPieceGrobs
 #' @export
 pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
-    cfg <- as.list(cfg)
-    g1 <- pieceGrob("pyramid_face",  suit, rank, cfg, 
+    g1 <- pieceGrob("pyramid_face",  suit, rank, cfg, use_pictureGrob=TRUE,
                     y=0.75, width=1.0, height=0.5, angle=180, name="face")
-    g2 <- pieceGrob("pyramid_back",  suit, rank, cfg, 
+    g2 <- pieceGrob("pyramid_back",  suit, rank, cfg, use_pictureGrob=TRUE,
                     y=0.25, width=1.0, height=0.5, angle=  0, name="back")
-    g3 <- pieceGrob("pyramid_left",  suit, rank, cfg, 
+    g3 <- pieceGrob("pyramid_left",  suit, rank, cfg, use_pictureGrob=TRUE,
                     x=0.25, width=1.0, height=0.5, angle=-90, name="left")
-    g4 <- pieceGrob("pyramid_right", suit, rank, cfg,
+    g4 <- pieceGrob("pyramid_right", suit, rank, cfg, use_pictureGrob=TRUE,
                     x=0.75, width=1.0, height=0.5, angle= 90, name="right")
-    gTree(children=gList(g1, g2, g3, g4), name="pyramid_top", 
-          gp=gpar(cex=0.3))
+    gTree(children=gList(g3, g4, g1, g2), name="pyramid_top")
 }
 
 #' @rdname basicPieceGrobs

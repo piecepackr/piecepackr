@@ -3,11 +3,14 @@
 \name{basicPieceGrobs}
 \alias{basicPieceGrobs}
 \alias{basicPieceGrob}
+\alias{picturePieceGrobFn}
 \alias{pyramidTopGrob}
 \alias{previewLayoutGrob}
 \title{Piece Grob Functions}
 \usage{
 basicPieceGrob(piece_side, suit, rank, cfg = pp_cfg())
+
+picturePieceGrobFn(directory, filename_fn = find_pp_file)
 
 pyramidTopGrob(piece_side, suit, rank, cfg = pp_cfg())
 
@@ -22,11 +25,20 @@ and the next number above that is "no suits".}
 
 \item{rank}{Number of rank (lowest rank starting from 1)}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,}
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object.}
+
+\item{directory}{Directory that \code{picturePieceGrobFn} will look in for piece graphics.}
+
+\item{filename_fn}{Function that takes arguments \code{directory}, \code{piece_side}, \code{suit}, 
+and \code{rank} and returns the (full path) filename of the image that the 
+function returned by \code{picturePieceGrobFn} should import.}
 }
 \description{
-Default functions \code{grid.piece} uses to create \code{grid} 
-graphical \code{grob} objects.
+\code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob} 
+ are the default \dQuote{grob} functions that \code{grid.piece} uses 
+to create \code{grid} #' graphical \code{grob} objects.  \code{picturePieceGrobFn}
+is a function that returns a \dQuote{grob} function that imports graphics from files
+found in its \code{directory} argument.
 }
 \examples{
 
@@ -43,13 +55,24 @@ graphical \code{grob} objects.
     popViewport()
 
     grid.newpage()
+    pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
+    grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
+    popViewport()
+   
+    grid.newpage()
     pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
     grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5))
     popViewport()
 
-    grid.newpage()
-    pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
-    grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
-    popViewport()
+    \donttest{
+        directory <- tempdir()
+        save_piece_images(cfg, directory=directory, format="svg", angle=0)
+        cfg2 <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
+
+        grid.newpage()
+        pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
+        grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5, cfg=cfg2))
+        popViewport()
+    }
  }
 }

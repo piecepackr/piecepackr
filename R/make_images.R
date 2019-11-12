@@ -1,4 +1,3 @@
-#' @importFrom grDevices bmp cairo_pdf cairo_ps dev.off jpeg png svg tiff
 #' @import grid
 
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", "coin_back", "coin_face",
@@ -47,14 +46,15 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, ra
     }
     bg <- "transparent"
     switch(format,
-           bmp = bmp(filename, width, height, "in", res=res, bg=bg),
-           jpeg = jpeg(filename, width, height, "in", res=res, bg=bg),
-           pdf = cairo_pdf(filename, width, height, bg=bg),
-           png = png(filename, width, height, "in", res=res, bg=bg),
-           ps = cairo_ps(filename, width, height, bg=bg),
-           svg = svg(filename, width, height, bg=bg),
-           svgz = svg(filename, width, height, bg=bg),
-           tiff = tiff(filename, width, height, "in", res=res, bg=bg))
+           bmp = grDevices::bmp(filename, width, height, "in", res=res, bg=bg),
+           jpeg = grDevices::jpeg(filename, width, height, "in", res=res, bg=bg),
+           jpg = grDevices::jpeg(filename, width, height, "in", res=res, bg=bg),
+           pdf = grDevices::cairo_pdf(filename, width, height, bg=bg),
+           png = grDevices::png(filename, width, height, "in", res=res, bg=bg),
+           ps = grDevices::cairo_ps(filename, width, height, bg=bg),
+           svg = grDevices::svg(filename, width, height, bg=bg),
+           svgz = grDevices::svg(filename, width, height, bg=bg),
+           tiff = grDevices::tiff(filename, width, height, "in", res=res, bg=bg))
     pushViewport(viewport(angle=angle, name="main"))
 }
 
@@ -93,7 +93,7 @@ save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", a
 }
 
 pp_dev_off <- function(f, format) {
-    v <- dev.off()
+    v <- grDevices::dev.off()
     if (format == "svgz") {
         svg <- readLines(file(f, "r"))
         writeLines(svg, gzfile(f, "w"))
