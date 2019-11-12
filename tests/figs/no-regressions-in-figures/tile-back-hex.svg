@@ -12,12 +12,12 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='360.00,216.00 297.65,252.00 297.65,324.00 360.00,360.00 422.35,324.00 422.35,252.00 360.00,216.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='360.00,216.00 297.65,252.00 297.65,324.00 360.00,360.00 422.35,324.00 422.35,252.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <line x1='360.00' y1='217.44' x2='360.00' y2='358.56' style='stroke-width: 3.00; stroke: #E69F00;' />
 <line x1='298.89' y1='252.72' x2='421.11' y2='323.28' style='stroke-width: 3.00; stroke: #E69F00;' />
 <line x1='298.89' y1='323.28' x2='421.11' y2='252.72' style='stroke-width: 3.00; stroke: #E69F00;' />
 <line x1='360.00' y1='358.56' x2='360.00' y2='217.44' style='stroke-width: 3.00; stroke: #E69F00;' />
 <line x1='421.11' y1='323.28' x2='298.89' y2='252.72' style='stroke-width: 3.00; stroke: #E69F00;' />
 <line x1='421.11' y1='252.72' x2='298.89' y2='323.28' style='stroke-width: 3.00; stroke: #E69F00;' />
-<polyline points='360.00,216.00 297.65,252.00 297.65,324.00 360.00,360.00 422.35,324.00 422.35,252.00 360.00,216.00 360.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polyline points='360.00,216.00 297.65,252.00 297.65,324.00 360.00,360.00 422.35,324.00 422.35,252.00 360.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>

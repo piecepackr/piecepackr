@@ -4,9 +4,13 @@
 \alias{save_print_and_play}
 \title{Save piecepack print-and-play (PnP) file}
 \usage{
-save_print_and_play(cfg = pp_cfg(), output_filename = "piecepack.pdf",
-  size = "letter", pieces = c("piecepack", "matchsticks", "pyramids"),
-  arrangement = "single-sided")
+save_print_and_play(
+  cfg = pp_cfg(),
+  output_filename = "piecepack.pdf",
+  size = "letter",
+  pieces = c("piecepack", "matchsticks", "pyramids"),
+  arrangement = "single-sided"
+)
 }
 \arguments{
 \item{cfg}{Piecepack configuration list}

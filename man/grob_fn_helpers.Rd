@@ -10,11 +10,9 @@
 \alias{is_color_invisible}
 \title{\code{pieceGrob} helper functions}
 \usage{
-gridlinesGrob(col, shape = "rect", shape_t = 90, lex = 1,
-  name = NULL)
+gridlinesGrob(col, shape = "rect", shape_t = 90, lex = 1, name = NULL)
 
-matGrob(col, shape = "rect", shape_t = 90, mat_width = 0,
-  name = NULL)
+matGrob(col, shape = "rect", shape_t = 90, mat_width = 0, name = NULL)
 
 checkersGrob(col, shape = "rect", shape_t = 90, name = NULL)
 

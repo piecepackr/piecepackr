@@ -6,21 +6,62 @@
 \alias{pieceGrob}
 \title{Draw piecepack pieces using grid}
 \usage{
-pmap_piece(.l, ..., cfg = pp_cfg(), envir = NULL, trans = NULL,
-  draw = TRUE, name = NULL, gp = NULL, vp = NULL)
+pmap_piece(
+  .l,
+  ...,
+  cfg = pp_cfg(),
+  envir = NULL,
+  trans = NULL,
+  draw = TRUE,
+  name = NULL,
+  gp = NULL,
+  vp = NULL
+)
 
-pieceGrob(piece_side = "tile_back", suit = NA, rank = NA,
-  cfg = pp_cfg(), x = unit(0.5, "npc"), y = unit(0.5, "npc"),
-  z = NA, angle = 0, use_pictureGrob = FALSE, width = NA,
-  height = NA, depth = NA, op_scale = 0, op_angle = 45,
-  default.units = "npc", envir = NULL, name = NULL, gp = NULL,
-  vp = NULL)
+pieceGrob(
+  piece_side = "tile_back",
+  suit = NA,
+  rank = NA,
+  cfg = pp_cfg(),
+  x = unit(0.5, "npc"),
+  y = unit(0.5, "npc"),
+  z = NA,
+  angle = 0,
+  use_pictureGrob = FALSE,
+  width = NA,
+  height = NA,
+  depth = NA,
+  op_scale = 0,
+  op_angle = 45,
+  default.units = "npc",
+  envir = NULL,
+  name = NULL,
+  gp = NULL,
+  vp = NULL
+)
 
-grid.piece(piece_side = "tile_back", suit = NA, rank = NA,
-  cfg = list(), x = unit(0.5, "npc"), y = unit(0.5, "npc"), z = NA,
-  angle = 0, use_pictureGrob = FALSE, width = NA, height = NA,
-  depth = NA, op_scale = 0, op_angle = 45, default.units = "npc",
-  envir = NULL, name = NULL, gp = NULL, draw = TRUE, vp = NULL)
+grid.piece(
+  piece_side = "tile_back",
+  suit = NA,
+  rank = NA,
+  cfg = list(),
+  x = unit(0.5, "npc"),
+  y = unit(0.5, "npc"),
+  z = NA,
+  angle = 0,
+  use_pictureGrob = FALSE,
+  width = NA,
+  height = NA,
+  depth = NA,
+  op_scale = 0,
+  op_angle = 45,
+  default.units = "npc",
+  envir = NULL,
+  name = NULL,
+  gp = NULL,
+  draw = TRUE,
+  vp = NULL
+)
 }
 \arguments{
 \item{.l}{A list of vectors, such as a data frame. The length of \code{.l}

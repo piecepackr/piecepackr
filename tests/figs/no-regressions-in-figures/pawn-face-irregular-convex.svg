@@ -12,33 +12,33 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='360.00,252.00 344.41,270.00 344.41,306.00 360.00,324.00 375.59,306.00 375.59,270.00 360.00,252.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='360.27,251.73 344.68,269.73 344.68,305.73 360.27,323.73 375.85,305.73 375.85,269.73 360.27,251.73 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='360.53,251.47 344.94,269.47 344.94,305.47 360.53,323.47 376.12,305.47 376.12,269.47 360.53,251.47 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='360.80,251.20 345.21,269.20 345.21,305.20 360.80,323.20 376.38,305.20 376.38,269.20 360.80,251.20 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='361.06,250.94 345.47,268.94 345.47,304.94 361.06,322.94 376.65,304.94 376.65,268.94 361.06,250.94 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='361.33,250.67 345.74,268.67 345.74,304.67 361.33,322.67 376.91,304.67 376.91,268.67 361.33,250.67 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='361.59,250.41 346.00,268.41 346.00,304.41 361.59,322.41 377.18,304.41 377.18,268.41 361.59,250.41 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='361.86,250.14 346.27,268.14 346.27,304.14 361.86,322.14 377.44,304.14 377.44,268.14 361.86,250.14 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='362.12,249.88 346.53,267.88 346.53,303.88 362.12,321.88 377.71,303.88 377.71,267.88 362.12,249.88 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='362.39,249.61 346.80,267.61 346.80,303.61 362.39,321.61 377.97,303.61 377.97,267.61 362.39,249.61 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='362.65,249.35 347.06,267.35 347.06,303.35 362.65,321.35 378.24,303.35 378.24,267.35 362.65,249.35 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='362.92,249.08 347.33,267.08 347.33,303.08 362.92,321.08 378.51,303.08 378.51,267.08 362.92,249.08 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='363.18,248.82 347.59,266.82 347.59,302.82 363.18,320.82 378.77,302.82 378.77,266.82 363.18,248.82 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='363.45,248.55 347.86,266.55 347.86,302.55 363.45,320.55 379.04,302.55 379.04,266.55 363.45,248.55 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='363.71,248.29 348.12,266.29 348.12,302.29 363.71,320.29 379.30,302.29 379.30,266.29 363.71,248.29 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='363.98,248.02 348.39,266.02 348.39,302.02 363.98,320.02 379.57,302.02 379.57,266.02 363.98,248.02 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='364.24,247.76 348.65,265.76 348.65,301.76 364.24,319.76 379.83,301.76 379.83,265.76 364.24,247.76 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='364.51,247.49 348.92,265.49 348.92,301.49 364.51,319.49 380.10,301.49 380.10,265.49 364.51,247.49 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='364.77,247.23 349.18,265.23 349.18,301.23 364.77,319.23 380.36,301.23 380.36,265.23 364.77,247.23 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='365.04,246.96 349.45,264.96 349.45,300.96 365.04,318.96 380.63,300.96 380.63,264.96 365.04,246.96 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='365.30,246.70 349.71,264.70 349.71,300.70 365.30,318.70 380.89,300.70 380.89,264.70 365.30,246.70 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='365.57,246.43 349.98,264.43 349.98,300.43 365.57,318.43 381.16,300.43 381.16,264.43 365.57,246.43 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='365.83,246.17 350.25,264.17 350.25,300.17 365.83,318.17 381.42,300.17 381.42,264.17 365.83,246.17 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='366.10,245.90 350.51,263.90 350.51,299.90 366.10,317.90 381.69,299.90 381.69,263.90 366.10,245.90 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 366.36,245.64 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 366.36,245.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='360.00,252.00 344.41,270.00 344.41,306.00 360.00,324.00 375.59,306.00 375.59,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
+<polygon points='360.27,251.73 344.68,269.73 344.68,305.73 360.27,323.73 375.85,305.73 375.85,269.73 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='360.53,251.47 344.94,269.47 344.94,305.47 360.53,323.47 376.12,305.47 376.12,269.47 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='360.80,251.20 345.21,269.20 345.21,305.20 360.80,323.20 376.38,305.20 376.38,269.20 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='361.06,250.94 345.47,268.94 345.47,304.94 361.06,322.94 376.65,304.94 376.65,268.94 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='361.33,250.67 345.74,268.67 345.74,304.67 361.33,322.67 376.91,304.67 376.91,268.67 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='361.59,250.41 346.00,268.41 346.00,304.41 361.59,322.41 377.18,304.41 377.18,268.41 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='361.86,250.14 346.27,268.14 346.27,304.14 361.86,322.14 377.44,304.14 377.44,268.14 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='362.12,249.88 346.53,267.88 346.53,303.88 362.12,321.88 377.71,303.88 377.71,267.88 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='362.39,249.61 346.80,267.61 346.80,303.61 362.39,321.61 377.97,303.61 377.97,267.61 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='362.65,249.35 347.06,267.35 347.06,303.35 362.65,321.35 378.24,303.35 378.24,267.35 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='362.92,249.08 347.33,267.08 347.33,303.08 362.92,321.08 378.51,303.08 378.51,267.08 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='363.18,248.82 347.59,266.82 347.59,302.82 363.18,320.82 378.77,302.82 378.77,266.82 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='363.45,248.55 347.86,266.55 347.86,302.55 363.45,320.55 379.04,302.55 379.04,266.55 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='363.71,248.29 348.12,266.29 348.12,302.29 363.71,320.29 379.30,302.29 379.30,266.29 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='363.98,248.02 348.39,266.02 348.39,302.02 363.98,320.02 379.57,302.02 379.57,266.02 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='364.24,247.76 348.65,265.76 348.65,301.76 364.24,319.76 379.83,301.76 379.83,265.76 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='364.51,247.49 348.92,265.49 348.92,301.49 364.51,319.49 380.10,301.49 380.10,265.49 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='364.77,247.23 349.18,265.23 349.18,301.23 364.77,319.23 380.36,301.23 380.36,265.23 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='365.04,246.96 349.45,264.96 349.45,300.96 365.04,318.96 380.63,300.96 380.63,264.96 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='365.30,246.70 349.71,264.70 349.71,300.70 365.30,318.70 380.89,300.70 380.89,264.70 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='365.57,246.43 349.98,264.43 349.98,300.43 365.57,318.43 381.16,300.43 381.16,264.43 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='365.83,246.17 350.25,264.17 350.25,300.17 365.83,318.17 381.42,300.17 381.42,264.17 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='366.10,245.90 350.51,263.90 350.51,299.90 366.10,317.90 381.69,299.90 381.69,263.90 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='358.05' y='291.27' style='font-size: 28.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='16.62px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <text x='357.04' y='264.16' style='font-size: 12.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
-<polyline points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 366.36,245.64 366.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polyline points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 366.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>
