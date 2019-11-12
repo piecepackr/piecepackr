@@ -57,7 +57,7 @@ halma_xy <- function() {
     list(x = c(0,0, x[indices],1,1), y=c(0,0.3,y[indices],0.3,0))
 }
 pyramid_xy <- list(x = c(0, 0.5, 1), y = c(0, 1, 0))
-kite_xy <- list(x = c(0.5, 0, 0.5, 1, 0.5), y = c(0, 0.25, 1, 0.25, 0))
+kite_xy <- list(x = c(0.5, 0, 0.5, 1), y = c(0, 0.25, 1, 0.25))
 # rect_xy <- function() { list(x = c(0, 0, 1, 1), y=c(0, 1, 1, 0)) }
 
 #' @rdname grid_shape_grobs
@@ -88,7 +88,7 @@ convex_xy <- function(n_vertices, t) {
     r <- 0.5
     x <- to_x(t, r) + 0.5
     y <- to_y(t, r) + 0.5
-    list(x=x, y=y)
+    list(x=utils::head(x, -1), y=utils::head(y, -1))
 }
 
 #' @rdname grid_shape_grobs

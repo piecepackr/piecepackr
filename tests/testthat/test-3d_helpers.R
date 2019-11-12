@@ -30,25 +30,25 @@ test_that("3d helper functions work", {
     df <- rbind(df1, df2, df1, df2, df1, df2)
     expect_doppelganger("matchsticks_045", opf( 45))
 
+    dft <- tibble(piece_side="tile_back", x=1.5, y=1.5, rank=NA, width=NA)
+    dfc <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
+    df <- rbind(dft, dfc)
+    ans <- c(0.25, rep(0.375, 5))
+
     # close circles
-    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    expect_equal(op_transform(df)$zt, rep(0.125, 5))
+    expect_equal(op_transform(df)$zt, ans)
 
     # close regular convex polygons
-    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    expect_equal(op_transform(df, cfg=list(shape.coin="convex6"))$zt, rep(0.125, 5))
+    expect_equal(op_transform(df, cfg=list(shape.coin="convex6"))$zt, ans)
 
     # close concave polygons (stars)
-    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    expect_equal(op_transform(df, cfg=list(shape.coin="concave5"))$zt, rep(0.125, 5))
+    expect_equal(op_transform(df, cfg=list(shape.coin="concave5"))$zt, ans)
 
     # close "kites"
-    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    expect_equal(op_transform(df, cfg=list(shape.coin="kite"))$zt, rep(0.125, 5))
+    expect_equal(op_transform(df, cfg=list(shape.coin="kite"))$zt, ans)
 
     # close "pyramids"
-    df <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    expect_equal(op_transform(df, cfg=list(shape.coin="pyramid"))$zt, rep(0.125, 5))
+    expect_equal(op_transform(df, cfg=list(shape.coin="pyramid"))$zt, ans)
 })
 
 test_that("SAT functions work", {
