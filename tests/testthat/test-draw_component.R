@@ -58,6 +58,7 @@ test_that("save_piece_images works as expected", {
     save_piece_images(cfg_default, directory, format="svgz", angle=c(0,90))
     expect_equal(length(list.files(directory)), 496)
 
+    skip_if_not(interactive())
     expect_doppelganger("diagram_op_ppgf", function() {
         g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
         g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
@@ -169,15 +170,6 @@ test_that("no regressions in figures", {
     expect_doppelganger("pawn_face.irregular_convex", 
                         function() dc("pawn_face", cfg=cfg, op_scale=0.5))
 
-    # pyramids
-    expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", suit=1, rank=6))
-    expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", suit=2, rank=5))
-    expect_doppelganger("pyramid_right.s3.r2", function() dc("pyramid_right", suit=3, rank=2))
-    expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", suit=4, rank=1))
-    expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", suit=2, rank=1))
-    expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", suit=4, rank=3)) 
-    cfg <- list(invert_colors.suited=TRUE, grob_fn="basicPieceGrob")
-    expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", cfg=cfg, suit=3, rank=4))
 
     # matchsticks
     expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", suit=1, rank=1))
@@ -234,6 +226,18 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
     expect_error(cfg_default$get_width("boo_back"), "Don't know width of piece boo")
+
+    # pyramids
+    expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", suit=1, rank=6))
+    expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", suit=2, rank=5))
+    expect_doppelganger("pyramid_right.s3.r2", function() dc("pyramid_right", suit=3, rank=2))
+    expect_doppelganger("pyramid_back.s4.r1", function() dc("pyramid_back", suit=4, rank=1))
+    expect_doppelganger("pyramid_face.s2.r1", function() dc("pyramid_face", suit=2, rank=1))
+    cfg <- list(invert_colors.suited=TRUE, grob_fn="basicPieceGrob")
+    expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", cfg=cfg, suit=3, rank=4))
+
+    skip_if_not(interactive())
+    expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", suit=4, rank=3)) 
 })
 
 context("oblique projection works")
