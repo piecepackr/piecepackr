@@ -9,7 +9,7 @@
 pmap_piece(
   .l,
   ...,
-  cfg = pp_cfg(),
+  cfg = NULL,
   envir = NULL,
   trans = NULL,
   draw = TRUE,

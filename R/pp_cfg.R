@@ -304,7 +304,8 @@ Config <- R6Class("pp_cfg",
 #' \code{as.list} will convert it into a list.
 #'
 #' @seealso <https://trevorldavis.com/piecepackr/configuration-lists.html> for more details 
-#'      about \code{piecepackr} configuration lists.
+#'      about \code{piecepackr} configuration lists.  [standard_game_systems()] returns 
+#'      configuration list objects for several game systems.
 #' @param cfg List of configuration options
 #' @examples
 #'  cfg <- pp_cfg(list(invert_colors=TRUE))

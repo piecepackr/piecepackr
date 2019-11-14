@@ -6,6 +6,8 @@ New features
 
 * New function ``picturePieceGrobFn`` which returns a "grob" function that imports graphics
   from files found in its ``directory`` argument (#152).
+* New function ``game_systems`` which returns a list of configuration objects
+  for multiple game systems (#157).
 
 Bug fixes and minor improvements
 --------------------------------

@@ -97,8 +97,22 @@ NULL
 
 #' @rdname grid.piece
 #' @export
-pmap_piece <- function(.l, ..., cfg=pp_cfg(), envir=NULL, trans=NULL, 
+pmap_piece <- function(.l, ..., cfg=NULL, envir=NULL, trans=NULL, 
                        draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+    if (is.null(cfg) && is.null(envir)) {
+        cfg <- pp_cfg()
+        envir <- game_systems()
+    } else if (is.null(cfg)) { # and !is.null(envir)
+        if(has_name(envir, "piecepack")) {
+            cfg <- envir[["piecepack"]]
+        } else {
+            cfg <- pp_cfg()
+        }
+    } else if (is.null(envir)) { # and !is.null(cfg)
+        cfg <- get_cfg(cfg)
+        envir <- game_systems()
+        envir[["piecepack"]] <- cfg
+    }
     if (is.function(trans)) { 
         .l <- trans(.l, ..., cfg=cfg, envir=envir)
     }
