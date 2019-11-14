@@ -95,8 +95,12 @@ save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", a
 pp_dev_off <- function(f, format) {
     v <- grDevices::dev.off()
     if (format == "svgz") {
-        svg <- readLines(file(f, "r"))
-        writeLines(svg, gzfile(f, "w"))
+        rcon <- file(f, "r")
+        svg <- readLines(rcon)
+        close(rcon)
+        wcon <- gzfile(f, "w")
+        writeLines(svg, wcon)
+        close(wcon)
     }
     invisible(v)
 }
