@@ -533,7 +533,8 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     subject <- sprintf(" /Subject (%s)\n", cfg$description)
     keywords <- " /Keywords (piecepack)\n"
     line <- sprintf("[%s%s%s%s /DOCINFO pdfmark",
-                    title, creator, subject, keywords)
+                    ifelse(length(title), title, ""), creator, 
+                    ifelse(length(subject), subject, ""), keywords)
     txt <- append(txt, line)
     writeLines(txt, temp_txt)
 
