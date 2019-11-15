@@ -22,14 +22,14 @@
 game_systems <- function(style=NULL) {
     if (is.null(style)) {
         piecepack <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202",  
-                          border_color="black", border_lex=4, 
+                          border_color="black", border_lex=4, depth.coin=0.25,
                           mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
                           rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
         playing_cards_expansion <- piecepack
         playing_cards_expansion$suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
     } else if (style == "dejavu") {
         piecepack <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1", fontfamily="DejaVu Sans", 
-                          border_color="black", border_lex=4, dm_cex.coin=0.5, 
+                          border_color="black", border_lex=4, dm_cex.coin=0.5, depth.coin=0.25, 
                           mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
                           rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
         playing_cards_expansion <- piecepack
