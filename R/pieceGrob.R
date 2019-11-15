@@ -95,10 +95,7 @@
 #' @name grid.piece
 NULL
 
-#' @rdname grid.piece
-#' @export
-pmap_piece <- function(.l, ..., cfg=NULL, envir=NULL, trans=NULL, 
-                       draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+default_cfg_envir <- function(cfg=NULL, envir=NULL) {
     if (is.null(cfg) && is.null(envir)) {
         cfg <- pp_cfg()
         envir <- game_systems()
@@ -113,6 +110,17 @@ pmap_piece <- function(.l, ..., cfg=NULL, envir=NULL, trans=NULL,
         envir <- game_systems()
         envir[["piecepack"]] <- cfg
     }
+    list(cfg=cfg, envir=envir)
+}
+
+#' @rdname grid.piece
+#' @export
+pmap_piece <- function(.l, ..., cfg=NULL, envir=NULL, trans=NULL, 
+                       draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+    ce <- default_cfg_envir(cfg, envir)
+    cfg <- ce$cfg
+    envir <- ce$envir
+
     if (is.function(trans)) { 
         .l <- trans(.l, ..., cfg=cfg, envir=envir)
     }
