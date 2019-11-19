@@ -44,6 +44,6 @@ pmap_piece(df, op_angle=135, trans=op_transform,
  
 }
 \seealso{
-<https://trevorldavis.com/piecepackr/3d-projections.html> for more details
+\url{https://trevorldavis.com/piecepackr/3d-projections.html} for more details
   and examples of oblique projections in \code{piecepackr}.
 }

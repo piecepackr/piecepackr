@@ -12,7 +12,20 @@ If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be 
 }
 \description{
 \code{game_systems} returns a list of \code{pp_cfg} objects
-of some game systems: the piecepack (plus a playing cards expansion, hexpack, and a "stackpack" subpack).
+representing several game systems.
+}
+\details{
+Contains the following game systems:\itemize{
+\item{icehouse pieces}
+\item{piecepack plus several piecepack accessories/expansions:\itemize{
+  \item{piecepack matchsticks}
+  \item{piecepack pyramids}
+  \item{piecepack saucers}
+  \item{hexpack}
+  \item{playing cards expansion}
+  \item{dual piecepacks expansion}
+  \item{(stackpack) subpack aka mini piecepack}
+}}}
 }
 \examples{
        cfgs <- game_systems()
@@ -29,5 +42,5 @@ of some game systems: the piecepack (plus a playing cards expansion, hexpack, an
        pmap_piece(df, envir=cfgs, op_scale=0.5, default.units="in")
 }
 \seealso{
-[pp_cfg()] for information about \code{pp_cfg} objects.
+\code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 }

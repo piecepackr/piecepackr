@@ -43,7 +43,7 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_depth(piece_side
 #' aren't guaranteed to work in every case.
 #' In some cases you may get better sorting results
 #' by changing the \code{op_angle} or the dimensions of pieces.
-#' @seealso <https://trevorldavis.com/piecepackr/3d-projections.html> for more details
+#' @seealso \url{https://trevorldavis.com/piecepackr/3d-projections.html} for more details
 #'   and examples of oblique projections in \code{piecepackr}.
 #' @param df A data frame with coordinates and dimensions in inches
 #' @param ... Ignored

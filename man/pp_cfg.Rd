@@ -42,7 +42,7 @@ as_pp_cfg(cfg = list())
   
 }
 \seealso{
-<https://trevorldavis.com/piecepackr/configuration-lists.html> for more details 
-     about \code{piecepackr} configuration lists.  [standard_game_systems()] returns 
+\url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details 
+     about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns 
      configuration list objects for several game systems.
 }

@@ -127,6 +127,17 @@ splice <- function(x0, x1) {
     append(vec, x0[ii+1])
 }
 
+halmaMatGrobFn <- function(width=0.2) {
+    width <- rep(width, length.out=2)
+    xy_out <- halma_xy()
+    xy_in <- unit_coords_to_cartesian_coords(xy_out$x, xy_out$y, 
+                                 height=1-width[1], width=1-2.5*width[2])
+    x <- c(xy_in$x, xy_out$x)
+    y <- c(xy_in$y, xy_out$y)
+    id <- rep(1:2, each=length(xy_out$x))
+    function(name=NULL, gp=gpar(), vp=NULL) { pathGrob(x, y, id=id, rule="evenodd", name=name, gp=gp, vp=vp) }
+}
+
 convexMatGrobFn <-  function(n_vertices, t=90, width=0.2) {
     t <- seq(0, 360, length.out=n_vertices+1) + t
     r <- 0.5-width[1]

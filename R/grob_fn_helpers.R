@@ -93,6 +93,8 @@ matGrob <- function(col, shape = "rect", shape_t = 90, mat_width = 0, name = NUL
         convexMatGrobFn(60, 0, mat_width[1])(gp=gp_mat)
     } else if (grepl("^convex", shape)) {
         convexMatGrobFn(get_n_vertices(shape), shape_t, mat_width[1])(gp=gp_mat)
+    } else if (shape == "halma") {
+        halmaMatGrobFn(mat_width)(gp=gp_mat)
     } else {
         stop(paste("Don't know how to add mat to shape", shape))
     }
