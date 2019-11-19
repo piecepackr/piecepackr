@@ -20,6 +20,7 @@ Bug fixes and minor improvements
   when width and height are not equal.
 * Fixes bug in ``op_transform`` for inferring width/height of matchsticks 
   and shape/depth of pyramids.
+* Fixes bug in printing 'pp_cfg' objects when a custom grob function had been set.
 
 piecepackr 1.1.1
 ================

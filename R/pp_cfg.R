@@ -45,7 +45,11 @@ Config <- R6Class("pp_cfg",
         as_list = function() { private$cfg },
         print = function() {
             for(name in names(private$cfg)) {
-                cat(paste0("$", name, " : ", private$cfg[[name]]), "\n")
+                if(is.function(private$cfg[[name]])) {
+                    cat(paste0("$", name, " : ", "a function", "\n"))
+                } else {
+                    cat(paste0("$", name, " : ", private$cfg[[name]]), "\n")
+                }
             }
         },
         get_grob = function(piece_side, suit, rank) {
