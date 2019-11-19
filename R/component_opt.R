@@ -175,6 +175,7 @@ get_shape <- function(piece_side, suit, rank, cfg) {
                pyramid_left = "pyramid",
                pyramid_right = "pyramid",
                pyramid_back = "pyramid",
+               pyramid_top = "rect",
                belt_face = "rect",
                suitdie_face = "rect",
                stop(paste("Don't know correct shape for", piece_side)))

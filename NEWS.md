@@ -18,8 +18,8 @@ Bug fixes and minor improvements
   overlap are now more accurate (#150).
 * Fixes bug in ``op_transform`` when computing bounding box for shapes 
   when width and height are not equal.
-* Fixes bug in ``op_transform`` for inferring width/height
-  of piecepack matchsticks.
+* Fixes bug in ``op_transform`` for inferring width/height of matchsticks 
+  and shape/depth of pyramids.
 
 piecepackr 1.1.1
 ================
