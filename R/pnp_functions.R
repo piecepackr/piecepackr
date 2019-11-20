@@ -54,7 +54,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
                      arrangement="single-sided") {
 
     current_dev <- grDevices::dev.cur()
-    on.exit(grDevices::dev.set(current_dev))
+    if(current_dev > 1) { on.exit(grDevices::dev.set(current_dev)) }
 
     cfg <- as_pp_cfg(cfg)
     n_suits <- cfg$n_suits

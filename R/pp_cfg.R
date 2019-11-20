@@ -105,7 +105,7 @@ Config <- R6Class("pp_cfg",
             png_file <- tempfile(fileext=".png")
             on.exit(unlink(png_file))
             current_dev <- grDevices::dev.cur()
-            on.exit(grDevices::dev.set(current_dev))
+            if(current_dev > 1) { on.exit(grDevices::dev.set(current_dev)) }
             png(png_file, width=width, height=height, units="in", res=res)
             grid.draw(grob)
             invisible(grDevices::dev.off())

@@ -13,10 +13,19 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <polygon points='351.00,301.85 360.00,274.15 369.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='351.00,301.85 360.00,274.15 369.00,301.85 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='351.00,301.85 360.00,274.15 369.00,301.85 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<polygon points='351.00,301.85 360.00,274.15 369.00,301.85 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text x='355.55' y='300.08' style='font-size: 15.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='8.91px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<text x='357.67' y='286.26' style='font-size: 3.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='4.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
-<polyline points='351.00,301.85 360.00,274.15 369.00,301.85 351.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='351.29,301.56 360.29,273.86 369.29,301.56 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='351.58,301.27 360.58,273.57 369.58,301.27 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='351.87,300.98 360.87,273.28 369.87,300.98 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='352.16,300.69 361.16,272.99 370.16,300.69 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='352.45,300.40 361.45,272.70 370.45,300.40 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='352.74,300.11 361.74,272.41 370.74,300.11 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='353.02,299.82 362.02,272.13 371.02,299.82 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='353.31,299.54 362.31,271.84 371.31,299.54 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='353.60,299.25 362.60,271.55 371.60,299.25 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='353.89,298.96 362.89,271.26 371.89,298.96 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='354.18,298.67 363.18,270.97 372.18,298.67 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='354.18,298.67 363.18,270.97 372.18,298.67 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='358.73' y='296.90' style='font-size: 15.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='8.91px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='360.85' y='283.08' style='font-size: 3.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='4.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
+<polyline points='354.18,298.67 363.18,270.97 372.18,298.67 354.18,298.67 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>

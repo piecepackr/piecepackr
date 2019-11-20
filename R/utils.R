@@ -153,7 +153,7 @@ as_picture <- function(grob, width, height) {
     svg_file <- tempfile(fileext=".svg")
     on.exit(unlink(svg_file))
     current_dev <- grDevices::dev.cur()
-    on.exit(grDevices::dev.set(current_dev))
+    if(current_dev > 1) { on.exit(grDevices::dev.set(current_dev)) }
     grDevices::svg(svg_file, width=width, height=height, bg="transparent")
     grid.draw(grob)
     invisible(grDevices::dev.off())
