@@ -104,9 +104,11 @@ Config <- R6Class("pp_cfg",
             height <- self$get_height(piece_side, suit, rank)
             png_file <- tempfile(fileext=".png")
             on.exit(unlink(png_file))
+            current_dev <- grDevices::dev.cur()
+            on.exit(grDevices::dev.set(current_dev))
             png(png_file, width=width, height=height, units="in", res=res)
             grid.draw(grob)
-            invisible(dev.off())
+            invisible(grDevices::dev.off())
             as.raster(png::readPNG(png_file))
         }, 
         get_piece_opt = function(piece_side, suit=NA, rank=NA) {

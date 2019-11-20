@@ -86,6 +86,9 @@ piece_filename <- function(directory, piece_side, format, angle,
 #'   
 #' @export
 save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", angle=0) {
+    current_dev <- grDevices::dev.cur()
+    on.exit(grDevices::dev.set(current_dev))
+
     if(!dir.exists(directory)) { stop(paste("directory", directory, "does not exist")) }
     for (f in format) {
         for (a in angle) make_images_helper(directory, cfg, f, a)

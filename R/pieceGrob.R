@@ -130,10 +130,11 @@ pmap_piece <- function(.l, ..., cfg=NULL, envir=NULL, trans=NULL,
         ll <- purrr::pmap(.l, pieceGrob_wrapper, ..., cfg=cfg, envir=envir, draw=FALSE)
     }
     grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp)
-    if (draw)
+    if (draw) {
         grid.draw(grob)
-    else
+    } else {
         grob
+    }
 }
 
 as.gList <- function(ll) {
