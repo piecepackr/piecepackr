@@ -311,7 +311,9 @@ Config <- R6Class("pp_cfg",
 #'
 #' \code{pp_cfg} and \code{as_pp_cfg} creates piecepack configuration list R6 object.
 #' \code{is_pp_cfg} returns \code{TRUE} if object is a piecepack configuration list R6 object.
-#' \code{as.list} will convert it into a list.
+#' \code{as.list} will convert it into a list.  \code{to_subpack} and \code{to_hexpack}
+#' will attempt to generate matching (piecepack stackpack) subpack and hexpack
+#' piecepack configuration list R6 objects given a piecepack configuration.
 #'
 #' @seealso \url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details 
 #'      about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns 

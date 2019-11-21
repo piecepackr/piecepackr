@@ -8,8 +8,10 @@ New features
   from files found in its ``directory`` argument (#152).
 * New function ``game_systems`` which returns a list of configuration objects
   for multiple game systems (#157).
+* Helper functions ``to_subpack`` and ``to_hexpack`` which given a piecepack configuration
+  attempts to generate an appropriate matching (piecepack stackpack) subpack and hexpack (#161).
 * ``pp_cfg`` objects ``get_suit_color`` function is now vectorized 
-  (and by default now returns the suit colors for each suit)
+  (and by default now returns the suit colors for each suit).
 
 Bug fixes and minor improvements
 --------------------------------

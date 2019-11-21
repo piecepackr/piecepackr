@@ -51,9 +51,6 @@ game_systems <- function(style=NULL) {
     playing_cards_expansion$suit_text <- pce_suit_text
     playing_cards_expansion$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
 
-    subpack <- c(piecepack, list(width.tile=0.75, width.coin=0.3, width.die=0.3, 
-                                 width.pawn=0.4 * 0.5, height.pawn=0.4 * 0.875,
-                                 cex=0.4))
 
     hexpack <- c(piecepack, list(shape.tile="convex6", border_lex=3, 
                                  shape_t.tile="60",  dm_t.tile_face=-90,
@@ -79,11 +76,42 @@ game_systems <- function(style=NULL) {
                         border_lex.pyramid=4, grob_fn.pyramid=icehousePyramidGrob)
 
     list(dual_piecepacks_expansion=pp_cfg(dual_piecepacks_expansion),
-         hexpack=pp_cfg(hexpack), 
+         hexpack=to_hexpack(piecepack), 
          icehouse_pieces=pp_cfg(icehouse_pieces),
          piecepack=pp_cfg(piecepack), 
          playing_cards_expansion=pp_cfg(playing_cards_expansion),
-         subpack=pp_cfg(subpack))
+         subpack=to_subpack(piecepack))
+}
+
+#' @rdname pp_cfg
+#' @export
+to_hexpack <- function(cfg=pp_cfg()) {
+    cfg <- as_pp_cfg(cfg)
+    hexpack <- as.list(cfg)
+    hexpack$shape.tile="convex6"
+    hexpack$border_lex=3 
+    hexpack$shape_t.tile=60
+    hexpack$dm_t.tile_face=-90
+    hexpack$width.tile=4/sqrt(3)
+    hexpack$height.tile=4/sqrt(3)
+    hexpack$shape.coin="convex3"
+    pp_cfg(hexpack)
+
+}
+
+#' @rdname pp_cfg
+#' @export
+to_subpack <- function(cfg=pp_cfg()) {
+    cfg <- as_pp_cfg(cfg)
+    subpack <- as.list(cfg)
+    subpack$width.tile <- (3/8)*cfg$get_width("tile")
+    subpack$width.coin <- 0.4*cfg$get_width("coin")
+    subpack$width.die <- 0.6*cfg$get_width("die")
+    subpack$width.pawn <- 0.4*cfg$get_width("pawn")
+    subpack$height.pawn <- 0.4*cfg$get_height("pawn")
+    subpack$width.saucer <- 0.4*cfg$get_width("saucer")
+    subpack$cex <- 0.4
+    pp_cfg(subpack)
 }
 
 icehousePyramidGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
