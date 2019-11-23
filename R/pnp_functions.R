@@ -1,4 +1,4 @@
-is_odd <- function(x) { as.logical(x %% 2) }
+is_odd <- function(x) as.logical(x %% 2)
 
 LETTER_WIDTH <- 8.5
 LETTER_HEIGHT <- 11
@@ -35,7 +35,7 @@ gappend <- function(ll, g) {
 #' @param cfg Piecepack configuration list
 #' @param output_filename Filename for print-and-play file
 #' @param size PnP output size (currently either "letter", "A4", or "A5")
-#' @param pieces Character vector of desired PnP pieces.  
+#' @param pieces Character vector of desired PnP pieces.
 #'        Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
 #' @param arrangement Either "single-sided" or "double-sided".
 #' @examples
@@ -49,12 +49,12 @@ gappend <- function(ll, g) {
 #'     }
 #'   }
 #' @export
-save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", size="letter", 
+save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", size="letter",
                      pieces=c("piecepack", "matchsticks", "pyramids"),
                      arrangement="single-sided") {
 
     current_dev <- grDevices::dev.cur()
-    if(current_dev > 1) { on.exit(grDevices::dev.set(current_dev)) }
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
 
     cfg <- as_pp_cfg(cfg)
     n_suits <- cfg$n_suits
@@ -65,7 +65,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
     } else if (size == "A4") {
         xl <- inch(A4_HEIGHT / 2 - A5W / 2)
         xr <- inch(A4_HEIGHT / 2 + A5W / 2)
-    } else { # size == "A5"
+    } else { # size is "A5"
         xl <- 0.5
         xr <- 0.5
     }
@@ -111,7 +111,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
     #### Add misc, cards, dominoes accessories?
     if ("matchsticks" %in% pieces) {
         n_pages <- (n_suits-1)%/%5+1
-        if (is_odd(n_pages) && arrangement == "double-sided" && size != "A5") 
+        if (is_odd(n_pages) && arrangement == "double-sided" && size != "A5")
             n_pages <- n_pages+1
         for (ii in seq(n_pages)) {
             if (arrangement == "double-sided" && size != "A5") {
@@ -128,7 +128,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
                 sf <- seq(5*ii-4, 5*ii)
                 sb <- seq(5*ii-4, 5*ii)
             }
-            mgf <- a5_matchsticks_grob(sf, cfg, TRUE) 
+            mgf <- a5_matchsticks_grob(sf, cfg, TRUE)
             mgb <- a5_matchsticks_grob(sb, cfg, FALSE)
             gl <- gappend(gl, mgf)
             gl <- gappend(gl, mgb)
@@ -183,13 +183,13 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
         }
         pl$Subpack <- n_pages
     }
-    if (size == "A5") { pl <- lapply(pl, function(x) 2*x) }
+    if (size == "A5") pl <- lapply(pl, function(x) 2*x)
     for (ii in seq(gl)) {
         if (is_odd(ii)) {
             grid.newpage()
             draw_a5_page(gl[[ii]], vpl)
         } else {
-            if (size == "A5") { grid.newpage() }
+            if (size == "A5") grid.newpage()
             draw_a5_page(gl[[ii]], vpr)
         }
     }
@@ -227,10 +227,10 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     grob_tile <- grobTree(htg("Tile", xt, yt+0.7),
                           tg("Face", xt-0.5, y=yt+0.6),
                           tg("Back", xt+0.5, y=yt+0.6),
-                          pmap_piece(df, default.units="in", draw=FALSE, 
+                          pmap_piece(df, default.units="in", draw=FALSE,
                                      cfg=cfg,
                                      gp=gpar(cex=0.5, lex=0.5)))
-                          # curveGrob(x1=xt[1]-0.8, y1=yt-1.1, x2=xt[2]+0.8, y2=yt-1.1, 
+                          # curveGrob(x1=xt[1]-0.8, y1=yt-1.1, x2=xt[2]+0.8, y2=yt-1.1,
                           #           curvature=0.2, square=FALSE, arrow=arrow(),
                           #           default.units="in"))
     # Coin
@@ -238,23 +238,23 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     cw <- 0.75
     yc <- yt - 0.5 - cw
     xc <- 0.5 + 2*cw
-    df <- tibble(piece_side = rep(c("coin_back", "coin_face"), 2), 
-                         x=xc+c(1.7, 0.7,-0.7, -1.7)*cw, 
+    df <- tibble(piece_side = rep(c("coin_back", "coin_face"), 2),
+                         x=xc+c(1.7, 0.7,-0.7, -1.7)*cw,
                          y=rep(yc,4),
                          width=0.75, height=0.75,
                          angle=c(0,180,0,0))
     grob_coin <- grobTree(htg("Coin", xc, yc+0.5*cw+0.2),
                           tg("Back", xc+c(1.7, -0.7)*cw, yc+0.5*cw+0.1),
                           tg("Face", xc+c(0.7, -1.7)*cw, yc+0.5*cw+0.1),
-                          pmap_piece(df, default.units="in", 
+                          pmap_piece(df, default.units="in",
                                      cfg=cfg, draw=FALSE, gp=gpar(lex=cwr, cex=cwr)),
                           textGrob("or", x=xc, y=yc, default.units="in"))
     # Saucer
-    swr <- 0.75 / cfg$get_width("saucer_face") 
+    swr <- 0.75 / cfg$get_width("saucer_face")
     sw <- 0.75
     ys <- yt - 1.6 - sw
     xs <- 0.5 + 2*cw
-    df <- tibble(piece_side = rep(c("saucer_back", "saucer_face"), 2), 
+    df <- tibble(piece_side = rep(c("saucer_back", "saucer_face"), 2),
                          x=xs+c(1.7, 0.7,-0.7, -1.7)*sw,
                          y=rep(ys,4),
                          width=0.75, height=0.75,
@@ -262,7 +262,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     grob_saucer <- grobTree(htg("(Pawn) Saucer", xs, ys+0.5*sw+0.25),
                             tg("Back", xs+c(1.7, -0.7)*sw, ys+0.5*sw+0.1),
                             tg("Face", xs+c(0.7, -1.7)*sw, ys+0.5*sw+0.1),
-                            pmap_piece(df, default.units="in", 
+                            pmap_piece(df, default.units="in",
                                        cfg=cfg, draw=FALSE, gp=gpar(lex=swr, cex=swr)),
                           textGrob("or", x=xs, y=ys, default.units="in"))
 
@@ -271,7 +271,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     dw <- 0.5
     yd <- 1.4
     d1 <- grobTree(piecepackDieGrob(1, cfg, arrangement="counter_down"),
-                   vp=viewport(x=0.2, y=inch(yd), 
+                   vp=viewport(x=0.2, y=inch(yd),
                    width=inch(4*dw), height=inch(3*dw), gp=gpar(lex=dwr, cex=dwr)))
     d2 <- grobTree(piecepackDieGrob(1, cfg, arrangement="counter_up"),
                    vp=viewport(x=0.5, y=inch(yd),
@@ -279,7 +279,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     d3 <- grobTree(piecepackDieGrob(1, cfg, arrangement="opposites_sum_to_5"),
                    vp=viewport(x=0.8, y=inch(yd),
                        width=inch(4*dw), height=inch(3*dw), gp=gpar(lex=dwr, cex=dwr)))
-    grob_die <- grobTree(htg("Die", A5W/2, yd+1.2), 
+    grob_die <- grobTree(htg("Die", A5W/2, yd+1.2),
                          tg('"counter_down"\narrangement', 0.3*A5W, yd+0.9),
                          tg('"counter_up"\narrangement', 0.6*A5W, yd+0.9),
                          tg('"opposites_sum_to_5"\narrangement', 0.85*A5W, yd+0.9),
@@ -302,7 +302,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     # Pyramids
     yy <- yt
     xy <- A5W-1
-    df <- tibble(piece_side=c("pyramid_layout", "pyramid_top"), 
+    df <- tibble(piece_side=c("pyramid_layout", "pyramid_top"),
                               suit=1, rank=2, x=xy+c(-0.5, 0.5), y=yy)
     grob_pyramid <- grobTree(htg("Pyramid", xy, yy+0.8),
                              htg("Top (View)", xy+0.5, yy+0.45),
@@ -315,7 +315,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
                              tg("Face", xy-0.5, yy-0.65),
                              tg("Right", xy-0.2, yy+0.4),
                              tg("Left", xy-0.2, yy-0.4),
-                             pmap_piece(df, default.units="in", 
+                             pmap_piece(df, default.units="in",
                                         cfg=cfg, draw=FALSE))
     # Matchsticks
     df <- tibble(piece_side=c("matchstick_face", "matchstick_back"),
@@ -323,7 +323,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     grob_matchsticks <- grobTree(htg("Matchstick", 1, 0.3),
                                  tg("Face", 1.7, 0.4),
                                  tg("Back", 1.7, 0.2),
-                                 pmap_piece(df, default.units="in", 
+                                 pmap_piece(df, default.units="in",
                                             cfg=cfg, draw=FALSE))
 
     grobTree(grob_title, grob_tile, grob_coin, grob_saucer,
@@ -370,21 +370,21 @@ a5_title_grob <- function(cfg=pp_cfg(), pieces) {
     # Credits
     y_credits <- y_copyright - grobHeight(grob_ch) - grobHeight(grob_c) - unit(0.03, "npc")
     credits <- paste(c('\u25cf The piecepack was invented by James "Kyle" Droscha. Public Domain.',
-                       '\thttp://www.piecepack.org/Anatomy.html',
-                 '\u25cf Piecepack pyramids were invented by Tim Schutz. Public Domain.',
-                 '\thttp://www.ludism.org/ppwiki/PiecepackPyramids',
-                 '\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.',
-                 '\thttp://www.piecepack.org/Accessories.html',
-                 '\u25cf Piecepack matchsticks were invented by Dan Burkey. Public Domain.',
-                 '\thttp://www.ludism.org/ppwiki/PiecepackMatchsticks',
-                 cfg$credit), 
+                       "\thttp://www.piecepack.org/Anatomy.html",
+                 "\u25cf Piecepack pyramids were invented by Tim Schutz. Public Domain.",
+                 "\thttp://www.ludism.org/ppwiki/PiecepackPyramids",
+                 "\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.",
+                 "\thttp://www.piecepack.org/Accessories.html",
+                 "\u25cf Piecepack matchsticks were invented by Dan Burkey. Public Domain.",
+                 "\thttp://www.ludism.org/ppwiki/PiecepackMatchsticks",
+                 cfg$credit),
                      collapse="\n")
     grob_credits <- gTree(name="credits", children=gList(
         textGrob("Credits", x=0.1, y=y_credits, just="left", gp=gp_header),
         textGrob(credits, x=0.1, y=y_credits-unit(0.02, "npc"), just=c(0,1), gp=gp_text)
     ))
 
-    grobTree(grob_title, grob_description, grob_license, grob_copyright, 
+    grobTree(grob_title, grob_description, grob_license, grob_copyright,
              grob_credits, name="title_page", vp=a5_vp)
 }
 
@@ -392,7 +392,6 @@ blank_grob <- textGrob("Intentionally left blank")
 
 draw_a5_page <- function(grob, vp) {
     pushViewport(vp)
-    # grid.rect(gp=gpar(col="brown"))
     grid.draw(grob)
     upViewport()
 }
@@ -411,15 +410,15 @@ a5_matchsticks_grob <- function(suits=1:5, cfg=pp_cfg(), front=TRUE) {
     y4s <- A5H - (0.5 + 0:3)*MATCHSTICK_HEIGHTS[4]
     x4s <- 4*n_suits * MATCHSTICK_WIDTHS[2] + (0.5 + 0:(n_suits-1)) * MATCHSTICK_WIDTHS[6]
 
-    x = c(rep(x1s,each=2), rep(xs, 4), rep(x4s, each=4))
-    y = c(rep(c(y1t, y1b), 2*n_suits), rep(c(y2, y3, y5, y6), each=4*n_suits), rep(c(y4s), n_suits))
-    suit = rep(rep(suits, each=4), 6)
-    rank = rep(c(1:3,5:6,4), each=4*n_suits)
+    x <- c(rep(x1s,each=2), rep(xs, 4), rep(x4s, each=4))
+    y <- c(rep(c(y1t, y1b), 2*n_suits), rep(c(y2, y3, y5, y6), each=4*n_suits), rep(c(y4s), n_suits))
+    suit <- rep(rep(suits, each=4), 6)
+    rank <- rep(c(1:3,5:6,4), each=4*n_suits)
     if (front) {
-        piece_side = "matchstick_face"
+        piece_side <- "matchstick_face"
     } else {
         x <- A5W - x
-        piece_side = "matchstick_back"
+        piece_side <- "matchstick_back"
 
     }
     df <- tibble(piece_side, x, y, suit, rank)
@@ -448,20 +447,20 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
     xsr <- A5W - 0.25 * tile_width
     ysb <- 2.75 * tile_width
     dft <- tibble(piece_side="tile_face", x=rep(c(xtr,xtl),3),
-                  y=rep(c(ytt,ytm,ytb),each=2), 
+                  y=rep(c(ytt,ytm,ytb),each=2),
                   suit, rank=1:6, angle=0)
     dfc <- tibble(piece_side="coin_back", x=rep(xc,6),
-                  y=ycs, suit, rank=1:6, 
+                  y=ycs, suit, rank=1:6,
                   angle=ifelse(front, cfg$coin_arrangement, 0))
-    dfd <- tibble(piece_side="die_face", x=rep(xdr,2), 
-                  y=rep(c(ydt,ydb),each=3), 
+    dfd <- tibble(piece_side="die_face", x=rep(xdr,2),
+                  y=rep(c(ydt,ydb),each=3),
                   suit, rank=1:6, angle=0)
     dfp <- tibble(piece_side="pawn_layout", x=xp,y=yp,
                   suit, rank=NA, angle=90)
     dfb <- tibble(piece_side="belt_face", x=xb, y=yb,
                   suit, rank=NA, angle=0)
     dfs <- tibble(piece_side="saucer_face", x=xsr, y=ysb,
-                  suit, rank=NA, 
+                  suit, rank=NA,
                   angle=ifelse(front, 0, cfg$coin_arrangement))
     df <- rbind(dfc, dfd, dfp, dfb, dfs, dft)
     if (!front) {
@@ -481,8 +480,6 @@ a5_pyramids_grob <- function(suit=1:2, cfg=pp_cfg(), front=TRUE) {
 }
 
 pyramid_grob_helper <- function(suit, cfg=pp_cfg(), xleft=0) {
-    n_ranks <- cfg$n_ranks
-    n_suits <- cfg$n_suits
     rank <- c(1:2,4,3,5:6)
     plh <- PYRAMID_LAYOUT_HEIGHTS[rank]
     pawn_width <- cfg$get_width("pawn_face")
@@ -493,13 +490,13 @@ pyramid_grob_helper <- function(suit, cfg=pp_cfg(), xleft=0) {
     piece_side <- "pyramid_layout"
     angle <- c(rep(0, 4), rep(180,2))
     df <- tibble::tibble(piece_side, x, y, suit, rank, angle)
-    dfp <- tibble::tibble(piece_side="pawn_layout", 
+    dfp <- tibble::tibble(piece_side="pawn_layout",
                           x=xleft+A5W/2-0.5*pawn_width,
                           y=c(0.5,1.5)*cfg$get_height("pawn_layout"),
                           suit, rank=NA, angle=0)
     if (cfg$get_width("die_face") <= 0.6) {
         dfd <- tibble::tibble(piece_side="die_layoutLF",
-                              x=xleft+c(0.5)*cfg$get_width("die_layoutLF"), 
+                              x=xleft+c(0.5)*cfg$get_width("die_layoutLF"),
                               y=A5H-c(0.5)*cfg$get_height("die_layoutLF"),
                               suit, rank=NA, angle=0)
     } else {
@@ -507,8 +504,8 @@ pyramid_grob_helper <- function(suit, cfg=pp_cfg(), xleft=0) {
         xdr <- c(0.5,1.5,2.5) * die_width
         ydt <- A5H - 0.5 * die_width
         ydb <- A5H - 1.5 * die_width
-        dfd <- tibble(piece_side="die_face", x=xleft+rep(xdr,2), 
-                      y=rep(c(ydt,ydb),each=3), 
+        dfd <- tibble(piece_side="die_face", x=xleft+rep(xdr,2),
+                      y=rep(c(ydt,ydb),each=3),
                       suit, rank=1:6, angle=0)
     }
     df <- rbind(dfp, dfd, df)
@@ -528,7 +525,7 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     txt <- character(0)
     for (ii in seq(pl)) {
         line <- sprintf("[/Page %s /View [/XYZ null null null] /Title (%s) /OUT pdfmark",
-                   starting_pages[ii], ns[ii])    
+                   starting_pages[ii], ns[ii])
         txt <- append(txt, line)
     }
     title <- sprintf(" /Title (%s)\n", cfg$title)
@@ -536,7 +533,7 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     subject <- sprintf(" /Subject (%s)\n", cfg$description)
     keywords <- " /Keywords (piecepack)\n"
     line <- sprintf("[%s%s%s%s /DOCINFO pdfmark",
-                    ifelse(length(title), title, ""), creator, 
+                    ifelse(length(title), title, ""), creator,
                     ifelse(length(subject), subject, ""), keywords)
     txt <- append(txt, line)
     writeLines(txt, temp_txt)

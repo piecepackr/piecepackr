@@ -1,17 +1,16 @@
-
-basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(), 
+basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, width=NA, height=NA, depth=NA,
                             op_scale=0, op_angle=45, default.units="npc") {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    if(is.na(angle)) { angle <- 0 }
-    if(is.na(width)) { width <- inch(cfg$get_width(piece_side, suit, rank)) }
-    if(is.na(height)) { height <- inch(cfg$get_height(piece_side, suit, rank)) }
-    if(is.na(depth)) { depth <- inch(cfg$get_depth(piece_side, suit, rank)) }
-    if(!is.unit(width)) { width <- unit(width, default.units) }
-    if(!is.unit(height)) { height <- unit(height, default.units) }
-    if(!is.unit(depth)) { depth <- unit(depth, default.units) }
+    if (is.na(angle)) angle <- 0
+    if (is.na(width)) width <- inch(cfg$get_width(piece_side, suit, rank))
+    if (is.na(height)) height <- inch(cfg$get_height(piece_side, suit, rank))
+    if (is.na(depth)) depth <- inch(cfg$get_depth(piece_side, suit, rank))
+    if (!is.unit(width)) width <- unit(width, default.units)
+    if (!is.unit(height)) height <- unit(height, default.units)
+    if (!is.unit(depth)) depth <- unit(depth, default.units)
     shape <- opt$shape
     if (shape == "circle") {
         circleShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
@@ -26,11 +25,11 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
 genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
     shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
-    # shape_xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
     n_shadows <- max(round(100*as.numeric(convertX(depth, "in"))), 3)
     ns <- n_shadows-1
     zs <- rep((1/ns)*depth, ns)
-    for (ii in 2:ns) { zs[ii] <- zs[ii] + zs[ii-1] } # cumsum doesn't work with units
+    for (ii in 2:ns) # cumsum doesn't work with units
+        zs[ii] <- zs[ii] + zs[ii-1]
     zs <- unit.c(z-0.5*depth, z-0.5*depth + zs)
     xp <- op_x(x, y, zs, op_angle, op_scale)
     yp <- op_y(x, y, zs, op_angle, op_scale)
@@ -38,7 +37,7 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
     vp <- viewport(xp[1], yp[1], width, height, angle=angle)
     gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     gl[[1]] <- shape_fn(gp=gp, vp=vp)
-    for (ii in 2:n_shadows) { 
+    for (ii in 2:n_shadows) {
         vps <- viewport(xp[ii], yp[ii], width, height, angle=angle)
         gps <- gpar(col=NA, fill=opt$edge_color)
         gl[[ii]] <- shape_fn(gp=gps, vp=vps)
@@ -47,7 +46,6 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
 }
 
 circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
     n_points <- 36
     thetas <- seq(op_angle+90, op_angle+270, length.out=n_points)
     r <- min(0.5*width, 0.5*height)
@@ -100,7 +98,7 @@ rectShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, 
 
 convexShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
     if (as.numeric(convertX(width, "in")) != as.numeric(convertY(height, "in")))
-        return (genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle))
+        return(genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle))
 
     n_vertices <- get_n_vertices(opt$shape)
     r <- convertX(min(0.5*width, 0.5*height), "in")

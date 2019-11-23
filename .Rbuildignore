@@ -6,7 +6,9 @@
 ^TODO.rst$
 ^LICENSE.md$
 ^Rakefile$
+
 ^.appveyor.yml$
+^.lintr$
 ^.travis.yml$
 ^cran-comments.rst$
 

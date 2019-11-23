@@ -1,20 +1,20 @@
 #' Piece Grob Functions
 #'
-#' \code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob} 
-#'  are the default \dQuote{grob} functions that \code{grid.piece} uses 
+#' \code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob}
+#'  are the default \dQuote{grob} functions that \code{grid.piece} uses
 #' to create \code{grid} #' graphical \code{grob} objects.  \code{picturePieceGrobFn}
 #' is a function that returns a \dQuote{grob} function that imports graphics from files
 #' found in its \code{directory} argument.
-#' 
+#'
 #' @rdname basicPieceGrobs
 #' @name basicPieceGrobs
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object. 
+#' @param cfg Piecepack configuration list or \code{pp_cfg} object.
 #' @inheritParams grid.piece
 #' @examples
 #'
 #'  if (require("grid")) {
 #'     cfg <- pp_cfg(list(invert_colors=TRUE))
-#' 
+#'
 #'     pushViewport(viewport(width=unit(2, "in"), height=unit(2, "in")))
 #'     grid.draw(basicPieceGrob("tile_face", suit=1, rank=3))
 #'     popViewport()
@@ -28,12 +28,12 @@
 #'     pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
 #'     grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
 #'     popViewport()
-#'    
+#'
 #'     grid.newpage()
 #'     pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
 #'     grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5))
 #'     popViewport()
-#' 
+#'
 #'     \donttest{
 #'         directory <- tempdir()
 #'         save_piece_images(cfg, directory=directory, format="svg", angle=0)
@@ -61,16 +61,16 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
 
     # Primary symbol
-    gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize, 
+    gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize,
                   fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
     ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
 
     # Directional mark
-    gp_dm <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize, 
+    gp_dm <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
                   fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
     dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
 
-    # Border 
+    # Border
     border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
     gl <- gList(background_grob, gl_grob, mat_grob, ps_grob,
                 dm_grob, border_grob)
@@ -80,8 +80,8 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 
 #' @rdname basicPieceGrobs
 #' @param directory Directory that \code{picturePieceGrobFn} will look in for piece graphics.
-#' @param filename_fn Function that takes arguments \code{directory}, \code{piece_side}, \code{suit}, 
-#'        and \code{rank} and returns the (full path) filename of the image that the 
+#' @param filename_fn Function that takes arguments \code{directory}, \code{piece_side}, \code{suit},
+#'        and \code{rank} and returns the (full path) filename of the image that the
 #'        function returned by \code{picturePieceGrobFn} should import.
 #' @export
 picturePieceGrobFn <- function(directory, filename_fn=find_pp_file) {
@@ -92,21 +92,25 @@ picturePieceGrobFn <- function(directory, filename_fn=find_pp_file) {
 }
 
 find_pp_file <- function(directory, piece_side, suit, rank) {
-    for(format in c("svgz", "svg", "png", "jpg", "jpeg")) {
-        if (!has_suit(piece_side) && !has_rank(piece_side)) {
-            f <- piece_filename(directory, piece_side, format, 0)
-        } else if (has_suit(piece_side) && !has_rank(piece_side)) {
-            f <- piece_filename(directory, piece_side, format, 0, suit)
-        } else if (!has_suit(piece_side) && has_rank(piece_side)) {
-            f <- piece_filename(directory, piece_side, format, 0, rank=rank)
-        } else if (has_suit(piece_side) && has_rank(piece_side)) {
-            f <- piece_filename(directory, piece_side, format, 0, suit, rank)
-        }
+    for (format in c("svgz", "svg", "png", "jpg", "jpeg")) {
+        f <- piece_filename_helper(directory, piece_side, format, suit, rank)
         if (file.exists(f)) {
             return(f)
         }
     }
     stop(paste("Couldn't find suitable", piece_side, "image in", directory))
+}
+
+piece_filename_helper <- function(directory, piece_side, format, suit, rank) {
+    if (!has_suit(piece_side) && !has_rank(piece_side)) {
+        piece_filename(directory, piece_side, format, 0)
+    } else if (has_suit(piece_side) && !has_rank(piece_side)) {
+        piece_filename(directory, piece_side, format, 0, suit=suit)
+    } else if (!has_suit(piece_side) && has_rank(piece_side)) {
+        piece_filename(directory, piece_side, format, 0, rank=rank)
+    } else if (has_suit(piece_side) && has_rank(piece_side)) {
+        piece_filename(directory, piece_side, format, 0, suit=suit, rank=rank)
+    }
 }
 
 #' @rdname basicPieceGrobs
@@ -133,7 +137,6 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     d_width <- cfg$get_width("die_face")
     s_width <-  cfg$get_width("saucer_face")
     p_height <- cfg$get_height("pawn_face")
-    preview_height <- 3*t_width
     preview_width <- 3*t_width
 
     gl <- gList()
@@ -152,7 +155,7 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     }
     x_tiles <- c(1, 5, 5, 1, 3, 3)
     y_tiles <- c(5, 5, 3, 3, 5, 3)
-    gl[["tiles"]] <- pieceGrob(cs_tiles, suit_tiles, rank_tiles, cfg, x_tiles, y_tiles, 
+    gl[["tiles"]] <- pieceGrob(cs_tiles, suit_tiles, rank_tiles, cfg, x_tiles, y_tiles,
                    default.units="in", name="tiles")
 
     cs_coins <- rep(c("coin_face", "coin_back"), each=3)
@@ -163,7 +166,7 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     if (get_n_suits(cfg) > 4) suit_coins[5] <- 5
     if (get_n_suits(cfg) > 5) suit_coins[6] <- 6
 
-    gl[["coins"]] <- pieceGrob(cs_coins, suit_coins, rank_coins, cfg, x_coins, y_coins, 
+    gl[["coins"]] <- pieceGrob(cs_coins, suit_coins, rank_coins, cfg, x_coins, y_coins,
                    default.units="in", name="coins")
 
     gl[["saucers"]] <- pieceGrob(c("saucer_face", "saucer_back"), c(1, NA), NA, cfg,
@@ -171,7 +174,7 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
                    default.units="in", name="saucers")
 
     gl[["pawns"]] <- pieceGrob(c("pawn_face", "pawn_back"), 2, NA, cfg,
-                   t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height, 
+                   t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height,
                    angle=c(0, 180), default.units="in", name="pawns")
 
     gl[["suitrankdie"]] <- pieceGrob("suitrankdie_layoutRF", NA, NA, cfg,
@@ -211,7 +214,7 @@ x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
 x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
 y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
 
-piecepackDieGrob <- function(suit, cfg, flip=FALSE, 
+piecepackDieGrob <- function(suit, cfg, flip=FALSE,
                              arrangement=cfg$die_arrangement) {
     cfg <- as_pp_cfg(cfg)
     angle <- rep(c(0, -90), 3)
@@ -234,7 +237,7 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE,
     gl <- gList()
     for (ii in 1:6) {
         gl[[ii]] <- pieceGrob("die_face", suit[ii], rank[ii], cfg,
-                            x=x[ii], y=y_die_layout[ii], 
+                            x=x[ii], y=y_die_layout[ii],
                             width=1/4, height=1/3, angle=angle[ii])
     }
     gTree(children=gl)
@@ -265,7 +268,7 @@ get_suit_die_suits <- function(cfg) {
         c(5,6,4:1)
     } else if (n_suits > 4) {
         6:1
-    } 
+    }
 }
 
 pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
@@ -273,12 +276,12 @@ pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
     suppressWarnings({
         ph <- cfg$get_height("pawn_face")
         pb <- 3/7 * ph
-        denominator <- 2*(ph + pb)
+        denominator <- 2 * (ph + pb)
         yf <- 0.5*ph / denominator
-        height = ph / denominator
-        gl[[1]] <- pieceGrob("pawn_face", suit, NA, cfg, 
+        height <- ph / denominator
+        gl[[1]] <- pieceGrob("pawn_face", suit, NA, cfg,
                              y=1/2-yf, height=height, name="pawn_face")
-        gl[[2]] <- pieceGrob("pawn_back", suit, NA, cfg, 
+        gl[[2]] <- pieceGrob("pawn_back", suit, NA, cfg,
                              y=1/2+yf, height=height, angle=180, name="pawn_back")
     })
     opt <- cfg$get_piece_opt("pawn_face", suit, 0)
@@ -300,10 +303,10 @@ pyramidLayoutGrob <- function(piece_side, suit, rank, cfg) {
         y <- 0.5 + 0.5*to_y(t, r)
         pieces <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
         angles <- c(90+72, 90+36, 90, 90-36, 90-72)
-        for(ii in 1:5) {
+        for (ii in 1:5) {
             cs <- pieces[ii]
-            vp <- viewport(width=inch(cfg$get_width(cs, rank=rank)), 
-                           height=inch(cfg$get_height(cs, rank=rank)), 
+            vp <- viewport(width=inch(cfg$get_width(cs, rank=rank)),
+                           height=inch(cfg$get_height(cs, rank=rank)),
                            angle=angles[ii], x=x[ii], y=y[ii])
             grob <- pieceGrob(cs, suit, rank, cfg, vp=vp)
             gl[[ii]] <- grob

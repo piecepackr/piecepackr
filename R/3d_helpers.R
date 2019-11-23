@@ -1,4 +1,4 @@
-has_name <- function(df, name) { name %in% names(df) }
+has_name <- function(df, name) (name %in% names(df))
 
 add_cfg <- function(df, cfg=pp_cfg(), envir=NULL) {
     df <- tibble::as_tibble(df)
@@ -15,7 +15,7 @@ add_field <- function(df, key, value) {
         df[[key]] <- ifelse(is.na(df[[key]]), value, df[[key]])
     } else {
         df[[key]] <- value
-    } 
+    }
     df
 }
 
@@ -27,18 +27,18 @@ add_measurements <- function(df) {
     df
 }
 
-an_pmap <- function(...) { as.numeric(purrr::pmap(...)) }
-gwh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_width(piece_side, suit, rank) }
-ghh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_height(piece_side, suit, rank) }
-gdh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_depth(piece_side, suit, rank) }
+an_pmap <- function(...) as.numeric(purrr::pmap(...))
+gwh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_width(piece_side, suit, rank)
+ghh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_height(piece_side, suit, rank)
+gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, suit, rank)
 
 #' Oblique projection helper function
-#' 
-#' Guesses \code{z} coordinates and 
-#' sorting order to more easily 
+#'
+#' Guesses \code{z} coordinates and
+#' sorting order to more easily
 #' make 3D graphics with \code{pmap_piece}.
 #'
-#' The heuristics used to generate guesses 
+#' The heuristics used to generate guesses
 #' for \code{z} coordinates and sorting order
 #' aren't guaranteed to work in every case.
 #' In some cases you may get better sorting results
@@ -47,20 +47,20 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) { cfg$get_depth(piece_side
 #'   and examples of oblique projections in \code{piecepackr}.
 #' @param df A data frame with coordinates and dimensions in inches
 #' @param ... Ignored
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object, 
+#' @param cfg Piecepack configuration list or \code{pp_cfg} object,
 #'        a list of \code{pp_cfg} objects,
 #'        or a character vector of \code{pp_cfg} objects
 #' @param envir Environment (or named list) containing configuration list(s).
 #' @param op_angle Intended oblique projection angle (used for re-sorting)
-#' @return A tibble with extra columns added 
+#' @return A tibble with extra columns added
 #'         and re-sorted rows
 #' @examples
-#' df <- tibble::tibble(piece_side="tile_back",  
-#'                      x=c(2,2,2,4,6,6,4,2,5),  
-#'                      y=c(4,4,4,4,4,2,2,2,3))  
-#' pmap_piece(df, op_angle=135, trans=op_transform, 
+#' df <- tibble::tibble(piece_side="tile_back",
+#'                      x=c(2,2,2,4,6,6,4,2,5),
+#'                      y=c(4,4,4,4,4,2,2,2,3))
+#' pmap_piece(df, op_angle=135, trans=op_transform,
 #'            op_scale=0.5, default.units="in")
-#'  
+#'
 #' @export
 op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45) {
     df <- add_3d_info(df, cfg, envir)
@@ -93,7 +93,7 @@ op_sort <- function(df, op_angle=45) {
     df
 }
 
-unit_coords_to_cartesian_coords <- function(x, y, x0=0.5, y0=0.5, width=1, height=1, angle=0) {
+unit_to_cartesian_coords <- function(x, y, x0=0.5, y0=0.5, width=1, height=1, angle=0) {
     # re-center to origin and re-scale by width/height
     x <- width * (x - 0.5)
     y <- height * (y - 0.5)
@@ -104,11 +104,11 @@ unit_coords_to_cartesian_coords <- function(x, y, x0=0.5, y0=0.5, width=1, heigh
 }
 
 # Axis-Aligned Bounding Box (AABB)
-add_bounding_box <- function(df) { 
-    ll <- unit_coords_to_cartesian_coords(0, 0, df$x, df$y, df$width, df$height, df$angle)
-    ul <- unit_coords_to_cartesian_coords(0, 1, df$x, df$y, df$width, df$height, df$angle)
-    ur <- unit_coords_to_cartesian_coords(1, 1, df$x, df$y, df$width, df$height, df$angle)
-    lr <- unit_coords_to_cartesian_coords(1, 0, df$x, df$y, df$width, df$height, df$angle)
+add_bounding_box <- function(df) {
+    ll <- unit_to_cartesian_coords(0, 0, df$x, df$y, df$width, df$height, df$angle)
+    ul <- unit_to_cartesian_coords(0, 1, df$x, df$y, df$width, df$height, df$angle)
+    ur <- unit_to_cartesian_coords(1, 1, df$x, df$y, df$width, df$height, df$angle)
+    lr <- unit_to_cartesian_coords(1, 0, df$x, df$y, df$width, df$height, df$angle)
     df$xll <- ll$x
     df$yll <- ll$y
     df$xul <- ul$x
@@ -130,12 +130,12 @@ do_ranges_overlap <- function(l1, r1, l2, r2) {
 }
 
 which_AABB_overlap <- function(dfi, dfs) {
-    rev(which(do_ranges_overlap(dfi$xl, dfi$xr, dfs$xl, dfs$xr) & 
+    rev(which(do_ranges_overlap(dfi$xl, dfi$xr, dfs$xl, dfs$xr) &
               do_ranges_overlap(dfi$yb, dfi$yt, dfs$yb, dfs$yt)))
 }
 
-less_than <- function(x, y) { 1e-6 < y - x }  # in case of trigonometric precision issues
-less_than_equal <- function(x, y) { 0 < y - x + 1e-6 }  # in case of trigonometric precision issues
+less_than <- function(x, y) 1e-6 < y - x # in case of trigonometric precision issues
+less_than_equal <- function(x, y) 0 < y - x + 1e-6 # in case of trigonometric precision issues
 
 add_z <- function(df) {
     shapes <- get_shapes(df)
@@ -143,18 +143,18 @@ add_z <- function(df) {
     for (ii in seq(length.out=nrow(df))) {
         dfi <- df[ii,]
         dfs <- df[0:(ii-1),]
-        for (jj in which_AABB_overlap(dfi, dfs)) { 
+        for (jj in which_AABB_overlap(dfi, dfs)) {
             if (do_shapes_overlap(shapes[[ii]], shapes[[jj]])) {
                 zp[ii] <- as.numeric(zp[jj] + 0.5*df[jj,"depth"] + 0.5*df[ii,"depth"])
                 break
             }
-        } 
+        }
     }
     df <- add_field(df, "z", zp)
     df
 }
 
-# plot_polygon <- function(o) { grid.newpage(); grid.polygon(x=o$x, y=o$y, default.units="in") }
+# plot_polygon <- function(o) grid.newpage(); grid.polygon(x=o$x, y=o$y, default.units="in") # nolint
 
 get_shapes <- function(df) {
     shapes <- vector("list", nrow(df))
@@ -177,10 +177,10 @@ get_shapes <- function(df) {
                 xy_u <- kite_xy
             } else if (opt$shape == "pyramid") {
                 xy_u <- pyramid_xy
-            } else { 
+            } else {
                 stop(paste("Don't know how to bound", opt$shape))
             }
-            xy_c <- unit_coords_to_cartesian_coords(xy_u$x, xy_u$y, x0=dfi$x, y0=dfi$y, 
+            xy_c <- unit_to_cartesian_coords(xy_u$x, xy_u$y, x0=dfi$x, y0=dfi$y,
                                                     width=dfi$width, height=dfi$height, angle=dfi$angle)
             shapes[[ii]] <- ConvexPolygon$new(x=xy_c$x, y=xy_c$y)
         }

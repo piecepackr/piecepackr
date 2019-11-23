@@ -14,7 +14,7 @@ Config <- R6Class("pp_cfg",
         fontfamily = NULL,
         copyright = NULL,
         credit = NULL,
-        description = NULL, 
+        description = NULL,
         annotation_color = NULL,
         has_pawns = TRUE,
         has_dice = TRUE,
@@ -22,7 +22,7 @@ Config <- R6Class("pp_cfg",
         has_tiles = TRUE,
         has_saucers = FALSE,
         has_pyramids = FALSE,
-        has_matchsticks = FALSE, 
+        has_matchsticks = FALSE,
         cache_grob = TRUE,
         cache_piece_opt = TRUE,
         cache_shadow = TRUE,
@@ -39,13 +39,13 @@ Config <- R6Class("pp_cfg",
             self$copyright <- cfg$copyright
             self$credit <- cfg$credit
             self$description <- cfg$description
-            self$annotation_color <- ifelse(is.null(cfg$annotation_color), 
+            self$annotation_color <- ifelse(is.null(cfg$annotation_color),
                                             "black", cfg$annotation_color)
         },
-        as_list = function() { private$cfg },
+        as_list = function() private$cfg,
         print = function() {
-            for(name in names(private$cfg)) {
-                if(is.function(private$cfg[[name]])) {
+            for (name in names(private$cfg)) {
+                if (is.function(private$cfg[[name]])) {
                     cat(paste0("$", name, " : ", "a function", "\n"))
                 } else {
                     cat(paste0("$", name, " : ", private$cfg[[name]]), "\n")
@@ -54,10 +54,10 @@ Config <- R6Class("pp_cfg",
         },
         get_grob = function(piece_side, suit, rank) {
             key <- opt_cache_key(piece_side, suit, rank, "grob")
-            if(!is.null(private$cache[[key]])) {
+            if (!is.null(private$cache[[key]])) {
                 private$cache[[key]]
             } else {
-                default_fn <- get_style_element("grob_fn", piece_side, private$cfg, 
+                default_fn <- get_style_element("grob_fn", piece_side, private$cfg,
                                                 basicPieceGrob, suit, rank)
                 grobFn <- switch(piece_side,
                                  die_layoutLF = dieLayoutGrobLF,
@@ -74,21 +74,21 @@ Config <- R6Class("pp_cfg",
                 if (is.character(grobFn))
                     grobFn <- match.fun(grobFn)
                 grob <- grobFn(piece_side, suit, rank, self)
-                if (self$cache_grob) { private$cache[[key]] <- grob }
+                if (self$cache_grob) private$cache[[key]] <- grob
                 grob
             }
         },
         get_shadow_fn = function(piece_side, suit, rank) {
             key <- opt_cache_key(piece_side, suit, rank, "shadow")
-            if(!is.null(private$cache[[key]])) {
+            if (!is.null(private$cache[[key]])) {
                 private$cache[[key]]
             } else {
-                default_fn <- get_style_element("shadow_fn", piece_side, private$cfg, 
+                default_fn <- get_style_element("shadow_fn", piece_side, private$cfg,
                                                 basicShadowGrob, suit, rank)
                 grobFn <- switch(piece_side,
                                  pyramid_top = function(...) nullGrob(),
                                  default_fn)
-                if (self$cache_shadow) { private$cache[[key]] <- grobFn }
+                if (self$cache_shadow) private$cache[[key]] <- grobFn
                 grobFn
             }
         },
@@ -97,7 +97,7 @@ Config <- R6Class("pp_cfg",
             width <- self$get_width(piece_side, suit, rank)
             height <- self$get_height(piece_side, suit, rank)
             as_picture(grob, width, height)
-        }, 
+        },
         get_raster = function(piece_side, suit, rank, res=72) {
             grob <- self$get_grob(piece_side, suit, rank)
             width <- self$get_width(piece_side, suit, rank)
@@ -105,104 +105,51 @@ Config <- R6Class("pp_cfg",
             png_file <- tempfile(fileext=".png")
             on.exit(unlink(png_file))
             current_dev <- grDevices::dev.cur()
-            if(current_dev > 1) { on.exit(grDevices::dev.set(current_dev)) }
+            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
             png(png_file, width=width, height=height, units="in", res=res)
             grid.draw(grob)
             invisible(grDevices::dev.off())
             as.raster(png::readPNG(png_file))
-        }, 
+        },
         get_piece_opt = function(piece_side, suit=NA, rank=NA) {
-            if(is.na(rank)) { rank <- 1 }
-            if(is.na(suit)) { suit <- self$i_unsuit }
+            if (is.na(rank)) rank <- 1
+            if (is.na(suit)) suit <- self$i_unsuit
             key <- opt_cache_key(piece_side, suit, rank, "piece_opt")
-            if(!is.null(private$cache[[key]])) {
+            if (!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
-            # Shape
-            shape <- get_shape(piece_side, suit, rank, private$cfg)
-            shape_r <- get_shape_r(piece_side, suit, rank, private$cfg)
-            shape_t <- get_shape_t(piece_side, suit, rank, private$cfg)
-
-            # Additional colors
-            background_color <- get_background_color(piece_side, suit, rank, private$cfg)
-            border_color <- get_border_color(piece_side, suit, rank, private$cfg)
-	    border_lex <- get_border_lex(piece_side, suit, rank, private$cfg)
-            gridline_color <- get_gridline_color(piece_side, suit, rank, private$cfg)
-	    gridline_lex <- get_gridline_lex(piece_side, suit, rank, private$cfg)
-            mat_color <- get_mat_color(piece_side, suit, rank, private$cfg)
-            mat_width <- get_mat_width(piece_side, suit, rank, private$cfg)
-            edge_color <- get_edge_color(piece_side, suit, rank, private$cfg)
-
-            # Overall scaling factor
-            cex <- get_cex(private$cfg)
-
-            # Directional mark symbol
-            dm_color <- get_dm_color(piece_side, suit, rank, private$cfg)
-            dm_cex <- get_dm_cex(piece_side, suit, rank, private$cfg)
-            dm_fontfamily <- get_dm_fontfamily(piece_side, suit, rank, private$cfg)
-            dm_fontface <- get_dm_fontface(piece_side, suit, rank, private$cfg)
-            dm_fontsize <- cex * dm_cex * get_dm_fontsize(piece_side, suit, rank, private$cfg)
-            dm_text <- get_dm_text(piece_side, suit, rank, private$cfg)
-            dm_t <- get_dm_t(piece_side, suit, rank, private$cfg)
-            dm_r <- get_dm_r(piece_side, suit, rank, private$cfg)
-            dm_x <- to_x(dm_t, dm_r) + 0.5
-            dm_y <- to_y(dm_t, dm_r) + 0.5
-
-            # Primary symbol
-            ps_color <- get_ps_color(piece_side, suit, rank, private$cfg)
-            ps_cex <- get_ps_cex(piece_side, suit, rank, private$cfg)
-            ps_fontfamily <- get_ps_fontfamily(piece_side, suit, rank, private$cfg)
-            ps_fontface <- get_ps_fontface(piece_side, suit, rank, private$cfg)
-            ps_fontsize <- cex * ps_cex * get_ps_fontsize(piece_side, suit, rank, private$cfg)
-            ps_text <- get_ps_text(piece_side, suit, rank, private$cfg)
-            ps_t <- get_ps_t(piece_side, suit, rank, private$cfg)
-            ps_r <- get_ps_r(piece_side, suit, rank, private$cfg)
-            ps_x <- to_x(ps_t, ps_r) + 0.5
-            ps_y <- to_y(ps_t, ps_r) + 0.5
-
-            opt <- list(shape=shape, shape_r=shape_r, shape_t=shape_t, 
-                 background_color=background_color, 
-		 border_color=border_color, border_lex=border_lex, edge_color=edge_color,
-                 gridline_color=gridline_color, gridline_lex=gridline_lex,
-		 mat_color=mat_color, mat_width=mat_width, 
-                 dm_color=dm_color, dm_text=dm_text, 
-                 dm_fontsize=dm_fontsize, 
-                 dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,
-                 dm_x=dm_x, dm_y=dm_y, 
-                 ps_color=ps_color, ps_text=ps_text, 
-                 ps_fontsize=ps_fontsize, 
-                 ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
-                 ps_x=ps_x, ps_y=ps_y)
-            if (self$cache_piece_opt) { private$cache[[key]] <- opt }
+            opt <- get_piece_opt_helper(piece_side, suit, rank, private$cfg)
+            if (self$cache_piece_opt)
+                private$cache[[key]] <- opt
             opt
         },
         get_suit_color = function(suit=NULL) {
-            if(is.null(suit)) { suit <- seq(self$n_suits) }
-            colors = character(length(suit))
+            if (is.null(suit)) suit <- seq(self$n_suits)
+            colors <- character(length(suit))
             for (ii in seq(along.with=suit)) {
-                colors[ii] <- get_suit_color_helper("pawn_face", suit[ii], rank=1, private$cfg) 
+                colors[ii] <- get_suit_color_helper("pawn_face", suit[ii], rank=1, private$cfg)
             }
             colors
         },
         get_width = function(piece_side, suit=1, rank=1) {
             key <- opt_cache_key(piece_side, suit, rank, "width")
-            if(!is.null(private$cache[[key]])) {
+            if (!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
             if (grepl("die_layout", piece_side)) {
                 die_width <- self$get_width("die_face")
-                return (4 * die_width)
+                return(4 * die_width)
             }
             if (grepl("pyramid_layout", piece_side)) {
                 pyramid_height <- self$get_height("pyramid_face", rank=rank)
-                return (pyramid_height)
+                return(pyramid_height)
             }
             if (piece_side == "preview_layout") {
                 tile_width <- self$get_width("tile_face")
-                return (3 * tile_width)
+                return(3 * tile_width)
             }
             piece <- get_piece(piece_side)
-            default <- switch(piece, 
+            default <- switch(piece,
                               belt = 0.75 * pi, # so can wrap around 3/4" diameter pawns
                               coin = 3/4,
                               die = 1/2,
@@ -219,18 +166,18 @@ Config <- R6Class("pp_cfg",
         },
         get_height = function(piece_side, suit=1, rank=1) {
             key <- opt_cache_key(piece_side, suit, rank, "height")
-            if(!is.null(private$cache[[key]])) {
+            if (!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
             if (grepl("die_layout", piece_side)) {
                 die_height <- self$get_height("die_face")
-                return (3 * die_height)
+                return(3 * die_height)
             }
             if (grepl("pyramid_layout", piece_side)) {
                 pyramid_height <- self$get_height("pyramid_face", rank=rank)
                 pyramid_width <- self$get_width("pyramid_face", rank=rank)
                 pyramid_diagonal <- sqrt(pyramid_height^2 + (0.5*pyramid_width)^2)
-                return (2 * pyramid_diagonal)
+                return(2 * pyramid_diagonal)
             }
             if (grepl("pyramid_top", piece_side)) {
                 pyramid_width <- self$get_width("pyramid_face", rank=rank)
@@ -242,7 +189,7 @@ Config <- R6Class("pp_cfg",
             }
             if (piece_side == "preview_layout") {
                 tile_height <- self$get_height("tile_face")
-                return (3 * tile_height)
+                return(3 * tile_height)
             }
             width <- self$get_width(piece_side, suit, rank)
             piece <- get_piece(piece_side)
@@ -251,7 +198,7 @@ Config <- R6Class("pp_cfg",
                 S <- 0.5 * self$get_width("tile_face")
                 ms_default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[rank])
             }
-            default <- switch(piece, 
+            default <- switch(piece,
                               belt = 1/2,
                               coin = width,
                               die = width,
@@ -268,7 +215,7 @@ Config <- R6Class("pp_cfg",
         },
         get_depth = function(piece_side, suit=1, rank=1) {
             key <- opt_cache_key(piece_side, suit, rank, "depth")
-            if(!is.null(private$cache[[key]])) {
+            if (!is.null(private$cache[[key]])) {
                 return(private$cache[[key]])
             }
             width <- self$get_width(piece_side, suit, rank)
@@ -277,7 +224,7 @@ Config <- R6Class("pp_cfg",
                 return(sqrt(slant_height^2 - (0.5*width)^2))
             }
             piece <- get_piece(piece_side)
-            default <- switch(piece, 
+            default <- switch(piece,
                               coin = 1/8,
                               die = width,
                               matchstick = width,
@@ -286,7 +233,7 @@ Config <- R6Class("pp_cfg",
                               saucer = 1/8,
                               suitdie = width,
                               tile = 1/4,
-                              0) 
+                              0)
             depth <- get_style_element("depth", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- depth
             depth
@@ -295,9 +242,9 @@ Config <- R6Class("pp_cfg",
     active = list(
         has_piecepack = function(value) {
             if (missing(value)) {
-                return (self$has_coins && self$has_tiles && self$has_pawns && self$has_dice)
+                return(self$has_coins && self$has_tiles && self$has_pawns && self$has_dice)
             } else {
-               if (!is.logical(value)) stop(paste(value, " is not logical")) 
+               if (!is.logical(value)) stop(paste(value, " is not logical"))
                 self$has_coins <- value
                 self$has_tiles <- value
                 self$has_pawns <- value
@@ -315,8 +262,8 @@ Config <- R6Class("pp_cfg",
 #' will attempt to generate matching (piecepack stackpack) subpack and hexpack
 #' piecepack configuration list R6 objects given a piecepack configuration.
 #'
-#' @seealso \url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details 
-#'      about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns 
+#' @seealso \url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details
+#'      about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns
 #'      configuration list objects for several game systems.
 #' @param cfg List of configuration options
 #' @examples
@@ -338,11 +285,11 @@ Config <- R6Class("pp_cfg",
 #'    cfg <- pp_cfg(list())
 #'    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
 #'  }
-#'   
+#'
 #' @exportClass pp_cfg
 #' @export
 pp_cfg <- function(cfg=list()) {
-    if(is_pp_cfg(cfg)) 
+    if (is_pp_cfg(cfg))
         cfg
     else
         Config$new(cfg)

@@ -18,7 +18,7 @@ get_embedded_font_helper <- function(font, char) {
 #' \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 #' \code{cleave} converts a delimiter separated string into a vector.
 #' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
-#' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) 
+#' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees)
 #' and Cartesian coordinates.
 #'
 #' @examples
@@ -29,7 +29,7 @@ get_embedded_font_helper <- function(font, char) {
 #'
 #'  cleave("0.5,0.2,0.4,0.5", float=TRUE)
 #'  cleave("black,darkred,#050EAA,,", color=TRUE)
-#'  
+#'
 #'  if (require("grid")) {
 #'      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
 #'  }
@@ -38,16 +38,18 @@ get_embedded_font_helper <- function(font, char) {
 #'      fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
 #'      get_embedded_font(fonts, chars)
 #'  }
-#' 
+#'
 #' @name pp_utils
 NULL
 
 #' @rdname pp_utils
 #' @param font A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.
 #' @param char A character vector of character(s) to be embedded by \code{grid::grid.text}
-#' @return \code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.  \code{NA}'s means no embedded font detected. 
-#'        This either means that no font was found or that a color emoji font was found and instead of a font an image was embedded.
-#' @details \code{get_embedded_font} depends on \code{pdffonts} being on the system path (on many OSes found in a \code{poppler-utils} package).
+#' @return \code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.
+#'         \code{NA}'s means no embedded font detected: this either means that no font
+#'          was found or that a color emoji font was found and instead of a font an image was embedded.
+#' @details \code{get_embedded_font} depends on \code{pdffonts} being on the system path
+#'          (on many OSes found in a \code{poppler-utils} package).
 #' @export
 get_embedded_font <- function(font, char) {
     df <- expand.grid(char, font, stringsAsFactors=FALSE)
@@ -62,8 +64,7 @@ get_embedded_font <- function(font, char) {
 #' @rdname pp_utils
 #' @param inches Number representing number of inches
 #' @export
-inch <- function(inches) { unit(inches, "in") }
-
+inch <- function(inches) unit(inches, "in")
 
 get_n_pages_pdfinfo <- function(pdf_filename) {
     pdf_filename <- shQuote(normalizePath(pdf_filename))
@@ -93,20 +94,20 @@ has_gs <- function() {
 
 gs <- function() {
     cmd <- tools::find_gs_cmd()
-    if (cmd == "") 
+    if (cmd == "")
         stop("Can't find system dependency ghostscript on PATH")
     cmd
 }
 
-to_radians <- function(t) { pi * t / 180 }
-to_degrees <- function(t) { 180 * t / pi }
+to_radians <- function(t) pi * t / 180
+to_degrees <- function(t) 180 * t / pi
 
 #' @rdname pp_utils
 #' @param t Polar angle in degrees
 #' @param r Radial distance
 #' @export
-to_x <- function(t, r) { 
-    r * cos(to_radians(t)) 
+to_x <- function(t, r) {
+    r * cos(to_radians(t))
 }
 
 #' @rdname pp_utils
@@ -137,7 +138,8 @@ to_t <- function(x, y) {
 #' @export
 cleave <- function(s, sep=",", float=FALSE, color=FALSE) {
     vec <- stringr::str_split(s, sep)
-    if (length(vec)) vec <- vec[[1]]
+    if (length(vec))
+        vec <- vec[[1]]
     if (float) {
         as.numeric(vec)
     } else if (color) {
@@ -145,15 +147,16 @@ cleave <- function(s, sep=",", float=FALSE, color=FALSE) {
     } else {
         vec
     }
-} 
-col_cleave <- function(s, sep=",") { cleave(s, sep, color=TRUE) }
-numeric_cleave <- function(s, sep=",") { cleave(s, sep, float=TRUE) }
+}
+col_cleave <- function(s, sep=",") cleave(s, sep, color=TRUE)
+numeric_cleave <- function(s, sep=",") cleave(s, sep, float=TRUE)
 
 as_picture <- function(grob, width, height) {
     svg_file <- tempfile(fileext=".svg")
     on.exit(unlink(svg_file))
     current_dev <- grDevices::dev.cur()
-    if(current_dev > 1) { on.exit(grDevices::dev.set(current_dev)) }
+    if (current_dev > 1)
+        on.exit(grDevices::dev.set(current_dev))
     grDevices::svg(svg_file, width=width, height=height, bg="transparent")
     grid.draw(grob)
     invisible(grDevices::dev.off())
@@ -173,6 +176,5 @@ filename2grob <- function(f) {
     }
 }
 
-to_rasterGrob <- function(obj) { rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc")) }
-to_pictureGrob <- function(obj) { grImport2::pictureGrob(obj, expansion=0, clip="off", distort=TRUE) }
-
+to_rasterGrob <- function(obj) rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc"))
+to_pictureGrob <- function(obj) grImport2::pictureGrob(obj, expansion=0, clip="off", distort=TRUE)
