@@ -31,5 +31,5 @@ Saves images of all individual piecepack pieces.
         save_piece_images(cfg, directory=tempdir(), format="png", angle=90)
     }
   }
-  
+
 }

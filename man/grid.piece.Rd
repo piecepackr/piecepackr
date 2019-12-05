@@ -70,7 +70,7 @@ will be called  with. List names will be used if present.}
 
 \item{...}{Extra arguments to pass to \code{pieceGrob}.}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
 or a character vector of \code{pp_cfg} objects}
 
@@ -106,8 +106,8 @@ and the next number above that is "no suits".}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
-\item{use_pictureGrob}{If \code{TRUE} instead of directly returning the grob first 
-export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.  
+\item{use_pictureGrob}{If \code{TRUE} instead of directly returning the grob first
+export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.
 This is useful if drawing pieces really big or small and don't want
 to play with re-configuring fontsizes.}
 
@@ -117,14 +117,15 @@ to play with re-configuring fontsizes.}
 
 \item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
 
-\item{op_scale}{How much to scale the depth of the piece in the oblique projection (viewed from the top of the board).
+\item{op_scale}{How much to scale the depth of the piece in the oblique projection
+(viewed from the top of the board).
 \code{0} (the default) leads to an \dQuote{orthographic} projection,
-\code{0.5} is the most common scale used in the \dQuote{cabinet} projection, 
+\code{0.5} is the most common scale used in the \dQuote{cabinet} projection,
  and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 
 \item{op_angle}{What is the angle of the oblique projection?  Has no effect if \code{op_scale} is \code{0}.}
 
-\item{default.units}{A string indicating the default units to use if 
+\item{default.units}{A string indicating the default units to use if
 'x', 'y', 'width', and/or 'height' are only given as numeric vectors.}
 }
 \value{
@@ -132,16 +133,16 @@ A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
         will also draw it to the graphics device.
 }
 \description{
-\code{grid.piece} draws a piecepack pieces onto the graphics device.  
+\code{grid.piece} draws a piecepack pieces onto the graphics device.
 \code{pieceGrob} is its \code{grid} \code{grob} counterpart.
-\code{pmap_piece} operates on the rows of a data frame  
+\code{pmap_piece} operates on the rows of a data frame
     applying \code{pieceGrob} to each row.
 }
 \examples{
   if (require("grid")) {
        draw_pp_diagram <- function(cfg=pp_cfg(), op_scale=0) {
-           g.p <- function(...) { 
-               grid.piece(..., op_scale=op_scale, cfg=cfg, default.units="in") 
+           g.p <- function(...) {
+               grid.piece(..., op_scale=op_scale, cfg=cfg, default.units="in")
            }
            g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
            g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
@@ -155,7 +156,7 @@ A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
 
        # default piecepack, orthogonal projection
        draw_pp_diagram(cfg=pp_cfg())
-       
+
        # custom configuration, orthogonal projection
        grid.newpage()
        dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
@@ -163,15 +164,15 @@ A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
        traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
        cfg <- c(dark_colorscheme, traditional_ranks)
        draw_pp_diagram(cfg=pp_cfg(cfg))
-       
+
        # custom configuration, oblique projection
        grid.newpage()
-       cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
+       cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,
                           dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
                           edge_color.coin="tan", edge_color.tile="tan")
        cfg <- pp_cfg(c(cfg, cfg3d))
        draw_pp_diagram(cfg=pp_cfg(cfg), op_scale=0.5)
-       
+
        # pmap_piece lets you use data frame input
        grid.newpage()
        df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),

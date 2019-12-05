@@ -160,21 +160,32 @@ as_picture <- function(grob, width, height) {
     grDevices::svg(svg_file, width=width, height=height, bg="transparent")
     grid.draw(grob)
     invisible(grDevices::dev.off())
-    to_pictureGrob(grImport2::readPicture(svg_file, warn=FALSE))
+    file2grob(svg_file)
 }
 
-filename2grob <- function(f) {
-    format <- tools::file_ext(f)
+#' @rdname pp_utils
+#' @param file Filename of image
+#' @param distort Logical value of whether one should preserve the aspect ratio
+#'                or distort to fit the area it is drawn in
+#' @export
+file2grob <- function(file, distort=TRUE) {
+    format <- tools::file_ext(file)
     if (format %in% c("svgz", "svg")) {
-        return(to_pictureGrob(grImport2::readPicture(f, warn=FALSE)))
+        return(to_pictureGrob(grImport2::readPicture(file, warn=FALSE), distort))
     } else if (format == "png") {
-        return(to_rasterGrob(grDevices::as.raster(png::readPNG(f))))
+        return(to_rasterGrob(grDevices::as.raster(png::readPNG(file)), distort))
     } else if (format %in% c("jpg", "jpeg")) {
-        return(to_rasterGrob(grDevices::as.raster(jpeg::readJPEG(f))))
+        return(to_rasterGrob(grDevices::as.raster(jpeg::readJPEG(file)), distort))
     } else {
-        return(to_rasterGrob(magick::image_read(f)))
+        return(to_rasterGrob(magick::image_read(file), distort))
     }
 }
 
-to_rasterGrob <- function(obj) rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc"))
-to_pictureGrob <- function(obj) grImport2::pictureGrob(obj, expansion=0, clip="off", distort=TRUE)
+to_rasterGrob <- function(obj, distort=TRUE) {
+    if (distort) {
+        rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc"))
+    } else {
+        rasterGrob(grDevices::as.raster(obj))
+    }
+}
+to_pictureGrob <- function(obj, distort=TRUE) grImport2::pictureGrob(obj, expansion=0, clip="off", distort=distort)

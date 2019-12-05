@@ -29,13 +29,13 @@ and the next number above that is "no suits".}
 
 \item{directory}{Directory that \code{picturePieceGrobFn} will look in for piece graphics.}
 
-\item{filename_fn}{Function that takes arguments \code{directory}, \code{piece_side}, \code{suit}, 
-and \code{rank} and returns the (full path) filename of the image that the 
+\item{filename_fn}{Function that takes arguments \code{directory}, \code{piece_side}, \code{suit},
+and \code{rank} and returns the (full path) filename of the image that the
 function returned by \code{picturePieceGrobFn} should import.}
 }
 \description{
-\code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob} 
- are the default \dQuote{grob} functions that \code{grid.piece} uses 
+\code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob}
+ are the default \dQuote{grob} functions that \code{grid.piece} uses
 to create \code{grid} #' graphical \code{grob} objects.  \code{picturePieceGrobFn}
 is a function that returns a \dQuote{grob} function that imports graphics from files
 found in its \code{directory} argument.
@@ -58,7 +58,7 @@ found in its \code{directory} argument.
     pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
     grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
     popViewport()
-   
+
     grid.newpage()
     pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
     grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5))

@@ -87,7 +87,7 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 picturePieceGrobFn <- function(directory, filename_fn=find_pp_file) {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         f <- filename_fn(directory, piece_side, suit, rank)
-        filename2grob(f)
+        file2grob(f)
     }
 }
 

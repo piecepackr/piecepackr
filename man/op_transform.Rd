@@ -11,7 +11,7 @@ op_transform(df, ..., cfg = pp_cfg(), envir = NULL, op_angle = 45)
 
 \item{...}{Ignored}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object, 
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
 or a character vector of \code{pp_cfg} objects}
 
@@ -20,28 +20,28 @@ or a character vector of \code{pp_cfg} objects}
 \item{op_angle}{Intended oblique projection angle (used for re-sorting)}
 }
 \value{
-A tibble with extra columns added 
+A tibble with extra columns added
         and re-sorted rows
 }
 \description{
-Guesses \code{z} coordinates and 
-sorting order to more easily 
+Guesses \code{z} coordinates and
+sorting order to more easily
 make 3D graphics with \code{pmap_piece}.
 }
 \details{
-The heuristics used to generate guesses 
+The heuristics used to generate guesses
 for \code{z} coordinates and sorting order
 aren't guaranteed to work in every case.
 In some cases you may get better sorting results
 by changing the \code{op_angle} or the dimensions of pieces.
 }
 \examples{
-df <- tibble::tibble(piece_side="tile_back",  
-                     x=c(2,2,2,4,6,6,4,2,5),  
-                     y=c(4,4,4,4,4,2,2,2,3))  
-pmap_piece(df, op_angle=135, trans=op_transform, 
+df <- tibble::tibble(piece_side="tile_back",
+                     x=c(2,2,2,4,6,6,4,2,5),
+                     y=c(4,4,4,4,4,2,2,2,3))
+pmap_piece(df, op_angle=135, trans=op_transform,
            op_scale=0.5, default.units="in")
- 
+
 }
 \seealso{
 \url{https://trevorldavis.com/piecepackr/3d-projections.html} for more details

@@ -9,6 +9,7 @@
 \alias{to_r}
 \alias{to_t}
 \alias{cleave}
+\alias{file2grob}
 \title{\code{piecepackr} utility functions}
 \usage{
 get_embedded_font(font, char)
@@ -24,6 +25,8 @@ to_r(x, y)
 to_t(x, y)
 
 cleave(s, sep = ",", float = FALSE, color = FALSE)
+
+file2grob(file, distort = TRUE)
 }
 \arguments{
 \item{font}{A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.}
@@ -47,20 +50,27 @@ cleave(s, sep = ",", float = FALSE, color = FALSE)
 \item{float}{If `TRUE` cast to numeric}
 
 \item{color}{if `TRUE` convert empty strings to `"transparent"`}
+
+\item{file}{Filename of image}
+
+\item{distort}{Logical value of whether one should preserve the aspect ratio
+or distort to fit the area it is drawn in}
 }
 \value{
-\code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.  \code{NA}'s means no embedded font detected. 
-       This either means that no font was found or that a color emoji font was found and instead of a font an image was embedded.
+\code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.
+        \code{NA}'s means no embedded font detected: this either means that no font
+         was found or that a color emoji font was found and instead of a font an image was embedded.
 }
 \description{
 \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 \code{cleave} converts a delimiter separated string into a vector.
 \code{inch(x)} is equivalent to \code{unit(x, "in")}.
-\code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees) 
+\code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees)
 and Cartesian coordinates.
 }
 \details{
-\code{get_embedded_font} depends on \code{pdffonts} being on the system path (on many OSes found in a \code{poppler-utils} package).
+\code{get_embedded_font} depends on \code{pdffonts} being on the system path
+         (on many OSes found in a \code{poppler-utils} package).
 }
 \examples{
  to_x(90, 1)
@@ -70,7 +80,7 @@ and Cartesian coordinates.
 
  cleave("0.5,0.2,0.4,0.5", float=TRUE)
  cleave("black,darkred,#050EAA,,", color=TRUE)
- 
+
  if (require("grid")) {
      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
  }

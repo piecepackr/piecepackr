@@ -47,10 +47,10 @@ piecepack configuration list R6 objects given a piecepack configuration.
    cfg <- pp_cfg(list())
    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
  }
-  
+
 }
 \seealso{
-\url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details 
-     about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns 
+\url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details
+     about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns
      configuration list objects for several game systems.
 }

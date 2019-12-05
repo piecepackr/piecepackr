@@ -35,7 +35,7 @@ graphical parameter settings.}
 \item{r}{Radial distance (from 0 to 0.5)}
 }
 \description{
-Utility functions that produce grobs of various shapes 
+Utility functions that produce grobs of various shapes
 or function that returns a function that produces a grob.
 These are usually wrappers of \code{polygonGrob} or \code{pathGrob}.
 }
