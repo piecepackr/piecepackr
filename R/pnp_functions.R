@@ -53,9 +53,6 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
                      pieces=c("piecepack", "matchsticks", "pyramids"),
                      arrangement="single-sided") {
 
-    current_dev <- grDevices::dev.cur()
-    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
-
     cfg <- as_pp_cfg(cfg)
     n_suits <- cfg$n_suits
 
@@ -72,6 +69,8 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
     if ("all" %in% pieces)
         pieces <- c("piecepack", "pyramids", "matchsticks", "subpack")
 
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     dev_onefile(output_filename, cfg$fontfamily, size)
 
     vpl <- viewport(x=xl, width=inch(A5W), height=inch(A5H))
@@ -333,7 +332,9 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
 }
 
 a5_title_grob <- function(cfg=pp_cfg(), pieces) {
+    current_dev <- grDevices::dev.cur()
     cc_picture <- grImport2::readPicture(system.file("extdata/by-sa.svgz", package="piecepackr"))
+    if (current_dev > 1) grDevices::dev.set(current_dev)
 
     # Title
     y_title <- unit(0.97, "npc")

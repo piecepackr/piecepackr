@@ -85,7 +85,7 @@ and Cartesian coordinates.
      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
  }
  if ((Sys.which("pdffonts") != "") && capabilities("cairo")) {
-     chars <- c("a", "\\u2666")
+     chars <- c("a", "\u2666")
      fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
      get_embedded_font(fonts, chars)
  }

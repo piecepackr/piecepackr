@@ -154,9 +154,9 @@ numeric_cleave <- function(s, sep=",") cleave(s, sep, float=TRUE)
 as_picture <- function(grob, width, height) {
     svg_file <- tempfile(fileext=".svg")
     on.exit(unlink(svg_file))
+
     current_dev <- grDevices::dev.cur()
-    if (current_dev > 1)
-        on.exit(grDevices::dev.set(current_dev))
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     grDevices::svg(svg_file, width=width, height=height, bg="transparent")
     grid.draw(grob)
     invisible(grDevices::dev.off())
@@ -169,6 +169,8 @@ as_picture <- function(grob, width, height) {
 #'                or distort to fit the area it is drawn in
 #' @export
 file2grob <- function(file, distort=TRUE) {
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     format <- tools::file_ext(file)
     if (format %in% c("svgz", "svg")) {
         return(to_pictureGrob(grImport2::readPicture(file, warn=FALSE), distort))
