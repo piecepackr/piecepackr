@@ -33,5 +33,3 @@ addons:
 r_github_packages:
   - r-lib/covr
   - jimhester/lintr
-before_install:
-    - if [ $TRAVIS_OS_NAME = osx ]; then brew install xpdf; fi
