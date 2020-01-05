@@ -85,6 +85,16 @@ test_that("get_piece_opt works as expected", {
     expect_equal(opt$dm_text, "\u0298\u0298")
     opt <- cfg$get_piece_opt("pawn_back")
     expect_equal(opt$dm_text, "")
+
+    cfg <- pp_cfg(list(suit_color="white"))
+    opt <- cfg$get_piece_opt("tile_face", suit=2, rank=2)
+    expect_equal(opt$ps_col, "white")
+    cfg <- pp_cfg(list(suit_color.suited="white"))
+    opt <- cfg$get_piece_opt("tile_face", suit=2, rank=2)
+    expect_equal(opt$ps_col, "white")
+    cfg <- pp_cfg(list(suit_color.s2="white"))
+    opt <- cfg$get_piece_opt("tile_face", suit=2, rank=2)
+    expect_equal(opt$ps_col, "white")
 })
 
 context("pp_cfg querying variables work as expected")

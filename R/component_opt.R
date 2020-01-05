@@ -192,7 +192,7 @@ get_n_vertices <- function(shape) {
 
 get_suit_color_helper <- function(piece_side, suit, rank, cfg=list()) {
     suit_colors <- col_cleave(get_style_element("suit_color", piece_side, cfg,
-                            "#D55E00,#000000,#009E73,#56B4E9,#E69F00"))
+                            "#D55E00,#000000,#009E73,#56B4E9,#E69F00", suit, rank))
     suit_colors <- expand_suit_elements(suit_colors, "suit_colors", piece_side, cfg)
     ifelse(suit <= get_n_suits(cfg), suit_colors[suit], suit_colors[get_i_unsuit(cfg)])
 }

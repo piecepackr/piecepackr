@@ -24,6 +24,7 @@ Bug fixes and minor improvements
 * Fixes bug in ``op_transform`` for inferring width/height of matchsticks 
   and shape/depth of pyramids.
 * Fixes bug in printing ``pp_cfg`` objects when a custom grob function had been set.
+* Fixes bug in setting individual suit colors with configurations list styles like ``suit_color.s2="white"``
 
 piecepackr 1.1.1
 ================
