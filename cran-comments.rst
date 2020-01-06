@@ -1,6 +1,6 @@
 **Test environments**
 
-* local (linux, R 3.4.4) 
+* local (linux, R 3.6.1) 
 * win-builder (windows, R devel) 
 * appveyor (windows, R devel) 
 * appveyor (windows, R release) 

@@ -31,7 +31,11 @@ piecepackr: Board Game Graphics
 
 .. _man pages: https://rdrr.io/github/trevorld/piecepackr/man/
 
+.. _oblique projection: https://trevorldavis.com/piecepackr/3d-projections.html
+
 .. contents::
+
+
 
 ``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with R's grid_ graphics system to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
@@ -88,7 +92,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 
     Piecepack diagram with custom configuration
 
-``grid.piece`` even has some support for drawing components with an `oblique projection <https://trevorldavis.com/piecepackr/3d-projections.html>`_:
+``grid.piece`` even has some support for drawing components with an `oblique projection`_:
 
 
 .. sourcecode:: r
@@ -122,19 +126,21 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
    save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
    save_piece_images(cfg)
 
-If you are comfortable using R data frames there is also ``pmap_piece`` which is wrapper for ``grid.piece`` that processes data frame input:
+If you are comfortable using R data frames there is also ``pmap_piece`` which is a wrapper for ``grid.piece`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
 
 
 .. sourcecode:: r
     
 
+    library("dplyr", warn.conflicts=FALSE)
     library("tibble")
-    df_tiles <- tibble(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-    df_coins <- tibble(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
+    df_tiles <- tibble(piece_side="tile_back", x=0.5+c(3,1,3,1,1,1), y=0.5+c(3,3,1,1,1,1))
+    df_coins <- tibble(piece_side="coin_back", x=rep(1:4, 4), y=rep(c(4,1), each=8),
                            suit=1:16%%2+rep(c(1,3), each=8),
-                           angle=rep(c(180,0), each=8), z=1/4+1/16)
-    df <- dplyr::bind_rows(df_tiles, df_coins)
-    pmap_piece(df, cfg=cfg, op_scale=0.5, default.units="in")
+                           angle=rep(c(180,0), each=8))
+    df <- bind_rows(df_tiles, df_coins)
+    cfg <- game_systems("dejavu")$piecepack
+    pmap_piece(df, cfg=cfg, default.units="in", trans=op_transform, op_scale=0.5, op_angle=135)
 
 .. figure:: man/figures/README-pmap-1.png
     :alt: 'pmap_piece' lets you use data frames as input

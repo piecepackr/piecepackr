@@ -244,7 +244,8 @@ test_that("no regressions in figures", {
     df1 <- rbind(dft, dfp)
 
     dft <- tibble(piece_side="tile_back", x=3.5, y=3.5, suit=NA, rank=NA, angle=NA)
-    dfp <- tibble(piece_side="pyramid_top", x=2+c(1,2,2,1,1,2,2,2), y=2+c(2,2,1,1,1,1,1,1), suit=c(1:6,2,3), rank=c(2:4,4,2,3,2,1), angle=seq(0, 630, 90))
+    dfp <- tibble(piece_side="pyramid_top", x=2+c(1,2,2,1,1,2,2,2), y=2+c(2,2,1,1,1,1,1,1),
+                  suit=c(1:6,2,3), rank=c(2:4,4,2,3,2,1), angle=seq(0, 630, 90))
     df2 <- rbind(dft, dfp)
     df <- rbind(df1, df2)
 
