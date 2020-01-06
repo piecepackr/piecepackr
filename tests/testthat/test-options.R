@@ -4,6 +4,7 @@ test_that("options work as expected", {
                 suit_color = "darkred,black,darkgreen,darkblue,grey")
     expect_equal(get_suit_color("coin_back", 1, 1, cfg), "white")
     expect_equal(get_suit_color("coin_face", 5, 1, cfg), "grey")
+    expect_equal(pp_cfg(cfg)$get_suit_color(3:2), c("darkgreen", "black"))
 
     expect_equal(should_invert("coin_back", 1, 1, list()), FALSE)
     expect_equal(should_invert("coin_back", 1, 1, list(invert_colors = TRUE)), TRUE)
@@ -120,4 +121,5 @@ test_that("pp_cfg querying variables work as expected", {
     expect_false(cfg$has_saucers)
     expect_false(cfg$has_pyramids)
     expect_false(cfg$has_matchsticks)
+    expect_error(cfg$has_piecepack <- 3, "3 is not logical")
 })

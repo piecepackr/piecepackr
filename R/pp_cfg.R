@@ -244,7 +244,7 @@ Config <- R6Class("pp_cfg",
             if (missing(value)) {
                 return(self$has_coins && self$has_tiles && self$has_pawns && self$has_dice)
             } else {
-               if (!is.logical(value)) stop(paste(value, " is not logical"))
+               if (!is.logical(value)) stop(paste(value, "is not logical"))
                 self$has_coins <- value
                 self$has_tiles <- value
                 self$has_pawns <- value
