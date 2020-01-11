@@ -117,12 +117,14 @@ add_bounding_box <- function(df) {
     df$ylr <- lr$y
     df$xur <- ur$x
     df$yur <- ur$y
-    df$xl <- pmin(df$xll, df$xul, df$xur, df$xlr)
-    df$xr <- pmax(df$xll, df$xul, df$xur, df$xlr)
-    df$yb <- pmin(df$yll, df$yul, df$yur, df$ylr)
-    df$yt <- pmax(df$yll, df$yul, df$yur, df$ylr)
+    df$xl <- op_round(pmin(df$xll, df$xul, df$xur, df$xlr))
+    df$xr <- op_round(pmax(df$xll, df$xul, df$xur, df$xlr))
+    df$yb <- op_round(pmin(df$yll, df$yul, df$yur, df$ylr))
+    df$yt <- op_round(pmax(df$yll, df$yul, df$yur, df$ylr))
     df
 }
+
+op_round <- function(x) round(x, 9)
 
 do_ranges_overlap <- function(l1, r1, l2, r2) {
     (less_than_equal(l1, l2) & less_than(l2, r1)) |

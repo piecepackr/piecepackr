@@ -30,6 +30,11 @@ test_that("3d helper functions work", {
     df <- rbind(df1, df2, df1, df2, df1, df2)
     expect_doppelganger("matchsticks_045", opf(045))
 
+    # rounding error #163
+    df <- tibble(piece_side = "tile_face", x=rep(seq(1,7,2), 4), y=rep(seq(1,7,2), each=4),
+                 angle = rep(90*0:3, 4), suit = rep(1:4, each=4), rank=rep_len(1:6, 16))
+    expect_doppelganger("rotated_tile_faces", opf(045))
+
     dft <- tibble(piece_side="tile_back", x=1.5, y=1.5, rank=NA, width=NA)
     dfc <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
     df <- rbind(dft, dfc)

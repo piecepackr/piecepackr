@@ -1,4 +1,12 @@
-piecepackr 1.2.0
+piecepackr 1.2.2
+================
+
+Bug fixes
+---------
+
+* Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
+
+piecepackr 1.2.1
 ================
 
 New features
