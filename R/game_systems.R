@@ -3,17 +3,28 @@
 #' \code{game_systems} returns a list of \code{pp_cfg} objects
 #' representing several game systems.
 #'
-#' Contains the following game systems:\itemize{
-#' \item{icehouse pieces}
-#' \item{piecepack plus several piecepack accessories/expansions:\itemize{
-#'   \item{piecepack matchsticks}
-#'   \item{piecepack pyramids}
-#'   \item{piecepack saucers}
-#'   \item{hexpack}
-#'   \item{playing cards expansion}
-#'   \item{dual piecepacks expansion}
-#'   \item{(stackpack) subpack aka mini piecepack}
-#' }}}
+#' Contains the following game systems:\describe{
+#' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
+#'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
+#' \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
+#'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
+#' \item{icehouse_pieces}{Icehouse pieces aka Looney Pyramids is a game system invented by Andrew Looney.
+#'                        See \url{https://www.looneylabs.com/looney-pyramids}.}
+#' \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
+#'   See \url{http://www.ludism.org/ppwiki}.
+#'   Configuration also contains the following piecepack accessories:\describe{
+#'     \item{piecepack matchsticks}{A public domain accessory developed by Dan Burkey.
+#'                                 See \url{http://www.ludism.org/ppwiki/PiecepackMatchsticks}.}
+#'     \item{piecepack pyramids}{A public domain accessory developed by Tim Schutz.
+#'                              See \url{http://www.ludism.org/ppwiki/PiecepackPyramids}.}
+#'     \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
+#'                              See \url{http://www.piecepack.org/Accessories.html}.}
+#'   }}
+#' \item{playing_cards_expansion}{A piecepack with the standard (``French'') playing card suits.
+#'                                See \url{http://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
+#' \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
+#'               ``stackpack'' diagrams.  See \url{http://www.ludism.org/ppwiki/StackPack}.}
+#' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'        If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be installed on the system).
 #' @examples
