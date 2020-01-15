@@ -92,11 +92,9 @@ graphical parameter settings.}
 
 \item{piece_side}{A string with piece and side separated by a underscore e.g. "coin_face"}
 
-\item{suit}{Number of suit (highest rank starting from 1).
-The number above the total number of suits is the neutral "unsuit".
-and the next number above that is "no suits".}
+\item{suit}{Number of suit (starting from 1).}
 
-\item{rank}{Number of rank (lowest rank starting from 1)}
+\item{rank}{Number of rank (starting from 1)}
 
 \item{x}{Where to place piece on x axis of viewport}
 

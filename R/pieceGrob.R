@@ -9,10 +9,8 @@
 #' @param cfg Piecepack configuration list or \code{pp_cfg} object,
 #'        a list of \code{pp_cfg} objects,
 #'        or a character vector of \code{pp_cfg} objects
-#' @param suit Number of suit (highest rank starting from 1).
-#'        The number above the total number of suits is the neutral "unsuit".
-#'        and the next number above that is "no suits".
-#' @param rank Number of rank (lowest rank starting from 1)
+#' @param suit Number of suit (starting from 1).
+#' @param rank Number of rank (starting from 1)
 #' @param x Where to place piece on x axis of viewport
 #' @param y Where to place piece on y axis of viewport
 #' @param z z-coordinate of the piece.  Has no effect if \code{op_scale} is \code{0}.
@@ -178,10 +176,7 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (!is.unit(width)) width <- unit(width, default.units)
     if (!is.unit(height)) height <- unit(height, default.units)
     if (!is.unit(depth)) depth <- unit(depth, default.units)
-    if (use_pictureGrob)
-        grob <- cfg$get_pictureGrob(piece_side, suit, rank)
-    else
-        grob <- cfg$get_grob(piece_side, suit, rank)
+    grob <- cfg$get_grob(piece_side, suit, rank, ifelse(use_pictureGrob, "picture", "normal"))
     if (op_scale < 0.01) {
         cvp <- viewport(x, y, width, height, angle=angle)
         grobTree(grob, vp=cvp)

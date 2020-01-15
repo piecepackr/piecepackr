@@ -6,6 +6,13 @@ Bug fixes
 
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
 
+Deprecated Features
+-------------------
+
+The following ``pp_cfg`` R6 class public methods are now deprecated:
+    * ``get_pictureGrob``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
+    * ``get_raster``.  Use ``get_grob(piece_type, suit, rank, type="raster")`` instead.
+
 piecepackr 1.2.1
 ================
 

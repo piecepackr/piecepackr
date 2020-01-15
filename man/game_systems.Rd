@@ -2,17 +2,27 @@
 % Please edit documentation in R/game_systems.R
 \name{game_systems}
 \alias{game_systems}
+\alias{to_hexpack}
+\alias{to_subpack}
 \title{Standard game systems}
 \usage{
 game_systems(style = NULL)
+
+to_hexpack(cfg = pp_cfg())
+
+to_subpack(cfg = pp_cfg())
 }
 \arguments{
 \item{style}{If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be installed on the system).}
+
+\item{cfg}{List of configuration options}
 }
 \description{
 \code{game_systems} returns a list of \code{pp_cfg} objects
 representing several game systems.
+\code{to_subpack} and \code{to_hexpack} will attempt to generate matching (piecepack stackpack)
+     subpack and (piecepack) hexpack \code{pp_cfg} R6 objects respectively given a piecepack configuration.
 }
 \details{
 Contains the following game systems:\describe{

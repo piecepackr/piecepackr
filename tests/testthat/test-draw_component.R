@@ -5,6 +5,8 @@ test_that("pp_cfg works as expected", {
     expect_true("pp_cfg" %in% class(cfg_default))
     expect_equal(class(as.list(cfg_default)), "list")
     expect_output(print(cfg_default), "default cfg")
+    expect_warning(cfg_default$get_pictureGrob("tile_back", 1, 1))
+    expect_warning(cfg_default$get_raster("tile_back", 1, 1))
 })
 
 context("save_print_and_play works as expected")

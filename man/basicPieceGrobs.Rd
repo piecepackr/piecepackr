@@ -19,11 +19,9 @@ previewLayoutGrob(piece_side, suit, rank, cfg = pp_cfg())
 \arguments{
 \item{piece_side}{A string with piece and side separated by a underscore e.g. "coin_face"}
 
-\item{suit}{Number of suit (highest rank starting from 1).
-The number above the total number of suits is the neutral "unsuit".
-and the next number above that is "no suits".}
+\item{suit}{Number of suit (starting from 1).}
 
-\item{rank}{Number of rank (lowest rank starting from 1)}
+\item{rank}{Number of rank (starting from 1)}
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object.}
 

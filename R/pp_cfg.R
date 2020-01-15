@@ -1,3 +1,86 @@
+#' Configuration list R6 object
+#'
+#' \code{pp_cfg} and \code{as_pp_cfg} creates piecepack configuration list R6 object.
+#' \code{is_pp_cfg} returns \code{TRUE} if object is a piecepack configuration list R6 object.
+#' \code{as.list} will convert it into a list.
+#'
+#' \code{pp_cfg} objects serve the following purposes:\enumerate{
+#' \item{Customize the appearance of pieces drawn by \code{grid.piece}.}
+#' \item{Speed up the drawing of graphics through use of caching.}
+#' \item{Allow the setting and querying of information about the board game components
+#'       that maybe of use to developers\enumerate{
+#'          \item{Number of suits}
+#'          \item{Number of ranks}
+#'          \item{Suit colors}
+#'          \item{Which types of components are included and/or properly supported}
+#'          \item{What would be a good color to use when adding annotations on top of these components.}
+#'          \item{Title, Description, Copyright, and Credit metadata}
+#'       }}}
+#'
+#' @section \code{pp_cfg} R6 Class Method Arguments:\describe{
+#'   \item{\code{piece_side}}{A string with piece and side separated by a underscore e.g. "coin_face".}
+#'   \item{\code{suit}}{Number of suit (starting from 1).}
+#'   \item{\code{rank}}{Number of rank (starting from 1).}
+#'   \item{\code{type}}{Which type of grob to return, either \code{"normal"}, \code{"picture"}, or \code{"raster"}.}
+
+#' }
+#'
+#' @section \code{pp_cfg} R6 Class Methods:\describe{
+#'   \item{\code{get_grob}}{Returns a \code{grid} \dQuote{grob} for drawing the piece.}
+#'   \item{\code{get_piece_opt}}{Returns a list with info useful for drawing the piece.}
+#'   \item{\code{get_suit_color}}{Returns the suit colors.}
+#'   \item{\code{get_width}, \code{get_height}, \code{get_depth}}{
+#'         Dimensions (of the bounding cube) of the piece in inches}
+#' }
+#'
+#' @seealso \url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details
+#'      about \code{piecepackr} configuration lists.
+#'  \code{\link{game_systems}} for functions that return
+#'      configuration list objects for several game systems.
+#' @param cfg List of configuration options
+#' @examples
+#'  cfg <- pp_cfg(list(invert_colors=TRUE))
+#'  as.list(cfg)
+#'  is_pp_cfg(cfg)
+#'  as_pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+#'  cfg$get_suit_color(suit=3)
+#'  cfg$annotation_color
+#'  cfg$has_matchsticks
+#'  cfg$has_matchsticks <- TRUE
+#'  cfg$has_matchsticks
+#'  cfg$get_width("tile_back")
+#'  cfg$get_height("die_face")
+#'  cfg$get_depth("coin_face")
+#'  \donttest{
+#'    cfg <- list()
+#'    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
+#'    cfg <- pp_cfg(list())
+#'    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
+#'  }
+#'
+#' @exportClass pp_cfg
+#' @export
+pp_cfg <- function(cfg=list()) {
+    if (is_pp_cfg(cfg))
+        cfg
+    else
+        Config$new(cfg)
+}
+
+#' @rdname pp_cfg
+#' @export
+is_pp_cfg <- function(cfg) {
+    "pp_cfg" %in% class(cfg)
+}
+
+#' @rdname pp_cfg
+#' @export
+as_pp_cfg <- pp_cfg
+
+#' @export
+as.list.pp_cfg <- function(x, ...) {
+    x$as_list()
+}
 opt_cache_key <- function(piece_side, suit, rank, type) {
     paste(piece_side, suit, rank, type, sep=".")
 }
@@ -42,74 +125,11 @@ Config <- R6Class("pp_cfg",
             self$annotation_color <- ifelse(is.null(cfg$annotation_color),
                                             "black", cfg$annotation_color)
         },
-        as_list = function() private$cfg,
-        print = function() {
-            for (name in names(private$cfg)) {
-                if (is.function(private$cfg[[name]])) {
-                    cat(paste0("$", name, " : ", "a function", "\n"))
-                } else {
-                    cat(paste0("$", name, " : ", private$cfg[[name]]), "\n")
-                }
-            }
-        },
-        get_grob = function(piece_side, suit, rank) {
-            key <- opt_cache_key(piece_side, suit, rank, "grob")
-            if (!is.null(private$cache[[key]])) {
-                private$cache[[key]]
-            } else {
-                default_fn <- get_style_element("grob_fn", piece_side, private$cfg,
-                                                basicPieceGrob, suit, rank)
-                grobFn <- switch(piece_side,
-                                 die_layoutLF = dieLayoutGrobLF,
-                                 die_layoutRF = dieLayoutGrobRF,
-                                 suitdie_layoutLF = suitdieLayouGrobtLF,
-                                 suitdie_layoutRF = suitdieLayoutGrobRF,
-                                 suitrankdie_layoutLF = suitrankdieLayoutGrobLF,
-                                 suitrankdie_layoutRF = suitrankdieLayoutGrobRF,
-                                 pawn_layout = pawnLayoutGrob,
-                                 preview_layout = previewLayoutGrob,
-                                 pyramid_layout = pyramidLayoutGrob,
-                                 pyramid_top = pyramidTopGrob,
-                                 default_fn)
-                if (is.character(grobFn))
-                    grobFn <- match.fun(grobFn)
-                grob <- grobFn(piece_side, suit, rank, self)
-                if (self$cache_grob) private$cache[[key]] <- grob
-                grob
-            }
-        },
-        get_shadow_fn = function(piece_side, suit, rank) {
-            key <- opt_cache_key(piece_side, suit, rank, "shadow")
-            if (!is.null(private$cache[[key]])) {
-                private$cache[[key]]
-            } else {
-                default_fn <- get_style_element("shadow_fn", piece_side, private$cfg,
-                                                basicShadowGrob, suit, rank)
-                grobFn <- switch(piece_side,
-                                 pyramid_top = function(...) nullGrob(),
-                                 default_fn)
-                if (self$cache_shadow) private$cache[[key]] <- grobFn
-                grobFn
-            }
-        },
-        get_pictureGrob = function(piece_side, suit, rank) {
-            grob <- self$get_grob(piece_side, suit, rank)
-            width <- self$get_width(piece_side, suit, rank)
-            height <- self$get_height(piece_side, suit, rank)
-            as_picture(grob, width, height)
-        },
-        get_raster = function(piece_side, suit, rank, res=72) {
-            grob <- self$get_grob(piece_side, suit, rank)
-            width <- self$get_width(piece_side, suit, rank)
-            height <- self$get_height(piece_side, suit, rank)
-            png_file <- tempfile(fileext=".png")
-            on.exit(unlink(png_file))
-            current_dev <- grDevices::dev.cur()
-            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
-            png(png_file, width=width, height=height, units="in", res=res)
-            grid.draw(grob)
-            invisible(grDevices::dev.off())
-            as.raster(png::readPNG(png_file))
+        get_grob = function(piece_side, suit, rank, type = "normal", ...) {
+            switch(type,
+                   normal = private$get_grob_normal(piece_side, suit, rank),
+                   picture = private$get_grob_picture(piece_side, suit, rank),
+                   raster = private$get_grob_raster(piece_side, suit, rank, ...))
         },
         get_piece_opt = function(piece_side, suit=NA, rank=NA) {
             if (is.na(rank)) rank <- 1
@@ -237,6 +257,39 @@ Config <- R6Class("pp_cfg",
             depth <- get_style_element("depth", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- depth
             depth
+        },
+        as_list = function() private$cfg,
+        print = function() {
+            for (name in names(private$cfg)) {
+                if (is.function(private$cfg[[name]])) {
+                    cat(paste0("$", name, " : ", "a function", "\n"))
+                } else {
+                    cat(paste0("$", name, " : ", private$cfg[[name]]), "\n")
+                }
+            }
+        },
+        get_shadow_fn = function(piece_side, suit, rank) {
+            key <- opt_cache_key(piece_side, suit, rank, "shadow")
+            if (!is.null(private$cache[[key]])) {
+                private$cache[[key]]
+            } else {
+                default_fn <- get_style_element("shadow_fn", piece_side, private$cfg,
+                                                basicShadowGrob, suit, rank)
+                grobFn <- switch(piece_side,
+                                 pyramid_top = function(...) nullGrob(),
+                                 default_fn)
+                if (self$cache_shadow) private$cache[[key]] <- grobFn
+                grobFn
+            }
+        },
+        # Deprecated public methods
+        get_pictureGrob = function(piece_side, suit, rank) {
+            .Deprecated('pp_cfg()$get_grob(piece_side, suit, rank, type = "picture")')
+            private$get_grob_picture(piece_side, suit, rank)
+        },
+        get_raster = function(piece_side, suit, rank, res=72) {
+            .Deprecated('pp_cfg()$get_grob(piece_side, suit, rank, type = "raster", res = res)')
+            private$get_grob_raster(piece_side, suit, rank, res = res)
         }
         ),
     active = list(
@@ -251,61 +304,50 @@ Config <- R6Class("pp_cfg",
                 self$has_dice  <- value
             }
         }),
-    private = list(cfg = NULL, cache = list())
+    private = list(cfg = NULL, cache = list(),
+        get_grob_normal = function(piece_side, suit, rank) {
+            key <- opt_cache_key(piece_side, suit, rank, "grob")
+            if (!is.null(private$cache[[key]])) {
+                private$cache[[key]]
+            } else {
+                default_fn <- get_style_element("grob_fn", piece_side, private$cfg,
+                                                basicPieceGrob, suit, rank)
+                grobFn <- switch(piece_side,
+                                 die_layoutLF = dieLayoutGrobLF,
+                                 die_layoutRF = dieLayoutGrobRF,
+                                 suitdie_layoutLF = suitdieLayouGrobtLF,
+                                 suitdie_layoutRF = suitdieLayoutGrobRF,
+                                 suitrankdie_layoutLF = suitrankdieLayoutGrobLF,
+                                 suitrankdie_layoutRF = suitrankdieLayoutGrobRF,
+                                 pawn_layout = pawnLayoutGrob,
+                                 preview_layout = previewLayoutGrob,
+                                 pyramid_layout = pyramidLayoutGrob,
+                                 pyramid_top = pyramidTopGrob,
+                                 default_fn)
+                if (is.character(grobFn))
+                    grobFn <- match.fun(grobFn)
+                grob <- grobFn(piece_side, suit, rank, self)
+                if (self$cache_grob) private$cache[[key]] <- grob
+                grob
+            }
+        },
+        get_grob_picture = function(piece_side, suit, rank) {
+            grob <- private$get_grob_normal(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            as_picture(grob, width, height)
+        },
+        get_grob_raster = function(piece_side, suit, rank, res=72) {
+            grob <- private$get_grob_normal(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            png_file <- tempfile(fileext=".png")
+            on.exit(unlink(png_file))
+            current_dev <- grDevices::dev.cur()
+            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+            png(png_file, width=width, height=height, units="in", res=res)
+            grid.draw(grob)
+            invisible(grDevices::dev.off())
+            as.raster(png::readPNG(png_file))
+        })
 )
-
-#' Configuration list R6 object
-#'
-#' \code{pp_cfg} and \code{as_pp_cfg} creates piecepack configuration list R6 object.
-#' \code{is_pp_cfg} returns \code{TRUE} if object is a piecepack configuration list R6 object.
-#' \code{as.list} will convert it into a list.  \code{to_subpack} and \code{to_hexpack}
-#' will attempt to generate matching (piecepack stackpack) subpack and hexpack
-#' piecepack configuration list R6 objects given a piecepack configuration.
-#'
-#' @seealso \url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details
-#'      about \code{piecepackr} configuration lists.  \code{\link{game_systems}} returns
-#'      configuration list objects for several game systems.
-#' @param cfg List of configuration options
-#' @examples
-#'  cfg <- pp_cfg(list(invert_colors=TRUE))
-#'  as.list(cfg)
-#'  is_pp_cfg(cfg)
-#'  as_pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
-#'  cfg$get_suit_color(suit=3)
-#'  cfg$annotation_color
-#'  cfg$has_matchsticks
-#'  cfg$has_matchsticks <- TRUE
-#'  cfg$has_matchsticks
-#'  cfg$get_width("tile_back")
-#'  cfg$get_height("die_face")
-#'  cfg$get_depth("coin_face")
-#'  \donttest{
-#'    cfg <- list()
-#'    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
-#'    cfg <- pp_cfg(list())
-#'    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
-#'  }
-#'
-#' @exportClass pp_cfg
-#' @export
-pp_cfg <- function(cfg=list()) {
-    if (is_pp_cfg(cfg))
-        cfg
-    else
-        Config$new(cfg)
-}
-
-#' @rdname pp_cfg
-#' @export
-is_pp_cfg <- function(cfg) {
-    "pp_cfg" %in% class(cfg)
-}
-
-#' @rdname pp_cfg
-#' @export
-as_pp_cfg <- pp_cfg
-
-#' @export
-as.list.pp_cfg <- function(x, ...) {
-    x$as_list()
-}

@@ -2,6 +2,8 @@
 #'
 #' \code{game_systems} returns a list of \code{pp_cfg} objects
 #' representing several game systems.
+#' \code{to_subpack} and \code{to_hexpack} will attempt to generate matching (piecepack stackpack)
+#'      subpack and (piecepack) hexpack \code{pp_cfg} R6 objects respectively given a piecepack configuration.
 #'
 #' Contains the following game systems:\describe{
 #' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
@@ -27,6 +29,7 @@
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'        If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be installed on the system).
+#' @param cfg List of configuration options
 #' @examples
 #'        cfgs <- game_systems()
 #'        names(cfgs)
@@ -94,7 +97,7 @@ game_systems <- function(style=NULL) {
          subpack=to_subpack(piecepack))
 }
 
-#' @rdname pp_cfg
+#' @rdname game_systems
 #' @export
 to_hexpack <- function(cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
@@ -110,7 +113,7 @@ to_hexpack <- function(cfg=pp_cfg()) {
 
 }
 
-#' @rdname pp_cfg
+#' @rdname game_systems
 #' @export
 to_subpack <- function(cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
