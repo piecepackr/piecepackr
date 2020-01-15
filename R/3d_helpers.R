@@ -82,33 +82,23 @@ add_3d_info <- function(df, cfg=pp_cfg(), envir=NULL) {
 op_sort <- function(df, op_angle=45) {
     op_angle <- op_angle %% 360
     if ((0 <= op_angle) && (op_angle < 90)) {
-        df <- df[order(df$zt, -df$yb, -df$xl),]
+        df <- df[order(df$zt, -df$yb, -df$xl), ]
     } else if ((90 <= op_angle) && (op_angle < 180)) {
-        df <- df[order(df$zt, -df$yb, df$xr),]
+        df <- df[order(df$zt, -df$yb, df$xr), ]
     } else if ((180 <= op_angle) && (op_angle < 270)) {
-        df <- df[order(df$zt, df$yt, df$xr),]
+        df <- df[order(df$zt, df$yt, df$xr), ]
     } else {
-        df <- df[order(df$zt, df$yt, -df$xl),]
+        df <- df[order(df$zt, df$yt, -df$xl), ]
     }
     df
 }
 
-unit_to_cartesian_coords <- function(x, y, x0=0.5, y0=0.5, width=1, height=1, angle=0) {
-    # re-center to origin and re-scale by width/height
-    x <- width * (x - 0.5)
-    y <- height * (y - 0.5)
-    # rotate and re-center to (x0, y0)
-    xr <- x0 + x * cos(to_radians(angle)) - y * sin(to_radians(angle))
-    yr <- y0 + x * sin(to_radians(angle)) + y * cos(to_radians(angle))
-    list(x=xr, y=yr)
-}
-
 # Axis-Aligned Bounding Box (AABB)
 add_bounding_box <- function(df) {
-    ll <- unit_to_cartesian_coords(0, 0, df$x, df$y, df$width, df$height, df$angle)
-    ul <- unit_to_cartesian_coords(0, 1, df$x, df$y, df$width, df$height, df$angle)
-    ur <- unit_to_cartesian_coords(1, 1, df$x, df$y, df$width, df$height, df$angle)
-    lr <- unit_to_cartesian_coords(1, 0, df$x, df$y, df$width, df$height, df$angle)
+    ll <- Point$new(0, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    ul <- Point$new(0, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    ur <- Point$new(1, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    lr <- Point$new(1, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
     df$xll <- ll$x
     df$yll <- ll$y
     df$xul <- ul$x
@@ -143,11 +133,11 @@ add_z <- function(df) {
     shapes <- get_shapes(df)
     zp <- 0.5*df$depth
     for (ii in seq(length.out=nrow(df))) {
-        dfi <- df[ii,]
-        dfs <- df[0:(ii-1),]
+        dfi <- df[ii, ]
+        dfs <- df[0:(ii-1), ]
         for (jj in which_AABB_overlap(dfi, dfs)) {
             if (do_shapes_overlap(shapes[[ii]], shapes[[jj]])) {
-                zp[ii] <- as.numeric(zp[jj] + 0.5*df[jj,"depth"] + 0.5*df[ii,"depth"])
+                zp[ii] <- as.numeric(zp[jj] + 0.5*df[jj, "depth"] + 0.5*df[ii, "depth"])
                 break
             }
         }
@@ -156,12 +146,10 @@ add_z <- function(df) {
     df
 }
 
-# plot_polygon <- function(o) grid.newpage(); grid.polygon(x=o$x, y=o$y, default.units="in") # nolint
-
 get_shapes <- function(df) {
     shapes <- vector("list", nrow(df))
     for (ii in seq(length.out=nrow(df))) {
-        dfi <- df[ii,]
+        dfi <- df[ii, ]
         cfg <- df$cfg[[ii]]
         piece_side <- df$piece_side[ii]
         suit <- ifelse(has_name(df, "suit"), df$suit[ii], NA)
@@ -182,9 +170,8 @@ get_shapes <- function(df) {
             } else {
                 stop(paste("Don't know how to bound", opt$shape))
             }
-            xy_c <- unit_to_cartesian_coords(xy_u$x, xy_u$y, x0=dfi$x, y0=dfi$y,
-                                                    width=dfi$width, height=dfi$height, angle=dfi$angle)
-            shapes[[ii]] <- ConvexPolygon$new(x=xy_c$x, y=xy_c$y)
+            xy_c <- Point$new(xy_u)$npc_to_in(dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
+            shapes[[ii]] <- ConvexPolygon$new(xy_c)
         }
     }
     shapes

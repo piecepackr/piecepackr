@@ -186,9 +186,9 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
         cvp <- viewport(x, y, width, height, angle=angle)
         grobTree(grob, vp=cvp)
     } else {
-        xp <- op_x(x, y, z+0.5*depth, op_angle, op_scale)
-        yp <- op_y(x, y, z+0.5*depth, op_angle, op_scale)
-        cvp <- viewport(xp, yp, width, height, angle=angle)
+        # xy_p <- Point$new(x, y)$project_op(z+0.5*depth, op_angle, op_scale) # nolint
+        xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+        cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
         grob <- grobTree(grob, vp=cvp)
         shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
         shadow <- shadow_fn(piece_side, suit, rank, cfg,
@@ -198,12 +198,11 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     }
 }
 
-op_x <- function(x, y, z, op_angle=45, op_scale=0) {
-    x + op_scale * z* cos((op_angle) * 2 * pi / 360)
-
-}
-op_y <- function(x, y, z, op_angle=45, op_scale=0) {
-    y + op_scale * z * sin((op_angle) * 2 * pi / 360)
+####
+op_xy <- function(x, y, z, op_angle=45, op_scale=0) {
+    x <- x + op_scale * z * cos(to_radians(op_angle))
+    y <- y + op_scale * z * sin(to_radians(op_angle))
+    list(x=x, y=y)
 }
 
 #' @rdname grid.piece

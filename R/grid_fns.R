@@ -58,7 +58,7 @@ halma_xy <- function() {
 }
 pyramid_xy <- list(x = c(0, 0.5, 1), y = c(0, 1, 0))
 kite_xy <- list(x = c(0.5, 0, 0.5, 1), y = c(0, 0.25, 1, 0.25))
-# rect_xy <- function() { list(x = c(0, 0, 1, 1), y=c(0, 1, 1, 0)) } # nolint
+rect_xy <- list(x = c(0, 0, 1, 1), y=c(0, 1, 1, 0))
 
 #' @rdname grid_shape_grobs
 #' @export
@@ -130,8 +130,7 @@ splice <- function(x0, x1) {
 halmaMatGrobFn <- function(width=0.2) {
     width <- rep(width, length.out=2)
     xy_out <- halma_xy()
-    xy_in <- unit_to_cartesian_coords(xy_out$x, xy_out$y,
-                                 height=1-width[1], width=1-2.5*width[2])
+    xy_in <- Point$new(xy_out)$npc_to_in(h=1-width[1], w=1-2.5*width[2])
     x <- c(xy_in$x, xy_out$x)
     y <- c(xy_in$y, xy_out$y)
     id <- rep(1:2, each=length(xy_out$x))
