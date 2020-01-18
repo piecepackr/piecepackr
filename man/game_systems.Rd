@@ -30,8 +30,6 @@ Contains the following game systems:\describe{
               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
-\item{icehouse_pieces}{Icehouse pieces aka Looney Pyramids is a game system invented by Andrew Looney.
-                       See \url{https://www.looneylabs.com/looney-pyramids}.}
 \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
   See \url{http://www.ludism.org/ppwiki}.
   Configuration also contains the following piecepack accessories:\describe{

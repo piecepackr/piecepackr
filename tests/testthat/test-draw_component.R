@@ -238,23 +238,6 @@ test_that("no regressions in figures", {
     expect_error(game_systems("boobear"),
                  "Don't have a customized configuration for style boobear")
 
-    # icehouse pyramids
-    dft <- tibble(piece_side="tile_back", x=1.5, y=1.5, suit=NA, rank=NA, angle=NA)
-    dfp <- tibble(piece_side=c("pyramid_face", "pyramid_left", "pyramid_right", "pyramid_back"),
-                  x=c(1,2,2,1), y=c(2,2,1,1), suit=1:4, rank=c(2:4,4), angle=seq(90, 360, 90))
-    df1 <- rbind(dft, dfp)
-
-    dft <- tibble(piece_side="tile_back", x=3.5, y=3.5, suit=NA, rank=NA, angle=NA)
-    dfp <- tibble(piece_side="pyramid_top", x=2+c(1,2,2,1,1,2,2,2), y=2+c(2,2,1,1,1,1,1,1),
-                  suit=c(1:6,2,3), rank=c(2:4,4,2,3,2,1), angle=seq(0, 630, 90))
-    df2 <- rbind(dft, dfp)
-    df <- rbind(df1, df2)
-
-    systems <- game_systems("dejavu")
-    expect_doppelganger("icehouse_pieces",
-        function() pmap_piece(df, cfg=systems$icehouse_pieces, default.units="in")
-    )
-
     # piecepack pyramids
     expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", suit=1, rank=6))
     expect_doppelganger("pyramid_left.s2.r5", function() dc("pyramid_left", suit=2, rank=5))

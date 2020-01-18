@@ -10,8 +10,6 @@
 #'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 #' \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
 #'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
-#' \item{icehouse_pieces}{Icehouse pieces aka Looney Pyramids is a game system invented by Andrew Looney.
-#'                        See \url{https://www.looneylabs.com/looney-pyramids}.}
 #' \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
 #'   See \url{http://www.ludism.org/ppwiki}.
 #'   Configuration also contains the following piecepack accessories:\describe{
@@ -78,20 +76,8 @@ game_systems <- function(style=NULL) {
     dual_piecepacks_expansion <- c(piecepack, dpe_base)
     dual_piecepacks_expansion$suit_text <- pce_suit_text
 
-    icehouse_pieces <- list(n_ranks=4, n_suits=6,
-                        width.r1.pyramid=11/32, width.r2.pyramid=9/16,
-                        width.r3.pyramid=25/32, width.r4.pyramid=1,
-                        height.r1.pyramid=5/8, height.r2.pyramid=1,
-                        height.r3.pyramid=1.375, height.r4.pyramid=1.75,
-                        rank_text=",\u25cf,\u25cf\u25cf,\u25cf\u25cf\u25cf",
-                        suit_color="#D55E00,#808080,#009E73,#56B4E9,#E69F00,#808080",
-                        border_color.pyramid="#D55E00,#808080,#009E73,#56B4E9,#E69F00,#808080",
-                        background_color.pyramid="#D55E0080,#000000,#009E7380,#56B4E980,#E69F0080,#FFFFFF",
-                        border_lex.pyramid=4, grob_fn.pyramid=icehousePyramidGrob)
-
     list(dual_piecepacks_expansion=pp_cfg(dual_piecepacks_expansion),
          hexpack=to_hexpack(piecepack),
-         icehouse_pieces=pp_cfg(icehouse_pieces),
          piecepack=pp_cfg(piecepack),
          playing_cards_expansion=pp_cfg(playing_cards_expansion),
          subpack=to_subpack(piecepack))
@@ -110,7 +96,6 @@ to_hexpack <- function(cfg=pp_cfg()) {
     hexpack$height.tile <- 4/sqrt(3)
     hexpack$shape.coin <- "convex3"
     pp_cfg(hexpack)
-
 }
 
 #' @rdname game_systems
@@ -126,27 +111,4 @@ to_subpack <- function(cfg=pp_cfg()) {
     subpack$width.saucer <- 0.4*cfg$get_width("saucer")
     subpack$cex <- 0.4
     pp_cfg(subpack)
-}
-
-icehousePyramidGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
-    cfg <- as_pp_cfg(cfg)
-    opt <- cfg$get_piece_opt(piece_side, suit, rank)
-
-    shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
-
-    # Background
-    background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
-
-    # Circles
-    gp_c <- gpar(fill=opt$ps_color, col=opt$ps_color)
-    c1_grob <- circleGrob(x=unit(0.5, "npc"), y=unit(0.48, "cm"), r=unit(0.12, "cm"), gp=gp_c)
-    c2_grob <- circleGrob(x=unit(0.5, "npc")-unit(0.38, "cm"), y=unit(0.48, "cm"), r=unit(0.12, "cm"), gp=gp_c)
-    c3_grob <- circleGrob(x=unit(0.5, "npc")-unit(0.76, "cm"), y=unit(0.48, "cm"), r=unit(0.12, "cm"), gp=gp_c)
-    c_grob <- switch(rank, nullGrob(), c1_grob, gList(c1_grob, c2_grob), gList(c1_grob, c2_grob, c3_grob))
-
-    # Border
-    border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
-    gl <- gList(background_grob, c_grob, border_grob)
-
-    gTree(children=gl, name=piece_side)
 }
