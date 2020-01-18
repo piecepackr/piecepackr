@@ -180,8 +180,7 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (op_scale < 0.01) {
         cvp <- viewport(x, y, width, height, angle=angle)
         grobTree(grob, vp=cvp)
-    } else {
-        # xy_p <- Point$new(x, y)$project_op(z+0.5*depth, op_angle, op_scale) # nolint
+    } else { ####
         xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
         cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
         grob <- grobTree(grob, vp=cvp)

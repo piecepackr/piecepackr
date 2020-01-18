@@ -35,7 +35,7 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
     shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
     n_shadows <- max(round(100*depth), 3)
     zs <- z + depth * seq(-0.5, 0.5, length.out = n_shadows)
-    xy_p <- Point$new(x, y)$project_op(zs, op_angle, op_scale)
+    xy_p <- Point3D$new(x, y, zs)$project_op(op_angle, op_scale)
     gl <- gList()
     vp <- viewport(xy_p$x[1], xy_p$y[1], width, height, angle=angle, default.units = "in")
     gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
@@ -54,8 +54,8 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     r <- min(0.5*width, 0.5*height)
 
     xy_c <- Point$new(x, y)$translate_polar(thetas, r)
-    xy_l <- xy_c$project_op(z - 0.5 * depth, op_angle, op_scale)
-    xy_u <- xy_c$project_op(z + 0.5 * depth, op_angle, op_scale)
+    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
+    xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
 
     x <- c(xy_l$x, rev(xy_u$x))
     y <- c(xy_l$y, rev(xy_u$y))
@@ -65,8 +65,8 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
 
 rectShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
     xy_c <- Point$new(rect_xy)$npc_to_in(x, y, width, height, angle)
-    xy_l <- xy_c$project_op(z-0.5*depth, op_angle, op_scale)
-    xy_u <- xy_c$project_op(z+0.5*depth, op_angle, op_scale)
+    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
+    xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
 
     # face angles
     fas <- c(180, 90, 0, -90) + angle + 180
@@ -94,8 +94,8 @@ convexShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     # rotated, non-projected vertices at the middle of the solid
     xy_c <- Point$new(x, y)$translate_polar(thetas, r)
     # rotated, projected vertices at the bottom and top of the solid
-    xy_l <- xy_c$project_op(z - 0.5 * depth, op_angle, op_scale)
-    xy_u <- xy_c$project_op(z + 0.5 * depth, op_angle, op_scale)
+    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
+    xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
 
     # face angles
     fas <- thetas + 360 / n_vertices / 2 + 180

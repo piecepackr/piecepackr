@@ -129,7 +129,7 @@ Config <- R6Class("pp_cfg",
             switch(type,
                    normal = private$get_grob_normal(piece_side, suit, rank),
                    picture = private$get_grob_picture(piece_side, suit, rank),
-                   raster = private$get_grob_raster(piece_side, suit, rank, ...))
+                   raster = to_rasterGrob(self$get_raster(piece_side, suit, rank, ...)))
         },
         get_piece_opt = function(piece_side, suit=NA, rank=NA) {
             if (is.na(rank)) rank <- 1
@@ -282,16 +282,26 @@ Config <- R6Class("pp_cfg",
                 grobFn
             }
         },
+        get_raster = function(piece_side, suit, rank, res=72, value="raster") {
+            grob <- private$get_grob_normal(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            png_file <- tempfile(fileext=".png")
+            if (value != "filename") on.exit(unlink(png_file))
+            current_dev <- grDevices::dev.cur()
+            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+            png(png_file, width=width, height=height, units="in", res=res, bg="transparent")
+            grid.draw(grob)
+            invisible(grDevices::dev.off())
+            if (value == "filename") return(png_file)
+            raster <- as.raster(png::readPNG(png_file))
+            raster
+        },
         # Deprecated public methods
         get_pictureGrob = function(piece_side, suit, rank) {
             .Deprecated('pp_cfg()$get_grob(piece_side, suit, rank, type = "picture")')
             private$get_grob_picture(piece_side, suit, rank)
-        },
-        get_raster = function(piece_side, suit, rank, res=72) {
-            .Deprecated('pp_cfg()$get_grob(piece_side, suit, rank, type = "raster", res = res)')
-            private$get_grob_raster(piece_side, suit, rank, res = res)
-        }
-        ),
+        }),
     active = list(
         has_piecepack = function(value) {
             if (missing(value)) {
@@ -306,13 +316,16 @@ Config <- R6Class("pp_cfg",
         }),
     private = list(cfg = NULL, cache = list(),
         get_grob_normal = function(piece_side, suit, rank) {
+            suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), self$i_unsuit)
+            suit <- ifelse(suit > self$i_unsuit+1, self$i_unsuit+1, suit)
+            rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
             key <- opt_cache_key(piece_side, suit, rank, "grob")
             if (!is.null(private$cache[[key]])) {
                 private$cache[[key]]
             } else {
                 default_fn <- get_style_element("grob_fn", piece_side, private$cfg,
                                                 basicPieceGrob, suit, rank)
-                grobFn <- switch(piece_side,
+                grob_fn <- switch(piece_side,
                                  die_layoutLF = dieLayoutGrobLF,
                                  die_layoutRF = dieLayoutGrobRF,
                                  suitdie_layoutLF = suitdieLayouGrobtLF,
@@ -324,9 +337,9 @@ Config <- R6Class("pp_cfg",
                                  pyramid_layout = pyramidLayoutGrob,
                                  pyramid_top = pyramidTopGrob,
                                  default_fn)
-                if (is.character(grobFn))
-                    grobFn <- match.fun(grobFn)
-                grob <- grobFn(piece_side, suit, rank, self)
+                if (is.character(grob_fn))
+                    grob_fn <- match.fun(grob_fn)
+                grob <- grob_fn(piece_side, suit, rank, self)
                 if (self$cache_grob) private$cache[[key]] <- grob
                 grob
             }
@@ -336,18 +349,5 @@ Config <- R6Class("pp_cfg",
             width <- self$get_width(piece_side, suit, rank)
             height <- self$get_height(piece_side, suit, rank)
             as_picture(grob, width, height)
-        },
-        get_grob_raster = function(piece_side, suit, rank, res=72) {
-            grob <- private$get_grob_normal(piece_side, suit, rank)
-            width <- self$get_width(piece_side, suit, rank)
-            height <- self$get_height(piece_side, suit, rank)
-            png_file <- tempfile(fileext=".png")
-            on.exit(unlink(png_file))
-            current_dev <- grDevices::dev.cur()
-            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
-            png(png_file, width=width, height=height, units="in", res=res)
-            grid.draw(grob)
-            invisible(grDevices::dev.off())
-            as.raster(png::readPNG(png_file))
         })
 )

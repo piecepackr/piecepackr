@@ -4,12 +4,15 @@ Point <- R6Class("point",
                  public = list(x=NULL, y=NULL,
                                initialize = function(x=0.5, y=0.5) {
                                    if (is.list(x) || inherits(x, "point")) {
-                                       self$x <- x$x
-                                       self$y <- x$y
+                                       xt <- x$x
+                                       y <- x$y
                                    } else {
-                                       self$x <- x
-                                       self$y <- y
+                                       xt <- x
+                                       y <- y
                                    }
+                                   n <- max(lengths(list(xt, y)))
+                                   self$x <- rep(xt, length.out = n)
+                                   self$y <- rep(y, length.out = n)
                                },
                                diff = function(p) {
                                    Vector$new(p$x-self$x, p$y-self$y)
@@ -35,13 +38,11 @@ Point <- R6Class("point",
                                    y <- height * self$y
                                    Point$new(x, y)
                                },
-                               project_op = function(z = 0, angle = 45, scale = 0) {
-                                   x <- self$x + scale * z * cos(to_radians(angle))
-                                   y <- self$y + scale * z * sin(to_radians(angle))
-                                   Point$new(x, y)
-                               },
                                npc_to_in = function(x=0.5, y=0.5, w=1, h=1, t=0) {
                                    self$translate(-0.5, -0.5)$dilate(w, h)$rotate(t)$translate(x, y)
+                               },
+                               plot = function(gp = gpar()) {
+                                   grid.points(x=self$x, y=self$y, default.units="in", gp = gpar())
                                }
                                ))
 `[.point` <- function(x, i) Point$new(x$x[i], x$y[i])
@@ -55,12 +56,42 @@ as.list.point <- function(x, ...) {
     ll
 }
 
+Point3D <- R6Class("point3d",
+                   public = list(x=NULL, y=NULL, z=NULL,
+                                 initialize = function(x=0, y=0, z=0) {
+                                     if (is.list(x) || inherits(x, "point") || inherits(x, "point3d")) {
+                                         xt <- x$x
+                                         y <- x$y
+                                         z <- if (is.null(x$z)) z else x$z
+                                     } else {
+                                         xt <- x
+                                         y <- y
+                                         z <- z
+                                     }
+                                     n <- max(lengths(list(xt, y, z)))
+                                     self$x <- rep(xt, length.out = n)
+                                     self$y <- rep(y, length.out = n)
+                                     self$z <- rep(z, length.out = n)
+                                 },
+                                 project_op = function(angle, scale) {
+                                   x <- self$x + scale * self$z * cos(to_radians(angle))
+                                   y <- self$y + scale * self$z * sin(to_radians(angle))
+                                   Point$new(x, y)
+                                 },
+                                 translate = function(x = 0, y = 0, z = 0) {
+                                    Point3D$new(self$x + x, self$y + y, self$z + z)
+                                 }
+                                 )
+)
+`[.point3d` <- function(x, i) Point3D$new(x$x[i], x$y[i], x$z[i])
+length.point3d <- function(x) length(x$x)
+
 Vector <- R6Class("geometry_vector", # vector is R builtin class
                   inherit = Point,
                   public = list(dot = function(v) {
                                     self$x * v$x + self$y * v$y
-                                },
-                                orthogonal = function() {
+                                }),
+                  active = list(orthogonal = function() {
                                     Vector$new(self$y, -self$x)
                                 }))
 `[.geometry_vector` <- function(x, i) Vector$new(x$x[i], x$y[i])
@@ -80,16 +111,17 @@ Circle <- R6Class("circle",
                       c(center - self$r, center + self$r)
                   }))
 
-ConvexPolygon <- R6Class("convex_polygon",
+
+Polygon <- R6Class("polygon",
     public = list(vertices=NULL, edges=NULL, normals=NULL,
                initialize = function(x=c(0, 0.5, 1, 0.5), y=c(0.5, 1, 0.5, 0)) {
                    self$vertices <- Point$new(x, y)
                    xy <- cbind(self$x, self$y)
                    n <- length(self$vertices)
                    # edges
-                   p <- self$vertices[c(seq(2,n), 1)]
-                   self$edges <- self$vertices$diff(p)
-                   self$normals <- self$edges$orthogonal()
+                   p <- self$vertices[c(seq(2, n), 1)]
+                   self$edges <- LineSegment$new(self$vertices, p)
+                   self$normals <- self$edges$orthogonal
                },
                plot = function(gp = gpar()) {
                    grid.polygon(x=self$x, y=self$y, default.units="in", gp = gpar())
@@ -106,6 +138,44 @@ ConvexPolygon <- R6Class("convex_polygon",
                   y = function() self$vertices$y)
     )
 
+LineSegment <- R6Class("line_segment",
+    public = list(p1=NULL, p2=NULL,
+                  initialize = function(p1, p2) {
+                      self$p1 <- p1
+                      self$p2 <- p2
+                  },
+                  face_matrix = function(z=0, depth=1) {
+                      vs = list()
+                      vs[[1]] <- Point3D$new(self$p1, z = z - 0.5*depth)
+                      vs[[2]] <- Point3D$new(self$p1, z = z + 0.5*depth)
+                      vs[[3]] <- Point3D$new(self$p2, z = z + 0.5*depth)
+                      vs[[4]] <- Point3D$new(self$p2, z = z - 0.5*depth)
+                      n <- max(lengths(c(self$p1, self$p2)))
+                      m <- matrix(0, nrow = 4 * n, ncol = 3)
+                      for (i_v in seq_len(n)) {
+                          i_m <- 4 * i_v - 4
+                          for (i in 1:4) {
+                              v <- vs[[i]][i_v]
+                              m[i_m + i, ] <- c(v$x, v$y, v$z)
+                          }
+                      }
+                      colnames(m) <- c("x", "y", "z")
+                      m
+                  }),
+   active = list(mid_point = function() {
+                     x <- (self$p1$x + self$p2$x) / 2
+                     y <- (self$p1$y + self$p2$y) / 2
+                     Point$new(x, y)
+                  },
+                  orthogonal = function() {
+                      self$p1$diff(self$p2)$orthogonal
+                  })
+    )
+
+ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
+#### ConcavePolygon, add a list of convex polygons that cover it to test SAT
+#### Most value adding if adding something like megahexes
+
 do_projections_overlap <- function(r1, r2) {
     do_ranges_overlap(r1[1], r1[2], r2[1], r2[2])
 }
@@ -121,7 +191,7 @@ do_convex_polygons_overlap <- function(s1, s2) {
 
 does_convex_polygon_overlap_circle <- function(p, c) { # nolint
     n_vertices <- length(p$vertices)
-    c_normals <- p$vertices$diff(c$c)$orthogonal()
+    c_normals <- p$vertices$diff(c$c)$orthogonal
     for (n in c(as.list(p$normals), as.list(c_normals))) {
         if (!do_projections_overlap(p$project(n), c$project(n))) {
             return(FALSE)

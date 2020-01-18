@@ -1,17 +1,17 @@
 piecepackr 1.2.2
 ================
 
-Bug fixes
----------
+Bug fixes and minor improvements
+--------------------------------
 
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
+* The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
 
 Deprecated Features
 -------------------
 
-The following ``pp_cfg`` R6 class public methods are now deprecated:
+The following ``pp_cfg`` R6 class public method is now deprecated:
     * ``get_pictureGrob``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
-    * ``get_raster``.  Use ``get_grob(piece_type, suit, rank, type="raster")`` instead.
 
 piecepackr 1.2.1
 ================
