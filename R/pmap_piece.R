@@ -91,4 +91,3 @@ default_cfg_envir <- function(cfg=NULL, envir=NULL) {
     }
     list(cfg=cfg, envir=envir)
 }
-

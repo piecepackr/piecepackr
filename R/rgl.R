@@ -113,9 +113,11 @@ rgl.piece_helper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cf
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA, res = 72) {
     cfg <- as_pp_cfg(cfg)
+    # nolint start
     # suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
     # suit <- ifelse(suit > cfg$i_unsuit+1, cfg$i_unsuit+1, suit)
     # rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
+    # nolint end
     if (is.na(angle)) angle <- 0
     if (is.na(axis_x)) axis_x <- 0
     if (is.na(axis_y)) axis_y <- 0
