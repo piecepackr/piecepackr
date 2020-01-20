@@ -62,12 +62,14 @@ or a character vector of \code{pp_cfg} objects}
 \code{rgl.piece} draws board games pieces using the rgl package.
 }
 \examples{
-  if (require("rgl") && require("grid")) {
-      rgl.open()
-      cfg <- pp_cfg()
-      rgl.piece("tile_face", suit=3, rank=3, cfg=cfg, x=0, y=0, z=0)
-      rgl.piece("coin_back", suit=4, rank=2, cfg=cfg, x=2, y=0, z=0)
-      rgl.piece("saucer_back", suit=1, cfg=cfg, x=2, y=2, z=-2)
-      rgl.piece("pawn_face", suit=2, cfg=cfg, x=1, y=1, z=2)
+  \donttest{
+    if (require("rgl")) {
+        rgl.open()
+        cfg <- pp_cfg()
+        rgl.piece("tile_face", suit=3, rank=3, cfg=cfg, x=0, y=0, z=0)
+        rgl.piece("coin_back", suit=4, rank=2, cfg=cfg, x=2, y=0, z=0)
+        rgl.piece("saucer_back", suit=1, cfg=cfg, x=2, y=2, z=-2)
+        rgl.piece("pawn_face", suit=2, cfg=cfg, x=1, y=1, z=2)
+    }
   }
 }
