@@ -1,11 +1,19 @@
 piecepackr 1.2.2
 ================
 
+New features
+------------
+
+* New function ``rgl.piece`` which plots pieces in 3D using ``rgl`` (#137).
+  Experimental and does not support dice nor pyramids yet.
+
 Bug fixes and minor improvements
 --------------------------------
 
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
+* ``pmap_piece`` now supports an ``.f`` function to specify the function to apply to the rows of the data frame.
+  By default it uses the (backwards-compatible) ``pieceGrob`` but one can also use new ``rgl.piece`` function.
 
 Deprecated Features
 -------------------

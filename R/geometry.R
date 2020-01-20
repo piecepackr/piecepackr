@@ -145,7 +145,7 @@ LineSegment <- R6Class("line_segment",
                       self$p2 <- p2
                   },
                   face_matrix = function(z=0, depth=1) {
-                      vs = list()
+                      vs <- list()
                       vs[[1]] <- Point3D$new(self$p1, z = z - 0.5*depth)
                       vs[[2]] <- Point3D$new(self$p1, z = z + 0.5*depth)
                       vs[[3]] <- Point3D$new(self$p2, z = z + 0.5*depth)

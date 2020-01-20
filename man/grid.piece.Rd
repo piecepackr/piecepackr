@@ -2,22 +2,9 @@
 % Please edit documentation in R/pieceGrob.R
 \name{grid.piece}
 \alias{grid.piece}
-\alias{pmap_piece}
 \alias{pieceGrob}
-\title{Draw piecepack pieces using grid}
+\title{Draw board game pieces using grid}
 \usage{
-pmap_piece(
-  .l,
-  ...,
-  cfg = NULL,
-  envir = NULL,
-  trans = NULL,
-  draw = TRUE,
-  name = NULL,
-  gp = NULL,
-  vp = NULL
-)
-
 pieceGrob(
   piece_side = "tile_back",
   suit = NA,
@@ -37,7 +24,8 @@ pieceGrob(
   envir = NULL,
   name = NULL,
   gp = NULL,
-  vp = NULL
+  vp = NULL,
+  ...
 )
 
 grid.piece(
@@ -60,41 +48,20 @@ grid.piece(
   name = NULL,
   gp = NULL,
   draw = TRUE,
-  vp = NULL
+  vp = NULL,
+  ...
 )
 }
 \arguments{
-\item{.l}{A list of vectors, such as a data frame. The length of \code{.l}
-determines the number of arguments that \code{grid.piece_wrapper}
-will be called  with. List names will be used if present.}
-
-\item{...}{Extra arguments to pass to \code{pieceGrob}.}
-
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
-a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
-
-\item{envir}{Environment (or named list) containing configuration list(s).}
-
-\item{trans}{Function to modify \code{.l} before drawing.
-Default (\code{NULL}) is to not modify \code{.l}.  \code{op_transform}
-can help with using an oblique projection (i.e. \code{op_scale} over 0).}
-
-\item{draw}{A logical value indicating whether graphics output should be produced.}
-
-\item{name}{A character identifier (for grid)}
-
-\item{gp}{An object of class ‘gpar’, typically the output from a call
-to the function ‘gpar’.  This is basically a list of
-graphical parameter settings.}
-
-\item{vp}{A \code{grid} viewport object (or NULL).}
-
 \item{piece_side}{A string with piece and side separated by a underscore e.g. "coin_face"}
 
 \item{suit}{Number of suit (starting from 1).}
 
 \item{rank}{Number of rank (starting from 1)}
+
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
+a list of \code{pp_cfg} objects,
+or a character vector of \code{pp_cfg} objects}
 
 \item{x}{Where to place piece on x axis of viewport}
 
@@ -125,16 +92,28 @@ to play with re-configuring fontsizes.}
 
 \item{default.units}{A string indicating the default units to use if
 'x', 'y', 'width', and/or 'height' are only given as numeric vectors.}
+
+\item{envir}{Environment (or named list) containing configuration list(s).}
+
+\item{name}{A character identifier (for grid)}
+
+\item{gp}{An object of class ‘gpar’, typically the output from a call
+to the function ‘gpar’.  This is basically a list of
+graphical parameter settings.}
+
+\item{vp}{A \code{grid} viewport object (or NULL).}
+
+\item{...}{Ignored.}
+
+\item{draw}{A logical value indicating whether graphics output should be produced.}
 }
 \value{
 A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
         will also draw it to the graphics device.
 }
 \description{
-\code{grid.piece} draws a piecepack pieces onto the graphics device.
+\code{grid.piece} draws board game pieces onto the graphics device.
 \code{pieceGrob} is its \code{grid} \code{grob} counterpart.
-\code{pmap_piece} operates on the rows of a data frame
-    applying \code{pieceGrob} to each row.
 }
 \examples{
   if (require("grid")) {
@@ -170,15 +149,9 @@ A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
                           edge_color.coin="tan", edge_color.tile="tan")
        cfg <- pp_cfg(c(cfg, cfg3d))
        draw_pp_diagram(cfg=pp_cfg(cfg), op_scale=0.5)
-
-       # pmap_piece lets you use data frame input
-       grid.newpage()
-       df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
-                              suit=NA, angle=NA, z=NA, stringsAsFactors=FALSE)
-       df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
-                              suit=1:16\%\%2+rep(c(1,3), each=8),
-                              angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
-       df <- rbind(df_tiles, df_coins)
-       pmap_piece(df, cfg=cfg, op_scale=0.5, default.units="in")
   }
+}
+\seealso{
+\code{\link{pmap_piece}} which applies \code{pieceGrob}
+     over rows of a data frame.
 }

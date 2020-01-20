@@ -51,6 +51,13 @@ game_systems <- function(style=NULL) {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
+    } else if (style == "dejavu3d") {
+        piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
+                                background_color="burlywood", border_color="transparent",
+                                mat_color.tile_back = "burlywood", width.tile = 1.95,
+                                edge_color.tile = "black", edge_color.coin = "black",
+                                suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
+        pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
     } else {
         stop(paste("Don't have a customized configuration for style", style))
     }
