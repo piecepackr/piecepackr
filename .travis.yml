@@ -30,6 +30,8 @@ addons:
             - libmagick++-dev
             - ghostscript
             - poppler-utils
+            - libgl1-mesa-dev 
+            - libglu1-mesa-dev
 r_github_packages:
   - r-lib/covr
   - jimhester/lintr
