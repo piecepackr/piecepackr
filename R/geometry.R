@@ -45,8 +45,11 @@ Point <- R6Class("point",
                                    grid.points(x=self$x, y=self$y, default.units="in", gp = gpar())
                                }
                                ))
+#' @export
 `[.point` <- function(x, i) Point$new(x$x[i], x$y[i])
+#' @export
 length.point <- function(x) length(x$x)
+#' @export
 as.list.point <- function(x, ...) {
     n <- length(x)
     ll <- vector("list", n)
@@ -83,7 +86,9 @@ Point3D <- R6Class("point3d",
                                  }
                                  )
 )
+#' @export
 `[.point3d` <- function(x, i) Point3D$new(x$x[i], x$y[i], x$z[i])
+#' @export
 length.point3d <- function(x) length(x$x)
 
 Vector <- R6Class("geometry_vector", # vector is R builtin class
@@ -133,9 +138,31 @@ Polygon <- R6Class("polygon",
                        projections[ii] <- v$dot(self$vertices[ii])
                    }
                    range(projections)
+               },
+               op_ref = function(angle) {
+                   self$c$translate_polar(angle + 180, 10 * self$width)
+               },
+               op_edges = function(angle) {
+                   op_ref <- self$op_ref(angle)
+                   dists <- sapply(self$edges$mid_point, function(x) x$distance_to(op_ref))
+                   self$edges[order(dists, decreasing = TRUE)]
                }),
+    private = list(center = NULL),
     active = list(x = function() self$vertices$x,
-                  y = function() self$vertices$y)
+                  y = function() self$vertices$y,
+                  c = function() {
+                      if (is.null(private$center)) {
+                          x <- mean(self$vertices$x)
+                          y <- mean(self$vertices$y)
+                          private$center <- Point$new(x, y)
+                      }
+                      private$center
+                  },
+                  width = function() {
+                      dx <- diff(range(self$vertices$x))
+                      dy <- diff(range(self$vertices$y))
+                      max(dx, dy)
+                  })
     )
 
 LineSegment <- R6Class("line_segment",
@@ -171,10 +198,12 @@ LineSegment <- R6Class("line_segment",
                       self$p1$diff(self$p2)$orthogonal
                   })
     )
+#' @export
+`[.line_segment` <- function(x, i) LineSegment$new(x$p1[i], x$p2[i])
 
 ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
 #### ConcavePolygon, add a list of convex polygons that cover it to test SAT
-#### Most value adding if adding something like megahexes
+#### Most value adding if adding something like megahexes but could be used for stars as well
 
 do_projections_overlap <- function(r1, r2) {
     do_ranges_overlap(r1[1], r1[2], r2[1], r2[2])

@@ -5,11 +5,13 @@ New features
 ------------
 
 * New function ``rgl.piece`` which plots pieces in 3D using ``rgl`` (#137).
-  Experimental and does not support dice nor pyramids yet.
+  Experimental and does not yet support dice nor pyramids.
 
 Bug fixes and minor improvements
 --------------------------------
 
+* Improved drawing of oblique projection edges for "concave" polygons (stars) 
+  and non-regular "convex" polygons (#174).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
 * ``pmap_piece`` now supports an ``.f`` function to specify the function to apply to the rows of the data frame.

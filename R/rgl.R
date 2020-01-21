@@ -79,7 +79,7 @@ rgl.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA,
                            envir = NULL, ..., res = 72) {
-    if (!requireNamespace("rgl")) {
+    if (!requireNamespace("rgl", quietly = TRUE)) {
         stop("You must install the suggested package rgl to use 'rgl.piece'.  Try ",
              'install.packages("rgl")')
     }

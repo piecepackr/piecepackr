@@ -22,12 +22,10 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     shape <- opt$shape
     if (shape == "circle") {
         circleShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
-    } else if (shape == "rect") {
-        rectShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
-    } else if (grepl("convex", shape)) {
-        convexShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
-    } else {
+    } else if (shape == "halma") {
         genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
+    } else {
+        polygonShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     }
 }
 
@@ -63,58 +61,20 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     polygonGrob(x=x, y=y, default.units="in", gp=gp)
 }
 
-rectShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    xy_c <- Point$new(rect_xy)$npc_to_in(x, y, width, height, angle)
-    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
-    xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
-
-    # face angles
-    fas <- c(180, 90, 0, -90) + angle + 180
-
-    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
-    gl <- gList()
-    for (ii in 1:4) {
-        xf <- c(xy_l$x[ii], xy_l$x[ii%%4+1], xy_u$x[ii%%4+1], xy_u$x[ii])
-        yf <- c(xy_l$y[ii], xy_l$y[ii%%4+1], xy_u$y[ii%%4+1], xy_u$y[ii])
-        da <- dist_angles(fas[ii], op_angle)
-        if ((da < 90)) {
-            gl[[ii]] <- polygonGrob(x=xf, y=yf, default.units="in", gp=gp)
-        }
-    }
-    gl
-}
-
-convexShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    if (width != height)
-        return(genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle))
-
-    n_vertices <- get_n_vertices(opt$shape)
-    r <- min(0.5*width, 0.5*height)
-    thetas <- seq(0, 360, length.out=n_vertices+1) + opt$shape_t + angle
-    # rotated, non-projected vertices at the middle of the solid
-    xy_c <- Point$new(x, y)$translate_polar(thetas, r)
-    # rotated, projected vertices at the bottom and top of the solid
-    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
-    xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
-
-    # face angles
-    fas <- thetas + 360 / n_vertices / 2 + 180
+polygonShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
+    xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
+    xy_c <- Point$new(xy)$npc_to_in(x, y, width, height, angle)
+    p <- Polygon$new(xy_c)
+    fm <- p$op_edges(op_angle)$face_matrix(z, depth)
+    e <- Point3D$new(fm[, 1], fm[, 2], fm[, 3])$project_op(op_angle, op_scale)
 
     gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     gl <- gList()
-    for (ii in 1:n_vertices) {
-        xf <- c(xy_l$x[ii], xy_l$x[ii+1], xy_u$x[ii+1], xy_u$x[ii])
-        yf <- c(xy_l$y[ii], xy_l$y[ii+1], xy_u$y[ii+1], xy_u$y[ii])
-        da <- dist_angles(fas[ii], op_angle)
-        if ((da < 90)) {
-            gl[[ii]] <- polygonGrob(x=xf, y=yf, default.units="in", gp=gp)
-        }
+    for (i in seq(nrow(fm) / 4)) {
+        index <- 4 * (i-1) + 1
+        xf <- e$x[index:(index+3)]
+        yf <- e$y[index:(index+3)]
+        gl[[i]] <- polygonGrob(x=xf, y=yf, default.units="in", gp=gp)
     }
     gl
-}
-
-
-dist_angles <- function(angle1, angle2) {
-    d <- abs(angle1 - angle2) %% 360
-    ifelse(d > 180, 360-d, d)
 }
