@@ -3,17 +3,17 @@
 \name{grid_shape_grobs}
 \alias{grid_shape_grobs}
 \alias{halmaGrob}
-\alias{pyramidGrob}
 \alias{kiteGrob}
+\alias{pyramidGrob}
 \alias{convexGrobFn}
 \alias{concaveGrobFn}
 \title{Grid shape grob utility functions}
 \usage{
 halmaGrob(name = NULL, gp = gpar(), vp = NULL)
 
-pyramidGrob(name = NULL, gp = gpar(), vp = NULL)
-
 kiteGrob(name = NULL, gp = gpar(), vp = NULL)
+
+pyramidGrob(name = NULL, gp = gpar(), vp = NULL)
 
 convexGrobFn(n_vertices, t)
 

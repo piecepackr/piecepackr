@@ -1,4 +1,4 @@
-piecepackr 1.2.2
+piecepackr 1.3.0
 ================
 
 New features
@@ -10,6 +10,7 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
+* Configuration lists now support an "oval" shape (#182).
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).

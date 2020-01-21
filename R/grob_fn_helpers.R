@@ -56,7 +56,7 @@ gridlinesGrob <- function(col, shape = "rect", shape_t = 90, lex = 1, name = NUL
         gp_gl <- gpar(col=col, lwd=lwd, lineend="butt", lex=lex)
         gl[[1]] <- linesGrob(x=0.5, gp=gp_gl)
         gl[[2]] <- linesGrob(y=0.5, gp=gp_gl)
-    } else if (shape %in% c("circle", "kite", "halma")) {
+    } else if (shape %in% c("circle", "kite", "halma", "oval")) {
         stop(paste("Don't know how to add grid lines to shape", shape))
     } else {
         o <- 0.01
@@ -89,7 +89,7 @@ matGrob <- function(col, shape = "rect", shape_t = 90, mat_width = 0, name = NUL
     gp_mat <- gpar(col=NA, fill=col)
     if (shape == "rect") {
         rectMatGrobFn(mat_width)(gp=gp_mat)
-    } else if (shape == "circle") {
+    } else if (shape == "circle" || shape == "oval") {
         convexMatGrobFn(60, 0, mat_width[1])(gp=gp_mat)
     } else if (grepl("^convex", shape)) {
         convexMatGrobFn(get_n_vertices(shape), shape_t, mat_width[1])(gp=gp_mat)
@@ -131,34 +131,6 @@ checkersGrob <- function(col, shape = "rect", shape_t=90, name = NULL) {
     }
 }
 
-# nolint start
-# add_hexlines <- function(col, shape, omit_direction=FALSE) {
-#     if(is_color_invisible(col)) return (grid.null())
-#     if (shape != "rect") {
-#         stop(paste("Don't know how to add hexlines to shape", shape))
-#     }
-#     ho <- 0.25
-#     hl_size <- 4
-#     gp = gpar(col=col, lwd=hl_size)
-#     if (omit_direction %in% 1:2)  # upper left
-#         NULL
-#     else
-#         grid.segments(0, 1 - ho, ho, 1, gp=gp)
-#     if (omit_direction %in% 3:4)  # lower left
-#         NULL
-#     else
-#         grid.segments(0, ho, ho, 0, gp=gp)
-#     if (omit_direction %in% 5:6)  # lower right
-#         NULL
-#     else
-#         grid.segments(1, ho, 1 - ho, 0, gp=gp)
-#     if (omit_direction %in% 7:8)  # upper right
-#         NULL
-#     else
-#         grid.segments(1, 1 - ho, 1 - ho, 1, gp=gp)
-# }
-# nolint end
-
 #' @rdname grob_fn_helpers
 #' @export
 hexlinesGrob <- function(col, shape = "rect", name = NULL) {
@@ -186,16 +158,18 @@ get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2) {
         circleGrob
     } else if (shape == "rect") {
         rectGrob
-    } else if (shape == "kite") {
-        kiteGrob
     } else if (shape == "halma") {
         halmaGrob
     } else if (shape == "pyramid") {
         pyramidGrob
-    } else if (grepl("^concave", shape)) {
-        concaveGrobFn(get_n_vertices(shape), shape_t, shape_r)
     } else if (grepl("^convex", shape)) {
         convexGrobFn(get_n_vertices(shape), shape_t)
+    } else if (grepl("^concave", shape)) {
+        concaveGrobFn(get_n_vertices(shape), shape_t, shape_r)
+    } else if (shape == "kite") {
+        kiteGrob
+    } else if (shape == "oval") {
+        ovalGrob
     } else {
         stop(paste("Don't know how to draw shape", shape))
     }
@@ -217,30 +191,12 @@ get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
         concave_xy(get_n_vertices(shape), shape_t, shape_r)
     } else if (grepl("^convex", shape)) {
         convex_xy(get_n_vertices(shape), shape_t)
+    } else if (shape == "oval") {
+        oval_xy()
     } else {
         stop(paste("Don't know how to get xy coordinates for", shape))
     }
 }
-
-# nolint start
-# get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
-#     if (shape == "rect") {
-#         rect_xy()
-#     } else if (shape == "kite") {
-#         kite_xy()
-#     } else if (shape == "halma") {
-#         halma_xy()
-#     } else if (shape == "pyramid") {
-#         pyramid_xy()
-#     } else if (grepl("^concave", shape)) {
-#         concave_xy(get_n_vertices(shape), shape_t, shape_r)
-#     } else if (grepl("^convex", shape)) {
-#         convex_xy(get_n_vertices(shape), shape_t)
-#     } else {
-#         stop(paste("Don't know how to get xy-coords for shape", shape))
-#     }
-# }
-# nolint end
 
 #' @rdname grob_fn_helpers
 #' @export

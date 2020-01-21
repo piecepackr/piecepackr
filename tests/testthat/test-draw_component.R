@@ -153,6 +153,9 @@ test_that("no regressions in figures", {
                                 function() dc("coin_face", rank=4, cfg=list(shape.coin="convex8")))
     expect_doppelganger("coin_face.r4concave8",
                                 function() dc("coin_face", rank=4, cfg=list(shape.coin="concave8", shape_r.coin=0.4)))
+    expect_doppelganger("coin_face.r4oval",
+                                function() dc("coin_face", rank=4, op_scale = 0.5,
+                                              cfg=list(shape.coin="oval", height.coin=1.3)))
     # die faces
     expect_doppelganger("die_face.s4.r1", function() dc("die_face", suit=4, rank=1))
     expect_doppelganger("die_face.s3.r2", function() dc("die_face", suit=3, rank=2))

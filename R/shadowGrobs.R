@@ -22,7 +22,7 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     shape <- opt$shape
     if (shape == "circle") {
         circleShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
-    } else if (shape == "halma") {
+    } else if (shape %in% c("halma", "oval")) {
         genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     } else {
         polygonShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)

@@ -69,14 +69,19 @@ halmaGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
 
 #' @rdname grid_shape_grobs
 #' @export
-pyramidGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
-    polygonGrob(x = pyramid_xy$x, y = pyramid_xy$y, name=name, gp=gp, vp=vp)
+kiteGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
+    polygonGrob(kite_xy$x, kite_xy$y, name=name, gp=gp, vp=vp)
+}
+
+ovalGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
+    xy <- oval_xy()
+    polygonGrob(xy$x, xy$y, name=name, gp=gp, vp=vp)
 }
 
 #' @rdname grid_shape_grobs
 #' @export
-kiteGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
-    polygonGrob(kite_xy$x, kite_xy$y, name=name, gp=gp, vp=vp)
+pyramidGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
+    polygonGrob(x = pyramid_xy$x, y = pyramid_xy$y, name=name, gp=gp, vp=vp)
 }
 
 polygonGrobFn <- function(x, y) {
@@ -90,6 +95,8 @@ convex_xy <- function(n_vertices, t) {
     y <- to_y(t, r) + 0.5
     list(x=utils::head(x, -1), y=utils::head(y, -1))
 }
+
+oval_xy <- function() convex_xy(36, 90)
 
 #' @rdname grid_shape_grobs
 #' @export
