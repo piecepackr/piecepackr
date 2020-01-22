@@ -8,12 +8,9 @@ plot_raster_face <- function(filename, x = 0, y = 0, z = 0,
     }
     p <- p$npc_to_in(x, y, width, height, angle)
     texcoords <- matrix(c(0,1,1,0,0,0,1,1), ncol=2)
-    rgl::rgl.quads(p$x, y=p$y,z=z,
+    rgl::rgl.quads(p$x, y=p$y, z=z,
                    texcoords=texcoords, texture=filename, textype="rgba",
-                   back = "culled",
-                   lit = FALSE,
-                   # fog = FALSE,
-                   # texmipmap = TRUE,
+                   lit = FALSE
                    )
 }
 
