@@ -1,19 +1,19 @@
 #' @importFrom tibble tibble
 xya_pips_cards <- function(n_pips) {
     if (n_pips == 0) {
-        return (tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
+        return(tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
     }
     switch(n_pips,
            tibble(x = 0.5, y = 0.5, angle = 0), # 1
            tibble(x = 0.5, y = c(0.2, 0.8), angle = c(180, 0)), # 2
            tibble(x = 0.5, y = c(0.2, 0.5, 0.8), angle = c(180, 0, 0)), # 3
-           tibble(x = rep(c(0.25, 0.75), 2), 
+           tibble(x = rep(c(0.25, 0.75), 2),
                   y = rep(c(0.2, 0.8), each=2), # 4
-                  angle = rep(c(180, 0), each=2)), 
+                  angle = rep(c(180, 0), each=2)),
            tibble(x = c(rep(c(0.25, 0.75), 2), 0.5), # 5
                   y = c(rep(c(0.2, 0.8), each=2), 0.5),
                   angle = c(rep(180, 2), rep(0, 3))),
-           tibble(x = rep(c(0.25, 0.75), 3), 
+           tibble(x = rep(c(0.25, 0.75), 3),
                   y = rep(c(0.2, 0.5, 0.8), each=2), # 6
                   angle = c(rep(180, 2), rep(0, 4))),
            tibble(x = c(rep(c(0.25, 0.75), 3), 0.5), # 7
@@ -34,7 +34,7 @@ xya_pips_cards <- function(n_pips) {
 
 xya_pips_dominoes <- function(n_pips) {
     if (n_pips == 0) {
-        return (tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
+        return(tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
     }
     switch(n_pips,
            tibble(x = 0.5, y = 0.5, angle = 0), # 1
@@ -43,7 +43,7 @@ xya_pips_dominoes <- function(n_pips) {
                   y = c(0.75, 0.5, 0.25),
                   angle = c(0, 0, 180)), # 3
            tibble(x = rep(c(0.25, 0.75), 2), # 4
-                  y = rep(c(0.25, 0.75), each=2), 
+                  y = rep(c(0.25, 0.75), each=2),
                   angle = rep(c(180, 0), each=2)),
            tibble(x = c(rep(c(0.25, 0.75), 2), 0.5), # 5
                   y = c(rep(c(0.25, 0.75), each=2), 0.5),

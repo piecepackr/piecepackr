@@ -6,10 +6,10 @@
 #'      subpack and (piecepack) hexpack \code{pp_cfg} R6 objects respectively given a piecepack configuration.
 #'
 #' Contains the following game systems:\describe{
-#' \item{dice}{Traditional six-sided pipped dice in six color schemes (controlled by their suit).}
-#' \item{dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
-#'      Traditional pipped dominoes in six color schemes.
-#'      In each scheme the number of pips on the \dQuote{top} of the domino is
+#' \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
+#' \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
+#'      Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
+#'      In each color scheme the number of pips on the \dQuote{top} of the domino is
 #'      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
 #' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
 #'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
@@ -99,6 +99,7 @@ game_systems <- function(style=NULL) {
     dice$has_dice <- TRUE
 
     list(dice = dice,
+         dominoes = dominoes("white", "black", "black"),
          dominoes_black = dominoes("black", "white", "grey30"),
          dominoes_blue = dominoes("#56B4E9", "white", "black"),
          dominoes_green = dominoes("#009E73", "white", "black"),
@@ -114,7 +115,9 @@ game_systems <- function(style=NULL) {
 
 dominoes <- function(background_color = "white", suit_color = "black", border_color = "black") {
     dominoes <- pp_cfg(list(n_suits = 13, n_ranks = 13,
-                            width.tile = 1, height.tile = 2,
+                            width.tile = 1,
+                            height.tile = 2,
+                            depth.tile = 0.25, # 3/8 professional, 1/2 jumbo
                             width.die = 16 / 25.4,
                             suit_color = suit_color, background_color = background_color,
                             border_color = border_color, border_lex = 4,

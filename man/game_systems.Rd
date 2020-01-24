@@ -26,10 +26,10 @@ representing several game systems.
 }
 \details{
 Contains the following game systems:\describe{
-\item{dice}{Traditional six-sided pipped dice in six color schemes (controlled by their suit).}
-\item{dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
-     Traditional pipped dominoes in six color schemes.
-     In each scheme the number of pips on the \dQuote{top} of the domino is
+\item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
+\item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
+     Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
+     In each color scheme the number of pips on the \dQuote{top} of the domino is
      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
 \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
@@ -45,7 +45,7 @@ Contains the following game systems:\describe{
     \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
                              See \url{http://www.piecepack.org/Accessories.html}.}
   }}
-\item{playing_cards_expansion}{A piecepack with the standard (``French'') playing card suits.
+\item{playing_cards_expansion}{A piecepack with the standard ``French'' playing card suits.
                                See \url{http://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
 \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
               ``stackpack'' diagrams.  See \url{http://www.ludism.org/ppwiki/StackPack}.}
