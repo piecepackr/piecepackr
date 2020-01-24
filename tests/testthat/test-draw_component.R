@@ -203,6 +203,20 @@ test_that("no regressions in figures", {
 
     cfg <- list(die_arrangement="opposites_sum_to_5")
     expect_doppelganger("die_layoutRF-opposites_sum_to_5", function() dc("die_layoutRF", suit=3, cfg=cfg))
+
+    # standard d6 dice
+    cfg <- game_systems("dejavu")$dice
+    expect_doppelganger("dice_d6", function()
+        grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6, op_scale=0.5, cfg=cfg))
+
+    # dominoes
+    cfg <- game_systems("dejavu3d")$dominoes_white
+    expect_doppelganger("dominoes", function()
+        grid.piece("tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+                   default.units="in", cfg=cfg, op_scale=0.5))
+    expect_error(xya_pips_cards(11), "Don't know pip pattern for 11 pips")
+    expect_error(xya_pips_dominoes(13), "Don't know pip pattern for 13 pips")
+
     # 102
     expect_doppelganger("rankdie_layoutRF_suitasace", function() {
         dc("die_layoutRF", suit=6, cfg=list(use_suit_as_ace=TRUE))

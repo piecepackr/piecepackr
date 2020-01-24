@@ -6,6 +6,10 @@ New features
 
 * New function ``rgl.piece`` which plots pieces in 3D using ``rgl`` (#137).
   Experimental and does not yet support dice nor pyramids.
+* Function ``game_systems`` now returns more game systems:
+
+  - ``dice``: Normal six-sided pipped dice in six color schemes.
+  - ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes.  
 
 Bug fixes and minor improvements
 --------------------------------
@@ -33,7 +37,28 @@ New features
 * New function ``picturePieceGrobFn`` which returns a "grob" function that imports graphics
   from files found in its ``directory`` argument (#152).
 * New function ``game_systems`` which returns a list of configuration objects
-  for multiple game systems (#157).
+  for multiple game systems (#157):
+
+  - ``dual_piecepacks_expansion``: A companion piecepack with a special suit scheme.
+                 See https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html.
+  - ``hexpack``: A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
+                  See https://boardgamegeek.com/boardgameexpansion/35424/hexpack.
+  - ``piecepack``: A public domain game system invented by James "Kyle" Droscha.
+     See http://www.ludism.org/ppwiki.
+     Configuration also contains the following piecepack accessories:
+
+       + ``piecepack matchstick``s: A public domain accessory developed by Dan Burkey.
+                                   See http://www.ludism.org/ppwiki/PiecepackMatchsticks.
+       + ``piecepack pyramids``: A public domain accessory developed by Tim Schutz.
+                                See http://www.ludism.org/ppwiki/PiecepackPyramids.
+       + ``piecepack saucers``: A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
+                                See http://www.piecepack.org/Accessories.html.
+     
+  - ``playing_cards_expansion``: A piecepack with the standard "French" playing card suits.
+                                  See http://www.ludism.org/ppwiki/PlayingCardsExpansion.
+  - ``subpack``: A "mini" piecepack.  Designed to be used with the ``piecepack`` to make piecepack
+                 "stackpack" diagrams.  See http://www.ludism.org/ppwiki/StackPack.
+   
 * Helper functions ``to_subpack`` and ``to_hexpack`` which given a piecepack configuration
   attempts to generate an appropriate matching (piecepack stackpack) subpack and hexpack (#161).
 * New function ``file2grob`` that imports a given image file as a grob.

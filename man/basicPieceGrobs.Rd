@@ -34,7 +34,7 @@ function returned by \code{picturePieceGrobFn} should import.}
 \description{
 \code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob}
  are the default \dQuote{grob} functions that \code{grid.piece} uses
-to create \code{grid} #' graphical \code{grob} objects.  \code{picturePieceGrobFn}
+to create \code{grid} graphical \code{grob} objects.  \code{picturePieceGrobFn}
 is a function that returns a \dQuote{grob} function that imports graphics from files
 found in its \code{directory} argument.
 }

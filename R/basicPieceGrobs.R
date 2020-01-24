@@ -2,7 +2,7 @@
 #'
 #' \code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob}
 #'  are the default \dQuote{grob} functions that \code{grid.piece} uses
-#' to create \code{grid} #' graphical \code{grob} objects.  \code{picturePieceGrobFn}
+#' to create \code{grid} graphical \code{grob} objects.  \code{picturePieceGrobFn}
 #' is a function that returns a \dQuote{grob} function that imports graphics from files
 #' found in its \code{directory} argument.
 #'
@@ -63,12 +63,12 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     # Primary symbol
     gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize,
                   fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
-    ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps)
+    ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps, hjust = 0.5, vjust = 0.5)
 
     # Directional mark
     gp_dm <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
                   fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
-    dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm)
+    dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm, hjust = 0.5, vjust = 0.5)
 
     # Border
     border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))

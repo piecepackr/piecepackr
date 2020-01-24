@@ -26,6 +26,11 @@ representing several game systems.
 }
 \details{
 Contains the following game systems:\describe{
+\item{dice}{Traditional six-sided pipped dice in six color schemes (controlled by their suit).}
+\item{dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
+     Traditional pipped dominoes in six color schemes.
+     In each scheme the number of pips on the \dQuote{top} of the domino is
+     controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
 \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
