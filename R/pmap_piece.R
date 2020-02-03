@@ -1,7 +1,7 @@
 #' Create graphics using data frame input
 #'
 #' \code{pmap_piece} operates on the rows of a data frame
-#'     applying \code{.f} to each row (usually \code{grid.piece} or \code{rgl.piece}).
+#'     applying \code{.f} to each row (usually \code{grid.piece}).
 #'
 #' \code{pmap_piece} differs from \code{purrr::pmap} in a few ways
 #' \enumerate{
@@ -16,11 +16,10 @@
 #'           will be called  with. List names will be used if present.
 #' @param .f Function to be applied to \code{.l} after adjustments to
 #'        \code{cfg} and \code{envir} and the application of \code{trans}.
-#'        Popular functions are \code{grid.piece} (the default) or \code{rgl.piece}.
 #' @param trans Function to modify \code{.l} before drawing.
 #'        Default (\code{NULL}) is to not modify \code{.l}.  \code{op_transform}
 #'        can help with using an oblique projection (i.e. \code{op_scale} over 0).
-#' @param ... Extra arguments to pass to \code{pieceGrob} or \code{rgl.piece}.
+#' @param ... Extra arguments to pass to \code{.f}.
 #' @examples
 #'   if (require("grid")) {
 #'        dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",

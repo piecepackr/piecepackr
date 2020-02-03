@@ -23,10 +23,9 @@ determines the number of arguments that \code{grid.piece_wrapper}
 will be called  with. List names will be used if present.}
 
 \item{.f}{Function to be applied to \code{.l} after adjustments to
-\code{cfg} and \code{envir} and the application of \code{trans}.
-Popular functions are \code{grid.piece} (the default) or \code{rgl.piece}.}
+\code{cfg} and \code{envir} and the application of \code{trans}.}
 
-\item{...}{Extra arguments to pass to \code{pieceGrob} or \code{rgl.piece}.}
+\item{...}{Extra arguments to pass to \code{.f}.}
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
@@ -50,7 +49,7 @@ graphical parameter settings.}
 }
 \description{
 \code{pmap_piece} operates on the rows of a data frame
-    applying \code{.f} to each row (usually \code{grid.piece} or \code{rgl.piece}).
+    applying \code{.f} to each row (usually \code{grid.piece}).
 }
 \details{
 \code{pmap_piece} differs from \code{purrr::pmap} in a few ways
