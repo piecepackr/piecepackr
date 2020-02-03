@@ -1,0 +1,4 @@
+destination: "/home/trevorld/a/projects/websites/R/piecepackr/"
+url: "https://trevorldavis.com/R/piecepackr"
+development:
+    mode: auto
