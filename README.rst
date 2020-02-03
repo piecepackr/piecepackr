@@ -5,16 +5,16 @@ piecepackr: Board Game Graphics
     :target: https://cran.r-project.org/package=piecepackr
     :alt: CRAN Status Badge
 
-.. image:: https://travis-ci.org/trevorld/piecepackr.png?branch=master
-    :target: https://travis-ci.org/trevorld/piecepackr
+.. image:: https://travis-ci.org/piecepackr/piecepackr.png?branch=master
+    :target: https://travis-ci.org/piecepackr/piecepackr
     :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/trevorld/piecepackr?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/trevorld/piecepackr
+.. image:: https://ci.appveyor.com/api/projects/status/github/piecepackr/piecepackr?branch=master&svg=true 
+    :target: https://ci.appveyor.com/project/piecepackr/piecepackr
     :alt: AppVeyor Build Status
 
-.. image:: https://img.shields.io/codecov/c/github/trevorld/piecepackr/master.svg
-    :target: https://codecov.io/github/trevorld/piecepackr?branch=master
+.. image:: https://img.shields.io/codecov/c/github/piecepackr/piecepackr/master.svg
+    :target: https://codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
 
 .. image:: https://www.repostatus.org/badges/latest/active.svg
@@ -29,7 +29,7 @@ piecepackr: Board Game Graphics
 
 .. _Print & Play layouts: https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html
 
-.. _man pages: https://rdrr.io/github/trevorld/piecepackr/man/
+.. _man pages: https://rdrr.io/github/piecepackr/piecepackr/man/
 
 .. _oblique projection: https://trevorldavis.com/piecepackr/3d-projections.html
 
@@ -260,7 +260,7 @@ To install the development version use the following commands:
 .. code:: r
 
    install.packages("remotes")
-   remotes::install_github("trevorld/piecepackr")
+   remotes::install_github("piecepackr/piecepackr")
 
 The default piecepackr configuration should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However if you wish to use advanced piecepackr configurations you'll need to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
 
@@ -395,4 +395,4 @@ How do I use this package in piecepack rulesets?
 There are two main ways that this package could be used to help make piecepack rulesets:
 
 1) The ``save_piece_images`` function makes individual images of components.  By default it makes them in the svg formats with rotations of 0 degrees but with configuration can also make them in the bmp, jpeg, pdf, png, ps, and tiff formats as well as 90, 180, and 270 degree rotations.  These can be directly inserted into your ruleset or even used to build diagrams with the aid of a graphics editor program.  An example filename is ``tile_face_s1_r5_t180.pdf`` where ``tile`` is the component, ``face`` is the side, ``s1`` indicates it was the first suit, ``r5`` indicates it was the 5th rank, ``t180`` indicates it was rotated 180 degrees, and ``pdf`` indicates it is a pdf image.
-2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  The important function for diagram drawing exported by the ``piecepack`` R package is ``grid.piece`` (or alternatives like ``pmap_piece``) which draws piecepack components to the graphics device.  The `ppgames <https://github.com/trevorld/ppgames>`_ R package has code for several `game diagram examples <https://trevorldavis.com/piecepackr/tag/ppgames.html>`_.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__.
+2) This R package can be directly used with the ``grid`` graphics library in R to make diagrams.  The important function for diagram drawing exported by the ``piecepack`` R package is ``grid.piece`` (or alternatives like ``pmap_piece``) which draws piecepack components to the graphics device.  The `ppgames <https://github.com/piecepackr/ppgames>`_ R package has code for several `game diagram examples <https://trevorldavis.com/piecepackr/tag/ppgames.html>`_.  One can also use this package to `make animations <https://trevorldavis.com/piecepackr/animations.html>`__.
