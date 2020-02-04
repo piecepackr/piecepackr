@@ -171,13 +171,16 @@ Config <- R6Class("pp_cfg",
             piece <- get_piece(piece_side)
             default <- switch(piece,
                               belt = 0.75 * pi, # so can wrap around 3/4" diameter pawns
-                              coin = 3/4,
-                              die = 1/2,
+                              bit = 0.75,
+                              board = rank,
+                              card = 2.5,
+                              coin = 0.75,
+                              die = 0.5,
                               matchstick = MATCHSTICK_WIDTHS[rank],
-                              pawn = 1/2,
+                              pawn = 0.5,
                               pyramid = PYRAMID_WIDTHS[rank],
-                              saucer = 3/4, # better than 7/8" for diagrams of hex games played with coin+pawn
-                              suitdie = 1/2,
+                              saucer = 0.75, # better than 7/8" for diagrams of hex games played with coin+pawn
+                              suitdie = 0.5,
                               tile = 2,
                               stop(paste("Don't know width of piece", piece)))
             width <- get_style_element("width", piece_side, private$cfg, default, suit, rank)
@@ -219,11 +222,14 @@ Config <- R6Class("pp_cfg",
                 ms_default <- (c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)[rank])
             }
             default <- switch(piece,
-                              belt = 1/2,
+                              belt = 0.5,
+                              bit = width,
+                              board = width,
+                              card = 1.4 * width,
                               coin = width,
                               die = width,
                               matchstick = ms_default,
-                              pawn = PAWN_HEIGHT,
+                              pawn = 0.875,
                               pyramid = 1.538842 * width,
                               saucer = width,
                               suitdie = width,
@@ -245,14 +251,17 @@ Config <- R6Class("pp_cfg",
             }
             piece <- get_piece(piece_side)
             default <- switch(piece,
-                              coin = 1/8,
+                              bit = 0.25,
+                              board = 0.25,
+                              card = 0.01181102, # 3 mm
+                              coin = 0.125,
                               die = width,
                               matchstick = width,
-                              pawn = 1/4,
-                              pyramid = 0.5*width,
-                              saucer = 1/8,
+                              pawn = 0.25,
+                              pyramid = 0.5 * width,
+                              saucer = 0.125,
                               suitdie = width,
-                              tile = 1/4,
+                              tile = 0.25,
                               0)
             depth <- get_style_element("depth", piece_side, private$cfg, default, suit, rank)
             private$cache[[key]] <- depth

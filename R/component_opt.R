@@ -2,6 +2,25 @@ get_piece <- function(piece_side) {
     cleave(piece_side, "_")[1]
 }
 
+has_suit <- function(cs) {
+    !(cs %in% c("tile_back", "saucer_back", "coin_face", "card_back"))
+}
+has_rank <- function(cs) {
+    !(cs %in% c("tile_back", "coin_back", "suitdie_face",
+                "pawn_face", "pawn_back", "belt_face",
+                "saucer_face", "saucer_back"))
+}
+
+PYRAMID_WIDTHS <- 2:8 * 1/8
+PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
+PYRAMID_DIAGONALS <- sqrt(PYRAMID_HEIGHTS^2 + (0.5*PYRAMID_WIDTHS)^2)
+PYRAMID_LAYOUT_WIDTHS <- PYRAMID_HEIGHTS
+PYRAMID_LAYOUT_HEIGHTS <- 2*PYRAMID_DIAGONALS
+W <- 3/16
+S <- 1
+MATCHSTICK_WIDTHS <- c(2*W, rep(W, 5))
+MATCHSTICK_HEIGHTS <- c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)
+
 # nolint start
 # piece_side="pawn_face"
 # suit=0
@@ -169,6 +188,12 @@ get_shape <- function(piece_side, suit, rank, cfg) {
                coin_back = "circle",
                coin_face = "circle",
                die_face = "rect",
+               board_face = "rect",
+               board_back = "rect",
+               bit_face = "circle",
+               bit_back = "circle",
+               card_face = "rect",
+               card_back = "rect",
                matchstick_back = "rect",
                matchstick_face = "rect",
                pawn_face = "halma",
@@ -288,7 +313,7 @@ get_dm_symbols <- function(piece_side, suit=0, rank=0, cfg=list()) {
         } else if (piece_side %in% c("pawn_face", "pyramid_face")) {
             dm_symbols <- "\u0298\u0298"
         } else if (piece_side %in% c("suitdie_face", "pawn_back",
-                                         "belt_face", "tile_back", "matchstick_back",
+                                         "belt_face", "tile_back", "matchstick_back", "card_back",
                                          "pyramid_left", "pyramid_right", "pyramid_back")) {
             dm_symbols <- ""
         } else {
@@ -528,6 +553,7 @@ get_suit_fontsize <- function(piece_side, suit, rank, cfg) {
                  "coin_back" = 34,
                  "pawn_face" = 28,
                  "pawn_back" = 28,
+                 "bit_back" = 34,
                  "saucer_back" = 28,
                  "saucer_face" = 28,
                  "suitdie_face" = 32,
@@ -552,6 +578,7 @@ get_rank_fontsize <- function(piece_side, suit, rank, cfg) {
                  "die_face" = 20,
                  "coin_face" = 28,
                  "tile_face" = 72,
+                 "bit_face" = 28,
                  "pyramid_left"  = 60 * (rank+1) / 8,
                  "pyramid_right" = 60 * (rank+1) / 8,
                  20)
@@ -560,9 +587,11 @@ get_rank_fontsize <- function(piece_side, suit, rank, cfg) {
 
 
 get_ps_element <- function(piece_side, suit_element, rank_element, neither_element=NA) {
-    if (piece_side %in% c("coin_face", "die_face", "tile_face", "pyramid_left", "pyramid_right", "matchstick_face")) {
+    if (piece_side %in% c("coin_face", "die_face", "tile_face",
+                          "pyramid_left", "pyramid_right", "matchstick_face",
+                          "bit_face", "card_face")) {
         rank_element
-    } else if (piece_side %in% c("tile_back", "matchstick_back")) {
+    } else if (piece_side %in% c("tile_back", "matchstick_back", "card_back")) {
         neither_element
     } else {
         suit_element
@@ -646,6 +675,10 @@ get_piece_opt_helper <- function(piece_side, suit, rank, cfg) {
     ps_x <- to_x(ps_t, ps_r) + 0.5
     ps_y <- to_y(ps_t, ps_r) + 0.5
 
+    # Extra info
+    rank_text <- get_rank_symbol(piece_side, suit, rank, cfg)
+    suit_text <- get_suit_symbol(piece_side, suit, rank, cfg)
+
     list(shape=shape, shape_r=shape_r, shape_t=shape_t,
          background_color=background_color,
          border_color=border_color, border_lex=border_lex, edge_color=edge_color,
@@ -658,5 +691,6 @@ get_piece_opt_helper <- function(piece_side, suit, rank, cfg) {
          ps_color=ps_color, ps_text=ps_text,
          ps_fontsize=ps_fontsize,
          ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
-         ps_x=ps_x, ps_y=ps_y)
+         ps_x=ps_x, ps_y=ps_y,
+         rank_text=rank_text, suit_text=suit_text)
 }

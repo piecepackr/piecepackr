@@ -6,33 +6,6 @@ COMPONENT_AND_SIDES <- c("tile_back", "tile_face", "coin_back", "coin_face",
            "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right", "pyramid_top",
            "matchstick_face", "matchstick_back")
 
-has_suit <- function(cs) {
-    !(cs %in% c("tile_back", "saucer_back", "coin_face"))
-}
-has_rank <- function(cs) {
-    !(cs %in% c("tile_back", "coin_back", "suitdie_face",
-                "pawn_face", "pawn_back", "belt_face",
-                "saucer_face", "saucer_back"))
-}
-
-COIN_WIDTH <- 3/4
-DIE_WIDTH <- 1/2
-TILE_WIDTH <- 2
-PAWN_HEIGHT <- 7/8
-DIE_LAYOUT_WIDTH <- 4 * DIE_WIDTH
-DIE_LAYOUT_HEIGHT <- 3 * DIE_WIDTH
-PYRAMID_WIDTHS <- 2:8 * 1/8
-PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
-PYRAMID_DIAGONALS <- sqrt(PYRAMID_HEIGHTS^2 + (0.5*PYRAMID_WIDTHS)^2)
-PYRAMID_LAYOUT_WIDTHS <- PYRAMID_HEIGHTS
-PYRAMID_LAYOUT_HEIGHTS <- 2*PYRAMID_DIAGONALS
-W <- 3/16
-S <- 1
-MATCHSTICK_WIDTHS <- c(2*W, rep(W, 5))
-MATCHSTICK_HEIGHTS <- c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S-W)
-
-
-
 pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, rank=1,
                       width=NULL, height=NULL, res=72) {
     cfg <- as_pp_cfg(cfg)
@@ -108,6 +81,10 @@ pp_dev_off <- function(f, format) {
     invisible(v)
 }
 
+#### Check if configuration has that piece?
+#### Extend to boards, bits, and cards?
+#### What to do if don't want other side of two sided pieces?
+#### Allow list of which pieces to save?
 make_images_helper <- function(directory, cfg, format, angle) {
     suppressWarnings({
         for (cs in COMPONENT_AND_SIDES) {
