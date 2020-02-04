@@ -175,29 +175,6 @@ get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2) {
     }
 }
 
-get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
-    if (shape == "circle") {
-        thetas <- seq(0, 360, length.out=30 + 1)[-1]
-        Point$new(0.5, 0.5)$translate_polar(thetas, 0.5)
-    } else if (shape == "rect") {
-        rect_xy
-    } else if (shape == "kite") {
-        kite_xy
-    } else if (shape == "halma") {
-        halma_xy()
-    } else if (shape == "pyramid") {
-        pyramid_xy
-    } else if (grepl("^concave", shape)) {
-        concave_xy(get_n_vertices(shape), shape_t, shape_r)
-    } else if (grepl("^convex", shape)) {
-        convex_xy(get_n_vertices(shape), shape_t)
-    } else if (shape == "oval") {
-        oval_xy()
-    } else {
-        stop(paste("Don't know how to get xy coordinates for", shape))
-    }
-}
-
 #' @rdname grob_fn_helpers
 #' @export
 is_color_invisible <- function(col) {

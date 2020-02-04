@@ -12,8 +12,8 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='328.50,336.47 360.00,239.53 391.50,336.47 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='360.00,239.53 328.50,336.47 391.50,336.47 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='344.41' y='330.30' style='font-size: 52.50px; fill: #D55E00; font-family: Liberation Sans;' textLength='31.17px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <text x='351.83' y='281.91' style='font-size: 10.50px; fill: #D55E00; font-family: Liberation Sans;' textLength='16.34px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
-<polyline points='328.50,336.47 360.00,239.53 391.50,336.47 328.50,336.47 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polyline points='360.00,239.53 328.50,336.47 391.50,336.47 360.00,239.53 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>
