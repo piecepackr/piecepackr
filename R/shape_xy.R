@@ -1,8 +1,8 @@
 get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
-    if (shape == "circle|oval") {
-        oval_xy()
-    } else if (shape == "rect") {
+    if (shape == "rect") {
         rect_xy
+    } else if (grepl(shape, "circle|oval")) {
+        oval_xy()
     } else if (shape == "kite") {
         kite_xy
     } else if (shape == "halma") {

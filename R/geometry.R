@@ -81,8 +81,23 @@ Point3D <- R6Class("point3d",
                                    y <- self$y + scale * self$z * sin(to_radians(angle))
                                    Point$new(x, y)
                                  },
+                                 dilate = function(width = 1, height = 1, depth = 1) {
+                                     x <- width * self$x
+                                     y <- height * self$y
+                                     z <- depth * self$z
+                                     Point3D$new(x, y, z)
+                                 },
                                  translate = function(x = 0, y = 0, z = 0) {
-                                    Point3D$new(self$x + x, self$y + y, self$z + z)
+                                     if (is.list(x) || inherits(x, "point") || inherits(x, "point3d")) {
+                                         xt <- x$x
+                                         y <- x$y
+                                         z <- if (is.null(x$z)) z else x$z
+                                     } else {
+                                         xt <- x
+                                         y <- y
+                                         z <- z
+                                     }
+                                    Point3D$new(self$x + xt, self$y + y, self$z + z)
                                  }
                                  )
 )
