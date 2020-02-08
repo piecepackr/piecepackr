@@ -1,0 +1,15 @@
+cfg <- piecepackr::game_systems("dejavu3d")$piecepack
+test_that("save_piece_obj works", {
+    files <- save_piece_obj("tile_face", cfg = cfg)
+    expect_length(files, 3)
+    files <- save_piece_obj("pyramid_top", cfg = cfg)
+    expect_length(files, 3)
+    files <- save_piece_obj("pyramid_left", cfg = cfg)
+    expect_length(files, 3)
+    files <- save_piece_obj("pyramid_right", cfg = cfg)
+    expect_length(files, 3)
+    files <- save_piece_obj("pyramid_back", cfg = cfg)
+    expect_length(files, 3)
+    files <- save_piece_obj("pyramid_face", cfg = cfg)
+    expect_length(files, 3)
+})

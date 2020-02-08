@@ -8,6 +8,8 @@ New features
 
   - ``dice``: Normal six-sided pipped dice in six color schemes.
   - ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes.  
+* New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures).
+  Currently doesn't support dice and pawns are two-sided tokens.
 
 Bug fixes and minor improvements
 --------------------------------
