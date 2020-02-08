@@ -87,6 +87,14 @@ Point3D <- R6Class("point3d",
                                      z <- depth * self$z
                                      Point3D$new(x, y, z)
                                  },
+                                 rotate = function(t = 0, axis_x = 0, axis_y = 0) {
+                                     if (axis_x != 0 || axis_y != 0) {
+                                         stop("Don't know how to do this rotation yet")
+                                     }
+                                     x <- self$x * cos(to_radians(t)) - self$y * sin(to_radians(t))
+                                     y <- self$x * sin(to_radians(t)) + self$y * cos(to_radians(t))
+                                     Point3D$new(x, y, self$z)
+                                 },
                                  translate = function(x = 0, y = 0, z = 0) {
                                      if (is.list(x) || inherits(x, "point") || inherits(x, "point3d")) {
                                          xt <- x$x
