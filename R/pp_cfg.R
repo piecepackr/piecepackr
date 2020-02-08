@@ -245,9 +245,14 @@ Config <- R6Class("pp_cfg",
                 return(private$cache[[key]])
             }
             width <- self$get_width(piece_side, suit, rank)
-            if (grepl("pyramid_top", piece_side)) {
-                slant_height <- self$get_height("pyramid_face", rank=rank)
-                return(sqrt(slant_height^2 - (0.5*width)^2))
+            if (grepl("pyramid", piece_side)) {
+                height <- self$get_height("pyramid_face", rank=rank)
+                if (piece_side == "pyramid_top") {
+                    return(sqrt(height^2 - (0.5*width)^2))
+                } else {
+                    theta <- 2 * asin(0.5 * width / height)
+                    return(sin(theta) * height)
+                }
             }
             piece <- get_piece(piece_side)
             default <- switch(piece,
@@ -258,7 +263,6 @@ Config <- R6Class("pp_cfg",
                               die = width,
                               matchstick = width,
                               pawn = 0.25,
-                              pyramid = 0.5 * width,
                               saucer = 0.125,
                               suitdie = width,
                               tile = 0.25,

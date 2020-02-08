@@ -19,6 +19,7 @@ Bug fixes and minor improvements
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
 * ``pmap_piece`` now supports an ``.f`` function to specify the function to apply to the rows of the data frame.
   By default it uses the (backwards-compatible) ``pieceGrob``.
+* ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).
 
 Deprecated Features
 -------------------

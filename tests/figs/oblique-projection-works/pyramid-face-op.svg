@@ -12,11 +12,11 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='369.00,301.85 372.18,298.67 363.18,270.97 360.00,274.15 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='360.00,274.15 363.18,270.97 354.18,298.67 351.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='351.00,301.85 354.18,298.67 372.18,298.67 369.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='363.18,270.97 354.18,298.67 372.18,298.67 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text x='358.73' y='296.90' style='font-size: 15.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='8.91px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<text x='360.85' y='283.08' style='font-size: 3.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='4.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
-<polyline points='363.18,270.97 354.18,298.67 372.18,298.67 363.18,270.97 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='369.00,301.85 375.02,295.83 366.02,268.13 360.00,274.15 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
+<polygon points='360.00,274.15 366.02,268.13 357.02,295.83 351.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
+<polygon points='351.00,301.85 357.02,295.83 375.02,295.83 369.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
+<polygon points='366.02,268.13 357.02,295.83 375.02,295.83 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='361.57' y='294.06' style='font-size: 15.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='8.91px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='363.69' y='280.24' style='font-size: 3.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='4.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
+<polyline points='366.02,268.13 357.02,295.83 375.02,295.83 366.02,268.13 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>
