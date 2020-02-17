@@ -127,8 +127,8 @@ is_legit_rank <- function(rank) {
 is_legit_suit <- function(suit) {
     (suit %in% c("suited", "unsuited")) || grepl("s[[:digit:]]", suit)
 }
-pieces <- c(paste0(rep(c("tile", "coin", "pawn", "saucer", "matchstick", "pyramid"), 3),
-                   rep(c("", "_face", "_back"), each=6)),
+pieces <- c(paste0(rep(c("tile", "coin", "pawn", "saucer", "matchstick", "pyramid", "bit", "board", "card"), 3),
+                   rep(c("", "_face", "_back"), each=9)),
             "die", "belt", "die_face", "belt_face", "pyramid_left", "pyramid_right")
 is_legit_piece <- function(piece) {
     piece %in% pieces
