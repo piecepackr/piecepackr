@@ -21,6 +21,8 @@ piecepackr: Board Game Graphics
    :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
    :target: https://www.repostatus.org/#active
 
+.. _hexpack: http://www.ludism.org/ppwiki/HexPack
+
 .. _piecepack: http://www.ludism.org/ppwiki/HomePage
 
 .. _grid: https://www.rdocumentation.org/packages/grid
@@ -36,6 +38,8 @@ piecepackr: Board Game Graphics
 .. _man pages: https://rdrr.io/github/piecepackr/piecepackr/man/
 
 .. _oblique projection: https://trevorldavis.com/piecepackr/3d-projections.html
+
+.. _Tak: https://en.wikipedia.org/wiki/Tak_(game)
 
 .. contents::
 
@@ -206,10 +210,75 @@ piece (rayrender)
 
 A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's `man pages`_.
 
-Tak Example
------------
+Game Systems
+------------
 
-Although the game of `Tak <https://en.wikipedia.org/wiki/Tak_(game)>`_ can be played with a piecepack stackpack here we'll show an example of configuring piecepackr to draw more traditional Tak game pieces.
+The function ``game_systems`` returns configurations for multiple public domain game systems.
+
+Traditional 6-sided dice
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+``game_systems`` returns a ``dice`` configuration which can make standard 6-sided dice in six colors.
+
+Double-12 dominoes
+~~~~~~~~~~~~~~~~~~
+
+``game_systems`` returns seven different configurations for double-12 dominoes:
+
+1) ``dominoes``
+2) ``dominoes_black``
+3) ``dominoes_blue``
+4) ``dominoes_green``
+5) ``dominoes_red``
+6) ``dominoes_white`` (identical to ``dominoes``)
+7) ``dominoes_yellow``
+
+
+.. sourcecode:: r
+    
+
+    library("tibble")
+    
+    envir <- game_systems("dejavu")
+    
+    df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+                          cfg = paste0("dominoes_", rep(c("black", "red", "green", "blue", "yellow", "white"), 2)))
+    df_tiles <- tibble(piece_side = "tile_back", x=5.5, y=c(2,4,6), suit=1:3, rank=1:3, cfg="piecepack")
+    df_dice <- tibble(piece_side = "die_face", x=6, y=0.5+1:6, suit=1:6, rank=1:6, cfg="dice")
+    df_coins1 <- tibble(piece_side = "coin_back", x=5, y=0.5+1:4, suit=1:4, rank=1:4, cfg="piecepack")
+    df_coins2 <- tibble(piece_side = "coin_face", x=5, y=0.5+5:6, suit=1:2, rank=1:2, cfg="piecepack")
+    df <- rbind(df_dominoes, df_tiles, df_dice, df_coins1, df_coins2)
+    
+    pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
+
+.. figure:: man/figures/README-dominoes-1.png
+    :alt: Double-12 dominoes and standard dice in a variety of colors
+
+    Double-12 dominoes and standard dice in a variety of colors
+
+
+Piecepack
+~~~~~~~~~
+
+``game_systems`` returns three different piecepack_ configurations:
+
+1) ``piecepack``
+2) ``playing_cards_expansion``
+3) ``dual_piecepacks_expansion``
+
+Plus a configuration for a ``subpack`` aka "mini" piecepack and a ``hexpack`` configuration.
+
+The piecepack configurations also contain common piecepack accessories like piecepack pyramids, piecepack matchsticks, and piecepack saucers.
+
+Looney Pyramids
+~~~~~~~~~~~~~~~
+
+Configurations for the proprietary Looney Pyramids aka Icehouse Pieces game system by Andrew Looney can be found in the companion R package ``piecenikr``: https://github.com/piecepackr/piecenikr
+
+Tak Example
+~~~~~~~~~~~
+
+Here we'll show an example of configuring piecepackr to draw diagrams for the abstract board game Tak_ (designed by James Ernest and Patrick Rothfuss).
 
 Since one often plays Tak on differently sized boards one common Tak board design is to have boards made with colored cells arranged in rings from the center plus extra symbols in rings placed at the points so it is easy to see smaller sub-boards.  To start we'll write a function to draw the Tak board.
 
@@ -247,27 +316,26 @@ Then we'll configure a Tak set and write some helper functions to draw Tak piece
 
     cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
                 ps_text="", dm_text="",
-                width.tile=6, height.tile=6, depth.tile=1/4,
-                grob_fn.tile=grobTakBoard,
-                width.coin=0.6, height.coin=0.6, depth.coin=1/4, shape.coin="rect",
-                width.saucer=0.6, height.saucer=1/4, depth.saucer=0.6, 
-                shape.saucer="rect", mat_width.saucer=0,
+                width.board=6, height.board=6, depth.board=1/4,
+                grob_fn.board=grobTakBoard,
+                width.r1.bit=0.6, height.r1.bit=0.6, depth.r1.bit=1/4, shape.r1.bit="rect",
+                width.r2.bit=0.6, height.r2.bit=1/4, depth.r2.bit=0.6, shape.r2.bit="rect", 
                 width.pawn=0.5, height.pawn=0.5, depth.pawn=0.8, shape.pawn="circle",
                 edge_color="white,tan4", border_lex=2,
-                edge_color.tile="tan", border_color.tile="black"))
+                edge_color.board="tan", border_color.board="black"))
     g.p <- function(...) { 
         grid.piece(..., op_scale=0.7, op_angle=45, cfg=cfg, default.units="in")
     }
     draw_tak_board <- function(x, y) { 
-        g.p("tile_back", x=x+0.5, y=y+0.5) 
+        g.p("board_back", x=x+0.5, y=y+0.5) 
     }
     draw_flat_stone <- function(x, y, suit=1) { 
         z <- 1/4*seq(along=suit)+1/8
-        g.p("coin_back", x=x+0.5, y=y+0.5, z=z, suit=suit)
+        g.p("bit_back", x=x+0.5, y=y+0.5, z=z, suit=suit, rank=1)
     }
     draw_standing_stone <- function(x, y, suit=1, n_beneath=0, angle=0) {
         z <- (n_beneath+1)*1/4+0.3
-        g.p("saucer_face", x=x+0.5, y=y+0.5, z=z, suit=suit, angle=angle)
+        g.p("bit_back", x=x+0.5, y=y+0.5, z=z, suit=suit, rank=2, angle=angle)
     }
     draw_capstone <- function(x, y, suit=1, n_beneath=0) {
         z <- (n_beneath+1)*1/4+0.4
