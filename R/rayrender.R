@@ -1,0 +1,76 @@
+#' Create rayrender objects
+#'
+#' \code{piece} creates 3d board game piece objects for use with the rayrender package.
+#' @inheritParams piece3d
+#' @return A rayrender object.
+#' @examples
+#'   \donttest{
+#'     if (require("rayrender")) {
+#'         cfg <- pp_cfg()
+#'         render_scene(piece("tile_face", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0))
+#'         render_scene(piece("coin_back", suit = 4, rank = 2, cfg = cfg, x = 2, y = 0, z = 0))
+#'         render_scene(piece("saucer_back", suit = 1, cfg = cfg, x = 2, y = 2, z=-2))
+#'         render_scene(piece("pawn_face", suit = 2, cfg = cfg, x = 1, y = 1, z = 2))
+#'     }
+#'   }
+#' @export
+piece <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
+                           x = 0, y = 0, z = NA,
+                           angle = 0, axis_x = 0, axis_y = 0,
+                           width = NA, height = NA, depth = NA,
+                           envir = NULL, ..., scale = 1, res = 72) {
+    if (!requireNamespace("rayrender", quietly = TRUE)) {
+        stop("You need to install the suggested package 'rayrender' to use 'piece'.",
+             "Use 'install.packages(\"rayrender\")'")
+    }
+    nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, axis_x, axis_y, width, height, depth)))
+    piece_side <- rep(piece_side, length.out = nn)
+    suit <- rep(suit, length.out = nn)
+    rank <- rep(rank, length.out = nn)
+    x <- rep(x, length.out = nn)
+    y <- rep(y, length.out = nn)
+    z <- rep(z, length.out = nn)
+    angle <- rep(angle, length.out = nn)
+    axis_x <- rep(axis_x, length.out = nn)
+    axis_y <- rep(axis_y, length.out = nn)
+    width <- rep(width, length.out = nn)
+    height <- rep(height, length.out = nn)
+    depth <- rep(depth, length.out = nn)
+
+    cfg <- get_cfg(cfg, envir)
+    cfg <- rep(c(cfg), length.out = nn)
+    scene <- rr_piece_helper(piece_side[1], suit[1], rank[1], cfg[[1]],
+                             x[1], y[1], z[1],
+                             angle[1], axis_x[1], axis_y[1],
+                             width[1], height[1], depth[1], res)
+    l <- lapply(seq(nn), function(i) {
+        rr_piece_helper(piece_side[i], suit[i], rank[i], cfg[[i]],
+                         x[i], y[i], z[i],
+                         angle[i], axis_x[i], axis_y[i],
+                         width[i], height[i], depth[i], scale, res)
+                             })
+    list_to_scene(l)
+}
+
+list_to_scene <- function(l) {
+    n <- length(l)
+    scene <- l[[1]]
+    if (n > 1) {
+        for (i in seq(2, n)) {
+            scene <- rayrender::add_object(scene, l[[i]])
+        }
+    }
+    scene
+}
+
+rr_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
+                           x = 0, y = 0, z = NA,
+                           angle = 0, axis_x = 0, axis_y = 0,
+                           width = NA, height = NA, depth = NA, scale = 1, res = 72) {
+    obj <- save_piece_obj(piece_side, suit, rank, cfg,
+                        x = x, y = y, z = z,
+                        angle = angle, axis_x = axis_x, axis_y = axis_y,
+                        width = width, height = height, depth = depth,
+                        scale = scale, res = res)
+    rayrender::obj_model(filename = obj$obj, texture = TRUE)
+}

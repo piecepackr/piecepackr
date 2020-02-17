@@ -6,10 +6,12 @@ New features
 
 * Function ``game_systems`` now returns more game systems:
 
-  - ``dice``: Normal six-sided pipped dice in six color schemes.
-  - ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes.  
-* New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures).
-  Currently doesn't support dice and pawns are two-sided tokens.
+  - ``dice``: Normal six-sided pipped dice in six color schemes (#166).
+  - ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes (#159).  
+* New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures) (#189, #190).
+  Currently doesn't support dice and only supports two-sided pawn tokens.
+* New function ``piece3d`` for making graphics with the ``rgl`` package (#76).
+* New function ``piece`` for making ``rayrender`` objects.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -23,11 +25,17 @@ Bug fixes and minor improvements
   By default it uses the (backwards-compatible) ``pieceGrob``.
 * ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).
 
-Deprecated Features
+Deprecated features
 -------------------
 
 The following ``pp_cfg`` R6 class public method is now deprecated:
     * ``get_pictureGrob``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
+
+Breaking changes
+----------------
+
+* The function ``game_systems`` no longer returns an ``icehouse_pieces`` configuration.
+  Configurations for Looney Pyramids can be found at https://github.com/piecepackr/piecenikr
 
 piecepackr 1.2.1
 ================

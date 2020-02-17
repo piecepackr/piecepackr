@@ -25,6 +25,10 @@ piecepackr: Board Game Graphics
 
 .. _grid: https://www.rdocumentation.org/packages/grid
 
+.. _rayrender: https://www.rdocumentation.org/packages/rayrender
+
+.. _rgl: https://www.rdocumentation.org/packages/rgl
+
 .. _R: https://www.r-project.org/
 
 .. _Print & Play layouts: https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html
@@ -37,12 +41,15 @@ piecepackr: Board Game Graphics
 
 
 
-``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with R's grid_ graphics system to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
+``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
 API Intro
 ---------
 
-``grid.piece`` is the core function that is used to draw board game components (by default piecepack_ game components):
+grid.piece
+~~~~~~~~~~
+
+``grid.piece`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
 
 
 .. sourcecode:: r
@@ -63,6 +70,9 @@ API Intro
     :alt: Piecepack diagram with default configuration
 
     Piecepack diagram with default configuration
+
+configuration lists
+~~~~~~~~~~~~~~~~~~~
 
 One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the game components drawn by ``grid.piece``:
 
@@ -92,7 +102,10 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 
     Piecepack diagram with custom configuration
 
-``grid.piece`` even has some support for drawing components with an `oblique projection`_:
+oblique 3D projection
+~~~~~~~~~~~~~~~~~~~~~
+
+``grid.piece`` even has some support for drawing 3D diagrams with an `oblique projection`_:
 
 
 .. sourcecode:: r
@@ -119,6 +132,9 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 
     Piecepack diagram in an oblique projection
 
+save_print_and_play and save_piece_images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ``save_print_and_play`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images`` makes individual images of each piecepack component:
 
 .. code:: r
@@ -126,7 +142,10 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
    save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
    save_piece_images(cfg)
 
-If you are comfortable using R data frames there is also ``pmap_piece`` which is a wrapper for ``grid.piece`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
+pmap_piece
+~~~~~~~~~~
+
+If you are comfortable using R data frames there is also ``pmap_piece`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
 
 
 .. sourcecode:: r
@@ -146,6 +165,44 @@ If you are comfortable using R data frames there is also ``pmap_piece`` which is
     :alt: 'pmap_piece' lets you use data frames as input
 
     'pmap_piece' lets you use data frames as input
+
+piece3d (rgl)
+~~~~~~~~~~~~~
+
+``piece3d`` draws pieces using ``rgl`` graphics.
+
+.. code:: r
+
+    library("ppgames")
+    df <- ppgames::df_four_field_kono()
+    envir <- piecepackr::game_systems("dejavu3d")
+    library("rgl")
+    pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+
+.. figure:: https://trevorldavis.com/share/piecepack/rgl_snapshot.png
+    :alt: rgl render
+
+    rgl render
+
+piece (rayrender)
+~~~~~~~~~~~~~~~~~
+
+``piece`` creates ``rayrender`` objects.
+
+.. code:: r
+
+    library("ppgames")
+    df <- ppgames::df_four_field_kono()
+    envir <- piecepackr::game_systems("dejavu3d")
+    library("rayrender")
+    l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+    scene <- do.call(dplyr::bind_rows, l)
+    render_scene(scene, lookat = c(2.5, 2.5, 0), lookfrom = c(0, -2, 13))
+
+.. figure:: https://trevorldavis.com/share/piecepack/3d_render.png
+    :alt: rayrender render
+
+    rayrender render
 
 A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's `man pages`_.
 

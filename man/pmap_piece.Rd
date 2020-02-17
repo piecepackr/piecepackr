@@ -56,7 +56,8 @@ graphical parameter settings.}
 \enumerate{
    \item{If \code{cfg} and/or \code{envir} are missing attempts to set reasonable defaults.}
    \item{If not \code{NULL} will first apply function \code{trans} to \code{.l}.}
-   \item{If the output of \code{.l} is a grid grob object will return a \code{gTree} object with
+   \item{If the output of \code{.f} is a grid grob object then \code{pmap_piece}
+         will return a \code{gTree} object with
          specified \code{name}, \code{gp}, and \code{vp} values and if \code{draw} is true draw it.}
  }
 }
