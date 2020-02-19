@@ -409,7 +409,7 @@ get_edge_color <- function(piece_side, suit, rank, cfg) {
     default <- switch(piece,
                     pawn = suit_col,
                     die = suit_col,
-                    matchstick = get_background_color_helper("matstick_back", suit=suit, rank=rank, cfg),
+                    matchstick = get_background_color_helper("matchstick_back", suit=suit, rank=rank, cfg),
                     pyramid = suit_col,
                     neutral_col)
     colors <- get_style_element("edge_color", piece_side, cfg, default, suit, rank)

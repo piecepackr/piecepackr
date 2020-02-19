@@ -83,11 +83,13 @@ dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
         mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
 
         # Top (Rank)
-        top_grob <- grobTree(pippedGrobFn(rank_offset, card, type, border = FALSE)("tile_face", rank, rank, cfg),
+        tfn <- pippedGrobFn(rank_offset, card, type, border = FALSE, mat = FALSE)
+        top_grob <- grobTree(tfn("tile_face", rank, rank, cfg),
                           vp=viewport(height = 0.5, y = 0.75, angle = 180))
 
         # Bottom (Suit)
-        bot_grob <- grobTree(pippedGrobFn(rank_offset, card, type, border = FALSE)("tile_face", suit, suit, cfg),
+        bfn <- pippedGrobFn(rank_offset, card, type, border = FALSE, mat = FALSE)
+        bot_grob <- grobTree(bfn("tile_face", suit, suit, cfg),
                           vp=viewport(height = 0.5, y = 0.25))
 
         gp_gl <- gpar(col = opt$gridline_color, lex = opt$gridline_lex)
@@ -96,12 +98,12 @@ dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
         # Border
         border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
 
-        gl <- gList(mat_grob, top_grob, bot_grob, gl_grob, border_grob)
+        gl <- gList(top_grob, bot_grob, gl_grob, mat_grob, border_grob)
         gTree(children=gl, name=piece_side)
     }
 }
 
-pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle", border = TRUE) {
+pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle", border = TRUE, mat = TRUE) {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         if (card) {
@@ -117,7 +119,10 @@ pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle", border 
         background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
 
         # Mat
-        mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
+        if (mat)
+            mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
+        else
+            mat_grob <- nullGrob()
 
         # Pips
         if (nrow(xya) > 0) {

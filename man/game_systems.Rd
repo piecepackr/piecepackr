@@ -26,6 +26,11 @@ representing several game systems.
 }
 \details{
 Contains the following game systems:\describe{
+\item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
+      Checkers are represented a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
+      and the \dQuote{back} is a lined board.
+      Color is controlled by suit and number of rows/columns by rank.
+      \code{checkers1} has one inch squares and \code{checkers2} has two inch squares.}
 \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
 \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
      Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
@@ -55,15 +60,39 @@ Contains the following game systems:\describe{
        cfgs <- game_systems()
        names(cfgs)
 
+    if (require("grid")) {
+       # standard dice
+       grid.newpage()
+       grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6,
+                  op_scale=0.5, cfg=cfgs$dice)
+
+       # dominoes
+       grid.newpage()
+       colors <- c("black", "red", "green", "blue", "yellow", "white")
+       cfg <- paste0("dominoes_", rep(colors, 2))
+       grid.piece("tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+                  cfg=cfg, default.units="in", envir=cfgs, op_scale=0.5)
+
+       # various piecepack expansions
+       grid.newpage()
        df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
                               suit=NA, angle=NA, z=NA, stringsAsFactors=FALSE)
+       df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
+                              suit=c(1,2,1,2,2,1,2,1,4,3,4,3,3,4,3,4),
+                              angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
+       df <- rbind(df_tiles, df_coins)
+       pmap_piece(df, cfg = cfgs$piecepack, op_scale=0.5, default.units="in")
+
+       grid.newpage()
        df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
                               suit=c(1,4,1,4,4,1,4,1,2,3,2,3,3,2,3,2),
                               angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
        df <- rbind(df_tiles, df_coins)
-       df$cfg <- "playing_cards_expansion"
+       pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5, default.units="in")
 
-       pmap_piece(df, envir=cfgs, op_scale=0.5, default.units="in")
+       grid.newpage()
+       pmap_piece(df, cfg = cfgs$dual_piecepacks_expansion, op_scale=0.5, default.units="in")
+    }
 }
 \seealso{
 \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
