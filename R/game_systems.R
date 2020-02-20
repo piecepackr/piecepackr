@@ -171,7 +171,7 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
 }
 
 cb_suit_colors_impure <- "#D55E00,grey30,#009E73,#56B4E9,#E69F00,#FFFFFF"
-# cb_suit_colors <- "#D55E00,#000000,#009E73,#56B4E9,#E69F00,#FFFFFF" # nolint
+cb_suit_colors_pure <- "#D55E00,#000000,#009E73,#56B4E9,#E69F00,#FFFFFF"
 
 checkers <- function(cell_width = 1) {
     checkers <- list(n_suits = 6, n_ranks = 12,
@@ -181,7 +181,8 @@ checkers <- function(cell_width = 1) {
                      ps_text.bit = "", dm_text.bit = "",
                      grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
                      grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
-                     gridline_color.board = cb_suit_colors_impure,
+                     gridline_color.board_face = cb_suit_colors_impure,
+                     gridline_color.board_back = cb_suit_colors_pure,
                      gridline_lex.board = 4,
                      edge_color.board = "white",
                      edge_color.bit = cb_suit_colors_impure,

@@ -189,6 +189,23 @@ Game Systems
 
 The function ``game_systems`` returns configurations for multiple public domain game systems.
 
+Checkers
+~~~~~~~~
+
+``game_systems`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
+
+.. {r breakthrough, fig.width=9, fig.height=9, fig.cap='Starting position for Dan Troyka\'s abstract game "Breakthrough"'}
+df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
+               x = 4.5, y = 4.5)
+df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
+               x = rep(1:8, 2), y = rep(1:2, each=8))
+df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+               x = rep(1:8, 2), y = rep(7:8, each=8))
+df <- rbind(df_board, df_w, df_b)
+df$cfg <- "checkers1"
+pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
+.. ..
+
 Traditional 6-sided dice
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
