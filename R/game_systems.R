@@ -187,7 +187,9 @@ checkers <- function(cell_width = 1) {
                      edge_color.board = "white",
                      edge_color.bit = cb_suit_colors_impure,
                      suit_color = cb_suit_colors_impure,
-                     background_color = "white,white,white,white,white,black",
+                     background_color = "white",
+                     gridline_color.s6.board_face = "grey80",
+                     gridline_color.s6.board_back = "grey80",
                      border_color = "black", border_lex = 4)
     for (i in seq(2, 12)) {
         checkers[[paste0("width.r", i, ".board")]] <- i * cell_width
