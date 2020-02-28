@@ -404,7 +404,6 @@ get_mat_width <- function(piece_side, suit, rank, cfg) {
 get_edge_color <- function(piece_side, suit, rank, cfg) {
     background_color <- get_background_color(piece_side, suit=suit, rank=rank, cfg)
     neutral_col <- get_background_color("tile_back", suit=get_i_unsuit(cfg), rank=0, cfg)
-    # suit_col <- get_suit_color_helper("pawn_face", suit=suit, rank=0, cfg)
 
     piece <- get_piece(piece_side)
     default <- switch(piece,
