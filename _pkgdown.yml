@@ -2,3 +2,35 @@ destination: "/home/trevorld/a/projects/websites/R/piecepackr/"
 url: "https://trevorldavis.com/R/piecepackr"
 development:
     mode: auto
+reference:
+    - title: "Drawing functions"
+      desc: "Functions for directly creating board game graphics via various graphic systems"
+      contents:
+        - grid.piece
+        - piece
+        - piece3d
+        - save_piece_obj
+    - title: "Data frame processors"
+      desc: "Functions that process data frame input"
+      contents:
+        - pmap_piece
+        - op_transform
+    - title: "Configuration list creators"
+      desc: "Functions that create configuration list objects that customize appearance of board game components"
+      contents:
+          - pp_cfg
+          - game_systems
+    - title: "Save piecepack images"
+      desc: "Function to save piecepack images either as a print-and-play file or as individual images."
+      contents:
+          - save_piece_images
+          - save_print_and_play
+    - title: "Developer helper functions"
+      desc: "Various exported helper functions intended for developers"
+      contents:
+          - basicPieceGrobs
+          - halmaGrob
+          - gridlinesGrob
+          - inch
+          
+
