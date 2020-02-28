@@ -10,7 +10,7 @@ New features
   - ``checkers1``, ``checkers2``: Checkered boards and checkers.  ``checkers1`` has 1" cells and ``checkers2`` has 2" cells (#168).
   - ``dominoes``, ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes (#159).  
 * New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures) (#189, #190).
-  Currently doesn't support dice and only supports two-sided pawn tokens.
+  Note currently doesn't support dice and only supports two-sided pawn tokens.
 * New function ``piece3d`` for making graphics with the ``rgl`` package (#76).
 * New function ``piece`` for making ``rayrender`` objects.
 
@@ -21,6 +21,7 @@ Bug fixes and minor improvements
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
+* The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color the ``piece_side``.
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
 * ``pmap_piece`` now supports an ``.f`` function to specify the function to apply to the rows of the data frame.
   By default it uses the (backwards-compatible) ``pieceGrob``.

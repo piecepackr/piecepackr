@@ -12,9 +12,9 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='369.00,301.85 375.02,295.83 366.02,268.13 360.00,274.15 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='360.00,274.15 366.02,268.13 357.02,295.83 351.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
-<polygon points='351.00,301.85 357.02,295.83 375.02,295.83 369.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #D55E00;' />
+<polygon points='369.00,301.85 375.02,295.83 366.02,268.13 360.00,274.15 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='360.00,274.15 366.02,268.13 357.02,295.83 351.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='351.00,301.85 357.02,295.83 375.02,295.83 369.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='366.02,268.13 357.02,295.83 375.02,295.83 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='361.57' y='294.06' style='font-size: 15.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='8.91px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <text x='363.69' y='280.24' style='font-size: 3.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='4.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
