@@ -21,8 +21,9 @@ Bug fixes and minor improvements
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
-* The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color the ``piece_side``.
+* The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color of ``piece_side``.
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
+* Font sizes and locations of piecepack matchsticks in ``game_systems`` made more "standard".
 * ``pmap_piece`` now supports an ``.f`` function to specify the function to apply to the rows of the data frame.
   By default it uses the (backwards-compatible) ``pieceGrob``.
 * ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).

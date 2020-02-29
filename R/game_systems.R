@@ -96,8 +96,10 @@ game_systems <- function(style=NULL) {
         stop(paste("Don't have a customized configuration for style", style))
     }
     piecepack_base <- list(border_color="black", border_lex=4, depth.coin=0.25,
-                          mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
-                          rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
+                           invert_colors.matchstick = TRUE, ps_cex.r2.matchstick = 0.7,
+                           dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5, suit_color.s2.matchstick = "grey30",
+                           mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
+                           rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
     piecepack <- c(piecepack_suits, piecepack_base)
 
     playing_cards_expansion <- piecepack
