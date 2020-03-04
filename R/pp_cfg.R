@@ -284,6 +284,23 @@ Config <- R6Class("pp_cfg",
                 }
             }
         },
+        get_op_grob = function(piece_side, suit, rank, x, y, z,
+                               angle, type,
+                               width, height, depth,
+                               op_scale, op_angle) {
+            key <- opt_cache_key(piece_side, suit, rank, "op_grob")
+            if (!is.null(private$cache[[key]])) {
+                grobFn <- private$cache[[key]]
+            } else {
+                default_fn <- switch(piece_side, basicOpGrob)
+                grobFn <- get_style_element("op_grob_fn", piece_side, private$cfg,
+                                                default_fn, suit, rank)
+                if (self$cache_shadow) private$cache[[key]] <- grobFn
+            }
+            grobFn(piece_side, suit, rank, self,
+                   x, y, z, angle, type, width, height, depth,
+                   op_scale, op_angle)
+        },
         get_shadow_fn = function(piece_side, suit, rank) {
             key <- opt_cache_key(piece_side, suit, rank, "shadow")
             if (!is.null(private$cache[[key]])) {

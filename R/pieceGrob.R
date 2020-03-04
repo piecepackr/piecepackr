@@ -100,27 +100,18 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (!is.unit(width)) width <- unit(width, default.units)
     if (!is.unit(height)) height <- unit(height, default.units)
     if (!is.unit(depth)) depth <- unit(depth, default.units)
-    grob <- cfg$get_grob(piece_side, suit, rank, ifelse(use_pictureGrob, "picture", "normal"))
+    grob_type <- ifelse(use_pictureGrob, "picture", "normal")
     if (op_scale < 0.01) {
+        grob <- cfg$get_grob(piece_side, suit, rank, grob_type)
         cvp <- viewport(x, y, width, height, angle=angle)
         grobTree(grob, vp=cvp)
-    } else { ####
-        xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
-        cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
-        grob <- grobTree(grob, vp=cvp)
-        shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
-        shadow <- shadow_fn(piece_side, suit, rank, cfg,
-                            x, y, z, angle, width, height, depth,
-                            op_scale, op_angle, default.units)
-        grobTree(shadow, grob)
+    } else {
+        grob <- cfg$get_op_grob(piece_side, suit, rank,
+                            x, y, z, angle, grob_type,
+                            width, height, depth,
+                            op_scale, op_angle)
+        grobTree(grob)
     }
-}
-
-####
-op_xy <- function(x, y, z, op_angle=45, op_scale=0) {
-    x <- x + op_scale * z * cos(to_radians(op_angle))
-    y <- y + op_scale * z * sin(to_radians(op_angle))
-    list(x=x, y=y)
 }
 
 #' @rdname grid.piece

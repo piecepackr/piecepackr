@@ -9,6 +9,8 @@ test_that("3d helper functions work", {
         }
     }
 
+    expect_warning(pp_cfg(list(shadow_fn = basicShadowGrob)))
+
     # orthogonal tiles
     df <- tibble(piece_side="tile_back",
                          x=c(2,2,2,4,6,6,4,2,5),

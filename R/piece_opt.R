@@ -116,7 +116,8 @@ styles <- c(paste(c("ps", "dm"),
                   sep="_"),
             "use_suit_as_ace", "fontfamily", "fontface", "cex", "n_ranks", "n_suits",
             "coin_arrangement", "die_arrangement",
-            "width", "height", "depth", "grob_fn", "shadow_fn",
+            "width", "height", "depth",
+            "grob_fn", "op_grob_fn", "shadow_fn",
             "title", "description", "credit", "copyright")
 is_legit_style <- function(style) {
     style %in% styles
@@ -138,6 +139,8 @@ warn_cfg <- function(cfg) {
         if (!is_legit_cfg_style(nn)) {
             warning(paste(nn, "is not a recognized configuration"))
         }
+        if (grepl("shadow_fn", nn))
+            warning("'shadow_fn' style is deprecated, use 'op_grob_fn' instead")
     }
 }
 

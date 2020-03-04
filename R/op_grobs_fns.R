@@ -1,16 +1,39 @@
+basicOpGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                            angle=0, type="normal",
+                            width=NA, height=NA, depth=NA,
+                            op_scale=0, op_angle=45) {
+            grob <- cfg$get_grob(piece_side, suit, rank, type)
+            xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+            cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
+            grob <- grobTree(grob, vp=cvp)
+            shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
+            shadow <- shadow_fn(piece_side, suit, rank, cfg,
+                                x, y, z, angle, width, height, depth,
+                                op_scale, op_angle)
+            grobTree(shadow, grob)
+}
+
+op_xy <- function(x, y, z, op_angle=45, op_scale=0) {
+    x <- x + op_scale * z * cos(to_radians(op_angle))
+    y <- y + op_scale * z * sin(to_radians(op_angle))
+    list(x=x, y=y)
+}
+
+basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                            angle=0, type="normal",
+                            width=NA, height=NA, depth=NA,
+                            op_scale=0, op_angle=45, default.units="npc") {
+}
+
+
 basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, width=NA, height=NA, depth=NA,
-                            op_scale=0, op_angle=45, default.units="npc") {
+                            op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    if (is.na(angle)) angle <- 0
-    if (is.na(width)) width <- inch(cfg$get_width(piece_side, suit, rank))
-    if (is.na(height)) height <- inch(cfg$get_height(piece_side, suit, rank))
-    if (is.na(depth)) depth <- inch(cfg$get_depth(piece_side, suit, rank))
-    if (!is.unit(width)) width <- unit(width, default.units)
-    if (!is.unit(height)) height <- unit(height, default.units)
-    if (!is.unit(depth)) depth <- unit(depth, default.units)
 
     x <- as.numeric(convertX(x, "in"))
     y <- as.numeric(convertY(y, "in"))

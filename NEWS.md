@@ -27,12 +27,16 @@ Bug fixes and minor improvements
 * ``pmap_piece`` now supports an ``.f`` function to specify the function to apply to the rows of the data frame.
   By default it uses the (backwards-compatible) ``pieceGrob``.
 * ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).
+* ``pp_cfg`` now supports a new ``op_grob_fn`` style indicating which function to draw pieces with 
+  when drawing with a 3D oblique projection.  The older ``shadow_fn`` style alternative is now deprecated.
 
 Deprecated features
 -------------------
 
 The following ``pp_cfg`` R6 class public method is now deprecated:
     * ``get_pictureGrob``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
+The following ``pp_cfg`` "style" is now deprecated:
+    * ``shadow_fn``.  Use the new ``op_grob_fn`` instead.
 
 Breaking changes
 ----------------
