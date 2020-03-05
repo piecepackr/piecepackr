@@ -52,6 +52,9 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #'        or a character vector of \code{pp_cfg} objects
 #' @param envir Environment (or named list) containing configuration list(s).
 #' @param op_angle Intended oblique projection angle (used for re-sorting)
+#' @param pt_thickness Thickness of pyramid tip i.e. value to add to the z-value of a pyramid top
+#'                  if it is a (weakly) smaller ranked pyramid (top)
+#'                  placed on top of a larger ranked pyramid (top).
 #' @return A tibble with extra columns added
 #'         and re-sorted rows
 #' @examples
@@ -62,24 +65,24 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #'            op_scale=0.5, default.units="in")
 #'
 #' @export
-op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45) {
-    df <- add_3d_info(df, cfg, envir)
-    df <- op_sort(df, op_angle)
+op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45, pt_thickness = 0.01) {
+    df <- add_3d_info(df, cfg = cfg, envir = envir, pt_thickness = pt_thickness)
+    df <- op_sort(df, op_angle = op_angle)
     df
 }
 
-add_3d_info <- function(df, cfg=pp_cfg(), envir=NULL) {
+add_3d_info <- function(df, ..., cfg=pp_cfg(), envir=NULL, pt_thickness = 0.01) {
     # Do more stuff if units aren't in inches?
     df <- add_cfg(df, cfg, envir)
     df <- add_measurements(df)
     df <- add_bounding_box(df)
-    df <- add_z(df)
+    df <- add_z(df, pt_thickness = pt_thickness)
     df <- add_field(df, "zt", df$z + 0.5*df$depth)
     df <- add_field(df, "zb", df$z - 0.5*df$depth)
     df
 }
 
-op_sort <- function(df, op_angle=45) {
+op_sort <- function(df, ..., op_angle=45) {
     op_angle <- op_angle %% 360
     if ((0 <= op_angle) && (op_angle < 90)) {
         df <- df[order(df$zt, -df$yb, -df$xl), ]
@@ -129,21 +132,37 @@ which_AABB_overlap <- function(dfi, dfs) {
 less_than <- function(x, y) 1e-6 < y - x # in case of trigonometric precision issues
 less_than_equal <- function(x, y) 0 < y - x + 1e-6 # in case of trigonometric precision issues
 
-add_z <- function(df) {
+add_z <- function(df, pt_thickness = 0.01) {
     shapes <- get_shapes(df)
     zp <- 0.5*df$depth
-    for (ii in seq(length.out=nrow(df))) {
-        dfi <- df[ii, ]
-        dfs <- df[0:(ii-1), ]
-        for (jj in which_AABB_overlap(dfi, dfs)) {
-            if (do_shapes_overlap(shapes[[ii]], shapes[[jj]])) {
-                zp[ii] <- as.numeric(zp[jj] + 0.5*df[jj, "depth"] + 0.5*df[ii, "depth"])
+    for (i in seq(length.out=nrow(df))) {
+        dfi <- df[i, ]
+        dfs <- df[0:(i-1), ]
+        for (j in which_AABB_overlap(dfi, dfs)) {
+            if (do_shapes_overlap(shapes[[i]], shapes[[j]])) {
+                zp[i] <- compute_z(df, zp, i, j, pt_thickness)
                 break
             }
         }
     }
     df <- add_field(df, "z", zp)
     df
+}
+# @param df Data frame
+# @param zp Depths
+# @param i Index of top piece
+# @param j Index of top overlapping piece underneath
+# @param pt_thickness Thickness of tip of pyramid
+compute_z <- function(df, zp, i, j, pt_thickness = 0.01) {
+    if (all(df$piece_side[c(i,j)] == "pyramid_top")) {
+        if (df$rank[i] <= df$rank[j]) { # top piece is (weakly) smaller
+            zp[j] + 0.5 * df$depth[j] + pt_thickness - 0.5 * df$depth[i]
+        } else { # top piece is (strictly) bigger
+            zp[j] - 0.5 * df$depth[j] + 0.5 * df$depth[i]
+        }
+    } else {
+        zp[j] + 0.5 * df$depth[j] + 0.5 * df$depth[i]
+    }
 }
 
 get_shapes <- function(df) {

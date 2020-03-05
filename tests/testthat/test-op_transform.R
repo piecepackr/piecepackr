@@ -32,6 +32,14 @@ test_that("3d helper functions work", {
     df <- rbind(df1, df2, df1, df2, df1, df2)
     expect_doppelganger("matchsticks_045", opf(045))
 
+    # stacked pyramids
+    df <- tibble(piece_side = "pyramid_top", x = 2, y = 2, rank = 1:6,
+                 suit = c(1:4, 1:2))
+    expect_doppelganger("pyramid_tops_larger_on_top", opf(045))
+    df <- tibble(piece_side = "pyramid_top", x = 2, y = 2, rank = 6:1,
+                 suit = c(1:4, 1:2))
+    expect_doppelganger("pyramid_tops_smaller_on_top", opf(045))
+
     # rounding error #163
     df <- tibble(piece_side = "tile_face", x=rep(seq(1,7,2), 4), y=rep(seq(1,7,2), each=4),
                  angle = rep(90*0:3, 4), suit = rep(1:4, each=4), rank=rep_len(1:6, 16))

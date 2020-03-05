@@ -21,6 +21,7 @@ Bug fixes and minor improvements
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
+* ``op_transform`` now accepts new argument ``pt_thickness``for improved handling of stacked pyramid (tops).
 * The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color of ``piece_side``.
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
 * Font sizes and locations of piecepack matchsticks in ``game_systems`` made more "standard".
