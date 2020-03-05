@@ -265,6 +265,8 @@ test_that("oblique projection works", {
     expect_doppelganger("pawn_face_op", function() dc("pawn_face"))
     expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))
     expect_doppelganger("pyramid_face_op", function() dc("pyramid_face"))
+    expect_doppelganger("pyramid_top_op", function()
+        dc("pyramid_top", rank = 6, op_angle = 90, cfg = list(invert_colors = TRUE)))
     expect_doppelganger("die_face_op", function() dc("die_face"))
     g.p <- function(...) {
         grid.piece(..., op_scale=0.5, default.units="in")

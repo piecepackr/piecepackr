@@ -24,7 +24,33 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, type="normal",
                             width=NA, height=NA, depth=NA,
-                            op_scale=0, op_angle=45, default.units="npc") {
+                            op_scale=0, op_angle=45) {
+    cfg <- as_pp_cfg(cfg)
+
+    x <- as.numeric(convertX(x, "in"))
+    y <- as.numeric(convertY(y, "in"))
+    z <- as.numeric(convertX(z, "in"))
+    width <- as.numeric(convertX(width, "in"))
+    height <- as.numeric(convertY(height, "in"))
+    depth <- as.numeric(convertX(depth, "in"))
+    xy_b <- Point$new(rect_xy)$npc_to_in(x, y, width, height, angle)
+    p <- Polygon$new(xy_b)
+    edge_types <- paste0("pyramid_", c("left", "back", "right", "face"))
+    order <- p$op_edge_order(op_angle)
+    df <- tibble(index = 1:4, order = order, edge = edge_types)[order, ]
+    gl <- gList()
+    #### Check angle and op_angle and if possible draw one of the pyramid faces
+    for (i in 1:4) {
+        opt <- cfg$get_piece_opt(df$edge[i], suit, rank)
+        gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
+        edge <- p$edges[df$index[i]]
+        ex <- c(edge$p1$x, edge$p2$x, x)
+        ey <- c(edge$p1$y, edge$p2$y, y)
+        ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
+        exy <- Point3D$new(x = ex, y = ey, z = ez)$project_op(op_angle, op_scale)
+        gl[[i]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+    }
+    gl
 }
 
 

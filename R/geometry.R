@@ -162,13 +162,13 @@ Polygon <- R6Class("polygon",
                    }
                    range(projections)
                },
-               op_ref = function(angle) {
-                   self$c$translate_polar(angle + 180, 10 * self$width)
+               op_edge_order = function(angle) {
+                   op_ref <- self$c$translate_polar(angle + 180, 10 * self$width)
+                   dists <- sapply(self$edges$mid_point, function(x) x$distance_to(op_ref))
+                   order(dists, decreasing = TRUE)
                },
                op_edges = function(angle) {
-                   op_ref <- self$op_ref(angle)
-                   dists <- sapply(self$edges$mid_point, function(x) x$distance_to(op_ref))
-                   self$edges[order(dists, decreasing = TRUE)]
+                   self$edges[self$op_edge_order(angle)]
                }),
     private = list(center = NULL),
     active = list(x = function() self$vertices$x,
