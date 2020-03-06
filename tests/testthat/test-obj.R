@@ -13,3 +13,15 @@ test_that("save_piece_obj works", {
     files <- save_piece_obj("pyramid_face", cfg = cfg)
     expect_length(files, 3)
 })
+
+test_that("rgl works", {
+    skip_on_cran()
+    library("rgl")
+    rgl.open()
+    piece3d("tile_face", cfg = cfg)
+    f <- tempfile()
+    rgl.snapshot(f)
+    expect_true(file.exists(f))
+    rgl.close()
+    unlink(f)
+})

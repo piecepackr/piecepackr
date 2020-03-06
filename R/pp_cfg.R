@@ -292,7 +292,7 @@ Config <- R6Class("pp_cfg",
             if (!is.null(private$cache[[key]])) {
                 grobFn <- private$cache[[key]]
             } else {
-                default_fn <- switch(piece_side, 
+                default_fn <- switch(piece_side,
                                      pyramid_top = basicPyramidTop,
                                      basicOpGrob)
                 grobFn <- get_style_element("op_grob_fn", piece_side, private$cfg,

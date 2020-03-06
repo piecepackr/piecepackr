@@ -130,7 +130,7 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     # texture coordinates, nb. obj has y axis in opposite direction
     xy_vt_t <- xy_npc$dilate(width = 0.4)
     xy_vt_b <- xy_npc$dilate(width = 0.4)$translate(x = 0.6)
-    xy_vt_e <- list(x = c(0.55, 0.45, 0.45, 0.55), y = c(1, 0, 0, 1))
+    xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(1, 0, 0, 1))
     vt_t <- paste("vt", xy_vt_t$x, xy_vt_t$y)
     vt_b <- paste("vt", xy_vt_b$x, xy_vt_b$y)
     vt_e <- paste("vt", xy_vt_e$x, xy_vt_e$y)

@@ -21,7 +21,9 @@ piece3d(
   envir = NULL,
   ...,
   scale = 1,
-  res = 72
+  res = 72,
+  lit = FALSE,
+  shininess = 50
 )
 }
 \arguments{
@@ -60,6 +62,10 @@ or a character vector of \code{pp_cfg} objects}
 \item{scale}{Multiplicative scaling factor to apply to width, height, and depth.}
 
 \item{res}{Resolution of the faces.}
+
+\item{lit}{logical, specifying if rgl lighting calculation should take place}
+
+\item{shininess}{Properties for rgl lighting calculation}
 }
 \value{
 A numeric vector of rgl object IDs.
