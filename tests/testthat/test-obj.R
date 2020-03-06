@@ -16,6 +16,7 @@ test_that("save_piece_obj works", {
 
 test_that("rgl works", {
     skip_on_cran()
+    skip_on_os("mac")
     library("rgl")
     rgl.open()
     piece3d("tile_face", cfg = cfg)
