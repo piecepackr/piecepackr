@@ -87,6 +87,9 @@ game_systems <- function(style=NULL) {
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
     } else if (style == "dejavu3d") {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
+                                suit_color.s4 = "#0072B2",
+                                invert_colors.pawn = TRUE,
+                                invert_colors.die = TRUE,
                                 background_color="burlywood", border_color="transparent",
                                 mat_color.tile_back = "burlywood", width.tile = 2,
                                 edge_color.tile = "black", edge_color.coin = "black",
@@ -151,6 +154,9 @@ game_systems <- function(style=NULL) {
          subpack=to_subpack(piecepack))
 }
 
+cb_suit_colors_impure <- "#D55E00,grey30,#009E73,#56B4E9,#E69F00,#FFFFFF"
+cb_suit_colors_pure <- "#D55E00,#000000,#009E73,#56B4E9,#E69F00,#FFFFFF"
+
 dominoes <- function(background_color = "white", suit_color = "black", border_color = "black", mat_width = 0) {
     dominoes <- pp_cfg(list(n_suits = 13, n_ranks = 13,
                             width.tile = 1,
@@ -171,9 +177,6 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
     dominoes$has_tiles <- TRUE
     dominoes
 }
-
-cb_suit_colors_impure <- "#D55E00,grey30,#009E73,#56B4E9,#E69F00,#FFFFFF"
-cb_suit_colors_pure <- "#D55E00,#000000,#009E73,#56B4E9,#E69F00,#FFFFFF"
 
 checkers <- function(cell_width = 1) {
     checkers <- list(n_suits = 6, n_ranks = 12,

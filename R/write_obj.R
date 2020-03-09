@@ -34,7 +34,7 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = p
     height <- scale * height
     depth <- scale * depth
 
-    if (grepl("tile|coin|saucer|pawn|matchstick|bit|board|card", piece_side)) {
+    if (grepl("tile|coin|pawn|die|matchstick|bit|board|card|saucer", piece_side)) {
         f <- write_2s_obj
     } else if (piece_side == "pyramid_top") {
         f <- write_pt_obj
@@ -74,6 +74,10 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
         gsub("face", "back", piece_side)
     } else {
         gsub("back", "face", piece_side)
+    }
+    if (piece_side == "die_face") {
+        opp_piece_side <- "die_face"
+        rank <- 7 - rank
     }
     pushViewport(viewport(x = 0.8, width = 0.4))
     grid.piece(opp_piece_side, suit, rank, cfg)

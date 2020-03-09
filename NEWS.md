@@ -10,7 +10,7 @@ New features
   - ``checkers1``, ``checkers2``: Checkered boards and checkers.  ``checkers1`` has 1" cells and ``checkers2`` has 2" cells (#168).
   - ``dominoes``, ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes (#159).  
 * New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures) (#189, #190).
-  Note currently doesn't support dice and only supports two-sided pawn tokens.
+  Note support for dice and pawns are currently rather crude.
 * New function ``piece3d`` for making graphics with the ``rgl`` package (#76).
 * New function ``piece`` for making ``rayrender`` objects.
 
