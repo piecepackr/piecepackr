@@ -60,7 +60,10 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
         units = "in", res = res, bg = "transparent")
 
     # front
-    pushViewport(viewport(x = 0.2, width = 0.4))
+    pushViewport(viewport(x = 0.225, width = 0.45))
+    grid.rect(gp = gpar(col = "transparent", fill = opt$background_color))
+    popViewport()
+    pushViewport(viewport(x = 0.225, width = 0.40))
     grid.piece(piece_side, suit, rank, cfg)
     popViewport()
 
@@ -79,7 +82,11 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
         opp_piece_side <- "die_face"
         rank <- 7 - rank
     }
-    pushViewport(viewport(x = 0.8, width = 0.4))
+    opp_opt <- cfg$get_piece_opt(opp_piece_side, suit, rank)
+    pushViewport(viewport(x = 0.775, width = 0.45))
+    grid.rect(gp = gpar(col = "transparent", fill = opp_opt$edge_color))
+    popViewport()
+    pushViewport(viewport(x = 0.775, width = 0.40))
     grid.piece(opp_piece_side, suit, rank, cfg)
     popViewport()
     grDevices::dev.off()
@@ -132,8 +139,8 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
         sep = "\n", file = filename)
 
     # texture coordinates, nb. obj has y axis in opposite direction
-    xy_vt_t <- xy_npc$dilate(width = 0.4)
-    xy_vt_b <- xy_npc$dilate(width = 0.4)$translate(x = 0.6)
+    xy_vt_t <- xy_npc$dilate(width = 0.4)$translate(x = 0.025)
+    xy_vt_b <- xy_npc$dilate(width = 0.4)$translate(x = 0.575)
     xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(1, 0, 0, 1))
     vt_t <- paste("vt", xy_vt_t$x, xy_vt_t$y)
     vt_b <- paste("vt", xy_vt_b$x, xy_vt_b$y)

@@ -102,6 +102,7 @@ game_systems <- function(style=NULL) {
                            invert_colors.matchstick = TRUE, ps_cex.r2.matchstick = 0.7,
                            dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5, suit_color.s2.matchstick = "grey30",
                            mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
+                           invert_colors.bit = TRUE,
                            rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
     piecepack <- c(piecepack_suits, piecepack_base)
 
@@ -190,7 +191,6 @@ checkers <- function(cell_width = 1) {
                      gridline_color.board_back = cb_suit_colors_pure,
                      gridline_lex.board = 4,
                      edge_color.board = "white",
-                     edge_color.bit = cb_suit_colors_impure,
                      suit_color = cb_suit_colors_impure,
                      background_color = "white",
                      gridline_color.s6.board_face = "grey80",

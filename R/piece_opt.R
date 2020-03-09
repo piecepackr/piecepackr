@@ -410,6 +410,7 @@ get_edge_color <- function(piece_side, suit, rank, cfg) {
 
     piece <- get_piece(piece_side)
     default <- switch(piece,
+                    bit = background_color,
                     pawn = background_color,
                     die = background_color,
                     matchstick = get_background_color("matchstick_back", suit=suit, rank=rank, cfg),
