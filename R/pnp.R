@@ -371,14 +371,16 @@ a5_title_grob <- function(cfg=pp_cfg(), pieces) {
     # Credits
     y_credits <- y_copyright - grobHeight(grob_ch) - grobHeight(grob_c) - unit(0.03, "npc")
     credits <- paste(c('\u25cf The piecepack was invented by James "Kyle" Droscha. Public Domain.',
-                       "\thttp://www.piecepack.org/Anatomy.html",
-                 "\u25cf Piecepack pyramids were invented by Tim Schutz. Public Domain.",
-                 "\thttp://www.ludism.org/ppwiki/PiecepackPyramids",
-                 "\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.",
-                 "\thttp://www.piecepack.org/Accessories.html",
-                 "\u25cf Piecepack matchsticks were invented by Dan Burkey. Public Domain.",
-                 "\thttp://www.ludism.org/ppwiki/PiecepackMatchsticks",
-                 cfg$credit),
+                       "\thttps://web.archive.org/web/20191222010028/http://www.piecepack.org/Anatomy.html",
+                       # "\thttp://www.piecepack.org/Anatomy.html",
+                       "\u25cf Piecepack pyramids were invented by Tim Schutz. Public Domain.",
+                       "\thttp://www.ludism.org/ppwiki/PiecepackPyramids",
+                       "\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.",
+                       "\thttps://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html",
+                       # "\thttp://www.piecepack.org/Accessories.html",
+                       "\u25cf Piecepack matchsticks were invented by Dan Burkey. Public Domain.",
+                       "\thttp://www.ludism.org/ppwiki/PiecepackMatchsticks",
+                       cfg$credit),
                      collapse="\n")
     grob_credits <- gTree(name="credits", children=gList(
         textGrob("Credits", x=0.1, y=y_credits, just="left", gp=gp_header),

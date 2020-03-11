@@ -48,7 +48,7 @@ Contains the following game systems:\describe{
     \item{piecepack pyramids}{A public domain accessory developed by Tim Schutz.
                              See \url{http://www.ludism.org/ppwiki/PiecepackPyramids}.}
     \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
-                             See \url{http://www.piecepack.org/Accessories.html}.}
+             See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}
   }}
 \item{playing_cards_expansion}{A piecepack with the standard ``French'' playing card suits.
                                See \url{http://www.ludism.org/ppwiki/PlayingCardsExpansion}.}

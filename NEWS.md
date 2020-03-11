@@ -69,8 +69,7 @@ New features
        + ``piecepack pyramids``: A public domain accessory developed by Tim Schutz.
                                 See http://www.ludism.org/ppwiki/PiecepackPyramids.
        + ``piecepack saucers``: A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
-                                See http://www.piecepack.org/Accessories.html.
-     
+                                See https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html
   - ``playing_cards_expansion``: A piecepack with the standard "French" playing card suits.
                                   See http://www.ludism.org/ppwiki/PlayingCardsExpansion.
   - ``subpack``: A "mini" piecepack.  Designed to be used with the ``piecepack`` to make piecepack
