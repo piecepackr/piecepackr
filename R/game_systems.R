@@ -34,11 +34,11 @@
 #'       Poker-sized \code{card} components for various playing card decks:\describe{
 #'        \item{playing_cards}{A traditional deck of playing cards with 4 suits
 #'            and 13 ranks (A, 2-10, J, Q, K) plus a 14th "Joker" rank.}
-#'        \item{playing_cards_colored}{Like \code{playing_cards} but with five colored suits: 
+#'        \item{playing_cards_colored}{Like \code{playing_cards} but with five colored suits:
 #'            red hearts, black spades, green clubs, blue diamonds, and yellow stars.}
 #'        \item{playing_cards_tarot}{A (French Bourgeois) deck of tarot playing cards:
-#'            first four suits are hearts, spades, clubs, and diamonds with 
-#'            14 ranks (ace through jack, knight, queen, king) plus a 
+#'            first four suits are hearts, spades, clubs, and diamonds with
+#'            14 ranks (ace through jack, knight, queen, king) plus a
 #'            fifth "suit" of 22 trump cards (1-21 plus an "excuse").}}}
 #' \item{playing_cards_expansion}{A piecepack with the standard ``French'' playing card suits.
 #'                                See \url{http://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
@@ -91,12 +91,13 @@ game_systems <- function(style=NULL) {
     if (is.null(style)) {
         piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
-        pc_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2302,"
+        pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,*",
+                             suit_cex.s5=1.3)
     } else if (style == "dejavu") {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
-        pc_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2605,"
+        pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605")
     } else if (style == "dejavu3d") {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_color.s4 = "#0072B2",
@@ -107,7 +108,7 @@ game_systems <- function(style=NULL) {
                                 edge_color.tile = "black", edge_color.coin = "black",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
-        pc_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2605,"
+        pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605")
     } else {
         stop(paste("Don't have a customized configuration for style", style))
     }
@@ -161,16 +162,14 @@ game_systems <- function(style=NULL) {
                                  suit_text.r14 = "",
                                  border_color = "black", border_lex = 4)
     playing_cards_list$n_suits <- 4
-    playing_cards_list$suit_text <- pc_suit_text
     playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00,#E59F00"
 
-    playing_cards <- pp_cfg(playing_cards_list)
+    playing_cards <- pp_cfg(c(playing_cards_list, pc_suit_text))
     playing_cards$has_piecepack <- FALSE
     playing_cards$has_cards <- TRUE
 
-    playing_cards_colored <- playing_cards_list
+    playing_cards_colored <- c(playing_cards_list, pc_suit_text)
     playing_cards_colored$n_suits <- 5
-    playing_cards_colored$suit_text <- pc_suit_text
     playing_cards_colored$suit_color <- cb_suit_colors_pure
 
     playing_cards_colored <- pp_cfg(playing_cards_colored)

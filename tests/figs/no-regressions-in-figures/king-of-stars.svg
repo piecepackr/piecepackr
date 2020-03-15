@@ -16,7 +16,7 @@
 <rect x='288.00' y='162.00' width='144.00' height='252.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='278.66' y='196.83' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='18.67px' lengthAdjust='spacingAndGlyphs'>K</text>
 <text transform='translate(441.34,379.17) rotate(-180)' style='font-size: 28.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='18.67px' lengthAdjust='spacingAndGlyphs'>K</text>
-<text x='278.34' y='223.41' style='font-size: 32.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='19.33px' lengthAdjust='spacingAndGlyphs'>⌂</text>
-<text transform='translate(441.66,352.59) rotate(-180)' style='font-size: 32.00px; fill: #E69F00; font-family: Liberation Sans;' textLength='19.33px' lengthAdjust='spacingAndGlyphs'>⌂</text>
+<text x='279.91' y='226.70' style='font-size: 41.60px; fill: #E69F00; font-family: Liberation Sans;' textLength='16.19px' lengthAdjust='spacingAndGlyphs'>*</text>
+<text transform='translate(440.09,349.30) rotate(-180)' style='font-size: 41.60px; fill: #E69F00; font-family: Liberation Sans;' textLength='16.19px' lengthAdjust='spacingAndGlyphs'>*</text>
 <rect x='270.00' y='162.00' width='180.00' height='252.00' style='stroke-width: 3.00;' />
 </svg>
