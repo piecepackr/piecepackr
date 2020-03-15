@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    line, polyline, polygon, path, rect, circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<rect x='270.00' y='162.00' width='180.00' height='252.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<rect x='288.00' y='162.00' width='144.00' height='252.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text transform='translate(378.90,318.59) rotate(-180)' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(342.90,343.79) rotate(-180)' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(414.90,343.79) rotate(-180)' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(342.90,293.39) rotate(-180)' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(414.90,293.39) rotate(-180)' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='305.10' y='282.61' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='377.10' y='282.61' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='305.10' y='232.21' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='377.10' y='232.21' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='341.10' y='257.41' style='font-size: 57.60px; fill: #009E73; font-family: Liberation Sans;' textLength='37.80px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='272.42' y='196.83' style='font-size: 28.00px; fill: #009E73; font-family: Liberation Sans;' textLength='31.16px' lengthAdjust='spacingAndGlyphs'>10</text>
+<text transform='translate(447.58,379.17) rotate(-180)' style='font-size: 28.00px; fill: #009E73; font-family: Liberation Sans;' textLength='31.16px' lengthAdjust='spacingAndGlyphs'>10</text>
+<text x='277.50' y='223.41' style='font-size: 32.00px; fill: #009E73; font-family: Liberation Sans;' textLength='21.00px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(442.50,352.59) rotate(-180)' style='font-size: 32.00px; fill: #009E73; font-family: Liberation Sans;' textLength='21.00px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<rect x='270.00' y='162.00' width='180.00' height='252.00' style='stroke-width: 3.00;' />
+</svg>

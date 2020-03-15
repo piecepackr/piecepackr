@@ -73,7 +73,43 @@ xya_pips_dominoes <- function(n_pips) {
            )
 }
 
+cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
+    force(rank_offset)
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
+
+        background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
+        mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
+
+        gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                        fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                        lineheight = 0.8)
+        rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
+                              x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
+                              hjust = 0.5, vjust = 0.5)
+        gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
+                        fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
+        suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
+                              x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
+                              hjust = 0.5, vjust = 0.5)
+
+        # Pips
+        tfn <- pippedGrobFn(rank_offset, card, type, border = FALSE, mat = FALSE)
+        pip_grob <- grobTree(tfn(piece_side, suit, rank, cfg),
+                          vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)))
+
+        # Border
+        border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
+
+        gl <- gList(background_grob, pip_grob, rank_grob, suit_grob, mat_grob, border_grob)
+        gTree(children=gl, name=piece_side)
+    }
+}
+
 dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
+    force(rank_offset)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -103,7 +139,8 @@ dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
     }
 }
 
-pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle", border = TRUE, mat = TRUE) {
+pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle",
+                         border = TRUE, mat = TRUE) {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         if (card) {
@@ -127,17 +164,17 @@ pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle", border 
         # Pips
         if (nrow(xya) > 0) {
             if (type == "circle") {
-                gp_ps <- gpar(col=opt$ps_color, fill=opt$ps_color)
+                gp_pip <- gpar(col=opt$dm_color, fill=opt$dm_color)
                 if (!card && (rank + rank_offset) > 9) r <- 0.06 else r <- 0.08
-                ps_grob <- circleGrob(x=xya$x, y=xya$y, r=r, gp=gp_ps)
+                pip_grob <- circleGrob(x=xya$x, y=xya$y, r=r, gp=gp_pip)
             } else {
-                gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize,
-                              fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
-                ps_grob <- textGrob(opt$ps_text, x=xya$x, y=xya$y, rot = xya$angle,
-                                   gp = gp_ps, hjust = 0.5, vjust = 0.5)
+                gp_pip <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
+                              fontfamily=opt$dm_fontfamily, fontface=opt$dm_fontface)
+                pip_grob <- textGrob(opt$dm_text, x=xya$x, y=xya$y, rot = xya$angle,
+                                   gp = gp_pip, hjust = 0.5, vjust = 0.5)
             }
         } else {
-            ps_grob <- nullGrob()
+            pip_grob <- nullGrob()
         }
 
         # Border
@@ -147,7 +184,7 @@ pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle", border 
             border_grob <- nullGrob()
         }
 
-        gl <- gList(background_grob, mat_grob, ps_grob, border_grob)
+        gl <- gList(background_grob, mat_grob, pip_grob, border_grob)
         gTree(children=gl, name=piece_side)
     }
 }

@@ -573,6 +573,7 @@ get_dm_fontsize <- function(piece_side, suit, rank, cfg) {
                  "pawn_face" = 12,
                  "pawn_back" = 12,
                  "pyramid_face" = 12 * (rank+1) / 8,
+                 "card_face" = 32,
                  12)
     get_style_element("dm_fontsize", piece_side, cfg, default, suit, rank)
 }
@@ -585,6 +586,7 @@ get_rank_fontsize <- function(piece_side, suit, rank, cfg) {
                  "bit_face" = 28,
                  "pyramid_left"  = 60 * (rank+1) / 8,
                  "pyramid_right" = 60 * (rank+1) / 8,
+                 "card_face" = 28,
                  20)
     get_style_element("rank_fontsize", piece_side, cfg, default, suit, rank)
 }

@@ -16,6 +16,7 @@ test_that("no regressions in figures", {
         )
     expect_error(xya_pips_cards(11), "Don't know pip pattern for 11 pips")
     expect_error(xya_pips_dominoes(13), "Don't know pip pattern for 13 pips")
+    for (i in 0:10) expect_equal(nrow(xya_pips_cards(i)), i)
 
     # checkers
     expect_doppelganger("checkers", function() {
@@ -30,7 +31,14 @@ test_that("no regressions in figures", {
         df_bit2 <- tibble(piece_side = "bit_back", x = 6, y = 6, suit = 4, rank = 4, cfg = "checkers2")
         df <- rbind(df2, df1f, df1b, df_bit2, df_bit)
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
-
-
     })
+
+    # playing cards
+    cfg <- game_systems()$playing_cards_colored
+    expect_doppelganger("ten_of_clubs", function()
+        grid.piece("card_face", suit = 3, rank = 10, cfg = cfg))
+    expect_doppelganger("king_of_stars", function()
+        grid.piece("card_face", suit = 5, rank = 13, cfg = cfg))
+    expect_doppelganger("red_joker", function()
+        grid.piece("card_face", suit = 1, rank = 14, cfg = cfg))
 })

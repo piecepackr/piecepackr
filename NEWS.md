@@ -9,6 +9,11 @@ New features
   - ``dice``: Normal six-sided pipped dice in six color schemes (#166).
   - ``checkers1``, ``checkers2``: Checkered boards and checkers.  ``checkers1`` has 1" cells and ``checkers2`` has 2" cells (#168).
   - ``dominoes``, ``dominoes_black``, ``dominoes_blue``, ``dominoes_green``, ``dominoes_red``, ``dominoes_white``, ``dominoes_yellow``: Traditional Double-12 pipped dominoes in various color schemes (#159).  
+  - ``playing_cards``, ``playing_cards_colored``, ``playing_cards_tarot``: 
+    ``playing cards`` is a traditional (French-suited) deck of (Poker) playing cards.
+    ``playing_cards_colored`` has five suits: red hearts, black spades, green clubs, blue diamonds, and yellow stars.
+    ``playing_cards_tarot`` is a (French Bourgeois) tarot deck with four suits (hearts, spades, clubs, diamonds) with 14 ranks (including knights) plus 22 trump cards (1-21 plus an "excuse").
+    
 * New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures) (#189, #190).
   Note support for dice and pawns are currently rather crude.
 * New function ``piece3d`` for making graphics with the ``rgl`` package (#76).

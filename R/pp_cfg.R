@@ -358,8 +358,12 @@ Config <- R6Class("pp_cfg",
             if (!is.null(private$cache[[key]])) {
                 private$cache[[key]]
             } else {
+                default_grob_fn <- switch(piece_side,
+                                          card_face = cardGrobFn(-1),
+                                          card_back = cardGrobFn(-1),
+                                          basicPieceGrob)
                 default_fn <- get_style_element("grob_fn", piece_side, private$cfg,
-                                                basicPieceGrob, suit, rank)
+                                                default_grob_fn, suit, rank)
                 grob_fn <- switch(piece_side,
                                  die_layoutLF = dieLayoutGrobLF,
                                  die_layoutRF = dieLayoutGrobRF,

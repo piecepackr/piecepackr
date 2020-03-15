@@ -30,6 +30,16 @@
 #'     \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
 #'              See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}
 #'   }}
+#' \item{playing_cards, playing_cards_colored, playing_cards_tarot}{
+#'       Poker-sized \code{card} components for various playing card decks:\describe{
+#'        \item{playing_cards}{A traditional deck of playing cards with 4 suits
+#'            and 13 ranks (A, 2-10, J, Q, K) plus a 14th "Joker" rank.}
+#'        \item{playing_cards_colored}{Like \code{playing_cards} but with five colored suits: 
+#'            red hearts, black spades, green clubs, blue diamonds, and yellow stars.}
+#'        \item{playing_cards_tarot}{A (French Bourgeois) deck of tarot playing cards:
+#'            first four suits are hearts, spades, clubs, and diamonds with 
+#'            14 ranks (ace through jack, knight, queen, king) plus a 
+#'            fifth "suit" of 22 trump cards (1-21 plus an "excuse").}}}
 #' \item{playing_cards_expansion}{A piecepack with the standard ``French'' playing card suits.
 #'                                See \url{http://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
 #' \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
@@ -81,10 +91,12 @@ game_systems <- function(style=NULL) {
     if (is.null(style)) {
         piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
+        pc_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2302,"
     } else if (style == "dejavu") {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
+        pc_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2605,"
     } else if (style == "dejavu3d") {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_color.s4 = "#0072B2",
@@ -95,6 +107,7 @@ game_systems <- function(style=NULL) {
                                 edge_color.tile = "black", edge_color.coin = "black",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
+        pc_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2605,"
     } else {
         stop(paste("Don't have a customized configuration for style", style))
     }
@@ -123,6 +136,7 @@ game_systems <- function(style=NULL) {
     dual_piecepacks_expansion$suit_text <- pce_suit_text
 
     dice <- pp_cfg(list(n_suits = 6, n_ranks = 6,
+                        rank_text = "1,2,3,4,5,6",
                         width.die = 16 / 25.4, # 16 mm dice most common
                         suit_color = cb_suit_colors_impure,
                         background_color = "white,white,white,white,black,black",
@@ -131,10 +145,55 @@ game_systems <- function(style=NULL) {
                         border_color = "black", border_lex = 4,
                         # border_color = "black", border_color.s2 = "grey30", border_lex = 4,
                         # border_color = "black", border_color.s2 = "white", border_lex = 4,
+                        grob_fn.card = cardGrobFn(type = "circle"),
                         grob_fn.die = pippedGrobFn(0, FALSE)
                         ))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE
+
+    playing_cards_list <- list(n_ranks = 14,
+                                 rank_text = "A,2,3,4,5,6,7,8,9,10,J,Q,K,\n\n\n\nJ\nO\nK\nE\nR",
+                                 grob_fn.card = cardGrobFn(),
+                                 grob_fn.r11.card = cardGrobFn(-11),
+                                 grob_fn.r12.card = cardGrobFn(-12),
+                                 grob_fn.r13.card = cardGrobFn(-13),
+                                 grob_fn.r14.card = cardGrobFn(-14),
+                                 suit_text.r14 = "",
+                                 border_color = "black", border_lex = 4)
+    playing_cards_list$n_suits <- 4
+    playing_cards_list$suit_text <- pc_suit_text
+    playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00,#E59F00"
+
+    playing_cards <- pp_cfg(playing_cards_list)
+    playing_cards$has_piecepack <- FALSE
+    playing_cards$has_cards <- TRUE
+
+    playing_cards_colored <- playing_cards_list
+    playing_cards_colored$n_suits <- 5
+    playing_cards_colored$suit_text <- pc_suit_text
+    playing_cards_colored$suit_color <- cb_suit_colors_pure
+
+    playing_cards_colored <- pp_cfg(playing_cards_colored)
+    playing_cards_colored$has_piecepack <- FALSE
+    playing_cards_colored$has_cards <- TRUE
+
+    playing_cards_tarot <- playing_cards_list
+    playing_cards_tarot$rank_text <- "A,2,3,4,5,6,7,8,9,10,J,C,Q,K"
+    fool_text <- ifelse(is.null(style), "*", "\u2605")
+    playing_cards_tarot$rank_text.s5 <- paste(c(1:21, fool_text), collapse = ",")
+    playing_cards_tarot$n_suits <- 5
+    playing_cards_tarot$n_ranks <- 22
+
+    tarot_suit_text <- "\u2665,\u2660,\u2663,\u2666,"
+    playing_cards_tarot$suit_text <- tarot_suit_text
+    playing_cards_tarot$suit_text.r14 <- tarot_suit_text
+    playing_cards_tarot$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
+    for (i in 15:22) {
+        playing_cards_tarot[[paste0("grob_fn.r", i, ".card")]] <- cardGrobFn(-i)
+    }
+    playing_cards_tarot <- pp_cfg(playing_cards_tarot)
+    playing_cards_tarot$has_piecepack <- FALSE
+    playing_cards_tarot$has_cards <- TRUE
 
     list(checkers1 = checkers(1),
          checkers2 = checkers(2),
@@ -151,12 +210,17 @@ game_systems <- function(style=NULL) {
          dual_piecepacks_expansion=pp_cfg(dual_piecepacks_expansion),
          hexpack=to_hexpack(piecepack),
          piecepack=pp_cfg(piecepack),
+         playing_cards = playing_cards,
+         playing_cards_colored = playing_cards_colored,
+         playing_cards_tarot = playing_cards_tarot,
          playing_cards_expansion=pp_cfg(playing_cards_expansion),
          subpack=to_subpack(piecepack))
 }
 
 cb_suit_colors_impure <- "#D55E00,grey30,#009E73,#56B4E9,#E69F00,#FFFFFF"
 cb_suit_colors_pure <- "#D55E00,#000000,#009E73,#56B4E9,#E69F00,#FFFFFF"
+
+
 
 dominoes <- function(background_color = "white", suit_color = "black", border_color = "black", mat_width = 0) {
     dominoes <- pp_cfg(list(n_suits = 13, n_ranks = 13,
@@ -168,6 +232,7 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
                             mat_width = mat_width, mat_color = suit_color,
                             border_color = border_color, border_lex = 4,
                             grob_fn.die = pippedGrobFn(0, FALSE),
+                            grob_fn.card = cardGrobFn(-1, type = "circle"),
                             gridline_color.tile_back = "transparent",
                             gridline_color.tile_face = suit_color,
                             gridline_lex.tile_face = 6,
