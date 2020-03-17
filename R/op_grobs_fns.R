@@ -37,7 +37,7 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
     p <- Polygon$new(xy_b)
     edge_types <- paste0("pyramid_", c("left", "back", "right", "face"))
     order <- p$op_edge_order(op_angle)
-    df <- tibble(index = 1:4, order = order, edge = edge_types)[order, ]
+    df <- tibble(index = 1:4, edge = edge_types)[order, ]
     gl <- gList()
     #### Check angle and op_angle and if possible draw one of the pyramid faces
     for (i in 1:4) {
@@ -53,6 +53,86 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gl
 }
 
+basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                            angle=0, type="normal",
+                            width=NA, height=NA, depth=NA,
+                            op_scale=0, op_angle=45) {
+    cfg <- as_pp_cfg(cfg)
+
+    x <- as.numeric(convertX(x, "in"))
+    y <- as.numeric(convertY(y, "in"))
+    z <- as.numeric(convertX(z, "in"))
+    width <- as.numeric(convertX(width, "in"))
+    height <- as.numeric(convertY(height, "in"))
+    depth <- as.numeric(convertX(depth, "in"))
+    xy_b <- Point$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
+    p <- Polygon$new(xy_b)
+
+    theta <- 2 * asin(0.5 * width / height)
+    yt <- 1 - cos(theta)
+    xy_t <- Point$new(x = 0:1, y = yt)$npc_to_in(x, y, width, height, angle)
+
+    gl <- gList()
+
+    # opposite edge
+    opposite_edge <- switch(piece_side,
+                            "pyramid_face" = "pyramid_back",
+                            "pyramid_back" = "pyramid_face",
+                            "pyramid_left" = "pyramid_right",
+                            "pyramid_right" = "pyramid_left")
+    opt <- cfg$get_piece_opt(opposite_edge, suit, rank)
+    gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
+    exy <- Point3D$new(x = xy_b$x, y = xy_b$y, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
+    gl[[1]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+    gl[[2]] <- nullGrob()
+    gl[[3]] <- nullGrob()
+
+    # side edges
+    edge_types <- paste0("pyramid_", switch(piece_side,
+                         "pyramid_face" = c("right", "bottom", "left"),
+                         "pyramid_left" = c("face", "bottom", "back"),
+                         "pyramid_back" = c("left", "bottom", "right"),
+                         "pyramid_right" = c("back", "bottom", "face")
+                         ))
+
+    order <- p$op_edge_order(op_angle)
+    df <- tibble(index = 1:3, edge = edge_types)[order, ]
+    gli <- 2
+
+    for (i in 1:3) {
+        edge_ps <- df$edge[i]
+        index <- df$index[i]
+        if (edge_ps == "pyramid_bottom") next
+        opt <- cfg$get_piece_opt(edge_ps, suit, rank)
+        gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
+        edge <- p$edges[index]
+        if (index == 1) {
+            ex <- c(edge$p1$x, edge$p2$x, edge$p2$x)
+            ey <- c(edge$p1$y, edge$p2$y, xy_t$y[1])
+            ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
+        } else { # index equals 3
+            ex <- c(edge$p1$x, edge$p2$x, edge$p1$x)
+            ey <- c(edge$p1$y, edge$p2$y, xy_t$y[2])
+            ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
+        }
+        exy <- Point3D$new(x = ex, y = ey, z = ez)$project_op(op_angle, op_scale)
+        gl[[gli]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+        gli <- gli + 1
+    }
+
+    # #### Check angle and op_angle and if possible draw one of the pyramid faces
+    # face
+    x_f <- xy_b$x
+    y_f <- c(xy_b$y[1], xy_t$y)
+    z_f <- c(z - 0.5 * depth, z + 0.5 * depth, z + 0.5 * depth)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
+    exy <- Point3D$new(x = x_f, y = y_f, z = z_f)$project_op(op_angle, op_scale)
+    gl[[4]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+
+    gl
+}
 
 basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),

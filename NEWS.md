@@ -25,6 +25,7 @@ Bug fixes and minor improvements
 * Configuration lists now support an "oval" shape (#182).
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
+* Improved drawing of oblique projection edges for pyramids (#172).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
 * ``op_transform`` now accepts new argument ``pt_thickness``for improved handling of stacked pyramid (tops).
 * The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color of ``piece_side``.
@@ -34,7 +35,7 @@ Bug fixes and minor improvements
   By default it uses the (backwards-compatible) ``pieceGrob``.
 * ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).
 * ``pp_cfg`` now supports a new ``op_grob_fn`` style indicating which function to draw pieces with 
-  when drawing with a 3D oblique projection.  The older ``shadow_fn`` style alternative is now deprecated.
+  when drawing with a 3D oblique projection in ``grid``.  The older ``shadow_fn`` style alternative is now deprecated.
 
 Deprecated features
 -------------------

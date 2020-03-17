@@ -294,6 +294,10 @@ Config <- R6Class("pp_cfg",
             } else {
                 default_fn <- switch(piece_side,
                                      pyramid_top = basicPyramidTop,
+                                     pyramid_face = basicPyramidSide,
+                                     pyramid_back = basicPyramidSide,
+                                     pyramid_left = basicPyramidSide,
+                                     pyramid_right = basicPyramidSide,
                                      basicOpGrob)
                 grobFn <- get_style_element("op_grob_fn", piece_side, private$cfg,
                                                 default_fn, suit, rank)

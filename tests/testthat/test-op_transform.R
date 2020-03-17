@@ -2,10 +2,10 @@ library("tibble")
 library("vdiffr")
 context("3d helper function")
 test_that("3d helper functions work", {
-    opf <- function(op_angle=45) {
+    opf <- function(op_angle=45, ...) {
         function() {
             pmap_piece(df, op_angle=op_angle, trans=op_transform,
-                       op_scale=0.5, default.units="in")
+                       op_scale=0.5, default.units="in", ...)
         }
     }
 
@@ -39,6 +39,18 @@ test_that("3d helper functions work", {
     df <- tibble(piece_side = "pyramid_top", x = 2, y = 2, rank = 6:1,
                  suit = c(1:4, 1:2))
     expect_doppelganger("pyramid_tops_smaller_on_top", opf(045))
+
+    cfg <- list(background_color.pyramid_face = "blue", background_color.pyramid_back = "red",
+               background_color.pyramid_left = "green", background_color.pyramid_right = "grey")
+    dft <- tibble(piece_side = "tile_back", x=rep(c(1, 3, 5), 3), y=rep(c(1, 3, 5), each=3),
+                  rank = NA, suit = NA, angle = 0)
+    dfp1 <- tibble(piece_side = "pyramid_top", x=3, y=3, rank = 3, suit = 2, angle = 0)
+    dfp2 <- tibble(piece_side = rep(c("pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right"), length.out=9),
+                   x = rep(c(1, 3, 5), 3), y = rep(c(5, 3, 1), each=3),
+                   angle = c(45, 0, -45, 90, 0, -90, 135, 180, -135),
+                   rank = rep(1:6, length.out=9), suit = 1)[-5, ]
+    df <- rbind(dft, dfp1, dfp2)
+    expect_doppelganger("oblique_pyramids", opf(045, cfg = cfg))
 
     # rounding error #163
     df <- tibble(piece_side = "tile_face", x=rep(seq(1,7,2), 4), y=rep(seq(1,7,2), each=4),
