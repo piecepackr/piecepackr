@@ -100,6 +100,8 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (!is.unit(width)) width <- unit(width, default.units)
     if (!is.unit(height)) height <- unit(height, default.units)
     if (!is.unit(depth)) depth <- unit(depth, default.units)
+    angle <- angle %% 360
+    op_angle <- op_angle %% 360
     grob_type <- ifelse(use_pictureGrob, "picture", "normal")
     if (op_scale < 0.01) {
         grob <- cfg$get_grob(piece_side, suit, rank, grob_type)

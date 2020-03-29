@@ -25,7 +25,7 @@ Bug fixes and minor improvements
 * Configuration lists now support an "oval" shape (#182).
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
-* Improved drawing of oblique projection edges for pyramids (#172).
+* Improved drawing of pyramids in the 3D oblique projection (#172).
 * Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
 * ``op_transform`` now accepts new argument ``pt_thickness``for improved handling of stacked pyramid (tops).
 * The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color of ``piece_side``.

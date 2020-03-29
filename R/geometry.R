@@ -20,6 +20,11 @@ Point <- R6Class("point",
                                distance_to = function(p) {
                                    sqrt((p$x - self$x)^2 + (p$y - self$y)^2)
                                },
+                               midpoint = function(p) {
+                                   x <- mean(c(p$x, self$x))
+                                   y <- mean(c(p$y, self$y))
+                                   Point$new(x, y)
+                               },
                                translate = function(x = 0, y = 0) {
                                    Point$new(self$x + x, self$y + y)
                                },

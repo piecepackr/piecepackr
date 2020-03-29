@@ -39,7 +39,6 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
     order <- p$op_edge_order(op_angle)
     df <- tibble(index = 1:4, edge = edge_types)[order, ]
     gl <- gList()
-    #### Check angle and op_angle and if possible draw one of the pyramid faces
     for (i in 1:4) {
         opt <- cfg$get_piece_opt(df$edge[i], suit, rank)
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
@@ -49,6 +48,15 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
         ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
         exy <- Point3D$new(x = ex, y = ey, z = ez)$project_op(op_angle, op_scale)
         gl[[i]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+    }
+    # Check angle and op_angle and if possible draw one of the pyramid faces
+    if ((angle - op_angle) %% 90 == 0) {
+        base_mid <- exy[1]$midpoint(exy[2])
+        xy_mid <- base_mid$midpoint(exy[3])
+        vheight <- base_mid$distance_to(exy[3])
+        vp <- viewport(x = xy_mid$x, y = xy_mid$y, default.units = "in", angle = op_angle - 90,
+                       width = width, height = vheight)
+        gl[[4]] <- grobTree(cfg$get_grob(df$edge[i], suit, rank, "picture"), vp = vp)
     }
     gl
 }
@@ -121,7 +129,6 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
         gli <- gli + 1
     }
 
-    # #### Check angle and op_angle and if possible draw one of the pyramid faces
     # face
     x_f <- xy_b$x
     y_f <- c(xy_b$y[1], xy_t$y)
@@ -130,6 +137,16 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
     exy <- Point3D$new(x = x_f, y = y_f, z = z_f)$project_op(op_angle, op_scale)
     gl[[4]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+
+    # Check angle and op_angle and if possible draw one of the pyramid faces
+    if (((op_angle - angle) %% 360 %in% c(90, 270)) && angle %% 90 == 0) {
+        base_mid <- exy[2]$midpoint(exy[3])
+        xy_mid <- base_mid$midpoint(exy[1])
+        vheight <- base_mid$distance_to(exy[1])
+        vp <- viewport(x = xy_mid$x, y = xy_mid$y, default.units = "in", angle = angle,
+                       width = width, height = vheight)
+        gl[[4]] <- grobTree(cfg$get_grob(piece_side, suit, rank, "picture"), vp = vp)
+    }
 
     gl
 }
