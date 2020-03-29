@@ -80,14 +80,16 @@ test_that("3d helper functions work", {
 
 test_that("SAT functions work", {
     r1 <- ConvexPolygon$new(x=c(0,0,1,1), y=c(0,1,1,0))
+    expect_doppelganger("simple_square", function() plot(r1))
     r2 <- ConvexPolygon$new(x=0.5+c(0,0,1,1), y=0.5+c(0,1,1,0))
     r3 <- ConvexPolygon$new(x=1+c(0,0,1,1), y=1+c(0,1,1,0))
     r4 <- ConvexPolygon$new(x=c(0.25,0.25,0.75,0.75), y=c(0.25,0.75,0.75,0.25))
 
     c1 <- Circle$new(x=0.5, y=0.5, r=0.5)
     c2 <- Circle$new(x=1.0, y=1.0, r=0.5)
-    c3 <- Circle$new(x=2.0, y=2.0, r=0.5)
+    c3 <- Circle$new(Point$new(x=2.0, y=2.0), r=0.5)
 
+    expect_true(do_shapes_overlap("boo", "bar"))
     expect_true(do_shapes_overlap(r1, r2))
     expect_true(do_shapes_overlap(r2, r3))
     expect_false(do_shapes_overlap(r1, r3))
@@ -101,4 +103,19 @@ test_that("SAT functions work", {
     expect_false(do_shapes_overlap(r1, c3))
     expect_true(do_shapes_overlap(c1, r1))
     expect_false(do_shapes_overlap(c3, r1))
+
+    p3 <- Point3D$new(x=1:5, y=1:5, z=1:5)
+    expect_error(p3$rotate(axis_x=1), "Don't know how to do this rotation yet")
+    p3p <- p3$translate(1, 2, 3)
+    expect_equal(p3p$z, 4:8)
+    p2 <- p3$project_op(45, 0.5)
+    expect_doppelganger("simple_points", function() plot(p2))
+})
+
+test_that("get_shape_xy works", {
+    expect_equal(get_shape_xy("kite"), kite_xy)
+    expect_equal(get_shape_xy("halma"), halma_xy())
+    expect_equal(get_shape_xy("pyramid"), pyramid_xy)
+    expect_equal(get_shape_xy("concave4"), concave_xy(4, 90, 0.2))
+    expect_error(get_shape_xy("boobah"), "Don't know how to get xy coordinates for boobah")
 })

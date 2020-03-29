@@ -1,6 +1,6 @@
 cfg <- piecepackr::game_systems("dejavu3d")$piecepack
 test_that("save_piece_obj works", {
-    files <- save_piece_obj("tile_face", cfg = cfg)
+    files <- save_piece_obj("tile_face", z = NA, cfg = cfg)
     expect_length(files, 3)
     files <- save_piece_obj("tile_back", cfg = cfg, angle = NA, axis_x = NA, axis_y = NA)
     expect_length(files, 3)
@@ -16,6 +16,7 @@ test_that("save_piece_obj works", {
     expect_length(files, 3)
     files <- save_piece_obj("pyramid_face", cfg = cfg)
     expect_length(files, 3)
+    expect_error(save_piece_obj("belt_face"))
 })
 
 test_that("rgl works", {

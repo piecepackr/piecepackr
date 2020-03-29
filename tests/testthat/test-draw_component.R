@@ -24,10 +24,13 @@ test_that("save_print_and_play works as expected", {
     pdf_deck_filename_5s <- file.path(pdf_deck_dir, "piecepack_deck_5s.pdf")
     on.exit(unlink(pdf_deck_filename_5s))
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
+
     save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5", "all", "double-sided")
 
     save_print_and_play(cfg_default, pdf_deck_filename, "letter")
-    save_print_and_play(cfg_default, pdf_deck_filename_a4, "A4")
+
+    cfg_large_dice <- pp_cfg(list(title="default cfg", width.die = 0.7))
+    save_print_and_play(cfg_large_dice, pdf_deck_filename_a4, "A4", arrangement = "double-sided")
     save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
 
     expect_error(save_print_and_play(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
@@ -35,7 +38,7 @@ test_that("save_print_and_play works as expected", {
 
     skip_if(!has_gs(), "Doesn't have ghostscript binary")
     expect_equal(get_n_pages(pdf_deck_filename), 7)
-    expect_equal(get_n_pages(pdf_deck_filename_a4), 7)
+    expect_equal(get_n_pages(pdf_deck_filename_a4), 10)
     expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
     expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
     skip_if(Sys.which("pdfinfo") == "", "Doesn't have pdfinfo binary")
