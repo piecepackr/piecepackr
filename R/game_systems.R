@@ -23,6 +23,8 @@
 #' \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
 #'   See \url{http://www.ludism.org/ppwiki}.
 #'   Configuration also contains the following piecepack accessories:\describe{
+#'     \item{piecepack dice cards}{An accessory proposed by John Braley.
+#'                                 See \url{http://www.ludism.org/ppwiki/PiecepackDiceCards}.}
 #'     \item{piecepack matchsticks}{A public domain accessory developed by Dan Burkey.
 #'                                 See \url{http://www.ludism.org/ppwiki/PiecepackMatchsticks}.}
 #'     \item{piecepack pyramids}{A public domain accessory developed by Tim Schutz.
