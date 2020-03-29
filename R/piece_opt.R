@@ -359,13 +359,11 @@ get_suit_color <- function(piece_side, suit, rank, cfg) {
         scol
 }
 get_gridline_color <- function(piece_side, suit, rank, cfg) {
-    if (piece_side == "tile_back") {
-        default <- c(rep("transparent", get_n_suits(cfg)),
-                     get_suit_color(piece_side, get_i_unsuit(cfg), rank, cfg))
-    } else {
-        default <- "transparent"
-    }
-    default <- paste(default, collapse=",")
+    default <- switch(piece_side,
+                      tile_back = get_suit_color(piece_side, get_i_unsuit(cfg), rank, cfg),
+                      board_face = get_suit_color(piece_side, suit, rank, cfg),
+                      board_back = get_suit_color(piece_side, suit, rank, cfg),
+                      "transparent")
     colors <- get_style_element("gridline_color", piece_side, cfg, default, suit, rank)
     colors <- col_cleave(colors)
     colors <- expand_suit_elements(colors, "gridline_colors", piece_side, cfg)

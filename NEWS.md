@@ -4,6 +4,10 @@ piecepackr 1.3.0
 New features
 ------------
 
+* Graphic functions now support more game pieces:
+  - ``board_face``, ``board_back`` for representing boards (#153).
+  - ``card_face``, ``card_back`` for representing cards (#124).
+  - ``bit_face``, ``bit_back`` for representing miscellaneous game pieces (#155).
 * Function ``game_systems`` now returns more game systems:
 
   - ``dice``: Normal six-sided pipped dice in six color schemes (#166).

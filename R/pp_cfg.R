@@ -175,7 +175,7 @@ Config <- R6Class("pp_cfg",
             default <- switch(piece,
                               belt = 0.75 * pi, # so can wrap around 3/4" diameter pawns
                               bit = 0.75,
-                              board = ifelse(is.na(rank), 8, rank),
+                              board = 8,
                               card = 2.5,
                               coin = 0.75,
                               die = 0.5,
@@ -363,6 +363,8 @@ Config <- R6Class("pp_cfg",
                 private$cache[[key]]
             } else {
                 default_grob_fn <- switch(piece_side,
+                                          board_face = checkeredBoardGrobFn(8, 8),
+                                          board_back = linedBoardGrobFn(8, 8),
                                           card_face = cardGrobFn(-1),
                                           card_back = cardGrobFn(-1),
                                           basicPieceGrob)
