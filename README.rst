@@ -469,7 +469,7 @@ The `Piecepack Wiki <http://www.ludism.org/ppwiki/HomePage>`_ has a page on `mak
 What are the dimensions of the components?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts") matches the traditional `Mesomorph piecepack dimensions <http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes and sizes:
+Although one can use the API to make layouts with components of different sizes the default print-and-play pdf's draw components of the following size which (except for the pawns and non-standard "pawn belts") matches the traditional `Mesomorph piecepack dimensions <https://web.archive.org/web/20191222010028/http://www.piecepack.org/Anatomy.html>`_ if one uses the default component shapes and sizes:
 
 - tiles (default "rect") are drawn into a 2" by 2" square 
 - coins (default "circle") are drawn into a ¾" by ¾" square
