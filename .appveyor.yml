@@ -21,6 +21,7 @@ environment:
     - R_VERSION: devel
     - R_VERSION: release
 
+
 build_script:
   - travis-tool.sh install_deps
 
