@@ -321,20 +321,18 @@ Config <- R6Class("pp_cfg",
                 grobFn
             }
         },
-        get_raster = function(piece_side, suit, rank, res=72, value="raster") {
+        get_raster = function(piece_side, suit, rank, res=72) {
             grob <- private$get_grob_normal(piece_side, suit, rank)
             width <- self$get_width(piece_side, suit, rank)
             height <- self$get_height(piece_side, suit, rank)
             png_file <- tempfile(fileext=".png")
-            if (value != "filename") on.exit(unlink(png_file))
+            on.exit(unlink(png_file))
             current_dev <- grDevices::dev.cur()
             if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
             png(png_file, width=width, height=height, units="in", res=res, bg="transparent")
             grid.draw(grob)
             invisible(grDevices::dev.off())
-            if (value == "filename") return(png_file)
-            raster <- as.raster(png::readPNG(png_file))
-            raster
+            as.raster(png::readPNG(png_file))
         },
         # Deprecated public methods
         get_pictureGrob = function(piece_side, suit, rank) {
