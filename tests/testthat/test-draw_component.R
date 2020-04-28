@@ -289,3 +289,21 @@ test_that("oblique projection works", {
         g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
     })
 })
+
+context("alpha and scale works")
+test_that("alpha and scale works", {
+    expect_doppelganger("alpha_and_scale", function() {
+        cfg <- pp_cfg(list(shape.coin="convex6"))
+        df <- tibble(piece_side="coin_back",
+                     x=1:6, y=1, alpha=seq(0, 1, length.out=6),
+                     scale=seq(0, 1, length.out=6))
+        pmap_piece(df, default.units="in", cfg=cfg)
+    })
+    expect_doppelganger("alpha_and_scale_op", function() {
+        cfg <- pp_cfg(list(shape.coin="convex6"))
+        df <- tibble(piece_side="coin_back",
+                     x=1:6, y=1, alpha=seq(0, 1, length.out=6),
+                     scale=seq(0, 1, length.out=6))
+        pmap_piece(df, default.units="in", cfg=cfg, op_scale=0.5)
+    })
+})

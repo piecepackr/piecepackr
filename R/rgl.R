@@ -23,7 +23,7 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA,
                            envir = NULL, ..., scale = 1, res = 72,
-                           lit = FALSE, shininess = 50.0) {
+                           alpha = 1.0, lit = FALSE, shininess = 50.0) {
     if (!requireNamespace("rgl", quietly = TRUE)) {
         stop("You need to install the suggested package rgl to use 'piece3d'.",
              "Use 'install.packages(\"rgl\")'")
@@ -42,6 +42,8 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg
     height <- rep(height, length.out = nn)
     depth <- rep(depth, length.out = nn)
 
+    scale <- rep(scale, length.out = nn)
+    alpha <- rep(alpha, length.out = nn)
     lit <- rep(lit, length.out = nn)
     shininess <- rep(shininess, length.out = nn)
 
@@ -52,8 +54,8 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg
                          x[i], y[i], z[i],
                          angle[i], axis_x[i], axis_y[i],
                          width[i], height[i], depth[i],
-                         scale = scale, res = res,
-                         lit = lit[i], shininess = shininess[i])
+                         scale = scale[i], res = res,
+                         alpha = alpha[i], lit = lit[i], shininess = shininess[i])
     })
     do.call(c, l)
 }
@@ -63,14 +65,15 @@ rgl_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA,
                            scale = 1, res = 72,
-                           lit = FALSE, shininess = 50.0) {
+                           alpha = 1, lit = FALSE, shininess = 50.0) {
+    if (scale == 0 || alpha == 0) return(numeric(0))
     obj <- save_piece_obj(piece_side, suit, rank, cfg,
                         x = x, y = y, z = z,
                         angle = angle, axis_x = axis_x, axis_y = axis_y,
                         width = width, height = height, depth = depth,
                         scale = scale, res = res)
-    material <- list(color = "white", texture = obj$png, textype = "rgba",
-                     lit = lit, shininess = shininess)
+    material <- list(color = "white", alpha = alpha, lit = lit, shininess = shininess,
+                     texture = obj$png, textype = "rgba")
     mesh <- suppressWarnings(rgl::readOBJ(obj$obj, material = material))
     invisible(as.numeric(rgl::shade3d(mesh)))
 }

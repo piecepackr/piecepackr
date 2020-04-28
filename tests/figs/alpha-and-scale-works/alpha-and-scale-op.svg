@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    line, polyline, polygon, path, rect, circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<polygon points='149.95,500.03 150.59,499.39 145.91,496.69 145.27,497.33 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20; fill: #FFFFFF; fill-opacity: 0.20;' />
+<polygon points='149.95,505.43 150.59,504.79 150.59,499.39 149.95,500.03 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20; fill: #FFFFFF; fill-opacity: 0.20;' />
+<polygon points='145.27,497.33 145.91,496.69 141.23,499.39 140.60,500.03 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20; fill: #FFFFFF; fill-opacity: 0.20;' />
+<polygon points='145.27,508.13 145.91,507.49 150.59,504.79 149.95,505.43 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20; fill: #FFFFFF; fill-opacity: 0.20;' />
+<polygon points='140.60,500.03 141.23,499.39 141.23,504.79 140.60,505.43 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20; fill: #FFFFFF; fill-opacity: 0.20;' />
+<polygon points='140.60,505.43 141.23,504.79 145.91,507.49 145.27,508.13 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20; fill: #FFFFFF; fill-opacity: 0.20;' />
+<polygon points='145.91,496.69 141.23,499.39 141.23,504.79 145.91,507.49 150.59,504.79 150.59,499.39 ' style='stroke-width: 0.15; stroke: none; fill: #FFFFFF; fill-opacity: 0.20;' />
+<text x='143.89' y='504.43' style='font-size: 6.80px; fill: #D55E00; fill-opacity: 0.20; font-family: Liberation Sans;' textLength='4.03px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='145.19' y='499.67' style='font-size: 2.40px; fill: #D55E00; fill-opacity: 0.20; font-family: Liberation Sans;' textLength='1.44px' lengthAdjust='spacingAndGlyphs'>●</text>
+<polyline points='145.91,496.69 141.23,499.39 141.23,504.79 145.91,507.49 150.59,504.79 150.59,499.39 145.91,496.69 ' style='stroke-width: 0.15; stroke: #BEBEBE; stroke-opacity: 0.20;' />
+<polygon points='226.31,497.65 227.58,496.37 218.23,490.97 216.95,492.25 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40; fill: #FFFFFF; fill-opacity: 0.40;' />
+<polygon points='226.31,508.45 227.58,507.17 227.58,496.37 226.31,497.65 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40; fill: #FFFFFF; fill-opacity: 0.40;' />
+<polygon points='216.95,492.25 218.23,490.97 208.87,496.37 207.60,497.65 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40; fill: #FFFFFF; fill-opacity: 0.40;' />
+<polygon points='216.95,513.85 218.23,512.57 227.58,507.17 226.31,508.45 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40; fill: #FFFFFF; fill-opacity: 0.40;' />
+<polygon points='207.60,497.65 208.87,496.37 208.87,507.17 207.60,508.45 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40; fill: #FFFFFF; fill-opacity: 0.40;' />
+<polygon points='207.60,508.45 208.87,507.17 218.23,512.57 216.95,513.85 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40; fill: #FFFFFF; fill-opacity: 0.40;' />
+<polygon points='218.23,490.97 208.87,496.37 208.87,507.17 218.23,512.57 227.58,507.17 227.58,496.37 ' style='stroke-width: 0.30; stroke: none; fill: #FFFFFF; fill-opacity: 0.40;' />
+<text x='214.19' y='506.45' style='font-size: 13.60px; fill: #D55E00; fill-opacity: 0.40; font-family: Liberation Sans;' textLength='8.08px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='216.78' y='496.94' style='font-size: 4.80px; fill: #D55E00; fill-opacity: 0.40; font-family: Liberation Sans;' textLength='2.89px' lengthAdjust='spacingAndGlyphs'>●</text>
+<polyline points='218.23,490.97 208.87,496.37 208.87,507.17 218.23,512.57 227.58,507.17 227.58,496.37 218.23,490.97 ' style='stroke-width: 0.30; stroke: #BEBEBE; stroke-opacity: 0.40;' />
+<polygon points='302.67,495.26 304.58,493.35 290.55,485.25 288.64,487.16 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60; fill: #FFFFFF; fill-opacity: 0.60;' />
+<polygon points='302.67,511.46 304.58,509.55 304.58,493.35 302.67,495.26 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60; fill: #FFFFFF; fill-opacity: 0.60;' />
+<polygon points='288.64,487.16 290.55,485.25 276.52,493.35 274.61,495.26 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60; fill: #FFFFFF; fill-opacity: 0.60;' />
+<polygon points='288.64,519.56 290.55,517.65 304.58,509.55 302.67,511.46 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60; fill: #FFFFFF; fill-opacity: 0.60;' />
+<polygon points='274.61,495.26 276.52,493.35 276.52,509.55 274.61,511.46 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60; fill: #FFFFFF; fill-opacity: 0.60;' />
+<polygon points='274.61,511.46 276.52,509.55 290.55,517.65 288.64,519.56 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60; fill: #FFFFFF; fill-opacity: 0.60;' />
+<polygon points='290.55,485.25 276.52,493.35 276.52,509.55 290.55,517.65 304.58,509.55 304.58,493.35 ' style='stroke-width: 0.45; stroke: none; fill: #FFFFFF; fill-opacity: 0.60;' />
+<text x='284.49' y='508.47' style='font-size: 20.40px; fill: #D55E00; fill-opacity: 0.60; font-family: Liberation Sans;' textLength='12.11px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='288.37' y='494.20' style='font-size: 7.20px; fill: #D55E00; fill-opacity: 0.60; font-family: Liberation Sans;' textLength='4.34px' lengthAdjust='spacingAndGlyphs'>●</text>
+<polyline points='290.55,485.25 276.52,493.35 276.52,509.55 290.55,517.65 304.58,509.55 304.58,493.35 290.55,485.25 ' style='stroke-width: 0.45; stroke: #BEBEBE; stroke-opacity: 0.60;' />
+<polygon points='379.02,492.88 381.57,490.34 362.86,479.54 360.32,482.08 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80; fill: #FFFFFF; fill-opacity: 0.80;' />
+<polygon points='379.02,514.48 381.57,511.94 381.57,490.34 379.02,492.88 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80; fill: #FFFFFF; fill-opacity: 0.80;' />
+<polygon points='360.32,482.08 362.86,479.54 344.16,490.34 341.61,492.88 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80; fill: #FFFFFF; fill-opacity: 0.80;' />
+<polygon points='360.32,525.28 362.86,522.74 381.57,511.94 379.02,514.48 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80; fill: #FFFFFF; fill-opacity: 0.80;' />
+<polygon points='341.61,492.88 344.16,490.34 344.16,511.94 341.61,514.48 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80; fill: #FFFFFF; fill-opacity: 0.80;' />
+<polygon points='341.61,514.48 344.16,511.94 362.86,522.74 360.32,525.28 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80; fill: #FFFFFF; fill-opacity: 0.80;' />
+<polygon points='362.86,479.54 344.16,490.34 344.16,511.94 362.86,522.74 381.57,511.94 381.57,490.34 ' style='stroke-width: 0.60; stroke: none; fill: #FFFFFF; fill-opacity: 0.80;' />
+<text x='354.79' y='510.49' style='font-size: 27.20px; fill: #D55E00; fill-opacity: 0.80; font-family: Liberation Sans;' textLength='16.14px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='359.97' y='491.47' style='font-size: 9.60px; fill: #D55E00; fill-opacity: 0.80; font-family: Liberation Sans;' textLength='5.80px' lengthAdjust='spacingAndGlyphs'>●</text>
+<polyline points='362.86,479.54 344.16,490.34 344.16,511.94 362.86,522.74 381.57,511.94 381.57,490.34 362.86,479.54 ' style='stroke-width: 0.60; stroke: #BEBEBE; stroke-opacity: 0.80;' />
+<polygon points='455.38,490.50 458.56,487.32 435.18,473.82 432.00,477.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='455.38,517.50 458.56,514.32 458.56,487.32 455.38,490.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='432.00,477.00 435.18,473.82 411.80,487.32 408.62,490.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='432.00,531.00 435.18,527.82 458.56,514.32 455.38,517.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='408.62,490.50 411.80,487.32 411.80,514.32 408.62,517.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='408.62,517.50 411.80,514.32 435.18,527.82 432.00,531.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='435.18,473.82 411.80,487.32 411.80,514.32 435.18,527.82 458.56,514.32 458.56,487.32 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='425.09' y='512.51' style='font-size: 34.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='20.19px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='431.56' y='488.74' style='font-size: 12.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<polyline points='435.18,473.82 411.80,487.32 411.80,514.32 435.18,527.82 458.56,514.32 458.56,487.32 435.18,473.82 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+</svg>

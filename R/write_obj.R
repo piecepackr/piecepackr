@@ -5,7 +5,6 @@
 #' @param axis_x Ignored for now.
 #' @param axis_y Ignored for now.
 #' @param filename Name of Wavefront OBJ object.
-#' @param scale Multiplicative scaling factor to apply to width, height, and depth.
 #' @param res Resolution of the faces.
 #' @return A list with named elements "obj", "mtl", "png" with the created filenames.
 #' @examples

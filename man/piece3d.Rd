@@ -22,6 +22,7 @@ piece3d(
   ...,
   scale = 1,
   res = 72,
+  alpha = 1,
   lit = FALSE,
   shininess = 50
 )
@@ -62,6 +63,8 @@ or a character vector of \code{pp_cfg} objects}
 \item{scale}{Multiplicative scaling factor to apply to width, height, and depth.}
 
 \item{res}{Resolution of the faces.}
+
+\item{alpha}{Alpha channel for transparency.}
 
 \item{lit}{logical, specifying if rgl lighting calculation should take place}
 

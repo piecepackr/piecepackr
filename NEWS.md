@@ -38,6 +38,7 @@ Bug fixes and minor improvements
 * ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).
 * ``pp_cfg`` now supports a new ``op_grob_fn`` style indicating which function to draw pieces with 
   when drawing with a 3D oblique projection in ``grid``.  The older ``shadow_fn`` style alternative is now deprecated.
+* ``grid.piece`` (and ``pieceGrob``) now support a ``scale`` and ``alpha`` argument (#201).
 
 Deprecated features
 -------------------

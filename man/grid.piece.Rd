@@ -25,7 +25,9 @@ pieceGrob(
   name = NULL,
   gp = NULL,
   vp = NULL,
-  ...
+  ...,
+  scale = 1,
+  alpha = 1
 )
 
 grid.piece(
@@ -49,7 +51,9 @@ grid.piece(
   gp = NULL,
   draw = TRUE,
   vp = NULL,
-  ...
+  ...,
+  scale = 1,
+  alpha = 1
 )
 }
 \arguments{
@@ -104,6 +108,10 @@ graphical parameter settings.}
 \item{vp}{A \code{grid} viewport object (or NULL).}
 
 \item{...}{Ignored.}
+
+\item{scale}{Multiplicative scaling factor to apply to width, height, and depth.}
+
+\item{alpha}{Alpha channel for transparency.}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 }

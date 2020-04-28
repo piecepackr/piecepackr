@@ -36,6 +36,8 @@
 #' @param draw A logical value indicating whether graphics output should be produced.
 #' @param vp A \code{grid} viewport object (or NULL).
 #' @param ... Ignored.
+#' @param scale Multiplicative scaling factor to apply to width, height, and depth.
+#' @param alpha Alpha channel for transparency.
 #' @return A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
 #'         will also draw it to the graphics device.
 #' @examples
@@ -84,7 +86,8 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
                            angle=0, use_pictureGrob=FALSE,
                            width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
-                           default.units = "npc") {
+                           default.units = "npc", scale=1, alpha=1) {
+    if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
     suit <- ifelse(suit > cfg$i_unsuit+1, cfg$i_unsuit+1, suit)
@@ -100,6 +103,9 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (!is.unit(width)) width <- unit(width, default.units)
     if (!is.unit(height)) height <- unit(height, default.units)
     if (!is.unit(depth)) depth <- unit(depth, default.units)
+    width <- scale * width
+    height <- scale * height
+    depth <- scale * depth
     angle <- angle %% 360
     op_angle <- op_angle %% 360
     grob_type <- ifelse(use_pictureGrob, "picture", "normal")
@@ -125,7 +131,7 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                          width=NA, height=NA, depth=NA,
                          op_scale=0, op_angle=45,
                          default.units = "npc", envir=NULL,
-                         name=NULL, gp=NULL, vp=NULL, ...) {
+                         name=NULL, gp=NULL, vp=NULL, ..., scale=1, alpha=1) {
 
     nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, use_pictureGrob, width, height, depth)))
     piece_side <- rep(piece_side, length.out=nn)
@@ -148,7 +154,17 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
         gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
                                         x[i], y[i], z[i], angle[i], use_pictureGrob[i],
                                         width[i], height[i], depth[i],
-                                        op_scale, op_angle, default.units)
+                                        op_scale, op_angle, default.units,
+                                        scale=scale, alpha=alpha)
+    }
+    if (scale != 1) {
+        if (is.null(gp)) gp <- gpar()
+        if (is.null(gp$cex)) gp$cex <- scale else gp$cex <- scale * gp$cex
+        if (is.null(gp$lex)) gp$lex <- scale else gp$lex <- scale * gp$lex
+    }
+    if (alpha != 1) {
+        if (is.null(gp)) gp <- gpar()
+        if (is.null(gp$alpha)) gp$alpha <- alpha else gp$alpha <- alpha * gp$alpha
     }
     gTree(children=gl, name=name, gp=gp, vp=vp)
 }
@@ -185,11 +201,13 @@ grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=list(),
                            width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
                            default.units = "npc", envir=NULL,
-                           name=NULL, gp=NULL, draw=TRUE, vp=NULL, ...) {
+                           name=NULL, gp=NULL, draw=TRUE, vp=NULL, ...,
+                           scale=1, alpha=1) {
     grob <- pieceGrob(piece_side, suit, rank, cfg,
                           x, y, z, angle, use_pictureGrob, width, height, depth,
                           op_scale, op_angle, default.units,
-                          envir, name, gp, vp)
+                          envir, name, gp, vp,
+                          scale=scale, alpha=alpha)
     if (draw) {
         grid.draw(grob)
     } else {

@@ -39,10 +39,6 @@ piece <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg()
 
     cfg <- get_cfg(cfg, envir)
     cfg <- rep(c(cfg), length.out = nn)
-    scene <- rr_piece_helper(piece_side[1], suit[1], rank[1], cfg[[1]],
-                             x[1], y[1], z[1],
-                             angle[1], axis_x[1], axis_y[1],
-                             width[1], height[1], depth[1], res)
     l <- lapply(seq(nn), function(i) {
         rr_piece_helper(piece_side[i], suit[i], rank[i], cfg[[i]],
                          x[i], y[i], z[i],
@@ -67,6 +63,7 @@ rr_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg 
                            x = 0, y = 0, z = NA,
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA, scale = 1, res = 72) {
+    if (scale == 0) return(NULL)
     obj <- save_piece_obj(piece_side, suit, rank, cfg,
                         x = x, y = y, z = z,
                         angle = angle, axis_x = axis_x, axis_y = axis_y,
