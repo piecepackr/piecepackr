@@ -38,7 +38,7 @@ Point <- R6Class("point",
                                    y <- self$x * sin(to_radians(t)) + self$y * cos(to_radians(t))
                                    Point$new(x, y)
                                },
-                               dilate = function(width = 1, height = 1) {
+                               dilate = function(width = 1, height = width) {
                                    x <- width * self$x
                                    y <- height * self$y
                                    Point$new(x, y)
@@ -86,7 +86,7 @@ Point3D <- R6Class("point3d",
                                    y <- self$y + scale * self$z * sin(to_radians(angle))
                                    Point$new(x, y)
                                  },
-                                 dilate = function(width = 1, height = 1, depth = 1) {
+                                 dilate = function(width = 1, height = width, depth = width) {
                                      x <- width * self$x
                                      y <- height * self$y
                                      z <- depth * self$z
