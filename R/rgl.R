@@ -7,7 +7,7 @@
 #' @param shininess Properties for rgl lighting calculation
 #' @return A numeric vector of rgl object IDs.
 #' @examples
-#'   \donttest{
+#'   \dontrun{
 #'     if (require("rgl")) {
 #'         rgl.open()
 #'         cfg <- pp_cfg()

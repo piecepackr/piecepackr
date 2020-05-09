@@ -77,7 +77,7 @@ A numeric vector of rgl object IDs.
 \code{piece3d} draws board games pieces using the rgl package.
 }
 \examples{
-  \donttest{
+  \dontrun{
     if (require("rgl")) {
         rgl.open()
         cfg <- pp_cfg()
