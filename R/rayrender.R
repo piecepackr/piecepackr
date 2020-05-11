@@ -7,10 +7,10 @@
 #'   \donttest{
 #'     if (require("rayrender")) {
 #'         cfg <- pp_cfg()
-#'         render_scene(piece("tile_face", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0))
-#'         render_scene(piece("coin_back", suit = 4, rank = 2, cfg = cfg, x = 2, y = 0, z = 0))
-#'         render_scene(piece("saucer_back", suit = 1, cfg = cfg, x = 2, y = 2, z=-2))
-#'         render_scene(piece("pawn_face", suit = 2, cfg = cfg, x = 1, y = 1, z = 2))
+#'         render_scene(piece("tile_face", suit = 3, rank = 3, cfg = cfg))
+#'         render_scene(piece("coin_back", suit = 4, rank = 2, cfg = cfg))
+#'         render_scene(piece("saucer_back", suit = 1, cfg = cfg))
+#'         render_scene(piece("pawn_face", suit = 2, cfg = cfg))
 #'     }
 #'   }
 #' @export
