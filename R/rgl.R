@@ -7,7 +7,7 @@
 #' @param shininess Properties for rgl lighting calculation
 #' @return A numeric vector of rgl object IDs.
 #' @examples
-#' if (require("rgl") && (Sys.getenv("TRAVIS") == "")) {
+#' if ((Sys.getenv("TRAVIS") == "") && require("rgl")) {
 #'     cfg <- pp_cfg()
 #'     piece3d("tile_face", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0)
 #'     piece3d("coin_back", suit = 4, rank = 2, cfg = cfg, x = 2, y = 0, z = 0)
