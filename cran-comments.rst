@@ -1,6 +1,8 @@
-CRAN Package Check Results for Solaris warns about "It is not known that wchar_t is Unicode on this platform".
-This package is about using Unicode glyphs to make board game graphics and it doesn't make sense to avoid these glyphs. 
-However by default the functions use only Unicode glyphs found in typical R "sans" fonts (i.e. Arial, DejaVu Sans, Arimo) but some of these glyphs like the French suits Hearts, Diamonds, Clubs, and Spades are not Latin-1 glyphs.
+* CRAN Package Check Results for Solaris WARNs "It is not known that wchar_t is Unicode on this platform".
+  This package is about using Unicode glyphs to make board game graphics and it doesn't make sense to avoid these glyphs. 
+  However by default the functions use only Unicode glyphs found in typical R "sans" fonts (i.e. Arial, DejaVu Sans, Arimo) 
+  but some of these glyphs like the French suits Hearts, Diamonds, Clubs, and Spades are not Latin-1 glyphs.
+* win-builder (devel) gives a NOTE about possibly invalid URLs but they all work fine for me with curl or Firefox.
 
 **Test environments**
 
