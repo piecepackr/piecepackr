@@ -2,6 +2,7 @@ library("vdiffr")
 context("no regressions in figures")
 test_that("no regressions in figures", {
 
+    skip_on_ci()
     # standard d6 dice
     cfg <- game_systems("dejavu3d")$dice
     expect_doppelganger("dice_d6", function()

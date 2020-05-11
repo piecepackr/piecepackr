@@ -77,6 +77,9 @@ test_that("save_piece_images works as expected", {
 
 context("grob_fn_helpers works as expected")
 test_that("grob_fn_helpers works as expected", {
+    expect_error(checkersGrob("blue", "circle"))
+    expect_error(hexlinesGrob("blue", "circle"))
+    skip_on_ci()
     expect_doppelganger("add_checkers", function() {
                     grid.draw(checkersGrob("purple", "rect"))
                     grid.draw(hexlinesGrob("yellow", "rect"))
@@ -88,12 +91,11 @@ test_that("grob_fn_helpers works as expected", {
     expect_doppelganger("add_checkers.convex8", function() {
                     grid.draw(checkersGrob("purple", "convex8"))
     })
-    expect_error(checkersGrob("blue", "circle"))
-    expect_error(hexlinesGrob("blue", "circle"))
 })
 
 context("no regressions in figures")
 test_that("no regressions in figures", {
+    skip_on_ci()
     dc <- function(..., cfg=cfg_default) {
         grid.piece(..., cfg=cfg)
     }
@@ -181,7 +183,6 @@ test_that("no regressions in figures", {
     expect_doppelganger("pawn_face.irregular_convex",
                         function() dc("pawn_face", cfg=cfg, op_scale=0.5))
 
-
     # matchsticks
     expect_doppelganger("matchstick_face.s1.r1", function() dc("matchstick_face", suit=1, rank=1))
     expect_doppelganger("matchstick_face.s2.r2", function() dc("matchstick_face", suit=2, rank=2))
@@ -264,6 +265,7 @@ test_that("no regressions in figures", {
 
 context("oblique projection works")
 test_that("oblique projection works", {
+    skip_on_ci()
     dc <- function(..., cfg=cfg_default) {
         grid.piece(..., cfg=cfg, op_scale=0.5)
     }
@@ -292,6 +294,7 @@ test_that("oblique projection works", {
 
 context("alpha and scale works")
 test_that("alpha and scale works", {
+    skip_on_ci()
     expect_doppelganger("alpha_and_scale", function() {
         cfg <- pp_cfg(list(shape.coin="convex6"))
         df <- tibble(piece_side="coin_back",

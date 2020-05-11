@@ -2,14 +2,30 @@ library("tibble")
 library("vdiffr")
 context("3d helper function")
 test_that("3d helper functions work", {
+
+    dft <- tibble(piece_side="tile_back", x=1.5, y=1.5, rank=NA, width=NA)
+    dfc <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
+    df <- rbind(dft, dfc)
+    ans <- c(0.25, rep(0.375, 5))
+    # close circles
+    expect_equal(op_transform(df)$zt, ans)
+    # close regular convex polygons
+    expect_equal(op_transform(df, cfg=list(shape.coin="convex6"))$zt, ans)
+    # close concave polygons (stars)
+    expect_equal(op_transform(df, cfg=list(shape.coin="concave5"))$zt, ans)
+    # close "kites"
+    expect_equal(op_transform(df, cfg=list(shape.coin="kite"))$zt, ans)
+    # close "pyramids"
+    expect_equal(op_transform(df, cfg=list(shape.coin="pyramid"))$zt, ans)
+    expect_warning(pp_cfg(list(shadow_fn = basicShadowGrob)))
+
+    skip_on_ci()
     opf <- function(op_angle=45, ...) {
         function() {
             pmap_piece(df, op_angle=op_angle, trans=op_transform,
                        op_scale=0.5, default.units="in", ...)
         }
     }
-
-    expect_warning(pp_cfg(list(shadow_fn = basicShadowGrob)))
 
     # orthogonal tiles
     df <- tibble(piece_side="tile_back",
@@ -57,30 +73,10 @@ test_that("3d helper functions work", {
                  angle = rep(90*0:3, 4), suit = rep(1:4, each=4), rank=rep_len(1:6, 16))
     expect_doppelganger("rotated_tile_faces", opf(045))
 
-    dft <- tibble(piece_side="tile_back", x=1.5, y=1.5, rank=NA, width=NA)
-    dfc <- tibble(piece_side="coin_face", x=c(1,2,2,1,1.5), y=c(2,2,1,1,1.5), rank=1:5, width=0.6)
-    df <- rbind(dft, dfc)
-    ans <- c(0.25, rep(0.375, 5))
-
-    # close circles
-    expect_equal(op_transform(df)$zt, ans)
-
-    # close regular convex polygons
-    expect_equal(op_transform(df, cfg=list(shape.coin="convex6"))$zt, ans)
-
-    # close concave polygons (stars)
-    expect_equal(op_transform(df, cfg=list(shape.coin="concave5"))$zt, ans)
-
-    # close "kites"
-    expect_equal(op_transform(df, cfg=list(shape.coin="kite"))$zt, ans)
-
-    # close "pyramids"
-    expect_equal(op_transform(df, cfg=list(shape.coin="pyramid"))$zt, ans)
 })
 
 test_that("SAT functions work", {
     r1 <- ConvexPolygon$new(x=c(0,0,1,1), y=c(0,1,1,0))
-    expect_doppelganger("simple_square", function() plot(r1))
     r2 <- ConvexPolygon$new(x=0.5+c(0,0,1,1), y=0.5+c(0,1,1,0))
     r3 <- ConvexPolygon$new(x=1+c(0,0,1,1), y=1+c(0,1,1,0))
     r4 <- ConvexPolygon$new(x=c(0.25,0.25,0.75,0.75), y=c(0.25,0.75,0.75,0.25))
@@ -109,6 +105,9 @@ test_that("SAT functions work", {
     p3p <- p3$translate(1, 2, 3)
     expect_equal(p3p$z, 4:8)
     p2 <- p3$project_op(45, 0.5)
+
+    skip_on_ci()
+    expect_doppelganger("simple_square", function() plot(r1))
     expect_doppelganger("simple_points", function() plot(p2))
 })
 
