@@ -52,6 +52,10 @@ NULL
 #'          (on many OSes found in a \code{poppler-utils} package).
 #' @export
 get_embedded_font <- function(font, char) {
+    if (Sys.which("pdffonts") == "") {
+        stop("'get_embedded_font' depends on 'pdffonts' being on the system path. ",
+             " On many OSes it is found in a 'poppler-utils' package.")
+    }
     df <- expand.grid(char, font, stringsAsFactors=FALSE)
     names(df) <- c("char", "requested_font")
     df$embedded_font <- NA

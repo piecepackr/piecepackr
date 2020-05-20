@@ -505,38 +505,35 @@ The program uses ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontcon
     ## Make some piecepacks
     $ sudo mv ~/NotoColorEmoji.ttf /usr/share/fonts/truetype/noto/
 
-Also as a sanity check use the command-line tool ``fc-match`` to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans" as one may have expected).    To help determine which fonts are actually being embedded you can use the ``get_embedded_font`` function:
+Also as a sanity check use the command-line tool ``fc-match`` (or the R function ``systemfonts::match_font``) to make sure you specified your font correctly in the first place (i.e. ``fc-match "Noto Sans"`` on my system returns "Noto Sans" but ``fc-match "Sans Noto"`` returns "DejaVu Sans" and not "Noto Sans" as one may have expected).    To help determine which fonts are actually being embedded you can use the ``get_embedded_font`` helper function:
 
 .. code:: r
 
     fonts <- c('Noto Sans Symbols2', 'Noto Emoji', 'sans')
     chars <- c('♥', '♠', '♣', '♦', '🌞' ,'🌜' ,'꩜')
     get_embedded_font(fonts, chars)
-
-::
-
-           requested_font            embedded_font char
-    1  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♥
-    2  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♠
-    3  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♣
-    4  Noto Sans Symbols2 NotoSansSymbols2-Regular    ♦
-    5  Noto Sans Symbols2                NotoEmoji    🌞
-    6  Noto Sans Symbols2                NotoEmoji    🌜
-    7  Noto Sans Symbols2     NotoSansCham-Regular    ꩜
-    8          Noto Emoji                NotoEmoji    ♥
-    9          Noto Emoji                NotoEmoji    ♠
-    10         Noto Emoji                NotoEmoji    ♣
-    11         Noto Emoji                NotoEmoji    ♦
-    12         Noto Emoji                NotoEmoji    🌞
-    13         Noto Emoji                NotoEmoji    🌜
-    14         Noto Emoji     NotoSansCham-Regular    ꩜
-    15               sans                    Arimo    ♥
-    16               sans                    Arimo    ♠
-    17               sans                    Arimo    ♣
-    18               sans                    Arimo    ♦
-    19               sans                NotoEmoji    🌞
-    20               sans                NotoEmoji    🌜
-    21               sans     NotoSansCham-Regular    ꩜
+    #     char      requested_font            embedded_font
+    # 1      ♥ Noto Sans Symbols2 NotoSansSymbols2-Regular
+    # 2      ♠ Noto Sans Symbols2 NotoSansSymbols2-Regular
+    # 3      ♣ Noto Sans Symbols2 NotoSansSymbols2-Regular
+    # 4      ♦ Noto Sans Symbols2 NotoSansSymbols2-Regular
+    # 5       🌞Noto Sans Symbols2                NotoEmoji
+    # 6       🌜Noto Sans Symbols2                NotoEmoji
+    # 7      ꩜ Noto Sans Symbols2     NotoSansCham-Regular
+    # 8      ♥         Noto Emoji                NotoEmoji
+    # 9      ♠         Noto Emoji                NotoEmoji
+    # 10     ♣         Noto Emoji                NotoEmoji
+    # 11     ♦         Noto Emoji                NotoEmoji
+    # 12      🌞        Noto Emoji                NotoEmoji
+    # 13      🌜        Noto Emoji                NotoEmoji
+    # 14     ꩜         Noto Emoji     NotoSansCham-Regular
+    # 15     ♥               sans                    Arimo
+    # 16     ♠               sans                    Arimo
+    # 17     ♣               sans                    Arimo
+    # 18     ♦               sans                    Arimo
+    # 19      🌞              sans                NotoEmoji
+    # 20      🌜              sans                NotoEmoji
+    # 21     ꩜               sans     NotoSansCham-Regular
 
 How do I use this package in piecepack rulesets?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
