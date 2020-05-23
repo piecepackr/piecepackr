@@ -27,7 +27,7 @@ piecepackr: Board Game Graphics
 
 .. _grid: https://www.rdocumentation.org/packages/grid
 
-.. _rayrender: https://www.rdocumentation.org/packages/rayrender
+.. _rayrender: https://www.rayrender.net/
 
 .. _rgl: https://www.rdocumentation.org/packages/rgl
 
@@ -35,7 +35,7 @@ piecepackr: Board Game Graphics
 
 .. _Print & Play layouts: https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html
 
-.. _man pages: https://rdrr.io/github/piecepackr/piecepackr/man/
+.. _man pages: https://trevorldavis.com/R/piecepackr/reference/index.html
 
 .. _oblique projection: https://trevorldavis.com/piecepackr/3d-projections.html
 
@@ -175,16 +175,23 @@ piece3d (rgl)
 
 ``piece3d`` draws pieces using ``rgl`` graphics.
 
-.. code:: r
 
-    library("ppgames")
-    df <- ppgames::df_four_field_kono()
-    envir <- piecepackr::game_systems("dejavu3d")
-    library("rgl")
-    pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+.. sourcecode:: r
+    
 
-.. figure:: https://trevorldavis.com/share/piecepack/rgl_snapshot.png
-    :alt: rgl render
+        library("ppgames")
+        library("rgl")
+        invisible(rgl::open3d())
+        rgl::view3d(phi=-30, zoom = 0.8)
+    
+        df <- ppgames::df_four_field_kono()
+        envir <- game_systems("dejavu3d")
+        pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+
+
+
+.. figure:: man/figures/README-rgl_snapshot.png
+    :alt: 3D render with rgl package
 
     rgl render
 
@@ -193,22 +200,27 @@ piece (rayrender)
 
 ``piece`` creates ``rayrender`` objects.
 
-.. code:: r
 
-    library("ppgames")
-    df <- ppgames::df_four_field_kono()
-    envir <- piecepackr::game_systems("dejavu3d")
-    library("rayrender")
-    l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150)
-    scene <- do.call(dplyr::bind_rows, l)
-    render_scene(scene, lookat = c(2.5, 2.5, 0), lookfrom = c(0, -2, 13))
+.. sourcecode:: r
+    
 
-.. figure:: https://trevorldavis.com/share/piecepack/3d_render.png
-    :alt: rayrender render
+        library("ppgames")
+        library("rayrender")
+        df <- ppgames::df_four_field_kono()
+        envir <- game_systems("dejavu3d")
+        l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+        scene <- Reduce(rayrender::add_object, l)
+        rayrender::render_scene(scene, lookat = c(2.5, 2.5, 0), lookfrom = c(0, -2, 13))
 
-    rayrender render
+.. figure:: man/figures/README-rayrender-1.png
+    :alt: 3D render with rayrender package
 
-A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's `man pages`_.
+    3D render with rayrender package
+
+Further documentation
+~~~~~~~~~~~~~~~~~~~~~
+
+A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's built-in `man pages`_.
 
 Game Systems
 ------------

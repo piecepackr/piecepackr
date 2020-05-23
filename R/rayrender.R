@@ -36,27 +36,18 @@ piece <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg()
     width <- rep(width, length.out = nn)
     height <- rep(height, length.out = nn)
     depth <- rep(depth, length.out = nn)
+    scale <- rep(scale, length.out = nn)
 
     cfg <- get_cfg(cfg, envir)
     cfg <- rep(c(cfg), length.out = nn)
     l <- lapply(seq(nn), function(i) {
-        rr_piece_helper(piece_side[i], suit[i], rank[i], cfg[[i]],
-                         x[i], y[i], z[i],
-                         angle[i], axis_x[i], axis_y[i],
-                         width[i], height[i], depth[i], scale, res)
-                             })
-    list_to_scene(l)
-}
-
-list_to_scene <- function(l) {
-    n <- length(l)
-    scene <- l[[1]]
-    if (n > 1) {
-        for (i in seq(2, n)) {
-            scene <- rayrender::add_object(scene, l[[i]])
-        }
-    }
-    scene
+        cfg[[i]]$rayrender(piece_side[i], suit[i], rank[i],
+                     x[i], y[i], z[i],
+                     angle[i], axis_x[i], axis_y[i],
+                     width[i], height[i], depth[i],
+                     scale = scale[i], res = res)
+    })
+    Reduce(rayrender::add_object, l)
 }
 
 rr_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint

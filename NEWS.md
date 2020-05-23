@@ -1,3 +1,13 @@
+piecepackr 1.4.0
+================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* ``pp_cfg`` now supports new ``obj_fn``, ``rayrender_fn``, and ``rgl_fn`` styles
+  allowing further piece customization within the 3D graphics functions
+  ``save_piece_obj``, ``piece``, and ``piece3d`` respectively (#200).
+
 piecepackr 1.3.1
 ================
 

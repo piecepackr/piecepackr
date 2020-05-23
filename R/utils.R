@@ -7,7 +7,7 @@ get_embedded_font_helper <- function(font, char) {
 
     pf_output <- system2("pdffonts", file, stdout=TRUE)
     if (length(pf_output) == 2)
-        embedded_font <- NA
+        embedded_font <- NA # probably some color emoji font used
     else
         embedded_font <- gsub(".*\\+(.*)", "\\1", strsplit(pf_output[3], " +")[[1]][1])
     embedded_font

@@ -33,19 +33,11 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = p
     height <- scale * height
     depth <- scale * depth
 
-    if (grepl("tile|coin|pawn|die|matchstick|bit|board|card|saucer", piece_side)) {
-        f <- write_2s_obj
-    } else if (piece_side == "pyramid_top") {
-        f <- write_pt_obj
-    } else if (grepl("pyramid", piece_side)) {
-        f <- write_ps_obj
-    } else {
-        stop("Don't know how to export ", piece_side, " to Wavefront OBJ format.")
-    }
-    f(piece_side, suit, rank, cfg,
-      x = x, y = y, z = z, angle = angle, axis_x = axis_x, axis_y = axis_y,
-      width = width, height = height, depth = depth,
-      filename = filename, res = res)
+    cfg$save_obj(piece_side, suit, rank,
+                 x, y, z,
+                 angle, axis_x, axis_y,
+                 width, height, depth,
+                 filename, res)
 }
 
 write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),

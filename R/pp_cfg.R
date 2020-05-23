@@ -110,6 +110,7 @@ Config <- R6Class("pp_cfg",
         has_saucers = FALSE,
         has_tiles = TRUE,
         cache_grob = TRUE,
+        cache_obj_fn = TRUE,
         cache_piece_opt = TRUE,
         cache_shadow = TRUE,
         initialize = function(cfg=list()) {
@@ -284,8 +285,8 @@ Config <- R6Class("pp_cfg",
                 }
             }
         },
-        get_op_grob = function(piece_side, suit, rank, x, y, z,
-                               angle, type,
+        get_op_grob = function(piece_side, suit, rank,
+                               x, y, z, angle, type,
                                width, height, depth,
                                op_scale, op_angle) {
             key <- opt_cache_key(piece_side, suit, rank, "op_grob")
@@ -307,6 +308,19 @@ Config <- R6Class("pp_cfg",
                    x, y, z, angle, type, width, height, depth,
                    op_scale, op_angle)
         },
+        get_raster = function(piece_side, suit, rank, res=72) {
+            grob <- private$get_grob_normal(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            png_file <- tempfile(fileext=".png")
+            on.exit(unlink(png_file))
+            current_dev <- grDevices::dev.cur()
+            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+            png(png_file, width=width, height=height, units="in", res=res, bg="transparent")
+            grid.draw(grob)
+            invisible(grDevices::dev.off())
+            as.raster(png::readPNG(png_file))
+        },
         get_shadow_fn = function(piece_side, suit, rank) {
             key <- opt_cache_key(piece_side, suit, rank, "shadow")
             if (!is.null(private$cache[[key]])) {
@@ -321,18 +335,72 @@ Config <- R6Class("pp_cfg",
                 grobFn
             }
         },
-        get_raster = function(piece_side, suit, rank, res=72) {
-            grob <- private$get_grob_normal(piece_side, suit, rank)
-            width <- self$get_width(piece_side, suit, rank)
-            height <- self$get_height(piece_side, suit, rank)
-            png_file <- tempfile(fileext=".png")
-            on.exit(unlink(png_file))
-            current_dev <- grDevices::dev.cur()
-            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
-            png(png_file, width=width, height=height, units="in", res=res, bg="transparent")
-            grid.draw(grob)
-            invisible(grDevices::dev.off())
-            as.raster(png::readPNG(png_file))
+        rayrender = function(piece_side, suit, rank,
+                             x, y, z, angle, axis_x, axis_y,
+                             width, height, depth,
+                             scale = 1, res = 72) {
+            key <- opt_cache_key(piece_side, suit, rank, "rayrender_fn")
+            if (!is.null(private$cache[[key]])) {
+                rayrender_fn <- private$cache[[key]]
+            } else {
+                rayrender_fn <- get_style_element("rayrender_fn", piece_side, private$cfg,
+                                                  rr_piece_helper, suit, rank)
+                if (self$cache_obj_fn) private$cache[[key]] <- rayrender_fn
+            }
+            rayrender_fn(piece_side, suit, rank, self,
+                         x, y, z,
+                         angle, axis_x, axis_y,
+                         width, height, depth,
+                         scale = scale, res = res)
+        },
+        rgl = function(piece_side, suit, rank,
+                       x, y, z, angle, axis_x, axis_y,
+                       width, height, depth,
+                       scale = 1, res = 72,
+                       alpha = 1.0, lit = FALSE, shininess = 50.0) {
+            key <- opt_cache_key(piece_side, suit, rank, "rgl_fn")
+            if (!is.null(private$cache[[key]])) {
+                rgl_fn <- private$cache[[key]]
+            } else {
+                rgl_fn <- get_style_element("shadow_fn", piece_side, private$cfg,
+                                                rgl_piece_helper, suit, rank)
+                if (self$cache_obj_fn) private$cache[[key]] <- rgl_fn
+            }
+            rgl_fn(piece_side, suit, rank, self,
+                   x, y, z,
+                   angle, axis_x, axis_y,
+                   width, height, depth,
+                   scale = scale, res = res,
+                   alpha = alpha, lit = lit, shininess = shininess)
+        },
+        save_obj = function(piece_side, suit, rank,
+                            x, y, z, angle, axis_x, axis_y,
+                            width, height, depth,
+                            filename = tempfile(fileext = ".obj"), res = 72) {
+            key <- opt_cache_key(piece_side, suit, rank, "obj_fn")
+            if (!is.null(private$cache[[key]])) {
+                obj_fn <- private$cache[[key]]
+            } else {
+                if (grepl("tile|coin|pawn|die|matchstick|bit|board|card|saucer", piece_side)) {
+                    default_fn <- write_2s_obj
+                } else if (piece_side == "pyramid_top") {
+                    default_fn <- write_pt_obj
+                } else if (grepl("pyramid", piece_side)) {
+                    default_fn <- write_ps_obj
+                } else {
+                    default_fn <- NULL
+                }
+                obj_fn <- get_style_element("obj_fn", piece_side, private$cfg, default_fn, suit, rank)
+                if (is.null(obj_fn)) {
+                    stop("Don't know how to export ", piece_side, " to Wavefront OBJ format.")
+                }
+                if (self$cache_obj_fn) private$cache[[key]] <- obj_fn
+            }
+            obj_fn(piece_side, suit, rank, self,
+                   x = x, y = y, z = z,
+                   angle = angle, axis_x = axis_x, axis_y = axis_y,
+                   width = width, height = height, depth = depth,
+                   filename = filename, res = res)
         },
         # Deprecated public methods
         get_pictureGrob = function(piece_side, suit, rank) {

@@ -48,12 +48,12 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg
     cfg <- get_cfg(cfg, envir)
     cfg <- rep(c(cfg), length.out = nn)
     l <- lapply(seq(nn), function(i) {
-        rgl_piece_helper(piece_side[i], suit[i], rank[i], cfg[[i]],
-                         x[i], y[i], z[i],
-                         angle[i], axis_x[i], axis_y[i],
-                         width[i], height[i], depth[i],
-                         scale = scale[i], res = res,
-                         alpha = alpha[i], lit = lit[i], shininess = shininess[i])
+        cfg[[i]]$rgl(piece_side[i], suit[i], rank[i],
+                     x[i], y[i], z[i],
+                     angle[i], axis_x[i], axis_y[i],
+                     width[i], height[i], depth[i],
+                     scale = scale[i], res = res,
+                     alpha = alpha[i], lit = lit[i], shininess = shininess[i])
     })
     do.call(c, l)
 }
@@ -64,7 +64,7 @@ rgl_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg
                            width = NA, height = NA, depth = NA,
                            scale = 1, res = 72,
                            alpha = 1, lit = FALSE, shininess = 50.0) {
-    if (scale == 0 || alpha == 0) return(numeric(0))
+    if (scale == 0 || alpha == 0) return(invisible(numeric(0)))
     obj <- save_piece_obj(piece_side, suit, rank, cfg,
                         x = x, y = y, z = z,
                         angle = angle, axis_x = axis_x, axis_y = axis_y,
