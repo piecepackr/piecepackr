@@ -26,7 +26,7 @@ MATCHSTICK_HEIGHTS <- c(2*W, S-W, sqrt(2)*S-W, 2*S-W, sqrt(5*S^2)-W, 2*sqrt(2)*S
 # suit=0
 # rank=0
 # style="font"
-# 
+#
 # if(is.na(piece_side)) {
 #     piece <- NULL
 # } else {
@@ -118,6 +118,7 @@ styles <- c(paste(c("ps", "dm"),
             "coin_arrangement", "die_arrangement",
             "width", "height", "depth",
             "grob_fn", "op_grob_fn", "shadow_fn",
+            "obj_fn", "rayrender_fn", "rgl_fn",
             "title", "description", "credit", "copyright")
 is_legit_style <- function(style) {
     style %in% styles
