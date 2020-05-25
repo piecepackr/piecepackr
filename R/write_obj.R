@@ -90,6 +90,7 @@ write_mtl <- function(mtl_filename, png_filename) {
                mtl_filename)
 }
 
+# two-sided objects
 write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
                          x = 0, y = 0, z = 0,
@@ -98,16 +99,9 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
                          filename = tempfile(fileext = ".obj"), res = 72) {
 
     cfg <- as_pp_cfg(cfg)
-
-    ext <- tools::file_ext(filename)
-    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
-    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
-
-    write_2s_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
-    write_mtl(mtl_filename, basename(png_filename))
-
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
+    # geometric vertices
     # 1st half "top" vertices
     # 2nd half "bottom" vertices
     pc <- Point3D$new(x, y, z)
@@ -120,39 +114,35 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     zs <- c(xyz_t$z, xyz_b$z)
     xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
 
-    nv <- length(xyz) / 2
-
-    # geometric vertices
-    v <- paste("v", xyz$x, xyz$y, xyz$z)
-    cat("# Written by piecepackr3d",
-        paste("mtllib", basename(mtl_filename)),
-        "# geometric vertices", v,
-        sep = "\n", file = filename)
-
-    # texture coordinates, nb. obj has y axis in opposite direction
+    # texture coordinates
     xy_vt_t <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
     xy_vt_b <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.575)
-    xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(1, 0, 0, 1))
-    vt_t <- paste("vt", xy_vt_t$x, xy_vt_t$y)
-    vt_b <- paste("vt", xy_vt_b$x, xy_vt_b$y)
-    vt_e <- paste("vt", xy_vt_e$x, xy_vt_e$y)
-    cat("# texture coordinates", vt_t, vt_b, vt_e,
-        sep = "\n", file = filename, append = TRUE)
+    xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(1, 1, 0, 0))
+    vt <- list(x = c(xy_vt_t$x, xy_vt_b$x, xy_vt_e$x),
+               y =  c(xy_vt_t$y, xy_vt_b$y, xy_vt_e$y))
 
-    # faces
-    f_t <- paste("f", paste0(seq(nv), "/", seq(nv), collapse = " "))
-    f_b <- paste("f", paste0(nv + rev(seq(nv)), "/", nv + seq(nv), collapse = " "))
-    cat("# Textured polygonal face element", "usemtl material_0", f_t, f_b,
-        sep = "\n", file = filename, append = TRUE)
+    # textured face elements
+    nv <- length(xyz) / 2
+    f <- list()
+    f[[1]] <- list(v = seq(nv), vt = seq(nv)) # top
+    f[[2]] <- list(v = nv + rev(seq(nv)), vt = nv + seq(nv)) # bottom
     # sides
-    for (ii in seq(nv)) {
-        ir <- ii %% nv + 1
+    for (i in seq(nv)) {
+        ir <- i %% nv + 1
         il <- ir %% nv + 1
-        cat(paste("f", paste0(c(ir, il, il + nv, ir + nv), "/", 2 * nv + 1:4, collapse = " ")),
-            sep = "\n", file = filename, append = TRUE)
+        f[[2 + i]] <- list(v = c(ir, il, il + nv, ir + nv), vt = 2 * nv + 1:4)
     }
+
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    write_obj(filename, v = xyz, vt = vt, f = f)
+    write_2s_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
+
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
+
 
 write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = pp_cfg(),
                              ...,
@@ -184,6 +174,7 @@ write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 
     invisible(filename)
 }
 
+# pyramid top up
 write_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
                          x = 0, y = 0, z = 0,
@@ -193,13 +184,7 @@ write_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = p
 
     cfg <- as_pp_cfg(cfg)
 
-    ext <- tools::file_ext(filename)
-    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
-    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
-
-    write_pyramid_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
-    write_mtl(mtl_filename, basename(png_filename))
-
+    # vertices
     pc <- Point3D$new(x, y, z)
     xy_npc <- Point$new(rect_xy)
     xy <- xy_npc$translate(-0.5, -0.5)
@@ -210,28 +195,27 @@ write_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = p
     zs <- c(xyz_t$z, xyz_b$z)
     xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
 
-    # geometric vertices
-    v <- paste("v", xyz$x, xyz$y, xyz$z)
-    cat("# Written by piecepackr3d",
-        paste("mtllib", basename(mtl_filename)),
-        "# geometric vertices", v,
-        sep = "\n", file = filename)
-
-    # texture coordinates, nb. obj has y axis in opposite direction
+    # texture coordinates
     xy_vt <- list(x = seq(0, 1, 0.125), y = rep(c(0, 1), length.out = 9))
-    cat("# texture coordinates", paste("vt", xy_vt$x, xy_vt$y),
-        sep = "\n", file = filename, append = TRUE)
 
-    cat("# Textured polygonal face element", "usemtl material_0",
-        "f 2/3 3/5 1/4", # left
-        "f 3/5 4/7 1/6", # back
-        "f 4/7 5/9 1/8", # right
-        "f 5/1 2/3 1/2", # front
-        sep = "\n", file = filename, append = TRUE)
+    # textured face elements
+    f <- list()
+    f[[1]] <- list(v = c(2, 3, 1), vt = c(3, 5, 4)) # left
+    f[[2]] <- list(v = c(3, 4, 1), vt = c(5, 7, 6)) # back
+    f[[3]] <- list(v = c(4, 5, 1), vt = c(7, 9, 8)) # right
+    f[[4]] <- list(v = c(5, 2, 1), vt = c(1, 3, 2)) # front
+
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    write_obj(filename, v = xyz, vt = xy_vt, f = f)
+    write_pyramid_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
 
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
 
+# pyramid side down
 write_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
                          x = 0, y = 0, z = 0,
@@ -241,13 +225,7 @@ write_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = 
 
     cfg <- as_pp_cfg(cfg)
 
-    ext <- tools::file_ext(filename)
-    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
-    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
-
-    write_pyramid_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
-    write_mtl(mtl_filename, basename(png_filename))
-
+    # geometric vertices
     pc <- Point3D$new(x, y, z)
     xy_npc <- Point$new(pyramid_xy)
     xy <- xy_npc$translate(-0.5, -0.5)
@@ -259,46 +237,68 @@ write_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = 
     zs <- c(xyz_t$z, xyz_b$z)
     xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
 
-    # geometric vertices
-    v <- paste("v", xyz$x, xyz$y, xyz$z)
-    cat("# Written by piecepackr3d",
-        paste("mtllib", basename(mtl_filename)),
-        "# geometric vertices", v,
-        sep = "\n", file = filename)
-
-    # texture coordinates, nb. obj has y axis in opposite direction
+    # texture coordinates
     xy_vt <- list(x = seq(0, 1, 0.125), y = rep(c(0, 1), length.out = 9))
-    cat("# texture coordinates", paste("vt", xy_vt$x, xy_vt$y),
-        sep = "\n", file = filename, append = TRUE)
 
+    # textured face elements
+    f <- list()
     if (piece_side == "pyramid_face") {
-        cat("# Textured polygonal face element", "usemtl material_0",
-            "f 2/3 5/5 3/4", # left
-            "f 5/5 4/7 3/6", # back
-            "f 4/7 1/9 3/8", # right
-            "f 1/1 2/3 3/2", # front
-            sep = "\n", file = filename, append = TRUE)
+        f[[1]] <- list(v = c(2, 5, 3), vt = c(3, 5, 4)) # left
+        f[[2]] <- list(v = c(5, 4, 3), vt = c(5, 7, 6)) # back
+        f[[3]] <- list(v = c(4, 1, 3), vt = c(7, 9, 8)) # right
+        f[[4]] <- list(v = c(1, 2, 3), vt = c(1, 3, 2)) # front
     } else if (piece_side == "pyramid_left") {
-        cat("# Textured polygonal face element", "usemtl material_0",
-            "f 1/3 2/5 3/4", # left
-            "f 2/5 5/7 3/6", # back
-            "f 5/7 4/9 3/8", # right
-            "f 4/1 1/3 3/2", # front
-            sep = "\n", file = filename, append = TRUE)
+        f[[1]] <- list(v = c(1, 2, 3), vt = c(3, 5, 4)) # left
+        f[[2]] <- list(v = c(2, 5, 3), vt = c(5, 7, 6)) # back
+        f[[3]] <- list(v = c(5, 4, 3), vt = c(7, 9, 8)) # right
+        f[[4]] <- list(v = c(4, 1, 3), vt = c(1, 3, 2)) # front
     } else if (piece_side == "pyramid_back") {
-        cat("# Textured polygonal face element", "usemtl material_0",
-            "f 4/3 1/5 3/4", # left
-            "f 1/5 2/7 3/6", # back
-            "f 2/7 5/9 3/8", # right
-            "f 5/1 4/3 3/2", # front
-            sep = "\n", file = filename, append = TRUE)
+        f[[1]] <- list(v = c(4, 1, 3), vt = c(3, 5, 4)) # left
+        f[[2]] <- list(v = c(1, 2, 3), vt = c(5, 7, 6)) # back
+        f[[3]] <- list(v = c(2, 5, 3), vt = c(7, 9, 8)) # right
+        f[[4]] <- list(v = c(5, 4, 3), vt = c(1, 3, 2)) # front
     } else { # pyramid right
-        cat("# Textured polygonal face element", "usemtl material_0",
-            "f 5/3 4/5 3/4", # left
-            "f 4/5 1/7 3/6", # back
-            "f 1/7 2/9 3/8", # right
-            "f 2/1 5/3 3/2", # front
-            sep = "\n", file = filename, append = TRUE)
+        f[[1]] <- list(v = c(5, 4, 3), vt = c(3, 5, 4)) # left
+        f[[2]] <- list(v = c(4, 1, 3), vt = c(5, 7, 6)) # back
+        f[[3]] <- list(v = c(1, 2, 3), vt = c(7, 9, 8)) # right
+        f[[4]] <- list(v = c(2, 5, 3), vt = c(1, 3, 2)) # front
     }
+
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    write_obj(filename, v = xyz, vt = xy_vt, f = f)
+    write_pyramid_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
+
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+}
+
+# v: v$x v$y v$z
+# vt: vt$x vt$y
+# f: list of lists of faces: f[[1]]$v, f[[1]]$vt
+write_obj <- function(file, v, vt = NULL, f = NULL) {
+    ext <- tools::file_ext(file)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", file)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", file)
+    write_mtl(mtl_filename, basename(png_filename))
+
+    cat(paste0("# Written by piecepackr v", packageDescription("piecepackr")$Version),
+        "# https://github.com/piecepackr/piecepackr",
+        paste("mtllib", basename(mtl_filename)),
+        "# geometric vertices",
+        paste("v", v$x, v$y, v$z),
+        sep = "\n", file = file)
+    if (!is.null(vt)) {
+        cat("# texture coordinates",
+            paste("vt", vt$x, vt$y),
+            sep = "\n", file = file, append = TRUE)
+    }
+    if (!is.null(f)) {
+        cat("# Textured polygonal face element",
+            "usemtl material_0",
+            sapply(f, function(x) paste("f", paste0(x$v, "/", x$vt, collapse = " "))),
+            sep = "\n", file = file, append = TRUE)
+    }
+    invisible(NULL)
 }
