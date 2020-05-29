@@ -117,7 +117,7 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     # texture coordinates
     xy_vt_t <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
     xy_vt_b <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.575)
-    xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(1, 1, 0, 0))
+    xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
     vt <- list(x = c(xy_vt_t$x, xy_vt_b$x, xy_vt_e$x),
                y =  c(xy_vt_t$y, xy_vt_b$y, xy_vt_e$y))
 
@@ -130,7 +130,7 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     for (i in seq(nv)) {
         ir <- i %% nv + 1
         il <- ir %% nv + 1
-        f[[2 + i]] <- list(v = c(ir, il, il + nv, ir + nv), vt = 2 * nv + 1:4)
+        f[[2 + i]] <- list(v = c(ir + nv, il + nv, il, ir), vt = 2 * nv + 1:4)
     }
 
     ext <- tools::file_ext(filename)
