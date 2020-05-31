@@ -46,6 +46,10 @@ gappend <- function(ll, g) {
 #'         save_print_and_play(cfg, "my_pnp_file_ds.pdf", arrangement="double-sided")
 #'         save_print_and_play(cfg, "my_pnp_file_A4.pdf", size="A4", pieces="all")
 #'         save_print_and_play(cfg, "my_pnp_file_A5.pdf", size="A5")
+#'         unlink("my_pnp_file.pdf")
+#'         unlink("my_pnp_file_ds.pdf")
+#'         unlink("my_pnp_file_A4.pdf")
+#'         unlink("my_pnp_file_A5.pdf")
 #'     }
 #'   }
 #' @export
