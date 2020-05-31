@@ -83,7 +83,7 @@ test_that("SAT functions work", {
 
     c1 <- Circle$new(x=0.5, y=0.5, r=0.5)
     c2 <- Circle$new(x=1.0, y=1.0, r=0.5)
-    c3 <- Circle$new(Point$new(x=2.0, y=2.0), r=0.5)
+    c3 <- Circle$new(Point2D$new(x=2.0, y=2.0), r=0.5)
 
     expect_true(do_shapes_overlap("boo", "bar"))
     expect_true(do_shapes_overlap(r1, r2))
@@ -101,7 +101,6 @@ test_that("SAT functions work", {
     expect_false(do_shapes_overlap(c3, r1))
 
     p3 <- Point3D$new(x=1:5, y=1:5, z=1:5)
-    expect_error(p3$rotate(axis_x=1), "Don't know how to do this rotation yet")
     p3p <- p3$translate(1, 2, 3)
     expect_equal(p3p$z, 4:8)
     p2 <- p3$project_op(45, 0.5)
@@ -117,4 +116,10 @@ test_that("get_shape_xy works", {
     expect_equal(get_shape_xy("pyramid"), pyramid_xy)
     expect_equal(get_shape_xy("concave4"), concave_xy(4, 90, 0.2))
     expect_error(get_shape_xy("boobah"), "Don't know how to get xy coordinates for boobah")
+})
+
+test_that("3D rotation functions work", {
+    expect_equal(AA_to_R(angle=60), R_z(angle=60))
+    expect_equal(R_to_AA(R_x(90)), list(angle = 90, axis_x = 1, axis_y = 0, axis_z = 0))
+    expect_equal(R_to_AA(R_y(90)), list(angle = 90, axis_x = 0, axis_y = 1, axis_z = 0))
 })

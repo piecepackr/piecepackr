@@ -91,7 +91,7 @@ concaveGrobFn <- function(n_vertices, t, r=0.2) {
 halmaMatGrobFn <- function(width=0.2) {
     width <- rep(width, length.out=2)
     xy_out <- halma_xy()
-    xy_in <- Point$new(xy_out)$npc_to_in(h=1-width[1], w=1-2.5*width[2])
+    xy_in <- Point2D$new(xy_out)$npc_to_in(h=1-width[1], w=1-2.5*width[2])
     x <- c(xy_in$x, xy_out$x)
     y <- c(xy_in$y, xy_out$y)
     id <- rep(1:2, each=length(xy_out$x))

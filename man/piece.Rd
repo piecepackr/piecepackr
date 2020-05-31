@@ -43,9 +43,9 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
-\item{axis_x}{Ignored for now.}
+\item{axis_x}{First coordinate of the axis unit vector.}
 
-\item{axis_y}{Ignored for now.}
+\item{axis_y}{Second coordinate of the axis unit vector.}
 
 \item{width}{Width of piece}
 
@@ -77,4 +77,8 @@ A rayrender object.
         render_scene(piece("pawn_face", suit = 2, cfg = cfg))
     }
   }
+}
+\seealso{
+See \url{https://www.rayrender.net} for more information about the \code{rayrender} package.
+         See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }

@@ -16,6 +16,8 @@
 #'     piece3d("pawn_face", suit = 2, cfg = cfg, x = 1, y = 1, z = 2)
 #' }
 #' @export
+#' @seealso See \code{\link[rgl]{rgl}} for more information about the \code{rgl} package.
+#'          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
                            x = 0, y = 0, z = NA,
                            angle = 0, axis_x = 0, axis_y = 0,

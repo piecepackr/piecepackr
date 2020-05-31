@@ -14,6 +14,8 @@
 #'     }
 #'   }
 #' @export
+#' @seealso See \url{https://www.rayrender.net} for more information about the \code{rayrender} package.
+#'          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 piece <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
                            x = 0, y = 0, z = NA,
                            angle = 0, axis_x = 0, axis_y = 0,

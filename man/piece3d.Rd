@@ -46,9 +46,9 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
-\item{axis_x}{Ignored for now.}
+\item{axis_x}{First coordinate of the axis unit vector.}
 
-\item{axis_y}{Ignored for now.}
+\item{axis_y}{Second coordinate of the axis unit vector.}
 
 \item{width}{Width of piece}
 
@@ -85,4 +85,8 @@ if ((Sys.getenv("TRAVIS") == "") && require("rgl")) {
     piece3d("saucer_back", suit = 1, cfg = cfg, x = 2, y = 2, z=-2)
     piece3d("pawn_face", suit = 2, cfg = cfg, x = 1, y = 1, z = 2)
 }
+}
+\seealso{
+See \code{\link[rgl]{rgl}} for more information about the \code{rgl} package.
+         See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }

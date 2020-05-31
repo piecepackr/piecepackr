@@ -33,7 +33,7 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
     width <- as.numeric(convertX(width, "in"))
     height <- as.numeric(convertY(height, "in"))
     depth <- as.numeric(convertX(depth, "in"))
-    xy_b <- Point$new(rect_xy)$npc_to_in(x, y, width, height, angle)
+    xy_b <- Point2D$new(rect_xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_b)
     edge_types <- paste0("pyramid_", c("left", "back", "right", "face"))
     order <- p$op_edge_order(op_angle)
@@ -74,12 +74,12 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     width <- as.numeric(convertX(width, "in"))
     height <- as.numeric(convertY(height, "in"))
     depth <- as.numeric(convertX(depth, "in"))
-    xy_b <- Point$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
+    xy_b <- Point2D$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_b)
 
     theta <- 2 * asin(0.5 * width / height)
     yt <- 1 - cos(theta)
-    xy_t <- Point$new(x = 0:1, y = yt)$npc_to_in(x, y, width, height, angle)
+    xy_t <- Point2D$new(x = 0:1, y = yt)$npc_to_in(x, y, width, height, angle)
 
     gl <- gList()
 
@@ -197,7 +197,7 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     thetas <- seq(op_angle+90, op_angle+270, length.out=n_points)
     r <- min(0.5*width, 0.5*height)
 
-    xy_c <- Point$new(x, y)$translate_polar(thetas, r)
+    xy_c <- Point2D$new(x, y)$translate_polar(thetas, r)
     xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
     xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
 
@@ -209,7 +209,7 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
 
 polygonShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
     xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
-    xy_c <- Point$new(xy)$npc_to_in(x, y, width, height, angle)
+    xy_c <- Point2D$new(xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_c)
     fm <- p$op_edges(op_angle)$face_matrix(z, depth)
     e <- Point3D$new(fm[, 1], fm[, 2], fm[, 3])$project_op(op_angle, op_scale)

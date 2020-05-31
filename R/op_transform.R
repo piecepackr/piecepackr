@@ -98,10 +98,10 @@ op_sort <- function(df, ..., op_angle=45) {
 
 # Axis-Aligned Bounding Box (AABB)
 add_bounding_box <- function(df) {
-    ll <- Point$new(0, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
-    ul <- Point$new(0, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
-    ur <- Point$new(1, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
-    lr <- Point$new(1, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    ll <- Point2D$new(0, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    ul <- Point2D$new(0, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    ur <- Point2D$new(1, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    lr <- Point2D$new(1, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
     df$xll <- ll$x
     df$yll <- ll$y
     df$xul <- ul$x
@@ -189,7 +189,7 @@ get_shapes <- function(df) {
             } else {
                 stop(paste("Don't know how to bound", opt$shape))
             }
-            xy_c <- Point$new(xy_u)$npc_to_in(dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
+            xy_c <- Point2D$new(xy_u)$npc_to_in(dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
             shapes[[ii]] <- ConvexPolygon$new(xy_c)
         }
     }

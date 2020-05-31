@@ -2,8 +2,8 @@
 #'
 #' \code{save_piece_obj} saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
 #' @inheritParams pieceGrob
-#' @param axis_x Ignored for now.
-#' @param axis_y Ignored for now.
+#' @param axis_x First coordinate of the axis unit vector.
+#' @param axis_y Second coordinate of the axis unit vector.
 #' @param filename Name of Wavefront OBJ object.
 #' @param res Resolution of the faces.
 #' @return A list with named elements "obj", "mtl", "png" with the created filenames.
@@ -11,6 +11,7 @@
 #'     cfg <- game_systems("dejavu3d")$piecepack
 #'     files <- save_piece_obj("tile_face", suit = 3, rank = 3, cfg = cfg)
 #'     print(files)
+#' @seealso See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 #' @export
 save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
@@ -105,7 +106,7 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     # 1st half "top" vertices
     # 2nd half "bottom" vertices
     pc <- Point3D$new(x, y, z)
-    xy_npc <- Point$new(get_shape_xy(opt$shape, opt$shape_t, opt$shape_r))
+    xy_npc <- Point2D$new(get_shape_xy(opt$shape, opt$shape_t, opt$shape_r))
     xy <- xy_npc$translate(-0.5, -0.5)
     xyz_t <- Point3D$new(xy, z = 0.5)
     xyz_b <- Point3D$new(xy, z = -0.5)
@@ -186,7 +187,7 @@ write_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = p
 
     # vertices
     pc <- Point3D$new(x, y, z)
-    xy_npc <- Point$new(rect_xy)
+    xy_npc <- Point2D$new(rect_xy)
     xy <- xy_npc$translate(-0.5, -0.5)
     xyz_t <- Point3D$new(x = 0.0, y = 0.0, z = 0.5)
     xyz_b <- Point3D$new(xy, z = -0.5)
@@ -227,7 +228,7 @@ write_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = 
 
     # geometric vertices
     pc <- Point3D$new(x, y, z)
-    xy_npc <- Point$new(pyramid_xy)
+    xy_npc <- Point2D$new(pyramid_xy)
     xy <- xy_npc$translate(-0.5, -0.5)
     xyz_b <- Point3D$new(xy, z = -0.5)
     theta <- 2 * asin(0.5 * width / height)

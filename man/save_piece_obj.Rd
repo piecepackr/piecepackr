@@ -45,9 +45,9 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
-\item{axis_x}{Ignored for now.}
+\item{axis_x}{First coordinate of the axis unit vector.}
 
-\item{axis_y}{Ignored for now.}
+\item{axis_y}{Second coordinate of the axis unit vector.}
 
 \item{width}{Width of piece}
 
@@ -71,4 +71,7 @@ A list with named elements "obj", "mtl", "png" with the created filenames.
     cfg <- game_systems("dejavu3d")$piecepack
     files <- save_piece_obj("tile_face", suit = 3, rank = 3, cfg = cfg)
     print(files)
+}
+\seealso{
+See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }

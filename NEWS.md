@@ -1,6 +1,17 @@
 piecepackr 1.4.0
 ================
 
+New features
+------------
+
+* ``save_piece_obj``, ``piece3d`` and ``piece`` now have support for 3D rotations of pieces (#188).
+* New functions ``AA_to_R`` and ``R_to_AA`` convert back and forth between the axis-angle representation
+  used by ``piecepackr`` and 3D rotation matrices (post-multiplied).
+* New functions ``R_x``, ``R_y``, and ``R_z`` create simple 3D rotation matrices (post-multiplied) for 
+  rotations around the x, y, and z axes.
+* Newly exported geometry helper functions ``to_degrees`` and ``to_radians`` convert back and forth between
+  degrees and radians.
+
 Bug fixes and minor improvements
 --------------------------------
 

@@ -4,10 +4,6 @@
 \alias{pp_utils}
 \alias{get_embedded_font}
 \alias{inch}
-\alias{to_x}
-\alias{to_y}
-\alias{to_r}
-\alias{to_t}
 \alias{cleave}
 \alias{file2grob}
 \title{\code{piecepackr} utility functions}
@@ -15,14 +11,6 @@
 get_embedded_font(font, char)
 
 inch(inches)
-
-to_x(t, r)
-
-to_y(t, r)
-
-to_r(x, y)
-
-to_t(x, y)
 
 cleave(s, sep = ",", float = FALSE, color = FALSE)
 
@@ -34,14 +22,6 @@ file2grob(file, distort = TRUE)
 \item{char}{A character vector of character(s) to be embedded by \code{grid::grid.text}}
 
 \item{inches}{Number representing number of inches}
-
-\item{t}{Polar angle in degrees}
-
-\item{r}{Radial distance}
-
-\item{x}{Cartesian x coordinate}
-
-\item{y}{Cartesian y coordinate}
 
 \item{s}{String to convert}
 
@@ -65,8 +45,6 @@ or distort to fit the area it is drawn in}
 \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 \code{cleave} converts a delimiter separated string into a vector.
 \code{inch(x)} is equivalent to \code{unit(x, "in")}.
-\code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert between polar coordinates (in degrees)
-and Cartesian coordinates.
 }
 \details{
 \code{get_embedded_font} depends on \code{pdffonts} being on the system path
