@@ -357,7 +357,8 @@ Config <- R6Class("pp_cfg",
                        x, y, z, angle, axis_x, axis_y,
                        width, height, depth,
                        scale = 1, res = 72,
-                       alpha = 1.0, lit = FALSE, shininess = 50.0) {
+                       alpha = 1.0, lit = FALSE,
+                       shininess = 50.0, textype = "rgba") {
             key <- opt_cache_key(piece_side, suit, rank, "rgl_fn")
             if (!is.null(private$cache[[key]])) {
                 rgl_fn <- private$cache[[key]]
@@ -371,7 +372,8 @@ Config <- R6Class("pp_cfg",
                    angle, axis_x, axis_y,
                    width, height, depth,
                    scale = scale, res = res,
-                   alpha = alpha, lit = lit, shininess = shininess)
+                   alpha = alpha, lit = lit,
+                   shininess = shininess, textype)
         },
         save_obj = function(piece_side, suit, rank,
                             x, y, z, angle, axis_x, axis_y,

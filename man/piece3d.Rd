@@ -24,7 +24,8 @@ piece3d(
   res = 72,
   alpha = 1,
   lit = FALSE,
-  shininess = 50
+  shininess = 50,
+  textype = "rgba"
 )
 }
 \arguments{
@@ -69,6 +70,10 @@ or a character vector of \code{pp_cfg} objects}
 \item{lit}{logical, specifying if rgl lighting calculation should take place}
 
 \item{shininess}{Properties for rgl lighting calculation}
+
+\item{textype}{Use \code{"rgba"} when png texture (may) also have alpha transparency.
+Use \code{"rgb"} when sure texture will not have alpha transparency
+(in particular \code{rgl}'s WebGL export will likely work better).}
 }
 \value{
 A numeric vector of rgl object IDs.
@@ -88,5 +93,6 @@ if ((Sys.getenv("TRAVIS") == "") && require("rgl")) {
 }
 \seealso{
 See \code{\link[rgl]{rgl}} for more information about the \code{rgl} package.
+         See \code{\link[rgl]{rgl.material}} for more info about setting \code{rgl} material properties.
          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }

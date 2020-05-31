@@ -18,6 +18,9 @@ Bug fixes and minor improvements
 * ``pp_cfg`` now supports new ``obj_fn``, ``rayrender_fn``, and ``rgl_fn`` styles
   allowing further piece customization within the 3D graphics functions
   ``save_piece_obj``, ``piece``, and ``piece3d`` respectively (#200).
+* ``piece3d`` now supports user manually setting the piece's ``rgl`` "material" ``textype`` argument.
+  When textures with alpha transparency are not needed then setting ``textype``
+  to ``"rgb"`` avoids a rglWebGL rendering bug (#187).
 
 piecepackr 1.3.1
 ================
