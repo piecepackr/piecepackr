@@ -34,7 +34,7 @@ grid.piece(
   piece_side = "tile_back",
   suit = NA,
   rank = NA,
-  cfg = list(),
+  cfg = pp_cfg(),
   x = unit(0.5, "npc"),
   y = unit(0.5, "npc"),
   z = NA,

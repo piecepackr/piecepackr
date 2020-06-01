@@ -44,42 +44,42 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = p
 write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
                              ...,
                              filename = tempfile(fileext = ".png"), res = 72) {
-    opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
     height <- cfg$get_height(piece_side, suit, rank)
     width <- cfg$get_width(piece_side, suit, rank)
     grDevices::png(filename, height = height, width = 2.5 * width,
         units = "in", res = res, bg = "transparent")
 
+    piece_face <- gsub("back", "face", piece_side)
+    piece_back <- gsub("face", "back", piece_side)
+
     # front
+    opt_face <- cfg$get_piece_opt(piece_face, suit, rank)
+    #### Update textures #206 #210
     pushViewport(viewport(x = 0.225, width = 0.45))
-    grid.rect(gp = gpar(col = "transparent", fill = opt$background_color))
+    grid.rect(gp = gpar(col = "transparent", fill = opt_face$background_color))
     popViewport()
     pushViewport(viewport(x = 0.225, width = 0.40))
-    grid.piece(piece_side, suit, rank, cfg)
+    grid.piece(piece_face, suit, rank, cfg)
     popViewport()
 
     # edge
     pushViewport(viewport(x = 0.5, width = 0.1))
-    grid.rect(gp = gpar(col = "transparent", fill = opt$edge_color))
+    grid.rect(gp = gpar(col = "transparent", fill = opt_face$edge_color))
     popViewport()
 
     # back
-    opp_piece_side <- if (grepl("_face", piece_side)) {
-        gsub("face", "back", piece_side)
-    } else {
-        gsub("back", "face", piece_side)
-    }
-    if (piece_side == "die_face") {
-        opp_piece_side <- "die_face"
+    if (piece_side == "die_face") { #### proper 6-sided die OBJ files
+        piece_back <- "die_face"
         rank <- 7 - rank
     }
-    opp_opt <- cfg$get_piece_opt(opp_piece_side, suit, rank)
+    opt_back <- cfg$get_piece_opt(piece_back, suit, rank)
+    #### Update textures #206 #210
     pushViewport(viewport(x = 0.775, width = 0.45))
-    grid.rect(gp = gpar(col = "transparent", fill = opp_opt$edge_color))
+    grid.rect(gp = gpar(col = "transparent", fill = opt_back$edge_color))
     popViewport()
     pushViewport(viewport(x = 0.775, width = 0.40))
-    grid.piece(opp_piece_side, suit, rank, cfg)
+    grid.piece(piece_back, suit, rank, cfg)
     popViewport()
     grDevices::dev.off()
 
@@ -90,6 +90,9 @@ write_mtl <- function(mtl_filename, png_filename) {
     writeLines(c("newmtl material_0", paste("map_Kd", png_filename)),
                mtl_filename)
 }
+
+# 1,2,3,4 -> 1,4,3,2
+rev_shift <- function(x) c(x[1], rev(x[-1]))
 
 # two-sided objects
 write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
@@ -108,16 +111,22 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     pc <- Point3D$new(x, y, z)
     xy_npc <- Point2D$new(get_shape_xy(opt$shape, opt$shape_t, opt$shape_r))
     xy <- xy_npc$translate(-0.5, -0.5)
+    xy_reflected <- xy$dilate(width = -1, height = 1)
+    xy_npc_reflected <- xy_reflected$translate(0.5, 0.5)
+
     xyz_t <- Point3D$new(xy, z = 0.5)
     xyz_b <- Point3D$new(xy, z = -0.5)
     xs <- c(xyz_t$x, xyz_b$x)
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
-    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
+    R <- AA_to_R(angle, axis_x, axis_y)
+    # If piece back then flip it over
+    if (grepl("_back", piece_side)) R <- R_y(180) %*% R
+    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
 
     # texture coordinates
     xy_vt_t <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
-    xy_vt_b <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.575)
+    xy_vt_b <- xy_npc_reflected$dilate(width = 0.4, height = 1)$translate(x = 0.575)
     xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
     vt <- list(x = c(xy_vt_t$x, xy_vt_b$x, xy_vt_e$x),
                y =  c(xy_vt_t$y, xy_vt_b$y, xy_vt_e$y))
@@ -126,7 +135,8 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     nv <- length(xyz) / 2
     f <- list()
     f[[1]] <- list(v = seq(nv), vt = seq(nv)) # top
-    f[[2]] <- list(v = nv + rev(seq(nv)), vt = nv + seq(nv)) # bottom
+    #### #217 "coin_arrangement"
+    f[[2]] <- list(v = rev_shift(nv + seq(nv)), vt = rev_shift(nv + seq(nv))) # bottom
     # sides
     for (i in seq(nv)) {
         ir <- i %% nv + 1

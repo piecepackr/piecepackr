@@ -152,8 +152,10 @@ hexlinesGrob <- function(col, shape = "rect", name = NULL) {
 }
 
 #' @rdname grob_fn_helpers
+#' @param back Logical of whether back of the piece, in which case will reflect shape along vertical axis.
 #' @export
-get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2) {
+get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2, back=FALSE) {
+    if (back) shape_t <- 180 - shape_t
     if (shape == "circle") {
         circleGrob
     } else if (shape == "rect") {

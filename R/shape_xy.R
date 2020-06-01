@@ -21,7 +21,7 @@ get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
 pyramid_xy <- list(x = c(0.5, 0, 1), y = c(1, 0, 0))
 kite_xy <- list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25))
 rect_xy <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1))
-oval_xy <- function() convex_xy(36, 90)
+oval_xy <- function() convex_xy(36, 90) #### grobCoords(circleGrob(), TRUE)[[1]] # nolint
 
 convex_xy <- function(n_vertices, t) {
     t <- seq(0, 360, length.out = n_vertices + 1) + t

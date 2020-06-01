@@ -18,7 +18,7 @@ checkersGrob(col, shape = "rect", shape_t = 90, name = NULL)
 
 hexlinesGrob(col, shape = "rect", name = NULL)
 
-get_shape_grob_fn(shape, shape_t = 90, shape_r = 0.2)
+get_shape_grob_fn(shape, shape_t = 90, shape_r = 0.2, back = FALSE)
 
 is_color_invisible(col)
 }
@@ -36,6 +36,8 @@ is_color_invisible(col)
 \item{mat_width}{Numeric vector of mat widths}
 
 \item{shape_r}{Radial distance (from 0 to 0.5) (ignored by most shapes)}
+
+\item{back}{Logical of whether back of the piece, in which case will reflect shape along vertical axis.}
 }
 \description{
 \code{gridlinesGrob} returns a grob that produces gridlines.

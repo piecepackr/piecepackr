@@ -82,6 +82,7 @@ rgl_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg
                         scale = scale, res = res)
     material <- list(color = "white", alpha = alpha,
                      lit = lit, shininess = shininess,
+                     front = "filled", back = "filled",
                      texture = obj$png, textype = textype)
     mesh <- suppressWarnings(rgl::readOBJ(obj$obj, material = material))
     invisible(as.numeric(rgl::shade3d(mesh)))

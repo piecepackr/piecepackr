@@ -50,7 +50,8 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
-    shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
+    reflect <- grepl("back", piece_side)
+    shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r, reflect)
 
     # Background
     background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))

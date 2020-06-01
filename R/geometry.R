@@ -103,9 +103,13 @@ Point3D <- R6Class("point3d",
                                      Point3D$new(x, y, z)
                                  },
                                  # rotation matrix 'R' is post-multiplied...
-                                 rotate = function(t = 0, axis_x = 0, axis_y = 0, R = NULL) {
+                                 rotate = function(t = 0, axis_x = 0, axis_y = 0) {
                                      m <- as.matrix(self)
-                                     if (is.null(R)) R <- AA_to_R(t, axis_x, axis_y)
+                                     if (is.matrix(t)) {
+                                         R <- t
+                                     } else {
+                                         R <- AA_to_R(t, axis_x, axis_y)
+                                     }
                                      Point3D$new(m %*% R)
                                  },
                                  translate = function(x = 0, y = 0, z = 0) {

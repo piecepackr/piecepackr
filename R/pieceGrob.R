@@ -195,7 +195,7 @@ get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
 
 #' @rdname grid.piece
 #' @export
-grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=list(),
+grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
                            angle=0, use_pictureGrob=FALSE,
                            width=NA, height=NA, depth=NA,

@@ -21,6 +21,9 @@ Bug fixes and minor improvements
 * ``piece3d`` now supports user manually setting the piece's ``rgl`` "material" ``textype`` argument.
   When textures with alpha transparency are not needed then setting ``textype``
   to ``"rgb"`` avoids a rglWebGL rendering bug (#187).
+* Utility function ``get_shape_grob_fn`` now has a ``back`` argument to indicate 
+  we are drawing the back of the shape and should reflect it across a vertical axis (#218).
+* Some bug fixes and enhancements in the OBJ export for certain shapes (#207, #208, #215).
 
 piecepackr 1.3.1
 ================
