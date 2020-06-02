@@ -58,7 +58,6 @@
 #'    system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
 #'  }
 #'
-#' @exportClass pp_cfg
 #' @export
 pp_cfg <- function(cfg=list()) {
     if (is_pp_cfg(cfg))
