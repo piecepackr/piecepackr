@@ -1,12 +1,13 @@
+* This update should fix the following CRAN Package Check warning: 
+  S4 exports specified in 'NAMESPACE' but not defined in package 'piecepackr'
 * CRAN Package Check Results for Solaris WARNs "It is not known that wchar_t is Unicode on this platform".
   This package is about using Unicode glyphs to make board game graphics and it doesn't make sense to avoid these glyphs. 
   However by default the functions use only Unicode glyphs found in typical R "sans" fonts (i.e. Arial, DejaVu Sans, Arimo) 
   but some of these glyphs like the French suits Hearts, Diamonds, Clubs, and Spades are not Latin-1 glyphs.
-* win-builder (devel) gives a NOTE about possibly invalid URLs but they all work fine for me with curl or Firefox.
 
 **Test environments**
 
-* local (linux, R 3.6.3) 
+* local (linux, R 4.0.0) 
 * win-builder (windows, R devel) 
 * appveyor (windows, R devel) 
 * appveyor (windows, R release) 
