@@ -3,9 +3,9 @@
 #' \code{piece3d} draws board games pieces using the rgl package.
 #' @inheritParams grid.piece
 #' @inheritParams save_piece_obj
-#' @param lit logical, specifying if rgl lighting calculation should take place
-#' @param shininess Properties for rgl lighting calculation
-#' @param textype Use \code{"rgba"} when png texture (may) also have alpha transparency.
+#' @param lit logical, specifying if rgl lighting calculation should take place.
+#' @param shininess Properties for rgl lighting calculation.
+#' @param textype Use \code{"rgba"} when png texture (may) have alpha transparency.
 #'                Use \code{"rgb"} when sure texture will not have alpha transparency
 #'                (in particular \code{rgl}'s WebGL export will likely work better).
 #' @return A numeric vector of rgl object IDs.
@@ -20,7 +20,7 @@
 #' }
 #' @export
 #' @seealso See \code{\link[rgl]{rgl-package}} for more information about the \code{rgl} package.
-#'          See \code{\link[rgl]{rgl.material}} for more info about setting \code{rgl} material properties.
+#'          See \code{\link[rgl:material]{rgl.material}} for more info about setting \code{rgl} material properties.
 #'          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
                            x = 0, y = 0, z = NA,

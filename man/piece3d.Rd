@@ -67,11 +67,11 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{alpha}{Alpha channel for transparency.}
 
-\item{lit}{logical, specifying if rgl lighting calculation should take place}
+\item{lit}{logical, specifying if rgl lighting calculation should take place.}
 
-\item{shininess}{Properties for rgl lighting calculation}
+\item{shininess}{Properties for rgl lighting calculation.}
 
-\item{textype}{Use \code{"rgba"} when png texture (may) also have alpha transparency.
+\item{textype}{Use \code{"rgba"} when png texture (may) have alpha transparency.
 Use \code{"rgb"} when sure texture will not have alpha transparency
 (in particular \code{rgl}'s WebGL export will likely work better).}
 }
@@ -93,6 +93,6 @@ if ((Sys.getenv("TRAVIS") == "") && require("rgl")) {
 }
 \seealso{
 See \code{\link[rgl]{rgl-package}} for more information about the \code{rgl} package.
-         See \code{\link[rgl]{rgl.material}} for more info about setting \code{rgl} material properties.
+         See \code{\link[rgl:material]{rgl.material}} for more info about setting \code{rgl} material properties.
          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }
