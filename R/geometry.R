@@ -298,8 +298,9 @@ do_shapes_overlap <- function(s1, s2) {
 #' @rdname geometry_utils
 #' @inheritParams save_piece_obj
 #' @param angle Angle in degrees (counter-clockwise)
+#' @param ... Ignored
 #' @export
-AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0) {
+AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, ...) {
     axis_z <- sqrt(1 - axis_x^2 - axis_y^2)
     e <- c(axis_x, axis_y, axis_z)
     I <- diag(3)

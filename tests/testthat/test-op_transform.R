@@ -120,6 +120,11 @@ test_that("get_shape_xy works", {
 
 test_that("3D rotation functions work", {
     expect_equal(AA_to_R(angle=60), R_z(angle=60))
+    R1 <- R_z(60) %*% R_x(50)
+    R2 <- do.call(AA_to_R, R_to_AA(R1))
+    expect_equal(R1, R2)
+    expect_equal(AA_to_R(angle=60), R_z(angle=60))
+    expect_equal(AA_to_R(angle=60), R_z(angle=60))
     expect_equal(R_to_AA(R_x(90)), list(angle = 90, axis_x = 1, axis_y = 0, axis_z = 0))
     expect_equal(R_to_AA(R_y(90)), list(angle = 90, axis_x = 0, axis_y = 1, axis_z = 0))
 })
