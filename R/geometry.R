@@ -297,11 +297,21 @@ do_shapes_overlap <- function(s1, s2) {
 
 #' @rdname geometry_utils
 #' @inheritParams save_piece_obj
+#' @param axis_z Third coordinate of the axis unit vector (usually inferred).
 #' @param angle Angle in degrees (counter-clockwise)
 #' @param ... Ignored
 #' @export
-AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, ...) {
-    axis_z <- sqrt(1 - axis_x^2 - axis_y^2)
+AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
+    if (is.na(axis_z)) {
+        axis_z <- sqrt(1 - axis_x^2 - axis_y^2)
+    } else {
+        norm <- sqrt(axis_x^2 + axis_y^2 + axis_z^2)
+        if (!isTRUE(all.equal(norm, 1))) {
+            axis_x <- axis_x / norm
+            axis_y <- axis_y / norm
+            axis_z <- axis_z / norm
+        }
+    }
     e <- c(axis_x, axis_y, axis_z)
     I <- diag(3)
     K <- cross_matrix(e)
@@ -343,6 +353,10 @@ R_to_AA <- function(R = diag(3)) {
         e[2] <- R[1,3] - R[3,1]
         e[3] <- R[2,1] - R[1,2]
         e <- e / (2 * sin(-t))
+    }
+    if (e[3] < 0) { # Force z-axis element positive
+        e <- -1 * e
+        t <- -t
     }
     list(angle = to_degrees(t), axis_x = e[1], axis_y = e[2], axis_z = e[3])
 }

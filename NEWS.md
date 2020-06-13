@@ -1,3 +1,14 @@
+piecepackr 1.4.2
+================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).
+* `AA_to_R()` now accepts an optional `axis_z` argument and automatically normalizes the axis vector.
+  In particular `R_to_AA(AA_to_R(...))` can now be used to normalize alternative axis-angle parameterizations
+  with non-unit axis vectors and/or negative `axis_z` values.
+
 piecepackr 1.4.1
 ================
 

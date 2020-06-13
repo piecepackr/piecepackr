@@ -15,7 +15,7 @@
 \alias{to_t}
 \title{Helper functions for making geometric calculations.}
 \usage{
-AA_to_R(angle = 0, axis_x = 0, axis_y = 0, ...)
+AA_to_R(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...)
 
 R_to_AA(R = diag(3))
 
@@ -43,6 +43,8 @@ to_t(x, y)
 \item{axis_x}{First coordinate of the axis unit vector.}
 
 \item{axis_y}{Second coordinate of the axis unit vector.}
+
+\item{axis_z}{Third coordinate of the axis unit vector (usually inferred).}
 
 \item{...}{Ignored}
 
