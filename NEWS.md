@@ -5,6 +5,7 @@ Bug fixes and minor improvements
 --------------------------------
 
 * `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).
+* Fixes bug in `R_to_AA()` for some 3D rotations with an "exactly" 180 degree angle (in the axis-angle representation).
 * `AA_to_R()` now accepts an optional `axis_z` argument and automatically normalizes the axis vector.
   In particular `R_to_AA(AA_to_R(...))` can now be used to normalize alternative axis-angle parameterizations
   with non-unit axis vectors and/or negative `axis_z` values.

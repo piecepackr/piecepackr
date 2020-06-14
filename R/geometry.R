@@ -337,6 +337,13 @@ cross_matrix <- function(v) {
 # trace of a (square) matrix
 trace <- function(m) sum(diag(m))
 
+# more robust handling of arccosine input
+arccos <- function(x) {
+    if (isTRUE(all.equal(x, 1)) && x > 1) x <- 1
+    if (isTRUE(all.equal(x, -1)) && x < -1) x <- -1
+    acos(x)
+}
+
 # Rotation matrix to Axis-angle representation
 # https://en.wikipedia.org/wiki/Axis-angle_representation
 
@@ -344,9 +351,20 @@ trace <- function(m) sum(diag(m))
 #' @rdname geometry_utils
 #' @export
 R_to_AA <- function(R = diag(3)) {
-    t <- acos(0.5 * (trace(R) - 1))
-    if (isTRUE(all.equal(sin(-t), 0))) {
+    t <- arccos(0.5 * (trace(R) - 1))
+    if (isTRUE(all.equal(R, diag(3)))) { # no rotation
         e <- c(0, 0, 1)
+    } else if (isTRUE(all.equal(sin(t), 0))) { # 180 degree rotation
+        B <- 0.5 * (R + diag(3))
+        e <- sqrt(diag(B))
+        sB <- sign(B)
+        if (isTRUE(all.equal(sB, ppn))) {
+            e[3] <- -e[3]
+        } else if (isTRUE(all.equal(sB, pnp))) {
+            e[2] <- -e[2]
+        } else if (isTRUE(all.equal(sB, npp))) {
+            e[1] <- -e[1]
+        }
     } else {
         e <- numeric(3)
         e[1] <- R[3,2] - R[2,3]
@@ -355,11 +373,26 @@ R_to_AA <- function(R = diag(3)) {
         e <- e / (2 * sin(-t))
     }
     if (e[3] < 0) { # Force z-axis element positive
-        e <- -1 * e
+        e <- -e
         t <- -t
     }
     list(angle = to_degrees(t), axis_x = e[1], axis_y = e[2], axis_z = e[3])
 }
+
+# Sign matrices for "B" matrix used to tell signs for axis unit vector (up to sign ambiguity) when angle = 180 degrees
+# signs for ppp and nnn don't need to be changed
+# ppn and npp
+ppn <- matrix(c(1, 1, -1,
+                1, 1, -1,
+                -1, -1, 1), ncol = 3, byrow = TRUE)
+# pnp and npn
+pnp <- matrix(c(1, -1, 1,
+                -1, 1, -1,
+                1, -1, 1), ncol = 3, byrow = TRUE)
+# pnn and npp
+npp <- matrix(c(1, -1, -1,
+                -1, 1, 1,
+                -1, 1, 1), ncol = 3, byrow = TRUE)
 
 # Basic 3D rotation matrices
 # https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions
