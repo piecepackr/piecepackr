@@ -47,7 +47,7 @@ Point2D <- R6Class("point2d",
                                    self$translate(-0.5, -0.5)$dilate(w, h)$rotate(t)$translate(x, y)
                                },
                                plot = function(gp = gpar()) {
-                                   grid.points(x=self$x, y=self$y, default.units="in", gp = gpar())
+                                   grid.points(x=self$x, y=self$y, default.units="in", gp = gp)
                                }
                                ))
 #' @export
@@ -175,7 +175,7 @@ Polygon <- R6Class("polygon",
                    self$normals <- self$edges$orthogonal
                },
                plot = function(gp = gpar()) {
-                   grid.polygon(x=self$x, y=self$y, default.units="in", gp = gpar())
+                   grid.polygon(x=self$x, y=self$y, default.units="in", gp = gp)
                },
                project = function(v) {
                    n <- length(self$x)
@@ -288,7 +288,6 @@ do_shapes_overlap <- function(s1, s2) {
         TRUE
     }
 }
-
 
 # Axis-angle representation to rotation matrix
 # https://en.wikipedia.org/wiki/Axis-angle_representation

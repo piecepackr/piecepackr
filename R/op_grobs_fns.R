@@ -50,7 +50,7 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
         gl[[i]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
     }
     # Check angle and op_angle and if possible draw one of the pyramid faces
-    if ((angle - op_angle) %% 90 == 0) {
+    if (near((angle - op_angle) %% 90, 0)) {
         base_mid <- exy[1]$midpoint(exy[2])
         xy_mid <- base_mid$midpoint(exy[3])
         vheight <- base_mid$distance_to(exy[3])
@@ -139,7 +139,8 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gl[[4]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
 
     # Check angle and op_angle and if possible draw one of the pyramid faces
-    if (((op_angle - angle) %% 360 %in% c(90, 270)) && angle %% 90 == 0) {
+    diff_angle <- (op_angle - angle) %% 360
+    if ((near(diff_angle, 90) || near(diff_angle, 270)) && near(angle %% 90, 0)) {
         base_mid <- exy[2]$midpoint(exy[3])
         xy_mid <- base_mid$midpoint(exy[1])
         vheight <- base_mid$distance_to(exy[1])
@@ -168,8 +169,10 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     shape <- opt$shape
     if (shape == "circle") {
         circleShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
-    } else if (shape %in% c("halma", "oval")) {
+    } else if (shape == "halma") {
         genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
+    } else if (shape == "oval") {
+        ovalShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     } else {
         polygonShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     }
@@ -198,6 +201,36 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     r <- min(0.5*width, 0.5*height)
 
     xy_c <- Point2D$new(x, y)$translate_polar(thetas, r)
+    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
+    xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
+
+    x <- c(xy_l$x, rev(xy_u$x))
+    y <- c(xy_l$y, rev(xy_u$y))
+    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+    polygonGrob(x=x, y=y, default.units="in", gp=gp)
+}
+
+ovalShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
+    xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
+    p <- Polygon$new(Point2D$new(xy)$npc_to_in(x, y, width, height, angle))
+
+    # We'll project points onto a line to figure out which are visible at that 'op_angle'.
+    # The line we want to project on is at a right angle to 'op_angle'.
+    n <- length(p$vertices)
+    projections <- numeric(n)
+    proj_vec <- Vector$new(to_x(op_angle - 90, 1), to_y(op_angle - 90, 1))
+    for (ii in seq(n)) {
+        projections[ii] <- proj_vec$dot(p$vertices[ii])
+    }
+    i_min <- which.min(projections)
+    i_max <- which.max(projections)
+    if (i_min < i_max) {
+        indices <- seq(i_min, i_max)
+    } else {
+        indices <- c(seq(i_min, n), seq(1, i_max))
+    }
+    xy_c <- p$vertices[indices]
+
     xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
     xy_u <- Point3D$new(xy_c, z = z + 0.5 * depth)$project_op(op_angle, op_scale)
 
