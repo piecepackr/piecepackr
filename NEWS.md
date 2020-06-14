@@ -10,6 +10,7 @@ Bug fixes and minor improvements
   In particular `R_to_AA(AA_to_R(...))` can now be used to normalize alternative axis-angle parameterizations
   with non-unit axis vectors and/or negative `axis_z` values.
 * Improved drawing of oblique projection edges for the "oval" shape (#212).
+* `is_color_invisible()` will now correctly classify as "invisible" colors with an alpha channel value set to 0.
 
 piecepackr 1.4.1
 ================
@@ -85,8 +86,11 @@ Deprecated features
 -------------------
 
 The following ``pp_cfg`` R6 class public method is now deprecated:
+
     * ``get_pictureGrob``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
+
 The following ``pp_cfg`` "style" is now deprecated:
+
     * ``shadow_fn``.  Use the new ``op_grob_fn`` instead.
 
 Breaking changes

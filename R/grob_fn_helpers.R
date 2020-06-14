@@ -182,7 +182,7 @@ get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2, back=FALSE) {
 is_color_invisible <- function(col) {
     if (is.na(col))
         return(TRUE)
-    if (col == "transparent")
+    if (grDevices::col2rgb(col, alpha=TRUE)[4] == 0)
         return(TRUE)
     return(FALSE)
 }
