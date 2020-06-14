@@ -104,6 +104,7 @@ test_that("SAT functions work", {
     p3p <- p3$translate(1, 2, 3)
     expect_equal(p3p$z, 4:8)
     p2 <- p3$project_op(45, 0.5)
+    expect_equal(dim(as.matrix(p2)), c(5, 2))
 
     skip_on_ci()
     expect_doppelganger("simple_square", function() plot(r1))
@@ -125,6 +126,23 @@ test_that("3D rotation functions work", {
     expect_equal(R1, R2)
     expect_equal(AA_to_R(angle=60), R_z(angle=60))
     expect_equal(AA_to_R(angle=60), R_z(angle=60))
+    expect_equal(AA_to_R(angle=45, axis_x=1), R_x(angle=45))
+    expect_equal(AA_to_R(angle=30, axis_y=1), R_y(angle=30))
     expect_equal(R_to_AA(R_x(90)), list(angle = 90, axis_x = 1, axis_y = 0, axis_z = 0))
     expect_equal(R_to_AA(R_y(90)), list(angle = 90, axis_x = 0, axis_y = 1, axis_z = 0))
+    expect_equal(R_to_AA(AA_to_R(180, 0.5, 0.5)),
+                 list(angle = 180, axis_x = 0.5, axis_y = 0.5, axis_z = 0.7071068),
+                 tolerance = 1e-6)
+    expect_equal(R_to_AA(AA_to_R(180, -0.6, 0.6, 0.8)),
+                 list(angle = 180, axis_x = -0.5144958, axis_y = 0.5144958, axis_z = 0.6859943),
+                 tolerance = 1e-6)
+    expect_equal(R_to_AA(AA_to_R(180,  0.6, -0.6)),
+                 list(angle = 180, axis_x = 0.6, axis_y = -0.6, axis_z = 0.5291503),
+                 tolerance = 1e-6)
+    expect_equal(R_to_AA(AA_to_R(180, -0.6, -0.6)),
+                 list(angle = 180, axis_x = -0.6, axis_y = -0.6, axis_z = 0.5291503),
+                 tolerance = 1e-6)
+    expect_equal(R_to_AA(AA_to_R(0, -0.6, 0.6)),
+                 list(angle = 0, axis_x = 0, axis_y = 0, axis_z = 1),
+                 tolerance = 1e-6)
 })

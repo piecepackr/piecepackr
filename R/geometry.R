@@ -306,7 +306,7 @@ AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
         axis_z <- sqrt(1 - axis_x^2 - axis_y^2)
     } else {
         norm <- sqrt(axis_x^2 + axis_y^2 + axis_z^2)
-        if (!isTRUE(all.equal(norm, 1))) {
+        if (!near(norm, 1)) {
             axis_x <- axis_x / norm
             axis_y <- axis_y / norm
             axis_z <- axis_z / norm
@@ -337,32 +337,36 @@ cross_matrix <- function(v) {
 # trace of a (square) matrix
 trace <- function(m) sum(diag(m))
 
+near <- function(x, y, tolerance = 1e-6) isTRUE(all.equal(x, y, tolerance = tolerance))
+
 # more robust handling of arccosine input
 arccos <- function(x) {
-    if (isTRUE(all.equal(x, 1)) && x > 1) x <- 1
-    if (isTRUE(all.equal(x, -1)) && x < -1) x <- -1
+    if (near(x, 1) && x > 1) x <- 1
+    if (near(x, -1) && x < -1) x <- -1
     acos(x)
 }
 
 # Rotation matrix to Axis-angle representation
 # https://en.wikipedia.org/wiki/Axis-angle_representation
-
 #' @param R 3D rotation matrix (post-multiplied)
 #' @rdname geometry_utils
 #' @export
 R_to_AA <- function(R = diag(3)) {
     t <- arccos(0.5 * (trace(R) - 1))
-    if (isTRUE(all.equal(R, diag(3)))) { # no rotation
+    if (near(R, diag(3))) { # no rotation
+        t <- 0
         e <- c(0, 0, 1)
-    } else if (isTRUE(all.equal(sin(t), 0))) { # 180 degree rotation
+    } else if (near(t, pi)) { # 180 degree rotation
+        t <- pi
         B <- 0.5 * (R + diag(3))
         e <- sqrt(diag(B))
         sB <- sign(B)
-        if (isTRUE(all.equal(sB, ppn))) {
+        if (near(sB, ppn)) {
             e[3] <- -e[3]
-        } else if (isTRUE(all.equal(sB, pnp))) {
+            t <- -pi
+        } else if (near(sB, pnp)) {
             e[2] <- -e[2]
-        } else if (isTRUE(all.equal(sB, npp))) {
+        } else if (near(sB, npp)) {
             e[1] <- -e[1]
         }
     } else {
