@@ -90,29 +90,32 @@
 #' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 #' @export
 game_systems <- function(style=NULL) {
-    if (is.null(style)) {
+    styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
+    if (!is.null(style) && is.na(match(style, styles))) {
+        stop(paste("Don't have a customized configuration for style", style))
+    }
+    if (is.null(style)) style <- "sans"
+    if (grepl("^sans", style)) {
         piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
         pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,*",
                              suit_cex.s5=1.3)
-    } else if (style == "dejavu") {
+    } else if (grepl("^dejavu", style)) {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
         pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605")
-    } else if (style == "dejavu3d") {
-        piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
-                                suit_color.s4 = "#0072B2",
-                                invert_colors.pawn = TRUE,
-                                invert_colors.die = TRUE,
-                                background_color="burlywood", border_color="transparent",
-                                mat_color.tile_back = "burlywood", width.tile = 2,
-                                edge_color.tile = "black", edge_color.coin = "black",
-                                suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
-        pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
-        pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605")
+    }
+    if (grepl("3d$", style)) {
+        style_3d <- list(suit_color.s4 = "#0072B2",
+                         invert_colors.pawn = TRUE,
+                         invert_colors.die = TRUE,
+                         background_color="burlywood", background_color.pyramid = "white",
+                         border_color="transparent",
+                         mat_color.tile_back = "burlywood",
+                         edge_color.tile = "black", edge_color.coin = "black")
     } else {
-        stop(paste("Don't have a customized configuration for style", style))
+        style_3d <- NULL
     }
     piecepack_base <- list(border_color="black", border_lex=4, depth.coin=0.25,
                            invert_colors.matchstick = TRUE, ps_cex.r2.matchstick = 0.7,
@@ -120,7 +123,7 @@ game_systems <- function(style=NULL) {
                            mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
                            invert_colors.bit = TRUE,
                            rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
-    piecepack <- c(piecepack_suits, piecepack_base)
+    piecepack <- c(style_3d, piecepack_suits, piecepack_base)
 
     playing_cards_expansion <- piecepack
     playing_cards_expansion$suit_text <- pce_suit_text

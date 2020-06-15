@@ -1,5 +1,6 @@
 library("vdiffr")
 cfg_default <- pp_cfg(list(title="default cfg"))
+cfg_3d <- game_systems("sans3d")$piecepack
 context("test pp_cfg")
 test_that("pp_cfg works as expected", {
     expect_true("pp_cfg" %in% class(cfg_default))
@@ -271,7 +272,7 @@ test_that("oblique projection works", {
     }
     expect_doppelganger("tile_face_op", function() dc("tile_face"))
     expect_doppelganger("coin_face_op", function() dc("coin_face"))
-    expect_doppelganger("pawn_face_op", function() dc("pawn_face"))
+    expect_doppelganger("pawn_face_op", function() dc("pawn_face", cfg=cfg_3d))
     expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))
     expect_doppelganger("pyramid_face_op", function() dc("pyramid_face"))
     expect_doppelganger("die_face_op", function() dc("die_face"))

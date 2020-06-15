@@ -179,20 +179,28 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 }
 
 genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
-    n_shadows <- max(round(100*depth), 3)
-    zs <- z + depth * seq(-0.5, 0.5, length.out = n_shadows)
-    xy_p <- Point3D$new(x, y, zs)$project_op(op_angle, op_scale)
+    xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
+    xy_c <- Point2D$new(xy)$npc_to_in(x, y, width, height, angle)
+
     gl <- gList()
-    vp <- viewport(xy_p$x[1], xy_p$y[1], width, height, angle=angle, default.units = "in")
+
+    # bottom
+    xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
     gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
-    gl[[1]] <- shape_fn(gp=gp, vp=vp)
-    gps <- gpar(col=NA, fill=opt$edge_color)
-    for (ii in 2:n_shadows) {
-        vps <- viewport(xy_p$x[ii], xy_p$y[ii], width, height, angle=angle, default.units = "in")
-        gl[[ii]] <- shape_fn(gp=gps, vp=vps)
+    gl[[1]] <- polygonGrob(x=xy_l$x, y=xy_l$y, default.units="in", gp=gp)
+
+    # edges
+    p <- Polygon$new(xy_c)
+    fm <- p$op_edges(op_angle)$face_matrix(z, depth)
+    e <- Point3D$new(fm[, 1], fm[, 2], fm[, 3])$project_op(op_angle, op_scale)
+    gp <- gpar(col=NA, fill=opt$edge_color)
+    for (i in seq(nrow(fm) / 4)) {
+        index <- 4 * (i-1) + 1
+        xf <- e$x[index:(index+3)]
+        yf <- e$y[index:(index+3)]
+        gl[[i+1]] <- polygonGrob(x=xf, y=yf, default.units="in", gp=gp)
     }
-    return(gl)
+    gl
 }
 
 circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
