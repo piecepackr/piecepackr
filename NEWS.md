@@ -18,25 +18,25 @@ piecepackr 1.4.1
 New features
 ------------
 
-* ``save_piece_obj``, ``piece3d`` and ``piece`` now have support for 3D rotations of pieces (#188)
+* ``save_piece_obj()``, ``piece3d()`` and ``piece()`` now have support for 3D rotations of pieces (#188)
   using an axis-angle representation parameterized by arguments ``angle``, ``axis_x``, and ``axis_y``.
-* New functions ``AA_to_R`` and ``R_to_AA`` convert back and forth between the axis-angle representation
+* New functions ``AA_to_R()`` and ``R_to_AA()`` convert back and forth between the axis-angle representation
   used by ``piecepackr`` and 3D rotation matrices (post-multiplied).
-* New functions ``R_x``, ``R_y``, and ``R_z`` create simple 3D rotation matrices (post-multiplied) for 
+* New functions ``R_x()``, ``R_y()``, and ``R_z()`` create simple 3D rotation matrices (post-multiplied) for 
   rotations around the x, y, and z axes.
-* Newly exported geometry helper functions ``to_degrees`` and ``to_radians`` convert back and forth between
+* Newly exported geometry helper functions ``to_degrees()`` and ``to_radians()`` convert back and forth between
   degrees and radians.
 
 Bug fixes and minor improvements
 --------------------------------
 
-* ``pp_cfg`` now supports new ``obj_fn``, ``rayrender_fn``, and ``rgl_fn`` styles
+* ``pp_cfg()`` now supports new ``obj_fn``, ``rayrender_fn``, and ``rgl_fn`` styles
   allowing further piece customization within the 3D graphics functions
-  ``save_piece_obj``, ``piece``, and ``piece3d`` respectively (#200).
-* ``piece3d`` now supports user manually setting the piece's ``rgl`` "material" ``textype`` argument.
+  ``save_piece_obj()``, ``piece()``, and ``piece3d()`` respectively (#200).
+* ``piece3d()`` now supports user manually setting the piece's ``rgl`` "material" ``textype`` argument.
   When textures with alpha transparency are not needed then setting ``textype``
   to ``"rgb"`` avoids a rglWebGL rendering bug (#187).
-* Utility function ``get_shape_grob_fn`` now has a ``back`` argument to indicate 
+* Utility function ``get_shape_grob_fn()`` now has a ``back`` argument to indicate 
   we are drawing the back of the shape and should reflect it across a vertical axis (#218).
 * Some bug fixes and enhancements in the OBJ export for certain shapes (#207, #208, #215).
 
@@ -58,10 +58,10 @@ New features
     + ``playing cards`` is a traditional (French-suited) deck of (Poker) playing cards.
     + ``playing_cards_colored`` has five suits: red hearts, black spades, green clubs, blue diamonds, and yellow stars.
     + ``playing_cards_tarot`` is a (French Bourgeois) tarot deck with four suits (hearts, spades, clubs, diamonds) with 14 ranks (including knights) plus 22 trump cards (1-21 plus an "excuse").
-* New function ``save_piece_obj`` for writing Waveform OBJ files (and associated MTL files and png textures) (#189, #190).
+* New function ``save_piece_obj()`` for writing Waveform OBJ files (and associated MTL files and png textures) (#189, #190).
   Note support for dice and pawns are currently rather crude.
-* New function ``piece3d`` for making graphics with the ``rgl`` package (#76).
-* New function ``piece`` for making ``rayrender`` objects.
+* New function ``piece3d()`` for making graphics with the ``rgl`` package (#76).
+* New function ``piece()`` for making ``rayrender`` objects.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -70,8 +70,8 @@ Bug fixes and minor improvements
 * Improved drawing of oblique projection edges for "concave" polygons (stars) 
   and non-regular "convex" polygons (#174).
 * Improved drawing of pyramids in the 3D oblique projection (#172).
-* Fixes bug in ``op_transform`` when sorting tile faces rotated in various directions (#163).
-* ``op_transform`` now accepts new argument ``pt_thickness``for improved handling of stacked pyramid (tops).
+* Fixes bug in ``op_transform()`` when sorting tile faces rotated in various directions (#163).
+* ``op_transform()`` now accepts new argument ``pt_thickness``for improved handling of stacked pyramid (tops).
 * The ``edge_color`` for dice, pawns, and pyramids now defaults to the background color of ``piece_side``.
 * The ``edge_color`` for matchsticks now defaults to the background color of the ``matchstick_back``.
 * Font sizes and locations of piecepack matchsticks in ``game_systems`` made more "standard".
@@ -80,14 +80,14 @@ Bug fixes and minor improvements
 * ``pp_cfg()$get_depth()`` now has better depth calculation for pyramid faces (representing laid down pyramids).
 * ``pp_cfg`` now supports a new ``op_grob_fn`` style indicating which function to draw pieces with 
   when drawing with a 3D oblique projection in ``grid``.  The older ``shadow_fn`` style alternative is now deprecated.
-* ``grid.piece`` (and ``pieceGrob``) now support a ``scale`` and ``alpha`` argument (#201).
+* ``grid.piece()`` (and ``pieceGrob()``) now support a ``scale`` and ``alpha`` argument (#201).
 
 Deprecated features
 -------------------
 
 The following ``pp_cfg`` R6 class public method is now deprecated:
 
-    * ``get_pictureGrob``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
+    * ``get_pictureGrob()``.  Use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
 
 The following ``pp_cfg`` "style" is now deprecated:
 
@@ -96,7 +96,7 @@ The following ``pp_cfg`` "style" is now deprecated:
 Breaking changes
 ----------------
 
-* The function ``game_systems`` no longer returns an ``icehouse_pieces`` configuration.
+* The function ``game_systems()`` no longer returns an ``icehouse_pieces`` configuration.
   Configurations for Looney Pyramids can be found at https://github.com/piecepackr/piecenikr
 
 piecepackr 1.2.1
@@ -105,9 +105,9 @@ piecepackr 1.2.1
 New features
 ------------
 
-* New function ``picturePieceGrobFn`` which returns a "grob" function that imports graphics
+* New function ``picturePieceGrobFn()`` which returns a "grob" function that imports graphics
   from files found in its ``directory`` argument (#152).
-* New function ``game_systems`` which returns a list of configuration objects
+* New function ``game_systems()`` which returns a list of configuration objects
   for multiple game systems (#157):
 
   - ``dual_piecepacks_expansion``: A companion piecepack with a special suit scheme.
@@ -129,18 +129,18 @@ New features
   - ``subpack``: A "mini" piecepack.  Designed to be used with the ``piecepack`` to make piecepack
                  "stackpack" diagrams.  See http://www.ludism.org/ppwiki/StackPack.
    
-* Helper functions ``to_subpack`` and ``to_hexpack`` which given a piecepack configuration
+* Helper functions ``to_subpack()`` and ``to_hexpack()`` which given a piecepack configuration
   attempts to generate an appropriate matching (piecepack stackpack) subpack and hexpack (#161).
-* New function ``file2grob`` that imports a given image file as a grob.
+* New function ``file2grob()`` that imports a given image file as a grob.
 
 Bug fixes and minor improvements
 --------------------------------
 
-* Guesses made by ``op_transform`` for whether two pieces
+* Guesses made by ``op_transform()`` for whether two pieces
   overlap are now more accurate (#150).
-* Fixes bug in ``op_transform`` when computing bounding box for shapes 
+* Fixes bug in ``op_transform()`` when computing bounding box for shapes 
   when width and height are not equal.
-* Fixes bug in ``op_transform`` for inferring width/height of matchsticks 
+* Fixes bug in ``op_transform()`` for inferring width/height of matchsticks 
   and shape/depth of pyramids.
 * Fixes bug in printing ``pp_cfg`` objects when a custom grob function had been set.
 * Fixes bug in setting individual suit colors with configurations list styles like ``suit_color.s2="white"``
@@ -150,7 +150,7 @@ Bug fixes and minor improvements
 piecepackr 1.1.1
 ================
 
-* New helper function ``op_transform`` and new ``pmap_piece`` argument ``trans``
+* New helper function ``op_transform()`` and new ``pmap_piece()`` argument ``trans``
   to facilitate making graphics with an oblique projection (#138).
 * Fixes bug when drawing non-regular-dimensioned "convex" shapes in an
   oblique 3D projection (#149)
@@ -163,9 +163,9 @@ piecepackr 1.0.2
 New features
 ------------
 
-* ``save_print_and_play`` function now supports adding piecepack pyramids (#37), matchsticks (#69), and subpacks (aka "travel" piecepacks) (#129) to the print-and-play layout.
+* ``save_print_and_play()`` function now supports adding piecepack pyramids (#37), matchsticks (#69), and subpacks (aka "travel" piecepacks) (#129) to the print-and-play layout.
 * Now supports drawing most pieces with a simple 3D oblique projection (#76).
-* New ``pp_cfg`` function (and R6 class) which on-the-fly builds a cache to speed up component drawing (#112, #122). 
+* New ``pp_cfg()`` function (and R6 class) which on-the-fly builds a cache to speed up component drawing (#112, #122). 
   Can also signal to rule diagram functions whether the piecepack lacks certain components (#130).
 * Now exports several additional utility functions for those who would like to use their own custom draw function (#116).  See ``help("pp_utils")``, ``help("grob_fn_helpers")``, and ``help("grid.piece")`` for more info.
 
@@ -196,8 +196,8 @@ Breaking changes
 Bug fixes and minor improvements
 --------------------------------
 
-* Bug in ``get_embedded_font`` function fixed.
-* ``make_pnp`` function now supports the A5 page size and is more A4 page size friendly (#54).
+* Bug in ``get_embedded_font()`` function fixed.
+* ``save_print_and_play()`` function now supports the A5 page size and is more A4 page size friendly (#54).
 * Can now specify ``fontface`` (#121) as well as ``width``, ``height``, and ``depth`` (#106) in configuration lists.
 * Removed some package dependencies.
 * ``pmap_piece`` now supports ``angle=NA`` and ``grid.piece`` no longer draws different output
@@ -207,9 +207,9 @@ Bug fixes and minor improvements
 * "configuration lists" now support ``coin_arrangement`` (#136).
 *  Also if ``ghostscript`` installed will automatically embed metadata in the print-and-play pdf (#93).
 * "configuration lists" now support ``border_lex`` and ``gridline_lex`` to allow customizing the width of the border and grid lines.
-* ``save_piece_images``'s ``format`` argument is now vectorized.  
-* ``save_print_and_play`` can now save a print-and-play "svg" and "ps" file (besides "pdf").
-* ``grid.piece`` no longer throws a warning when ``use_pictureGrob==TRUE`` and ``angle!=0`` (#148).
+* ``save_piece_images()``'s ``format`` argument is now vectorized.  
+* ``save_print_and_play()`` can now save a print-and-play "svg" and "ps" file (besides "pdf").
+* ``grid.piece()`` no longer throws a warning when ``use_pictureGrob==TRUE`` and ``angle!=0`` (#148).
 
 piecepackr 0.11.0
 =================
@@ -226,8 +226,8 @@ piecepackr 0.10.0
 =================
 
 * Generalized star shape to ``concave#`` and ``#`` shape to ``convex#`` shape (#100).  Added "pyramid" triangle shape (progress on #37).
-* New ``draw_components`` function allows one to draw several piecepack components specified in a data frame (#96).
-* New ``load_configurations`` function allows one to load in several JSON configuration files and/or internal piecepackr configurations in a layered (cascading) manner (#81).
+* New ``draw_components()`` function allows one to draw several piecepack components specified in a data frame (#96).
+* New ``load_configurations()`` function allows one to load in several JSON configuration files and/or internal piecepackr configurations in a layered (cascading) manner (#81).
 * Made several non-reverse-compatible API changes to configuration and piecepack image making functions and scripts.
 * Increased the width of a pawn belt from 1.5" to 2" (so can fit around a 5/8" diameter pawn).
 
@@ -237,7 +237,7 @@ piecepackr 0.10.0
 piecepackr 0.9.0
 ================
 
-* Added ``get_embedded_font`` function and executable (#80).
+* Added ``get_embedded_font()`` function and executable (#80).
 * Dropped ``pdfjoin`` from list of system dependencies (#77).
 * Added ability to configure by individual suits and/or ranks (#44).
 
