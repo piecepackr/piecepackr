@@ -57,7 +57,7 @@ test_that("save_piece_images works as expected", {
     }
 
     expect_error(save_piece_images(cfg_default, directory), paste("does not exist"))
-    expect_error(pieceGrob("tile_back", cfg=cfg), "Couldn't find suitable")
+    expect_error(grid.piece("tile_back", cfg=cfg), "Couldn't find suitable")
     dir.create(directory)
 
     save_piece_images(cfg_default, directory, format="svgz", angle=c(0,90))
@@ -76,21 +76,24 @@ test_that("save_piece_images works as expected", {
     })
 })
 
-context("grob_fn_helpers works as expected")
-test_that("grob_fn_helpers works as expected", {
-    expect_error(checkersGrob("blue", "circle"))
-    expect_error(hexlinesGrob("blue", "circle"))
+context("pp_shape() works as expected")
+test_that("pp_shape() works as expected", {
+    circle <- pp_shape("circle")
+    expect_error(grid.draw(circle$checkers(gp=gpar(fill="purple"))))
+    expect_error(grid.draw(circle$hexlines(gp=gpar(col="yellow"))))
     skip_on_ci()
+    rect <- pp_shape("rect")
     expect_doppelganger("add_checkers", function() {
-                    grid.draw(checkersGrob("purple", "rect"))
-                    grid.draw(hexlinesGrob("yellow", "rect"))
+                    grid.draw(rect$checkers(gp=gpar(fill="purple")))
+                    grid.draw(rect$hexlines(gp=gpar(col="yellow")))
     })
     expect_doppelganger("add_checkers.transparent", function() {
-                    grid.draw(checkersGrob("transparent", "rect"))
-                    grid.draw(hexlinesGrob("transparent", "rect"))
+                    grid.draw(rect$checkers(gp=gpar(fill="transparent")))
+                    grid.draw(rect$hexlines(gp=gpar(col="transparent")))
     })
+    convex8 <- pp_shape("convex8")
     expect_doppelganger("add_checkers.convex8", function() {
-                    grid.draw(checkersGrob("purple", "convex8"))
+                    grid.draw(convex8$checkers(gp=gpar(fill="purple")))
     })
 })
 
@@ -271,6 +274,7 @@ test_that("oblique projection works", {
         grid.piece(..., cfg=cfg, op_scale=0.5)
     }
     expect_doppelganger("tile_face_op", function() dc("tile_face"))
+    expect_doppelganger("tile_face_op_roundrect", function() dc("tile_face", cfg=list(shape.tile="roundrect")))
     expect_doppelganger("coin_face_op", function() dc("coin_face"))
     expect_doppelganger("pawn_face_op", function() dc("pawn_face", cfg=cfg_3d))
     expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))

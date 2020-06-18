@@ -41,11 +41,9 @@ can help with using an oblique projection (i.e. \code{op_scale} over 0).}
 
 \item{name}{A character identifier (for grid)}
 
-\item{gp}{An object of class ‘gpar’, typically the output from a call
-to the function ‘gpar’.  This is basically a list of
-graphical parameter settings.}
+\item{gp}{An object of class \code{'gpar'}.}
 
-\item{vp}{A \code{grid} viewport object (or NULL).}
+\item{vp}{A \code{grid} viewport object (or \code{NULL}).}
 }
 \description{
 \code{pmap_piece} operates on the rows of a data frame

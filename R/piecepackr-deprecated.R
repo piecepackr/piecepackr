@@ -1,23 +1,25 @@
-#' \code{pieceGrob} helper functions
+#' Deprecated functions
 #'
-#' \code{gridlinesGrob} returns a grob that produces gridlines.
-#' \code{matGrob} returns a grob that produces a mat.
-#' \code{checkersGrob} returns a grob that adds checkers.
-#' \code{hexlinesGrob} returns a grob that adds hexlines.
-#' \code{get_shape_grob_fn} returns a function that returns a grob of the piece shape.
-#' \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
+#' These functions are Deprecated in this release of piecepackr,
+#' they will be marked as Defunct and removed in a future version.
+#'
+#' \enumerate{
+#' \item{\code{get_shape_grob_fn} returns a function that returns a grob of the piece shape.
+#'       Use \code{pp_shape()$shape} instead.}
+#' \item{\code{gridlinesGrob()} returns a grob that produces gridlines.  Use \code{pp_shape()$gridlines()} instead.}
+#' \item{\code{matGrob()} returns a grob that produces a mat.  Use \code{pp_shape()$mat()} instead.}
+#' \item{\code{checkersGrob()}() returns a grob that adds checkers.  Use \code{pp_shape()$checkers()} instead.}
+#' \item{\code{hexlinesGrob()} returns a grob that adds hexlines.  Use \code{pp_shape()$hexlines()} instead.}
+#' }
 #' @param col Color
-#' @param shape String of the shape
+#' @param lex Scales width of line.
+#' @param mat_width Numeric vector of mat widths
+#' @param name grob 'name' value
+#' @param shape Label of shape
 #' @param shape_t Angle (in degrees) of first vertex of shape (ignored by many shapes).
 #' @param shape_r Radial distance (from 0 to 0.5) (ignored by most shapes)
-#' @param name A character identifier (for grid)
-#' @param lex Multiplier to apply to the line width
+#' @param back Logical of whether back of the piece, in which case will reflect shape along vertical axis.
 #' @examples
-#'  is_color_invisible("transparent")
-#'  is_color_invisible(NA)
-#'  is_color_invisible("blue")
-#'  is_color_invisible("#05AE9C")
-#'
 #'  if (require("grid")) {
 #'      gp <- gpar(col="black", fill="yellow")
 #'      pushViewport(viewport(x=0.25, y=0.75, width=1/2, height=1/2))
@@ -41,11 +43,10 @@
 #'      grid.draw(matGrob("blue", shape="rect", mat_width=c(0.2, 0.1, 0.3, 0.4)))
 #'      popViewport()
 #'  }
-#'
-#' @name grob_fn_helpers
+#' @name piecepackr-deprecated
 NULL
 
-#' @rdname grob_fn_helpers
+#' @rdname piecepackr-deprecated
 #' @export
 gridlinesGrob <- function(col, shape = "rect", shape_t = 90, lex = 1, name = NULL) {
     if (is_color_invisible(col)) return(nullGrob())
@@ -80,7 +81,7 @@ gridlinesGrob <- function(col, shape = "rect", shape_t = 90, lex = 1, name = NUL
     gl
 }
 
-#' @rdname grob_fn_helpers
+#' @rdname piecepackr-deprecated
 #' @param mat_width Numeric vector of mat widths
 #' @export
 matGrob <- function(col, shape = "rect", shape_t = 90, mat_width = 0, name = NULL) {
@@ -100,7 +101,7 @@ matGrob <- function(col, shape = "rect", shape_t = 90, mat_width = 0, name = NUL
     }
 }
 
-#' @rdname grob_fn_helpers
+#' @rdname piecepackr-deprecated
 #' @export
 checkersGrob <- function(col, shape = "rect", shape_t=90, name = NULL) {
     if (is_color_invisible(col)) return(nullGrob(name=name))
@@ -131,7 +132,7 @@ checkersGrob <- function(col, shape = "rect", shape_t=90, name = NULL) {
     }
 }
 
-#' @rdname grob_fn_helpers
+#' @rdname piecepackr-deprecated
 #' @export
 hexlinesGrob <- function(col, shape = "rect", name = NULL) {
     if (is_color_invisible(col)) return(nullGrob(name=name))
@@ -151,8 +152,7 @@ hexlinesGrob <- function(col, shape = "rect", name = NULL) {
     }
 }
 
-#' @rdname grob_fn_helpers
-#' @param back Logical of whether back of the piece, in which case will reflect shape along vertical axis.
+#' @rdname piecepackr-deprecated
 #' @export
 get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2, back=FALSE) {
     if (back) shape_t <- 180 - shape_t
@@ -175,14 +175,4 @@ get_shape_grob_fn <- function(shape, shape_t=90, shape_r=0.2, back=FALSE) {
     } else {
         stop(paste("Don't know how to draw shape", shape))
     }
-}
-
-#' @rdname grob_fn_helpers
-#' @export
-is_color_invisible <- function(col) {
-    if (is.na(col))
-        return(TRUE)
-    if (grDevices::col2rgb(col, alpha=TRUE)[4] == 0)
-        return(TRUE)
-    return(FALSE)
 }

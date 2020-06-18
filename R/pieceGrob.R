@@ -30,11 +30,9 @@
 #'   'x', 'y', 'width', and/or 'height' are only given as numeric vectors.
 #' @param envir Environment (or named list) containing configuration list(s).
 #' @param name A character identifier (for grid)
-#' @param gp An object of class ‘gpar’, typically the output from a call
-#'        to the function ‘gpar’.  This is basically a list of
-#'        graphical parameter settings.
+#' @param gp An object of class \code{'gpar'}.
 #' @param draw A logical value indicating whether graphics output should be produced.
-#' @param vp A \code{grid} viewport object (or NULL).
+#' @param vp A \code{grid} viewport object (or \code{NULL}).
 #' @param ... Ignored.
 #' @param scale Multiplicative scaling factor to apply to width, height, and depth.
 #' @param alpha Alpha channel for transparency.
@@ -86,7 +84,7 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
                            angle=0, use_pictureGrob=FALSE,
                            width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
-                           default.units = "npc", scale=1, alpha=1) {
+                           default.units = "npc", scale=1, alpha=1, name="") {
     if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
@@ -112,13 +110,15 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (op_scale < 0.01) {
         grob <- cfg$get_grob(piece_side, suit, rank, grob_type)
         cvp <- viewport(x, y, width, height, angle=angle)
-        grobTree(grob, vp=cvp)
+        name <- paste0("piece_side", name)
+        grid::editGrob(grob, vp=cvp, name=name)
     } else {
         grob <- cfg$get_op_grob(piece_side, suit, rank,
                             x, y, z, angle, grob_type,
                             width, height, depth,
                             op_scale, op_angle)
-        grobTree(grob)
+        name <- paste0("projected_piece", name)
+        grid::editGrob(grob, name=name)
     }
 }
 
@@ -132,31 +132,22 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                          op_scale=0, op_angle=45,
                          default.units = "npc", envir=NULL,
                          name=NULL, gp=NULL, vp=NULL, ..., scale=1, alpha=1) {
+    gTree(piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
+          x=x, y=y, z=z, angle=angle, use_pictureGrob=use_pictureGrob,
+          width=width, height=height, depth=depth,
+          op_scale=op_scale, op_angle=op_angle,
+          default.units=default.units, envir=envir,
+          scale=scale, alpha=alpha,
+          name=name, gp=gp, vp=vp,
+          cl="piece")
+}
 
-    nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, use_pictureGrob, width, height, depth)))
-    piece_side <- rep(piece_side, length.out=nn)
-    suit <- rep(suit, length.out=nn)
-    rank <- rep(rank, length.out=nn)
-    x <- rep(x, length.out=nn)
-    y <- rep(y, length.out=nn)
-    z <- rep(z, length.out=nn)
-    angle <- rep(angle, length.out=nn)
-    use_pictureGrob <- rep(use_pictureGrob, length.out=nn)
-    width <- rep(width, length.out=nn)
-    height <- rep(height, length.out=nn)
-    depth <- rep(depth, length.out=nn)
+#' @export
+makeContext.piece <- function(x) {
+    scale <- x$scale
+    alpha <- x$alpha
+    gp <- x$gp
 
-    cfg <- get_cfg(cfg, envir)
-    cfg <- rep(c(cfg), length.out=nn)
-
-    gl <- gList()
-    for (i in seq(nn)) {
-        gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
-                                        x[i], y[i], z[i], angle[i], use_pictureGrob[i],
-                                        width[i], height[i], depth[i],
-                                        op_scale, op_angle, default.units,
-                                        scale=scale, alpha=alpha)
-    }
     if (scale != 1) {
         if (is.null(gp)) gp <- gpar()
         if (is.null(gp$cex)) gp$cex <- scale else gp$cex <- scale * gp$cex
@@ -166,7 +157,39 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
         if (is.null(gp)) gp <- gpar()
         if (is.null(gp$alpha)) gp$alpha <- alpha else gp$alpha <- alpha * gp$alpha
     }
-    gTree(children=gl, name=name, gp=gp, vp=vp)
+    x$gp <- gp
+    x
+}
+
+#' @export
+makeContent.piece <- function(x) {
+    nn <- max(lengths(list(x$piece_side, x$suit, x$rank, x$x, x$y, x$z, x$angle,
+                           x$use_pictureGrob, x$width, x$height, x$depth)))
+    piece_side <- rep(x$piece_side, length.out=nn)
+    suit <- rep(x$suit, length.out=nn)
+    rank <- rep(x$rank, length.out=nn)
+    xc <- rep(x$x, length.out=nn)
+    yc <- rep(x$y, length.out=nn)
+    zc <- rep(x$z, length.out=nn)
+    angle <- rep(x$angle, length.out=nn)
+    use_pictureGrob <- rep(x$use_pictureGrob, length.out=nn)
+    width <- rep(x$width, length.out=nn)
+    height <- rep(x$height, length.out=nn)
+    depth <- rep(x$depth, length.out=nn)
+
+    cfg <- get_cfg(x$cfg, x$envir)
+    cfg <- rep(c(cfg), length.out=nn)
+
+    gl <- gList()
+    for (i in seq(nn)) {
+        name <- paste0(".", i)
+        gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
+                                        xc[i], yc[i], zc[i], angle[i], use_pictureGrob[i],
+                                        width[i], height[i], depth[i],
+                                        x$op_scale, x$op_angle, x$default.units,
+                                        x$scale, x$alpha, name)
+    }
+    setChildren(x, gl)
 }
 
 get_cfg <- function(cfg=pp_cfg(), envir=NULL) {

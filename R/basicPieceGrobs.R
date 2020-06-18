@@ -50,33 +50,30 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
-    reflect <- grepl("back", piece_side)
-    shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r, reflect)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     # Background
-    background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
-    # Gridlines, Mat
-    gl_grob <- gridlinesGrob(opt$gridline_color, opt$shape, opt$shape_t, opt$gridline_lex)
-
-    mat_grob <- matGrob(opt$mat_color, opt$shape, opt$shape_t, opt$mat_width)
+    gl_grob <- shape$gridlines(gp = gpar(col = opt$gridline_color, lex = opt$gridline_lex), name = "gridlines")
+    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
 
     # Primary symbol
     gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize,
                   fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
-    ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, gp=gp_ps, hjust = 0.5, vjust = 0.5)
+    ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, hjust = 0.5, vjust = 0.5,
+                        gp = gp_ps, name = "primary_symbol")
 
     # Directional mark
     gp_dm <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
                   fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
-    dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, gp=gp_dm, hjust = 0.5, vjust = 0.5)
+    dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, hjust = 0.5, vjust = 0.5,
+                        gp = gp_dm, name = "directional_mark")
 
-    # Border
-    border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
-    gl <- gList(background_grob, gl_grob, mat_grob, ps_grob,
-                dm_grob, border_grob)
+    gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+    border_grob <- shape$shape(gp=gp_border, name = "border")
 
-    gTree(children=gl, name=piece_side)
+    grobTree(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob, cl="basic_piece_side")
 }
 
 #' @rdname basicPieceGrobs
@@ -125,7 +122,7 @@ pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
                     x=0.25, width=1.0, height=0.5, angle=-90, name="left")
     g4 <- pieceGrob("pyramid_right", suit, rank, cfg, use_pictureGrob=TRUE,
                     x=0.75, width=1.0, height=0.5, angle= 90, name="right")
-    gTree(children=gList(g3, g4, g1, g2), name="pyramid_top")
+    grobTree(g3, g4, g1, g2, cl="pyramid_top")
 }
 
 #' @rdname basicPieceGrobs
@@ -241,7 +238,7 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE,
                             x=x[ii], y=y_die_layout[ii],
                             width=1/4, height=1/3, angle=angle[ii])
     }
-    gTree(children=gl)
+    gTree(children=gl, name="die_layout")
 }
 
 suitdieGrob <- function(cfg, flip=FALSE) {
@@ -258,7 +255,7 @@ suitdieGrob <- function(cfg, flip=FALSE) {
         vp <- viewport(x=x[ii], y=y_die_layout[ii], angle=angle[ii])
         gl[[ii]] <- pieceGrob("suitdie_face", suit[ii], NA, cfg, vp=vp)
     }
-    gTree(children=gl)
+    gTree(children=gl, name="suitdie_layout")
 }
 
 get_suit_die_suits <- function(cfg) {
@@ -313,5 +310,5 @@ pyramidLayoutGrob <- function(piece_side, suit, rank, cfg) {
             gl[[ii]] <- grob
         }
     })
-    gTree(children=gl)
+    gTree(children=gl, name="pyramid_layout")
 }

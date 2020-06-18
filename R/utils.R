@@ -18,6 +18,7 @@ get_embedded_font_helper <- function(font, char) {
 #' \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 #' \code{cleave} converts a delimiter separated string into a vector.
 #' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
+#' \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
 #' @examples
 #'  to_x(90, 1)
 #'  to_y(180, 0.5)
@@ -36,8 +37,24 @@ get_embedded_font_helper <- function(font, char) {
 #'      get_embedded_font(fonts, chars)
 #'  }
 #'
+#'  is_color_invisible("transparent")
+#'  is_color_invisible(NA)
+#'  is_color_invisible("blue")
+#'  is_color_invisible("#05AE9C")
+#'
 #' @name pp_utils
 NULL
+
+#' @param col Color
+#' @rdname pp_utils
+#' @export
+is_color_invisible <- function(col) {
+    if (is.na(col))
+        return(TRUE)
+    if (grDevices::col2rgb(col, alpha=TRUE)[4] == 0)
+        return(TRUE)
+    return(FALSE)
+}
 
 #' @rdname pp_utils
 #' @param font A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.
@@ -143,21 +160,36 @@ file2grob <- function(file, distort=TRUE) {
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     format <- tools::file_ext(file)
     if (format %in% c("svgz", "svg")) {
-        return(to_pictureGrob(grImport2::readPicture(file, warn=FALSE), distort))
+        picture <- grImport2::readPicture(file, warn=FALSE)
     } else if (format == "png") {
-        return(to_rasterGrob(grDevices::as.raster(png::readPNG(file)), distort))
+        picture <- grDevices::as.raster(png::readPNG(file))
     } else if (format %in% c("jpg", "jpeg")) {
-        return(to_rasterGrob(grDevices::as.raster(jpeg::readJPEG(file)), distort))
+        picture <- grDevices::as.raster(jpeg::readJPEG(file))
     } else {
-        return(to_rasterGrob(magick::image_read(file), distort))
+        picture <- magick::image_read(file)
+    }
+    if (grDevices::is.raster(picture)) {
+        to_rasterGrob(picture, distort)
+    } else {
+        ppPictureGrob(picture, distort)
     }
 }
 
 to_rasterGrob <- function(obj, distort=TRUE) {
     if (distort) {
-        rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc"))
+        rasterGrob(grDevices::as.raster(obj), height=unit(1, "npc"), width=unit(1, "npc"), name = "raster")
     } else {
-        rasterGrob(grDevices::as.raster(obj))
+        rasterGrob(grDevices::as.raster(obj), name = "raster")
     }
 }
-to_pictureGrob <- function(obj, distort=TRUE) grImport2::pictureGrob(obj, expansion=0, clip="off", distort=distort)
+
+# adds support for a 'vp' viewport plus hiding grob details in `grid.ls()` (i.e. ``grid.revert()`` if "forced")
+ppPictureGrob <- function(picture, distort = TRUE, ..., name = NULL, gp = gpar(), vp = NULL) {
+    gTree(picture = picture, distort = distort, name = name, gp = gp, vp = vp, cl = "pp_picture")
+}
+
+#' @export
+makeContent.pp_picture <- function(x) {
+    grob <- grImport2::pictureGrob(x$picture, expansion=0, clip="off", distort=x$distort)
+    setChildren(x, gList(grob))
+}

@@ -59,19 +59,10 @@ kiteGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
     polygonGrob(kite_xy$x, kite_xy$y, name=name, gp=gp, vp=vp)
 }
 
-ovalGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
-    xy <- oval_xy()
-    polygonGrob(xy$x, xy$y, name=name, gp=gp, vp=vp)
-}
-
 #' @rdname grid_shape_grobs
 #' @export
 pyramidGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
     polygonGrob(x = pyramid_xy$x, y = pyramid_xy$y, name=name, gp=gp, vp=vp)
-}
-
-polygonGrobFn <- function(x, y) {
-    function(name=NULL, gp=gpar(), vp=NULL) polygonGrob(x, y, name=name, gp=gp, vp=vp)
 }
 
 #' @rdname grid_shape_grobs
@@ -88,6 +79,20 @@ concaveGrobFn <- function(n_vertices, t, r=0.2) {
     polygonGrobFn(xy$x, xy$y)
 }
 
+ovalGrob <- function(name=NULL, gp=gpar(), vp=NULL) {
+    xy <- oval_xy()
+    polygonGrob(xy$x, xy$y, name=name, gp=gp, vp=vp)
+}
+
+polygonGrobFn <- function(x, y) {
+    function(name=NULL, gp=gpar(), vp=NULL) polygonGrob(x, y, name=name, gp=gp, vp=vp)
+}
+
+roundrectGrobFn <- function(r = 0.05) {
+    function(name=NULL, gp=gpar(), vp=NULL) roundrectGrob(r = unit(r, "snpc"), name=name, gp=gp, vp=vp)
+}
+
+# "mat" grob functions
 halmaMatGrobFn <- function(width=0.2) {
     width <- rep(width, length.out=2)
     xy_out <- halma_xy()
@@ -109,6 +114,22 @@ convexMatGrobFn <-  function(n_vertices, t=90, width=0.2) {
     y <- c(y_in, y_out)
     id <- rep(1:2, each=n_vertices+1)
     function(name=NULL, gp=gpar(), vp=NULL) pathGrob(x, y, id=id, rule="evenodd", name=name, gp=gp, vp=vp)
+}
+
+diffMatGrobFn <- function(width=0.2, shape = pp_shape()) {
+    width <- rep(width, length.out=4)
+    x_in <- c(width[4], 1-width[2], 1-width[2], width[4])
+    y_in <- c(1-width[1], 1-width[1], width[3], width[3])
+    vpi_x <- mean(x_in[1:2])
+    vpi_y <- mean(y_in[2:3])
+    vpi_w <- x_in[2] - x_in[1]
+    vpi_h <- y_in[2] - y_in[3]
+    function(name=NULL, gp=gpar(), vp=NULL) {
+        vpi <- viewport(x=vpi_x, y=vpi_y, width=vpi_w, height=vpi_h)
+        outer <- shape$grob(gp=gpar(col=NA, fill=NA))
+        inner <- shape$grob(gp=gpar(col=NA, fill=NA), vp=vpi)
+        gridGeometry::polyclipGrob(outer, inner, op="minus", name=name, gp=gp, vp=vp)
+    }
 }
 
 rectMatGrobFn <- function(width=0.2) {

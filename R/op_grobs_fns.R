@@ -6,12 +6,15 @@ basicOpGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
             grob <- cfg$get_grob(piece_side, suit, rank, type)
             xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
             cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
-            grob <- grobTree(grob, vp=cvp)
+            grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
+
             shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
-            shadow <- shadow_fn(piece_side, suit, rank, cfg,
+            edge <- shadow_fn(piece_side, suit, rank, cfg,
                                 x, y, z, angle, width, height, depth,
                                 op_scale, op_angle)
-            grobTree(shadow, grob)
+            edge <- grid::editGrob(edge, name="edge")
+
+            grobTree(edge, grob, cl="basic_projected_piece")
 }
 
 op_xy <- function(x, y, z, op_angle=45, op_scale=0) {
@@ -58,7 +61,7 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
                        width = width, height = vheight)
         gl[[4]] <- grobTree(cfg$get_grob(df$edge[i], suit, rank, "picture"), vp = vp)
     }
-    gl
+    gTree(children=gl, cl="projected_pyramid_top")
 }
 
 basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
@@ -149,9 +152,10 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
         gl[[4]] <- grobTree(cfg$get_grob(piece_side, suit, rank, "picture"), vp = vp)
     }
 
-    gl
+    gTree(children=gl, cl="projected_pyramid_side")
 }
 
+## edge-side grobs aka "shadow" effect
 basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, width=NA, height=NA, depth=NA,
@@ -171,8 +175,8 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         circleShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     } else if (shape == "halma") {
         genericShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
-    } else if (shape == "oval") {
-        ovalShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
+    } else if (shape %in% c("oval", "roundrect")) {
+        convexCurvedShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     } else {
         polygonShadowGrob(opt, x, y, z, angle, width, height, depth, op_scale, op_angle)
     }
@@ -193,14 +197,14 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
     p <- Polygon$new(xy_c)
     fm <- p$op_edges(op_angle)$face_matrix(z, depth)
     e <- Point3D$new(fm[, 1], fm[, 2], fm[, 3])$project_op(op_angle, op_scale)
-    gp <- gpar(col=NA, fill=opt$edge_color)
     for (i in seq(nrow(fm) / 4)) {
         index <- 4 * (i-1) + 1
         xf <- e$x[index:(index+3)]
         yf <- e$y[index:(index+3)]
-        gl[[i+1]] <- polygonGrob(x=xf, y=yf, default.units="in", gp=gp)
+        gl[[i+1]] <- polygonGrob(x=xf, y=yf, default.units="in")
     }
-    gl
+    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+    gTree(children=gl, gp=gp, cl="generic_edge")
 }
 
 circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
@@ -218,7 +222,7 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
     polygonGrob(x=x, y=y, default.units="in", gp=gp)
 }
 
-ovalShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
+convexCurvedShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
     xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
     p <- Polygon$new(Point2D$new(xy)$npc_to_in(x, y, width, height, angle))
 
@@ -261,7 +265,7 @@ polygonShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
         index <- 4 * (i-1) + 1
         xf <- e$x[index:(index+3)]
         yf <- e$y[index:(index+3)]
-        gl[[i]] <- polygonGrob(x=xf, y=yf, default.units="in", gp=gp)
+        gl[[i]] <- polygonGrob(x=xf, y=yf, default.units="in", name=paste0("edge", i))
     }
-    gl
+    gTree(children=gl, gp=gp, cl="prism_edge")
 }

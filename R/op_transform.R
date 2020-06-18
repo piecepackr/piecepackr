@@ -176,7 +176,7 @@ get_shapes <- function(df) {
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
         if (opt$shape == "circle") {
             shapes[[ii]] <- Circle$new(x=dfi$x, y=dfi$y, r=min(dfi$width/2, dfi$height/2))
-        } else if (opt$shape %in% c("rect", "halma")) {
+        } else if (opt$shape %in% c("rect", "halma", "roundrect")) {
             shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
                                               y=c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr))
         } else {

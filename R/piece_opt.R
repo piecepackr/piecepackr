@@ -180,7 +180,9 @@ get_shape_t <- function(piece_side, suit, rank, cfg) {
 }
 
 get_shape_r <- function(piece_side, suit, rank, cfg) {
-    r <- numeric_cleave(get_style_element("shape_r", piece_side, cfg, 0.2, suit, rank))
+    shape <- get_shape(piece_side, suit, rank, cfg)
+    default <- switch(shape, roundrect = 0.06, 0.2)
+    r <- numeric_cleave(get_style_element("shape_r", piece_side, cfg, default, suit, rank))
     r <- expand_suit_elements(r, "shape_r", piece_side, cfg)
     r[suit]
 }
@@ -642,6 +644,7 @@ get_piece_opt_helper <- function(piece_side, suit, rank, cfg) {
     shape <- get_shape(piece_side, suit, rank, cfg)
     shape_r <- get_shape_r(piece_side, suit, rank, cfg)
     shape_t <- get_shape_t(piece_side, suit, rank, cfg)
+    back <- grepl("back", piece_side)
 
     # Additional colors
     background_color <- get_background_color(piece_side, suit, rank, cfg)
@@ -684,7 +687,7 @@ get_piece_opt_helper <- function(piece_side, suit, rank, cfg) {
     rank_text <- get_rank_symbol(piece_side, suit, rank, cfg)
     suit_text <- get_suit_symbol(piece_side, suit, rank, cfg)
 
-    list(shape=shape, shape_r=shape_r, shape_t=shape_t,
+    list(shape=shape, shape_r=shape_r, shape_t=shape_t, back=back,
          background_color=background_color,
          border_color=border_color, border_lex=border_lex, edge_color=edge_color,
          gridline_color=gridline_color, gridline_lex=gridline_lex,

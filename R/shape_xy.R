@@ -9,6 +9,8 @@ get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
         halma_xy()
     } else if (shape == "pyramid") {
         pyramid_xy
+    } else if (shape == "roundrect") {
+        roundrect_xy(shape_r)
     } else if (grepl("^concave", shape)) {
         concave_xy(get_n_vertices(shape), shape_t, shape_r)
     } else if (grepl("^convex", shape)) {
@@ -16,6 +18,13 @@ get_shape_xy <- function(shape, shape_t=90, shape_r=0.2) {
     } else {
         stop(paste("Don't know how to get xy coordinates for", shape))
     }
+}
+
+roundrect_xy <- function(shape_r) {
+    coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")), closed=TRUE)[[1]]
+    x <- as.numeric(grid::convertX(grid::unit(coords$x, "in"), "npc"))
+    y <- as.numeric(grid::convertY(grid::unit(coords$y, "in"), "npc"))
+    list(x = x, y = y)
 }
 
 pyramid_xy <- list(x = c(0.5, 0, 1), y = c(1, 0, 0))

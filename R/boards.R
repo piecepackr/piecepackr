@@ -1,18 +1,23 @@
-cellBoardGrob <- function(nrows = 8, ncols = 8, # nolint
-                            background_color = "white",
-                            checker_color = "black",
-                            gridline_color = NA_character_, gridline_lex = 1) {
+cellsGrob <- function(nrows = 8, ncols = 8, # nolint
+                      name = NULL, gp = gpar(), vp = NULL) {
+    if (is.null(gp$fill)) gp$fill <- NA_character_
+    if (is.null(gp$col)) gp$col <- NA_character_
+    if (is.null(gp$lineend)) gp$lineend <- "butt"
+
+    fill <- gp$fill
+    gp$fill <- NULL
+
     x <- seq(0.5 / ncols, 1 - 0.5 / ncols, length.out = ncols)
     y <- seq(0.5 / nrows, 1 - 0.5 / nrows, length.out = nrows)
-    gl <- gList(rectGrob(gp = gpar(col = NA, fill = background_color)))
-    col <- gridline_color
-    fill <- c(checker_color, NA_character_)
+    gl <- gList()
+    fill <- c(fill, NA_character_)
     for (i in seq(nrows)) {
         lwd <- 1
-        gp <- gpar(col = col, fill = cycle_elements(fill, i-1), lwd = lwd, lineend = "butt", lex = gridline_lex)
-        gl[[i + 1]] <- rectGrob(x, y[i], width = 1 / ncols, height = 1 / nrows, gp = gp, default.units = "npc")
+        gp_cell <- gpar(fill = cycle_elements(fill, i-1))
+        gl[[i]] <- rectGrob(x, y[i], width = 1 / ncols, height = 1 / nrows, default.units = "npc",
+                            name = paste("cell.", i), gp = gp_cell)
     }
-    gl
+    gTree(children=gl, name = name, gp = gp, vp = vp, cl = "cells")
 }
 
 checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
@@ -21,20 +26,17 @@ checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
-        background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
+        cell_grob <- cellsGrob(nrows, ncols, gp=gpar(fill=opt$gridline_color), name = "cells")
 
-        background_color <- opt$background_color
-        checker_color <- opt$gridline_color
-        gridline_color <- NA_character_
-        cell_grob <- cellBoardGrob(nrows, ncols, background_color, checker_color, gridline_color)
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
 
-        border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
-        gl <- gList(background_grob, cell_grob, border_grob)
-
-        gTree(children=gl, name=piece_side)
+        grobTree(background_grob, cell_grob, border_grob,
+                 name=piece_side, cl = "checkered_board")
     }
 }
 
@@ -44,20 +46,18 @@ linedBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        shape_fn <- get_shape_grob_fn(opt$shape, opt$shape_t, opt$shape_r)
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
-        background_grob <- shape_fn(gp=gpar(col=NA, fill=opt$background_color))
+        gp_cell <- gpar(col=opt$gridline_color, lex=opt$gridline_lex)
+        cell_grob <- cellsGrob(nrows, ncols, gp=gp_cell, name = "cells")
 
-        background_color <- opt$background_color
-        checker_color <- NA_character_
-        cell_grob <- cellBoardGrob(nrows, ncols, background_color, checker_color,
-                                   opt$gridline_color, opt$gridline_lex)
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
 
-        border_grob <- shape_fn(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex))
-        gl <- gList(background_grob, cell_grob, border_grob)
-
-        gTree(children=gl, name=piece_side)
+        grobTree(background_grob, cell_grob, border_grob,
+                 name=piece_side, cl = "lined_board")
     }
 }
 

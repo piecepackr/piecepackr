@@ -2,12 +2,15 @@
 % Please edit documentation in R/utils.R
 \name{pp_utils}
 \alias{pp_utils}
+\alias{is_color_invisible}
 \alias{get_embedded_font}
 \alias{inch}
 \alias{cleave}
 \alias{file2grob}
 \title{\code{piecepackr} utility functions}
 \usage{
+is_color_invisible(col)
+
 get_embedded_font(font, char)
 
 inch(inches)
@@ -17,6 +20,8 @@ cleave(s, sep = ",", float = FALSE, color = FALSE)
 file2grob(file, distort = TRUE)
 }
 \arguments{
+\item{col}{Color}
+
 \item{font}{A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.}
 
 \item{char}{A character vector of character(s) to be embedded by \code{grid::grid.text}}
@@ -45,6 +50,7 @@ or distort to fit the area it is drawn in}
 \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 \code{cleave} converts a delimiter separated string into a vector.
 \code{inch(x)} is equivalent to \code{unit(x, "in")}.
+\code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
 }
 \details{
 \code{get_embedded_font} depends on \code{pdffonts} being on the system path
@@ -67,5 +73,10 @@ or distort to fit the area it is drawn in}
      fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
      get_embedded_font(fonts, chars)
  }
+
+ is_color_invisible("transparent")
+ is_color_invisible(NA)
+ is_color_invisible("blue")
+ is_color_invisible("#05AE9C")
 
 }

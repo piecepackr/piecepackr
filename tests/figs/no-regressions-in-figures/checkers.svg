@@ -17,7 +17,6 @@
 <polygon points='0.00,0.00 0.00,0.00 6.36,0.00 6.36,569.64 0.00,576.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='0.00,576.00 6.36,569.64 582.36,569.64 576.00,576.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <rect x='6.36' y='-6.36' width='576.00' height='576.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='6.36' y='-6.36' width='576.00' height='576.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='6.36' y='425.64' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt; fill: #4D4D4D;' />
 <rect x='150.36' y='425.64' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt;' />
 <rect x='294.36' y='425.64' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt; fill: #4D4D4D;' />
@@ -39,7 +38,6 @@
 <polygon points='300.73,0.00 300.73,275.27 294.36,281.64 294.36,0.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='294.36,281.64 300.73,275.27 588.73,275.27 582.36,281.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <rect x='300.73' y='-12.73' width='288.00' height='288.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='300.73' y='-12.73' width='288.00' height='288.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='300.73' y='131.27' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt; fill: #56B4E9;' />
 <rect x='444.73' y='131.27' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt;' />
 <rect x='300.73' y='-12.73' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt;' />
@@ -48,7 +46,6 @@
 <polygon points='294.36,281.64 300.73,275.27 300.73,0.00 294.36,0.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='12.73,0.00 12.73,275.27 6.36,281.64 6.36,0.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='6.36,281.64 12.73,275.27 300.73,275.27 294.36,281.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
-<rect x='12.73' y='-12.73' width='288.00' height='288.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='12.73' y='-12.73' width='288.00' height='288.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='12.73' y='203.27' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt; fill: #E69F00;' />
 <rect x='84.73' y='203.27' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt;' />
@@ -75,7 +72,6 @@
 <polygon points='294.36,425.64 300.73,419.27 300.73,563.27 294.36,569.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='294.36,569.64 300.73,563.27 444.73,563.27 438.36,569.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <rect x='300.73' y='419.27' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='300.73' y='419.27' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='300.73' y='491.27' width='72.00' height='72.00' style='stroke-width: 3.00; stroke: #D55E00; stroke-linecap: butt;' />
 <rect x='372.73' y='491.27' width='72.00' height='72.00' style='stroke-width: 3.00; stroke: #D55E00; stroke-linecap: butt;' />
 <rect x='300.73' y='419.27' width='72.00' height='72.00' style='stroke-width: 3.00; stroke: #D55E00; stroke-linecap: butt;' />
@@ -85,7 +81,6 @@
 <polygon points='150.36,425.64 156.73,419.27 12.73,419.27 6.36,425.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='6.36,425.64 12.73,419.27 12.73,563.27 6.36,569.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='6.36,569.64 12.73,563.27 156.73,563.27 150.36,569.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
-<rect x='12.73' y='419.27' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='12.73' y='419.27' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='12.73' y='491.27' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt; fill: #D55E00;' />
 <rect x='84.73' y='491.27' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt;' />
