@@ -31,6 +31,8 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
+* `pp_cfg()` now supports a "roundrect" (rounded rectangle) `shape` (#214).  
+  Curvature of the corners are controlled by the `shape_r` style.
 * `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).
 * Fixes bug in `R_to_AA()` for some 3D rotations with an "exactly" 180 degree angle (in the axis-angle representation).
 * `AA_to_R()` now accepts an optional `axis_z` argument and automatically normalizes the axis vector.
@@ -38,9 +40,9 @@ Bug fixes and minor improvements
   with non-unit axis vectors and/or negative `axis_z` values.
 * Improved drawing of oblique projection edges for the "oval" shape (#212) and the "halma" shape.
 * `is_color_invisible()` will now correctly classify as "invisible" colors with an alpha channel value set to 0.
-* `pp_cfg()` now supports a "roundrect" (rounded rectangle) `shape` (#214).  Curvature of the corners are controlled by the `shape_r` style.
 * The named list returned `pp_cfg()$get_piece_opt()` now also contains a `back` value indicating whether this is a back of a piece
   (and hence for some shapes may need to be flipped across a vertical line).
+* Fixes bug in "circle" shape "mat" when drawn in a non-square grid viewport.
 
 piecepackr 1.4.1
 ================

@@ -76,27 +76,6 @@ test_that("save_piece_images works as expected", {
     })
 })
 
-context("pp_shape() works as expected")
-test_that("pp_shape() works as expected", {
-    circle <- pp_shape("circle")
-    expect_error(grid.draw(circle$checkers(gp=gpar(fill="purple"))))
-    expect_error(grid.draw(circle$hexlines(gp=gpar(col="yellow"))))
-    skip_on_ci()
-    rect <- pp_shape("rect")
-    expect_doppelganger("add_checkers", function() {
-                    grid.draw(rect$checkers(gp=gpar(fill="purple")))
-                    grid.draw(rect$hexlines(gp=gpar(col="yellow")))
-    })
-    expect_doppelganger("add_checkers.transparent", function() {
-                    grid.draw(rect$checkers(gp=gpar(fill="transparent")))
-                    grid.draw(rect$hexlines(gp=gpar(col="transparent")))
-    })
-    convex8 <- pp_shape("convex8")
-    expect_doppelganger("add_checkers.convex8", function() {
-                    grid.draw(convex8$checkers(gp=gpar(fill="purple")))
-    })
-})
-
 context("no regressions in figures")
 test_that("no regressions in figures", {
     skip_on_ci()

@@ -160,15 +160,14 @@ makeContent.mat <- function(x) {
         gl <- gList(nullGrob())
     } else if (label == "rect") {
         gl <- gList(rectMatGrobFn(mat_width)())
-    } else if (label == "circle" || label == "oval") {
+    } else if (label == "oval") {
         gl <- gList(convexMatGrobFn(60, 0, mat_width[1])())
     } else if (grepl("^convex", label)) {
         if (back) theta <- 180 - theta
         gl <- gList(convexMatGrobFn(get_n_vertices(label), theta, mat_width[1])())
     } else if (label == "halma") {
         gl <- gList(halmaMatGrobFn(mat_width)())
-    } else if (label == "roundrect") {
-        shape_fn <- shape_grob_fn(label, theta, radius, back)
+    } else if (label %in% c("circle", "roundrect")) {
         gl <- gList(diffMatGrobFn(mat_width, x$shape)())
     } else {
         stop(paste("Don't know how to add mat to shape", label))
@@ -211,7 +210,13 @@ makeContent.checkers <- function(x) {
             }
         }
     } else {
-        stop(paste("Don't know how to add checkers to shape", label))
+        squares <- gList(
+            rectGrob(x=0.25, y=0.25, width=0.5, height=0.5),
+            rectGrob(x=0.75, y=0.75, width=0.5, height=0.5)
+        )
+        shape <- x$shape$shape()
+        checkers <- gridGeometry::polyclipGrob(squares, shape, op="intersection")
+        gl <- gList(checkers)
     }
     setChildren(x, gl)
 }
@@ -227,7 +232,7 @@ makeContent.hexlines <- function(x) {
     label <- x$shape$label
     if (is_color_invisible(x$gp$col)) {
         gl <- gList(nullGrob())
-    } else if (label == "rect") {
+    } else if (label %in% c("rect", "roundrect")) {
         ho <- 0.25
         gl <- gList(
             segmentsGrob(0, 1 - ho, ho, 1),

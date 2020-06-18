@@ -42,7 +42,8 @@ they will be marked as Defunct and removed in a future version.
 }
 \details{
 \enumerate{
-\item{\code{get_shape_grob_fn} returns a function that returns a grob of the piece shape.  Use \code{pp_shape()$shape} instead.}
+\item{\code{get_shape_grob_fn} returns a function that returns a grob of the piece shape.
+      Use \code{pp_shape()$shape} instead.}
 \item{\code{gridlinesGrob()} returns a grob that produces gridlines.  Use \code{pp_shape()$gridlines()} instead.}
 \item{\code{matGrob()} returns a grob that produces a mat.  Use \code{pp_shape()$mat()} instead.}
 \item{\code{checkersGrob()}() returns a grob that adds checkers.  Use \code{pp_shape()$checkers()} instead.}
