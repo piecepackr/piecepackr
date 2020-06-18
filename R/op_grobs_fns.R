@@ -190,7 +190,7 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
 
     # bottom
     xy_l <- Point3D$new(xy_c, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
-    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+    gp <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
     gl[[1]] <- polygonGrob(x=xy_l$x, y=xy_l$y, default.units="in", gp=gp)
 
     # edges
@@ -203,7 +203,7 @@ genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scal
         yf <- e$y[index:(index+3)]
         gl[[i+1]] <- polygonGrob(x=xf, y=yf, default.units="in")
     }
-    gp <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+    gp <- gpar(col=NA, fill=opt$edge_color)
     gTree(children=gl, gp=gp, cl="generic_edge")
 }
 
