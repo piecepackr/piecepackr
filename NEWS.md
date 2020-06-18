@@ -4,20 +4,21 @@ piecepackr 1.5.0
 Breaking changes
 ----------------
 
-There are no user-facing breaking changes but the internal `grid` structure of the grobs drawn/returned by `grid.piece()` / `pieceGrob()`
+There are no user-facing breaking changes in `piecepackr`'s API
+but the internal `grid` structure of the grobs drawn/returned by `grid.piece()` / `pieceGrob()`
 have been changed to make it easier to query or edit the grid graphics post initial drawing
 with functions like `grid::grid.get()`, `grid::grid.edit()`, `grid::grid.reorder()` etc. (#205).
 
 * The `gTree` "grob" returned by `grid.piece()` and `pieceGrob()` now have a "piece" class and "named slots" which match the arguments of `grid.piece()`.
 * The new "piece" class grob only generates its content to draw at drawing time, one must use `grid::grid.force()` to view/edit its internal grob "children".
-* The internal grob layout for included grob functions are better named to more easily understand the structure and generate a matching ``grid::gPath``.
+* The internal grob layout for included grob functions are better named and structured to more easily generate a matching ``grid::gPath``.
 
 Deprecated functions
 --------------------
 
 The following utility functions have been deprecated in favor of methods provided by the new `pp_shape()` object:
 
-* `get_shape_grob_fn()`, `pp_shape()$shape` instead.
+* `get_shape_grob_fn()`, use `pp_shape()$shape` instead.
 * `checkersGrob()`, use `pp_shape()$checkers()` instead.
 * `gridlinesGrob()`, use `pp_shape()$gridlines()` instead.
 * `hexlinesGrob()`, use `pp_shape()$hexlines()` instead.
@@ -26,7 +27,13 @@ The following utility functions have been deprecated in favor of methods provide
 New features
 ------------
 
-* `pp_shape()` returns an R6 object with methods to create various grobs (`shape()`, `mat()`, `gridlines()`, `checkers()`, `hexlines()`).
+* `pp_shape()` returns an R6 object with methods to create various grobs for all the "shape"'s supported by `pp_cfg()`:
+ 
+  + `shape()` returns a grob of the shape
+  + `mat()` returns a grob of a matting "mat" within the shape
+  + `gridlines()` returns a grob of "gridlines" within the shape
+  + `checkers()` returns a grob of "checkers" within the shape
+  + `hexlines()` returns a grob of "hexlines" within the shape
 
 Bug fixes and minor improvements
 --------------------------------
