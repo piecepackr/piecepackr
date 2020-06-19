@@ -2,6 +2,11 @@
 % Please edit documentation in R/piecepackr-deprecated.R
 \name{piecepackr-deprecated}
 \alias{piecepackr-deprecated}
+\alias{halmaGrob}
+\alias{kiteGrob}
+\alias{pyramidGrob}
+\alias{convexGrobFn}
+\alias{concaveGrobFn}
 \alias{gridlinesGrob}
 \alias{matGrob}
 \alias{checkersGrob}
@@ -9,6 +14,16 @@
 \alias{get_shape_grob_fn}
 \title{Deprecated functions}
 \usage{
+halmaGrob(name = NULL, gp = gpar(), vp = NULL)
+
+kiteGrob(name = NULL, gp = gpar(), vp = NULL)
+
+pyramidGrob(name = NULL, gp = gpar(), vp = NULL)
+
+convexGrobFn(n_vertices, t)
+
+concaveGrobFn(n_vertices, t, r = 0.2)
+
 gridlinesGrob(col, shape = "rect", shape_t = 90, lex = 1, name = NULL)
 
 matGrob(col, shape = "rect", shape_t = 90, mat_width = 0, name = NULL)
@@ -20,6 +35,18 @@ hexlinesGrob(col, shape = "rect", name = NULL)
 get_shape_grob_fn(shape, shape_t = 90, shape_r = 0.2, back = FALSE)
 }
 \arguments{
+\item{name}{A character identifier (for grid)}
+
+\item{gp}{An object of class \sQuote{gpar}}
+
+\item{vp}{A \code{grid} viewport object (or NULL).}
+
+\item{n_vertices}{Number of vertices}
+
+\item{t}{Angle (in degrees) of first vertex of shape}
+
+\item{r}{Radial distance (from 0 to 0.5)}
+
 \item{col}{Color}
 
 \item{shape}{Label of shape}
@@ -27,8 +54,6 @@ get_shape_grob_fn(shape, shape_t = 90, shape_r = 0.2, back = FALSE)
 \item{shape_t}{Angle (in degrees) of first vertex of shape (ignored by many shapes).}
 
 \item{lex}{Scales width of line.}
-
-\item{name}{grob 'name' value}
 
 \item{mat_width}{Numeric vector of mat widths}
 
@@ -42,12 +67,16 @@ they will be marked as Defunct and removed in a future version.
 }
 \details{
 \enumerate{
-\item{\code{get_shape_grob_fn} returns a function that returns a grob of the piece shape.
-      Use \code{pp_shape()$shape} instead.}
-\item{\code{gridlinesGrob()} returns a grob that produces gridlines.  Use \code{pp_shape()$gridlines()} instead.}
-\item{\code{matGrob()} returns a grob that produces a mat.  Use \code{pp_shape()$mat()} instead.}
-\item{\code{checkersGrob()}() returns a grob that adds checkers.  Use \code{pp_shape()$checkers()} instead.}
-\item{\code{hexlinesGrob()} returns a grob that adds hexlines.  Use \code{pp_shape()$hexlines()} instead.}
+\item{For \code{get_shape_grob_fn} use \code{pp_shape()$shape} instead.}
+\item{For \code{gridlinesGrob()} use \code{pp_shape()$gridlines()} instead.}
+\item{For \code{matGrob()} use \code{pp_shape()$mat()} instead.}
+\item{For \code{checkersGrob()}() use \code{pp_shape()$checkers()} instead.}
+\item{For \code{hexlinesGrob()} use \code{pp_shape()$hexlines()} instead.}
+\item{For \code{halmaGrob()} use \code{pp_shape("halma")$shape()} instead.}
+\item{For \code{kiteGrob()} use \code{pp_shape("kite")$shape()} instead.}
+\item{For \code{pyramid()} use \code{pp_shape("pyramid")$shape()} instead.}
+\item{For \code{convexGrobFn()} use \code{pp_shape("convexN", t)$shape} instead.}
+\item{For \code{concaveGrobFn()} use \code{pp_shape("concaveN", t, r)$shape} instead.}
 }
 }
 \examples{
@@ -74,6 +103,36 @@ they will be marked as Defunct and removed in a future version.
          grid.draw(get_shape_grob_fn("rect")(gp=gp))
          grid.draw(matGrob("blue", shape="rect", mat_width=c(0.2, 0.1, 0.3, 0.4)))
          popViewport()
+
+         grid.newpage()
+         gp <- gpar(col="black", fill="yellow")
+
+         vp <- viewport(x=1/3-1/6, width=1/3)
+         grid.draw(halmaGrob(gp=gp, vp=vp))
+         vp <- viewport(x=2/3-1/6, width=1/3)
+         grid.draw(pyramidGrob(gp=gp, vp=vp))
+         vp <- viewport(x=3/3-1/6, width=1/3)
+         grid.draw(kiteGrob(gp=gp, vp=vp))
+
+         grid.newpage()
+         vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+         grid.draw(convexGrobFn(3, 0)(gp=gp, vp=vp))
+         vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+         grid.draw(convexGrobFn(4, 90)(gp=gp, vp=vp))
+         vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+         grid.draw(convexGrobFn(5, 180)(gp=gp, vp=vp))
+         vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+         grid.draw(convexGrobFn(6, 270)(gp=gp, vp=vp))
+
+         grid.newpage()
+         vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+         grid.draw(concaveGrobFn(3, 0, 0.1)(gp=gp, vp=vp))
+         vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+         grid.draw(concaveGrobFn(4, 90, 0.2)(gp=gp, vp=vp))
+         vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+         grid.draw(concaveGrobFn(5, 180, 0.3)(gp=gp, vp=vp))
+         vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+         grid.draw(concaveGrobFn(6, 270)(gp=gp, vp=vp))
      }, classes = "deprecatedWarning")
  }
 }

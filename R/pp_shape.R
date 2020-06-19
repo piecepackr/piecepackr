@@ -1,4 +1,4 @@
-#' shape object
+#' Shape object for generating various grobs
 #'
 #' \code{pp_shape()} creates an R6 object with methods for creating various shape based grobs.
 #'
@@ -22,12 +22,31 @@
 #' \item{\code{gridlines}}{Returns a grob of gridlines for that shape.}
 #' \item{\code{hexlines}}{Returns a grob of hexlines for that shape.}
 #' }
-#' @param label Label of the shape.
+#' @section \code{pp_shape} R6 Class Active Bindings:\describe{
+#' \item{\code{label}}{The shape's label.}
+#' \item{\code{theta}}{The shape's theta.}
+#' \item{\code{radius}}{The shape's radius.}
+#' \item{\code{back}}{The shape's back.}
+#' \item{\code{npc_coords}}{A named list of \dQuote{npc} coordinates along the perimeter of the shape.}
+#' }
+#' @param label Label of the shape.  One of \describe{
+#'      \item{\dQuote{rect}}{Rectange.}
+#'      \item{\dQuote{roundrect}}{\dQuote{Rounded} rectangle.  \code{radius} controls curvature of corners.}
+#'      \item{\dQuote{circle}}{Circle.}
+#'      \item{\dQuote{oval}}{Oval.}
+#'      \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
+#'      \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.}
+#'      \item{\dQuote{convexN}}{An \code{N}-sided convex polygon.
+#'                              \code{theta} controls which direction the first vertex is drawn.}
+#'      \item{\dQuote{concaveN}}{An \dQuote{star} polygon with \code{N} \dQuote{points}.
+#'                              \code{theta} controls which direction the first point is drawn.
+#'                              \code{radius} controls the distance of the \dQuote{inner} vertices from the center.}
+#' }
 #' @param theta \code{convex} and \code{concave} polygon shapes
 #'                    use this to determine where the first point is drawn.
 #' @param radius \code{concave} polygon and \code{roundrect} use this
 #'                     to control appearance of the shape.
-#' @param back Whether the shape should be reflected across a vertical line.
+#' @param back Whether the shape should be reflected across a vertical line in the middle of the viewport.
 #' @examples
 #'  if (require("grid")) {
 #'      gp <- gpar(col="black", fill="yellow")
@@ -55,6 +74,36 @@
 #'      grid.draw(rect$shape(gp=gp))
 #'      grid.draw(rect$mat(mat_width=c(0.2, 0.1, 0.3, 0.4), gp=gpar(fill="blue")))
 #'      popViewport()
+#'
+#'      grid.newpage()
+#'      gp <- gpar(col="black", fill="yellow")
+#'
+#'      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("halma")$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("pyramid")$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("kite")$shape(gp=gp, vp=vp))
+#'
+#'      grid.newpage()
+#'      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("convex3", 0)$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("convex4", 90)$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("convex5", 180)$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("convex6", 270)$shape(gp=gp, vp=vp))
+#'
+#'      grid.newpage()
+#'      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("concave3", 0, 0.1)$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("concave4", 90, 0.2)$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("concave5", 180, 0.3)$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("concave6", 270)$shape(gp=gp, vp=vp))
 #'  }
 #' @export
 pp_shape <- function(label = "rect", theta = 90, radius = 0.2, back = FALSE) {
@@ -62,21 +111,21 @@ pp_shape <- function(label = "rect", theta = 90, radius = 0.2, back = FALSE) {
 }
 
 Shape <- R6Class("pp_shape",
-    public = list(label = NULL,
-                  theta = NULL,
-                  radius = NULL,
-                  back = NULL,
+    public = list(
+
+
+
                   initialize = function(label = "rect", theta = 90,
                                         radius = 0.2, back = FALSE) {
-                      self$label <- label
-                      self$theta <- theta
-                      self$radius <- radius
-                      self$back <- back
+                      if (!is_known_shape_label(label))
+                          stop("Don't recognize shape label ", label)
+                      private$shape_label <- label
+                      private$shape_theta <- theta
+                      private$shape_radius <- radius
+                      private$shape_back <- back
                   },
                   shape = function(name = NULL, gp = gpar(), vp = NULL) {
-                      fn <- shape_grob_fn(self$label, self$theta,
-                                          self$radius, self$back)
-                      fn(name = name, gp = gp, vp = vp)
+                      private$shape_grob_fn()(name = name, gp = gp, vp = vp)
                   },
                   gridlines = function(name = NULL, gp = gpar(), vp = NULL) {
                       gTree(shape = self, name = name, gp = gp, vp = vp, cl = "gridlines")
@@ -90,7 +139,72 @@ Shape <- R6Class("pp_shape",
                   },
                   hexlines = function(name = NULL, gp = gpar(), vp = NULL) {
                       gTree(shape = self, name = name, gp = gp, vp = vp, cl = "hexlines")
-                  }))
+                  }),
+    active = list(
+        label = function() private$shape_label,
+        theta = function() private$shape_theta,
+        radius = function() private$shape_radius,
+        back = function() private$shape_back,
+        npc_coords = function() {
+            label <- self$label
+            theta <- self$theta
+            radius <- self$radius
+            back <- self$back
+            if (label == "rect") {
+                rect_xy
+            } else if (grepl(label, "circle|oval")) {
+                #### grobCoords(circleGrob(), TRUE)[[1]] # nolint
+                convex_xy(36, 90)
+            } else if (label == "kite") {
+                list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25))
+            } else if (label == "halma") {
+                halma_xy()
+            } else if (label == "pyramid") {
+                pyramid_xy
+            } else if (label == "roundrect") {
+                roundrect_xy(radius)
+            } else if (grepl("^concave", label)) {
+                if (back) theta <- 180 - theta
+                concave_xy(get_n_vertices(label), theta, radius)
+            } else if (grepl("^convex", label)) {
+                if (back) theta <- 180 - theta
+                convex_xy(get_n_vertices(label), theta)
+            }
+        }),
+    private = list(
+        shape_label = NULL,
+        shape_theta = NULL,
+        shape_radius = NULL,
+        shape_back = NULL,
+        shape_grob_fn = function() {
+            label <- self$label
+            if (label == "circle") {
+                circleGrob
+            } else if (label == "rect") {
+                rectGrob
+            } else if (label == "roundrect") {
+                roundrectGrobFn(self$radius)
+            } else {
+                coords <- self$npc_coords
+                polygonGrobFn(coords$x, coords$y)
+            }
+        })
+)
+
+polygonGrobFn <- function(x, y) {
+    function(name=NULL, gp=gpar(), vp=NULL) polygonGrob(x, y, name=name, gp=gp, vp=vp)
+}
+
+roundrectGrobFn <- function(r = 0.05) {
+    function(name=NULL, gp=gpar(), vp=NULL) roundrectGrob(r = unit(r, "snpc"), name=name, gp=gp, vp=vp)
+}
+
+is_known_shape_label <- function(label) {
+    if (label %in% c("circle", "halma", "kite", "oval", "pyramid", "rect", "roundrect")) return(TRUE)
+    if (grepl("^concave[0-9]+$", label)) return(TRUE)
+    if (grepl("^convex[0-9]+$", label)) return(TRUE)
+    FALSE
+}
 
 #' @export
 makeContext.gridlines <- function(x) {
@@ -246,27 +360,55 @@ makeContent.hexlines <- function(x) {
     setChildren(x, gl)
 }
 
-shape_grob_fn <- function(label, theta = 90, radius = 0.2, back = FALSE) {
-    if (back) theta <- 180 - theta
-    if (label == "circle") {
-        circleGrob
-    } else if (label == "rect") {
-        rectGrob
-    } else if (label == "halma") {
-        halmaGrob
-    } else if (label == "pyramid") {
-        pyramidGrob
-    } else if (grepl("^convex", label)) {
-        convexGrobFn(get_n_vertices(label), theta)
-    } else if (grepl("^concave", label)) {
-        concaveGrobFn(get_n_vertices(label), theta, radius)
-    } else if (label == "kite") {
-        kiteGrob
-    } else if (label == "roundrect") {
-        roundrectGrobFn(radius)
-    } else if (label == "oval") {
-        ovalGrob
-    } else {
-        stop(paste("Don't know how to draw shape", label))
+# xy functions and/or constants
+roundrect_xy <- function(shape_r) {
+    coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")), closed=TRUE)[[1]]
+    x <- as.numeric(grid::convertX(grid::unit(coords$x, "in"), "npc"))
+    y <- as.numeric(grid::convertY(grid::unit(coords$y, "in"), "npc"))
+    list(x = x, y = y)
+}
+
+pyramid_xy <- list(x = c(0.5, 0, 1), y = c(1, 0, 0))
+rect_xy <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1))
+
+convex_xy <- function(n_vertices, t) {
+    t <- seq(0, 360, length.out = n_vertices + 1) + t
+    r <- 0.5
+    x <- to_x(t, r) + 0.5
+    y <- to_y(t, r) + 0.5
+    list(x = utils::head(x, -1), y = utils::head(y, -1))
+}
+
+halma_xy <- function() {
+    y_cutoff <- 0.55
+    y_frac <- 0.5
+    t <- seq(0, 360, length.out = 36 + 1) - 90
+    r <- 0.5
+    x <- 0.5 + to_x(t, r)
+    y <- 1 + y_frac * (to_y(t, r) - r)
+    indices <- which(y >= y_cutoff)
+    list(x = c(1, 1, x[indices], 0, 0),
+         y = c(0, 0.3, y[indices], 0.3, 0))
+}
+
+concave_xy <- function(n_vertices, t, r = 0.2) {
+    t_outer <- seq(0, 360, length.out = n_vertices+1) + t
+    n_degrees <- 360 / n_vertices / 2
+    t_inner <- seq(n_degrees, 360 - n_degrees, length.out = n_vertices) + t
+    x_outer <- to_x(t_outer, 0.5) + 0.5
+    x_inner <- to_x(t_inner,   r) + 0.5
+    y_outer <- to_y(t_outer, 0.5) + 0.5
+    y_inner <- to_y(t_inner,   r) + 0.5
+    x <- splice(x_outer, x_inner)
+    y <- splice(y_outer, y_inner)
+    list(x = x, y = y)
+}
+
+splice <- function(x0, x1) {
+    vec <- as.numeric()
+    for (ii in seq_along(x1)) {
+        vec <- append(vec, x0[ii])
+        vec <- append(vec, x1[ii])
     }
+    append(vec, x0[ii+1])
 }

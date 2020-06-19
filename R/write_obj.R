@@ -108,25 +108,28 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     # geometric vertices
     # 1st half "top" vertices
     # 2nd half "bottom" vertices
-    pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(get_shape_xy(opt$shape, opt$shape_t, opt$shape_r))
-    xy <- xy_npc$translate(-0.5, -0.5)
-    xy_reflected <- xy$dilate(width = -1, height = 1)
-    xy_npc_reflected <- xy_reflected$translate(0.5, 0.5)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back)
+    xy_npc <- Point2D$new(shape$npc_coords)
+    xy_npc_back <- Point2D$new(back$npc_coords)
 
+    pc <- Point3D$new(x, y, z)
+
+    xy <- xy_npc$translate(-0.5, -0.5)
     xyz_t <- Point3D$new(xy, z = 0.5)
     xyz_b <- Point3D$new(xy, z = -0.5)
     xs <- c(xyz_t$x, xyz_b$x)
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
+
     R <- AA_to_R(angle, axis_x, axis_y)
-    # If piece back then flip it over
-    if (grepl("_back", piece_side)) R <- R_y(180) %*% R
+    if (grepl("_back", piece_side)) R <- R_y(180) %*% R # If piece back then flip it over
+
     xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
 
     # texture coordinates
     xy_vt_t <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
-    xy_vt_b <- xy_npc_reflected$dilate(width = 0.4, height = 1)$translate(x = 0.575)
+    xy_vt_b <- xy_npc_back$dilate(width = 0.4, height = 1)$translate(x = 0.575)
     xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
     vt <- list(x = c(xy_vt_t$x, xy_vt_b$x, xy_vt_e$x),
                y =  c(xy_vt_t$y, xy_vt_b$y, xy_vt_e$y))

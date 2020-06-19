@@ -20,6 +20,7 @@ cellsGrob <- function(nrows = 8, ncols = 8, # nolint
     gTree(children=gl, name = name, gp = gp, vp = vp, cl = "cells")
 }
 
+#### make.Content
 checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
     force(nrows)
     force(ncols)
@@ -40,6 +41,7 @@ checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
     }
 }
 
+#### make.Content
 linedBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
     force(nrows)
     force(ncols)

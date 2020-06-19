@@ -183,7 +183,8 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 }
 
 genericShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    xy <- shape$npc_coords
     xy_c <- Point2D$new(xy)$npc_to_in(x, y, width, height, angle)
 
     gl <- gList()
@@ -223,7 +224,8 @@ circleShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale
 }
 
 convexCurvedShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    xy <- shape$npc_coords
     p <- Polygon$new(Point2D$new(xy)$npc_to_in(x, y, width, height, angle))
 
     # We'll project points onto a line to figure out which are visible at that 'op_angle'.
@@ -253,7 +255,8 @@ convexCurvedShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op
 }
 
 polygonShadowGrob <- function(opt, x, y, z, angle, width, height, depth, op_scale, op_angle) {
-    xy <- get_shape_xy(opt$shape, opt$shape_t, opt$shape_r)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    xy <- shape$npc_coords
     xy_c <- Point2D$new(xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_c)
     fm <- p$op_edges(op_angle)$face_matrix(z, depth)

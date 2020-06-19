@@ -73,6 +73,7 @@ xya_pips_dominoes <- function(n_pips) {
            )
 }
 
+#### make.Content
 cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
     force(rank_offset)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
@@ -109,6 +110,8 @@ cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
     }
 }
 
+#### Support roundrect shape
+#### make.Content
 dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
     force(rank_offset)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
@@ -145,47 +148,56 @@ pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle",
                          border = TRUE, mat = TRUE) {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
-        if (card) {
-            xya <- xya_pips_cards(rank + rank_offset)
-        } else {
-            xya <- xya_pips_dominoes(rank + rank_offset)
-        }
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
-
-        # Background
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
-
-        # Mat
-        if (mat) {
-            mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
-        } else {
-            mat_grob <- NULL
-        }
-
-        # Pips
-        if (nrow(xya) > 0) {
-            if (type == "circle") {
-                gp_pip <- gpar(col=opt$dm_color, fill=opt$dm_color)
-                if (!card && (rank + rank_offset) > 9) r <- 0.06 else r <- 0.08
-                pip_grob <- circleGrob(x=xya$x, y=xya$y, r=r, gp=gp_pip, name="pips")
-            } else {
-                gp_pip <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
-                              fontfamily=opt$dm_fontfamily, fontface=opt$dm_fontface)
-                pip_grob <- textGrob(opt$dm_text, x=xya$x, y=xya$y, rot = xya$angle,
-                                   gp = gp_pip, hjust = 0.5, vjust = 0.5, name="pips")
-            }
-        } else {
-            pip_grob <- nullGrob(name="pips")
-        }
-
-        # Border
-        if (border) {
-            gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
-            border_grob <- shape$shape(gp=gp_border, name="border")
-        } else {
-            border_grob <- NULL
-        }
-        grobTree(background_grob, mat_grob, pip_grob, border_grob, cl="pipped")
+        gTree(opt = opt, n_pips = rank + rank_offset, card = card, type = type, border = border, mat = mat,
+              name = NULL, gp = gpar(), vp = NULL, cl = "pipped")
     }
+}
+
+#' @export
+makeContent.pipped <- function(x) {
+    opt <- x$opt
+    if (x$card) {
+        xya <- xya_pips_cards(x$n_pips)
+    } else {
+        xya <- xya_pips_dominoes(x$n_pips)
+    }
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    # Background
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
+
+    # Mat
+    if (x$mat) {
+        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+    } else {
+        mat_grob <- NULL
+    }
+
+    # Pips
+    if (nrow(xya) > 0) {
+        if (x$type == "circle") {
+            gp_pip <- gpar(col=opt$dm_color, fill=opt$dm_color)
+            if (!x$card && x$n_pips > 9) r <- 0.06 else r <- 0.08
+            pip_grob <- circleGrob(x=xya$x, y=xya$y, r=r, gp=gp_pip, name="pips")
+        } else {
+            gp_pip <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
+                          fontfamily=opt$dm_fontfamily, fontface=opt$dm_fontface)
+            pip_grob <- textGrob(opt$dm_text, x=xya$x, y=xya$y, rot = xya$angle,
+                               gp = gp_pip, hjust = 0.5, vjust = 0.5, name="pips")
+        }
+    } else {
+        pip_grob <- nullGrob(name="pips")
+    }
+
+    # Border
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name="border")
+    } else {
+        border_grob <- NULL
+    }
+
+    gl <- gList(background_grob, mat_grob, pip_grob, border_grob)
+    setChildren(x, gl)
 }

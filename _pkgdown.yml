@@ -28,11 +28,11 @@ reference:
     - title: "Developer helper functions"
       desc: "Various exported helper functions intended for developers"
       contents:
+          - pp_shape
           - basicPieceGrobs
-          - halmaGrob
           - pp_utils
           - geometry_utils
     - title: "Deprecated functions"
       desc: "Deprecated functions that may be removed in a future version"
       contents:
-          - gridlinesGrob
+          - piecepackr-deprecated

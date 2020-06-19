@@ -50,3 +50,11 @@ test_that("pp_shape() works as expected", {
         grid.draw(circle$shape(gp=gpar(col="black", fill="NA", lex=4)))
     })
 })
+
+test_that("npc_coords() works", {
+    expect_equal(pp_shape("kite")$npc_coords, list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25)))
+    expect_equal(pp_shape("halma")$npc_coords, halma_xy())
+    expect_equal(pp_shape("pyramid")$npc_coords, pyramid_xy)
+    expect_equal(pp_shape("concave4")$npc_coords, concave_xy(4, 90, 0.2))
+    expect_error(pp_shape("boobah")$npc_coords, "Don't recognize shape label boobah")
+})

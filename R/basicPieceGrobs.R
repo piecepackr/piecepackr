@@ -49,7 +49,12 @@
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    gTree(opt=opt, name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
+}
 
+#' @export
+makeContent.basic_piece_side <- function(x) {
+    opt <- x$opt
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     # Background
@@ -72,8 +77,9 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 
     gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
     border_grob <- shape$shape(gp=gp_border, name = "border")
+    gl <- gList(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob)
 
-    grobTree(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob, cl="basic_piece_side")
+    setChildren(x, gl)
 }
 
 #' @rdname basicPieceGrobs
@@ -179,7 +185,7 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
                    preview_width-2*d_width, 0.5*t_width,
                    default.units="in", name="suitrankdie")
 
-    gTree(children=gl, name="preview_layout")
+    gTree(children=gl, cl="preview_layout")
 }
 
 dieLayoutGrobRF <- function(piece_side, suit, rank, cfg) {

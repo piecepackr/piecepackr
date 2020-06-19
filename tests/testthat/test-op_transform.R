@@ -111,14 +111,6 @@ test_that("SAT functions work", {
     expect_doppelganger("simple_points", function() plot(p2))
 })
 
-test_that("get_shape_xy works", {
-    expect_equal(get_shape_xy("kite"), kite_xy)
-    expect_equal(get_shape_xy("halma"), halma_xy())
-    expect_equal(get_shape_xy("pyramid"), pyramid_xy)
-    expect_equal(get_shape_xy("concave4"), concave_xy(4, 90, 0.2))
-    expect_error(get_shape_xy("boobah"), "Don't know how to get xy coordinates for boobah")
-})
-
 test_that("3D rotation functions work", {
     expect_equal(AA_to_R(angle=60), R_z(angle=60))
     R1 <- R_z(60) %*% R_x(50)

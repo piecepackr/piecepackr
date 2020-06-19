@@ -7,7 +7,19 @@
 pp_shape(label = "rect", theta = 90, radius = 0.2, back = FALSE)
 }
 \arguments{
-\item{label}{Label of the shape.}
+\item{label}{Label of the shape.  One of \describe{
+     \item{\dQuote{rect}}{Rectange.}
+     \item{\dQuote{roundrect}}{\dQuote{Rounded} rectangle.  \code{radius} controls curvature of corners.}
+     \item{\dQuote{circle}}{Circle.}
+     \item{\dQuote{oval}}{Oval.}
+     \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
+     \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.}
+     \item{\dQuote{convexN}}{An \code{N}-sided convex polygon.
+                             \code{theta} controls which direction the first vertex is drawn.}
+     \item{\dQuote{concaveN}}{An \dQuote{star} polygon with \code{N} \dQuote{points}.
+                             \code{theta} controls which direction the first point is drawn.
+                             \code{radius} controls the distance of the \dQuote{inner} vertices from the center.}
+}}
 
 \item{theta}{\code{convex} and \code{concave} polygon shapes
 use this to determine where the first point is drawn.}
@@ -15,7 +27,7 @@ use this to determine where the first point is drawn.}
 \item{radius}{\code{concave} polygon and \code{roundrect} use this
 to control appearance of the shape.}
 
-\item{back}{Whether the shape should be reflected across a vertical line.}
+\item{back}{Whether the shape should be reflected across a vertical line in the middle of the viewport.}
 }
 \description{
 \code{pp_shape()} creates an R6 object with methods for creating various shape based grobs.
@@ -47,6 +59,16 @@ to control appearance of the shape.}
 }
 }
 
+\section{\code{pp_shape} R6 Class Active Bindings}{
+\describe{
+\item{\code{label}}{The shape's label.}
+\item{\code{theta}}{The shape's theta.}
+\item{\code{radius}}{The shape's radius.}
+\item{\code{back}}{The shape's back.}
+\item{\code{npc_coords}}{A named list of \dQuote{npc} coordinates along the perimeter of the shape.}
+}
+}
+
 \examples{
  if (require("grid")) {
      gp <- gpar(col="black", fill="yellow")
@@ -74,5 +96,35 @@ to control appearance of the shape.}
      grid.draw(rect$shape(gp=gp))
      grid.draw(rect$mat(mat_width=c(0.2, 0.1, 0.3, 0.4), gp=gpar(fill="blue")))
      popViewport()
+
+     grid.newpage()
+     gp <- gpar(col="black", fill="yellow")
+
+     vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("halma")$shape(gp=gp, vp=vp))
+     vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("pyramid")$shape(gp=gp, vp=vp))
+     vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("kite")$shape(gp=gp, vp=vp))
+
+     grid.newpage()
+     vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("convex3", 0)$shape(gp=gp, vp=vp))
+     vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("convex4", 90)$shape(gp=gp, vp=vp))
+     vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("convex5", 180)$shape(gp=gp, vp=vp))
+     vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("convex6", 270)$shape(gp=gp, vp=vp))
+
+     grid.newpage()
+     vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("concave3", 0, 0.1)$shape(gp=gp, vp=vp))
+     vp <- viewport(x=3/4, y=1/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("concave4", 90, 0.2)$shape(gp=gp, vp=vp))
+     vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("concave5", 180, 0.3)$shape(gp=gp, vp=vp))
+     vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("concave6", 270)$shape(gp=gp, vp=vp))
  }
 }

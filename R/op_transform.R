@@ -180,15 +180,10 @@ get_shapes <- function(df) {
             shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
                                               y=c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr))
         } else {
-            if (grepl("convex|concave", opt$shape)) {
-                xy_u <- convex_xy(get_n_vertices(opt$shape), opt$shape_t)
-            } else if (opt$shape == "kite") {
-                xy_u <- kite_xy
-            } else if (opt$shape == "pyramid") {
-                xy_u <- pyramid_xy
-            } else {
-                stop(paste("Don't know how to bound", opt$shape))
-            }
+            label <- opt$shape
+            if (grepl("^concave", label)) label <- gsub("concave", "convex", label)
+            shape <- pp_shape(label, opt$shape_t, opt$shape_r, opt$back)
+            xy_u <- shape$npc_coords
             xy_c <- Point2D$new(xy_u)$npc_to_in(dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
             shapes[[ii]] <- ConvexPolygon$new(xy_c)
         }

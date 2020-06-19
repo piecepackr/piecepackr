@@ -18,11 +18,16 @@ Deprecated functions
 
 The following utility functions have been deprecated in favor of methods provided by the new `pp_shape()` object:
 
-* `get_shape_grob_fn()`, use `pp_shape()$shape` instead.
 * `checkersGrob()`, use `pp_shape()$checkers()` instead.
+* `concaveGrobFn(N, t, r)`, use `pp_shape("concaveN", t, r)$shape' instead.
+* `convexGrobFn(N, t)`, use `pp_shape("convexN", t)$shape' instead.
+* `get_shape_grob_fn()`, use `pp_shape()$shape` instead.
 * `gridlinesGrob()`, use `pp_shape()$gridlines()` instead.
+* `halmaGrob()`, use `pp_shape("halma")$shape()` instead.
 * `hexlinesGrob()`, use `pp_shape()$hexlines()` instead.
+* `kiteGrob()`, use `pp_shape("kite")$shape()' instead.
 * `matGrob()`, use `pp_shape()$mat()` instead.
+* `pyramid()`, use `pp_shape("pyramid")$shape()' instead.
 
 New features
 ------------
@@ -50,6 +55,7 @@ Bug fixes and minor improvements
 * The named list returned `pp_cfg()$get_piece_opt()` now also contains a `back` value indicating whether this is a back of a piece
   (and hence for some shapes may need to be flipped across a vertical line).
 * Fixes bug in "circle" shape "mat" when drawn in a non-square grid viewport.
+* Fixes bug in `op_transform()` for pieces whose "shape" is a non-symmetric (across vertical axis) polygons.
 
 piecepackr 1.4.1
 ================

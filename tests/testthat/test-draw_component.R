@@ -222,7 +222,7 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", rank = 3, cfg=list(gridline_color = "grey")),
                  "Don't know how to add grid lines to shape circle")
     expect_error(dce("coin_face", rank = 3, cfg=list(shape = "meeple")),
-                 "Don't know how to draw shape meeple")
+                 "Don't recognize shape label meeple")
     expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
     expect_error(cfg_default$get_width("boo_back"), "Don't know width of piece boo")
