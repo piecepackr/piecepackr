@@ -20,10 +20,8 @@ piece <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg()
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA,
                            envir = NULL, ..., scale = 1, res = 72) {
-    if (!requireNamespace("rayrender", quietly = TRUE)) {
-        stop("You need to install the suggested package 'rayrender' to use 'piece'.",
-             "Use 'install.packages(\"rayrender\")'")
-    }
+    assert_suggested("rayrender")
+
     nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, axis_x, axis_y, width, height, depth)))
     piece_side <- rep(piece_side, length.out = nn)
     suit <- rep(suit, length.out = nn)

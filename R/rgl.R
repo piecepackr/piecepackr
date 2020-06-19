@@ -29,10 +29,8 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg
                            envir = NULL, ..., scale = 1, res = 72,
                            alpha = 1.0, lit = FALSE,
                            shininess = 50.0, textype = "rgba") {
-    if (!requireNamespace("rgl", quietly = TRUE)) {
-        stop("You need to install the suggested package rgl to use 'piece3d'.",
-             "Use 'install.packages(\"rgl\")'")
-    }
+    assert_suggested("rgl")
+
     nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, axis_x, axis_y, width, height, depth)))
     piece_side <- rep(piece_side, length.out = nn)
     suit <- rep(suit, length.out = nn)

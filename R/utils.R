@@ -166,6 +166,7 @@ file2grob <- function(file, distort=TRUE) {
     } else if (format %in% c("jpg", "jpeg")) {
         picture <- grDevices::as.raster(jpeg::readJPEG(file))
     } else {
+        assert_suggested("magick")
         picture <- magick::image_read(file)
     }
     if (grDevices::is.raster(picture)) {
@@ -192,4 +193,13 @@ ppPictureGrob <- function(picture, distort = TRUE, ..., name = NULL, gp = gpar()
 makeContent.pp_picture <- function(x) {
     grob <- grImport2::pictureGrob(x$picture, expansion=0, clip="off", distort=x$distort)
     setChildren(x, gList(grob))
+}
+
+assert_suggested <- function(package) {
+    calling_fn <- deparse(sys.calls()[[sys.nframe()-1]])
+    if (!requireNamespace(package, quietly = TRUE)) {
+        stop(paste("You need to install the suggested package", sQuote(package),
+                   sprintf("to use %s.", sQuote(calling_fn)),
+                   sprintf("Use %s.", sQuote(sprintf('install.packages("%s")', package)))))
+    }
 }
