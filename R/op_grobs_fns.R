@@ -53,7 +53,7 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
         gl[[i]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
     }
     # Check angle and op_angle and if possible draw one of the pyramid faces
-    if (near((angle - op_angle) %% 90, 0)) {
+    if (nigh((angle - op_angle) %% 90, 0)) {
         base_mid <- exy[1]$midpoint(exy[2])
         xy_mid <- base_mid$midpoint(exy[3])
         vheight <- base_mid$distance_to(exy[3])
@@ -143,7 +143,7 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     # Check angle and op_angle and if possible draw one of the pyramid faces
     diff_angle <- (op_angle - angle) %% 360
-    if ((near(diff_angle, 90) || near(diff_angle, 270)) && near(angle %% 90, 0)) {
+    if ((nigh(diff_angle, 90) || nigh(diff_angle, 270)) && nigh(angle %% 90, 0)) {
         base_mid <- exy[2]$midpoint(exy[3])
         xy_mid <- base_mid$midpoint(exy[1])
         vheight <- base_mid$distance_to(exy[1])

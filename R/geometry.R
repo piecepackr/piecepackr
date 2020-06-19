@@ -305,7 +305,7 @@ AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
         axis_z <- sqrt(1 - axis_x^2 - axis_y^2)
     } else {
         norm <- sqrt(axis_x^2 + axis_y^2 + axis_z^2)
-        if (!near(norm, 1)) {
+        if (!nigh(norm, 1)) {
             axis_x <- axis_x / norm
             axis_y <- axis_y / norm
             axis_z <- axis_z / norm
@@ -336,12 +336,13 @@ cross_matrix <- function(v) {
 # trace of a (square) matrix
 trace <- function(m) sum(diag(m))
 
-near <- function(x, y, tolerance = 1e-6) isTRUE(all.equal(x, y, tolerance = tolerance))
+# Name 'nigh' to avoid potential conflict with 'dplyr::near()'
+nigh <- function(x, y, tolerance = 1e-6) isTRUE(all.equal(x, y, tolerance = tolerance))
 
 # more robust handling of arccosine input
 arccos <- function(x) {
-    if (near(x, 1) && x > 1) x <- 1
-    if (near(x, -1) && x < -1) x <- -1
+    if (nigh(x, 1) && x > 1) x <- 1
+    if (nigh(x, -1) && x < -1) x <- -1
     acos(x)
 }
 
@@ -352,20 +353,20 @@ arccos <- function(x) {
 #' @export
 R_to_AA <- function(R = diag(3)) {
     t <- arccos(0.5 * (trace(R) - 1))
-    if (near(R, diag(3))) { # no rotation
+    if (nigh(R, diag(3))) { # no rotation
         t <- 0
         e <- c(0, 0, 1)
-    } else if (near(t, pi)) { # 180 degree rotation
+    } else if (nigh(t, pi)) { # 180 degree rotation
         t <- pi
         B <- 0.5 * (R + diag(3))
         e <- sqrt(diag(B))
         sB <- sign(B)
-        if (near(sB, ppn)) {
+        if (nigh(sB, ppn)) {
             e[3] <- -e[3]
             t <- -pi
-        } else if (near(sB, pnp)) {
+        } else if (nigh(sB, pnp)) {
             e[2] <- -e[2]
-        } else if (near(sB, npp)) {
+        } else if (nigh(sB, npp)) {
             e[1] <- -e[1]
         }
     } else {
