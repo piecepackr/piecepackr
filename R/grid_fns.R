@@ -33,9 +33,8 @@ diffMatGrobFn <- function(width=0.2, shape = pp_shape()) {
     vpi_h <- y_in[2] - y_in[3]
     function(name=NULL, gp=gpar(), vp=NULL) {
         vpi <- viewport(x=vpi_x, y=vpi_y, width=vpi_w, height=vpi_h)
-        outer <- shape$shape(gp=gpar(col=NA, fill=NA))
-        inner <- shape$shape(gp=gpar(col=NA, fill=NA), vp=vpi)
-        gridGeometry::polyclipGrob(outer, inner, op="minus", name=name, gp=gp, vp=vp)
+        inner <- shape$shape(vp=vpi)
+        shape$polyclip(inner, op="minus", name=name, gp=gp, vp=vp)
     }
 }
 

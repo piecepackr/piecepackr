@@ -49,6 +49,11 @@ test_that("pp_shape() works as expected", {
         # grid.draw(circle$gridlines(gp=gpar(col="black"))) # nolint
         grid.draw(circle$shape(gp=gpar(col="black", fill="NA", lex=4)))
     })
+    expect_doppelganger("polyclip.circle", function() {
+        circle <- pp_shape("circle")
+        g <- pieceGrob("coin_face", op_scale=1)
+        grid.draw(circle$polyclip(g, "minus", gp=gpar(fill="blue")))
+    })
 })
 
 test_that("npc_coords() works", {

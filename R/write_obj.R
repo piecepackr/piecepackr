@@ -52,34 +52,27 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
 
     piece_face <- gsub("back", "face", piece_side)
     piece_back <- gsub("face", "back", piece_side)
+    edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
 
     # front
-    opt_face <- cfg$get_piece_opt(piece_face, suit, rank)
     #### Update textures #206 #210
     pushViewport(viewport(x = 0.225, width = 0.45))
-    grid.rect(gp = gpar(col = "transparent", fill = opt_face$background_color))
-    popViewport()
-    pushViewport(viewport(x = 0.225, width = 0.40))
-    grid.piece(piece_face, suit, rank, cfg)
+    draw_piece_and_bleed(piece_face, suit, rank, cfg)
     popViewport()
 
     # edge
     pushViewport(viewport(x = 0.5, width = 0.1))
-    grid.rect(gp = gpar(col = "transparent", fill = opt_face$edge_color))
+    grid.rect(gp = gpar(col = "transparent", fill = edge_color))
     popViewport()
 
     # back
-    if (piece_side == "die_face") { #### proper 6-sided die OBJ files
+    if (piece_side == "die_face") { #### proper 6-sided die OBJ files #186
         piece_back <- "die_face"
         rank <- 7 - rank
     }
-    opt_back <- cfg$get_piece_opt(piece_back, suit, rank)
     #### Update textures #206 #210
     pushViewport(viewport(x = 0.775, width = 0.45))
-    grid.rect(gp = gpar(col = "transparent", fill = opt_back$edge_color))
-    popViewport()
-    pushViewport(viewport(x = 0.775, width = 0.40))
-    grid.piece(piece_back, suit, rank, cfg)
+    draw_piece_and_bleed(piece_back, suit, rank, cfg)
     popViewport()
     grDevices::dev.off()
 
@@ -169,23 +162,31 @@ write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 
         units = "in", res = res, bg = "transparent")
 
     pushViewport(viewport(x = 0.125, width = 0.25))
-    grid.piece("pyramid_face", suit, rank, cfg)
+    draw_piece_and_bleed("pyramid_face", suit, rank, cfg)
     popViewport()
 
     pushViewport(viewport(x = 0.375, width = 0.25))
-    grid.piece("pyramid_left", suit, rank, cfg)
+    draw_piece_and_bleed("pyramid_left", suit, rank, cfg)
     popViewport()
 
     pushViewport(viewport(x = 0.625, width = 0.25))
-    grid.piece("pyramid_back", suit, rank, cfg)
+    draw_piece_and_bleed("pyramid_back", suit, rank, cfg)
     popViewport()
 
     pushViewport(viewport(x = 0.875, width = 0.25))
-    grid.piece("pyramid_right", suit, rank, cfg)
+    draw_piece_and_bleed("pyramid_right", suit, rank, cfg)
     popViewport()
     grDevices::dev.off()
 
     invisible(filename)
+}
+
+draw_piece_and_bleed <- function(piece_side, suit, rank, cfg) {
+    g <- pieceGrob(piece_side, suit, rank, cfg)
+    bleed_color <- cfg$get_piece_opt(piece_side, suit, rank)$bleed_color
+    b <- pp_shape()$polyclip(g, "minus", gp=gpar(col=NA, fill=bleed_color))
+    grid.draw(b)
+    grid.draw(g)
 }
 
 # pyramid top up

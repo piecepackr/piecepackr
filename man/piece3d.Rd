@@ -25,7 +25,7 @@ piece3d(
   alpha = 1,
   lit = FALSE,
   shininess = 50,
-  textype = "rgba"
+  textype = NA
 )
 }
 \arguments{
@@ -71,9 +71,10 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{shininess}{Properties for rgl lighting calculation.}
 
-\item{textype}{Use \code{"rgba"} when png texture (may) have alpha transparency.
+\item{textype}{Use \code{"rgba"} when sure texture will have alpha transparency.
 Use \code{"rgb"} when sure texture will not have alpha transparency
-(in particular \code{rgl}'s WebGL export will likely work better).}
+(in particular \code{rgl}'s WebGL export will likely work better).
+If \code{NA} we will read the texture and figure out a reasonable value.}
 }
 \value{
 A numeric vector of rgl object IDs.
@@ -88,7 +89,7 @@ if ((Sys.getenv("TRAVIS") == "") && require("rgl")) {
     piece3d("tile_back", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0)
     piece3d("coin_back", suit = 4, rank = 2, cfg = cfg, x = 0.5, y = 0.5, z = 0.25)
     piece3d("pawn_face", suit = 1, cfg = cfg, x = -0.5, y = 0.5, z = 0.25)
-    piece3d("pyramid_top", suit = 2, rank = 3, cfg = cfg, x = 0.5, y = -0.5, z = 0.5)
+    piece3d("pyramid_top", suit = 2, rank = 3, cfg = cfg, x = 1.5, y = 0.0, z = 0.5)
 }
 }
 \seealso{

@@ -192,6 +192,13 @@ makeContent.piece <- function(x) {
     setChildren(x, gl)
 }
 
+#' @export
+grobPoints.piece <- function(x, closed = TRUE) {
+    gc <- grobCoords(x, closed = closed)
+    f <- function(x, y) gridGeometry::polyclip(x, y, "union")
+    Reduce(f, gc)
+}
+
 get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
     if (is_pp_cfg(cfg)) {
         cfg <- cfg
@@ -233,6 +240,7 @@ grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
                           scale=scale, alpha=alpha)
     if (draw) {
         grid.draw(grob)
+        invisible(grob)
     } else {
         grob
     }

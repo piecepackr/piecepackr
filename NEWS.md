@@ -40,6 +40,8 @@ New features
   + `gridlines()` returns a grob of "gridlines" within the shape.
   + `checkers()` returns a grob of "checkers" within the shape.
   + `hexlines()` returns a grob of "hexlines" within the shape.
+  + `polyclip()` returns a grob that is an "intersection", "minus", "union", or "xor" of another grob.
+    Note unlike `gridGeometry::polyclipGrob` it can directly work with a `pieceGrob` "clip grob" argument.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -55,9 +57,11 @@ Bug fixes and minor improvements
 * `is_color_invisible()` will now correctly classify as "invisible" colors with an alpha channel value set to 0.
 * The named list returned by `pp_cfg()$get_piece_opt()` now also contains a `back` value indicating whether this is a back of a piece
   (and hence for some shapes may need to be flipped across a vertical line) and a `bleed_color` value indicating a good
-  color for a "bleed" effect (e.g. for print-and-play layouts).
+  color for a "bleed" effect (e.g. for print-and-play layouts) (#211).
 * Fixes bug in "circle" shape "mat" when drawn in a non-square grid viewport.
 * Fixes bug in `op_transform()` for pieces whose "shape" is a non-symmetric (across vertical axis) polygon.
+* `grid.piece()` now returns the grob if `draw=TRUE` as documented.
+* By default `piece3d()` will now infer a reasonable `textype` value by manually checking the png texture's alpha channel.
 
 piecepackr 1.4.1
 ================

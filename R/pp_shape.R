@@ -10,9 +10,13 @@
 #'   }
 #'
 #' @section \code{pp_shape} R6 Class Method Arguments:\describe{
-#' \item{\code{mat_width}}{Numeric vector of mat widths}
+#' \item{\code{mat_width}}{Numeric vector of mat widths.}
+#' \item{\code{clip}}{\dQuote{clip grob} to perform polyclip operation with.
+#'                    See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
+#' \item{\code{op}}{Polyclip operation to perform.
+#'                  See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
 #' \item{\code{name}}{Grid grob \code{name} value.}
-#' \item{\code{gp}}{Grid \code{gpar} list.}
+#' \item{\code{gp}}{Grid \code{gpar} list.  See \code{\link[grid]{gpar}} for more info.}
 #' \item{\code{vp}}{Grid viewport or \code{NULL}.}
 #' }
 #' @section \code{pp_shape} R6 Class Methods:\describe{
@@ -112,34 +116,36 @@ pp_shape <- function(label = "rect", theta = 90, radius = 0.2, back = FALSE) {
 
 Shape <- R6Class("pp_shape",
     public = list(
-
-
-
-                  initialize = function(label = "rect", theta = 90,
-                                        radius = 0.2, back = FALSE) {
-                      if (!is_known_shape_label(label))
-                          stop("Don't recognize shape label ", label)
-                      private$shape_label <- label
-                      private$shape_theta <- theta
-                      private$shape_radius <- radius
-                      private$shape_back <- back
-                  },
-                  shape = function(name = NULL, gp = gpar(), vp = NULL) {
-                      private$shape_grob_fn()(name = name, gp = gp, vp = vp)
-                  },
-                  gridlines = function(name = NULL, gp = gpar(), vp = NULL) {
-                      gTree(shape = self, name = name, gp = gp, vp = vp, cl = "gridlines")
-                  },
-                  mat = function(mat_width = 0, name = NULL, gp = gpar(), vp = NULL) {
-                      gTree(mat_width = mat_width, shape = self,
-                            name = name, gp = gp, vp = vp, cl = "mat")
-                  },
-                  checkers = function(name = NULL, gp = gpar(), vp = NULL) {
-                      gTree(shape = self, name = name, gp = gp, vp = vp, cl = "checkers")
-                  },
-                  hexlines = function(name = NULL, gp = gpar(), vp = NULL) {
-                      gTree(shape = self, name = name, gp = gp, vp = vp, cl = "hexlines")
-                  }),
+        initialize = function(label = "rect", theta = 90,
+                              radius = 0.2, back = FALSE) {
+            if (!is_known_shape_label(label))
+                stop("Don't recognize shape label ", label)
+            private$shape_label <- label
+            private$shape_theta <- theta
+            private$shape_radius <- radius
+            private$shape_back <- back
+        },
+        shape = function(name = NULL, gp = gpar(), vp = NULL) {
+            private$shape_grob_fn()(name = name, gp = gp, vp = vp)
+        },
+        gridlines = function(name = NULL, gp = gpar(), vp = NULL) {
+            gTree(shape = self, name = name, gp = gp, vp = vp, cl = "gridlines")
+        },
+        mat = function(mat_width = 0, name = NULL, gp = gpar(), vp = NULL) {
+            gTree(mat_width = mat_width, shape = self,
+                  name = name, gp = gp, vp = vp, cl = "mat")
+        },
+        checkers = function(name = NULL, gp = gpar(), vp = NULL) {
+            gTree(shape = self, name = name, gp = gp, vp = vp, cl = "checkers")
+        },
+        hexlines = function(name = NULL, gp = gpar(), vp = NULL) {
+            gTree(shape = self, name = name, gp = gp, vp = vp, cl = "hexlines")
+        },
+        polyclip = function(clip, op = "intersection",
+                            name = NULL, gp = gpar(), vp = NULL) {
+            gTree(shape = self, clip = clip, op = op,
+                  name = name, gp = gp, vp = vp, cl = "pp_polyclip")
+        }),
     active = list(
         label = function() private$shape_label,
         theta = function() private$shape_theta,
@@ -327,9 +333,7 @@ makeContent.checkers <- function(x) {
             rectGrob(x=0.25, y=0.25, width=0.5, height=0.5),
             rectGrob(x=0.75, y=0.75, width=0.5, height=0.5)
         )
-        shape <- x$shape$shape()
-        checkers <- gridGeometry::polyclipGrob(squares, shape, op="intersection")
-        gl <- gList(checkers)
+        gl <- gList(x$shape$polyclip(squares, "intersection"))
     }
     setChildren(x, gl)
 }
@@ -356,6 +360,17 @@ makeContent.hexlines <- function(x) {
     } else {
         stop(paste("Don't know how to add hexlines to shape", label))
     }
+    setChildren(x, gl)
+}
+
+#' @export
+makeContent.pp_polyclip <- function(x) {
+    subject <- x$shape$shape()
+    clip <- x$clip
+    if (inherits(clip, "piece")) {
+        clip <- gridGeometry::xyListPath(grobPoints(clip))
+    }
+    gl <- gList(gridGeometry::polyclipGrob(subject, clip, x$op))
     setChildren(x, gl)
 }
 

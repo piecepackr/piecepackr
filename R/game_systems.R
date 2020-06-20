@@ -110,7 +110,7 @@ game_systems <- function(style=NULL) {
         style_3d <- list(suit_color.s4 = "#0072B2",
                          invert_colors.pawn = TRUE,
                          invert_colors.die = TRUE,
-                         background_color="burlywood", background_color.pyramid = "white",
+                         background_color="burlywood",
                          border_color="transparent",
                          mat_color.tile_back = "burlywood",
                          edge_color.tile = "black", edge_color.coin = "black")

@@ -42,9 +42,13 @@ to control appearance of the shape.}
 }
 \section{\code{pp_shape} R6 Class Method Arguments}{
 \describe{
-\item{\code{mat_width}}{Numeric vector of mat widths}
+\item{\code{mat_width}}{Numeric vector of mat widths.}
+\item{\code{clip}}{\dQuote{clip grob} to perform polyclip operation with.
+                   See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
+\item{\code{op}}{Polyclip operation to perform.
+                 See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
 \item{\code{name}}{Grid grob \code{name} value.}
-\item{\code{gp}}{Grid \code{gpar} list.}
+\item{\code{gp}}{Grid \code{gpar} list.  See \code{\link[grid]{gpar}} for more info.}
 \item{\code{vp}}{Grid viewport or \code{NULL}.}
 }
 }
