@@ -18,27 +18,28 @@ Deprecated functions
 
 The following utility functions have been deprecated in favor of methods provided by the new `pp_shape()` object:
 
-* `checkersGrob()`, use `pp_shape()$checkers()` instead.
-* `concaveGrobFn(N, t, r)`, use `pp_shape("concaveN", t, r)$shape' instead.
-* `convexGrobFn(N, t)`, use `pp_shape("convexN", t)$shape' instead.
-* `get_shape_grob_fn()`, use `pp_shape()$shape` instead.
-* `gridlinesGrob()`, use `pp_shape()$gridlines()` instead.
-* `halmaGrob()`, use `pp_shape("halma")$shape()` instead.
-* `hexlinesGrob()`, use `pp_shape()$hexlines()` instead.
-* `kiteGrob()`, use `pp_shape("kite")$shape()' instead.
-* `matGrob()`, use `pp_shape()$mat()` instead.
-* `pyramid()`, use `pp_shape("pyramid")$shape()' instead.
+* `checkersGrob(c, s, t, n)`, use `pp_shape(s, t)$checkers(n, gp=gpar(fill=c))` instead.
+* `concaveGrobFn(N, t, r)`, use `pp_shape("concaveN", t, r)$shape` instead.
+* `convexGrobFn(N, t)`, use `pp_shape("convexN", t)$shape` instead.
+* `get_shape_grob_fn(s, t, r, b)`, use `pp_shape(s, t, r, b)$shape` instead.
+* `gridlinesGrob(c, s, t, l, n)`, use `pp_shape(s, t)$gridlines(n, gp=gpar(col=c, lex=l))` instead.
+* `halmaGrob(...)`, use `pp_shape("halma")$shape(...)` instead.
+* `hexlinesGrob(c, s, n)`, use `pp_shape(s)$hexlines(n, gp=gpar(col=c))` instead.
+* `kiteGrob(...)`, use `pp_shape("kite")$shape(...)` instead.
+* `matGrob(c, s, t, mw, n)`, use `pp_shape(s, t)$mat(mw, n, gp=gpar(fill=c))` instead.
+* `pyramid(...)`, use `pp_shape("pyramid")$shape(...)` instead.
 
 New features
 ------------
 
 * `pp_shape()` returns an R6 object with methods to create various grobs for all the "shape"'s supported by `pp_cfg()`:
  
-  + `shape()` returns a grob of the shape
-  + `mat()` returns a grob of a matting "mat" within the shape
-  + `gridlines()` returns a grob of "gridlines" within the shape
-  + `checkers()` returns a grob of "checkers" within the shape
-  + `hexlines()` returns a grob of "hexlines" within the shape
+  + `shape()` returns a grob of the shape.
+  + `mat()` returns a grob of a matting "mat" within the shape.  
+     Its argument `mat_width` controls how "wide" the matting should be.
+  + `gridlines()` returns a grob of "gridlines" within the shape.
+  + `checkers()` returns a grob of "checkers" within the shape.
+  + `hexlines()` returns a grob of "hexlines" within the shape.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -52,10 +53,11 @@ Bug fixes and minor improvements
   with non-unit axis vectors and/or negative `axis_z` values.
 * Improved drawing of oblique projection edges for the "oval" shape (#212) and the "halma" shape.
 * `is_color_invisible()` will now correctly classify as "invisible" colors with an alpha channel value set to 0.
-* The named list returned `pp_cfg()$get_piece_opt()` now also contains a `back` value indicating whether this is a back of a piece
-  (and hence for some shapes may need to be flipped across a vertical line).
+* The named list returned by `pp_cfg()$get_piece_opt()` now also contains a `back` value indicating whether this is a back of a piece
+  (and hence for some shapes may need to be flipped across a vertical line) and a `bleed_color` value indicating a good
+  color for a "bleed" effect (e.g. for print-and-play layouts).
 * Fixes bug in "circle" shape "mat" when drawn in a non-square grid viewport.
-* Fixes bug in `op_transform()` for pieces whose "shape" is a non-symmetric (across vertical axis) polygons.
+* Fixes bug in `op_transform()` for pieces whose "shape" is a non-symmetric (across vertical axis) polygon.
 
 piecepackr 1.4.1
 ================

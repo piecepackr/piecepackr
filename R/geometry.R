@@ -337,7 +337,10 @@ cross_matrix <- function(v) {
 trace <- function(m) sum(diag(m))
 
 # Name 'nigh' to avoid potential conflict with 'dplyr::near()'
-nigh <- function(x, y, tolerance = 1e-6) isTRUE(all.equal(x, y, tolerance = tolerance))
+nigh <- function(x, y, tolerance = 1e-6) {
+    if (length(y) < length(x)) y <- rep(y, length.out=length(x))
+    isTRUE(all.equal(x, y, tolerance = tolerance))
+}
 
 # more robust handling of arccosine input
 arccos <- function(x) {

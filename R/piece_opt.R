@@ -687,18 +687,30 @@ get_piece_opt_helper <- function(piece_side, suit, rank, cfg) {
     rank_text <- get_rank_symbol(piece_side, suit, rank, cfg)
     suit_text <- get_suit_symbol(piece_side, suit, rank, cfg)
 
-    list(shape=shape, shape_r=shape_r, shape_t=shape_t, back=back,
-         background_color=background_color,
-         border_color=border_color, border_lex=border_lex, edge_color=edge_color,
-         gridline_color=gridline_color, gridline_lex=gridline_lex,
-         mat_color=mat_color, mat_width=mat_width,
-         dm_color=dm_color, dm_text=dm_text,
-         dm_fontsize=dm_fontsize,
-         dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,
-         dm_x=dm_x, dm_y=dm_y,
-         ps_color=ps_color, ps_text=ps_text,
-         ps_fontsize=ps_fontsize,
-         ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
-         ps_x=ps_x, ps_y=ps_y,
-         rank_text=rank_text, suit_text=suit_text)
+    opt <- list(shape=shape, shape_r=shape_r, shape_t=shape_t, back=back,
+                background_color=background_color, edge_color=edge_color,
+                border_color=border_color, border_lex=border_lex,
+                gridline_color=gridline_color, gridline_lex=gridline_lex,
+                mat_color=mat_color, mat_width=mat_width,
+                dm_color=dm_color, dm_text=dm_text,
+                dm_fontsize=dm_fontsize,
+                dm_fontfamily=dm_fontfamily, dm_fontface=dm_fontface,
+                dm_x=dm_x, dm_y=dm_y,
+                ps_color=ps_color, ps_text=ps_text,
+                ps_fontsize=ps_fontsize,
+                ps_fontfamily=ps_fontfamily, ps_fontface=ps_fontface,
+                ps_x=ps_x, ps_y=ps_y,
+                rank_text=rank_text, suit_text=suit_text)
+    opt$bleed_color <- get_bleed_color(opt)
+    opt
+}
+
+get_bleed_color <- function(opt) {
+    if (!is_color_invisible(opt$border_color) && !nigh(opt$border_lex, 0))
+        return(opt$border_color)
+    if (!is_color_invisible(opt$mat_color) && !nigh(opt$mat_width, 0))
+        return(opt$mat_color)
+    if (!is_color_invisible(opt$background_color))
+        return(opt$background_color)
+    return("transparent")
 }

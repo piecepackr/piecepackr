@@ -25,6 +25,7 @@ test_that("rgl works", {
     library("rgl")
     rgl.open()
     piece3d("tile_face", cfg = cfg)
+    piece3d("tile_face", cfg = cfg, scale = 0)
     f <- tempfile(fileext = ".png")
     rgl.snapshot(f)
     expect_true(file.exists(f))
@@ -42,4 +43,6 @@ test_that("rayrender works", {
     dev.off()
     expect_true(file.exists(f))
     unlink(f)
+
+    expect_null(piece("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
 })

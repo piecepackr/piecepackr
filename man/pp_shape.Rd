@@ -2,7 +2,7 @@
 % Please edit documentation in R/pp_shape.R
 \name{pp_shape}
 \alias{pp_shape}
-\title{shape object}
+\title{Shape object for generating various grobs}
 \usage{
 pp_shape(label = "rect", theta = 90, radius = 0.2, back = FALSE)
 }

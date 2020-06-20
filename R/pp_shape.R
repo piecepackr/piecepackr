@@ -269,8 +269,7 @@ makeContent.mat <- function(x) {
     radius <- x$shape$radius
     back <- x$shape$back
 
-    is_mat_width_zero <- nigh(mat_width, rep(0, length(mat_width)))
-    if (is_color_invisible(x$gp$fill) || is_mat_width_zero) {
+    if (is_color_invisible(x$gp$fill) || nigh(mat_width, 0)) {
         gl <- gList(nullGrob())
     } else if (label == "rect") {
         gl <- gList(rectMatGrobFn(mat_width)())
