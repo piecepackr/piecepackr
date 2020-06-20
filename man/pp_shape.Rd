@@ -8,17 +8,19 @@ pp_shape(label = "rect", theta = 90, radius = 0.2, back = FALSE)
 }
 \arguments{
 \item{label}{Label of the shape.  One of \describe{
-     \item{\dQuote{rect}}{Rectange.}
-     \item{\dQuote{roundrect}}{\dQuote{Rounded} rectangle.  \code{radius} controls curvature of corners.}
      \item{\dQuote{circle}}{Circle.}
-     \item{\dQuote{oval}}{Oval.}
-     \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
-     \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.}
      \item{\dQuote{convexN}}{An \code{N}-sided convex polygon.
                              \code{theta} controls which direction the first vertex is drawn.}
-     \item{\dQuote{concaveN}}{An \dQuote{star} polygon with \code{N} \dQuote{points}.
+     \item{\dQuote{concaveN}}{A \dQuote{star} (concave) polygon with \code{N} \dQuote{points}.
                              \code{theta} controls which direction the first point is drawn.
                              \code{radius} controls the distance of the \dQuote{inner} vertices from the center.}
+     \item{\dQuote{halma}}{A 2D outline of a \dQuote{Halma pawn}.}
+     \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
+     \item{\dQuote{oval}}{Oval.}
+     \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.
+                             Typically used to help draw the face of the \dQuote{pyramid} piece.}
+     \item{\dQuote{rect}}{Rectangle.}
+     \item{\dQuote{roundrect}}{\dQuote{Rounded} rectangle.  \code{radius} controls curvature of corners.}
 }}
 
 \item{theta}{\code{convex} and \code{concave} polygon shapes
@@ -55,11 +57,14 @@ to control appearance of the shape.}
 
 \section{\code{pp_shape} R6 Class Methods}{
 \describe{
-\item{\code{shape}}{Returns a grob of the shape.}
-\item{\code{mat}}{Returns a grob for a matting \dQuote{mat} for that shape.}
-\item{\code{checkers}}{Returns a grob of checkers for that shape.}
-\item{\code{gridlines}}{Returns a grob of gridlines for that shape.}
-\item{\code{hexlines}}{Returns a grob of hexlines for that shape.}
+\item{\code{checkers(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of checkers for that shape.}
+\item{\code{gridlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of gridlines for that shape.}
+\item{\code{hexlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of hexlines for that shape.}
+\item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob for a matting \dQuote{mat} for that shape.}
+\item{\code{polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)}}{
+      Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
+      Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
+\item{\code{shape(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of the shape.}
 }
 }
 
