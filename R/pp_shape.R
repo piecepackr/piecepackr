@@ -23,10 +23,11 @@
 #' \item{\code{checkers(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of checkers for that shape.}
 #' \item{\code{gridlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of gridlines for that shape.}
 #' \item{\code{hexlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of hexlines for that shape.}
-#' \item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob for a matting \dQuote{mat} for that shape.}
+#' \item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{
+#'    Returns a grob for a matting \dQuote{mat} for that shape.}
 #' \item{\code{polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)}}{
-#'       Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
-#'       Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
+#'    Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
+#'    Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
 #' \item{\code{shape(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of the shape.}
 #' }
 #' @section \code{pp_shape} R6 Class Active Bindings:\describe{
@@ -372,7 +373,7 @@ makeContent.hexlines <- function(x) {
 makeContent.pp_polyclip <- function(x) {
     subject <- x$shape$shape()
     clip <- x$clip
-    if (inherits(clip, "piece")) {
+    if (inherits(clip, "piece") || inherits(clip, "pmap_piece")) {
         clip <- gridGeometry::xyListPath(grobPoints(clip))
     }
     gl <- gList(gridGeometry::polyclipGrob(subject, clip, x$op))

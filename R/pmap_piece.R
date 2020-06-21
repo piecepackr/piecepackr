@@ -10,6 +10,9 @@
 #'    \item{If the output of \code{.f} is a grid grob object then \code{pmap_piece}
 #'          will return a \code{gTree} object with
 #'          specified \code{name}, \code{gp}, and \code{vp} values and if \code{draw} is true draw it.}
+#'    \item{If \code{.l} lacks a \code{name} column or if \code{name} column is non-unique
+#'          attempts to generate a reasonable new default \code{name} column
+#'          and use that to name the return \code{gTree} children  or \code{list} values.}
 #'  }
 #' @inheritParams grid.piece
 #' @param .l A list of vectors, such as a data frame. The length of \code{.l}
@@ -46,8 +49,10 @@ pmap_piece <- function(.l, .f = pieceGrob, ..., cfg=NULL, envir=NULL, trans=NULL
     cfg <- ce$cfg
     envir <- ce$envir
 
+    .l <- update_name(.l)
     if (is.function(trans)) {
         .l <- trans(.l, ..., cfg=cfg, envir=envir)
+        .l <- update_name(.l)
     }
     if (has_name(.l, "cfg")) {
         ll <- purrr::pmap(.l, .f, ..., envir=envir, draw=FALSE)
@@ -55,15 +60,41 @@ pmap_piece <- function(.l, .f = pieceGrob, ..., cfg=NULL, envir=NULL, trans=NULL
         ll <- purrr::pmap(.l, .f, ..., cfg=cfg, envir=envir, draw=FALSE)
     }
     if (all(sapply(ll, is.grob))) {
-        grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp)
-        if (draw) {
-            grid.draw(grob)
-        } else {
-            invisible(grob)
-        }
+        grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp, cl="pmap_piece")
+        if (draw) grid.draw(grob)
+        invisible(grob)
     } else {
+        names(ll) <- .l$name
         invisible(ll)
     }
+}
+
+update_name <- function(.l) {
+    if (has_name(.l, "name")) {
+        if (!is.character(.l$name)) .l$name <- as.character(.l$name)
+        if (sum(duplicated(.l$name)) == 0) {
+            return(.l)
+        } else {
+            warning("the name column in .l is not unique, generating new name column")
+        }
+    }
+    if (has_name(.l, "id")) {
+        .l$name <- paste0("piece.", as.character(.l$id))
+        if (sum(duplicated(.l$name)) == 0) {
+            return(.l)
+        } else {
+            warning("the id column in .l is not unique, generating new name column")
+        }
+    }
+    .l$name <- paste0("piece.", as.character(seq(length(.l[[1]]))))
+    .l
+}
+
+#' @export
+grobPoints.pmap_piece <- function(x, closed = TRUE) {
+    gc <- lapply(x$children, grobPoints)
+    f <- function(x, y) gridGeometry::polyclip(x, y, "union")
+    Reduce(f, gc)
 }
 
 as.gList <- function(ll) {

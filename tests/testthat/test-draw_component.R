@@ -9,6 +9,19 @@ test_that("pp_cfg works as expected", {
     expect_warning(cfg_default$get_pictureGrob("tile_back", 1, 1))
 })
 
+test_that("update_names works as expected", {
+    df <- tibble(x = 1:4, name = 1:4)
+    expect_equal(update_name(df)$name, as.character(1:4))
+    df <- tibble(x = 1:4, id = 1:4)
+    expect_equal(update_name(df)$name, paste0("piece.", 1:4))
+    df <- tibble(x = 1:4)
+    expect_equal(update_name(df)$name, paste0("piece.", 1:4))
+    df <- tibble(x = 1:4, name = 1)
+    expect_warning(update_name(df)$name, "the name column in .l is not unique, generating new name column")
+    df <- tibble(x = 1:4, id = 1)
+    expect_warning(update_name(df)$name, "the id column in .l is not unique, generating new name column")
+})
+
 context("save_print_and_play works as expected")
 test_that("save_print_and_play works as expected", {
 
@@ -215,7 +228,7 @@ test_that("no regressions in figures", {
                           })
     expect_doppelganger("draw_components.default", function() {
                                     pushViewport(viewport(width=inch(4), height=inch(4)))
-                                    pmap_piece(df)
+                                    pmap_piece(df, envir=list())
                           })
 
     # errors
@@ -291,6 +304,7 @@ test_that("alpha and scale works", {
         df <- tibble(piece_side="coin_back",
                      x=1:6, y=1, alpha=seq(0, 1, length.out=6),
                      scale=seq(0, 1, length.out=6))
-        pmap_piece(df, default.units="in", cfg=cfg, op_scale=0.5)
+        g <- pmap_piece(df, default.units="in", cfg=cfg, op_scale=0.5)
+        grid.draw(pp_shape()$polyclip(g, "minus", gp=gpar(fill="yellow")))
     })
 })

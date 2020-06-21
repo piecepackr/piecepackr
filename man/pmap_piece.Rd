@@ -57,6 +57,9 @@ can help with using an oblique projection (i.e. \code{op_scale} over 0).}
    \item{If the output of \code{.f} is a grid grob object then \code{pmap_piece}
          will return a \code{gTree} object with
          specified \code{name}, \code{gp}, and \code{vp} values and if \code{draw} is true draw it.}
+   \item{If \code{.l} lacks a \code{name} column or if \code{name} column is non-unique
+         attempts to generate a reasonable new default \code{name} column
+         and use that to name the return \code{gTree} children  or \code{list} values.}
  }
 }
 \examples{

@@ -60,10 +60,11 @@ to control appearance of the shape.}
 \item{\code{checkers(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of checkers for that shape.}
 \item{\code{gridlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of gridlines for that shape.}
 \item{\code{hexlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of hexlines for that shape.}
-\item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob for a matting \dQuote{mat} for that shape.}
+\item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{
+   Returns a grob for a matting \dQuote{mat} for that shape.}
 \item{\code{polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)}}{
-      Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
-      Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
+   Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
+   Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
 \item{\code{shape(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of the shape.}
 }
 }

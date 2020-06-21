@@ -5,13 +5,17 @@ Breaking changes
 ----------------
 
 There are no user-facing breaking changes in `piecepackr`'s API
-but the internal `grid` structure of the grobs drawn/returned by `grid.piece()` / `pieceGrob()`
+but the internal `grid` structure of the grobs drawn/returned by `grid.piece()` / `pieceGrob() / `pmap_piece()`
 have been changed to make it easier to query or edit the grid graphics post initial drawing
 with functions like `grid::grid.get()`, `grid::grid.edit()`, `grid::grid.reorder()` etc. (#205).
 
-* The `gTree` "grob" returned by `grid.piece()` and `pieceGrob()` now have a "piece" class and "named slots" which match the arguments of `grid.piece()`.
+* The "grob" returned by `grid.piece()` and `pieceGrob()` now has a "piece" class and "named slots" which match the arguments of `grid.piece()`.
 * The new "piece" class grob only generates its content to draw at drawing time, one must use `grid::grid.force()` to view/edit its internal grob "children".
 * The internal grob layout for included grob functions are better named and structured to more easily generate a matching ``grid::gPath``.
+* `grobPoints()` methods have been written for the "grob" returned by `grid.piece() / pieceGrob()` and the "grob" returned by `pmap_piece()`.
+* If no unique `name` in `.l` then `pmap_piece()` will now generate/replace a unique `name`
+  by concatenating `piece.` with a unique `id` if it exists or if it does not then by row number 
+  in order to better label the "children" of the returned `gTree` grob object (#223).
 
 Deprecated functions
 --------------------
@@ -60,8 +64,9 @@ Bug fixes and minor improvements
   color for a "bleed" effect (e.g. for print-and-play layouts) (#211).
 * Fixes bug in "circle" shape "mat" when drawn in a non-square grid viewport.
 * Fixes bug in `op_transform()` for pieces whose "shape" is a non-symmetric (across vertical axis) polygon.
-* `grid.piece()` now returns the grob if `draw=TRUE` as documented.
-* By default `piece3d()` will now infer a reasonable `textype` value by manually checking the png texture's alpha channel.
+* `grid.piece()` and `pmap_piece()` now returns the grob invisibly if `draw=TRUE` as documented
+  (while continuing to draw the grob to the active graphics device).
+* By default `piece3d()` will now try to infer a reasonable `textype` value by manually checking the png texture's alpha channel.
 
 piecepackr 1.4.1
 ================
