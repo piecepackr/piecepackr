@@ -181,7 +181,12 @@ get_shape_t <- function(piece_side, suit, rank, cfg) {
 
 get_shape_r <- function(piece_side, suit, rank, cfg) {
     shape <- get_shape(piece_side, suit, rank, cfg)
-    default <- switch(shape, roundrect = 0.06, 0.2)
+    piece <- get_piece(piece_side)
+    default <- switch(shape,
+                      roundrect = switch(piece,
+                                         tile = 0.12,
+                                         0.06),
+                      0.2)
     r <- numeric_cleave(get_style_element("shape_r", piece_side, cfg, default, suit, rank))
     r <- expand_suit_elements(r, "shape_r", piece_side, cfg)
     r[suit]

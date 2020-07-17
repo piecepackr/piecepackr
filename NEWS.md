@@ -5,7 +5,7 @@ Breaking changes
 ----------------
 
 There are no user-facing breaking changes in `piecepackr`'s API
-but the internal `grid` structure of the grobs drawn/returned by `grid.piece()` / `pieceGrob() / `pmap_piece()`
+but the internal `grid` structure of the grobs drawn/returned by `grid.piece()`, `pieceGrob()`, and `pmap_piece()`
 have been changed to make it easier to query or edit the grid graphics post initial drawing
 with functions like `grid::grid.get()`, `grid::grid.edit()`, `grid::grid.reorder()` etc. (#205).
 
@@ -50,7 +50,7 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
-* `pp_cfg()` now supports a "roundrect" (rounded rectangle) `shape` (#214).  
+* `pp_cfg()` now supports a "roundrect" (rounded rectangle) `shape` (#214, #229).  
   Curvature of the corners are controlled by the `shape_r` style.
 * `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).
 * Fixes bug in `R_to_AA()` for some 3D rotations with an "exactly" 180 degree angle (in the axis-angle representation).
