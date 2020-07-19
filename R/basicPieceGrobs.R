@@ -218,16 +218,7 @@ x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
 x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
 y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
 
-piecepackDieGrob <- function(suit, cfg, flip=FALSE,
-                             arrangement=cfg$die_arrangement) {
-    cfg <- as_pp_cfg(cfg)
-    angle <- rep(c(0, -90), 3)
-    if (flip) {
-        x <- x_die_layoutLF
-        angle <- -angle
-    } else {
-        x <- x_die_layoutRF
-    }
+get_die_face_info <- function(suit, arrangement = "counter_down") { #### also angle #175
     suit <- rep(suit, length.out=6)
     if (arrangement == "opposites_sum_to_5") {
         rank <- c(1, 2, 3, 6, 5, 4)
@@ -238,9 +229,23 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE,
     } else {
         rank <- 1:6
     }
+    list(rank = rank, suit = suit)
+}
+
+piecepackDieGrob <- function(suit, cfg, flip=FALSE,
+                             arrangement=cfg$die_arrangement) {
+    cfg <- as_pp_cfg(cfg)
+    angle <- rep(c(0, -90), 3)
+    if (flip) {
+        x <- x_die_layoutLF
+        angle <- -angle
+    } else {
+        x <- x_die_layoutRF
+    }
+    rs <- get_die_face_info(suit, arrangement)
     gl <- gList()
     for (ii in 1:6) {
-        gl[[ii]] <- pieceGrob("die_face", suit[ii], rank[ii], cfg,
+        gl[[ii]] <- pieceGrob("die_face", rs$suit[ii], rs$rank[ii], cfg,
                             x=x[ii], y=y_die_layout[ii],
                             width=1/4, height=1/3, angle=angle[ii])
     }

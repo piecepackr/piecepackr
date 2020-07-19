@@ -55,7 +55,6 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
     edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
 
     # front
-    #### Update textures #206 #210
     pushViewport(viewport(x = 0.225, width = 0.45))
     draw_piece_and_bleed(piece_face, suit, rank, cfg)
     popViewport()
@@ -66,11 +65,6 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
     popViewport()
 
     # back
-    if (piece_side == "die_face") { #### proper 6-sided die OBJ files #186
-        piece_back <- "die_face"
-        rank <- 7 - rank
-    }
-    #### Update textures #206 #210
     pushViewport(viewport(x = 0.775, width = 0.45))
     draw_piece_and_bleed(piece_back, suit, rank, cfg)
     popViewport()
@@ -150,6 +144,56 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
 
+write_die_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                          ...,
+                          x = 0, y = 0, z = 0,
+                          angle = 0, axis_x = 0, axis_y = 0,
+                          width = NA, height = NA, depth = NA,
+                         filename = tempfile(fileext = ".obj"), res = 72) {
+
+    cfg <- as_pp_cfg(cfg)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    pc <- Point3D$new(x, y, z)
+
+    xs <- c(0, 0, 1, 1, 0, 0, 1, 1) - 0.5
+    ys <- c(1, 0, 0, 1, 1, 0, 0, 1) - 0.5
+    zs <- rep(c(1, 0), each = 4) - 0.5
+
+    # figure out rotation to reach each die face
+    rs <- get_die_face_info(suit, cfg$die_arrangement) #### also allow customization of angle #175
+    i <- which(rs$rank == rank)
+    dR <- switch(i,
+                 diag(3),
+                 R_y(-90) %*% R_z(90),
+                 R_x(90) %*% R_z(-90),
+                 R_x(180),
+                 R_y(90) %*% R_z(90),
+                 R_x(-90) %*% R_z(90),
+                 diag(3))
+    R <- dR %*% AA_to_R(angle, axis_x, axis_y)
+    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+
+    xy_vt <- list(x = rep(c(0, 0.5, 1), 4),
+                  y = rep(c(1, 2/3, 1/3, 0), each = 3))
+
+    # textured face elements
+    f <- list()
+    f[[1]] <- list(v = 1:4, vt = c(1, 4, 5, 2))
+    f[[2]] <- list(v = c(8, 4, 3, 7), vt = c(2, 5, 6, 3))
+    f[[3]] <- list(v = c(1, 4, 8, 5), vt = c(4, 7, 8, 5))
+    f[[4]] <- list(v = c(6, 5, 8, 7), vt = c(5, 8, 9, 6))
+    f[[5]] <- list(v = c(1, 5, 6, 2), vt = c(7, 10, 11, 8))
+    f[[6]] <- list(v = c(3, 2, 6, 7), vt = c(8, 11, 12, 9))
+
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    write_obj(filename, v = xyz, vt = xy_vt, f = f)
+    write_die_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
+
+    invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+}
 
 write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = pp_cfg(),
                              ...,
@@ -176,8 +220,39 @@ write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 
     pushViewport(viewport(x = 0.875, width = 0.25))
     draw_piece_and_bleed("pyramid_right", suit, rank, cfg)
     popViewport()
-    grDevices::dev.off()
 
+    grDevices::dev.off()
+    invisible(filename)
+}
+
+write_die_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                              ..., filename = tempfile(fileext = ".png"), res = 72) {
+    width <- cfg$get_width("die_face", suit, rank)
+
+    grDevices::png(filename, height = 3 * width, width = 2 * width,
+                   units = "in", res = res, bg = "transparent")
+
+    rs <- get_die_face_info(suit, cfg$die_arrangement) #### also angle
+    pushViewport(viewport(x = 0.25, width = 0.5, y = 5/6, height = 1/3))
+    grid.piece("die_face", suit = rs$suit[1], rank = rs$rank[1], cfg = cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.75, width = 0.5, y = 5/6, height = 1/3))
+    grid.piece("die_face", suit = rs$suit[2], rank = rs$rank[2], cfg = cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.25, width = 0.5, y = 3/6, height = 1/3))
+    grid.piece("die_face", suit = rs$suit[3], rank = rs$rank[3], cfg = cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.75, width = 0.5, y = 3/6, height = 1/3))
+    grid.piece("die_face", suit = rs$suit[4], rank = rs$rank[4], cfg = cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.25, width = 0.5, y = 1/6, height = 1/3))
+    grid.piece("die_face", suit = rs$suit[5], rank = rs$rank[5], cfg = cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.75, width = 0.5, y = 1/6, height = 1/3))
+    grid.piece("die_face", suit = rs$suit[6], rank = rs$rank[6], cfg = cfg)
+    popViewport()
+
+    grDevices::dev.off()
     invisible(filename)
 }
 

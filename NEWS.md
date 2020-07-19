@@ -52,6 +52,8 @@ Bug fixes and minor improvements
 
 * `pp_cfg()` now supports a "roundrect" (rounded rectangle) `shape` (#214, #229).  
   Curvature of the corners are controlled by the `shape_r` style.
+* The default OBJ generating function (used by the default rgl and rayrender functions) 
+  now produces six-faced cubes for the dice component (#186).
 * `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).
 * Fixes bug in `R_to_AA()` for some 3D rotations with an "exactly" 180 degree angle (in the axis-angle representation).
 * `AA_to_R()` now accepts an optional `axis_z` argument and automatically normalizes the axis vector.
