@@ -55,6 +55,8 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #' @param pt_thickness Thickness of pyramid tip i.e. value to add to the z-value of a pyramid top
 #'                  if it is a (weakly) smaller ranked pyramid (top)
 #'                  placed on top of a larger ranked pyramid (top).
+#' @param as_top Character vector of components whose \dQuote{side}
+#'               should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.
 #' @return A tibble with extra columns added
 #'         and re-sorted rows
 #' @examples
@@ -65,7 +67,13 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #'            op_scale=0.5, default.units="in")
 #'
 #' @export
-op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45, pt_thickness = 0.01) {
+op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45,
+                         pt_thickness = 0.01, as_top = character(0)) {
+    for (ps in as_top) {
+        indices <- which(df$piece_side == ps)
+        piece <- get_piece(ps)
+        df$piece_side[indices] <- gsub(ps, paste0(piece, "_top"), df$piece_side[indices])
+    }
     df <- add_3d_info(df, cfg = cfg, envir = envir, pt_thickness = pt_thickness)
     df <- op_sort(df, op_angle = op_angle)
     df
@@ -173,12 +181,12 @@ get_shapes <- function(df) {
         piece_side <- df$piece_side[ii]
         suit <- ifelse(has_name(df, "suit"), df$suit[ii], NA)
         rank <- ifelse(has_name(df, "rank"), df$rank[ii], NA)
-        opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        if (opt$shape == "circle") {
-            shapes[[ii]] <- Circle$new(x=dfi$x, y=dfi$y, r=min(dfi$width/2, dfi$height/2))
-        } else if (opt$shape %in% c("rect", "halma", "roundrect")) {
+        opt <- try(cfg$get_piece_opt(piece_side, suit, rank), silent = TRUE)
+        if (inherits(opt, "try-error") || opt$shape %in% c("rect", "halma", "roundrect")) {
             shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
                                               y=c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr))
+        } else if (opt$shape == "circle") {
+            shapes[[ii]] <- Circle$new(x=dfi$x, y=dfi$y, r=min(dfi$width/2, dfi$height/2))
         } else {
             label <- opt$shape
             if (grepl("^concave", label)) label <- gsub("concave", "convex", label)

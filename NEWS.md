@@ -36,7 +36,8 @@ The following utility functions have been deprecated in favor of methods provide
 New features
 ------------
 
-* `pp_shape()` returns an R6 object with methods to create various grobs for all the "shape"'s supported by `pp_cfg()`:
+* New function `pp_shape()` returns an R6 object that provides the following methods to create 
+  various grobs for all the "shape"'s supported by `pp_cfg()`:
  
   + `shape()` returns a grob of the shape.
   + `mat()` returns a grob of a matting "mat" within the shape.  
@@ -46,6 +47,10 @@ New features
   + `hexlines()` returns a grob of "hexlines" within the shape.
   + `polyclip()` returns a grob that is an "intersection", "minus", "union", or "xor" of another grob.
     Note unlike `gridGeometry::polyclipGrob` it can directly work with a `pieceGrob` "clip grob" argument.
+
+* Default functions used by `save_piece_obj()`, `piece3d()`, `piece()` now support a
+  "top", "base", "left", and "right" side for the two-sided token components:
+  "bit", "board", "card", "matchstick", "pawn", "saucer", and "tile" (#135).
 
 Bug fixes and minor improvements
 --------------------------------

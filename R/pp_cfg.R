@@ -172,6 +172,10 @@ Config <- R6Class("pp_cfg",
                 return(3 * tile_width)
             }
             piece <- get_piece(piece_side)
+            if (grepl("_left$|_right$", piece_side) && piece != "pyramid") {
+                ps <- paste0(piece, "_face")
+                return(self$get_height(ps, suit=suit, rank=rank))
+            }
             default <- switch(piece,
                               belt = 0.75 * pi, # so can wrap around 3/4" diameter pawns
                               bit = 0.75,
@@ -217,8 +221,12 @@ Config <- R6Class("pp_cfg",
                 tile_height <- self$get_height("tile_face")
                 return(3 * tile_height)
             }
-            width <- self$get_width(piece_side, suit, rank)
             piece <- get_piece(piece_side)
+            if (grepl("_top$|_base$|_left$|_right$", piece_side) && piece != "pyramid") {
+                ps <- paste0(piece, "_face")
+                return(self$get_depth(ps, suit=suit, rank=rank))
+            }
+            width <- self$get_width(piece_side, suit, rank)
             if (piece == "matchstick") {
                 W <- ifelse(rank == 1, 0.5*width, width)
                 S <- 0.5 * self$get_width("tile_face")
@@ -258,6 +266,13 @@ Config <- R6Class("pp_cfg",
                 }
             }
             piece <- get_piece(piece_side)
+            if (grepl("_top$|_base$", piece_side)) {
+                ps <- paste0(piece, "_face")
+                return(self$get_height(ps, suit=suit, rank=rank))
+            } else if (grepl("_left$|_right$", piece_side)) {
+                ps <- paste0(piece, "_face")
+                return(self$get_width(ps, suit=suit, rank=rank))
+            }
             default <- switch(piece,
                               bit = 0.25,
                               board = 0.25,

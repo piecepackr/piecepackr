@@ -1,5 +1,8 @@
 get_piece <- function(piece_side) {
-    cleave(piece_side, "_")[1]
+    strsplit(piece_side, "_")[[1]][1]
+}
+get_side <- function(piece_side) {
+    strsplit(piece_side, "_")[[1]][2]
 }
 
 has_suit <- function(cs) {

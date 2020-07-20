@@ -10,7 +10,8 @@ op_transform(
   cfg = pp_cfg(),
   envir = NULL,
   op_angle = 45,
-  pt_thickness = 0.01
+  pt_thickness = 0.01,
+  as_top = character(0)
 )
 }
 \arguments{
@@ -29,6 +30,9 @@ or a character vector of \code{pp_cfg} objects}
 \item{pt_thickness}{Thickness of pyramid tip i.e. value to add to the z-value of a pyramid top
 if it is a (weakly) smaller ranked pyramid (top)
 placed on top of a larger ranked pyramid (top).}
+
+\item{as_top}{Character vector of components whose \dQuote{side}
+should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.}
 }
 \value{
 A tibble with extra columns added

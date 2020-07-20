@@ -45,14 +45,15 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
                              ...,
                              filename = tempfile(fileext = ".png"), res = 72) {
 
-    height <- cfg$get_height(piece_side, suit, rank)
-    width <- cfg$get_width(piece_side, suit, rank)
+    piece <- get_piece(piece_side)
+    piece_face <- paste0(piece, "_face")
+    piece_back <- paste0(piece, "_back")
+    height <- cfg$get_height(piece_face, suit, rank)
+    width <- cfg$get_width(piece_face, suit, rank)
+    edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
+
     grDevices::png(filename, height = height, width = 2.5 * width,
         units = "in", res = res, bg = "transparent")
-
-    piece_face <- gsub("back", "face", piece_side)
-    piece_back <- gsub("face", "back", piece_side)
-    edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
 
     # front
     pushViewport(viewport(x = 0.225, width = 0.45))
@@ -90,7 +91,8 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
                          filename = tempfile(fileext = ".obj"), res = 72) {
 
     cfg <- as_pp_cfg(cfg)
-    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    piece <- get_piece(piece_side)
+    opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
 
     # geometric vertices
     # 1st half "top" vertices
@@ -109,10 +111,34 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
 
-    R <- AA_to_R(angle, axis_x, axis_y)
-    if (grepl("_back", piece_side)) R <- R_y(180) %*% R # If piece back then flip it over
+    side <- get_side(piece_side)
+    Rs <- switch(side,
+                 back = R_y(180),
+                 base = R_x(-90),
+                 left = R_y(-90) %*% R_z(-90),
+                 right = R_y(90) %*% R_z(90),
+                 top = R_x(90) %*% R_z(180),
+                 diag(3))
+    R <- Rs %*% AA_to_R(angle, axis_x, axis_y)
 
-    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+    w <- switch(side,
+                left = depth,
+                right = depth,
+                width)
+    h <- switch(side,
+                back = height,
+                face = height,
+                left = width,
+                right = width,
+                depth)
+    d <- switch(side,
+                base = height,
+                top = height,
+                left = height,
+                right = height,
+                depth)
+
+    xyz <- Point3D$new(xs, ys, zs)$dilate(w, h, d)$rotate(R)$translate(pc)
 
     # texture coordinates
     xy_vt_t <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
