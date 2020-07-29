@@ -76,7 +76,7 @@ test_that("save_piece_images works as expected", {
     save_piece_images(cfg_default, directory, format="svgz", angle=c(0,90))
     expect_equal(length(list.files(directory)), 496)
 
-    skip_if_not(Sys.info()[["nodename"]] == "trevorld-Bonobo-Extreme")
+    skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     expect_doppelganger("diagram_op_ppgf", function() {
         g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
         g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
@@ -251,7 +251,7 @@ test_that("no regressions in figures", {
     cfg <- list(invert_colors.suited=TRUE, grob_fn="basicPieceGrob")
     expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", cfg=cfg, suit=3, rank=4))
 
-    skip_if_not(Sys.info()[["nodename"]] == "trevorld-Bonobo-Extreme")
+    skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", suit=4, rank=3))
     expect_doppelganger("pyramid_top_op", function()
         dc("pyramid_top", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
