@@ -64,7 +64,8 @@ Bug fixes and minor improvements
 * `AA_to_R()` now accepts an optional `axis_z` argument and automatically normalizes the axis vector.
   In particular `R_to_AA(AA_to_R(...))` can now be used to normalize alternative axis-angle parameterizations
   with non-unit axis vectors and/or negative `axis_z` values.
-* Improved drawing of oblique projection edges for the "oval" shape (#212) and the "halma" shape.
+* Improved drawing of oblique projection edges for the "oval" shape (#212) and the "halma" shape (#213).
+* In oblique projection obscured edges are now drawn in case of transparent backgrounds (#221).
 * `is_color_invisible()` will now correctly classify as "invisible" colors with an alpha channel value set to 0.
 * The named list returned by `pp_cfg()$get_piece_opt()` now also contains a `back` value indicating whether this is a back of a piece
   (and hence for some shapes may need to be flipped across a vertical line) and a `bleed_color` value indicating a good

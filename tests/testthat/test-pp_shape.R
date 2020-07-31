@@ -3,7 +3,12 @@ library("vdiffr")
 context("pp_shape() works as expected")
 test_that("pp_shape() works as expected", {
     circle <- pp_shape("circle")
-    expect_error(grid.draw(circle$hexlines(gp=gpar(col="yellow"))))
+    expect_error({
+        dev.new()
+        i_cur <- dev.cur()
+        on.exit(dev.off(i_cur))
+        grid.draw(circle$hexlines(gp=gpar(col="yellow")))
+    })
     skip_on_ci()
     expect_doppelganger("add_checkers", function() {
         rect <- pp_shape("rect")
@@ -57,9 +62,29 @@ test_that("pp_shape() works as expected", {
 })
 
 test_that("npc_coords() works", {
-    expect_equal(pp_shape("kite")$npc_coords, list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25)))
+    expect_equal(pp_shape("kite")$npc_coords, kite_xy)
     expect_equal(pp_shape("halma")$npc_coords, halma_xy())
     expect_equal(pp_shape("pyramid")$npc_coords, pyramid_xy)
     expect_equal(pp_shape("concave4")$npc_coords, concave_xy(4, 90, 0.2))
     expect_error(pp_shape("boobah")$npc_coords, "Don't recognize shape label boobah")
+})
+
+test_that("partition_edges works", {
+    s <- pp_shape("kite")
+    expect_equal(partition_edges(s)$type, rep("flat", 4))
+    expect_equal(partition_edges(s)$indices, list(1:2, 2:3, 3:4, c(4, 1)))
+
+    s <- pp_shape("oval")
+    expect_equal(partition_edges(s)$type, "ring")
+    expect_equal(partition_edges(s)$indices, list(1:36))
+
+    s <- pp_shape("halma")
+    expect_equal(partition_edges(s)$type, c("flat", "flat", "flat", "curved", "flat", "flat"))
+    expect_equal(partition_edges(s)$indices, list(c(33, 1), 1:2, 2:3, 3:31, 31:32, 32:33))
+})
+
+test_that("Token2S works as expected", {
+    shape <- pp_shape("kite")
+    token <- Token2S$new(shape)
+    expect_length(token$edges, 4)
 })

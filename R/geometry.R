@@ -91,15 +91,24 @@ Point3D <- R6Class("point3d",
                                      self$y <- rep(y, length.out = n)
                                      self$z <- rep(z, length.out = n)
                                  },
+                                 distance_to = function(p) {
+                                     sqrt((p$x - self$x)^2 + (p$y - self$y)^2 + (p$z  - self$z)^2)
+                                 },
                                  project_op = function(angle, scale) {
                                    x <- self$x + scale * self$z * cos(to_radians(angle))
                                    y <- self$y + scale * self$z * sin(to_radians(angle))
                                    Point2D$new(x, y)
                                  },
                                  dilate = function(width = 1, height = width, depth = width) {
-                                     x <- width * self$x
-                                     y <- height * self$y
-                                     z <- depth * self$z
+                                     if (is.list(width)) {
+                                         x <- width$width * self$x
+                                         y <- width$height * self$y
+                                         z <- width$depth * self$z
+                                     } else {
+                                         x <- width * self$x
+                                         y <- height * self$y
+                                         z <- depth * self$z
+                                     }
                                      Point3D$new(x, y, z)
                                  },
                                  # rotation matrix 'R' is post-multiplied...
@@ -123,8 +132,13 @@ Point3D <- R6Class("point3d",
                                          z <- z
                                      }
                                     Point3D$new(self$x + xt, self$y + y, self$z + z)
-                                 }
-                                 )
+                                 }),
+                   active = list(c = function() {
+                                     Point3D$new(mean(self$x), mean(self$y), mean(self$z))
+                                 },
+                                 width = function() {
+                                     2 * max(self$distance_to(self$c))
+                                 })
 )
 #' @export
 `[.point3d` <- function(x, i) Point3D$new(x$x[i], x$y[i], x$z[i])
@@ -161,7 +175,6 @@ Circle <- R6Class("circle",
                       center <- v$dot(self$c)
                       c(center - self$r, center + self$r)
                   }))
-
 
 Polygon <- R6Class("polygon",
     public = list(vertices=NULL, edges=NULL, normals=NULL,

@@ -82,45 +82,18 @@ write_mtl <- function(mtl_filename, png_filename) {
 # 1,2,3,4 -> 1,4,3,2
 rev_shift <- function(x) c(x[1], rev(x[-1]))
 
-# two-sided objects
-write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
-                         ...,
-                         x = 0, y = 0, z = 0,
-                         angle = 0, axis_x = 0, axis_y = 0,
-                         width = NA, height = NA, depth = NA,
-                         filename = tempfile(fileext = ".obj"), res = 72) {
+# 2-sided token angle
+side_R <- function(side) {
+    switch(side,
+           back = R_y(180),
+           base = R_x(-90),
+           left = R_y(-90) %*% R_z(-90),
+           right = R_y(90) %*% R_z(90),
+           top = R_x(90) %*% R_z(180),
+           diag(3))
+}
 
-    cfg <- as_pp_cfg(cfg)
-    piece <- get_piece(piece_side)
-    opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
-
-    # geometric vertices
-    # 1st half "top" vertices
-    # 2nd half "bottom" vertices
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
-    back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back)
-    xy_npc <- Point2D$new(shape$npc_coords)
-    xy_npc_back <- Point2D$new(back$npc_coords)
-
-    pc <- Point3D$new(x, y, z)
-
-    xy <- xy_npc$translate(-0.5, -0.5)
-    xyz_t <- Point3D$new(xy, z = 0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
-    xs <- c(xyz_t$x, xyz_b$x)
-    ys <- c(xyz_t$y, xyz_b$y)
-    zs <- c(xyz_t$z, xyz_b$z)
-
-    side <- get_side(piece_side)
-    Rs <- switch(side,
-                 back = R_y(180),
-                 base = R_x(-90),
-                 left = R_y(-90) %*% R_z(-90),
-                 right = R_y(90) %*% R_z(90),
-                 top = R_x(90) %*% R_z(180),
-                 diag(3))
-    R <- Rs %*% AA_to_R(angle, axis_x, axis_y)
-
+get_scaling_factors <- function(side, width, height, depth) {
     w <- switch(side,
                 left = depth,
                 right = depth,
@@ -137,15 +110,38 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
                 left = height,
                 right = height,
                 depth)
+    list(width = w, height = h, depth = d)
+}
 
-    xyz <- Point3D$new(xs, ys, zs)$dilate(w, h, d)$rotate(R)$translate(pc)
+# two-sided objects
+write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                         ...,
+                         x = 0, y = 0, z = 0,
+                         angle = 0, axis_x = 0, axis_y = 0,
+                         width = NA, height = NA, depth = NA,
+                         filename = tempfile(fileext = ".obj"), res = 72) {
+
+    cfg <- as_pp_cfg(cfg)
+    piece <- get_piece(piece_side)
+    side <- get_side(piece_side)
+    opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    # geometric vertices
+    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
+    whd <- get_scaling_factors(side, width, height, depth)
+    pc <- Point3D$new(x, y, z)
+    xyz <- Token2S$new(shape, whd, pc, R)$xyz
 
     # texture coordinates
-    xy_vt_t <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
+    back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back)
+    xy_npc <- Point2D$new(shape$npc_coords)
+    xy_npc_back <- Point2D$new(back$npc_coords)
+    xy_vt_f <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
     xy_vt_b <- xy_npc_back$dilate(width = 0.4, height = 1)$translate(x = 0.575)
     xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
-    vt <- list(x = c(xy_vt_t$x, xy_vt_b$x, xy_vt_e$x),
-               y =  c(xy_vt_t$y, xy_vt_b$y, xy_vt_e$y))
+    vt <- list(x = c(xy_vt_f$x, xy_vt_b$x, xy_vt_e$x),
+               y =  c(xy_vt_f$y, xy_vt_b$y, xy_vt_e$y))
 
     # textured face elements
     nv <- length(xyz) / 2

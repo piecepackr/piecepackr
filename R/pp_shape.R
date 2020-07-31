@@ -165,10 +165,11 @@ Shape <- R6Class("pp_shape",
             if (label == "rect") {
                 rect_xy
             } else if (grepl(label, "circle|oval")) {
-                #### grobCoords(circleGrob(), TRUE)[[1]] # nolint
-                convex_xy(36, 90)
+                xy <- convex_xy(36, 90) #### increase number of vertices?
+                xy$c <- rep("C1", length(xy$x))
+                xy
             } else if (label == "kite") {
-                list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25))
+                kite_xy
             } else if (label == "halma") {
                 halma_xy()
             } else if (label == "pyramid") {
@@ -385,18 +386,19 @@ roundrect_xy <- function(shape_r) {
     coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")), closed=TRUE)[[1]]
     x <- as.numeric(grid::convertX(grid::unit(coords$x, "in"), "npc"))
     y <- as.numeric(grid::convertY(grid::unit(coords$y, "in"), "npc"))
-    list(x = x, y = y)
+    list(x = x, y = y, c = rep("C1", length(x)))
 }
 
-pyramid_xy <- list(x = c(0.5, 0, 1), y = c(1, 0, 0))
-rect_xy <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1))
+kite_xy <- list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25), c = rep("C0", 4))
+pyramid_xy <- list(x = c(0.5, 0, 1), y = c(1, 0, 0), c = rep("C0", 3))
+rect_xy <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), c = rep("C0", 4))
 
 convex_xy <- function(n_vertices, t) {
     t <- seq(0, 360, length.out = n_vertices + 1) + t
     r <- 0.5
     x <- to_x(t, r) + 0.5
     y <- to_y(t, r) + 0.5
-    list(x = utils::head(x, -1), y = utils::head(y, -1))
+    list(x = utils::head(x, -1), y = utils::head(y, -1), c = rep("C0", n_vertices))
 }
 
 halma_xy <- function() {
@@ -408,7 +410,8 @@ halma_xy <- function() {
     y <- 1 + y_frac * (to_y(t, r) - r)
     indices <- which(y >= y_cutoff)
     list(x = c(1, 1, x[indices], 0, 0),
-         y = c(0, 0.3, y[indices], 0.3, 0))
+         y = c(0, 0.3, y[indices], 0.3, 0),
+         c = c("C0", "C0", "C0", rep("C1", length(indices)-2),  "C0", "C0", "C0"))
 }
 
 concave_xy <- function(n_vertices, t, r = 0.2) {
@@ -421,7 +424,7 @@ concave_xy <- function(n_vertices, t, r = 0.2) {
     y_inner <- to_y(t_inner,   r) + 0.5
     x <- splice(x_outer, x_inner)
     y <- splice(y_outer, y_inner)
-    list(x = x, y = y)
+    list(x = x, y = y, c = rep("C0", length(x)))
 }
 
 splice <- function(x0, x1) {
