@@ -71,11 +71,11 @@ partition_edges <- function(shape) {
     } else if (all(classes == "C1")) {
         list(type = "ring", indices = list(seq_along(classes)))
     } else {
-        if (!all(classes[c(1,n)] == "C0")) stop("Can only handle case when first and last class are 'C0'")
+        if (!(classes[n] == "C0")) stop("Can only handle case when last class is 'C0'")
         type <- vector("character")
         indices <- vector("list")
         index <- 1
-        prev <- "C0"
+        prev <- classes[n]
         curve_start <- NULL
         for (i in seq_along(classes)) {
             class <- classes[i]
@@ -86,7 +86,11 @@ partition_edges <- function(shape) {
                 index <- index + 1
             } else if (prev == "C1" && class == "C0") { # end of curved
                 type[index] <- "curved"
-                indices[[index]] <- seq(curve_start, i)
+                if (curve_start == 0) {
+                    indices[[index]] <- c(n, seq(i))
+                } else {
+                    indices[[index]] <- seq(curve_start, i)
+                }
                 index <- index + 1
             } else if (prev == "C0" && class == "C1") { # start of curved
                 curve_start <- i - 1
@@ -125,10 +129,11 @@ RingEdge <- R6Class("edge_ring",
                       i_max <- which.max(projections)
                       if (i_min < i_max) {
                           indices <- seq(i_min, i_max)
-                          if (i_max < n)
+                          if (i_max < n) {
                               indices_obscured <- c(seq(i_max + 1, n), seq_len(i_min - 1))
-                          else
+                          } else {
                               indices_obscured <- seq(1, i_min - 1)
+                          }
                       } else {
                           indices <- c(seq(i_min, n), seq(1, i_max))
                           indices_obscured <- seq(i_max + 1, i_min - 1)
@@ -183,6 +188,18 @@ CurvedEdge <- R6Class("edge_curved",
                       x <- numeric(0)
                       y <- numeric(0)
                       id <- numeric(0)
+
+                      # figure out which part farthest
+                      r <- 10 * self$vertices$width
+                      op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
+                      op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
+                      op_ref <- self$vertices$c$translate(op_diff)
+                      dists <- sapply(l_indices,
+                                      function(x) {
+                                          indices <- full_indices(x, n)
+                                          op_ref$distance_to(self$vertices[indices]$c)
+                                      })
+                      l_indices <- l_indices[order(dists)]
                       for (i in seq_along(l_indices)) {
                           indices <- full_indices(l_indices[[i]], n)
                           x <- append(x, xy$x[indices])

@@ -46,6 +46,7 @@
 #'                              \code{radius} controls the distance of the \dQuote{inner} vertices from the center.}
 #'      \item{\dQuote{halma}}{A 2D outline of a \dQuote{Halma pawn}.}
 #'      \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
+#'      \item{\dQuote{meeple}}{A 2D outline of a \dQuote{meeple}.}
 #'      \item{\dQuote{oval}}{Oval.}
 #'      \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.
 #'                              Typically used to help draw the face of the \dQuote{pyramid} piece.}
@@ -94,6 +95,8 @@
 #'      grid.draw(pp_shape("pyramid")$shape(gp=gp, vp=vp))
 #'      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("kite")$shape(gp=gp, vp=vp))
+#'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+#'      grid.draw(pp_shape("meeple")$shape(gp=gp, vp=vp))
 #'
 #'      grid.newpage()
 #'      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
@@ -172,6 +175,8 @@ Shape <- R6Class("pp_shape",
                 kite_xy
             } else if (label == "halma") {
                 halma_xy()
+            } else if (label == "meeple") {
+                meeple_xy
             } else if (label == "pyramid") {
                 pyramid_xy
             } else if (label == "roundrect") {
@@ -213,7 +218,9 @@ roundrectGrobFn <- function(r = 0.05) {
 }
 
 is_known_shape_label <- function(label) {
-    if (label %in% c("circle", "halma", "kite", "oval", "pyramid", "rect", "roundrect")) return(TRUE)
+    if (label %in% c("circle", "halma", "kite", "meeple", "oval", "pyramid", "rect", "roundrect")) {
+        return(TRUE)
+    }
     if (grepl("^concave[0-9]+$", label)) return(TRUE)
     if (grepl("^convex[0-9]+$", label)) return(TRUE)
     FALSE

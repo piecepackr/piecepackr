@@ -182,7 +182,7 @@ get_shapes <- function(df) {
         suit <- ifelse(has_name(df, "suit"), df$suit[ii], NA)
         rank <- ifelse(has_name(df, "rank"), df$rank[ii], NA)
         opt <- try(cfg$get_piece_opt(piece_side, suit, rank), silent = TRUE)
-        if (inherits(opt, "try-error") || opt$shape %in% c("rect", "halma", "roundrect")) {
+        if (inherits(opt, "try-error") || opt$shape %in% c("rect", "halma", "meeple", "roundrect")) {
             shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
                                               y=c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr))
         } else if (opt$shape == "circle") {

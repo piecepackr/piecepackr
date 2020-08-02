@@ -234,8 +234,8 @@ test_that("no regressions in figures", {
     # errors
     expect_error(dce("coin_face", rank = 3, cfg=list(gridline_color = "grey")),
                  "Don't know how to add grid lines to shape circle")
-    expect_error(dce("coin_face", rank = 3, cfg=list(shape = "meeple")),
-                 "Don't recognize shape label meeple")
+    expect_error(dce("coin_face", rank = 3, cfg=list(shape = "megahex")),
+                 "Don't recognize shape label megahex")
     expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
     expect_error(cfg_default$get_width("boo_back"), "Don't know width of piece boo")
@@ -286,6 +286,20 @@ test_that("oblique projection works", {
         g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
         g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
         g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
+    })
+
+    cfg <- pp_cfg(list(depth.pawn = 10/25.4, width.pawn=16/25.4, height.pawn=16/25.4,
+                       dm_cex.pawn=0.5, shape.pawn="meeple", invert_colors.pawn=TRUE))
+    expect_doppelganger("meeple", function() {
+        g.p("pawn_face", x=2, y=3, cfg=cfg, op_angle=90)
+        g.p("pawn_face", x=3, y=3, cfg=cfg, op_angle=45)
+        g.p("pawn_face", x=3, y=2, cfg=cfg, op_angle=0)
+        g.p("pawn_face", x=3, y=1, cfg=cfg, op_angle=-45)
+        g.p("pawn_face", x=2, y=1, cfg=cfg, op_angle=-90)
+        g.p("pawn_face", x=1, y=1, cfg=cfg, op_angle=-135)
+        g.p("pawn_face", x=1, y=2, cfg=cfg, op_angle=180)
+        g.p("pawn_face", x=1, y=3, cfg=cfg, op_angle=135)
+        g.p("coin_face", x=2, y=2, cfg=cfg, op_angle=0, angle=190)
     })
 })
 

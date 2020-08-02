@@ -16,6 +16,7 @@ pp_shape(label = "rect", theta = 90, radius = 0.2, back = FALSE)
                              \code{radius} controls the distance of the \dQuote{inner} vertices from the center.}
      \item{\dQuote{halma}}{A 2D outline of a \dQuote{Halma pawn}.}
      \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
+     \item{\dQuote{meeple}}{A 2D outline of a \dQuote{meeple}.}
      \item{\dQuote{oval}}{Oval.}
      \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.
                              Typically used to help draw the face of the \dQuote{pyramid} piece.}
@@ -116,6 +117,8 @@ to control appearance of the shape.}
      grid.draw(pp_shape("pyramid")$shape(gp=gp, vp=vp))
      vp <- viewport(x=3/4, y=3/4, width=1/2, height=1/2)
      grid.draw(pp_shape("kite")$shape(gp=gp, vp=vp))
+     vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
+     grid.draw(pp_shape("meeple")$shape(gp=gp, vp=vp))
 
      grid.newpage()
      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)

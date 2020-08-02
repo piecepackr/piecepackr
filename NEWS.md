@@ -57,6 +57,9 @@ Bug fixes and minor improvements
 
 * `pp_cfg()` now supports a "roundrect" (rounded rectangle) `shape` (#214, #229).  
   Curvature of the corners are controlled by the `shape_r` style.
+* `pp_cfg()` now supports a "meeple" shape (#104).
+  Meeple coordinates were extracted from [Meeple icon](https://game-icons.net/1x1/delapouite/meeple.html)
+  by [Delapouite](http://delapouite.com/) / [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
 * The default OBJ generating function (used by the default rgl and rayrender functions) 
   now produces six-faced cubes for the dice component (#186).
 * `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).
