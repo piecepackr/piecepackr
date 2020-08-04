@@ -4,7 +4,7 @@ test_that("no regressions in figures", {
 
     skip_on_ci()
     # standard d6 dice
-    cfg <- game_systems("dejavu3d")$dice
+    cfg <- game_systems()$dice
     expect_doppelganger("dice_d6", function()
         grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6, op_scale=0.5, cfg=cfg))
 
@@ -35,7 +35,7 @@ test_that("no regressions in figures", {
     })
 
     # playing cards
-    cfg <- game_systems()$playing_cards_colored
+    cfg <- game_systems("sans3d")$playing_cards_colored
     expect_doppelganger("ten_of_clubs", function()
         grid.piece("card_face", suit = 3, rank = 10, cfg = cfg))
     expect_doppelganger("king_of_stars", function()

@@ -91,7 +91,7 @@ is_legit_cfg_style <- function(cfg_style) {
     # style.suit.piece
     # style.rank.piece
     # style.suit.rank.piece
-    ss <- cleave(cfg_style, sep="\\.")
+    ss <- cleave2(cfg_style, sep="\\.")
     if (!is_legit_style(ss[1])) return(FALSE)
     if (length(ss) == 2) {
         return(is_legit_suit(ss[2]) || is_legit_rank(ss[2]) || is_legit_piece(ss[2]))
@@ -335,7 +335,7 @@ get_dm_symbols <- function(piece_side, suit=0, rank=0, cfg=list()) {
         }
     }
     default <- paste(default, collapse=",")
-    dm_symbols <- cleave(get_style_element("dm_text", piece_side, cfg, default, suit, rank))
+    dm_symbols <- cleave2(get_style_element("dm_text", piece_side, cfg, default, suit, rank))
     dm_symbols <- expand_suit_elements(dm_symbols, "suit_symbols", piece_side, cfg)
     dm_symbols
 }
@@ -437,14 +437,14 @@ get_suit_symbol <- function(piece_side, suit, rank, cfg) {
 
 get_rank_symbols <- function(piece_side=NA, suit=0, rank=0, cfg=list(), expand=TRUE) {
     default <- "n,a,2,3,4,5"
-    rank_symbols <- cleave(get_style_element("rank_text", piece_side, cfg, default, suit, rank))
+    rank_symbols <- cleave2(get_style_element("rank_text", piece_side, cfg, default, suit, rank))
     if (expand)
         rank_symbols <- expand_rank_elements(rank_symbols, "rank_symbols", piece_side, cfg)
     rank_symbols
 }
 get_suit_symbols <- function(piece_side=NA, suit=0, rank=0, cfg=list(), expand=TRUE) {
     default <- "\u2665,\u2660,\u2663,\u2666,\u263c"
-    suit_symbols <- cleave(get_style_element("suit_text", piece_side, cfg, default, suit, rank))
+    suit_symbols <- cleave2(get_style_element("suit_text", piece_side, cfg, default, suit, rank))
     if (expand)
         suit_symbols <- expand_suit_elements(suit_symbols, "suit_symbols", piece_side, cfg)
     suit_symbols
@@ -501,7 +501,7 @@ get_rank_fontfamily <- function(piece_side, suit, rank, cfg) {
     if (use_suit_as_ace(piece_side, suit, rank, cfg)) {
         get_suit_fontfamily(piece_side, suit,  rank, cfg)
     } else {
-        fontfamilies <- cleave(get_style_element("rank_fontfamily", piece_side, cfg, get_fontfamily(cfg), suit, rank))
+        fontfamilies <- cleave2(get_style_element("rank_fontfamily", piece_side, cfg, get_fontfamily(cfg), suit, rank))
         expand_rank_elements(fontfamilies, "font", piece_side, cfg)[rank]
     }
 }
@@ -509,19 +509,19 @@ get_rank_fontface <- function(piece_side, suit, rank, cfg) {
     if (use_suit_as_ace(piece_side, suit, rank, cfg)) {
         get_suit_fontface(piece_side, suit,  rank, cfg)
     } else {
-        fontfaces <- cleave(get_style_element("rank_fontface", piece_side, cfg, get_fontface(cfg), suit, rank))
+        fontfaces <- cleave2(get_style_element("rank_fontface", piece_side, cfg, get_fontface(cfg), suit, rank))
         expand_rank_elements(fontfaces, "fontface", piece_side, cfg)[rank]
     }
 }
 get_suit_fonts <- function(piece_side, suit, rank, cfg) {
-    fonts <- cleave(get_style_element("suit_fontfamily", piece_side, cfg, get_fontfamily(cfg), suit, rank))
+    fonts <- cleave2(get_style_element("suit_fontfamily", piece_side, cfg, get_fontfamily(cfg), suit, rank))
     expand_suit_elements(fonts, "font", piece_side, cfg)
 }
 get_suit_fontfamily <- function(piece_side, suit, rank, cfg) {
     get_suit_fonts(piece_side, suit, rank, cfg)[suit]
 }
 get_suit_fontface <- function(piece_side, suit, rank, cfg) {
-    fontfaces <- cleave(get_style_element("suit_fontface", piece_side, cfg, get_fontface(cfg), suit, rank))
+    fontfaces <- cleave2(get_style_element("suit_fontface", piece_side, cfg, get_fontface(cfg), suit, rank))
     expand_suit_elements(fontfaces, "fontface", piece_side, cfg)[suit]
 }
 get_suit_cex <- function(piece_side, suit, rank, cfg) {
@@ -538,7 +538,7 @@ get_dm_fontface <- function(piece_side, suit, rank, cfg) {
     } else {
         default <- get_fontface(cfg)
     }
-    fonts <- cleave(get_style_element("dm_fontface", piece_side, cfg, default))
+    fonts <- cleave2(get_style_element("dm_fontface", piece_side, cfg, default))
     expand_suit_elements(fonts, "fontface", piece_side, cfg)[suit]
 }
 get_dm_fontfamily <- function(piece_side, suit, rank, cfg) {
@@ -547,7 +547,7 @@ get_dm_fontfamily <- function(piece_side, suit, rank, cfg) {
     } else {
         default <- get_fontfamily(cfg)
     }
-    fonts <- cleave(get_style_element("dm_fontfamily", piece_side, cfg, default))
+    fonts <- cleave2(get_style_element("dm_fontfamily", piece_side, cfg, default))
     expand_suit_elements(fonts, "font", piece_side, cfg)[suit]
 }
 get_dm_cex <- function(piece_side, suit, rank, cfg) {

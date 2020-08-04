@@ -51,6 +51,7 @@ New features
 * Default functions used by `save_piece_obj()`, `piece3d()`, `piece()` now support a
   "top", "base", "left", and "right" side for the two-sided token components:
   "bit", "board", "card", "matchstick", "pawn", "saucer", and "tile" (#135).
+* Function ``game_systems`` now returns a "meeple" configuration with "standard" meeple "bit" pieces (#232).
 
 Bug fixes and minor improvements
 --------------------------------
@@ -59,7 +60,9 @@ Bug fixes and minor improvements
   Curvature of the corners are controlled by the `shape_r` style.
 * `pp_cfg()` now supports a "meeple" shape (#104).
   Meeple coordinates were extracted from [Meeple icon](https://game-icons.net/1x1/delapouite/meeple.html)
-  by [Delapouite](http://delapouite.com/) / [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/)
+  by [Delapouite](http://delapouite.com/) / [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
+* `pp_cfg()` now supports setting multiple styles by using a greater-than-length-one vectors 
+  (as well as continuing to support previously-supported comma-separated strings).
 * The default OBJ generating function (used by the default rgl and rayrender functions) 
   now produces six-faced cubes for the dice component (#186).
 * `R_to_AA()` now always returns an axis-angle parameterization with positive `axis_z` value (#219).

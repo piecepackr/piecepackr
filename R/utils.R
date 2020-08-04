@@ -135,8 +135,14 @@ cleave <- function(s, sep=",", float=FALSE, color=FALSE) {
         vec
     }
 }
-col_cleave <- function(s, sep=",") cleave(s, sep, color=TRUE)
-numeric_cleave <- function(s, sep=",") cleave(s, sep, float=TRUE)
+
+cleave2 <- function(s, sep=",", ...) {
+    if (length(s) > 1)
+        s <- paste(s, collapse=sep)
+    cleave(s, sep, ...)
+}
+col_cleave <- function(s, sep=",") cleave2(s, sep, color=TRUE)
+numeric_cleave <- function(s, sep=",") cleave2(s, sep, float=TRUE)
 
 as_picture <- function(grob, width, height) {
     svg_file <- tempfile(fileext=".svg")

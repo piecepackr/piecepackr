@@ -20,7 +20,7 @@ If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be 
 }
 \description{
 \code{game_systems} returns a list of \code{pp_cfg} objects
-representing several game systems.
+representing several game systems and pieces.
 \code{to_subpack} and \code{to_hexpack} will attempt to generate matching (piecepack stackpack)
      subpack and (piecepack) hexpack \code{pp_cfg} R6 objects respectively given a piecepack configuration.
 }
@@ -40,6 +40,7 @@ Contains the following game systems:\describe{
               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
+\item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
 \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
   See \url{http://www.ludism.org/ppwiki}.
   Configuration also contains the following piecepack accessories:\describe{

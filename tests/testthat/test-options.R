@@ -5,6 +5,12 @@ test_that("options work as expected", {
     expect_equal(get_suit_color("coin_back", 1, 1, cfg), "white")
     expect_equal(get_suit_color("coin_face", 5, 1, cfg), "grey")
     expect_equal(pp_cfg(cfg)$get_suit_color(3:2), c("darkgreen", "black"))
+    cfg <- list(invert_colors.suited = TRUE,
+                background_color = "white",
+                suit_color = c("darkred", "black", "darkgreen", "darkblue", "grey"))
+    expect_equal(get_suit_color("coin_back", 1, 1, cfg), "white")
+    expect_equal(get_suit_color("coin_face", 5, 1, cfg), "grey")
+    expect_equal(pp_cfg(cfg)$get_suit_color(3:2), c("darkgreen", "black"))
 
     expect_equal(should_invert("coin_back", 1, 1, list()), FALSE)
     expect_equal(should_invert("coin_back", 1, 1, list(invert_colors = TRUE)), TRUE)
