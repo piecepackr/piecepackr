@@ -247,7 +247,7 @@ makeContent.gridlines <- function(x) {
     if (is_color_invisible(x$gp$col)) {
         return(setChildren(x, gList(nullGrob(name = "invisible"))))
     }
-    if (label %in% c("circle", "kite", "halma", "oval")) {
+    if (label %in% c("circle", "kite", "halma", "oval", "meeple")) {
         stop(paste("Don't know how to add grid lines to shape", label))
     }
     gl <- gList()
