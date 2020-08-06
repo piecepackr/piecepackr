@@ -4,9 +4,10 @@ context("pp_shape() works as expected")
 test_that("pp_shape() works as expected", {
     circle <- pp_shape("circle")
     expect_error({
-        dev.new()
-        i_cur <- dev.cur()
-        on.exit(dev.off(i_cur))
+        pdf_file <- tempfile(fileext = ".pdf")
+        on.exit(unlink(pdf_file))
+        pdf(pdf_file)
+        on.exit(dev.off())
         grid.draw(circle$hexlines(gp=gpar(col="yellow")))
     })
     skip_on_ci()

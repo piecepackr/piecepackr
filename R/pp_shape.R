@@ -390,6 +390,13 @@ makeContent.pp_polyclip <- function(x) {
 
 # xy functions and/or constants
 roundrect_xy <- function(shape_r) {
+    # avoid opening a blank graphic device window if no graphic devices open
+    if (length(grDevices::dev.list()) == 0) {
+        pdf_file <- tempfile(fileext=".pdf")
+        unlink(pdf_file)
+        grDevices::pdf(pdf_file)
+        on.exit(grDevices::dev.off())
+    }
     coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")), closed=TRUE)[[1]]
     x <- as.numeric(grid::convertX(grid::unit(coords$x, "in"), "npc"))
     y <- as.numeric(grid::convertY(grid::unit(coords$y, "in"), "npc"))
