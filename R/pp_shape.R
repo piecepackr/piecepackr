@@ -34,7 +34,7 @@
 #' \item{\code{label}}{The shape's label.}
 #' \item{\code{theta}}{The shape's theta.}
 #' \item{\code{radius}}{The shape's radius.}
-#' \item{\code{back}}{The shape's back.}
+#' \item{\code{back}}{A boolean of whether this is the shape's \dQuote{back} side.}
 #' \item{\code{npc_coords}}{A named list of \dQuote{npc} coordinates along the perimeter of the shape.}
 #' }
 #' @param label Label of the shape.  One of \describe{

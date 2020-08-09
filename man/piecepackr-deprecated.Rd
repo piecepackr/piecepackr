@@ -74,9 +74,9 @@ they will be marked as Defunct and removed in a future version.
 \item{For \code{hexlinesGrob()} use \code{pp_shape()$hexlines()} instead.}
 \item{For \code{halmaGrob()} use \code{pp_shape("halma")$shape()} instead.}
 \item{For \code{kiteGrob()} use \code{pp_shape("kite")$shape()} instead.}
-\item{For \code{pyramid()} use \code{pp_shape("pyramid")$shape()} instead.}
-\item{For \code{convexGrobFn()} use \code{pp_shape("convexN", t)$shape} instead.}
-\item{For \code{concaveGrobFn()} use \code{pp_shape("concaveN", t, r)$shape} instead.}
+\item{For \code{pyramidGrob()} use \code{pp_shape("pyramid")$shape()} instead.}
+\item{For \code{convexGrobFn(n, t)} use \code{pp_shape(paste0("convex", n), t)$shape} instead.}
+\item{For \code{concaveGrobFn(n, t, r)} use \code{pp_shape(paste0("concave", n), t, r)$shape} instead.}
 }
 }
 \examples{

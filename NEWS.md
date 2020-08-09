@@ -23,15 +23,15 @@ Deprecated functions
 The following utility functions have been deprecated in favor of methods provided by the new `pp_shape()` object:
 
 * `checkersGrob(c, s, t, n)`, use `pp_shape(s, t)$checkers(n, gp=gpar(fill=c))` instead.
-* `concaveGrobFn(N, t, r)`, use `pp_shape("concaveN", t, r)$shape` instead.
-* `convexGrobFn(N, t)`, use `pp_shape("convexN", t)$shape` instead.
+* `concaveGrobFn(n, t, r)`, use `pp_shape(paste0("concave", n), t, r)$shape` instead.
+* `convexGrobFn(n, t)`, use `pp_shape(paste0("convex", n), t)$shape` instead.
 * `get_shape_grob_fn(s, t, r, b)`, use `pp_shape(s, t, r, b)$shape` instead.
 * `gridlinesGrob(c, s, t, l, n)`, use `pp_shape(s, t)$gridlines(n, gp=gpar(col=c, lex=l))` instead.
 * `halmaGrob(...)`, use `pp_shape("halma")$shape(...)` instead.
 * `hexlinesGrob(c, s, n)`, use `pp_shape(s)$hexlines(n, gp=gpar(col=c))` instead.
 * `kiteGrob(...)`, use `pp_shape("kite")$shape(...)` instead.
 * `matGrob(c, s, t, mw, n)`, use `pp_shape(s, t)$mat(mw, n, gp=gpar(fill=c))` instead.
-* `pyramid(...)`, use `pp_shape("pyramid")$shape(...)` instead.
+* `pyramidGrob(...)`, use `pp_shape("pyramid")$shape(...)` instead.
 
 New features
 ------------
@@ -60,7 +60,7 @@ Bug fixes and minor improvements
   Curvature of the corners are controlled by the `shape_r` style.
 * `pp_cfg()` now supports a "meeple" shape (#104).
   Meeple coordinates were extracted from [Meeple icon](https://game-icons.net/1x1/delapouite/meeple.html)
-  by [Delapouite](http://delapouite.com/) / [CC BY 3.0](http://creativecommons.org/licenses/by/3.0/).
+  by [Delapouite](https://delapouite.com/) / [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
 * `pp_cfg()` now supports setting multiple styles by using a greater-than-length-one vectors 
   (as well as continuing to support previously-supported comma-separated strings).
 * The default OBJ generating function (used by the default rgl and rayrender functions) 
