@@ -6,6 +6,7 @@
 **Test environments**
 
 * local (linux, R 4.0.2) 
+* win-builder (windows, R devel)
 * appveyor (windows, R devel) 
 * appveyor (windows, R release) 
 * travis-ci (OSX, R release) 
