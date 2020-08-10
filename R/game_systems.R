@@ -206,7 +206,7 @@ game_systems <- function(style=NULL) {
     playing_cards_tarot$suit_text <- tarot_suit_text
     playing_cards_tarot$suit_text.r14 <- tarot_suit_text
     playing_cards_tarot$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
-    playing_cards_tarot$grob_fn_s5.card <- cardGrobFn(0)
+    playing_cards_tarot$grob_fn.s5.card <- cardGrobFn(0)
     playing_cards_tarot <- pp_cfg(playing_cards_tarot)
     playing_cards_tarot$has_piecepack <- FALSE
     playing_cards_tarot$has_cards <- TRUE
@@ -229,15 +229,16 @@ game_systems <- function(style=NULL) {
          dominoes_red = dominoes(color_list$suit_color[1], "white", color_list$border_color),
          dominoes_white = dominoes(color_list$suit_color[6], "black", color_list$border_color),
          dominoes_yellow = dominoes(color_list$suit_color[5], "black", color_list$border_color),
-         dual_piecepacks_expansion=pp_cfg(dual_piecepacks_expansion),
-         hexpack=to_hexpack(piecepack),
-         meeples=meeples,
-         piecepack=pp_cfg(piecepack),
+         dual_piecepacks_expansion = pp_cfg(dual_piecepacks_expansion),
+         go = go(1, color_list),
+         hexpack = to_hexpack(piecepack),
+         meeples = meeples,
+         piecepack = pp_cfg(piecepack),
          playing_cards = playing_cards,
          playing_cards_colored = playing_cards_colored,
          playing_cards_tarot = playing_cards_tarot,
-         playing_cards_expansion=pp_cfg(playing_cards_expansion),
-         subpack=to_subpack(piecepack))
+         playing_cards_expansion = pp_cfg(playing_cards_expansion),
+         subpack = to_subpack(piecepack))
 }
 
 cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
@@ -293,6 +294,30 @@ checkers <- function(cell_width = 1, color_list) {
     checkers$has_boards <- TRUE
     checkers$has_bits <- TRUE
     checkers
+}
+
+go <- function(cell_width = 1, color_list) {
+    go <- list(n_suits = 6, n_ranks = 19,
+               width.board = (18 + 1) * cell_width,
+               height.board = (18 + 1) * cell_width,
+               width.bit = 0.75 * cell_width, invert_colors.bit = TRUE,
+               ps_text.bit = "", dm_text.bit = "",
+               grob_fn.r1.board_face = linedBoardGrobFn(18, 18, 0.5),
+               gridline_color.board_face = cb_suit_colors_pure,
+               gridline_lex.board = 4,
+               suit_color = cb_suit_colors_impure,
+               background_color = "white",
+               gridline_color.s6.board_face = "grey80")
+    for (i in seq(2, 18)) {
+        go[[paste0("width.r", i, ".board")]] <- (i + 1) * cell_width
+        go[[paste0("height.r", i, ".board")]] <- (i + 1) * cell_width
+        go[[paste0("grob_fn.r", i, ".board_face")]] <- linedBoardGrobFn(i - 1, i - 1, 0.5)
+    }
+    go <- pp_cfg(c(go, color_list))
+    go$has_piecepack <- FALSE
+    go$has_boards <- TRUE
+    go$has_bits <- TRUE
+    go
 }
 
 #' @rdname game_systems

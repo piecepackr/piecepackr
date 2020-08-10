@@ -21,7 +21,7 @@ cellsGrob <- function(nrows = 8, ncols = 8, # nolint
 }
 
 #### make.Content
-checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
+checkeredBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
     force(nrows)
     force(ncols)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
@@ -31,7 +31,10 @@ checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
 
         background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
-        cell_grob <- cellsGrob(nrows, ncols, gp=gpar(fill=opt$gridline_color), name = "cells")
+        vp_cell <- viewport(width = ncols / (ncols + 2 * margin),
+                            height = nrows / (nrows + 2 * margin))
+        cell_grob <- cellsGrob(nrows, ncols, gp=gpar(fill=opt$gridline_color),
+                               name = "cells", vp = vp_cell)
 
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
         border_grob <- shape$shape(gp=gp_border, name = "border")
@@ -42,9 +45,10 @@ checkeredBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
 }
 
 #### make.Content
-linedBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
+linedBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
     force(nrows)
     force(ncols)
+    force(margin)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -52,8 +56,10 @@ linedBoardGrobFn <- function(nrows = 8, ncols = 8) { # nolint
 
         background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
+        vp_cell <- viewport(width = ncols / (ncols + 2 * margin),
+                            height = nrows / (nrows + 2 * margin))
         gp_cell <- gpar(col=opt$gridline_color, lex=opt$gridline_lex)
-        cell_grob <- cellsGrob(nrows, ncols, gp=gp_cell, name = "cells")
+        cell_grob <- cellsGrob(nrows, ncols, gp=gp_cell, name = "cells", vp = vp_cell)
 
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
         border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
