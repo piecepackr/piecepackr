@@ -88,6 +88,10 @@ rgl_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg
                      lit = lit, shininess = shininess,
                      front = "filled", back = "filled",
                      texture = obj$png, textype = textype)
-    mesh <- suppressWarnings(rgl::readOBJ(obj$obj, material = material))
-    invisible(as.numeric(rgl::shade3d(mesh)))
+    mesh <- tryCatch(suppressWarnings(rgl::readOBJ(obj$obj)), error = function(e) {
+                         assert_suggested("readobj")
+                         readobj::read.obj(obj$obj, convert.rgl=TRUE)
+                     })
+    id <- rgl::shade3d(mesh, material = material)
+    invisible(as.numeric(id))
 }
