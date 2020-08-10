@@ -19,7 +19,7 @@ pmap_piece(
 }
 \arguments{
 \item{.l}{A list of vectors, such as a data frame. The length of \code{.l}
-determines the number of arguments that \code{grid.piece_wrapper}
+determines the number of arguments that \code{.f}
 will be called  with. List names will be used if present.}
 
 \item{.f}{Function to be applied to \code{.l} after adjustments to
