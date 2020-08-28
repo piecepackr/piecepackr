@@ -3,13 +3,15 @@ library("vdiffr")
 context("pp_shape() works as expected")
 test_that("pp_shape() works as expected", {
     circle <- pp_shape("circle")
+    current_dev <- grDevices::dev.cur()
+    pdf_file <- tempfile(fileext = ".pdf")
     expect_error({
-        pdf_file <- tempfile(fileext = ".pdf")
-        on.exit(unlink(pdf_file))
         pdf(pdf_file)
-        on.exit(dev.off())
         grid.draw(circle$hexlines(gp=gpar(col="yellow")))
     })
+    unlink(pdf_file)
+    dev.off()
+    if (current_dev > 1) grDevices::dev.set(current_dev)
     skip_on_ci()
     expect_doppelganger("add_checkers", function() {
         rect <- pp_shape("rect")
