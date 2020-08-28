@@ -1,3 +1,19 @@
+piecepackr 1.5.2
+================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* The center of the "face" and "joker" cards in the 
+  "playing_cards", "playing_cards_colored", and "playing_cards_tarot" configurations
+  returned by "game_systems()" now have simple graphics
+  using this packages built-in meeple shape (#193).
+* The "playing_cards_tarot" configuration returned by "game_systems()"
+  now supports a 15th "Joker" "rank" for the first four "suits".
+  This means all the [Playing cards in Unicode](https://en.wikipedia.org/wiki/Playing_cards_in_Unicode)
+  now has a corresponding card in the "playing_cards_tarot" configuration 
+  (suggested Joker mapping is "White" = suit 1, "Black" = suit 2, and "Red" = suit 4)
+
 piecepackr 1.5.1
 ================
 

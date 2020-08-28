@@ -42,4 +42,9 @@ test_that("no regressions in figures", {
         grid.piece("card_face", suit = 5, rank = 13, cfg = cfg))
     expect_doppelganger("red_joker", function()
         grid.piece("card_face", suit = 1, rank = 14, cfg = cfg))
+    cfg <- game_systems("sans3d")$playing_cards_tarot
+    expect_doppelganger("black_joker_no_star", function()
+        grid.piece("card_face", suit = 3, rank = 15, cfg = cfg))
+    expect_doppelganger("knight_of_diamonds", function()
+        grid.piece("card_face", suit = 4, rank = 12, cfg = cfg))
 })

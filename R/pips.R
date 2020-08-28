@@ -75,7 +75,9 @@ xya_pips_dominoes <- function(n_pips) {
 
 #### make.Content
 cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
+    force(card)
     force(rank_offset)
+    force(type)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -110,10 +112,134 @@ cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
     }
 }
 
+#### make.Content
+jokerCardGrobFn <- function(star = TRUE) {
+    force(star)
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+
+        gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                        fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                        lineheight = 0.8)
+        rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
+                              x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
+                              hjust = 0.5, vjust = 0.5, name = "rank")
+
+        # Joker
+        joker_grob <- jokerGrob(opt, star)
+
+        # Border
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+
+        grobTree(background_grob, joker_grob, rank_grob,
+                 mat_grob, border_grob, cl="joker_card_side")
+    }
+}
+
+jokerGrob <- function(opt, star = TRUE) {
+    gp_meeple <- gpar(col = opt$ps_color, lwd = 4)
+    vp_meeple <- viewport(height=inch(1.3), width=inch(1.2), y = 0.4)
+    meeple_grob <- pp_shape("meeple")$shape(gp=gp_meeple, vp=vp_meeple)
+    gp_triangle <- gpar(fill = opt$ps_color, col = NA_character_)
+    y_triangle <- unit(0.4, "npc") + inch(0.5 * 1.3) + inch(0.5 * 0.8) + inch(-0.10)
+    vp_triangle <- viewport(height=inch(0.8), width=inch(0.45), y = y_triangle)
+    triangle_grob <- pp_shape("pyramid")$shape(gp=gp_triangle, vp=vp_triangle)
+    y_circle <- y_triangle + inch(0.5 * 0.8) + inch(0.5 * 0.2) + inch(-0.02)
+    vp_circle <- viewport(height=inch(0.2), width=inch(0.2), y = y_circle)
+    circle_grob <- circleGrob(vp = vp_circle, gp = gpar(col = opt$ps_color, lwd = 4))
+    if (star) {
+        star_grob <- pp_shape("concave5")$shape(gp = gp_triangle, vp = vp_circle)
+    } else {
+        star_grob <- NULL
+    }
+    grobTree(meeple_grob, triangle_grob, circle_grob, star_grob,
+             vp = viewport(width=0.8, height=0.9), cl = "joker")
+}
+
+#### make.Content
+faceCardGrobFn <- function(label = "", placement = "high") {
+    force(label)
+    force(placement)
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+
+        gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                        fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                        lineheight = 0.8)
+        rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
+                              x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
+                              hjust = 0.5, vjust = 0.5, name = "rank")
+        gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
+                        fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
+        suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
+                              x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
+                              hjust = 0.5, vjust = 0.5, name = "suit")
+
+        # Face
+        top_grob <- faceGrob(opt, label, placement)
+        top_grob <- grid::editGrob(top_grob,
+                          vp=viewport(y=0.75, height = 0.5, width = 0.80), name = "top")
+        bot_grob <- faceGrob(opt, label, placement)
+        bot_grob <- grid::editGrob(top_grob,
+                          vp=viewport(y=0.25, height = 0.5, width = 0.80, angle = 180), name = "bottom")
+
+        # Border
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+
+        grobTree(background_grob, top_grob, bot_grob, rank_grob,
+                 suit_grob, mat_grob, border_grob, cl="face_card_side")
+    }
+}
+
+faceGrob <- function(opt, label = "", placement = "high") {
+    if (placement == "high") {
+        y <- 0.7
+        x_meeple <- 0.5
+        y_meeple <- 0.3
+        in_meeple <- 1
+        cex <- 1.5
+    } else {
+        y <- 0.25
+        x_meeple <- 0.57
+        y_meeple <- 0.42
+        in_meeple <- 0.6
+        cex <- 3.0
+    }
+    rot <- ifelse(label %in% c("\u046a", "\u050a"), 180, 0)
+    gp_label <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                    fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                    lineheight = 0.8, cex = cex)
+    label_grob <- textGrob(label = label, gp = gp_label, x = 0.5, y = y,
+                          hjust = 0.5, vjust = 0.5, rot = rot, name = "label")
+    gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
+                    fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface,
+                    cex = in_meeple)
+    suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit, x = x_meeple, y = y_meeple,
+                          hjust = 0.5, vjust = 0.5, name = "suit")
+    gp_meeple <- gpar(col = opt$ps_color, lwd = 4)
+    vp_meeple <- viewport(height=inch(in_meeple), width=inch(in_meeple), x = x_meeple, y = y_meeple)
+    meeple_grob <- pp_shape("meeple")$shape(gp = gp_meeple, vp = vp_meeple)
+    grobTree(meeple_grob, label_grob, suit_grob, cl="face")
+}
+
 #### Support roundrect shape
 #### make.Content
 dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
     force(rank_offset)
+    force(card)
+    force(type)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
