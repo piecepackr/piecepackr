@@ -7,10 +7,15 @@
 #'
 #' Contains the following game systems:\describe{
 #' \item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
-#'       Checkers are represented a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
+#'       Checkers are represented by a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
 #'       and the \dQuote{back} is a lined board.
 #'       Color is controlled by suit and number of rows/columns by rank.
 #'       \code{checkers1} has one inch squares and \code{checkers2} has two inch squares.}
+#' \item{chess1, chess2}{Chess pieces and checkered boards in six color schemes.
+#'       Chess pieces are represented by a \dQuote{bit} (face).   The \dQuote{board} \dQuote{face} is a checkered board
+#'       and the \dQuote{back} is a lined board.
+#'       Color is controlled by suit and number of rows/columns by rank.
+#'       \code{chess1} has one inch squares and \code{chess2} has two inch squares.}
 #' \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
 #' \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 #'      Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
@@ -18,6 +23,11 @@
 #'      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
 #' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
 #'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
+#' \item{go}{Go stones and lined boards in six color schemes.
+#'           Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
+#'           Color is controlled by suit and number of rows/columns by rank
+#'           Currently the "stones" look like "checkers" which is okay for 2D diagrams
+#'           but perhaps unsatisfactory for 3D diagrams.}
 #' \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
 #'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
 #' \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
@@ -103,12 +113,16 @@ game_systems <- function(style=NULL) {
         pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,*",
                              suit_cex.s5=1.3)
         face_labels <- c("", "\u050a", "\u046a", "\u0238")
+        chess_black <- c("p", "n", "b", "r", "q", "k")
+        chess_white <- c("P", "N", "B", "R", "Q", "K")
     } else if (grepl("^dejavu", style)) {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
         pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605")
         face_labels <- c("", "\u265e", "\u265b", "\u265a")
+        chess_black <- c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a")
+        chess_white <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
     }
     if (is_3d) {
         style_3d <- list(suit_color.s4 = "#0072B2",
@@ -221,6 +235,8 @@ game_systems <- function(style=NULL) {
 
     list(checkers1 = checkers(1, color_list),
          checkers2 = checkers(2, color_list),
+         chess1 = chess(1, color_list, chess_black, chess_white),
+         chess2 = chess(2, color_list, chess_black, chess_white),
          dice = dice,
          dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color),
          dominoes_black = dominoes(color_list$suit_color[2], "white", color_list$border_color),
@@ -294,6 +310,40 @@ checkers <- function(cell_width = 1, color_list) {
     checkers$has_boards <- TRUE
     checkers$has_bits <- TRUE
     checkers
+}
+
+chess <- function(cell_width = 1, color_list, black_chess_ranks, white_chess_ranks) {
+    chess <- list(n_suits = 6, n_ranks = 12,
+                     width.board = 8 * cell_width,
+                     height.board = 8 * cell_width,
+                     width.bit = 0.75 * cell_width,
+                     ps_text.bit_back = "", dm_text.bit = "",
+                     grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
+                     grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
+                     gridline_color.board_face = cb_suit_colors_impure,
+                     gridline_color.board_back = cb_suit_colors_pure,
+                     gridline_lex.board = 4,
+                     suit_text = "",
+                     rank_cex.bit = cell_width,
+                     rank_text = black_chess_ranks,
+                     rank_text.s6 = white_chess_ranks,
+                     suit_color = cb_suit_colors_pure,
+                     suit_color.s6 = "black",
+                     background_color = "white",
+                     gridline_color.s6.board_face = "grey80",
+                     gridline_color.s6.board_back = "grey80")
+    for (i in seq(2, 12)) {
+        chess[[paste0("width.r", i, ".board")]] <- i * cell_width
+        chess[[paste0("height.r", i, ".board")]] <- i * cell_width
+        chess[[paste0("grob_fn.r", i, ".board_face")]] <- checkeredBoardGrobFn(i, i)
+        chess[[paste0("grob_fn.r", i, ".board_back")]] <- linedBoardGrobFn(i, i)
+    }
+    chess <- pp_cfg(c(chess, color_list))
+    chess$has_piecepack <- FALSE
+    chess$has_boards <- TRUE
+    chess$has_bits <- TRUE
+    chess$has_dice <- TRUE
+    chess
 }
 
 go <- function(cell_width = 1, color_list) {

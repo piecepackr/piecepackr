@@ -1,6 +1,18 @@
 piecepackr 1.5.2
 ================
 
+New features
+------------
+
+* Function ``game_systems()`` now returns the following new configurations:
+
+  + "go" to make "board" and "stone" "bit" pieces in six colors (#169). 
+     Currently the "stones" look like "checkers" which is okay for 2D diagrams
+     but perhaps unsatisfactory for 3D diagrams.
+  + "chess1", "chess2" to make "board" and "bit" chess pieces in six colors (#167).
+    "chess1"'s "board" has 1" cells while "chess2"'s "board" has 2" cells.
+     Currently the chess piece's are print-and-play style discs instead of 3D Staunton style pieces.
+
 Bug fixes and minor improvements
 --------------------------------
 
@@ -67,7 +79,7 @@ New features
 * Default functions used by `save_piece_obj()`, `piece3d()`, `piece()` now support a
   "top", "base", "left", and "right" side for the two-sided token components:
   "bit", "board", "card", "matchstick", "pawn", "saucer", and "tile" (#135).
-* Function ``game_systems`` now returns a "meeple" configuration with "standard" meeple "bit" pieces (#232).
+* Function ``game_systems()`` now returns a "meeple" configuration with "standard" meeple "bit" pieces (#232).
 
 Bug fixes and minor improvements
 --------------------------------

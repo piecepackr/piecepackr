@@ -27,10 +27,15 @@ representing several game systems and pieces.
 \details{
 Contains the following game systems:\describe{
 \item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
-      Checkers are represented a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
+      Checkers are represented by a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
       and the \dQuote{back} is a lined board.
       Color is controlled by suit and number of rows/columns by rank.
       \code{checkers1} has one inch squares and \code{checkers2} has two inch squares.}
+\item{chess1, chess2}{Chess pieces and checkered boards in six color schemes.
+      Chess pieces are represented by a \dQuote{bit} (face).   The \dQuote{board} \dQuote{face} is a checkered board
+      and the \dQuote{back} is a lined board.
+      Color is controlled by suit and number of rows/columns by rank.
+      \code{chess1} has one inch squares and \code{chess2} has two inch squares.}
 \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
 \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
      Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
@@ -38,6 +43,11 @@ Contains the following game systems:\describe{
      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
 \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
+\item{go}{Go stones and lined boards in six color schemes.
+          Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
+          Color is controlled by suit and number of rows/columns by rank
+          Currently the "stones" look like "checkers" which is okay for 2D diagrams
+          but perhaps unsatisfactory for 3D diagrams.}
 \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
 \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
