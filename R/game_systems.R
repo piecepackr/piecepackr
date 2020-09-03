@@ -60,6 +60,8 @@
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'        If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be installed on the system).
+#' @param round If \code{TRUE} the \dQuote{shape} of \dQuote{tiles} and \dQuote{cards}
+#'              will be \dQuote{roundrect} instead of \dQuote{rect} (the default).
 #' @param cfg List of configuration options
 #' @examples
 #'        cfgs <- game_systems()
@@ -100,13 +102,14 @@
 #'     }
 #' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 #' @export
-game_systems <- function(style=NULL) {
+game_systems <- function(style=NULL, round = FALSE) {
     styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
     if (!is.null(style) && is.na(match(style, styles))) {
         stop(paste("Don't have a customized configuration for style", style))
     }
     if (is.null(style)) style <- "sans"
     is_3d <- grepl("3d$", style)
+    rect_shape <- ifelse(round, "roundrect", "rect")
     if (grepl("^sans", style)) {
         piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
@@ -146,7 +149,9 @@ game_systems <- function(style=NULL) {
                            dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5, suit_color.s2.matchstick = "grey30",
                            mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
                            invert_colors.bit = TRUE,
-                           rank_text=",a,2,3,4,5", use_suit_as_ace=TRUE)
+                           rank_text=",a,2,3,4,5",
+                           use_suit_as_ace=TRUE,
+                           shape.tile = rect_shape, shape.card = rect_shape)
     piecepack <- c(style_3d, piecepack_suits, piecepack_base)
 
     playing_cards_expansion <- piecepack
@@ -166,25 +171,27 @@ game_systems <- function(style=NULL) {
     dual_piecepacks_expansion$suit_text <- pce_suit_text
 
     dice_list <- list(n_suits = 6, n_ranks = 6,
-                        rank_text = "1,2,3,4,5,6",
-                        width.die = 16 / 25.4, # 16 mm dice most common
-                        background_color = "white,white,white,white,black,black",
-                        invert_colors = TRUE,
-                        die_arrangement = "opposites_sum_to_5",
-                        grob_fn.card = cardGrobFn(type = "circle"),
-                        grob_fn.die = pippedGrobFn(0, FALSE))
+                      rank_text = "1,2,3,4,5,6",
+                      width.die = 16 / 25.4, # 16 mm dice most common
+                      background_color = "white,white,white,white,black,black",
+                      invert_colors = TRUE,
+                      die_arrangement = "opposites_sum_to_5",
+                      shape.card = rect_shape,
+                      grob_fn.card = cardGrobFn(type = "circle"),
+                      grob_fn.die = pippedGrobFn(0, FALSE))
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE
 
     playing_cards_list <- list(n_ranks = 14,
-                                 rank_text = "A,2,3,4,5,6,7,8,9,10,J,Q,K,\n\n\n\nJ\nO\nK\nE\nR",
-                                 grob_fn.card = cardGrobFn(),
-                                 grob_fn.r11.card = faceCardGrobFn(face_labels[1]),
-                                 grob_fn.r12.card = faceCardGrobFn(face_labels[3]),
-                                 grob_fn.r13.card = faceCardGrobFn(face_labels[4]),
-                                 grob_fn.r14.card = jokerCardGrobFn(TRUE),
-                                 border_color = "black", border_lex = 4)
+                               rank_text = "A,2,3,4,5,6,7,8,9,10,J,Q,K,\n\n\n\nJ\nO\nK\nE\nR",
+                               grob_fn.card = cardGrobFn(),
+                               grob_fn.r11.card = faceCardGrobFn(face_labels[1]),
+                               grob_fn.r12.card = faceCardGrobFn(face_labels[3]),
+                               grob_fn.r13.card = faceCardGrobFn(face_labels[4]),
+                               grob_fn.r14.card = jokerCardGrobFn(TRUE),
+                               shape.card = rect_shape,
+                               border_color = "black", border_lex = 4)
     playing_cards_list$n_suits <- 4
     playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00,#E59F00"
 
@@ -238,13 +245,13 @@ game_systems <- function(style=NULL) {
          chess1 = chess(1, color_list, chess_black, chess_white),
          chess2 = chess(2, color_list, chess_black, chess_white),
          dice = dice,
-         dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color),
-         dominoes_black = dominoes(color_list$suit_color[2], "white", color_list$border_color),
-         dominoes_blue = dominoes(color_list$suit_color[4], "white", color_list$border_color),
-         dominoes_green = dominoes(color_list$suit_color[3], "white", color_list$border_color),
-         dominoes_red = dominoes(color_list$suit_color[1], "white", color_list$border_color),
-         dominoes_white = dominoes(color_list$suit_color[6], "black", color_list$border_color),
-         dominoes_yellow = dominoes(color_list$suit_color[5], "black", color_list$border_color),
+         dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
+         dominoes_black = dominoes(color_list$suit_color[2], "white", color_list$border_color, rect_shape),
+         dominoes_blue = dominoes(color_list$suit_color[4], "white", color_list$border_color, rect_shape),
+         dominoes_green = dominoes(color_list$suit_color[3], "white", color_list$border_color, rect_shape),
+         dominoes_red = dominoes(color_list$suit_color[1], "white", color_list$border_color, rect_shape),
+         dominoes_white = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
+         dominoes_yellow = dominoes(color_list$suit_color[5], "black", color_list$border_color, rect_shape),
          dual_piecepacks_expansion = pp_cfg(dual_piecepacks_expansion),
          go = go(1, color_list),
          hexpack = to_hexpack(piecepack),
@@ -260,7 +267,7 @@ game_systems <- function(style=NULL) {
 cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 
-dominoes <- function(background_color = "white", suit_color = "black", border_color = "black", mat_width = 0) {
+dominoes <- function(background_color = "white", suit_color = "black", border_color = "black", rect_shape, mat_width = 0) {
     border_lex <- ifelse(border_color == "black", 4, 0)
     dominoes <- pp_cfg(list(n_suits = 13, n_ranks = 13,
                             width.tile = 1,
@@ -276,6 +283,7 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
                             gridline_color.tile_back = "transparent",
                             gridline_color.tile_face = suit_color,
                             gridline_lex.tile_face = 6,
+                            shape.tile = rect_shape, shape.card = rect_shape,
                             grob_fn.tile_face = dominoGrobFn(-1, FALSE)
                             ))
     dominoes$has_piecepack <- FALSE

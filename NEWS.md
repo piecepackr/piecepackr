@@ -13,6 +13,10 @@ New features
     "chess1"'s "board" has 1" cells while "chess2"'s "board" has 2" cells.
      Currently the chess piece's are print-and-play style discs instead of 3D Staunton style pieces.
 
+* Function ``game_systems()`` now accepts new argument ``round``. 
+  If ``TRUE`` then the (retangular) tiles and cards will have a "roundrect" shape
+  instead of a "rect" shape (the default) (#226).
+
 Bug fixes and minor improvements
 --------------------------------
 
