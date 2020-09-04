@@ -17,6 +17,8 @@ test_that("save_piece_obj works", {
     files <- save_piece_obj("pyramid_face", cfg = cfg)
     expect_length(files, 3)
     expect_error(save_piece_obj("belt_face"))
+    files <- save_piece_obj("bit_face", cfg = game_systems()$go)
+    expect_length(files, 3)
 })
 
 test_that("rgl works", {

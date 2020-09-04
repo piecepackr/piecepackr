@@ -70,6 +70,47 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     grobTree(grob_opposite, grob_edge)
 }
 
+basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                           angle=0, type="normal",
+                           width=NA, height=NA, depth=NA,
+                           op_scale=0, op_angle=45) {
+    cfg <- as_pp_cfg(cfg)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+
+    x <- as.numeric(convertX(x, "in"))
+    y <- as.numeric(convertY(y, "in"))
+    z <- as.numeric(convertX(z, "in"))
+    width <- as.numeric(convertX(width, "in"))
+    height <- as.numeric(convertY(height, "in"))
+    depth <- as.numeric(convertX(depth, "in"))
+
+    xyz <- ellipse_xyz()$dilate(width, height, depth)$translate(x, y, z)
+    xy <- xyz$project_op(op_angle, op_scale)
+    hull <- grDevices::chull(as.matrix(xy))
+    x <- xy$x[hull]
+    y <- xy$y[hull]
+
+    gp <- gpar(col=opt$border_color, fill=opt$background_color, lex=opt$border_lex)
+    polygonGrob(x = x, y = y, default.units = "in", gp = gp)
+}
+
+ellipse_xyz <- function() {
+    xy <- expand.grid(x=seq(0.0, 1.0, 0.05), y = seq(0.0, 1.0, 0.05))
+    xy <- xy[which(xy$x^2 + xy$y^2 <= 1), ]
+    z <- sqrt(1 - xy$x^2 - xy$y^2)
+    ppp <- data.frame(x=xy$x, y=xy$y, z=z)
+    ppn <- data.frame(x=xy$x, y=xy$y, z=-z)
+    pnp <- data.frame(x=xy$x, y=-xy$y, z=z)
+    pnn <- data.frame(x=xy$x, y=-xy$y, z=-z)
+    nnp <- data.frame(x=-xy$x, y=-xy$y, z=z)
+    npp <- data.frame(x=-xy$x, y=xy$y, z=z)
+    npn <- data.frame(x=-xy$x, y=xy$y, z=-z)
+    nnn <- data.frame(x=-xy$x, y=-xy$y, z=-z)
+    df <- 0.5 * rbind(ppp, ppn, pnp, pnn, nnp, npp, npn, nnn)
+    Point3D$new(df)
+}
+
 basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, type="normal",

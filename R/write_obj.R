@@ -166,6 +166,45 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
 
+write_ellipse_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                              ...,
+                              x = 0, y = 0, z = 0,
+                              angle = 0, axis_x = 0, axis_y = 0,
+                              width = NA, height = NA, depth = NA,
+                              filename = tempfile(fileext = ".obj"), subdivide=3) {
+    assert_suggested("rgl")
+    cfg <- as_pp_cfg(cfg)
+    piece <- get_piece(piece_side)
+    side <- get_side(piece_side)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+
+    # geometric vertices
+    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
+    whd <- get_scaling_factors(side, width, height, depth)
+    pc <- Point3D$new(x, y, z)
+    e <- rgl::ellipse3d(diag(3), t=0.5, subdivide=subdivide, smooth=FALSE)
+    xyz <- as.data.frame(t(e$vb))
+    names(xyz) <- c("x", "y", "z", "u")
+    xyz <- Point3D$new(xyz)$dilate(whd)$translate(pc)
+
+    # texture coordinates
+    xy_vt <- list(x = c(0, 0, 1, 1), c(1, 0, 0, 1))
+
+    # face elements
+    f <- lapply(seq.int(ncol(e$ib)), function(x) list(v = e$ib[, x], vt = 1:4))
+
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    write_obj(filename, v = xyz, vt = xy_vt, f = f)
+    grDevices::png(png_filename, bg=opt$background_color)
+    grid.newpage()
+    grDevices::dev.off()
+
+    invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+}
+
 write_die_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
                           ...,
                           x = 0, y = 0, z = 0,

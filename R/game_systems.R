@@ -131,28 +131,30 @@ game_systems <- function(style=NULL, round = FALSE) {
         style_3d <- list(suit_color.s4 = "#0072B2",
                          invert_colors.pawn = TRUE,
                          invert_colors.die = TRUE,
-                         background_color="burlywood",
                          border_color="transparent",
                          mat_color.tile_back = "burlywood",
                          edge_color.tile = "black", edge_color.coin = "black")
-        color_list <- list(suit_color = cb_suit_colors_pure,
+        color_list <- list(background_color="burlywood",
+                           suit_color = cb_suit_colors_pure,
                            border_color = "transparent", border_lex = 0,
                            edge_color.board = "black")
     } else {
         style_3d <- NULL
-        color_list <- list(suit_color = cb_suit_colors_impure,
+        color_list <- list(background_color="white",
+                           suit_color = cb_suit_colors_impure,
                            border_color = "black", border_lex = 4,
                            edge_color.board = "white")
     }
-    piecepack_base <- list(border_color="black", border_lex=4, depth.coin=0.25,
-                           invert_colors.matchstick = TRUE, ps_cex.r2.matchstick = 0.7,
+    piecepack_base <- list(depth.coin=0.25,
+                           invert_colors.matchstick = TRUE,
+                           ps_cex.r2.matchstick = 0.7,
                            dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5, suit_color.s2.matchstick = "grey30",
                            mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
                            invert_colors.bit = TRUE,
                            rank_text=",a,2,3,4,5",
                            use_suit_as_ace=TRUE,
                            shape.tile = rect_shape, shape.card = rect_shape)
-    piecepack <- c(style_3d, piecepack_suits, piecepack_base)
+    piecepack <- c(style_3d, piecepack_suits, color_list, piecepack_base)
 
     playing_cards_expansion <- piecepack
     playing_cards_expansion$suit_text <- pce_suit_text
@@ -267,7 +269,8 @@ game_systems <- function(style=NULL, round = FALSE) {
 cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 
-dominoes <- function(background_color = "white", suit_color = "black", border_color = "black", rect_shape, mat_width = 0) {
+dominoes <- function(background_color = "white", suit_color = "black", border_color = "black",
+                     rect_shape, mat_width = 0) {
     border_lex <- ifelse(border_color == "black", 4, 0)
     dominoes <- pp_cfg(list(n_suits = 13, n_ranks = 13,
                             width.tile = 1,
@@ -332,12 +335,13 @@ chess <- function(cell_width = 1, color_list, black_chess_ranks, white_chess_ran
                      gridline_color.board_back = cb_suit_colors_pure,
                      gridline_lex.board = 4,
                      suit_text = "",
-                     rank_cex.bit = cell_width,
+                     rank_cex.bit = 1.4 * cell_width,
                      rank_text = black_chess_ranks,
                      rank_text.s6 = white_chess_ranks,
                      suit_color = cb_suit_colors_pure,
                      suit_color.s6 = "black",
                      background_color = "white",
+                     edge_color.bit = color_list$edge_color.board,
                      gridline_color.s6.board_face = "grey80",
                      gridline_color.s6.board_back = "grey80")
     for (i in seq(2, 12)) {
@@ -358,13 +362,19 @@ go <- function(cell_width = 1, color_list) {
     go <- list(n_suits = 6, n_ranks = 19,
                width.board = (18 + 1) * cell_width,
                height.board = (18 + 1) * cell_width,
-               width.bit = 0.75 * cell_width, invert_colors.bit = TRUE,
+               width.bit = 0.8700787 * cell_width, # white stone should be 22.1 mm wide
+               depth.bit = 0.3937008 * cell_width, # stones should be 6-10 mm thick
+               grob_fn.board_back = basicPieceGrob,
+               invert_colors.bit = TRUE,
+               op_grob_fn.bit = basicEllipsoid,
+               obj_fn.bit = function(...) write_ellipse_obj(..., subdivide=4),
                ps_text.bit = "", dm_text.bit = "",
                grob_fn.r1.board_face = linedBoardGrobFn(18, 18, 0.5),
                gridline_color.board_face = cb_suit_colors_pure,
+               gridline_color.board_back = "transparent",
                gridline_lex.board = 4,
                suit_color = cb_suit_colors_impure,
-               background_color = "white",
+               background_color = color_list$background_color,
                gridline_color.s6.board_face = "grey80")
     for (i in seq(2, 18)) {
         go[[paste0("width.r", i, ".board")]] <- (i + 1) * cell_width

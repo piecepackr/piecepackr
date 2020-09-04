@@ -292,11 +292,24 @@ Double-12 dominoes
 
     Double-12 dominoes and standard dice in a variety of colors
 
+Go
+~~
+
+``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is an example diagram for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted in rgl: 
+
+
+.. figure:: man/figures/README-go.png
+    :alt: 3D Multi-player Go diagram
+    :align: center
+    :width: 80%
+
+    3D Multi-player Go diagram
+
 
 Piecepack
 ~~~~~~~~~
 
-``game_systems`` returns three different piecepack_ configurations:
+``game_systems()`` returns three different piecepack_ configurations:
 
 1) ``piecepack``
 2) ``playing_cards_expansion``
@@ -305,6 +318,30 @@ Piecepack
 Plus a configuration for a ``subpack`` aka "mini" piecepack and a ``hexpack`` configuration.
 
 The piecepack configurations also contain common piecepack accessories like piecepack pyramids, piecepack matchsticks, and piecepack saucers.
+
+Playing Cards
+~~~~~~~~~~~~~
+
+``game_systems()`` returns ``playing_cards``, ``playing_cards_colored``, and ``playing_cards_tarot`` (French Tarot) configurations for making diagrams with various decks of playing cards.
+
+
+.. sourcecode:: r
+    
+
+    library("tibble")
+    
+    envir <- game_systems("dejavu", round=TRUE)
+    
+    df <- tibble(piece_side = "card_face", 
+                 x=1.25 + 2.5 * 0:3, y=2, 
+                 suit=1:4, rank=c(1,6,9,12),
+                 cfg = "playing_cards")
+    pmap_piece(df, default.units="in", envir=envir)
+
+.. figure:: man/figures/README-cards-1.png
+    :alt: Playing Cards
+
+    Playing Cards
 
 Looney Pyramids
 ~~~~~~~~~~~~~~~
