@@ -128,21 +128,35 @@ RingEdge <- R6Class("edge_ring",
                       i_min <- which.min(projections)
                       i_max <- which.max(projections)
                       if (i_min < i_max) {
-                          indices <- seq(i_min, i_max)
+                          indices1 <- seq(i_min, i_max)
                           if (i_max < n) {
-                              indices_obscured <- c(seq(i_max + 1, n), seq_len(i_min - 1))
+                              indices2 <- c(seq(i_max + 1, n), seq_len(i_min - 1))
                           } else {
-                              indices_obscured <- seq(1, i_min - 1)
+                              indices2 <- seq(1, i_min - 1)
                           }
                       } else {
-                          indices <- c(seq(i_min, n), seq(1, i_max))
-                          indices_obscured <- seq(i_max + 1, i_min - 1)
+                          indices1 <- c(seq(i_min, n), seq(1, i_max))
+                          indices2 <- seq(i_max + 1, i_min - 1)
+                      }
+                      # figure out which part farthest
+                      r <- 10 * self$vertices$width
+                      op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
+                      op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
+                      op_ref <- self$vertices$c$translate(op_diff)
+                      d1 <- op_ref$distance_to(self$vertices[indices1]$c)
+                      d2 <- op_ref$distance_to(self$vertices[indices2]$c)
+                      if (d1 > d2) {
+                          indices_obscured <- indices2
+                          indices_visible <- indices1
+                      } else {
+                          indices_obscured <- indices1
+                          indices_visible <- indices2
                       }
                       xy <- self$vertices$project_op(angle, scale)
                       x_obscured <- xy$x[full_indices(indices_obscured, n)]
                       y_obscured <- xy$y[full_indices(indices_obscured, n)]
-                      x_visible <- xy$x[full_indices(indices, n)]
-                      y_visible <- xy$y[full_indices(indices, n)]
+                      x_visible <- xy$x[full_indices(indices_visible, n)]
+                      y_visible <- xy$y[full_indices(indices_visible, n)]
                       polygonGrob(x=c(x_obscured, x_visible),
                                   y=c(y_obscured, y_visible),
                                   id.lengths = c(length(x_obscured), length(x_visible)),

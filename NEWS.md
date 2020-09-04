@@ -27,6 +27,7 @@ Bug fixes and minor improvements
   This means all the [Playing cards in Unicode](https://en.wikipedia.org/wiki/Playing_cards_in_Unicode)
   now has a corresponding card in the "playing_cards_tarot" configuration 
   (suggested Joker mapping is "White" = suit 1, "Black" = suit 2, and "Red" = suit 4)
+* Fixes a bug in the oblique projection of piece "backs" of thick convex-curved 2-sided tokens.
 
 piecepackr 1.5.1
 ================
