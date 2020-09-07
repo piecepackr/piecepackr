@@ -59,9 +59,13 @@
 #'               ``stackpack'' diagrams.  See \url{http://www.ludism.org/ppwiki/StackPack}.}
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
-#'        If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be installed on the system).
+#'              If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
+#'              (must be installed on the system).
 #' @param round If \code{TRUE} the \dQuote{shape} of \dQuote{tiles} and \dQuote{cards}
 #'              will be \dQuote{roundrect} instead of \dQuote{rect} (the default).
+#' @param pawn If \code{"token"} (default) the piecepack pawn will be a two-sided token in a \dQuote{halma} outline,
+#'             if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn
+#'             (doesn't works well with \code{grid.piece}).
 #' @param cfg List of configuration options
 #' @examples
 #'        cfgs <- game_systems()
@@ -102,7 +106,7 @@
 #'     }
 #' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 #' @export
-game_systems <- function(style=NULL, round = FALSE) {
+game_systems <- function(style=NULL, round = FALSE, pawn="token") {
     styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
     if (!is.null(style) && is.na(match(style, styles))) {
         stop(paste("Don't have a customized configuration for style", style))
@@ -127,10 +131,22 @@ game_systems <- function(style=NULL, round = FALSE) {
         chess_black <- c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a")
         chess_white <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
     }
+    if (pawn == "peg-doll") {
+        pawn <- list(width.pawn=0.75, depth.pawn=0.75, height.pawn=1.5,
+                     edge_color.pawn=cb_suit_colors_pure,
+                     edge_color.s4.pawn="#0072B2",
+                     background_color.belt_face="white",
+                     mat_color.belt_face="transparent",
+                     suit_cex.belt_face=1.5,
+                     obj_fn.pawn=save_peg_doll_obj)
+    } else {
+        pawn <- NULL
+    }
     if (is_3d) {
         style_3d <- list(suit_color.s4 = "#0072B2",
                          invert_colors.pawn = TRUE,
                          invert_colors.die = TRUE,
+                         background_color.die = "white",
                          border_color="transparent",
                          mat_color.tile_back = "burlywood",
                          edge_color.tile = "black", edge_color.coin = "black")
@@ -154,7 +170,7 @@ game_systems <- function(style=NULL, round = FALSE) {
                            rank_text=",a,2,3,4,5",
                            use_suit_as_ace=TRUE,
                            shape.tile = rect_shape, shape.card = rect_shape)
-    piecepack <- c(style_3d, piecepack_suits, color_list, piecepack_base)
+    piecepack <- c(pawn, style_3d, piecepack_suits, color_list, piecepack_base)
 
     playing_cards_expansion <- piecepack
     playing_cards_expansion$suit_text <- pce_suit_text
@@ -367,7 +383,7 @@ go <- function(cell_width = 1, color_list) {
                grob_fn.board_back = basicPieceGrob,
                invert_colors.bit = TRUE,
                op_grob_fn.bit = basicEllipsoid,
-               obj_fn.bit = function(...) write_ellipse_obj(..., subdivide=4),
+               obj_fn.bit = function(...) save_ellipsoid_obj(..., subdivide=4),
                ps_text.bit = "", dm_text.bit = "",
                grob_fn.r1.board_face = linedBoardGrobFn(18, 18, 0.5),
                gridline_color.board_face = cb_suit_colors_pure,

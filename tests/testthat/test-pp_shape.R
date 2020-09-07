@@ -79,7 +79,7 @@ test_that("partition_edges works", {
 
     s <- pp_shape("oval")
     expect_equal(partition_edges(s)$type, "ring")
-    expect_equal(partition_edges(s)$indices, list(1:36))
+    expect_equal(partition_edges(s)$indices, list(1:72))
 
     s <- pp_shape("halma")
     expect_equal(partition_edges(s)$type, c("flat", "flat", "flat", "curved", "flat", "flat"))

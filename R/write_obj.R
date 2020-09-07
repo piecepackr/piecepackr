@@ -114,7 +114,7 @@ get_scaling_factors <- function(side, width, height, depth) {
 }
 
 # two-sided objects
-write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
+save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
                          x = 0, y = 0, z = 0,
                          angle = 0, axis_x = 0, axis_y = 0,
@@ -166,7 +166,22 @@ write_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
 
-write_ellipse_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
+#' Alternative Wavefront OBJ file generators
+#'
+#' These are alternative Wavefront OBJ generators intended to be used as a \code{obj_fn} attribute
+#' in a \code{pp_cfg()} \dQuote{configuration list}.
+#' \code{save_ellipsoid_obj} saves an ellipsoid with a color equal to that piece's \code{background_color}.
+#' \code{save_peg_doll_obj} saves a \dQuote{peg doll} style doll with a color equal to that piece's \code{edge_color}
+#' with a \dQuote{pawn belt} around it's waste from that suit's and rank's \code{belt_face}.
+#' @seealso See \code{\link{pp_cfg}} for a discussion of \dQuote{configuration lists}.
+#'          Wavefront OBJ file generators are used by \code{\link{save_piece_obj}} and (by default)
+#'          \code{\link{piece3d}} (\code{rgl} wrapper) and \code{\link{piece}} (\code{rayrender} wrapper).
+#' @inheritParams save_piece_obj
+#' @param subdivide Increasing this value makes for a smoother ellipsoid (and larger OBJ file and slower render).
+#'                  See \code{\link[rgl]{ellipse3d}}.
+#' @rdname obj_fns
+#' @export
+save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1, cfg = pp_cfg(),
                               ...,
                               x = 0, y = 0, z = 0,
                               angle = 0, axis_x = 0, axis_y = 0,
@@ -176,7 +191,6 @@ write_ellipse_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     cfg <- as_pp_cfg(cfg)
     piece <- get_piece(piece_side)
     side <- get_side(piece_side)
-    opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
     # geometric vertices
     R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
@@ -188,7 +202,7 @@ write_ellipse_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     xyz <- Point3D$new(xyz)$dilate(whd)$translate(pc)
 
     # texture coordinates
-    xy_vt <- list(x = c(0, 0, 1, 1), c(1, 0, 0, 1))
+    xy_vt <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1))
 
     # face elements
     f <- lapply(seq.int(ncol(e$ib)), function(x) list(v = e$ib[, x], vt = 1:4))
@@ -198,6 +212,7 @@ write_ellipse_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
 
     write_obj(filename, v = xyz, vt = xy_vt, f = f)
+    opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
     grDevices::png(png_filename, bg=opt$background_color)
     grid.newpage()
     grDevices::dev.off()
@@ -205,12 +220,165 @@ write_ellipse_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
 
-write_die_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
+#' @rdname obj_fns
+#' @export
+save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1, cfg = pp_cfg(),
+                               ...,
+                               x = 0, y = 0, z = 0,
+                               angle = 0, axis_x = 0, axis_y = 0,
+                               width = NA, height = NA, depth = NA,
+                               filename = tempfile(fileext = ".obj"), res = 72) {
+
+    assert_suggested("rgl")
+    cfg <- as_pp_cfg(cfg)
+    piece <- get_piece(piece_side)
+    side <- get_side(piece_side)
+
+    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
+    whd <- get_scaling_factors(side, width, height, depth)
+    pc <- Point3D$new(x, y, z)
+    # normalized peg doll is laying down face up
+    width <- whd$width
+    height <- whd$height
+    depth <- whd$depth
+    if (!nigh(width, depth)) warning("Base of peg doll is not circular")
+    # base
+    circle <- Point2D$new(pp_shape("convex72", back=TRUE)$npc_coords)$translate(x = -0.5, y = -0.5)
+    xyz_base <- as.data.frame(Point3D$new(x=circle$x, y=-0.5, z=circle$y))
+    vt_base <- as.data.frame(Point2D$new(circle)$dilate(height=0.2)$translate(x = 0.5, y = 0.1))
+    n_base <- nrow(xyz_base)
+    f_base <- list(list(v = seq(n_base), vt = seq(n_base)))
+
+    # body below
+    belt <- cfg$get_height("belt_face", suit, rank) / height
+    head <- width / height
+    neck <- 0.1 * head
+    y_below <- (1 - head - neck - belt) / 2
+    xyz_below <- as.data.frame(Point3D$new(x=circle$x, y=y_below - 0.5, z=circle$y))
+    vt_body <- data.frame(x = c(0, 0, 1, 1), y = c(0.1, 0, 0, 0.1))
+
+    f_below <- list()
+    for (i in seq(n_base)) {
+        ir <- i %% n_base + 1
+        il <- ir %% n_base + 1
+        f_below[[i]] <- list(v = c(n_base + ir, n_base + il, il, ir),
+                             vt = n_base + 1:4)
+    }
+    # belt
+    xyz_belt <- as.data.frame(Point3D$new(x=circle$x, y=y_below - 0.5 + belt, z=circle$y))
+    vt_belt <- data.frame(x = rep(seq(0, 1, length.out = nrow(xyz_belt) + 1L), 2),
+                          y = rep(c(0.75, 0.25), each=nrow(xyz_belt) + 1L))
+    f_belt <- list()
+    for (i in seq(n_base)) {
+        if (i <= n_base / 2) {
+            ir <- i
+            il <- ir + 1
+            v <- c(n_base + ir, n_base + il, il, ir)
+            vt <- c(0.5 * n_base + 2 - ir, 0.5*n_base + 2 - il, 1.5*n_base + 3 - il, 1.5*n_base + 3 -ir)
+            f_belt[[i]] <- list(v = n_base + v, vt = n_base + 4 + vt)
+        } else {
+            ir <- i
+            il <- ir + 1
+            ilv <- ifelse(il > n_base, 1, il)
+            v <- c(n_base + ir, n_base + ilv, ilv, ir)
+            vt <- c(1.5 * n_base + 2 - ir, 1.5*n_base + 2 - il, 2.5*n_base + 3 - il, 2.5*n_base + 3 -ir)
+            f_belt[[i]] <- list(v = n_base + v, vt = n_base + 4 + vt)
+        }
+    }
+
+    # body above
+    xyz_above <- as.data.frame(Point3D$new(x=circle$x, y=2 * y_below + belt - 0.5, z=circle$y))
+
+    f_above <- list()
+    for (i in seq(n_base)) {
+        ir <- i %% n_base + 1
+        il <- ir %% n_base + 1
+        f_above[[i]] <- list(v = 2 * n_base + c(n_base + ir, n_base + il, il, ir),
+                             vt = n_base + 1:4)
+    }
+    # neck
+    xyz_neck1 <- as.data.frame(Point3D$new(x=0.95*circle$x, y=0.5-head-0.95*neck, z=0.95*circle$y))
+    xyz_neck2 <- as.data.frame(Point3D$new(x=0.85*circle$x, y=0.5-head-0.7*neck, z=0.85*circle$y))
+    xyz_neck3 <- as.data.frame(Point3D$new(x=0.70*circle$x, y=0.5-head-0.4*neck, z=0.70*circle$y))
+    xyz_neck4 <- as.data.frame(Point3D$new(x=0.50*circle$x, y=0.5-head, z=0.50*circle$y))
+    xyz_neck5 <- as.data.frame(Point3D$new(x=0.50*circle$x, y=0.5-0.9*head, z=0.50*circle$y))
+    xyz_neck <- rbind(xyz_neck1, xyz_neck2, xyz_neck3, xyz_neck4, xyz_neck5)
+
+    f_neck <- vector("list", 5 * n_base)
+    for (i in seq(n_base)) {
+        ir <- i %% n_base + 1
+        il <- ir %% n_base + 1
+        f_neck[[i]] <- list(v = 3 * n_base + c(n_base + ir, n_base + il, il, ir),
+                            vt = 3 * n_base + 4 + 2 + 1:4)
+        f_neck[[n_base + i]] <- list(v = 4 * n_base + c(n_base + ir, n_base + il, il, ir),
+                                     vt = 3 * n_base + 4 + 2 + 1:4)
+        f_neck[[2 * n_base + i]] <- list(v = 5 * n_base + c(n_base + ir, n_base + il, il, ir),
+                                         vt = 3 * n_base + 4 + 2 + 1:4)
+        f_neck[[3 * n_base + i]] <- list(v = 6 * n_base + c(n_base + ir, n_base + il, il, ir),
+                                         vt = 3 * n_base + 4 + 2 + 1:4)
+        f_neck[[4 * n_base + i]] <- list(v = 7 * n_base + c(n_base + ir, n_base + il, il, ir),
+                                         vt = 3 * n_base + 4 + 2 + 1:4)
+    }
+
+    # head
+    e <- rgl::ellipse3d(diag(3), t=0.5, subdivide=4, smooth=FALSE)
+    xyz <- as.data.frame(t(e$vb))
+    names(xyz) <- c("x", "y", "z", "u")
+    xyz_head <- as.data.frame(Point3D$new(xyz)$dilate(height = width/height)$translate(y = 0.5 - 0.5*width/height))
+
+    vt_head <- data.frame(x = c(0, 0, 1, 1), y = c(1, 0.90, 0.90, 1))
+
+    f_head <- lapply(seq.int(ncol(e$ib)), function(x) list(v = 9 * n_base + e$ib[, x],
+                                                           vt = 3 * n_base + 4 + 2 + 1:4))
+
+    # write obj
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    xyz <- rbind(xyz_base, xyz_below, xyz_belt, xyz_above, xyz_neck, xyz_head)
+    xyz <- Point3D$new(xyz)$dilate(whd)$rotate(R)$translate(pc)
+
+    xy_vt <- rbind(vt_base, vt_body, vt_belt, vt_head)
+
+    faces <- c(f_base, f_below, f_belt, f_above, f_neck, f_head)
+
+    write_obj(filename, v = xyz, vt = xy_vt, f = faces)
+    write_peg_doll_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
+
+    invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+
+}
+
+write_peg_doll_texture <- function(piece_side = "pawn_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                                   ...,
+                                   filename = tempfile(fileext = ".png"), res = 72) {
+    height <- cfg$get_height("belt_face", suit, rank)
+    width <- cfg$get_width("belt_face", suit, rank)
+    piece <- get_piece(piece_side)
+    opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
+    grDevices::png(filename, height = 2 * height, width = width,
+        units = "in", res = res, bg = "transparent")
+    pushViewport(viewport(y=0.875, height=0.25))
+    grid.rect(gp = gpar(col=NA_character_, fill=opt$edge_color))
+    popViewport()
+    pushViewport(viewport(y=0.500, height=0.50))
+    grid.piece("belt_face", suit = suit, rank = rank, cfg = cfg)
+    popViewport()
+    pushViewport(viewport(y=0.125, height=0.25))
+    grid.rect(gp = gpar(col=NA_character_, fill=opt$edge_color))
+    popViewport()
+
+    grDevices::dev.off()
+    invisible(filename)
+}
+
+save_die_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
                           ...,
                           x = 0, y = 0, z = 0,
                           angle = 0, axis_x = 0, axis_y = 0,
                           width = NA, height = NA, depth = NA,
-                         filename = tempfile(fileext = ".obj"), res = 72) {
+                          filename = tempfile(fileext = ".obj"), res = 72) {
 
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -326,7 +494,7 @@ draw_piece_and_bleed <- function(piece_side, suit, rank, cfg) {
 }
 
 # pyramid top up
-write_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = pp_cfg(),
+save_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
                          x = 0, y = 0, z = 0,
                          angle = 0, axis_x = 0, axis_y = 0,
@@ -367,7 +535,7 @@ write_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = p
 }
 
 # pyramid side down
-write_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = pp_cfg(),
+save_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = pp_cfg(),
                          ...,
                          x = 0, y = 0, z = 0,
                          angle = 0, axis_x = 0, axis_y = 0,

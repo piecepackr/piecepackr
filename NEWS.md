@@ -1,4 +1,4 @@
-piecepackr 1.5.2
+piecepackr 1.6.0
 ================
 
 New features
@@ -11,9 +11,24 @@ New features
     "chess1"'s "board" has 1" cells while "chess2"'s "board" has 2" cells.
     Currently the chess piece's are print-and-play style discs instead of 3D Staunton style pieces.
 
+* New alternative Wavefront OBJ file generating functions intended to be used
+  with the ``obj_fn`` attribute in ``pp_cfg()`` "configuration lists":
+
+  + ``save_ellipsoid_obj()`` creates an ellipsoid piece colored with that piece's ``background_color``.
+    Currently used for the go "stones" in ``game_systems()`` "go" configuration.
+    Could also be used for colored "marble / ball" pieces (#176).
+  + ``save_peg_doll_obj()`` creates a "peg doll" piece colored with that piece's ``edge_color``
+    and with a "pawn belt" around its "waist" controlled by that suit and rank's ``belt_face`` component (#184).
+
 * Function ``game_systems()`` now accepts new argument ``round``. 
   If ``TRUE`` then the (retangular) tiles and cards will have a "roundrect" shape
   instead of a "rect" shape (the default) (#226).
+  NB. ``piece3d`` (rgl bindings) currently cannot import the "roundrect" shape.
+
+* Function ``game_systems()`` now accepts new argument ``pawn``. 
+  If ``"token"`` (the default) piecepack pawns are a two-sided token with a "halma" shape.
+  If ``"peg-doll"`` then piecepack pawns will be a "peg doll" with a "pawn belt" (#184).
+  NB. ``grid.piece`` (grid bindings) currently cannot draw the "peg-doll" style pawn.
 
 Bug fixes and minor improvements
 --------------------------------

@@ -49,150 +49,8 @@ knitr::opts_chunk$set(fig.path = "man/figures/README-")
 
 ``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
-API Intro
----------
-
-grid.piece
-~~~~~~~~~~
-
-``grid.piece`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
-
-.. {r intro1, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with default configuration"}
-library("piecepackr")
-g.p <- function(...) { grid.piece(..., default.units="in") }
-g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-g.p("tile_back", x=0.5+3, y=0.5+1)
-g.p("tile_back", x=0.5+3, y=0.5+1)
-g.p("die_face", suit=3, rank=5, x=1, y=1)
-g.p("pawn_face", x=1, y=4, angle=90)
-g.p("coin_back", x=3, y=4, angle=180)
-g.p("coin_back", suit=4, x=3, y=4, angle=180)
-g.p("coin_back", suit=2, x=3, y=1, angle=90)
-.. ..
-
-configuration lists
-~~~~~~~~~~~~~~~~~~~
-
-One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the game components drawn by ``grid.piece``:
-
-.. {r config, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with custom configuration"}
-dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
-                     invert_colors.suited=TRUE, border_color="black", border_lex=2)
-piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
-                    suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
-                    suit_cex="0.6,0.7,0.75,0.9,0.9")
-traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
-cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
-g.p <- function(...) { grid.piece(..., default.units="in", cfg=pp_cfg(cfg)) }
-g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-g.p("tile_back", x=0.5+3, y=0.5+1)
-g.p("tile_back", x=0.5+3, y=0.5+1)
-g.p("die_face", suit=3, rank=5, x=1, y=1)
-g.p("pawn_face", x=1, y=4, angle=90)
-g.p("coin_back", x=3, y=4, angle=180)
-g.p("coin_back", suit=4, x=3, y=4, angle=180)
-g.p("coin_back", suit=2, x=3, y=1, angle=90)
-.. ..
-
-oblique 3D projection
-~~~~~~~~~~~~~~~~~~~~~
-
-``grid.piece`` even has some support for drawing 3D diagrams with an `oblique projection`_:
-
-.. {r proj, fig.width=5, fig.height=5, fig.cap="Piecepack diagram in an oblique projection"}
-cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
-                   dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
-                   edge_color.coin="tan", edge_color.tile="tan")
-cfg <- pp_cfg(c(cfg, cfg3d))
-g.p <- function(...) { 
-    grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in") 
-}
-g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
-g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8)
-g.p("die_face", suit=3, rank=5, x=1, y=1, z=1/4+1/4)
-g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90)
-g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180)
-g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
-g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
-.. ..
-
-save_print_and_play and save_piece_images
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``save_print_and_play`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images`` makes individual images of each piecepack component:
-
-.. code:: r
-
-   save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
-   save_piece_images(cfg)
-
-pmap_piece
-~~~~~~~~~~
-
-If you are comfortable using R data frames there is also ``pmap_piece`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
-
-.. {r pmap, fig.width=5, fig.height=5, fig.cap="'pmap_piece' lets you use data frames as input"}
-library("dplyr", warn.conflicts=FALSE)
-library("tibble")
-df_tiles <- tibble(piece_side="tile_back", x=0.5+c(3,1,3,1,1,1), y=0.5+c(3,3,1,1,1,1))
-df_coins <- tibble(piece_side="coin_back", x=rep(1:4, 4), y=rep(c(4,1), each=8),
-                       suit=1:16%%2+rep(c(1,3), each=8),
-                       angle=rep(c(180,0), each=8))
-df <- bind_rows(df_tiles, df_coins)
-cfg <- game_systems("dejavu")$piecepack
-pmap_piece(df, cfg=cfg, default.units="in", trans=op_transform, op_scale=0.5, op_angle=135)
-.. ..
-
-piece3d (rgl)
-~~~~~~~~~~~~~
-
-``piece3d`` draws pieces using ``rgl`` graphics.
-
-.. {r rgl}
-    library("ppgames")
-    library("rgl")
-    invisible(rgl::open3d())
-    rgl::view3d(phi=-30, zoom = 0.8)
-
-    df <- ppgames::df_four_field_kono()
-    envir <- game_systems("dejavu3d")
-    pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
-.. ..
-.. {r rgl_save, echo=FALSE}
-    if (Sys.which("wmctrl") != "") system("wmctrl -r RGL -e 0,-1,-1,1080,1080") 
-    Sys.sleep(2)
-    rgl.snapshot("man/figures/README-rgl_snapshot.png", top = FALSE)
-.. ..
-
-.. figure:: man/figures/README-rgl_snapshot.png
-    :alt: 3D render with rgl package
-
-    rgl render
-
-piece (rayrender)
-~~~~~~~~~~~~~~~~~
-
-``piece`` creates ``rayrender`` objects.
-
-.. {r rayrender, fig.width=5, fig.height=5, fig.cap="3D render with rayrender package"}
-
-    library("ppgames")
-    library("rayrender")
-    df <- ppgames::df_four_field_kono()
-    envir <- game_systems("dejavu3d")
-    l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150)
-    scene <- Reduce(rayrender::add_object, l)
-    rayrender::render_scene(scene, lookat = c(2.5, 2.5, 0), lookfrom = c(0, -2, 13))
-.. ..
-
-Further documentation
-~~~~~~~~~~~~~~~~~~~~~
-
-A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's built-in `man pages`_.
-
-Game Systems
-------------
+Built-in Game Systems
+---------------------
 
 The function ``game_systems`` returns configurations for multiple public domain game systems.
 
@@ -297,6 +155,152 @@ Looney Pyramids
 ~~~~~~~~~~~~~~~
 
 Configurations for the proprietary Looney Pyramids aka Icehouse Pieces game system by Andrew Looney can be found in the companion R package ``piecenikr``: https://github.com/piecepackr/piecenikr
+
+
+API Intro
+---------
+
+grid.piece
+~~~~~~~~~~
+
+``grid.piece`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
+
+.. {r intro1, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with default configuration"}
+library("piecepackr")
+g.p <- function(...) { grid.piece(..., default.units="in") }
+g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("die_face", suit=3, rank=5, x=1, y=1)
+g.p("pawn_face", x=1, y=4, angle=90)
+g.p("coin_back", x=3, y=4, angle=180)
+g.p("coin_back", suit=4, x=3, y=4, angle=180)
+g.p("coin_back", suit=2, x=3, y=1, angle=90)
+.. ..
+
+configuration lists
+~~~~~~~~~~~~~~~~~~~
+
+One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the game components drawn by ``grid.piece``:
+
+.. {r config, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with custom configuration"}
+dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
+                     invert_colors.suited=TRUE, border_color="black", border_lex=2)
+piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+                    suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
+                    suit_cex="0.6,0.7,0.75,0.9,0.9")
+traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
+cfg <- c(piecepack_suits, dark_colorscheme, traditional_ranks)
+g.p <- function(...) { grid.piece(..., default.units="in", cfg=pp_cfg(cfg)) }
+g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("tile_back", x=0.5+3, y=0.5+1)
+g.p("die_face", suit=3, rank=5, x=1, y=1)
+g.p("pawn_face", x=1, y=4, angle=90)
+g.p("coin_back", x=3, y=4, angle=180)
+g.p("coin_back", suit=4, x=3, y=4, angle=180)
+g.p("coin_back", suit=2, x=3, y=1, angle=90)
+.. ..
+
+oblique 3D projection
+~~~~~~~~~~~~~~~~~~~~~
+
+``grid.piece`` even has some support for drawing 3D diagrams with an `oblique projection`_:
+
+.. {r proj, fig.width=5, fig.height=5, fig.cap="Piecepack diagram in an oblique projection"}
+cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
+                   dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
+                   edge_color.coin="tan", edge_color.tile="tan")
+cfg <- pp_cfg(c(cfg, cfg3d))
+g.p <- function(...) { 
+    grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in") 
+}
+g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
+g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8)
+g.p("die_face", suit=3, rank=5, x=1, y=1, z=1/4+1/4)
+g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90)
+g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180)
+g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
+g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
+.. ..
+
+save_print_and_play and save_piece_images
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``save_print_and_play`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images`` makes individual images of each piecepack component:
+
+.. code:: r
+
+   save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
+   save_piece_images(cfg)
+
+pmap_piece
+~~~~~~~~~~
+
+If you are comfortable using R data frames there is also ``pmap_piece`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
+
+.. {r pmap, fig.width=5, fig.height=5, fig.cap="'pmap_piece' lets you use data frames as input"}
+library("dplyr", warn.conflicts=FALSE)
+library("tibble")
+df_tiles <- tibble(piece_side="tile_back", x=0.5+c(3,1,3,1,1,1), y=0.5+c(3,3,1,1,1,1))
+df_coins <- tibble(piece_side="coin_back", x=rep(1:4, 4), y=rep(c(4,1), each=8),
+                       suit=1:16%%2+rep(c(1,3), each=8),
+                       angle=rep(c(180,0), each=8))
+df <- bind_rows(df_tiles, df_coins)
+cfg <- game_systems("dejavu")$piecepack
+pmap_piece(df, cfg=cfg, default.units="in", trans=op_transform, op_scale=0.5, op_angle=135)
+.. ..
+
+piece3d (rgl)
+~~~~~~~~~~~~~
+
+``piece3d`` draws pieces using ``rgl`` graphics.
+
+.. {r rgl}
+library("ppgames") # remotes::install_github("piecepackr/ppgames")
+library("rgl")
+invisible(rgl::open3d())
+rgl::view3d(phi=-30, zoom = 0.8)
+
+df <- ppgames::df_four_field_kono()
+envir <- game_systems("dejavu3d")
+pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+.. ..
+.. {r rgl_save, echo=FALSE}
+if (Sys.which("wmctrl") != "") system("wmctrl -r RGL -e 0,-1,-1,1080,1080") 
+Sys.sleep(2)
+rgl.snapshot("man/figures/README-rgl_snapshot.png", top = FALSE)
+.. ..
+
+.. figure:: man/figures/README-rgl_snapshot.png
+    :alt: 3D render with rgl package
+
+    3D render with rgl package
+
+piece (rayrender)
+~~~~~~~~~~~~~~~~~
+
+``piece`` creates ``rayrender`` objects.
+
+.. {r rayrender, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.caption="3D render with rayrender package"}
+library("ppgames") # remotes::install_github("piecepackr/ppgames")
+library("magrittr")
+library("rayrender")
+df <- ppgames::df_xiangqi()
+envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
+l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")
+table <- sphere(z=-1e3, radius=1e3, material=diffuse(color="green")) %>%
+         add_object(sphere(x=5,y=-4, z=30, material=light(intensity=420)))
+scene <- Reduce(rayrender::add_object, l, init=table)
+rayrender::render_scene(scene, lookat = c(5, 5, 0), lookfrom = c(5, -7, 25), 
+                        width = 500, height = 500, samples=200)
+.. ..
+
+Further documentation
+~~~~~~~~~~~~~~~~~~~~~
+
+A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's built-in `man pages`_.
 
 Tak Example
 ~~~~~~~~~~~

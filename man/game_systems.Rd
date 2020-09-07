@@ -6,7 +6,7 @@
 \alias{to_subpack}
 \title{Standard game systems}
 \usage{
-game_systems(style = NULL, round = FALSE)
+game_systems(style = NULL, round = FALSE, pawn = "token")
 
 to_hexpack(cfg = pp_cfg())
 
@@ -14,10 +14,15 @@ to_subpack(cfg = pp_cfg())
 }
 \arguments{
 \item{style}{If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
-If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font (must be installed on the system).}
+If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
+(must be installed on the system).}
 
 \item{round}{If \code{TRUE} the \dQuote{shape} of \dQuote{tiles} and \dQuote{cards}
 will be \dQuote{roundrect} instead of \dQuote{rect} (the default).}
+
+\item{pawn}{If \code{"token"} (default) the piecepack pawn will be a two-sided token in a \dQuote{halma} outline,
+if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn
+(doesn't works well with \code{grid.piece}).}
 
 \item{cfg}{List of configuration options}
 }

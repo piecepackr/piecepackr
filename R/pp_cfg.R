@@ -398,13 +398,13 @@ Config <- R6Class("pp_cfg",
                 obj_fn <- private$cache[[key]]
             } else {
                 if (grepl("tile|coin|pawn|matchstick|bit|board|card|saucer", piece_side)) {
-                    default_fn <- write_2s_obj
+                    default_fn <- save_2s_obj
                 } else if (grepl("die", piece_side)) {
-                    default_fn <- write_die_obj
+                    default_fn <- save_die_obj
                 } else if (piece_side == "pyramid_top") {
-                    default_fn <- write_pt_obj
+                    default_fn <- save_pt_obj
                 } else if (grepl("pyramid", piece_side)) {
-                    default_fn <- write_ps_obj
+                    default_fn <- save_ps_obj
                 } else {
                     default_fn <- NULL
                 }

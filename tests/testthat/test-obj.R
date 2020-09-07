@@ -27,6 +27,9 @@ test_that("rgl works", {
     files <- save_piece_obj("bit_face", cfg = game_systems()$go)
     expect_length(files, 3)
 
+    files <- save_piece_obj("pawn_top", cfg = game_systems("sans3d", pawn="peg-doll")$piecepack)
+    expect_length(files, 3)
+
     rgl.open()
     df <- tibble::tibble(piece_side = "tile_face", scale = c(1, 0))
     pmap_piece(df, piece3d, cfg=cfg)

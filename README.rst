@@ -47,6 +47,207 @@ piecepackr: Board Game Graphics
 
 ``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
+Built-in Game Systems
+---------------------
+
+The function ``game_systems`` returns configurations for multiple public domain game systems.
+
+Checkers
+~~~~~~~~
+
+``game_systems`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
+
+
+.. sourcecode:: r
+    
+
+    df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
+                   x = 4.5, y = 4.5)
+
+
+::
+
+    ## Error in tibble(piece_side = "board_face", suit = 3, rank = 8, x = 4.5, : could not find function "tibble"
+
+
+.. sourcecode:: r
+    
+
+    df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
+                   x = rep(1:8, 2), y = rep(1:2, each=8))
+
+
+::
+
+    ## Error in tibble(piece_side = "bit_face", suit = 6, rank = 1, x = rep(1:8, : could not find function "tibble"
+
+
+.. sourcecode:: r
+    
+
+    df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+                   x = rep(1:8, 2), y = rep(7:8, each=8))
+
+
+::
+
+    ## Error in tibble(piece_side = "bit_face", suit = 1, rank = 1, x = rep(1:8, : could not find function "tibble"
+
+
+.. sourcecode:: r
+    
+
+    df <- rbind(df_board, df_w, df_b)
+
+
+::
+
+    ## Error in rbind(df_board, df_w, df_b): object 'df_board' not found
+
+
+.. sourcecode:: r
+    
+
+    df$cfg <- "checkers1"
+
+
+::
+
+    ## Error in df$cfg <- "checkers1": object of type 'closure' is not subsettable
+
+
+.. sourcecode:: r
+    
+
+    pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
+
+
+::
+
+    ## Error in pmap_piece(df, envir = game_systems(), default.units = "in", : could not find function "pmap_piece"
+
+
+
+Traditional 6-sided dice
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+``game_systems`` returns a ``dice`` configuration which can make standard 6-sided dice in six colors.
+
+Double-12 dominoes
+~~~~~~~~~~~~~~~~~~
+
+``game_systems`` returns seven different configurations for double-12 dominoes:
+
+1) ``dominoes``
+2) ``dominoes_black``
+3) ``dominoes_blue``
+4) ``dominoes_green``
+5) ``dominoes_red``
+6) ``dominoes_white`` (identical to ``dominoes``)
+7) ``dominoes_yellow``
+
+
+.. sourcecode:: r
+    
+
+    library("tibble")
+    
+    envir <- game_systems("dejavu")
+
+
+::
+
+    ## Error in game_systems("dejavu"): could not find function "game_systems"
+
+
+.. sourcecode:: r
+    
+
+    df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+                          cfg = paste0("dominoes_", rep(c("black", "red", "green", "blue", "yellow", "white"), 2)))
+    df_tiles <- tibble(piece_side = "tile_back", x=5.5, y=c(2,4,6), suit=1:3, rank=1:3, cfg="piecepack")
+    df_dice <- tibble(piece_side = "die_face", x=6, y=0.5+1:6, suit=1:6, rank=1:6, cfg="dice")
+    df_coins1 <- tibble(piece_side = "coin_back", x=5, y=0.5+1:4, suit=1:4, rank=1:4, cfg="piecepack")
+    df_coins2 <- tibble(piece_side = "coin_face", x=5, y=0.5+5:6, suit=1:2, rank=1:2, cfg="piecepack")
+    df <- rbind(df_dominoes, df_tiles, df_dice, df_coins1, df_coins2)
+    
+    pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
+
+
+::
+
+    ## Error in pmap_piece(df, default.units = "in", envir = envir, op_scale = 0.5, : could not find function "pmap_piece"
+
+
+
+Go
+~~
+
+``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is an example diagram for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted in rgl: 
+
+
+.. figure:: man/figures/README-go.png
+    :alt: 3D Multi-player Go diagram
+    :align: center
+    :width: 80%
+
+    3D Multi-player Go diagram
+
+
+Piecepack
+~~~~~~~~~
+
+``game_systems()`` returns three different piecepack_ configurations:
+
+1) ``piecepack``
+2) ``playing_cards_expansion``
+3) ``dual_piecepacks_expansion``
+
+Plus a configuration for a ``subpack`` aka "mini" piecepack and a ``hexpack`` configuration.
+
+The piecepack configurations also contain common piecepack accessories like piecepack pyramids, piecepack matchsticks, and piecepack saucers.
+
+Playing Cards
+~~~~~~~~~~~~~
+
+``game_systems()`` returns ``playing_cards``, ``playing_cards_colored``, and ``playing_cards_tarot`` (French Tarot) configurations for making diagrams with various decks of playing cards.
+
+
+.. sourcecode:: r
+    
+
+    library("tibble")
+    
+    envir <- game_systems("dejavu", round=TRUE)
+
+
+::
+
+    ## Error in game_systems("dejavu", round = TRUE): could not find function "game_systems"
+
+
+.. sourcecode:: r
+    
+
+    df <- tibble(piece_side = "card_face", 
+                 x=1.25 + 2.5 * 0:3, y=2, 
+                 suit=1:4, rank=c(1,6,9,12),
+                 cfg = "playing_cards")
+    pmap_piece(df, default.units="in", envir=envir)
+
+
+::
+
+    ## Error in pmap_piece(df, default.units = "in", envir = envir): could not find function "pmap_piece"
+
+
+
+Looney Pyramids
+~~~~~~~~~~~~~~~
+
+Configurations for the proprietary Looney Pyramids aka Icehouse Pieces game system by Andrew Looney can be found in the companion R package ``piecenikr``: https://github.com/piecepackr/piecenikr
+
+
 API Intro
 ---------
 
@@ -179,21 +380,21 @@ piece3d (rgl)
 .. sourcecode:: r
     
 
-        library("ppgames")
-        library("rgl")
-        invisible(rgl::open3d())
-        rgl::view3d(phi=-30, zoom = 0.8)
+    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("rgl")
+    invisible(rgl::open3d())
+    rgl::view3d(phi=-30, zoom = 0.8)
     
-        df <- ppgames::df_four_field_kono()
-        envir <- game_systems("dejavu3d")
-        pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
+    df <- ppgames::df_four_field_kono()
+    envir <- game_systems("dejavu3d")
+    pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
 
 
 
 .. figure:: man/figures/README-rgl_snapshot.png
     :alt: 3D render with rgl package
 
-    rgl render
+    3D render with rgl package
 
 piece (rayrender)
 ~~~~~~~~~~~~~~~~~
@@ -204,149 +405,27 @@ piece (rayrender)
 .. sourcecode:: r
     
 
-        library("ppgames")
-        library("rayrender")
-        df <- ppgames::df_four_field_kono()
-        envir <- game_systems("dejavu3d")
-        l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150)
-        scene <- Reduce(rayrender::add_object, l)
-        rayrender::render_scene(scene, lookat = c(2.5, 2.5, 0), lookfrom = c(0, -2, 13))
+    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("magrittr")
+    library("rayrender")
+    df <- ppgames::df_xiangqi()
+    envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
+    l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")
+    table <- sphere(z=-1e3, radius=1e3, material=diffuse(color="green")) %>%
+             add_object(sphere(x=5,y=-4, z=30, material=light(intensity=420)))
+    scene <- Reduce(rayrender::add_object, l, init=table)
+    rayrender::render_scene(scene, lookat = c(5, 5, 0), lookfrom = c(5, -7, 25), 
+                            width = 500, height = 500, samples=200)
 
 .. figure:: man/figures/README-rayrender-1.png
-    :alt: 3D render with rayrender package
+    :alt: plot of chunk rayrender
 
-    3D render with rayrender package
+    plot of chunk rayrender
 
 Further documentation
 ~~~~~~~~~~~~~~~~~~~~~
 
 A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's built-in `man pages`_.
-
-Game Systems
-------------
-
-The function ``game_systems`` returns configurations for multiple public domain game systems.
-
-Checkers
-~~~~~~~~
-
-``game_systems`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
-
-
-.. sourcecode:: r
-    
-
-    df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
-                   x = 4.5, y = 4.5)
-    df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
-                   x = rep(1:8, 2), y = rep(1:2, each=8))
-    df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
-                   x = rep(1:8, 2), y = rep(7:8, each=8))
-    df <- rbind(df_board, df_w, df_b)
-    df$cfg <- "checkers1"
-    pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
-
-.. figure:: man/figures/README-breakthrough-1.png
-    :alt: Starting position for Dan Troyka's abstract game "Breakthrough"
-
-    Starting position for Dan Troyka's abstract game "Breakthrough"
-
-Traditional 6-sided dice
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-``game_systems`` returns a ``dice`` configuration which can make standard 6-sided dice in six colors.
-
-Double-12 dominoes
-~~~~~~~~~~~~~~~~~~
-
-``game_systems`` returns seven different configurations for double-12 dominoes:
-
-1) ``dominoes``
-2) ``dominoes_black``
-3) ``dominoes_blue``
-4) ``dominoes_green``
-5) ``dominoes_red``
-6) ``dominoes_white`` (identical to ``dominoes``)
-7) ``dominoes_yellow``
-
-
-.. sourcecode:: r
-    
-
-    library("tibble")
-    
-    envir <- game_systems("dejavu")
-    
-    df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
-                          cfg = paste0("dominoes_", rep(c("black", "red", "green", "blue", "yellow", "white"), 2)))
-    df_tiles <- tibble(piece_side = "tile_back", x=5.5, y=c(2,4,6), suit=1:3, rank=1:3, cfg="piecepack")
-    df_dice <- tibble(piece_side = "die_face", x=6, y=0.5+1:6, suit=1:6, rank=1:6, cfg="dice")
-    df_coins1 <- tibble(piece_side = "coin_back", x=5, y=0.5+1:4, suit=1:4, rank=1:4, cfg="piecepack")
-    df_coins2 <- tibble(piece_side = "coin_face", x=5, y=0.5+5:6, suit=1:2, rank=1:2, cfg="piecepack")
-    df <- rbind(df_dominoes, df_tiles, df_dice, df_coins1, df_coins2)
-    
-    pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
-
-.. figure:: man/figures/README-dominoes-1.png
-    :alt: Double-12 dominoes and standard dice in a variety of colors
-
-    Double-12 dominoes and standard dice in a variety of colors
-
-Go
-~~
-
-``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is an example diagram for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted in rgl: 
-
-
-.. figure:: man/figures/README-go.png
-    :alt: 3D Multi-player Go diagram
-    :align: center
-    :width: 80%
-
-    3D Multi-player Go diagram
-
-
-Piecepack
-~~~~~~~~~
-
-``game_systems()`` returns three different piecepack_ configurations:
-
-1) ``piecepack``
-2) ``playing_cards_expansion``
-3) ``dual_piecepacks_expansion``
-
-Plus a configuration for a ``subpack`` aka "mini" piecepack and a ``hexpack`` configuration.
-
-The piecepack configurations also contain common piecepack accessories like piecepack pyramids, piecepack matchsticks, and piecepack saucers.
-
-Playing Cards
-~~~~~~~~~~~~~
-
-``game_systems()`` returns ``playing_cards``, ``playing_cards_colored``, and ``playing_cards_tarot`` (French Tarot) configurations for making diagrams with various decks of playing cards.
-
-
-.. sourcecode:: r
-    
-
-    library("tibble")
-    
-    envir <- game_systems("dejavu", round=TRUE)
-    
-    df <- tibble(piece_side = "card_face", 
-                 x=1.25 + 2.5 * 0:3, y=2, 
-                 suit=1:4, rank=c(1,6,9,12),
-                 cfg = "playing_cards")
-    pmap_piece(df, default.units="in", envir=envir)
-
-.. figure:: man/figures/README-cards-1.png
-    :alt: Playing Cards
-
-    Playing Cards
-
-Looney Pyramids
-~~~~~~~~~~~~~~~
-
-Configurations for the proprietary Looney Pyramids aka Icehouse Pieces game system by Andrew Looney can be found in the companion R package ``piecenikr``: https://github.com/piecepackr/piecenikr
 
 Tak Example
 ~~~~~~~~~~~

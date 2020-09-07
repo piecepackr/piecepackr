@@ -69,6 +69,10 @@ as.list.point2d <- function(x, ...) {
     }
     ll
 }
+#' @export
+as.data.frame.point2d <- function(x, ...) {
+    as.data.frame(as.matrix(x))
+}
 
 Point3D <- R6Class("point3d",
                    public = list(x=NULL, y=NULL, z=NULL,
@@ -149,6 +153,10 @@ as.matrix.point3d <- function(x, ...) {
     m <- cbind(x$x, x$y, x$z)
     colnames(m) <- c("x", "y", "z")
     m
+}
+#' @export
+as.data.frame.point3d <- function(x, ...) {
+    as.data.frame(as.matrix(x))
 }
 
 Vector <- R6Class("geometry_vector", # vector is R builtin class

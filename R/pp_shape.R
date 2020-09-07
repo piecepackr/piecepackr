@@ -168,7 +168,7 @@ Shape <- R6Class("pp_shape",
             if (label == "rect") {
                 rect_xy
             } else if (grepl(label, "circle|oval")) {
-                xy <- convex_xy(36, 90) #### increase number of vertices?
+                xy <- convex_xy(72, 90) #### increase number of vertices?
                 xy$c <- rep("C1", length(xy$x))
                 xy
             } else if (label == "kite") {
