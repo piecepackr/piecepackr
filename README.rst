@@ -61,72 +61,22 @@ Checkers
 .. sourcecode:: r
     
 
+    library("piecepackr")
+    library("tibble")
     df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
                    x = 4.5, y = 4.5)
-
-
-::
-
-    ## Error in tibble(piece_side = "board_face", suit = 3, rank = 8, x = 4.5, : could not find function "tibble"
-
-
-.. sourcecode:: r
-    
-
     df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
                    x = rep(1:8, 2), y = rep(1:2, each=8))
-
-
-::
-
-    ## Error in tibble(piece_side = "bit_face", suit = 6, rank = 1, x = rep(1:8, : could not find function "tibble"
-
-
-.. sourcecode:: r
-    
-
     df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
                    x = rep(1:8, 2), y = rep(7:8, each=8))
-
-
-::
-
-    ## Error in tibble(piece_side = "bit_face", suit = 1, rank = 1, x = rep(1:8, : could not find function "tibble"
-
-
-.. sourcecode:: r
-    
-
     df <- rbind(df_board, df_w, df_b)
-
-
-::
-
-    ## Error in rbind(df_board, df_w, df_b): object 'df_board' not found
-
-
-.. sourcecode:: r
-    
-
     df$cfg <- "checkers1"
-
-
-::
-
-    ## Error in df$cfg <- "checkers1": object of type 'closure' is not subsettable
-
-
-.. sourcecode:: r
-    
-
     pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
 
+.. figure:: man/figures/README-breakthrough-1.png
+    :alt: Starting position for Dan Troyka's abstract game "Breakthrough"
 
-::
-
-    ## Error in pmap_piece(df, envir = game_systems(), default.units = "in", : could not find function "pmap_piece"
-
-
+    Starting position for Dan Troyka's abstract game "Breakthrough"
 
 Traditional 6-sided dice
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -150,19 +100,10 @@ Double-12 dominoes
 .. sourcecode:: r
     
 
+    library("piecepackr")
     library("tibble")
-    
     envir <- game_systems("dejavu")
-
-
-::
-
-    ## Error in game_systems("dejavu"): could not find function "game_systems"
-
-
-.. sourcecode:: r
     
-
     df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
                           cfg = paste0("dominoes_", rep(c("black", "red", "green", "blue", "yellow", "white"), 2)))
     df_tiles <- tibble(piece_side = "tile_back", x=5.5, y=c(2,4,6), suit=1:3, rank=1:3, cfg="piecepack")
@@ -173,17 +114,15 @@ Double-12 dominoes
     
     pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
 
+.. figure:: man/figures/README-dominoes-1.png
+    :alt: Double-12 dominoes and standard dice in a variety of colors
 
-::
-
-    ## Error in pmap_piece(df, default.units = "in", envir = envir, op_scale = 0.5, : could not find function "pmap_piece"
-
-
+    Double-12 dominoes and standard dice in a variety of colors
 
 Go
 ~~
 
-``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is an example diagram for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted in rgl: 
+``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is `an example diagram <https://trevorldavis.com/piecepackr/go.html>`_ for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted in rgl: 
 
 
 .. figure:: man/figures/README-go.png
@@ -216,31 +155,20 @@ Playing Cards
 .. sourcecode:: r
     
 
+    library("piecepackr")
     library("tibble")
-    
     envir <- game_systems("dejavu", round=TRUE)
-
-
-::
-
-    ## Error in game_systems("dejavu", round = TRUE): could not find function "game_systems"
-
-
-.. sourcecode:: r
     
-
     df <- tibble(piece_side = "card_face", 
                  x=1.25 + 2.5 * 0:3, y=2, 
                  suit=1:4, rank=c(1,6,9,12),
                  cfg = "playing_cards")
     pmap_piece(df, default.units="in", envir=envir)
 
+.. figure:: man/figures/README-cards-1.png
+    :alt: Playing Cards
 
-::
-
-    ## Error in pmap_piece(df, default.units = "in", envir = envir): could not find function "pmap_piece"
-
-
+    Playing Cards
 
 Looney Pyramids
 ~~~~~~~~~~~~~~~

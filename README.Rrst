@@ -60,6 +60,8 @@ Checkers
 ``game_systems`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
 
 .. {r breakthrough, fig.width=9, fig.height=9, fig.cap='Starting position for Dan Troyka\'s abstract game "Breakthrough"'}
+library("piecepackr")
+library("tibble")
 df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
                x = 4.5, y = 4.5)
 df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
@@ -90,9 +92,8 @@ Double-12 dominoes
 7) ``dominoes_yellow``
 
 .. {r dominoes, fig.width=7, fig.height=8, fig.cap="Double-12 dominoes and standard dice in a variety of colors"}
-
+library("piecepackr")
 library("tibble")
-
 envir <- game_systems("dejavu")
 
 df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
@@ -109,7 +110,7 @@ pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform
 Go
 ~~
 
-``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is an example diagram for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted in rgl: 
+``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes via the ``game_systems()`` function.  Here are is `an example diagram <https://trevorldavis.com/piecepackr/go.html>`_ for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted using rgl_: 
 
 
 .. figure:: man/figures/README-go.png
@@ -139,9 +140,8 @@ Playing Cards
 ``game_systems()`` returns ``playing_cards``, ``playing_cards_colored``, and ``playing_cards_tarot`` (French Tarot) configurations for making diagrams with various decks of playing cards.
 
 .. {r cards, fig.width=10, fig.height=4, fig.cap="Playing Cards"}
-
+library("piecepackr")
 library("tibble")
-
 envir <- game_systems("dejavu", round=TRUE)
 
 df <- tibble(piece_side = "card_face", 
