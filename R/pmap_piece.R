@@ -59,7 +59,7 @@ pmap_piece <- function(.l, .f = pieceGrob, ..., cfg=NULL, envir=NULL, trans=NULL
     } else {
         ll <- purrr::pmap(.l, .f, ..., cfg=cfg, envir=envir, draw=FALSE)
     }
-    if (all(sapply(ll, is.grob))) {
+    if (length(ll) && all(sapply(ll, is.grob))) {
         grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp, cl="pmap_piece")
         if (draw) grid.draw(grob)
         invisible(grob)

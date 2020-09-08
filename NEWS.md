@@ -43,6 +43,7 @@ Bug fixes and minor improvements
   now has a corresponding card in the "playing_cards_tarot" configuration 
   (suggested Joker mapping is "White" = suit 1, "Black" = suit 2, and "Red" = suit 4)
 * Fixes a bug in the oblique projection of piece "backs" of thick convex-curved 2-sided tokens.
+* ``pmap_piece()`` now simply returns ``list()`` if its output has zero observations.
 
 piecepackr 1.5.1
 ================
