@@ -175,10 +175,10 @@ file2grob <- function(file, distort=TRUE) {
         assert_suggested("magick")
         picture <- magick::image_read(file)
     }
-    if (grDevices::is.raster(picture)) {
-        to_rasterGrob(picture, distort)
-    } else {
+    if (inherits(picture, "Picture")) {
         ppPictureGrob(picture, distort)
+    } else { # grDevices::is.raster(picture) # nolint
+        to_rasterGrob(picture, distort)
     }
 }
 
