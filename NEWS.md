@@ -44,7 +44,8 @@ Bug fixes and minor improvements
   (suggested Joker mapping is "White" = suit 1, "Black" = suit 2, and "Red" = suit 4)
 * Fixes a bug in the oblique projection of piece "backs" of thick convex-curved 2-sided tokens.
 * ``pmap_piece()`` now simply returns ``list()`` if its output has zero observations.
-* ``file2grob()`` fixes a bug when importing images using the ``magick`` package.
+* ``file2grob()`` fixes a bug when importing images using the ``magick`` package
+  (currently any image that is not PNG, JPEG, or SVG).
 
 piecepackr 1.5.1
 ================
