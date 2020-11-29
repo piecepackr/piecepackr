@@ -28,7 +28,7 @@ build_script:
 
 test_script:
   - cinst ghostscript
-  - cmd: set "GSPATH=C:\\Program Files\\gs\\gs9.53\\bin\\"
+  - cmd: set "GSPATH=C:\\Program Files\\gs\\gs9.53.3\\bin\\"
   - cmd: set "PATH=%GSPATH%;%PATH%"
   - cmd: gswin64c --version
   - travis-tool.sh run_tests
