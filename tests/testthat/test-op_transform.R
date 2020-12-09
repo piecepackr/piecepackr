@@ -1,5 +1,4 @@
 library("tibble")
-library("vdiffr")
 context("3d helper function")
 test_that("3d helper functions work", {
 
@@ -20,6 +19,8 @@ test_that("3d helper functions work", {
     expect_warning(pp_cfg(list(shadow_fn = basicShadowGrob)))
 
     skip_on_ci()
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     opf <- function(op_angle=45, ...) {
         function() {
             pmap_piece(df, op_angle=op_angle, trans=op_transform,

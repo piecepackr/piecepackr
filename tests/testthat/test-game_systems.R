@@ -1,8 +1,9 @@
-library("vdiffr")
 context("no regressions in figures")
 test_that("no regressions in figures", {
 
     skip_on_ci()
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     # standard d6 dice
     cfg <- game_systems()$dice
     expect_doppelganger("dice_d6", function()

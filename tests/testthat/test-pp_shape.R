@@ -1,5 +1,4 @@
 library("grid")
-library("vdiffr")
 context("pp_shape() works as expected")
 test_that("pp_shape() works as expected", {
     circle <- pp_shape("circle")
@@ -13,6 +12,8 @@ test_that("pp_shape() works as expected", {
     dev.off()
     if (current_dev > 1) grDevices::dev.set(current_dev)
     skip_on_ci()
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     expect_doppelganger("add_checkers", function() {
         rect <- pp_shape("rect")
         pushViewport(viewport(width=0.9, height=0.9))

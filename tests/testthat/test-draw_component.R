@@ -1,4 +1,3 @@
-library("vdiffr")
 cfg_default <- pp_cfg(list(title="default cfg"))
 cfg_3d <- game_systems("sans3d")$piecepack
 context("test pp_cfg")
@@ -77,6 +76,7 @@ test_that("save_piece_images works as expected", {
     expect_equal(length(list.files(directory)), 496)
 
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
+    library("vdiffr")
     expect_doppelganger("diagram_op_ppgf", function() {
         g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
         g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
@@ -92,6 +92,8 @@ test_that("save_piece_images works as expected", {
 context("no regressions in figures")
 test_that("no regressions in figures", {
     skip_on_ci()
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
         grid.piece(..., cfg=cfg)
     }
@@ -306,6 +308,8 @@ test_that("oblique projection works", {
 context("alpha and scale works")
 test_that("alpha and scale works", {
     skip_on_ci()
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     expect_doppelganger("alpha_and_scale", function() {
         cfg <- pp_cfg(list(shape.coin="convex6"))
         df <- tibble(piece_side="coin_back",
