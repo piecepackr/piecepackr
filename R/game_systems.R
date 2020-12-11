@@ -393,8 +393,8 @@ go <- function(cell_width = 1, color_list) {
                background_color = color_list$background_color,
                gridline_color.s6.board_face = "grey80")
     for (i in seq(2, 18)) {
-        go[[paste0("width.r", i, ".board")]] <- (i + 1) * cell_width
-        go[[paste0("height.r", i, ".board")]] <- (i + 1) * cell_width
+        go[[paste0("width.r", i, ".board")]] <- i * cell_width
+        go[[paste0("height.r", i, ".board")]] <- i * cell_width
         go[[paste0("grob_fn.r", i, ".board_face")]] <- linedBoardGrobFn(i - 1, i - 1, 0.5)
     }
     go <- pp_cfg(c(go, color_list))
