@@ -19,7 +19,6 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = p
                          angle = 0, axis_x = 0, axis_y = 0,
                          width = NA, height = NA, depth = NA,
                          filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
-
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(is.na(suit), 1, suit)
     rank <- ifelse(is.na(rank), 1, rank)
@@ -45,6 +44,8 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
                              ...,
                              filename = tempfile(fileext = ".png"), res = 72) {
 
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     piece <- get_piece(piece_side)
     piece_face <- paste0(piece, "_face")
     piece_back <- paste0(piece, "_back")
@@ -212,6 +213,9 @@ save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1, cfg 
     png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
 
     write_obj(filename, v = xyz, vt = xy_vt, f = f)
+
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
     grDevices::png(png_filename, bg=opt$background_color)
     grid.newpage()
@@ -353,6 +357,9 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1, cfg =
 write_peg_doll_texture <- function(piece_side = "pawn_face", suit = 1, rank = 1, cfg = pp_cfg(),
                                    ...,
                                    filename = tempfile(fileext = ".png"), res = 72) {
+
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     height <- cfg$get_height("belt_face", suit, rank)
     width <- cfg$get_width("belt_face", suit, rank)
     piece <- get_piece(piece_side)
@@ -428,6 +435,8 @@ write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 
                              ...,
                              filename = tempfile(fileext = ".png"), res = 72) {
 
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     height <- cfg$get_height("pyramid_face", suit, rank)
     width <- cfg$get_width("pyramid_face", suit, rank)
 
@@ -456,6 +465,9 @@ write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 
 
 write_die_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
                               ..., filename = tempfile(fileext = ".png"), res = 72) {
+
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     width <- cfg$get_width("die_face", suit, rank)
 
     grDevices::png(filename, height = 3 * width, width = 2 * width,

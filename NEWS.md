@@ -46,6 +46,8 @@ Bug fixes and minor improvements
 * ``pmap_piece()`` now simply returns ``list()`` if its output has zero observations.
 * ``file2grob()`` fixes a bug when importing images using the ``magick`` package
   (currently any image that is not PNG, JPEG, or SVG).
+* Fixes bug in ``save_piece_obj()``: if multiple graphics devices are open 
+  it should no longer accidentally switch the "active" device (#239).
 
 piecepackr 1.5.1
 ================
