@@ -29,6 +29,7 @@ addons:
             - libmagick++-dev
             - ghostscript
             - poppler-utils
+            - libgit2-dev
             - libgl1-mesa-dev 
             - libglu1-mesa-dev
 r_github_packages:
