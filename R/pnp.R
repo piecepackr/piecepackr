@@ -113,28 +113,22 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
     #### Fine-tune between pyramids, matchsticks, and misc.?
     #### Add misc, cards, dominoes accessories?
     if ("matchsticks" %in% pieces) {
-        n_pages <- (n_suits-1)%/%5+1
-        if (is_odd(n_pages) && arrangement == "double-sided" && size != "A5")
-            n_pages <- n_pages+1
+        n_pages <- (n_suits-1)%/%4+1
         for (ii in seq(n_pages)) {
-            if (arrangement == "double-sided" && size != "A5") {
-                if (is_odd(ii)) {
-                    np <- ii+1
-                    sf <- seq(5*ii-4, 5*ii)
-                    sb <- seq(5*np-4, 5*np)
-                } else {
-                    pp <- ii-1
-                    sf <- seq(5*ii-4, 5*ii)
-                    sb <- seq(5*pp-4, 5*pp)
-                }
+            ss <- seq(4*ii-3, 4*ii)
+            if (arrangement == "double-sided" && size == "A5") {
+                gl <- gappend(gl, a5_matchsticks_grob(ss, cfg, TRUE))
+                gl <- gappend(gl, a5_matchsticks_grob(ss, cfg, FALSE))
+                gl <- gappend(gl, a5_matchsticks_grob2(ss, cfg, TRUE))
+                gl <- gappend(gl, a5_matchsticks_grob2(ss, cfg, FALSE))
             } else {
-                sf <- seq(5*ii-4, 5*ii)
-                sb <- seq(5*ii-4, 5*ii)
+                gl <- gappend(gl, a5_matchsticks_grob(ss, cfg, TRUE))
+                gl <- gappend(gl, a5_matchsticks_grob2(ss, cfg, TRUE))
+                if (arrangement == "double-sided") {
+                    gl <- gappend(gl, a5_matchsticks_grob2(ss, cfg, FALSE))
+                    gl <- gappend(gl, a5_matchsticks_grob(ss, cfg, FALSE))
+                }
             }
-            mgf <- a5_matchsticks_grob(sf, cfg, TRUE)
-            mgb <- a5_matchsticks_grob(sb, cfg, FALSE)
-            gl <- gappend(gl, mgf)
-            gl <- gappend(gl, mgb)
         }
         pl$Matchsticks <- n_pages
     }
@@ -375,12 +369,12 @@ a5_title_grob <- function(cfg=pp_cfg(), pieces) {
     # Credits
     y_credits <- y_copyright - grobHeight(grob_ch) - grobHeight(grob_c) - unit(0.03, "npc")
     credits <- paste(c('\u25cf The piecepack was invented by James "Kyle" Droscha. Public Domain.',
-                       "\thttps://web.archive.org/web/20191222010028/http://www.piecepack.org/Anatomy.html",
+                       "\thttps://web.archive.org/web/2018/http://www.piecepack.org/Anatomy.html",
                        # "\thttp://www.piecepack.org/Anatomy.html",
                        "\u25cf Piecepack pyramids were invented by Tim Schutz. Public Domain.",
                        "\thttp://www.ludism.org/ppwiki/PiecepackPyramids",
                        "\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.",
-                       "\thttps://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html",
+                       "\thttps://web.archive.org/web/2018/http://www.piecepack.org/Accessories.html",
                        # "\thttp://www.piecepack.org/Accessories.html",
                        "\u25cf Piecepack matchsticks were invented by Dan Burkey. Public Domain.",
                        "\thttp://www.ludism.org/ppwiki/PiecepackMatchsticks",
@@ -403,24 +397,22 @@ draw_a5_page <- function(grob, vp) {
     upViewport()
 }
 
-a5_matchsticks_grob <- function(suits=1:5, cfg=pp_cfg(), front=TRUE) {
+a5_matchsticks_grob <- function(suits=1:4, cfg=pp_cfg(), front=TRUE) {
 
     n_suits <- length(suits)
     y1t <- A5H - 0.5* MATCHSTICK_HEIGHTS[1]
     y1b <- A5H - 1.5* MATCHSTICK_HEIGHTS[1]
-    x1s <- (0.5 + 0:(2*n_suits-1)) * MATCHSTICK_WIDTHS[1]
-    xs <-  (0.5 + 0:(4*n_suits-1)) * MATCHSTICK_WIDTHS[2]
+    x1s <- (0.5 + 0:(3*n_suits-1)) * MATCHSTICK_WIDTHS[1]
+    xs <-  (0.5 + 0:(6*n_suits-1)) * MATCHSTICK_WIDTHS[2]
     y2  <- y1b - 0.5*MATCHSTICK_HEIGHTS[1] - 0.5*MATCHSTICK_HEIGHTS[2]
     y3  <- y2  - 0.5*MATCHSTICK_HEIGHTS[2] - 0.5*MATCHSTICK_HEIGHTS[3]
     y5  <- y3  - 0.5*MATCHSTICK_HEIGHTS[3] - 0.5*MATCHSTICK_HEIGHTS[5]
     y6  <- y5  - 0.5*MATCHSTICK_HEIGHTS[5] - 0.5*MATCHSTICK_HEIGHTS[6]
-    y4s <- A5H - (0.5 + 0:3)*MATCHSTICK_HEIGHTS[4]
-    x4s <- 4*n_suits * MATCHSTICK_WIDTHS[2] + (0.5 + 0:(n_suits-1)) * MATCHSTICK_WIDTHS[6]
 
-    x <- c(rep(x1s,each=2), rep(xs, 4), rep(x4s, each=4))
-    y <- c(rep(c(y1t, y1b), 2*n_suits), rep(c(y2, y3, y5, y6), each=4*n_suits), rep(c(y4s), n_suits))
-    suit <- rep(rep(suits, each=4), 6)
-    rank <- rep(c(1:3,5:6,4), each=4*n_suits)
+    x <- c(rep(x1s,each=2), rep(xs, 4))
+    y <- c(rep(c(y1t, y1b), 3*n_suits), rep(c(y2, y3, y5, y6), each=6*n_suits))
+    suit <- rep(rep(suits, each=6), 5)
+    rank <- rep(c(1:3,5:6), each=6*n_suits)
     if (front) {
         piece_side <- "matchstick_face"
     } else {
@@ -429,6 +421,44 @@ a5_matchsticks_grob <- function(suits=1:5, cfg=pp_cfg(), front=TRUE) {
 
     }
     df <- tibble(piece_side, x, y, suit, rank)
+
+    pmap_piece(df, cfg=cfg, default.units="inches", draw=FALSE)
+}
+
+a5_matchsticks_grob2 <- function(suits=1:4, cfg=pp_cfg(), front=TRUE) {
+
+    n_suits <- length(suits)
+    y4s <- A5H - (0.5 + 0:3)*MATCHSTICK_HEIGHTS[4]
+    x4s <- (0.5 + 0:5) * MATCHSTICK_WIDTHS[6]
+
+    x <- rep(x4s, 4)
+    y <- rep(c(y4s), each=6)
+    suit <- rep(suits, each=6)
+    rank <- 4
+    if (front) {
+        piece_side <- "matchstick_face"
+    } else {
+        x <- A5W - x
+        piece_side <- "matchstick_back"
+
+    }
+    df <- tibble(piece_side, x, y, suit, rank)
+
+    # add some extra dice if there is some space
+    if (cfg$get_width("die_face") <= 0.6) {
+        xd1 <- max(x4s) + 0.0 + c(0.6)*cfg$get_width("die_layoutLF")
+        dfd <- tibble::tibble(piece_side="die_layoutLF",
+                              x=xd1, y=unique(y),
+                              suit=suits, rank=NA)
+        df <- rbind(df, dfd)
+    }
+    if (cfg$get_width("die_face") <= 0.55) {
+        xd2 <- xd1 + c(0.7)*cfg$get_width("die_layoutLF")
+        dfd <- tibble::tibble(piece_side="die_layoutLF",
+                              x=xd2, y=unique(y),
+                              suit=suits, rank=NA)
+        df <- rbind(df, dfd)
+    }
 
     pmap_piece(df, cfg=cfg, default.units="inches", draw=FALSE)
 }
