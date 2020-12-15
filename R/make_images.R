@@ -95,7 +95,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
                 pp_dev_off(f, format)
             }
             if (has_suit(cs) && !has_rank(cs)) {
-                for (suit in 1:get_n_suits(cfg)) {
+                for (suit in 1:cfg$n_suits) {
                     f <- piece_filename(directory, cs, format, angle, suit)
                     pp_device(f, cs, cfg, angle)
                     grid.piece(cs, suit, NA, cfg)
@@ -103,7 +103,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
                 }
             }
             if (!has_suit(cs) && has_rank(cs)) {
-                for (rank in 1:get_n_ranks(cfg)) {
+                for (rank in 1:cfg$n_ranks) {
                     f <- piece_filename(directory, cs, format, angle, rank=rank)
                     pp_device(f, cs, cfg, angle)
                     grid.piece(cs, NA, rank, cfg)
@@ -111,8 +111,8 @@ make_images_helper <- function(directory, cfg, format, angle) {
                 }
             }
             if (has_suit(cs) && has_rank(cs)) {
-                for (suit in 1:get_n_suits(cfg)) {
-                    for (rank in 1:get_n_ranks(cfg)) {
+                for (suit in 1:cfg$n_suits) {
+                    for (rank in 1:cfg$n_ranks) {
                         f <- piece_filename(directory, cs, format, angle, suit, rank)
                         pp_device(f, cs, cfg, angle, rank=rank)
                         grid.piece(cs, suit, rank, cfg)

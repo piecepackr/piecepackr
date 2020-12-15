@@ -285,24 +285,6 @@ get_ps_r <- function(piece_side, suit, rank, cfg) {
     expand_suit_elements(r, "ps_r", piece_side, cfg)[suit]
 }
 
-get_n_suits <- function(cfg=list()) {
-    if (is.null(cfg[["n_suits"]])) {
-        length(get_suit_symbols(cfg=cfg, expand=FALSE)) - 1
-    } else {
-        cfg[["n_suits"]]
-    }
-}
-
-get_n_ranks <- function(cfg=list()) {
-    if (is.null(cfg[["n_ranks"]])) {
-        length(get_rank_symbols(cfg=cfg, expand=FALSE))
-    } else {
-        cfg[["n_ranks"]]
-    }
-}
-
-get_i_unsuit <- function(cfg=list()) get_n_suits(cfg) + 1
-
 get_die_arrangement <- function(cfg=list()) {
     if (is.null(cfg[["die_arrangement"]])) {
         "counter_down"

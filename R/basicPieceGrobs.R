@@ -147,12 +147,12 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cs_tiles <- rep("tile_face", 6)
     suit_tiles <- 1:6
     rank_tiles <- rep(2, 6)
-    if (get_n_suits(cfg) < 5) {
+    if (cfg$n_suits < 5) {
         cs_tiles[5] <- "tile_back"
         suit_tiles[5] <- NA
         rank_tiles[5] <- NA
     }
-    if (get_n_suits(cfg) < 6) {
+    if (cfg$n_suits < 6) {
         cs_tiles[6] <- "tile_back"
         suit_tiles[6] <- NA
         rank_tiles[6] <- NA
@@ -167,8 +167,8 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     rank_coins <- c(1:3, rep(NA, 3))
     x_coins <- rep(1:3, 2)*c_width - 0.5*c_width
     y_coins <- 0.5*t_width + rep(c(0.5, -0.5), each=3)*c_width
-    if (get_n_suits(cfg) > 4) suit_coins[5] <- 5
-    if (get_n_suits(cfg) > 5) suit_coins[6] <- 6
+    if (cfg$n_suits > 4) suit_coins[5] <- 5
+    if (cfg$n_suits > 5) suit_coins[6] <- 6
 
     gl[["coins"]] <- pieceGrob(cs_coins, suit_coins, rank_coins, cfg, x_coins, y_coins,
                    default.units="in", name="coins")
@@ -270,7 +270,7 @@ suitdieGrob <- function(cfg, flip=FALSE) {
 }
 
 get_suit_die_suits <- function(cfg) {
-    n_suits <- get_n_suits(cfg)
+    n_suits <- cfg$n_suits
     if (n_suits < 4) {
         rep(n_suits:1, length.out=6)
     } else if (n_suits == 4) {

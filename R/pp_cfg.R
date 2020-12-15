@@ -84,6 +84,25 @@ opt_cache_key <- function(piece_side, suit, rank, type) {
     paste(piece_side, suit, rank, type, sep=".")
 }
 
+get_n_suits <- function(cfg=list()) {
+    if (is.null(cfg[["n_suits"]])) {
+        length(get_suit_symbols(cfg=cfg, expand=FALSE)) - 1
+    } else {
+        cfg[["n_suits"]]
+    }
+}
+
+get_n_ranks <- function(cfg=list()) {
+    if (is.null(cfg[["n_ranks"]])) {
+        length(get_rank_symbols(cfg=cfg, expand=FALSE))
+    } else {
+        cfg[["n_ranks"]]
+    }
+}
+
+get_i_unsuit <- function(cfg=list()) get_n_suits(cfg) + 1
+
+
 #' @import R6
 Config <- R6Class("pp_cfg",
     public = list(

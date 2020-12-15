@@ -27,8 +27,8 @@ test_that("options work as expected", {
     expect_equal(should_invert("coin_face", 5, 1, list(invert_colors.coin_face = TRUE)), TRUE)
     expect_equal(should_invert("coin_face", 5, 1, list(invert_colors = FALSE)), FALSE)
 
-    expect_equal(get_n_ranks(list(n_ranks = 7)), 7)
-    expect_equal(get_n_suits(list(n_suits = 3)), 3)
+    expect_equal(pp_cfg(list(n_ranks = 7))$n_ranks, 7)
+    expect_equal(pp_cfg(list(n_suits = 3))$n_suits, 3)
 
     cfg <- list(rank_symbols="A,B,C,D,E,F",
                 use_suit_as_ace=TRUE)
