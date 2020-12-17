@@ -32,14 +32,14 @@
 #'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
 #' \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
 #' \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
-#'   See \url{http://www.ludism.org/ppwiki}.
+#'   See \url{https://www.ludism.org/ppwiki}.
 #'   Configuration also contains the following piecepack accessories:\describe{
 #'     \item{piecepack dice cards}{An accessory proposed by John Braley.
-#'                                 See \url{http://www.ludism.org/ppwiki/PiecepackDiceCards}.}
+#'                                 See \url{https://www.ludism.org/ppwiki/PiecepackDiceCards}.}
 #'     \item{piecepack matchsticks}{A public domain accessory developed by Dan Burkey.
-#'                                 See \url{http://www.ludism.org/ppwiki/PiecepackMatchsticks}.}
+#'                                 See \url{https://www.ludism.org/ppwiki/PiecepackMatchsticks}.}
 #'     \item{piecepack pyramids}{A public domain accessory developed by Tim Schutz.
-#'                              See \url{http://www.ludism.org/ppwiki/PiecepackPyramids}.}
+#'                              See \url{https://www.ludism.org/ppwiki/PiecepackPyramids}.}
 #'     \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
 #'              See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}
 #'   }}
@@ -54,9 +54,9 @@
 #'            14 ranks (ace through jack, knight, queen, king) plus a 15th "Joker" rank
 #'            and a fifth "suit" of 22 trump cards (1-21 plus an "excuse").}}}
 #' \item{playing_cards_expansion}{A piecepack with the standard ``French'' playing card suits.
-#'                                See \url{http://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
+#'                                See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
 #' \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
-#'               ``stackpack'' diagrams.  See \url{http://www.ludism.org/ppwiki/StackPack}.}
+#'               ``stackpack'' diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'              If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font

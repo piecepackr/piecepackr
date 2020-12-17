@@ -1,4 +1,5 @@
-* ``vdiffr`` now used conditionally as requested by Prof. Ripley
+* Resubmit.  URLs fixed as requested by Uwes Ligges.
+* ``vdiffr`` now used conditionally as requested by Prof. Ripley.
 * To fix CRAN check error for ``r-oldrel`` we now use ``backports`` to supply ``suppressWarnings()``
 * To fix CRAN check warning for ``r-oldrel-windows`` we now skip on CRAN
   any tests that assume the presence of the Dejavu Sans font
