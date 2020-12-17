@@ -4,17 +4,14 @@ cache:
   directories:
     - $HOME/Library/Caches/Homebrew
 r:
-    - devel 
     - release
-    - oldrel
+    - devel 
 os:
     - linux
     - osx
 matrix:
     exclude:
-        r: 
-            - devel
-            - oldrel
+        r: devel
         os: osx
 sudo: false
 latex: false

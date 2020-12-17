@@ -5,6 +5,7 @@ test_that("grob_fn_helpers works as expected", {
     skip_on_ci()
     skip_if_not_installed("vdiffr")
     library("vdiffr")
+
     expect_doppelganger("add_checkers", function() {
         suppressWarnings({
             grid.draw(checkersGrob(shape = "rect", col="purple"))

@@ -1,8 +1,6 @@
-has_name <- function(df, name) (name %in% names(df))
-
 add_cfg <- function(df, cfg=pp_cfg(), envir=NULL) {
     df <- tibble::as_tibble(df)
-    if (has_name(df, "cfg")) {
+    if (hasName(df, "cfg")) {
         df$cfg <- lapply(df$cfg, get_cfg, envir)
     } else {
         df$cfg <- rep(c(get_cfg(cfg, envir)), length.out=nrow(df))
@@ -11,7 +9,7 @@ add_cfg <- function(df, cfg=pp_cfg(), envir=NULL) {
 }
 
 add_field <- function(df, key, value) {
-    if (has_name(df, key)) {
+    if (hasName(df, key)) {
         df[[key]] <- ifelse(is.na(df[[key]]), value, df[[key]])
     } else {
         df[[key]] <- value
@@ -179,8 +177,8 @@ get_shapes <- function(df) {
         dfi <- df[ii, ]
         cfg <- df$cfg[[ii]]
         piece_side <- df$piece_side[ii]
-        suit <- ifelse(has_name(df, "suit"), df$suit[ii], NA)
-        rank <- ifelse(has_name(df, "rank"), df$rank[ii], NA)
+        suit <- ifelse(hasName(df, "suit"), df$suit[ii], NA)
+        rank <- ifelse(hasName(df, "rank"), df$rank[ii], NA)
         opt <- try(cfg$get_piece_opt(piece_side, suit, rank), silent = TRUE)
         if (inherits(opt, "try-error") || opt$shape %in% c("rect", "halma", "meeple", "roundrect")) {
             shapes[[ii]] <- ConvexPolygon$new(x=c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),

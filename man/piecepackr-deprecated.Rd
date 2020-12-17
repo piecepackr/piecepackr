@@ -81,6 +81,7 @@ they will be marked as Defunct and removed in a future version.
 }
 \examples{
  if (require("grid")) {
+     if (getRversion() < "4.0.0") suppressWarnings <- backports::suppressWarnings
      suppressWarnings({
          gp <- gpar(col="black", fill="yellow")
          pushViewport(viewport(x=0.25, y=0.75, width=1/2, height=1/2))
