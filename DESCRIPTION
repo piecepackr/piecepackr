@@ -6,7 +6,7 @@ Version: 1.6.1
 Description: Functions to make board game graphics.  By default makes game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <http://www.ludism.org/ppwiki> but can be configured to make graphics for other board game systems.
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
              person("Delapouite <https://delapouite.com/>", role="dtc",
-                     comment = 'Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <http://creativecommons.org/licenses/by/3.0/>'))
+                     comment = 'Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>'))
 License: CC BY-SA 4.0
 URL: https://trevorldavis.com/piecepackr/, https://github.com/piecepackr/piecepackr, https://groups.google.com/forum/#!forum/piecepackr
 BugReports: https://github.com/piecepackr/piecepackr/issues

@@ -89,13 +89,6 @@
 #'        df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
 #'                               suit=NA, angle=NA, z=NA, stringsAsFactors=FALSE)
 #'        df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
-#'                               suit=c(1,2,1,2,2,1,2,1,4,3,4,3,3,4,3,4),
-#'                               angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
-#'        df <- rbind(df_tiles, df_coins)
-#'        pmap_piece(df, cfg = cfgs$piecepack, op_scale=0.5, default.units="in")
-#'
-#'        grid.newpage()
-#'        df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
 #'                               suit=c(1,4,1,4,4,1,4,1,2,3,2,3,3,2,3,2),
 #'                               angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
 #'        df <- rbind(df_tiles, df_coins)
