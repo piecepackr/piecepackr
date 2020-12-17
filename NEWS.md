@@ -1,4 +1,4 @@
-piecepackr 1.6.2
+piecepackr 1.6.3
 ================
 
 New features

@@ -2,9 +2,10 @@ cfg_default <- pp_cfg(list(title="default cfg"))
 cfg_3d <- game_systems("sans3d")$piecepack
 context("test pp_cfg")
 test_that("pp_cfg works as expected", {
-    expect_true("pp_cfg" %in% class(cfg_default))
+    expect_true(inherits(cfg_default, "pp_cfg"))
     expect_equal(class(as.list(cfg_default)), "list")
     expect_output(print(cfg_default), "default cfg")
+    skip_if_not(capabilities("cairo"))
     expect_warning(cfg_default$get_pictureGrob("tile_back", 1, 1))
 })
 
@@ -61,6 +62,7 @@ test_that("save_print_and_play works as expected", {
 
 context("save_piece_images works as expected")
 test_that("save_piece_images works as expected", {
+    skip_if_not(capabilities("cairo"))
     directory <- tempfile()
     on.exit(unlink(directory))
     cfg <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
@@ -92,6 +94,7 @@ test_that("save_piece_images works as expected", {
 context("no regressions in figures")
 test_that("no regressions in figures", {
     skip_on_ci()
+    skip_if_not(capabilities("cairo"))
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
