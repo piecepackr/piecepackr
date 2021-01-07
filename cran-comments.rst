@@ -1,4 +1,5 @@
-* Resubmit. To fix CRAN check error for ``M1mac`` we add some ``capabilities("cairo")`` checks
+* To fix CRAN check error for ``M1mac`` we add a ``capabilities("cairo")`` in example
+  and a couple of ``skip_if_not_installed("vdiffr")`` checks in unit tests.
 
 **Test environments**
 

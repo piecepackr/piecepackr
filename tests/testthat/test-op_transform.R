@@ -108,6 +108,9 @@ test_that("SAT functions work", {
     expect_equal(dim(as.matrix(p2)), c(5, 2))
 
     skip_on_ci()
+    skip_on_cran()
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     expect_doppelganger("simple_square", function() plot(r1))
     expect_doppelganger("simple_points", function() plot(p2))
 })

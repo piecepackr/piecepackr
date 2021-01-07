@@ -40,7 +40,7 @@ found in its \code{directory} argument.
 }
 \examples{
 
- if (require("grid")) {
+ if (require("grid") && capabilities("cairo")) {
     cfg <- pp_cfg(list(invert_colors=TRUE))
 
     pushViewport(viewport(width=unit(2, "in"), height=unit(2, "in")))

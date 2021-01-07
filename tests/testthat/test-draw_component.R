@@ -267,6 +267,10 @@ test_that("no regressions in figures", {
 context("oblique projection works")
 test_that("oblique projection works", {
     skip_on_ci()
+    skip_on_cran()
+    skip_if_not(capabilities("cairo"))
+    skip_if_not_installed("vdiffr")
+    library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
         grid.piece(..., cfg=cfg, op_scale=0.5)
     }
@@ -311,6 +315,7 @@ test_that("oblique projection works", {
 context("alpha and scale works")
 test_that("alpha and scale works", {
     skip_on_ci()
+    skip_if_not(capabilities("cairo"))
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     expect_doppelganger("alpha_and_scale", function() {

@@ -2,6 +2,7 @@ context("grob_fn_helpers works as expected")
 test_that("grob_fn_helpers works as expected", {
     expect_error(checkersGrob(shape = "circle", gp=gpar(fill="purple")))
     expect_error(hexlinesGrob(shape = "circle", gp=gpar(col="yellow")))
+
     skip_on_ci()
     skip_if_not_installed("vdiffr")
     library("vdiffr")
