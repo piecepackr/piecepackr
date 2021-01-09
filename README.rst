@@ -124,14 +124,10 @@ Go
 
 ``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes.  Here are is `an example diagram <https://trevorldavis.com/piecepackr/go.html>`_ for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted using rgl_: 
 
-
 .. figure:: man/figures/README-go.png
     :alt: 3D Multi-player Go diagram
-    :align: center
-    :width: 80%
 
     3D Multi-player Go diagram
-
 
 Piecepack
 ~~~~~~~~~
@@ -343,7 +339,7 @@ piece (rayrender)
              add_object(sphere(x=5,y=-4, z=30, material=light(intensity=420)))
     scene <- Reduce(rayrender::add_object, l, init=table)
     rayrender::render_scene(scene, lookat = c(5, 5, 0), lookfrom = c(5, -7, 25), 
-                            width = 500, height = 500, samples=200)
+                            width = 500, height = 500, samples=200, clamp_value=8)
 
 .. figure:: man/figures/README-rayrender-1.png
     :alt: plot of chunk rayrender

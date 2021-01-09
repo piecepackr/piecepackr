@@ -1,3 +1,8 @@
+piecepackr 1.6.5
+================
+
+No user-facing changes (we tweak our examples/tests so R CMD check passes without issue on CRAN's new 'M1mac' build). 
+
 piecepackr 1.6.3
 ================
 
