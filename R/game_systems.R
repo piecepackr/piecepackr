@@ -64,8 +64,9 @@
 #' @param round If \code{TRUE} the \dQuote{shape} of \dQuote{tiles} and \dQuote{cards}
 #'              will be \dQuote{roundrect} instead of \dQuote{rect} (the default).
 #' @param pawn If \code{"token"} (default) the piecepack pawn will be a two-sided token in a \dQuote{halma} outline,
-#'             if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn
-#'             (doesn't works well with \code{grid.piece}).
+#'             if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn, and
+#'             if \code{"joystick"} the piecepack pawn will be a \dQuote{joystick} style pawn.
+#'             Note for the latter two pawn styles only \code{pawn_top} will work with \code{grid.piece}.
 #' @param cfg List of configuration options
 #' @examples
 #'        cfgs <- game_systems()
@@ -99,7 +100,7 @@
 #'     }
 #' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 #' @export
-game_systems <- function(style=NULL, round = FALSE, pawn="token") {
+game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
     styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
     if (!is.null(style) && is.na(match(style, styles))) {
         stop(paste("Don't have a customized configuration for style", style))
@@ -123,17 +124,6 @@ game_systems <- function(style=NULL, round = FALSE, pawn="token") {
         face_labels <- c("", "\u265e", "\u265b", "\u265a")
         chess_black <- c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a")
         chess_white <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
-    }
-    if (pawn == "peg-doll") {
-        pawn <- list(width.pawn=0.75, depth.pawn=0.75, height.pawn=1.5,
-                     edge_color.pawn=cb_suit_colors_pure,
-                     edge_color.s4.pawn="#0072B2",
-                     background_color.belt_face="white",
-                     mat_color.belt_face="transparent",
-                     suit_cex.belt_face=1.5,
-                     obj_fn.pawn=save_peg_doll_obj)
-    } else {
-        pawn <- NULL
     }
     if (is_3d) {
         style_3d <- list(suit_color.s4 = "#0072B2",
@@ -163,6 +153,11 @@ game_systems <- function(style=NULL, round = FALSE, pawn="token") {
                            rank_text=",a,2,3,4,5",
                            use_suit_as_ace=TRUE,
                            shape.tile = rect_shape, shape.card = rect_shape)
+    shapes <- shapes_cfg(color_list)
+    pawn <- switch(pawn,
+                   "peg-doll" = peg_doll_pawn(shapes),
+                   "joystick" = joystick_pawn(shapes),
+                   NULL)
     piecepack <- c(pawn, style_3d, piecepack_suits, color_list, piecepack_base)
 
     playing_cards_expansion <- piecepack
@@ -395,6 +390,62 @@ go <- function(cell_width = 1, color_list) {
     go$has_boards <- TRUE
     go$has_bits <- TRUE
     go
+}
+
+shapes_cfg <- function(color_list) {
+    shapes <- list(n_suits = 6, n_ranks = 4,
+                   invert_colors = TRUE,
+                   ps_text = "", dm_text = "",
+                   background_color = "white",
+                   width = 1, height = 1, depth = 1,
+                   shape.r1.bit = "circle",
+                   shape.r2.bit = "circle",
+                   op_grob_fn.r2.bit = basicEllipsoid,
+                   obj_fn.r2.bit = function(...) save_ellipsoid_obj(..., subdivide=4),
+                   shape.r3.bit = "pyramid",
+                   shape.r4.bit = "rect")
+    pp_cfg(c(shapes, color_list))
+}
+
+peg_doll_pawn <- function(shapes) {
+
+    pegdoll_depth <- c(0.55, 1.0 * 0.75 / 1.5)
+    df_pegdoll <- tibble(piece_side = "bit_back", rank = c(1, 2),
+                          width =  1, height = 1, depth = pegdoll_depth,
+                          x = 0.5, y = 0.5, z = c(0.5 * pegdoll_depth[1], 1 - 0.5 * pegdoll_depth[2]),
+                          cfg = "shapes")
+
+    pegdoll <- CompositePiece$new(df_pegdoll, envir=list(shapes=shapes))
+
+    list(width.pawn=0.75, depth.pawn=0.75, height.pawn=1.5,
+         edge_color.pawn=cb_suit_colors_pure,
+         edge_color.s4.pawn="#0072B2",
+         background_color.belt_face="white",
+         mat_color.belt_face="transparent",
+         suit_cex.belt_face=1.5,
+         obj_fn.pawn=save_peg_doll_obj,
+         grob_fn.pawn = pegdoll$grob_fn,
+         op_grob_fn.pawn = pegdoll$op_grob_fn)
+}
+
+joystick_pawn <- function(shapes) {
+
+    jd <- c(0.15, 0.6, 0.5 * 5 / 8)
+    df_joystick <- tibble(piece_side = "bit_back", rank = c(1, 1, 2),
+                          width =  c(1, 0.3, 0.5),
+                          height = c(1, 0.3, 0.5),
+                          depth = jd,
+                          x = rep(0.5, 3), y = rep(0.5, 3),
+                          z = c(0.5 * jd[1], jd[1] + 0.5 * jd[2], 1 - 0.5 * jd[3]),
+                          cfg = "shapes")
+
+    joystick <- CompositePiece$new(df_joystick, envir=list(shapes=shapes))
+
+    list(grob_fn.pawn = joystick$grob_fn,
+         op_grob_fn.pawn = joystick$op_grob_fn,
+         rayrender_fn.pawn = joystick$rayrender_fn,
+         rgl_fn.pawn = joystick$rgl_fn,
+         width.pawn=5/8, height.pawn=1.0, depth.pawn=5/8)
 }
 
 #' @rdname game_systems

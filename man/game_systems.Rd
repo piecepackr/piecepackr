@@ -21,8 +21,9 @@ If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
 will be \dQuote{roundrect} instead of \dQuote{rect} (the default).}
 
 \item{pawn}{If \code{"token"} (default) the piecepack pawn will be a two-sided token in a \dQuote{halma} outline,
-if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn
-(doesn't works well with \code{grid.piece}).}
+if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn, and
+if \code{"joystick"} the piecepack pawn will be a \dQuote{joystick} style pawn.
+Note for the latter two pawn styles only \code{pawn_top} will work with \code{grid.piece}.}
 
 \item{cfg}{List of configuration options}
 }

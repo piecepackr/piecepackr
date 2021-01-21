@@ -1,3 +1,23 @@
+piecepackr 1.7.0
+================
+
+* Function ``game_systems()`` ``pawn`` argument now supports a "joystick" value (#183). 
+  This allows one to draw a "joystick" style piecepack ``"pawn_top"`` in grid, rgl, and rayrender.
+  
+  + Currently Wavefront OBJ export is not supported for "joystick" pawns.
+  + Other pawn "sides" (e.g. ``"pawn_face"``) are not supported in grid 
+    (but are supported in rgl and rayrender).
+  + You may find it useful to set ``as_top = "pawn_face"`` in ``op_transform()`` (when using ``pmap_piece()``).
+
+Bug fixes and minor improvements
+--------------------------------
+
+* The "peg-doll" pawn (available via ``game_systems()`` ``pawn`` argument) now has basic
+  support for a piecepack ``"pawn_top"`` in grid (#184).
+  Previously only had support in rgl and rayrender. 
+* Fixed bug when setting custom configuration list "rgl_fn" values.
+* ``AA_to_R()`` is now more robust to minor numerical errors in ``axis_x`` and ``axis_y`` values.
+
 piecepackr 1.6.5
 ================
 

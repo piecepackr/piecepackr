@@ -35,6 +35,16 @@ test_that("no regressions in figures", {
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
     })
 
+    # joystick pawns
+    cfg <- game_systems(pawn = "joystick")$piecepack
+    df <- tibble(piece_side = "pawn_top", x = 1:4, y=1:4, suit=1:4)
+    expect_doppelganger("joystick", function() {
+        pmap_piece(df, default.units="in", cfg=cfg)
+    })
+    expect_doppelganger("joystick-op", function() {
+        pmap_piece(df, default.units="in", cfg=cfg, op_scale=0.5)
+    })
+
     # go
     expect_doppelganger("go", function() {
         dfb <- tibble(piece_side = "board_face", x=10, y=10, suit=2)

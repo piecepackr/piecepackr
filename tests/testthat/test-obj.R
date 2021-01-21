@@ -38,6 +38,11 @@ test_that("rgl works", {
     expect_true(file.exists(f))
     rgl.close()
     unlink(f)
+
+    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    rgl.clear()
+    l <- piece3d("pawn_top", x=-1:1, suit=1:3, cfg = cfg, lit=TRUE)
+    expect_true(length(l) > 2)
 })
 
 test_that("rayrender works", {
@@ -52,4 +57,9 @@ test_that("rayrender works", {
     unlink(f)
 
     expect_null(piece("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
+
+    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    scene <- piece("pawn_top", x=-1:1, suit=1:3, cfg = cfg)
+    expect_equal(nrow(scene), 9)
+    # render_scene(scene, samples = 1, lookfrom=c(0, -5, 5)) # nolint
 })
