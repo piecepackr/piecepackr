@@ -396,7 +396,7 @@ Config <- R6Class("pp_cfg",
             if (!is.null(private$cache[[key]])) {
                 rgl_fn <- private$cache[[key]]
             } else {
-                rgl_fn <- get_style_element("shadow_fn", piece_side, private$cfg,
+                rgl_fn <- get_style_element("rgl_fn", piece_side, private$cfg,
                                                 rgl_piece_helper, suit, rank)
                 if (self$cache_obj_fn) private$cache[[key]] <- rgl_fn
             }
