@@ -323,7 +323,12 @@ do_shapes_overlap <- function(s1, s2) {
 #' @export
 AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
     if (is.na(axis_z)) {
-        axis_z <- sqrt(1 - axis_x^2 - axis_y^2)
+        inner <- 1 - axis_x^2 - axis_y^2
+        if (nigh(inner, 0)) {
+            axis_z <- 0
+        } else {
+            axis_z <- sqrt(inner)
+        }
     } else {
         norm <- sqrt(axis_x^2 + axis_y^2 + axis_z^2)
         if (!nigh(norm, 1)) {
