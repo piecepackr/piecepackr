@@ -155,8 +155,16 @@ get_fontfamily <- make_get_style_fn("fontfamily", "sans")
 get_fontface <- make_get_style_fn("fontface", "plain")
 get_cex <- make_get_style_fn("cex", 1.0)
 
+is_edge <- function(piece_side) {
+    (get_side(piece_side) %in% c("top", "left", "right", "base")) &&
+    (get_piece(piece_side) != "pyramid")
+}
+
 get_background_color_helper <- function(piece_side, suit, rank, cfg) {
-    colors <- col_cleave(get_style_element("background_color", piece_side, cfg, "white", suit, rank))
+    default <- ifelse(is_edge(piece_side),
+                      get_edge_color(paste0(get_piece(piece_side), "_face"), suit, rank, cfg),
+                      "white")
+    colors <- col_cleave(get_style_element("background_color", piece_side, cfg, default, suit, rank))
     expand_suit_elements(colors, "background_colors", piece_side, cfg)[suit]
 }
 
@@ -197,19 +205,10 @@ get_shape_r <- function(piece_side, suit, rank, cfg) {
 
 get_shape <- function(piece_side, suit, rank, cfg) {
     default <- switch(piece_side,
-               tile_back = "rect",
-               tile_face = "rect",
                coin_back = "circle",
                coin_face = "circle",
-               die_face = "rect",
-               board_face = "rect",
-               board_back = "rect",
                bit_face = "circle",
                bit_back = "circle",
-               card_face = "rect",
-               card_back = "rect",
-               matchstick_back = "rect",
-               matchstick_face = "rect",
                pawn_face = "halma",
                pawn_back = "halma",
                saucer_face = "circle",
@@ -218,10 +217,7 @@ get_shape <- function(piece_side, suit, rank, cfg) {
                pyramid_left = "pyramid",
                pyramid_right = "pyramid",
                pyramid_back = "pyramid",
-               pyramid_top = "rect",
-               belt_face = "rect",
-               suitdie_face = "rect",
-               stop(paste("Don't know correct shape for", piece_side)))
+               "rect")
     get_style_element("shape", piece_side, cfg, default, suit, rank)
 }
 
@@ -230,8 +226,11 @@ get_n_vertices <- function(shape) {
 }
 
 get_suit_color_helper <- function(piece_side, suit, rank, cfg=list()) {
+    default <- ifelse(is_edge(piece_side),
+                      get_edge_color(paste0(get_piece(piece_side), "_face"), suit, rank, cfg),
+                      "#D55E00,#000000,#009E73,#56B4E9,#E69F00")
     suit_colors <- col_cleave(get_style_element("suit_color", piece_side, cfg,
-                            "#D55E00,#000000,#009E73,#56B4E9,#E69F00", suit, rank))
+                            default, suit, rank))
     suit_colors <- expand_suit_elements(suit_colors, "suit_colors", piece_side, cfg)
     ifelse(suit <= get_n_suits(cfg), suit_colors[suit], suit_colors[get_i_unsuit(cfg)])
 }
@@ -302,7 +301,9 @@ get_coin_arrangement <- function(cfg=list()) {
 
 get_dm_symbols <- function(piece_side, suit=0, rank=0, cfg=list()) {
     default <- {
-        if (piece_side %in% c("coin_back", "coin_face")) {
+        if (is_edge(piece_side)) {
+            dm_symbols <- ""
+        } else if (piece_side %in% c("coin_back", "coin_face")) {
             dm_symbols <- "\u25cf"
         } else if (piece_side %in% c("saucer_back", "saucer_face")) {
             dm_symbols <- "\u25b2"
@@ -590,6 +591,8 @@ get_ps_element <- function(piece_side, suit_element, rank_element, neither_eleme
         rank_element
     } else if (piece_side %in% c("tile_back", "matchstick_back", "card_back")) {
         neither_element
+    } else if (is_edge(piece_side)) {
+        neither_element
     } else {
         suit_element
     }
@@ -621,14 +624,13 @@ get_ps_cex <- function(piece_side, suit=get_i_unsuit(cfg), rank=1, cfg=list()) {
 get_ps_text <- function(piece_side, suit=get_i_unsuit(cfg), rank=1, cfg=list()) {
     rank_symbol <- get_rank_symbol(piece_side, suit, rank, cfg)
     suit_symbol <- get_suit_symbol(piece_side, suit, rank, cfg)
-    default <- get_ps_element(piece_side, suit_symbol, rank_symbol, NULL)
+    default <- get_ps_element(piece_side, suit_symbol, rank_symbol, "")
     get_style_element("ps_text", piece_side, cfg, default, suit, rank)
 }
 get_ps_color <- function(piece_side, suit, rank, cfg) {
     default <- get_suit_color(piece_side, suit, rank, cfg)
     get_style_element("ps_color", piece_side, cfg, default, suit, rank)
 }
-
 get_piece_opt_helper <- function(piece_side, suit, rank, cfg) {
     # Shape
     shape <- get_shape(piece_side, suit, rank, cfg)

@@ -114,6 +114,15 @@ test_that("get_piece_opt works as expected", {
     expect_equal(cfg$get_piece_opt("tile_face")$bleed_color, "blue")
     cfg <- pp_cfg(list(border_color = "transparent", mat_color = "blue", background_color = "#00000000"))
     expect_equal(cfg$get_piece_opt("tile_face")$bleed_color, "transparent")
+
+    # edges
+    cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey",
+                       edge_color="darkred,black,darkgreen,darkblue,grey"))
+    opt <- cfg$get_piece_opt("pawn_top", 1, 1)
+    expect_equal(opt$shape, "rect")
+    expect_equal(opt$dm_text, "")
+    expect_equal(opt$ps_text, "")
+    expect_equal(opt$background_color, "darkred")
 })
 
 context("pp_cfg querying variables work as expected")

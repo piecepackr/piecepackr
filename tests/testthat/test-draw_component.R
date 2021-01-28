@@ -214,6 +214,16 @@ test_that("no regressions in figures", {
         dc("die_layoutRF", suit=6, cfg=list(use_suit_as_ace=TRUE))
     })
 
+    # edges
+    df <- tibble(piece_side = c("pawn_top", "coin_left", "tile_base"),
+                 x = 1:3, y = 1:3, suit = 1:3, rank = 1:3)
+    cfg <- list(border_color = "black", edge_color.pawn = "red",
+                edge_color.coin = "grey", edge_color.tile = "grey")
+    expect_doppelganger("piece_edges", function() {
+                                    pushViewport(viewport(width=inch(4), height=inch(4)))
+                                    pmap_piece(df, cfg=cfg, default.units="in")
+                          })
+
     cfg <- list(suit_text="A,B,C,D,E,F", suit_color="red,black,green,blue,orange,grey")
     expect_doppelganger("suitdie_layoutRF-5suits", function() dc("suitdie_layoutRF", cfg=cfg))
     expect_doppelganger("suitrankdie_layoutRF-5suits", function() dc("suitrankdie_layoutRF", cfg=cfg))
