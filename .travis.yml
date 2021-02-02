@@ -1,18 +1,9 @@
 language: r
 cache:
   packages: true
-  directories:
-    - $HOME/Library/Caches/Homebrew
 r:
     - release
     - devel 
-os:
-    - linux
-    - osx
-matrix:
-    exclude:
-        r: devel
-        os: osx
 sudo: false
 latex: false
 warnings_are_errors: true
