@@ -68,9 +68,7 @@ pp_cfg <- function(cfg=list()) {
 
 #' @rdname pp_cfg
 #' @export
-is_pp_cfg <- function(cfg) {
-    "pp_cfg" %in% class(cfg)
-}
+is_pp_cfg <- function(cfg) inherits(cfg, "pp_cfg")
 
 #' @rdname pp_cfg
 #' @export
