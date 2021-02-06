@@ -517,35 +517,20 @@ a5_pyramids_grob <- function(suit=1:2, cfg=pp_cfg(), front=TRUE) {
 }
 
 pyramid_grob_helper <- function(suit, cfg=pp_cfg(), xleft=0) {
-    rank <- c(1:2,4,3,5:6)
+    rank <- c(2,4,5,1,3, 6)
     plh <- PYRAMID_LAYOUT_HEIGHTS[rank]
-    pawn_width <- cfg$get_width("pawn_face")
     y_up <- cumsum(plh) - 0.5*plh
     x_up <- 0.5*PYRAMID_LAYOUT_WIDTHS[rank]
-    x <- xleft+c(x_up[1:4], A5W/2 - x_up[5:6] - pawn_width)
-    y <- c(y_up[1:4], c(plh[6]+0.5*plh[5], 0.5*plh[6]))
+    x <- xleft+c(x_up[1:3], A5W/2 - x_up[4:6])
+    y <- c(y_up[1:3], c(plh[5] + plh[6] + 0.5*plh[4], plh[6]+0.5*plh[5], 0.5*plh[6]))
     piece_side <- "pyramid_layout"
-    angle <- c(rep(0, 4), rep(180,2))
+    angle <- c(rep(0, 3), rep(180,3))
     df <- tibble::tibble(piece_side, x, y, suit, rank, angle)
+    # space for a pawn layout on top
     dfp <- tibble::tibble(piece_side="pawn_layout",
-                          x=xleft+A5W/2-0.5*pawn_width,
-                          y=c(0.5,1.5)*cfg$get_height("pawn_layout"),
-                          suit, rank=NA, angle=0)
-    if (cfg$get_width("die_face") <= 0.6) {
-        dfd <- tibble::tibble(piece_side="die_layoutLF",
-                              x=xleft+c(0.5)*cfg$get_width("die_layoutLF"),
-                              y=A5H-c(0.5)*cfg$get_height("die_layoutLF"),
-                              suit, rank=NA, angle=0)
-    } else {
-        die_width <- cfg$get_width("die_width")
-        xdr <- c(0.5,1.5,2.5) * die_width
-        ydt <- A5H - 0.5 * die_width
-        ydb <- A5H - 1.5 * die_width
-        dfd <- tibble(piece_side="die_face", x=xleft+rep(xdr,2),
-                      y=rep(c(ydt,ydb),each=3),
-                      suit, rank=1:6, angle=0)
-    }
-    df <- rbind(dfp, dfd, df)
+                          x = xleft + 0.25 * A5W, y = A5H - 0.5 * cfg$get_width("pawn_layout"),
+                          suit, rank=1, angle=90)
+    df <- rbind(dfp, df)
     pmap_piece(df, cfg=cfg, default.units="inches", draw=FALSE)
 }
 

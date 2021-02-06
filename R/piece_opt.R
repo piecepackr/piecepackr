@@ -14,7 +14,7 @@ has_rank <- function(cs) {
                 "saucer_face", "saucer_back"))
 }
 
-PYRAMID_WIDTHS <- 2:8 * 1/8
+PYRAMID_WIDTHS <- seq(1/2, by = 1/16, length.out = 6)
 PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
 PYRAMID_DIAGONALS <- sqrt(PYRAMID_HEIGHTS^2 + (0.5*PYRAMID_WIDTHS)^2)
 PYRAMID_LAYOUT_WIDTHS <- PYRAMID_HEIGHTS
@@ -553,8 +553,8 @@ get_suit_fontsize <- function(piece_side, suit, rank, cfg) {
                  "saucer_back" = 28,
                  "saucer_face" = 28,
                  "suitdie_face" = 32,
-                 "pyramid_face" = 60 * (rank+1) / 8,
-                 "pyramid_back" = 60 * (rank+1) / 8,
+                 "pyramid_face" = 48 * PYRAMID_WIDTHS[rank],
+                 "pyramid_back" = 48 * PYRAMID_WIDTHS[rank],
                  24)
     get_style_element("suit_fontsize", piece_side, cfg, default, suit, rank)
 }
@@ -564,7 +564,7 @@ get_dm_fontsize <- function(piece_side, suit, rank, cfg) {
                  "tile_face" = 40,
                  "pawn_face" = 12,
                  "pawn_back" = 12,
-                 "pyramid_face" = 12 * (rank+1) / 8,
+                 "pyramid_face" = 12 * PYRAMID_WIDTHS[rank],
                  "card_face" = 32,
                  12)
     get_style_element("dm_fontsize", piece_side, cfg, default, suit, rank)
@@ -576,8 +576,8 @@ get_rank_fontsize <- function(piece_side, suit, rank, cfg) {
                  "coin_face" = 28,
                  "tile_face" = 72,
                  "bit_face" = 28,
-                 "pyramid_left"  = 60 * (rank+1) / 8,
-                 "pyramid_right" = 60 * (rank+1) / 8,
+                 "pyramid_left"  = 48 * PYRAMID_WIDTHS[rank],
+                 "pyramid_right" = 48 * PYRAMID_WIDTHS[rank],
                  "card_face" = 28,
                  20)
     get_style_element("rank_fontsize", piece_side, cfg, default, suit, rank)

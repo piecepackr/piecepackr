@@ -12,8 +12,8 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='360.00,274.15 351.00,301.85 369.00,301.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='369.00,301.85 360.00,274.15 375.02,289.98 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='360.00,274.15 351.00,301.85 357.02,289.98 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='360.00,274.15 357.02,289.98 375.02,289.98 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='360.00,260.30 342.00,315.70 378.00,315.70 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='378.00,315.70 360.00,260.30 390.04,291.96 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='360.00,260.30 342.00,315.70 354.04,291.96 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='360.00,260.30 354.04,291.96 390.04,291.96 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 </svg>

@@ -304,22 +304,16 @@ pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
 }
 
 pyramidLayoutGrob <- function(piece_side, suit, rank, cfg) {
-    gl <- gList()
-    suppressWarnings({
-        t <- c(72, 36, 0, -36, -72)
-        r <- 0.5
-        x <- to_x(t, r)
-        y <- 0.5 + 0.5*to_y(t, r)
-        pieces <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
-        angles <- c(90+72, 90+36, 90, 90-36, 90-72)
-        for (ii in 1:5) {
-            cs <- pieces[ii]
-            vp <- viewport(width=inch(cfg$get_width(cs, rank=rank)),
-                           height=inch(cfg$get_height(cs, rank=rank)),
-                           angle=angles[ii], x=x[ii], y=y[ii])
-            grob <- pieceGrob(cs, suit, rank, cfg, vp=vp)
-            gl[[ii]] <- grob
-        }
-    })
-    gTree(children=gl, name="pyramid_layout")
+    w <- cfg$get_width("pyramid_face", rank=rank)
+    h <- cfg$get_height("pyramid_face", rank=rank)
+    d <- sqrt(h^2 + (0.5*w)^2)
+    t <- c(72, 36, 0, -36, -72)
+    r <- h
+    x <- 0.5 * to_x(t, r)
+    y <- d + 0.5 * to_y(t, r)
+    pieces <- c("pyramid_face", "pyramid_right", "pyramid_back", "pyramid_left", "pyramid_face")
+    angles <- c(90+72, 90+36, 90, 90-36, 90-72)
+    df <- tibble(piece_side=pieces, x=x, y=y, suit=suit, rank=rank, angle=angles)
+    g <- pmap_piece(df, cfg=cfg, default.units="inches", draw=FALSE)
+    grobTree(g, name="pyramid_layout")
 }

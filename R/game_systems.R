@@ -320,7 +320,8 @@ piecepack <- function(style, color_list, rect_shape, pawn) {
                          background_color.die = "white",
                          border_color="transparent",
                          mat_color.tile_back = "burlywood",
-                         edge_color.tile = "black", edge_color.coin = "black")
+                         edge_color.tile = "black", edge_color.coin = "black",
+                         border_color.pyramid="black", border_lex.pyramid=1, background_color.pyramid="white")
     } else {
         style_3d <- NULL
     }
@@ -332,6 +333,12 @@ piecepack <- function(style, color_list, rect_shape, pawn) {
                            invert_colors.bit = TRUE,
                            rank_text=",a,2,3,4,5",
                            use_suit_as_ace=TRUE,
+                           rank_text.pyramid=LETTERS[1:6],
+                           suit_cex.pyramid_face=0.5, ps_r.pyramid_face=-0.08,
+                           dm_cex.pyramid_face=4.0, dm_text.pyramid_face="|", dm_r.pyramid_face=-0.22,
+                           ps_cex.pyramid_left=0.7, ps_r.pyramid_left=-0.00,
+                           ps_cex.pyramid_right=0.7, ps_r.pyramid_right=-0.00,
+                           use_suit_as_ace.pyramid=FALSE,
                            shape.tile = rect_shape, shape.card = rect_shape)
     shapes <- shapes_cfg(color_list)
     pawn <- switch(pawn,

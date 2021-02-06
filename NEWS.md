@@ -12,6 +12,10 @@ piecepackr 1.7.0
 Bug fixes and minor improvements
 --------------------------------
 
+* Piecepack pyramid dimensions have been fixed to better reflect their actual physical size (#241).
+  Their layout in the print-and-play layouts produced by ``save_print_and_play()`` has also been updated.
+* The appearance of piecepack pyramids returned by ``game_systems()`` 
+  now more closely resemble the original piecepack pyramids.
 * The "peg-doll" pawn (available via ``game_systems()`` ``pawn`` argument) now has basic
   support for a piecepack ``"pawn_top"`` in grid (#184).
   Previously only had support in rgl and rayrender. 
