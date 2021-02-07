@@ -14,7 +14,7 @@ has_rank <- function(cs) {
                 "saucer_face", "saucer_back"))
 }
 
-PYRAMID_WIDTHS <- seq(1/2, by = 1/16, length.out = 6)
+PYRAMID_WIDTHS <- seq(from = 1/2, to = 27/32, length.out = 6)
 PYRAMID_HEIGHTS <- 1.538842 * PYRAMID_WIDTHS
 PYRAMID_DIAGONALS <- sqrt(PYRAMID_HEIGHTS^2 + (0.5*PYRAMID_WIDTHS)^2)
 PYRAMID_LAYOUT_WIDTHS <- PYRAMID_HEIGHTS

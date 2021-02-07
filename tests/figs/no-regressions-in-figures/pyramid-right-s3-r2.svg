@@ -12,7 +12,7 @@
   ]]></style>
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
-<polygon points='360.00,256.84 339.75,319.16 380.25,319.16 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text x='352.49' y='312.87' style='font-size: 27.00px; fill: #009E73; font-family: Liberation Sans;' textLength='15.02px' lengthAdjust='spacingAndGlyphs'>a</text>
-<polyline points='360.00,256.84 339.75,319.16 380.25,319.16 360.00,256.84 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='360.00,256.49 339.53,319.51 380.48,319.51 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='352.41' y='313.14' style='font-size: 27.30px; fill: #009E73; font-family: Liberation Sans;' textLength='15.19px' lengthAdjust='spacingAndGlyphs'>a</text>
+<polyline points='360.00,256.49 339.53,319.51 380.48,319.51 360.00,256.49 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </svg>
