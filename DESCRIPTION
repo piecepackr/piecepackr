@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics
-Version: 1.7.0-4
+Version: 1.7.0-5
 Description: Functions to make board game graphics.  By default makes game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can be configured to make graphics for other board game systems.
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
              person("Delapouite <https://delapouite.com/>", role="dtc",

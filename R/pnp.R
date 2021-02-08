@@ -297,21 +297,21 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
                           pieceGrob("belt_face", x=xb, y=yb, cfg=cfg,
                                     default.units="in"))
     # Pyramids
-    yy <- yt
-    xy <- A5W-1
+    yy <- yt+0.10
+    xy <- A5W-1.2
     df <- tibble(piece_side=c("pyramid_layout", "pyramid_top"),
-                              suit=1, rank=2, x=xy+c(-0.5, 0.5), y=yy)
+                              suit=1, rank=1, x=xy+c(-0.5, 0.6), y=yy)
     grob_pyramid <- grobTree(htg("Pyramid", xy, yy+0.8),
-                             htg("Top (View)", xy+0.5, yy+0.45),
-                             tg("Face", xy+0.5, yy+0.3),
-                             tg("Back", xy+0.5, yy-0.3),
-                             tg("Left", xy+0.2, yy, rot=90),
-                             tg("Right", xy+0.8, yy, rot=-90),
-                             tg("Back", xy-0.1, yy, rot=-90),
-                             tg("Face", xy-0.5, yy+0.65),
-                             tg("Face", xy-0.5, yy-0.65),
-                             tg("Right", xy-0.2, yy+0.4),
-                             tg("Left", xy-0.2, yy-0.4),
+                             htg("Top (View)", xy+0.7, yy+0.50),
+                             tg("Face", xy+0.6, yy+0.33),
+                             tg("Back", xy+0.6, yy-0.33),
+                             tg("Left", xy+0.25, yy, rot=90),
+                             tg("Right", xy+0.95, yy, rot=-90),
+                             tg("Back", xy-0.0, yy, rot=-90),
+                             tg("Face", xy-1.0, yy+0.60, rot=90),
+                             tg("Face", xy-1.0, yy-0.60, rot=90),
+                             tg("Right", xy-0.05, yy+0.45),
+                             tg("Left", xy-0.05, yy-0.45),
                              pmap_piece(df, default.units="in",
                                         cfg=cfg, draw=FALSE))
     # Matchsticks
