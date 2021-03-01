@@ -143,13 +143,15 @@ add_z <- function(df, pt_thickness = 0.01) {
     zp <- 0.5*df$depth
     for (i in seq(length.out=nrow(df))) {
         dfi <- df[i, ]
-        dfs <- df[0:(i-1), ]
+        dfs <- df[seq_len(i-1L), ]
+        zc <- zp[i]
         for (j in which_AABB_overlap(dfi, dfs)) {
             if (do_shapes_overlap(shapes[[i]], shapes[[j]])) {
-                zp[i] <- compute_z(df, zp, i, j, pt_thickness)
-                break
+                zc0 <- compute_z(df, zp, i, j, pt_thickness)
+                if (zc0 > zc) zc <- zc0
             }
         }
+        zp[i] <- zc
     }
     df <- add_field(df, "z", zp)
     df

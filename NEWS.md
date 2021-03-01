@@ -27,6 +27,8 @@ Bug fixes and minor improvements
   + These "edge" sides are not properly supported in ``grid.piece()`` / ``pieceGrob()`` (grid) 
     when using a 3D oblique projection (``op_scale`` over 0) but are supported in
     ``piece3d()`` (rgl) and ``piece()`` (rayrender).
+* Fixed bug in ``op_transform()`` when calculating "z"-coordinate when a piece 
+  overlaps with multiple pieces and the "latest" one isn't actually the "highest" one.
 
 piecepackr 1.6.5
 ================
