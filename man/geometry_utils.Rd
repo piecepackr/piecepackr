@@ -69,11 +69,11 @@ the x, y, and z axes.
 }
 \details{
 \code{pp_cfg} uses polar coordinates to determine where the "primary" and "directional"
-     symbols are located on a game piece.
+symbols are located on a game piece.
 They are also useful for drawing certain shapes and for making game diagrams on hex boards.
 
 \code{piecepackr} and \code{grid} functions use angles in degrees
- but the \code{base} trigonometry functions usually use radians.
+but the \code{base} trigonometry functions usually use radians.
 
 \code{piecepackr}'s 3D graphics functions \code{save_piece_obj}, \code{piece}, and \code{piece3d}
 use the axis-angle representation for 3D rotations.
@@ -106,6 +106,6 @@ Pieces are rotated as if their center was at the origin.
 }
 \seealso{
 \url{https://en.wikipedia.org/wiki/Axis-angle_representation} for more details
-  about the Axis-angle representation of 3D rotations.
-  See \code{\link[base]{Trig}} for R's built-in trigonometric functions.
+about the Axis-angle representation of 3D rotations.
+See \code{\link[base]{Trig}} for R's built-in trigonometric functions.
 }

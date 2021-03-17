@@ -87,8 +87,8 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
                            default.units = "npc", scale=1, alpha=1, name="") {
     if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
-    suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), cfg$i_unsuit)
-    suit <- ifelse(suit > cfg$i_unsuit+1, cfg$i_unsuit+1, suit)
+    suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1L, suit), cfg$n_suits + 1L)
+    suit <- ifelse(suit > cfg$n_suits + 2L, cfg$n_suits + 2L, suit)
     rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
     if (is.na(angle)) angle <- 0
     if (is.na(width)) width <- inch(cfg$get_width(piece_side, suit, rank))

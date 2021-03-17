@@ -2,13 +2,13 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics
-Version: 1.7.0-6
-Description: Functions to make board game graphics.  By default makes game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can be configured to make graphics for other board game systems.
+Version: 1.7.0-7
+Description: Functions to make board game graphics.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can be configured to make graphics for other board game systems.  Includes built-in configurations for several public domain game systems.
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
              person("Delapouite <https://delapouite.com/>", role="dtc",
                      comment = 'Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>'))
 License: CC BY-SA 4.0
-URL: https://trevorldavis.com/piecepackr/, https://github.com/piecepackr/piecepackr, https://groups.google.com/forum/#!forum/piecepackr
+URL: https://trevorldavis.com/piecepackr/, https://groups.google.com/forum/#!forum/piecepackr
 BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyLoad: yes
 Imports:
@@ -32,4 +32,5 @@ Suggests:
     testthat,
     vdiffr
 SystemRequirements: ghostscript
+Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1

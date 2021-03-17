@@ -79,5 +79,5 @@ A rayrender object.
 }
 \seealso{
 See \url{https://www.rayrender.net} for more information about the \code{rayrender} package.
-         See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
+See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }

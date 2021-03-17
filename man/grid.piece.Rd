@@ -90,7 +90,7 @@ to play with re-configuring fontsizes.}
 (viewed from the top of the board).
 \code{0} (the default) leads to an \dQuote{orthographic} projection,
 \code{0.5} is the most common scale used in the \dQuote{cabinet} projection,
- and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
+and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 
 \item{op_angle}{What is the angle of the oblique projection?  Has no effect if \code{op_scale} is \code{0}.}
 
@@ -115,7 +115,7 @@ to play with re-configuring fontsizes.}
 }
 \value{
 A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
-        will also draw it to the graphics device.
+will also draw it to the graphics device.
 }
 \description{
 \code{grid.piece} draws board game pieces onto the graphics device.
@@ -160,5 +160,5 @@ A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
 }
 \seealso{
 \code{\link{pmap_piece}} which applies \code{pieceGrob}
-     over rows of a data frame.
+over rows of a data frame.
 }

@@ -83,7 +83,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
     pl <- list()
 
     if ("piecepack" %in% pieces || "subpack" %in% pieces) {
-        psuits <- seq(cfg$i_unsuit+1)
+        psuits <- seq(cfg$n_suits+2L)
         lpgf <- lapply(psuits, a5_piecepack_grob, cfg=cfg, front=TRUE, arrangement=arrangement)
         lpgb <- lapply(psuits, a5_piecepack_grob, cfg=cfg, front=FALSE, arrangement=arrangement)
     }
@@ -166,7 +166,7 @@ save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", s
             n_pages <- n_pages + 1
         for (ii in seq(n_pages)) {
             ss <- seq(4*ii-3, 4*ii)
-            ss[which(ss > cfg$i_unsuit+1)] <- cfg$i_unsuit+1
+            ss[which(ss > cfg$n_suits+2L)] <- cfg$n_suits+2L
             gf <- grobTree(grobTree(lsgf[[ss[1]]], vp=vpul),
                      grobTree(lsgb[[ss[1]]], vp=vpur),
                      grobTree(lsgf[[ss[2]]], vp=vpll),

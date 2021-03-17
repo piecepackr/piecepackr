@@ -90,6 +90,6 @@ with a \dQuote{pawn belt} around it's waste from that suit's and rank's \code{be
 }
 \seealso{
 See \code{\link{pp_cfg}} for a discussion of \dQuote{configuration lists}.
-         Wavefront OBJ file generators are used by \code{\link{save_piece_obj}} and (by default)
-         \code{\link{piece3d}} (\code{rgl} wrapper) and \code{\link{piece}} (\code{rayrender} wrapper).
+Wavefront OBJ file generators are used by \code{\link{save_piece_obj}} and (by default)
+\code{\link{piece3d}} (\code{rgl} wrapper) and \code{\link{piece}} (\code{rayrender} wrapper).
 }

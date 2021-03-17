@@ -16,40 +16,82 @@ as_pp_cfg(cfg = list())
 \item{cfg}{List of configuration options}
 }
 \description{
-\code{pp_cfg} and \code{as_pp_cfg} creates piecepack configuration list R6 object.
-\code{is_pp_cfg} returns \code{TRUE} if object is a piecepack configuration list R6 object.
-\code{as.list} will convert it into a list.
+\code{pp_cfg()} and \code{as_pp_cfg()} create piecepack configuration list R6 objects.
+\code{is_pp_cfg()} returns \code{TRUE} if object is a piecepack configuration list R6 object.
+\code{as.list()} will convert it into a list.
 }
 \details{
-\code{pp_cfg} objects serve the following purposes:\enumerate{
-\item{Customize the appearance of pieces drawn by \code{grid.piece}.}
-\item{Speed up the drawing of graphics through use of caching.}
-\item{Allow the setting and querying of information about the board game components
-      that maybe of use to developers\enumerate{
-         \item{Number of suits}
-         \item{Number of ranks}
-         \item{Suit colors}
-         \item{Which types of components are included and/or properly supported}
-         \item{What would be a good color to use when adding annotations on top of these components.}
-         \item{Title, Description, Copyright, and Credit metadata}
-      }}}
+\code{pp_cfg} R6 class objects serve the following purposes:
+\itemize{
+\item Customize the appearance of pieces drawn by \code{grid.piece()}.
+\item Speed up the drawing of graphics through use of caching.
+\item Allow the setting and querying of information about the board game components
+that maybe of use to developers:
+\itemize{
+\item Number of suits
+\item Number of ranks
+\item Suit colors
+\item Which types of components are included and/or properly supported
+\item What would be a good color to use when adding annotations on top of these components.
+\item Title, Description, Copyright, and Credit metadata
+}
+}
 }
 \section{\code{pp_cfg} R6 Class Method Arguments}{
 \describe{
-  \item{\code{piece_side}}{A string with piece and side separated by a underscore e.g. "coin_face".}
-  \item{\code{suit}}{Number of suit (starting from 1).}
-  \item{\code{rank}}{Number of rank (starting from 1).}
-  \item{\code{type}}{Which type of grob to return, either \code{"normal"}, \code{"picture"}, or \code{"raster"}.}
+\item{\code{piece_side}}{A string with piece and side separated by a underscore e.g. "coin_face".}
+\item{\code{suit}}{Number of suit (starting from 1).}
+\item{\code{rank}}{Number of rank (starting from 1).}
+\item{\code{type}}{Which type of grob to return, either \code{"normal"}, \code{"picture"}, or \code{"raster"}.}
 }
 }
 
 \section{\code{pp_cfg} R6 Class Methods}{
 \describe{
-  \item{\code{get_grob}}{Returns a \code{grid} \dQuote{grob} for drawing the piece.}
-  \item{\code{get_piece_opt}}{Returns a list with info useful for drawing the piece.}
-  \item{\code{get_suit_color}}{Returns the suit colors.}
-  \item{\code{get_width}, \code{get_height}, \code{get_depth}}{
-        Dimensions (of the bounding cube) of the piece in inches}
+\item{\code{get_grob()}}{Returns a \code{grid} \dQuote{grob} for drawing the piece.}
+\item{\code{get_piece_opt()}}{Returns a list with info useful for drawing the piece.}
+\item{\code{get_suit_color()}}{Returns the suit colors.}
+\item{\code{get_width()}, \code{get_height()}, \code{get_depth()}}{
+Dimensions (of the bounding cube) of the piece in inches}
+}
+}
+
+\section{\code{pp_cfg} R6 Class Fields and Active Bindings}{
+\describe{
+\item{\code{annotation_color}}{Suggestion of a good color to annotate with}
+\item{\code{cache}}{Cache object which stores intermediate graphical calculations.
+Default is a memory-cache that does not prune.
+This can be replaced by another cache that
+implements the cache API used by the \code{cachem} package}
+\item{\code{cache_grob}}{Whether we should cache (2D) grobs}
+\item{\code{cache_piece_opt}}{Whether we should cache piece opt information}
+\item{\code{cache_op_fn}}{Whether we should cache the oblique projection functions}
+\item{\code{cache_obj_fn}}{Whether we should cache any 3D rendering functions}
+\item{\code{copyright}}{Design copyright information}
+\item{\code{credit}}{Design credits}
+\item{\code{description}}{Design description}
+\item{\code{fontfamily}}{Main font family}
+\item{\code{has_bits}}{Whether we should assume this supports "bit" pieces}
+\item{\code{has_boards}}{Whether we should assume this supports "board" pieces}
+\item{\code{has_cards}}{Whether we should assume this supports "card" pieces}
+\item{\code{has_coins}}{Whether we should assume this supports "coin" pieces}
+\item{\code{has_dice}}{Whether we should assume this supports "die" pieces}
+\item{\code{has_matchsticks}}{Whether we should assume this supports "matchstick" pieces}
+\item{\code{has_pawns}}{Whether we should assume this supports "pawn" pieces}
+\item{\code{has_piecepack}}{Binding which simultaneously checks/sets
+\code{has_coins}, \code{has_tiles}, \code{has_pawns}, \code{has_dice}}
+\item{\code{has_pyramids}}{Whether we should assume this supports "pyramid" pieces}
+\item{\code{has_saucers}}{Whether we should assume this supports "saucer" pieces}
+\item{\code{has_tiles}}{Whether we should assume this supports "tile" pieces}
+\item{\code{title}}{Design title}
+}
+}
+
+\section{Deprecated \code{pp_cfg} R6 Class attributes}{
+\describe{
+\item{\code{cache_shadow}}{Use \code{cache_op_fn} instead}
+\item{\code{get_pictureGrob()}}{Use \code{get_grob(..., type = "picture")} instead}
+\item{\code{i_unsuit}}{Instead add \code{1L} to \code{n_suits}}
 }
 }
 
@@ -75,8 +117,8 @@ as_pp_cfg(cfg = list())
 
 }
 \seealso{
+\code{\link[=game_systems]{game_systems()}} for functions that return configuration list
+objects for several game systems.
 \url{https://trevorldavis.com/piecepackr/configuration-lists.html} for more details
-     about \code{piecepackr} configuration lists.
- \code{\link{game_systems}} for functions that return
-     configuration list objects for several game systems.
+about \code{piecepackr} configuration lists.
 }

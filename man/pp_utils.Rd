@@ -32,9 +32,9 @@ file2grob(file, distort = TRUE)
 
 \item{sep}{Delimiter (defaults to ",")}
 
-\item{float}{If `TRUE` cast to numeric}
+\item{float}{If \code{TRUE} cast to numeric}
 
-\item{color}{if `TRUE` convert empty strings to `"transparent"`}
+\item{color}{if \code{TRUE} convert empty strings to \code{"transparent"}}
 
 \item{file}{Filename of image}
 
@@ -43,8 +43,8 @@ or distort to fit the area it is drawn in}
 }
 \value{
 \code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.
-        \code{NA}'s means no embedded font detected: this either means that no font
-         was found or that a color emoji font was found and instead of a font an image was embedded.
+\code{NA}'s means no embedded font detected: this either means that no font
+was found or that a color emoji font was found and instead of a font an image was embedded.
 }
 \description{
 \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
@@ -54,7 +54,7 @@ or distort to fit the area it is drawn in}
 }
 \details{
 \code{get_embedded_font} depends on \code{pdffonts} being on the system path
-         (on many OSes found in a \code{poppler-utils} package).
+(on many OSes found in a \code{poppler-utils} package).
 }
 \examples{
  to_x(90, 1)

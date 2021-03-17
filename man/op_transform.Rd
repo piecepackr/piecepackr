@@ -36,7 +36,7 @@ should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.}
 }
 \value{
 A tibble with extra columns added
-        and re-sorted rows
+and re-sorted rows
 }
 \description{
 Guesses \code{z} coordinates and
@@ -60,5 +60,5 @@ pmap_piece(df, op_angle=135, trans=op_transform,
 }
 \seealso{
 \url{https://trevorldavis.com/piecepackr/3d-projections.html} for more details
-  and examples of oblique projections in \code{piecepackr}.
+and examples of oblique projections in \code{piecepackr}.
 }

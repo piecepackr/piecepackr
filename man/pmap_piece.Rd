@@ -47,20 +47,20 @@ can help with using an oblique projection (i.e. \code{op_scale} over 0).}
 }
 \description{
 \code{pmap_piece} operates on the rows of a data frame
-    applying \code{.f} to each row (usually \code{grid.piece}).
+applying \code{.f} to each row (usually \code{grid.piece}).
 }
 \details{
 \code{pmap_piece} differs from \code{purrr::pmap} in a few ways
 \enumerate{
-   \item{If \code{cfg} and/or \code{envir} are missing attempts to set reasonable defaults.}
-   \item{If not \code{NULL} will first apply function \code{trans} to \code{.l}.}
-   \item{If the output of \code{.f} is a grid grob object then \code{pmap_piece}
-         will return a \code{gTree} object with
-         specified \code{name}, \code{gp}, and \code{vp} values and if \code{draw} is true draw it.}
-   \item{If \code{.l} lacks a \code{name} column or if \code{name} column is non-unique
-         attempts to generate a reasonable new default \code{name} column
-         and use that to name the return \code{gTree} children  or \code{list} values.}
- }
+\item{If \code{cfg} and/or \code{envir} are missing attempts to set reasonable defaults.}
+\item{If not \code{NULL} will first apply function \code{trans} to \code{.l}.}
+\item{If the output of \code{.f} is a grid grob object then \code{pmap_piece}
+will return a \code{gTree} object with
+specified \code{name}, \code{gp}, and \code{vp} values and if \code{draw} is true draw it.}
+\item{If \code{.l} lacks a \code{name} column or if \code{name} column is non-unique
+attempts to generate a reasonable new default \code{name} column
+and use that to name the return \code{gTree} children  or \code{list} values.}
+}
 }
 \examples{
   if (require("grid")) {
