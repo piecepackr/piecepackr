@@ -1,4 +1,3 @@
-
 # "mat" grob functions
 halmaMatGrobFn <- function(width=0.2) {
     width <- rep(width, length.out=2)

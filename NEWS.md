@@ -39,10 +39,8 @@ Bug fixes and minor improvements
     the amount of memory that can used by the cache.
     Note our cache uses keys that include hyphens and underscores which older versions
     of the ``cachem`` package did not support.  
-    
   + Each ``pp_cfg()`` has a random prefix so (with a high probability) multiple
     objects could theoretically share the same cache.
-
   + The default cache is a memory cache that does not prune.  
     It has a ``reset()`` method which clears it.
 
