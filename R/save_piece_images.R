@@ -10,8 +10,8 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, ra
                       width=NULL, height=NULL, res=72) {
     cfg <- as_pp_cfg(cfg)
     format <- tools::file_ext(filename)
-    if (is.null(width)) width <- cfg$get_width(piece_side, suit, rank)
-    if (is.null(height)) height <- cfg$get_height(piece_side, suit, rank)
+    width <- width %||% cfg$get_width(piece_side, suit, rank)
+    height <- height %||% cfg$get_height(piece_side, suit, rank)
     if (angle %in% c(90, 270)) {
         twidth <- height
         height <- width

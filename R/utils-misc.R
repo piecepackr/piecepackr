@@ -209,3 +209,5 @@ assert_suggested <- function(package) {
                    sprintf("Use %s.", sQuote(sprintf('install.packages("%s")', package)))))
     }
 }
+
+`%||%` <- function(x, y) if (is.null(x)) y else x

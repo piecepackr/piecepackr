@@ -105,7 +105,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
     if (!is.null(style) && is.na(match(style, styles))) {
         stop(paste("Don't have a customized configuration for style", style))
     }
-    if (is.null(style)) style <- "sans"
+    style <- style %||% "sans"
     is_3d <- grepl("3d$", style)
     rect_shape <- ifelse(round, "roundrect", "rect")
     if (is_3d) {

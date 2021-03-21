@@ -1,22 +1,18 @@
 cellsGrob <- function(nrows = 8, ncols = 8, # nolint
                       name = NULL, gp = gpar(), vp = NULL) {
-    if (is.null(gp$fill)) gp$fill <- NA_character_
-    if (is.null(gp$col)) gp$col <- NA_character_
-    if (is.null(gp$lineend)) gp$lineend <- "butt"
-
-    fill <- gp$fill
-    gp$fill <- NULL
-
     x <- seq(0.5 / ncols, 1 - 0.5 / ncols, length.out = ncols)
     y <- seq(0.5 / nrows, 1 - 0.5 / nrows, length.out = nrows)
     gl <- gList()
-    fill <- c(fill, NA_character_)
+    fill <- c(gp$fill %||% NA_character_, NA_character_)
     for (i in seq(nrows)) {
         lwd <- 1
         gp_cell <- gpar(fill = cycle_elements(fill, i-1))
         gl[[i]] <- rectGrob(x, y[i], width = 1 / ncols, height = 1 / nrows, default.units = "npc",
                             name = paste("cell.", i), gp = gp_cell)
     }
+    gp$col <- gp$col %||% NA_character_
+    gp$fill <- NULL
+    gp$lineend <- gp$lineend %||% "butt"
     gTree(children=gl, name = name, gp = gp, vp = vp, cl = "cells")
 }
 

@@ -80,7 +80,7 @@ Point3D <- R6Class("point3d",
                                      if (is.list(x) || inherits(x, "point2d") || inherits(x, "point3d")) {
                                          xt <- x$x
                                          y <- x$y
-                                         z <- if (is.null(x$z)) z else x$z
+                                         z <- x$z %||% z
                                      } else if (is.matrix(x)) {
                                          xt <- x[, 1]
                                          y <- x[, 2]
@@ -129,7 +129,7 @@ Point3D <- R6Class("point3d",
                                      if (is.list(x) || inherits(x, "point2d") || inherits(x, "point3d")) {
                                          xt <- x$x
                                          y <- x$y
-                                         z <- if (is.null(x$z)) z else x$z
+                                         z <- x$z %||% z
                                      } else {
                                          xt <- x
                                          y <- y

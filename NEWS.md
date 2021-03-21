@@ -44,6 +44,11 @@ Bug fixes and minor improvements
   + The default cache is a memory cache that does not prune.  
     It has a ``reset()`` method which clears it.
 
+* ``pp_cfg()`` objects now store more information in their internal lists
+  (which can be exported via ``as.list()``).
+* ``pp_cfg()``'s `print()` method now sorts fields by name and collapses vectors into a single string.
+* Several of ``pp_cfg()``'s R6 class's fields are now active bindings.
+
 Deprecated features
 -------------------
 

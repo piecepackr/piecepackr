@@ -228,7 +228,7 @@ is_known_shape_label <- function(label) {
 
 #' @export
 makeContext.gridlines <- function(x) {
-    if (is.null(x$gp$col)) x$gp$col <- "black"
+    x$gp$col <- x$gp$col %||% "black"
     if (x$shape$label %in% c("rect", "roundrect")) {
         x$gp$lwd <- 8
         x$gp$lineend <- "butt"
@@ -276,8 +276,8 @@ makeContent.gridlines <- function(x) {
 
 #' @export
 makeContext.mat <- function(x) {
-    if (is.null(x$gp$col)) x$gp$col <- NA
-    if (is.null(x$gp$fill)) x$gp$fill <- NA
+    x$gp$col <- x$gp$col %||% NA_character_
+    x$gp$fill <- x$gp$fill %||% NA_character_
     x
 }
 
@@ -310,7 +310,7 @@ makeContent.mat <- function(x) {
 
 #' @export
 makeContext.checkers <- function(x) {
-    if (is.null(x$gp$col)) x$gp$col <- NA
+    x$gp$col <- x$gp$col %||% NA_character_
     x
 }
 
@@ -354,7 +354,7 @@ makeContent.checkers <- function(x) {
 
 #' @export
 makeContext.hexlines <- function(x) {
-    if (is.null(x$gp$lwd)) x$gp$lwd <- 4
+    x$gp$lwd <- x$gp$lwd %||% 4
     x
 }
 

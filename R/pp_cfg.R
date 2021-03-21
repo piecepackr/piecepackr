@@ -114,37 +114,9 @@ as.list.pp_cfg <- function(x, ...) {
     x$as_list()
 }
 
-get_n_suits <- function(cfg=list()) {
-    if (is.null(cfg[["n_suits"]])) {
-        length(get_suit_symbols(cfg=cfg, expand=FALSE)) - 1
-    } else {
-        cfg[["n_suits"]]
-    }
-}
-
-get_n_ranks <- function(cfg=list()) {
-    if (is.null(cfg[["n_ranks"]])) {
-        length(get_rank_symbols(cfg=cfg, expand=FALSE))
-    } else {
-        cfg[["n_ranks"]]
-    }
-}
-
-get_i_unsuit <- function(cfg=list()) get_n_suits(cfg) + 1
-
 #' @import R6
 Config <- R6Class("pp_cfg",
     public = list(
-        n_suits = NULL,
-        n_ranks = NULL,
-        coin_arrangement = NULL,
-        die_arrangement = NULL,
-        title = NULL,
-        fontfamily = NULL,
-        copyright = NULL,
-        credit = NULL,
-        description = NULL,
-        annotation_color = NULL,
         cache = NULL,
         has_bits = FALSE,
         has_boards = FALSE,
@@ -158,21 +130,12 @@ Config <- R6Class("pp_cfg",
         has_tiles = TRUE,
         initialize = function(cfg=list()) {
             warn_cfg(cfg)
+            self$cache <- Cache$new()
             private$cfg <- cfg
+            private$cfg$n_suits <- cfg$n_suits %||% (length(get_suit_symbols(cfg=cfg, expand=FALSE)) - 1L)
+            private$cfg$n_ranks <- cfg$n_ranks %||% length(get_rank_symbols(cfg=cfg, expand=FALSE))
             # so different cfg objects can share the same cache (with high probability)
             private$prefix <- as.hexmode(sample.int(2147483647L, 1L, useHash=TRUE))
-            self$cache <- Cache$new()
-            self$n_suits <- get_n_suits(cfg)
-            self$n_ranks <- get_n_ranks(cfg)
-            self$coin_arrangement <- get_coin_arrangement(cfg)
-            self$die_arrangement <- get_die_arrangement(cfg)
-            self$fontfamily <- get_fontfamily(cfg)
-            self$title <- cfg$title
-            self$copyright <- cfg$copyright
-            self$credit <- cfg$credit
-            self$description <- cfg$description
-            self$annotation_color <- ifelse(is.null(cfg$annotation_color),
-                                            "black", cfg$annotation_color)
         },
         get_grob = function(piece_side, suit, rank, type = "normal", ...) {
             switch(type,
@@ -336,11 +299,11 @@ Config <- R6Class("pp_cfg",
         },
         as_list = function() private$cfg,
         print = function() {
-            for (name in names(private$cfg)) {
+            for (name in sort(names(private$cfg))) {
                 if (is.function(private$cfg[[name]])) {
                     cat(paste0("$", name, " : ", "a function", "\n"))
                 } else {
-                    cat(paste0("$", name, " : ", private$cfg[[name]]), "\n")
+                    cat(paste0("$", name, " : ", paste(private$cfg[[name]], collapse=",")), "\n")
                 }
             }
         },
@@ -466,6 +429,14 @@ Config <- R6Class("pp_cfg",
             private$get_grob_picture(piece_side, suit, rank)
         }),
     active = list(
+        annotation_color = function(value) {
+            if (missing(value)) {
+                private$cfg$annotation_color %||% "black"
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$annotation_color <- value
+            }
+        },
         cache_grob = function(value) {
             if (missing(value)) {
                 private$cache_grob_bool
@@ -502,24 +473,84 @@ Config <- R6Class("pp_cfg",
                 private$cache_type(value, "cache_op_fn_bool", "shadow$|op_grob_fn$")
             }
         },
+        coin_arrangement = function(value) {
+            if (missing(value)) {
+                as.numeric(private$cfg$coin_arrangement %||% 180)
+            } else {
+                private$cfg$coin_arrangement <- value
+            }
+        },
+        copyright = function(value) {
+            if (missing(value)) {
+                private$cfg$copyright
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$copyright <- value
+            }
+        },
+        credit = function(value) {
+            if (missing(value)) {
+                private$cfg$credit
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$credit <- value
+            }
+        },
+        description = function(value) {
+            if (missing(value)) {
+                private$cfg$description
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$description <- value
+            }
+        },
+        die_arrangement = function(value) {
+            if (missing(value)) {
+                private$cfg$die_arrangement %||% "counter_down"
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$die_arrangement <- value
+            }
+        },
+        fontfamily = function(value) {
+            if (!missing(value)) warning("Can't set 'fontfamily'")
+            private$cfg$fontfamily %||% "sans"
+        },
         has_piecepack = function(value) {
             if (missing(value)) {
-                return(self$has_coins && self$has_tiles && self$has_pawns && self$has_dice)
+                self$has_coins && self$has_tiles && self$has_pawns && self$has_dice
             } else {
-               if (!is.logical(value)) stop(paste(value, "is not logical"))
+                if (!is.logical(value)) stop(paste(value, "is not logical"))
                 self$has_coins <- value
                 self$has_tiles <- value
                 self$has_pawns <- value
                 self$has_dice  <- value
             }
         },
+        n_ranks = function(value) {
+            if (!missing(value)) warning("Can't set 'n_ranks'")
+            private$cfg$n_ranks
+        },
+        n_suits = function(value) {
+            if (!missing(value)) warning("Can't set 'n_suits'")
+            private$cfg$n_suits
+        },
         i_unsuit = function(value) {
             .Deprecated("Add '1L' to 'n_suits'")
             self$n_suits + 1L
+        },
+        title = function(value) {
+            if (missing(value)) {
+                private$cfg$title
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$title <- value
+            }
         }),
     private = list(cfg = NULL, prefix = NULL,
                    cache_grob_bool = TRUE, cache_obj_fn_bool = TRUE,
                    cache_piece_opt_bool = TRUE, cache_op_fn_bool = TRUE,
+                   n_suits_val = NULL, n_ranks_val = NULL,
         get_grob_normal = function(piece_side, suit, rank) {
             suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), self$n_suits+1L)
             suit <- ifelse(suit > self$n_suits+2L, self$n_suits+2L, suit)
