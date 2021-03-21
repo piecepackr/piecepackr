@@ -5,7 +5,8 @@ New features
 ------------
 
 * Function ``game_systems()`` ``pawn`` argument now supports a "joystick" value (#183). 
-  This allows one to draw a "joystick" style ``"pawn_top"`` in grid, rgl, and rayrender.
+  This allows one to draw a "joystick" style ``"pawn_top"`` in grid, rgl, and rayrender
+  with the "piecepack" game system configurations.
   
   + Currently Wavefront OBJ export is not supported for "joystick" pawns.
   + Other pawn "sides" (e.g. ``"pawn_face"``) are not supported in ``grid.piece()`` / ``pieceGrob()``
@@ -15,23 +16,15 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
-* Piecepack pyramid dimensions have been fixed to better reflect their actual physical size (#241).
-  Their layout in the print-and-play layouts produced by ``save_print_and_play()`` has also been updated.
-* The appearance of piecepack pyramids returned by ``game_systems()`` 
-  now more closely resemble the original piecepack pyramids.
-* The "peg-doll" pawn (available via ``game_systems()`` ``pawn`` argument) now has basic
-  support for a piecepack ``"pawn_top"`` in grid (#184).
-  Previously only had support in rgl and rayrender. 
-* ``AA_to_R()`` is now more robust to minor numerical errors in ``axis_x`` and ``axis_y`` values.
 * Can now draw "top", "left", "right", and "base" "edge" sides of two-sided tokens in grid 
   (``grid.piece()`` / ``pieceGrob()``) if not using an 3D oblique projection (``op_scale`` over 0) (#135).
 
   + These "edge" sides are not properly supported in ``grid.piece()`` / ``pieceGrob()`` (grid) 
     when using a 3D oblique projection (``op_scale`` over 0) but are supported in
     ``piece3d()`` (rgl) and ``piece()`` (rayrender).
-* Fixed bug in ``op_transform()`` when calculating "z"-coordinate when a piece 
-  overlaps with multiple pieces and the "latest" one isn't actually the "highest" one.
-* Fixed bug when setting custom ``pp_cfg()`` configuration list "rgl_fn" values.
+* The "peg-doll" pawn (available via ``game_systems()`` ``pawn`` argument) now has basic
+  support for a piecepack ``"pawn_top"`` in grid (#184).
+  Previously only had support in rgl and rayrender. 
 * ``pp_cfg()`` objects now make their cache available as a public field named ``cache`` (#242):
 
   + The cache can be replaced with a different cache that obeys the ``cachem`` package cache API.
@@ -45,9 +38,17 @@ Bug fixes and minor improvements
     It has a ``reset()`` method which clears it.
 
 * ``pp_cfg()`` objects now store more information in their internal lists
-  (which can be exported via ``as.list()``).
+  (which can be exported via ``as.list()``) including any inferred `n_ranks` and `n_suits`.
 * ``pp_cfg()``'s `print()` method now sorts fields by name and collapses vectors into a single string.
 * Several of ``pp_cfg()``'s R6 class's fields are now active bindings.
+* Fixed bug when setting custom ``pp_cfg()`` configuration list "rgl_fn" values.
+* Piecepack pyramid dimensions have been fixed to better reflect their actual physical size (#241).
+  Their layout in the print-and-play layouts produced by ``save_print_and_play()`` has also been updated.
+* The appearance of piecepack pyramids returned by ``game_systems()`` 
+  now more closely resemble the original piecepack pyramids.
+* ``AA_to_R()`` is now more robust to minor numerical errors in ``axis_x`` and ``axis_y`` values.
+* Fixed bug in ``op_transform()`` when calculating "z"-coordinate when a piece 
+  overlaps with multiple pieces and the "latest" one isn't actually the "highest" one.
 
 Deprecated features
 -------------------
