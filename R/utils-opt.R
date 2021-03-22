@@ -5,9 +5,6 @@ get_side <- function(piece_side) {
     strsplit(piece_side, "_")[[1]][2]
 }
 
-has_suit <- function(cs) {
-    !(cs %in% c("tile_back", "saucer_back", "coin_face", "card_back"))
-}
 has_rank <- function(cs) {
     !(cs %in% c("tile_back", "coin_back", "suitdie_face",
                 "pawn_face", "pawn_back", "belt_face",
@@ -120,6 +117,7 @@ styles <- c(paste(c("ps", "dm"),
             "width", "height", "depth",
             "grob_fn", "op_grob_fn", "shadow_fn",
             "obj_fn", "rayrender_fn", "rgl_fn",
+            "lacks_rank", "lacks_suit",
             "title", "description", "credit", "copyright")
 is_legit_style <- function(style) {
     style %in% styles
@@ -240,7 +238,7 @@ is_suited <- function(piece_side, suit, rank, cfg) {
     if (is.na(piece_side))
         FALSE
     else
-        has_suit(piece_side) && (suit <= cfg$n_suits + 1L)
+        !(piece_side %in% cfg$lacks_suit) && (suit <= cfg$n_suits + 1L)
 }
 
 get_dm_t <- function(piece_side, suit, rank, cfg) {

@@ -28,7 +28,7 @@ previewLayoutGrob(piece_side, suit, rank, cfg = pp_cfg())
 \item{directory}{Directory that \code{picturePieceGrobFn} will look in for piece graphics.}
 
 \item{filename_fn}{Function that takes arguments \code{directory}, \code{piece_side}, \code{suit},
-and \code{rank} and returns the (full path) filename of the image that the
+\code{rank}, and optionally \code{cfg} and returns the (full path) filename of the image that the
 function returned by \code{picturePieceGrobFn} should import.}
 }
 \description{

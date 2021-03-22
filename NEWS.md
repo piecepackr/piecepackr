@@ -1,6 +1,20 @@
 piecepackr 1.7.0
 ================
 
+Breaking changes
+----------------
+
+The following changes in ``pp_cfg()`` configuration lists are unlikely to impact the vast majority of users:
+
+* By default "card_back" is now assumed to lack a "rank".
+  To re-allow the appearance of "card_back" pieces to differ by rank set the
+  new ``lacks_rank`` style of ``pp_cfg()`` to a character vector that does not include "card_back".
+* A "piece_side" that is assumed to lack rank now 
+  is imputed a rank equal to ``n_ranks + 1L`` when drawn (instead of ``0``)
+  to mirror the behaviour with suits.
+  For example if ``n_ranks`` is set to 6 then the style ``background_color.r7 = "blue"``
+  will set the background color for pieces that *lack* a rank to "blue".
+
 New features
 ------------
 
@@ -12,6 +26,31 @@ New features
   + Other pawn "sides" (e.g. ``"pawn_face"``) are not supported in ``grid.piece()`` / ``pieceGrob()``
     but are supported in ``piece3d()`` (rgl) and ``piece()`` (rayrender).
   + You may find it useful to set ``as_top = "pawn_face"`` in ``op_transform()`` (when using ``pmap_piece()``).
+
+* The configuration lists supported by ``pp_cfg()`` now support two new "styles" (#237):
+
+  + ``lacks_rank``: a character vector of "piece_side"'s that we should assume
+    do not vary by rank.  By default these are the piecepack components that do
+    not vary by rank plus "card_back".
+  + ``lacks_suit``: a character vector of "piece_side"'s that we should assume
+    do not vary by suit. By default these are the piecepack components that do
+    not vary by suit plus "card_back".
+
+* ``pp_cfg()`` objects now make their cache available as a public field named ``cache`` (#242):
+
+  + The cache can be replaced with a different cache that obeys the ``cachem`` package cache API.
+    In particular one could choose replace it with ``cachem::cache_mem()`` to cap
+    the amount of memory that can used by the cache.
+    Note our cache uses keys that include hyphens and underscores which older versions
+    of the ``cachem`` package did not support.  
+  + Each ``pp_cfg()`` has a random prefix so (with a high probability) multiple
+    objects could theoretically share the same cache.
+  + The default cache is a memory cache that does not prune.  
+    It has a ``reset()`` method which clears it.
+
+* The function that can be passed into the `filename_fn` argument of `picturePieceGrobFn()`
+  can now accept an optional fifth argument named ``cfg`` that will (if present)
+  be passed a ``pp_cfg()`` object.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -25,23 +64,6 @@ Bug fixes and minor improvements
 * The "peg-doll" pawn (available via ``game_systems()`` ``pawn`` argument) now has basic
   support for a piecepack ``"pawn_top"`` in grid (#184).
   Previously only had support in rgl and rayrender. 
-* ``pp_cfg()`` objects now make their cache available as a public field named ``cache`` (#242):
-
-  + The cache can be replaced with a different cache that obeys the ``cachem`` package cache API.
-    In particular one could choose replace it with ``cachem::cache_mem()`` to cap
-    the amount of memory that can used by the cache.
-    Note our cache uses keys that include hyphens and underscores which older versions
-    of the ``cachem`` package did not support.  
-  + Each ``pp_cfg()`` has a random prefix so (with a high probability) multiple
-    objects could theoretically share the same cache.
-  + The default cache is a memory cache that does not prune.  
-    It has a ``reset()`` method which clears it.
-
-* ``pp_cfg()`` objects now store more information in their internal lists
-  (which can be exported via ``as.list()``) including any inferred `n_ranks` and `n_suits`.
-* ``pp_cfg()``'s `print()` method now sorts fields by name and collapses vectors into a single string.
-* Several of ``pp_cfg()``'s R6 class's fields are now active bindings.
-* Fixed bug when setting custom ``pp_cfg()`` configuration list "rgl_fn" values.
 * Piecepack pyramid dimensions have been fixed to better reflect their actual physical size (#241).
   Their layout in the print-and-play layouts produced by ``save_print_and_play()`` has also been updated.
 * The appearance of piecepack pyramids returned by ``game_systems()`` 
@@ -49,6 +71,11 @@ Bug fixes and minor improvements
 * ``AA_to_R()`` is now more robust to minor numerical errors in ``axis_x`` and ``axis_y`` values.
 * Fixed bug in ``op_transform()`` when calculating "z"-coordinate when a piece 
   overlaps with multiple pieces and the "latest" one isn't actually the "highest" one.
+* ``pp_cfg()`` objects now store more information in their internal lists
+  (which can be exported via ``as.list()``) including any inferred `n_ranks` and `n_suits`.
+* ``pp_cfg()``'s `print()` method now sorts fields by name and collapses vectors into a single string.
+* Several of ``pp_cfg()``'s R6 class's fields are now active bindings.
+* Fixed bug when setting custom ``pp_cfg()`` configuration list "rgl_fn" values.
 
 Deprecated features
 -------------------

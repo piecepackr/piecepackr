@@ -114,6 +114,21 @@ as.list.pp_cfg <- function(x, ...) {
     x$as_list()
 }
 
+default_lacks_suit <- c("tile_back", "saucer_back", "coin_face", "card_back")
+default_lacks_rank <- c("tile_back", "coin_back", "card_back",
+                        "pawn_face", "pawn_back", "belt_face",
+                        "saucer_face", "saucer_back", "suitdie_face")
+impute_rank <- function(piece_side, rank, cfg) {
+    ifelse(piece_side %in% cfg$lacks_rank,
+           cfg$n_ranks+1L,
+           ifelse(is.na(rank), 1L, min(rank, cfg$n_ranks+2L)))
+}
+impute_suit <- function(piece_side, suit, cfg) {
+    ifelse(piece_side %in% cfg$lacks_suit,
+           cfg$n_suits+1L,
+           ifelse(is.na(suit), 1L, min(suit, cfg$n_suits+2L)))
+}
+
 #' @import R6
 Config <- R6Class("pp_cfg",
     public = list(
@@ -134,6 +149,8 @@ Config <- R6Class("pp_cfg",
             private$cfg <- cfg
             private$cfg$n_suits <- cfg$n_suits %||% (length(get_suit_symbols(cfg=cfg, expand=FALSE)) - 1L)
             private$cfg$n_ranks <- cfg$n_ranks %||% length(get_rank_symbols(cfg=cfg, expand=FALSE))
+            private$cfg$lacks_rank <- cleave2(cfg$lacks_rank %||% default_lacks_rank)
+            private$cfg$lacks_suit <- cleave2(cfg$lacks_suit %||% default_lacks_suit)
             # so different cfg objects can share the same cache (with high probability)
             private$prefix <- as.hexmode(sample.int(2147483647L, 1L, useHash=TRUE))
         },
@@ -513,8 +530,10 @@ Config <- R6Class("pp_cfg",
             }
         },
         fontfamily = function(value) {
-            if (!missing(value)) warning("Can't set 'fontfamily'")
-            private$cfg$fontfamily %||% "sans"
+            if (missing(value))
+                private$cfg$fontfamily %||% "sans"
+            else
+                warning("Must set 'fontfamily' at initialization")
         },
         has_piecepack = function(value) {
             if (missing(value)) {
@@ -527,13 +546,29 @@ Config <- R6Class("pp_cfg",
                 self$has_dice  <- value
             }
         },
+        lacks_rank = function(value) {
+            if (missing(value))
+                private$cfg$lacks_rank
+            else
+                warning("Must set 'lacks_rank' at initialization")
+        },
+        lacks_suit = function(value) {
+            if (missing(value))
+                private$cfg$lacks_suit
+            else
+                warning("Must set 'lacks_suit' at initialization")
+        },
         n_ranks = function(value) {
-            if (!missing(value)) warning("Can't set 'n_ranks'")
-            private$cfg$n_ranks
+            if (missing(value))
+                private$cfg$n_ranks
+            else
+                warning("Must set 'n_ranks' at initialization")
         },
         n_suits = function(value) {
-            if (!missing(value)) warning("Can't set 'n_suits'")
-            private$cfg$n_suits
+            if (missing(value))
+                private$cfg$n_suits
+            else
+                warning("Must set 'n_suits' at initialization")
         },
         i_unsuit = function(value) {
             .Deprecated("Add '1L' to 'n_suits'")
@@ -552,9 +587,8 @@ Config <- R6Class("pp_cfg",
                    cache_piece_opt_bool = TRUE, cache_op_fn_bool = TRUE,
                    n_suits_val = NULL, n_ranks_val = NULL,
         get_grob_normal = function(piece_side, suit, rank) {
-            suit <- ifelse(has_suit(piece_side), ifelse(is.na(suit), 1, suit), self$n_suits+1L)
-            suit <- ifelse(suit > self$n_suits+2L, self$n_suits+2L, suit)
-            rank <- ifelse(has_rank(piece_side), ifelse(is.na(rank), 1, rank), 0)
+            rank <- impute_rank(piece_side, rank, self)
+            suit <- impute_suit(piece_side, suit, self)
             key <- private$opt_cache_key(piece_side, suit, rank, "grob")
             grob <- self$cache$get(key, key_missing())
             if (is.key_missing(grob)) {

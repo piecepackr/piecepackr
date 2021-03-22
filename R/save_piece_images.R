@@ -86,38 +86,45 @@ pp_dev_off <- function(f, format) {
 #### What to do if don't want other side of two sided pieces?
 #### Allow list of which pieces to save?
 make_images_helper <- function(directory, cfg, format, angle) {
+    lacks_rank_lacks_suit <- intersect(COMPONENT_AND_SIDES,
+                                       intersect(cfg$lacks_rank, cfg$lacks_suit))
+    lacks_rank_has_suit <- intersect(setdiff(COMPONENT_AND_SIDES, cfg$lacks_suit),
+                                     (cfg$lacks_rank))
+    has_rank_lacks_suit <- intersect(setdiff(COMPONENT_AND_SIDES, cfg$lacks_rank),
+                                     (cfg$lacks_suit))
+    has_rank_has_suit <- setdiff(COMPONENT_AND_SIDES,
+                                 union(cfg$lacks_rank, cfg$lacks_suit))
+
     suppressWarnings({
-        for (cs in COMPONENT_AND_SIDES) {
-            if (!has_suit(cs) && !has_rank(cs)) {
-                f <- piece_filename(directory, cs, format, angle)
+        for (cs in lacks_rank_lacks_suit) {
+            f <- piece_filename(directory, cs, format, angle)
+            pp_device(f, cs, cfg, angle)
+            grid.piece(cs, NA, NA, cfg)
+            pp_dev_off(f, format)
+        }
+        for (cs in lacks_rank_has_suit) {
+            for (suit in 1:cfg$n_suits) {
+                f <- piece_filename(directory, cs, format, angle, suit)
                 pp_device(f, cs, cfg, angle)
-                grid.piece(cs, NA, NA, cfg)
+                grid.piece(cs, suit, NA, cfg)
                 pp_dev_off(f, format)
             }
-            if (has_suit(cs) && !has_rank(cs)) {
-                for (suit in 1:cfg$n_suits) {
-                    f <- piece_filename(directory, cs, format, angle, suit)
-                    pp_device(f, cs, cfg, angle)
-                    grid.piece(cs, suit, NA, cfg)
-                    pp_dev_off(f, format)
-                }
+        }
+        for (cs in has_rank_lacks_suit) {
+            for (rank in 1:cfg$n_ranks) {
+                f <- piece_filename(directory, cs, format, angle, rank=rank)
+                pp_device(f, cs, cfg, angle)
+                grid.piece(cs, NA, rank, cfg)
+                pp_dev_off(f, format)
             }
-            if (!has_suit(cs) && has_rank(cs)) {
+        }
+        for (cs in has_rank_has_suit) {
+            for (suit in 1:cfg$n_suits) {
                 for (rank in 1:cfg$n_ranks) {
-                    f <- piece_filename(directory, cs, format, angle, rank=rank)
-                    pp_device(f, cs, cfg, angle)
-                    grid.piece(cs, NA, rank, cfg)
+                    f <- piece_filename(directory, cs, format, angle, suit, rank)
+                    pp_device(f, cs, cfg, angle, rank=rank)
+                    grid.piece(cs, suit, rank, cfg)
                     pp_dev_off(f, format)
-                }
-            }
-            if (has_suit(cs) && has_rank(cs)) {
-                for (suit in 1:cfg$n_suits) {
-                    for (rank in 1:cfg$n_ranks) {
-                        f <- piece_filename(directory, cs, format, angle, suit, rank)
-                        pp_device(f, cs, cfg, angle, rank=rank)
-                        grid.piece(cs, suit, rank, cfg)
-                        pp_dev_off(f, format)
-                    }
                 }
             }
         }

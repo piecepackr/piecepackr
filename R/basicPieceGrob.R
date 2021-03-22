@@ -83,21 +83,24 @@ makeContent.basic_piece_side <- function(x) {
 }
 
 #' @rdname basicPieceGrobs
-#' @param directory Directory that \code{picturePieceGrobFn} will look in for piece graphics.
-#' @param filename_fn Function that takes arguments \code{directory}, \code{piece_side}, \code{suit},
-#'        and \code{rank} and returns the (full path) filename of the image that the
-#'        function returned by \code{picturePieceGrobFn} should import.
+#' @param directory Directory that `picturePieceGrobFn` will look in for piece graphics.
+#' @param filename_fn Function that takes arguments `directory`, `piece_side`, `suit`,
+#'        `rank`, and optionally `cfg` and returns the (full path) filename of the image that the
+#'        function returned by `picturePieceGrobFn` should import.
 #' @export
 picturePieceGrobFn <- function(directory, filename_fn=find_pp_file) {
-    function(piece_side, suit, rank, cfg=pp_cfg()) {
-        f <- filename_fn(directory, piece_side, suit, rank)
+    function(piece_side, suit, rank, cfg) {
+        if (hasName(formals(find_pp_file), "cfg"))
+            f <- filename_fn(directory, piece_side, suit, rank, cfg)
+        else
+            f <- filename_fn(directory, piece_side, suit, rank)
         file2grob(f)
     }
 }
 
-find_pp_file <- function(directory, piece_side, suit, rank) {
+find_pp_file <- function(directory, piece_side, suit, rank, cfg) {
     for (format in c("svgz", "svg", "png", "jpg", "jpeg")) {
-        f <- piece_filename_helper(directory, piece_side, format, suit, rank)
+        f <- piece_filename_helper(directory, piece_side, format, suit, rank, cfg)
         if (file.exists(f)) {
             return(f)
         }
@@ -105,14 +108,14 @@ find_pp_file <- function(directory, piece_side, suit, rank) {
     stop(paste("Couldn't find suitable", piece_side, "image in", directory))
 }
 
-piece_filename_helper <- function(directory, piece_side, format, suit, rank) {
-    if (!has_suit(piece_side) && !has_rank(piece_side)) {
+piece_filename_helper <- function(directory, piece_side, format, suit, rank, cfg) {
+    if (piece_side %in% intersect(cfg$lacks_rank, cfg$lacks_suit)) {
         piece_filename(directory, piece_side, format, 0)
-    } else if (has_suit(piece_side) && !has_rank(piece_side)) {
+    } else if (piece_side %in% cfg$lacks_rank) {
         piece_filename(directory, piece_side, format, 0, suit=suit)
-    } else if (!has_suit(piece_side) && has_rank(piece_side)) {
+    } else if (piece_side %in% cfg$lacks_suit) {
         piece_filename(directory, piece_side, format, 0, rank=rank)
-    } else if (has_suit(piece_side) && has_rank(piece_side)) {
+    } else {
         piece_filename(directory, piece_side, format, 0, suit=suit, rank=rank)
     }
 }

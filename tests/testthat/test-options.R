@@ -2,12 +2,13 @@ test_that("options work as expected", {
     cfg <- list(invert_colors.suited = TRUE,
                 background_color = "white",
                 suit_color = "darkred,black,darkgreen,darkblue,grey",
-                n_suits = 4)
+                lacks_suit = "coin_face", n_suits = 4)
     expect_equal(get_suit_color("coin_back", 1, 1, cfg), "white")
     expect_equal(get_suit_color("coin_face", 5, 1, cfg), "grey")
     expect_equal(pp_cfg(cfg)$get_suit_color(3:2), c("darkgreen", "black"))
     colors <- c("darkred", "black", "darkgreen", "darkblue", "grey")
-    cfg <- list(invert_colors.suited = TRUE, background_color = "white", suit_color = colors, n_suits = 4)
+    cfg <- list(invert_colors.suited = TRUE, background_color = "white", suit_color = colors,
+                lacks_suit = "coin_face", n_suits = 4)
     expect_equal(get_suit_color("coin_back", 1, 1, cfg), "white")
     expect_equal(get_suit_color("coin_face", 5, 1, cfg), "grey")
     cfg <- pp_cfg(cfg)
@@ -23,10 +24,10 @@ test_that("options work as expected", {
     cfg <- list(invert_colors = FALSE, n_suits = 4)
     expect_equal(should_invert("coin_back", 1, 1, cfg), FALSE)
     expect_equal(should_invert("coin_face", 5, 1, cfg), FALSE)
-    cfg <- list(invert_colors.suited = TRUE, n_suits = 4)
+    cfg <- list(invert_colors.suited = TRUE, lacks_suit = "coin_face", n_suits = 4)
     expect_equal(should_invert("coin_back", 1, 1, cfg), TRUE)
     expect_equal(should_invert("coin_face", 5, 1, cfg), FALSE)
-    cfg <- list(invert_colors.unsuited = TRUE, n_suits = 4)
+    cfg <- list(invert_colors.unsuited = TRUE, lacks_suit = "coin_face", n_suits = 4)
     expect_equal(should_invert("coin_back", 1, 1, cfg), FALSE)
     expect_equal(should_invert("coin_face", 5, 1, cfg), TRUE)
     cfg <- list(invert_colors.coin_back = TRUE, n_suits = 4)
@@ -43,7 +44,7 @@ test_that("options work as expected", {
     cfg <- list(rank_symbols="A,B,C,D,E,F", use_suit_as_ace=TRUE, n_ranks=6, n_suits=4)
     expect_equal(get_rank_symbol("die_face", 6, 2, cfg), "\u263c")
 
-    cfg <- list(background_color.unsuited="orange", n_suits=4)
+    cfg <- list(background_color.unsuited="orange", lacks_suit = "tile_back", n_suits=4)
     expect_equal(get_background_color("tile_face", 1, 1, cfg), "white")
     expect_equal(get_background_color("tile_back", 1, 1, cfg), "orange")
     expect_equal(is_suited("die_face", 5, 1, list(n_suits=4)), TRUE)
