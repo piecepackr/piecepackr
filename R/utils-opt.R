@@ -467,7 +467,8 @@ get_rank_fontfamily <- function(piece_side, suit, rank, cfg) {
     if (use_suit_as_ace(piece_side, suit, rank, cfg)) {
         get_suit_fontfamily(piece_side, suit,  rank, cfg)
     } else {
-        fontfamilies <- cleave2(get_style_element("rank_fontfamily", piece_side, cfg, cfg$fontfamily %||% "sans", suit, rank))
+        fontfamilies <- cleave2(get_style_element("rank_fontfamily", piece_side, cfg,
+                                                  cfg$fontfamily %||% "sans", suit, rank))
         expand_rank_elements(fontfamilies, "font", piece_side, cfg)[rank]
     }
 }
