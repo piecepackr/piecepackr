@@ -1,13 +1,9 @@
-* To fix CRAN check error for ``M1mac`` we add a ``capabilities("cairo")`` in example
-  and a couple of ``skip_if_not_installed("vdiffr")`` checks in unit tests.
-
 **Test environments**
 
-* local (linux, R 4.0.3) 
+* local (linux, R 4.0.4) 
 * win-builder (windows, R devel)
 * appveyor (windows, R devel) 
 * appveyor (windows, R release) 
-* travis-ci (OSX, R release) 
 * travis-ci (linux, R devel) 
 * travis-ci (linux, R release) 
 

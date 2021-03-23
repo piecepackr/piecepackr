@@ -4,14 +4,16 @@ piecepackr 1.7.0
 Breaking changes
 ----------------
 
-The following changes in ``pp_cfg()`` configuration lists are unlikely to impact the vast majority of users:
+The following changes in ``pp_cfg()`` configuration lists seem unlikely to affect any users (but theoretically *could* do so):
 
 * By default "card_back" is now assumed to lack a "rank".
   To re-allow the appearance of "card_back" pieces to differ by rank set the
   new ``lacks_rank`` style of ``pp_cfg()`` to a character vector that does not include "card_back".
 * A "piece_side" that is assumed to lack rank now 
   is imputed a rank equal to ``n_ranks + 1L`` when drawn (instead of ``0``)
-  to mirror the behaviour with suits.
+  and for a "piece_side" that is assumed to have a rank we impose an assumption 
+  that the rank will not exceed ``n_ranks + 2L`` (replacing with ``n_ranks + 2L`` if more than that).
+  This now mirrors the pre-existing behaviour with suits.
   For example if ``n_ranks`` is set to 6 then the style ``background_color.r7 = "blue"``
   will set the background color for pieces that *lack* a rank to "blue".
 
@@ -61,6 +63,7 @@ Bug fixes and minor improvements
   + These "edge" sides are not properly supported in ``grid.piece()`` / ``pieceGrob()`` (grid) 
     when using a 3D oblique projection (``op_scale`` over 0) but are supported in
     ``piece3d()`` (rgl) and ``piece()`` (rayrender).
+
 * The "peg-doll" pawn (available via ``game_systems()`` ``pawn`` argument) now has basic
   support for a piecepack ``"pawn_top"`` in grid (#184).
   Previously only had support in rgl and rayrender. 
