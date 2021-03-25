@@ -1,4 +1,4 @@
-piecepackr 1.7.0
+piecepackr 1.7.1
 ================
 
 Breaking changes
