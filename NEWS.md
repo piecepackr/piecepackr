@@ -1,3 +1,10 @@
+
+piecepackr 1.7.2
+================
+
+* No user-facing changes (we bumped the ``rgl`` package requirement to ``0.106.8``
+  in order to avoid a bug introduced by ``0.106.6``).
+
 piecepackr 1.7.1
 ================
 

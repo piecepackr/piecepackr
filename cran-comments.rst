@@ -1,3 +1,6 @@
+* Bumps 'rgl' version requirement to 0.106.8 to prevent
+  ERROR notes due to bug introduced by 'rgl' v0.106.6.
+
 **Test environments**
 
 * local (linux, R 4.0.4) 
