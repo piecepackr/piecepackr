@@ -17,10 +17,6 @@ piecepackr: Board Game Graphics
     :target: https://codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
 
-.. image:: https://www.repostatus.org/badges/latest/active.svg
-   :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
-   :target: https://www.repostatus.org/#active
-
 .. image:: man/figures/logo.png
    :alt: piecepackr hex sticker
 
@@ -45,8 +41,6 @@ piecepackr: Board Game Graphics
 .. _Tak: https://en.wikipedia.org/wiki/Tak_(game)
 
 .. contents::
-
-
 
 ``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
