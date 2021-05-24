@@ -1,6 +1,11 @@
 piecepackr: Board Game Graphics
 ===============================
 
+.. image:: man/figures/logo.png
+   :width: 300
+   :alt: piecepackr hex sticker
+   :align: right
+
 .. image:: https://www.r-pkg.org/badges/version/piecepackr
     :target: https://cran.r-project.org/package=piecepackr
     :alt: CRAN Status Badge
