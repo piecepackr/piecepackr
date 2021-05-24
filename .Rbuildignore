@@ -11,6 +11,7 @@
 ^codecov.yml$
 ^.lintr$
 ^_pkgdown.yml$
+^pkgdown$
 ^.travis.yml$
 ^cran-comments.rst$
 

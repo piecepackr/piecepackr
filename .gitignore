@@ -1,6 +1,7 @@
 .rake_tasks~
 README.html
 README.md
+pkgdown/
 *.swp
 *by-sa*
 *png
