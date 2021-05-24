@@ -10,9 +10,6 @@ init:
 install:
   ps: Bootstrap
 
-cache:
-  - C:\RLibrary -> .appveyor.yml
-
 # Adapt as necessary starting from here
 environment:
   global:
@@ -21,7 +18,6 @@ environment:
   matrix:
     - R_VERSION: devel
     - R_VERSION: release
-
 
 build_script:
   - travis-tool.sh install_deps
