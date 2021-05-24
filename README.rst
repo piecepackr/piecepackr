@@ -1,11 +1,6 @@
 piecepackr: Board Game Graphics
 ===============================
 
-.. image:: man/figures/logo.png
-   :width: 300
-   :alt: piecepackr hex sticker
-   :align: right
-
 .. image:: https://www.r-pkg.org/badges/version/piecepackr
     :target: https://cran.r-project.org/package=piecepackr
     :alt: CRAN Status Badge
@@ -25,6 +20,9 @@ piecepackr: Board Game Graphics
 .. image:: https://www.repostatus.org/badges/latest/active.svg
    :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
    :target: https://www.repostatus.org/#active
+
+.. image:: man/figures/logo.png
+   :alt: piecepackr hex sticker
 
 .. _hexpack: http://www.ludism.org/ppwiki/HexPack
 
