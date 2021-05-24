@@ -1,3 +1,6 @@
+.. image:: man/figures/logo.png
+   :alt: piecepackr hex sticker
+
 piecepackr: Board Game Graphics
 ===============================
 
@@ -16,9 +19,6 @@ piecepackr: Board Game Graphics
 .. image:: https://img.shields.io/codecov/c/github/piecepackr/piecepackr/master.svg
     :target: https://codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
-
-.. image:: man/figures/logo.png
-   :alt: piecepackr hex sticker
 
 .. _hexpack: http://www.ludism.org/ppwiki/HexPack
 
