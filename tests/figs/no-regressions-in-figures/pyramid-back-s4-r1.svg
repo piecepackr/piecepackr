@@ -14,5 +14,5 @@
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <polygon points='360.00,260.30 342.00,315.70 378.00,315.70 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='353.88' y='310.11' style='font-size: 24.00px; fill: #56B4E9; font-family: Liberation Sans;' textLength='12.25px' lengthAdjust='spacingAndGlyphs'>♦</text>
-<polyline points='360.00,260.30 342.00,315.70 378.00,315.70 360.00,260.30 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='360.00,260.30 342.00,315.70 378.00,315.70 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </svg>

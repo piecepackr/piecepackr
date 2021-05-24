@@ -13,26 +13,26 @@
 </defs>
 <rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
 <polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none;' />
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
 <text transform='translate(294.99,314.23) rotate(90)' style='font-size: 32.00px; fill: #BEBEBE; font-family: Liberation Sans;' textLength='19.55px' lengthAdjust='spacingAndGlyphs'>F</text>
-<polyline points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none;' />
-<polyline points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <rect x='324.00' y='306.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='331.33' y='335.01' style='font-size: 32.00px; fill: #FFA500; font-family: Liberation Sans;' textLength='21.34px' lengthAdjust='spacingAndGlyphs'>E</text>
 <rect x='324.00' y='306.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none;' />
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
 <text transform='translate(330.99,276.45) rotate(90)' style='font-size: 32.00px; fill: #0000FF; font-family: Liberation Sans;' textLength='23.11px' lengthAdjust='spacingAndGlyphs'>D</text>
-<polyline points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none;' />
-<polyline points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <rect x='360.00' y='270.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='366.45' y='299.01' style='font-size: 32.00px; fill: #00FF00; font-family: Liberation Sans;' textLength='23.11px' lengthAdjust='spacingAndGlyphs'>C</text>
 <rect x='360.00' y='270.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none;' />
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
 <text transform='translate(366.99,241.33) rotate(90)' style='font-size: 32.00px; font-family: Liberation Sans;' textLength='21.34px' lengthAdjust='spacingAndGlyphs'>B</text>
-<polyline points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none;' />
-<polyline points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <rect x='396.00' y='234.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='403.33' y='263.01' style='font-size: 32.00px; fill: #FF0000; font-family: Liberation Sans;' textLength='21.34px' lengthAdjust='spacingAndGlyphs'>A</text>
 <rect x='396.00' y='234.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />

@@ -1,6 +1,6 @@
 .. raw:: html
 
-   <img src="man/figures/logo.png" align="right" width="300px" alt="piecepackr hex sticker">
+   <img src="man/figures/logo.png" align="right" width="200px" alt="piecepackr hex sticker">
 
 piecepackr: Board Game Graphics
 ===============================

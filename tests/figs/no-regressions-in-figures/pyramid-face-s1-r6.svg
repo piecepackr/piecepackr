@@ -15,5 +15,5 @@
 <polygon points='360.00,241.26 329.62,334.74 390.38,334.74 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='347.98' y='325.30' style='font-size: 40.50px; fill: #D55E00; font-family: Liberation Sans;' textLength='24.05px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <text x='352.12' y='282.14' style='font-size: 10.12px; fill: #D55E00; font-family: Liberation Sans;' textLength='15.75px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
-<polyline points='360.00,241.26 329.62,334.74 390.38,334.74 360.00,241.26 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='360.00,241.26 329.62,334.74 390.38,334.74 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </svg>

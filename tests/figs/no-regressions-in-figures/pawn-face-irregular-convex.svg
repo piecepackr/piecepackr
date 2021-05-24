@@ -22,5 +22,5 @@
 <polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='358.05' y='291.27' style='font-size: 28.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='16.62px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <text x='357.04' y='264.16' style='font-size: 12.00px; fill: #D55E00; font-family: Liberation Sans;' textLength='18.66px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
-<polyline points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 366.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </svg>
