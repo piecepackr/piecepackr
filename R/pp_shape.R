@@ -412,7 +412,9 @@ convex_xy <- function(n_vertices, t) {
     r <- 0.5
     x <- to_x(t, r) + 0.5
     y <- to_y(t, r) + 0.5
-    list(x = utils::head(x, -1), y = utils::head(y, -1), c = rep("C0", n_vertices))
+    list(x = utils::head(x, -1),
+         y = utils::head(y, -1),
+         c = rep("C0", n_vertices))
 }
 
 halma_xy <- function() {
