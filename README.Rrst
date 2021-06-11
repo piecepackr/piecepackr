@@ -13,10 +13,6 @@ piecepackr: Board Game Graphics
     :target: https://travis-ci.org/piecepackr/piecepackr
     :alt: Build Status
 
-.. image:: https://ci.appveyor.com/api/projects/status/github/piecepackr/piecepackr?branch=master&svg=true 
-    :target: https://ci.appveyor.com/project/piecepackr/piecepackr
-    :alt: AppVeyor Build Status
-
 .. image:: https://img.shields.io/codecov/c/github/piecepackr/piecepackr/master.svg
     :target: https://codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
