@@ -1,3 +1,8 @@
+piecepackr 1.8.0
+================
+
+* The R6 object returned by `pp_shape()` now has a new `pattern()` method that fills 
+  the shape with a specified pattern.  Requires the suggested package `{gridpattern}` (#228).
 
 piecepackr 1.7.2
 ================

@@ -47,11 +47,14 @@ or manipulate a piece post drawing via functions like \code{grid::grid.edit()}.}
 \describe{
 \item{\code{mat_width}}{Numeric vector of mat widths.}
 \item{\code{clip}}{\dQuote{clip grob} to perform polyclip operation with.
-See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
+See \code{\link[gridGeometry:grid.polyclip]{gridGeometry::grid.polyclip()}} for more info.}
 \item{\code{op}}{Polyclip operation to perform.
-See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
+See \code{\link[gridGeometry:grid.polyclip]{gridGeometry::grid.polyclip()}} for more info.}
+\item{\code{pattern}}{Pattern to fill in shape with.
+See \code{\link[gridpattern:grid.pattern]{gridpattern::patternGrob()}} for more info.}
+\item{\code{...}}{Passed to \code{gridpattern::patternGrob()}.}
 \item{\code{name}}{Grid grob \code{name} value.}
-\item{\code{gp}}{Grid \code{gpar} list.  See \code{\link[grid]{gpar}} for more info.}
+\item{\code{gp}}{Grid \code{gpar} list.  See \code{\link[grid:gpar]{grid::gpar()}} for more info.}
 \item{\code{vp}}{Grid viewport or \code{NULL}.}
 }
 }
@@ -63,6 +66,10 @@ See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
 \item{\code{hexlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of hexlines for that shape.}
 \item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{
 Returns a grob for a matting \dQuote{mat} for that shape.}
+\item{\code{pattern(pattern = "stripe", ..., name = NULL, gp = gpar(), vp = NULL)}}{
+Fills in the shape's \code{npc_coords} with a pattern.
+See \code{\link[gridpattern:grid.pattern]{gridpattern::patternGrob()}} for more information.
+}
 \item{\code{polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)}}{
 Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
 Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
@@ -139,5 +146,15 @@ Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{
      grid.draw(pp_shape("concave5", 180, 0.3)$shape(gp=gp, vp=vp))
      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
      grid.draw(pp_shape("concave6", 270)$shape(gp=gp, vp=vp))
+
+     if (require("gridpattern")) {
+         grid.newpage()
+         hex <- pp_shape("convex6")
+         gp <- gpar(fill = c("blue", "yellow", "red"), col = "black")
+         grid.draw(hex$pattern("polygon_tiling", gp = gp, spacing = 0.1,
+                               type = "truncated_trihexagonal"))
+         gp <- gpar(fill = "black", col = NA)
+         grid.draw(hex$mat(mat_width = 0.025, gp = gp))
+     }
  }
 }

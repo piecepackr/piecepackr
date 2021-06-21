@@ -1,7 +1,3 @@
-.. raw:: html
-
-   <img src="man/figures/logo.png" align="right" width="200px" alt="piecepackr hex sticker">
-
 piecepackr: Board Game Graphics
 ===============================
 
@@ -9,13 +5,17 @@ piecepackr: Board Game Graphics
     :target: https://cran.r-project.org/package=piecepackr
     :alt: CRAN Status Badge
 
-.. image:: https://travis-ci.org/piecepackr/piecepackr.png?branch=master
-    :target: https://travis-ci.org/piecepackr/piecepackr
-    :alt: Build Status
-
 .. image:: https://img.shields.io/codecov/c/github/piecepackr/piecepackr/master.svg
     :target: https://codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
+
+.. image:: https://github.com/piecepackr/piecepackr/workflows/R-CMD-check/badge.svg
+    :target: https://github.com/piecepackr/piecepackr/actions
+    :alt: R-CMD-check
+
+.. raw:: html
+
+   <img src="man/figures/logo.png" align="right" width="200px" alt="piecepackr hex sticker">
 
 .. _hexpack: http://www.ludism.org/ppwiki/HexPack
 
@@ -39,12 +39,14 @@ piecepackr: Board Game Graphics
 
 .. contents::
 
+
+
 ``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
 Built-in Game Systems
 ---------------------
 
-The function ``game_systems`` returns configurations for multiple public domain game systems.
+The function ``game_systems()`` returns configurations for multiple public domain game systems.
 
 Checkers
 ~~~~~~~~
@@ -68,9 +70,9 @@ Checkers
     pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
 
 .. figure:: man/figures/README-breakthrough-1.png
-    :alt: Starting position for Dan Troyka's abstract game "Breakthrough"
+    :alt: Starting position for Dan Troyka's abstract game &quot;Breakthrough&quot;
 
-    Starting position for Dan Troyka's abstract game "Breakthrough"
+    Starting position for Dan Troyka's abstract game &quot;Breakthrough&quot;
 
 Traditional 6-sided dice
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -197,7 +199,7 @@ grid.piece
 configuration lists
 ~~~~~~~~~~~~~~~~~~~
 
-One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ the appearance of the game components drawn by ``grid.piece``:
+One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ to quickly adjust the appearance of the game components drawn by ``grid.piece``:
 
 
 .. sourcecode:: r
@@ -224,6 +226,50 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
     :alt: Piecepack diagram with custom configuration
 
     Piecepack diagram with custom configuration
+
+custom grob functions
+~~~~~~~~~~~~~~~~~~~~~
+
+One can even specify `custom grob functions <https://trevorldavis.com/piecepackr/custom-grob-functions.html>`_ to completely customize the appearance of one's game pieces.  `piecepackr` comes with a variety of convenience functions such as `pp_shape()` to facilitate creating custom game pieces.  Here is an example of creating "patterned" checkers using ``pp_shape()`` objects' ``pattern()`` method powered by the suggested package `gridpattern <https://github.com/trevorld/gridpattern>`_:
+
+
+.. sourcecode:: r
+    
+
+    library("grid")
+    library("gridpattern")
+    
+    tilings <- c("hexagonal", "snub_square", "pythagorean",
+                 "truncated_square", "triangular", "trihexagonal")
+    patternedCheckerGrobFn <- function(piece_side, suit, rank, cfg) {
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+        gp_pattern <- gpar(col=opt$suit_color, fill=c(opt$background_color, "white"))
+        pattern_grob <- shape$pattern("polygon_tiling", type = tilings[suit],
+                                      spacing = 0.3, name = "pattern",
+                                      gp = gp_pattern, angle = 0)
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+        grobTree(pattern_grob, border_grob)
+    }
+    checkers1 <- as.list(game_systems()$checkers1)
+    checkers1$grob_fn.bit <- patternedCheckerGrobFn
+    checkers1 <- pp_cfg(checkers1)
+    
+    x1 <- c(1:3, 1:2, 1)
+    x2 <- c(6:8, 7:8, 8)
+    df <- tibble::tibble(piece_side = c("board_face", rep_len("bit_back", 24L)),
+                         suit = c(6L, rep(c(1L, 3L, 4L, 5L), each = 6L)),
+                         rank = 8L,
+                         x = c(4.5, x1, rev(x1), x2, rev(x2)),
+                         y = c(4.5, rep(c(1,1,1, 2,2, 3, 6, 7,7, 8,8,8), 2)))
+    
+    pmap_piece(df, cfg=checkers1, default.units="in")
+
+.. figure:: man/figures/README-pattern-1.png
+    :alt: Patterned checkers via custom grob function
+
+    Patterned checkers via custom grob function
 
 oblique 3D projection
 ~~~~~~~~~~~~~~~~~~~~~
@@ -326,6 +372,33 @@ piece (rayrender)
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("magrittr")
     library("rayrender")
+
+
+::
+
+    ## 
+    ## Attaching package: 'rayrender'
+
+
+
+::
+
+    ## The following object is masked from 'package:rgl':
+    ## 
+    ##     text3d
+
+
+
+::
+
+    ## The following object is masked from 'package:grid':
+    ## 
+    ##     arrow
+
+
+.. sourcecode:: r
+    
+
     df <- ppgames::df_xiangqi()
     envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
     l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")

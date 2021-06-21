@@ -63,6 +63,15 @@ test_that("pp_shape() works as expected", {
         g <- pieceGrob("coin_face", op_scale=1)
         grid.draw(circle$polyclip(g, "minus", gp=gpar(fill="blue")))
     })
+    skip_if_not_installed("gridpattern")
+    expect_doppelganger("hex_pattern", function() {
+        hex <- pp_shape("convex6")
+        gp <- gpar(fill = c("blue", "yellow", "red"), col = "black")
+        grid.draw(hex$pattern("polygon_tiling", gp = gp, spacing = 0.1,
+                              type = "truncated_trihexagonal"))
+        gp <- gpar(fill = "black", col = NA)
+        grid.draw(hex$mat(mat_width = 0.025, gp = gp))
+    })
 })
 
 test_that("npc_coords() works", {

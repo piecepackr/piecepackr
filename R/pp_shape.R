@@ -1,49 +1,56 @@
 #' Shape object for generating various grobs
 #'
-#' \code{pp_shape()} creates an R6 object with methods for creating various shape based grobs.
+#' `pp_shape()` creates an R6 object with methods for creating various shape based grobs.
 #'
-#' \code{pp_shape} objects serve the following purposes:\enumerate{
+#' `pp_shape` objects serve the following purposes:\enumerate{
 #'  \item{Make it easier for developers to customize game piece appearances
-#'        either through a "grob_fn" or "op_grob_fn" styles in \code{pp_cfg()}
-#'        or manipulate a piece post drawing via functions like \code{grid::grid.edit()}.}
-#'  \item{Used internally to generate \code{piecepackr}'s built-in game piece grobs.}
+#'        either through a "grob_fn" or "op_grob_fn" styles in `pp_cfg()`
+#'        or manipulate a piece post drawing via functions like `grid::grid.edit()`.}
+#'  \item{Used internally to generate `piecepackr`'s built-in game piece grobs.}
 #'   }
 #'
-#' @section \code{pp_shape} R6 Class Method Arguments:\describe{
-#' \item{\code{mat_width}}{Numeric vector of mat widths.}
-#' \item{\code{clip}}{\dQuote{clip grob} to perform polyclip operation with.
-#'                    See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
-#' \item{\code{op}}{Polyclip operation to perform.
-#'                  See \code{\link[gridGeometry]{grid.polyclip}} for more info.}
-#' \item{\code{name}}{Grid grob \code{name} value.}
-#' \item{\code{gp}}{Grid \code{gpar} list.  See \code{\link[grid]{gpar}} for more info.}
-#' \item{\code{vp}}{Grid viewport or \code{NULL}.}
+#' @section `pp_shape` R6 Class Method Arguments:\describe{
+#' \item{`mat_width`}{Numeric vector of mat widths.}
+#' \item{`clip`}{\dQuote{clip grob} to perform polyclip operation with.
+#'                    See [gridGeometry::grid.polyclip()] for more info.}
+#' \item{`op`}{Polyclip operation to perform.
+#'                  See [gridGeometry::grid.polyclip()] for more info.}
+#' \item{`pattern`}{Pattern to fill in shape with.
+#'                  See [gridpattern::patternGrob()] for more info.}
+#' \item{`...`}{Passed to `gridpattern::patternGrob()`.}
+#' \item{`name`}{Grid grob `name` value.}
+#' \item{`gp`}{Grid `gpar` list.  See [grid::gpar()] for more info.}
+#' \item{`vp`}{Grid viewport or `NULL`.}
 #' }
-#' @section \code{pp_shape} R6 Class Methods:\describe{
-#' \item{\code{checkers(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of checkers for that shape.}
-#' \item{\code{gridlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of gridlines for that shape.}
-#' \item{\code{hexlines(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of hexlines for that shape.}
-#' \item{\code{mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)}}{
+#' @section `pp_shape` R6 Class Methods:\describe{
+#' \item{`checkers(name = NULL, gp = gpar(), vp = NULL)`}{Returns a grob of checkers for that shape.}
+#' \item{`gridlines(name = NULL, gp = gpar(), vp = NULL)`}{Returns a grob of gridlines for that shape.}
+#' \item{`hexlines(name = NULL, gp = gpar(), vp = NULL)`}{Returns a grob of hexlines for that shape.}
+#' \item{`mat(mat_width = 0, name = NULL, gp = gpar(), vp = NULL)`}{
 #'    Returns a grob for a matting \dQuote{mat} for that shape.}
-#' \item{\code{polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)}}{
-#'    Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
-#'    Note unlike \code{gridGeometry::polyclipGrob} it can directly work with a \code{pieceGrob} "clip grob" argument.}
-#' \item{\code{shape(name = NULL, gp = gpar(), vp = NULL)}}{Returns a grob of the shape.}
+#' \item{`pattern(pattern = "stripe", ..., name = NULL, gp = gpar(), vp = NULL)`}{
+#'       Fills in the shape's `npc_coords` with a pattern.
+#'       See [gridpattern::patternGrob()] for more information.
 #' }
-#' @section \code{pp_shape} R6 Class Active Bindings:\describe{
-#' \item{\code{label}}{The shape's label.}
-#' \item{\code{theta}}{The shape's theta.}
-#' \item{\code{radius}}{The shape's radius.}
-#' \item{\code{back}}{A boolean of whether this is the shape's \dQuote{back} side.}
-#' \item{\code{npc_coords}}{A named list of \dQuote{npc} coordinates along the perimeter of the shape.}
+#' \item{`polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)`}{
+#'    Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
+#'    Note unlike `gridGeometry::polyclipGrob` it can directly work with a `pieceGrob` "clip grob" argument.}
+#' \item{`shape(name = NULL, gp = gpar(), vp = NULL)`}{Returns a grob of the shape.}
+#' }
+#' @section `pp_shape` R6 Class Active Bindings:\describe{
+#' \item{`label`}{The shape's label.}
+#' \item{`theta`}{The shape's theta.}
+#' \item{`radius`}{The shape's radius.}
+#' \item{`back`}{A boolean of whether this is the shape's \dQuote{back} side.}
+#' \item{`npc_coords`}{A named list of \dQuote{npc} coordinates along the perimeter of the shape.}
 #' }
 #' @param label Label of the shape.  One of \describe{
 #'      \item{\dQuote{circle}}{Circle.}
-#'      \item{\dQuote{convexN}}{An \code{N}-sided convex polygon.
-#'                              \code{theta} controls which direction the first vertex is drawn.}
-#'      \item{\dQuote{concaveN}}{A \dQuote{star} (concave) polygon with \code{N} \dQuote{points}.
-#'                              \code{theta} controls which direction the first point is drawn.
-#'                              \code{radius} controls the distance of the \dQuote{inner} vertices from the center.}
+#'      \item{\dQuote{convexN}}{An `N`-sided convex polygon.
+#'                              `theta` controls which direction the first vertex is drawn.}
+#'      \item{\dQuote{concaveN}}{A \dQuote{star} (concave) polygon with `N` \dQuote{points}.
+#'                              `theta` controls which direction the first point is drawn.
+#'                              `radius` controls the distance of the \dQuote{inner} vertices from the center.}
 #'      \item{\dQuote{halma}}{A 2D outline of a \dQuote{Halma pawn}.}
 #'      \item{\dQuote{kite}}{\dQuote{Kite} quadrilateral shape.}
 #'      \item{\dQuote{meeple}}{A 2D outline of a \dQuote{meeple}.}
@@ -51,11 +58,11 @@
 #'      \item{\dQuote{pyramid}}{An \dQuote{Isosceles} triangle whose base is the bottom of the viewport.
 #'                              Typically used to help draw the face of the \dQuote{pyramid} piece.}
 #'      \item{\dQuote{rect}}{Rectangle.}
-#'      \item{\dQuote{roundrect}}{\dQuote{Rounded} rectangle.  \code{radius} controls curvature of corners.}
+#'      \item{\dQuote{roundrect}}{\dQuote{Rounded} rectangle.  `radius` controls curvature of corners.}
 #' }
-#' @param theta \code{convex} and \code{concave} polygon shapes
+#' @param theta `convex` and `concave` polygon shapes
 #'                    use this to determine where the first point is drawn.
-#' @param radius \code{concave} polygon and \code{roundrect} use this
+#' @param radius `concave` polygon and `roundrect` use this
 #'                     to control appearance of the shape.
 #' @param back Whether the shape should be reflected across a vertical line in the middle of the viewport.
 #' @examples
@@ -117,6 +124,16 @@
 #'      grid.draw(pp_shape("concave5", 180, 0.3)$shape(gp=gp, vp=vp))
 #'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("concave6", 270)$shape(gp=gp, vp=vp))
+#'
+#'      if (require("gridpattern")) {
+#'          grid.newpage()
+#'          hex <- pp_shape("convex6")
+#'          gp <- gpar(fill = c("blue", "yellow", "red"), col = "black")
+#'          grid.draw(hex$pattern("polygon_tiling", gp = gp, spacing = 0.1,
+#'                                type = "truncated_trihexagonal"))
+#'          gp <- gpar(fill = "black", col = NA)
+#'          grid.draw(hex$mat(mat_width = 0.025, gp = gp))
+#'      }
 #'  }
 #' @export
 pp_shape <- function(label = "rect", theta = 90, radius = 0.2, back = FALSE) {
@@ -149,6 +166,12 @@ Shape <- R6Class("pp_shape",
         },
         hexlines = function(name = NULL, gp = gpar(), vp = NULL) {
             gTree(shape = self, name = name, gp = gp, vp = vp, cl = "hexlines")
+        },
+        pattern = function(pattern = "stripe", ..., name = NULL, gp = gpar(), vp = NULL) {
+            assert_suggested("gridpattern")
+            xy <- self$npc_coords
+            gridpattern::patternGrob(pattern, xy$x, xy$y, ...,
+                                     name = name, gp = gp, vp = vp)
         },
         polyclip = function(clip, op = "intersection",
                             name = NULL, gp = gpar(), vp = NULL) {
