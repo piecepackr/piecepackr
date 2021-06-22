@@ -47,6 +47,7 @@ test_that("rgl works", {
 
 test_that("rayrender works", {
     skip_on_cran()
+    skip_if_not_installed("rayrender")
     library("rayrender")
     scene <- piece("coin_face", x=-1:1, rank=1:3, cfg = cfg)
     f <- tempfile(fileext = ".png")
@@ -59,6 +60,7 @@ test_that("rayrender works", {
     expect_null(piece("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
 
     cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    skip_if_not_installed("rgl") # needed to generate joystick pawn obj
     scene <- piece("pawn_top", x=-1:1, suit=1:3, cfg = cfg)
     expect_equal(nrow(scene), 9)
     # render_scene(scene, samples = 1, lookfrom=c(0, -5, 5)) # nolint

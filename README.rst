@@ -371,34 +371,7 @@ piece (rayrender)
 
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("magrittr")
-    library("rayrender")
-
-
-::
-
-    ## 
-    ## Attaching package: 'rayrender'
-
-
-
-::
-
-    ## The following object is masked from 'package:rgl':
-    ## 
-    ##     text3d
-
-
-
-::
-
-    ## The following object is masked from 'package:grid':
-    ## 
-    ##     arrow
-
-
-.. sourcecode:: r
-    
-
+    library("rayrender", warn.conflicts = FALSE)
     df <- ppgames::df_xiangqi()
     envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
     l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")

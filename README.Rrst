@@ -315,7 +315,7 @@ piece (rayrender)
 .. {r rayrender, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.caption="3D render with rayrender package"}
 library("ppgames") # remotes::install_github("piecepackr/ppgames")
 library("magrittr")
-library("rayrender")
+library("rayrender", warn.conflicts = FALSE)
 df <- ppgames::df_xiangqi()
 envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
 l <- pmap_piece(df, piece, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")

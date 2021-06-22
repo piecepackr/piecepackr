@@ -6,7 +6,8 @@ test_that("pp_cfg works as expected", {
     expect_equal(class(as.list(cfg_default)), "list")
     expect_output(print(cfg_default), "default cfg")
     skip_if_not(capabilities("cairo"))
-    expect_warning(cfg_default$get_pictureGrob("tile_back", 1, 1))
+    skip_on_os("mac")
+    expect_warning(cfg_default$get_pictureGrob("tile_back", 1, 1)) # deprecated
 })
 
 test_that("update_names works as expected", {
@@ -39,6 +40,8 @@ test_that("save_print_and_play works as expected", {
     on.exit(unlink(pdf_deck_filename_5s))
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
 
+    skip_if_not(capabilities("cairo"))
+    skip_on_os("mac")
     save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5", "all", "double-sided")
 
     save_print_and_play(cfg_default, pdf_deck_filename, "letter")
@@ -63,6 +66,7 @@ test_that("save_print_and_play works as expected", {
 context("save_piece_images works as expected")
 test_that("save_piece_images works as expected", {
     skip_if_not(capabilities("cairo"))
+    skip_on_os("mac")
     directory <- tempfile()
     on.exit(unlink(directory))
     cfg <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
@@ -95,6 +99,7 @@ context("no regressions in figures")
 test_that("no regressions in figures", {
     skip_on_ci()
     skip_if_not(capabilities("cairo"))
+    skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
@@ -279,6 +284,7 @@ test_that("oblique projection works", {
     skip_on_ci()
     skip_on_cran()
     skip_if_not(capabilities("cairo"))
+    skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
@@ -326,6 +332,7 @@ context("alpha and scale works")
 test_that("alpha and scale works", {
     skip_on_ci()
     skip_if_not(capabilities("cairo"))
+    skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     expect_doppelganger("alpha_and_scale", function() {
