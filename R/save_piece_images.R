@@ -50,13 +50,13 @@ piece_filename <- function(directory, piece_side, format, angle,
 #' @param angle Numeric vector of angles to rotate images (in degrees)
 #' @examples
 #'   \donttest{
-#'     if (all(capabilities(c("cairo", "png")))) {
+#'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
+#'     if (all(capabilities(c("cairo", "png"))) && !is_mac) {
 #'         cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
 #'         save_piece_images(cfg, directory=tempdir(), format="svg", angle=0)
 #'         save_piece_images(cfg, directory=tempdir(), format="png", angle=90)
 #'     }
 #'   }
-#'
 #' @export
 save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", angle=0) {
     current_dev <- grDevices::dev.cur()
