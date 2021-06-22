@@ -29,7 +29,8 @@ Save piecepack print-and-play (PnP) file
 }
 \examples{
   \donttest{
-    if (capabilities("cairo")) {
+    is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
+    if (capabilities("cairo") && !is_mac) {
         cfg <- pp_cfg(list(invert_colors.suited=TRUE))
         save_print_and_play(cfg, "my_pnp_file.pdf")
         save_print_and_play(cfg, "my_pnp_file_ds.pdf", arrangement="double-sided")
