@@ -389,6 +389,23 @@ Config <- R6Class("pp_cfg",
                          width, height, depth,
                          scale = scale, res = res)
         },
+        rayvertex = function(piece_side, suit, rank,
+                             x, y, z, angle, axis_x, axis_y,
+                             width, height, depth,
+                             scale = 1, res = 72) {
+            key <- private$opt_cache_key(piece_side, suit, rank, "rayvertex_fn")
+            rayvertex_fn <- self$cache$get(key, key_missing())
+            if (is.key_missing(rayvertex_fn)) {
+                rayvertex_fn <- get_style_element("rayvertex_fn", piece_side, private$cfg,
+                                                  rv_piece_helper, suit, rank)
+                if (self$cache_obj_fn) self$cache$set(key, rayvertex_fn)
+            }
+            rayvertex_fn(piece_side, suit, rank, self,
+                         x, y, z,
+                         angle, axis_x, axis_y,
+                         width, height, depth,
+                         scale = scale, res = res)
+        },
         rgl = function(piece_side, suit, rank,
                        x, y, z, angle, axis_x, axis_y,
                        width, height, depth,

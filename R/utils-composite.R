@@ -1,5 +1,3 @@
-
-
 # pieces that are composites of other pieces
 # earlier pieces (in df) are "beneath" later pieces (view from the top)
 CompositePiece <- R6Class("pp_composite",
@@ -51,6 +49,26 @@ CompositePiece <- R6Class("pp_composite",
             df <- private$transform_df(piece_side, x, y, z, angle, width, height, depth, axis_x, axis_y, scale)
             l <- pmap_piece(df, suit = suit, envir = private$envir, .f = piece, res = res)
             Reduce(rayrender::add_object, l)
+        },
+        rayvertex_fn = function() function(piece_side, suit, rank, cfg,
+                                           x, y, z, angle, axis_x, axis_y,
+                                           width, height, depth,
+                                           scale = scale, res = res) {
+
+            suit <- ifelse(is.na(suit), 1, suit)
+            rank <- ifelse(is.na(rank), 1, rank)
+            if (is.na(angle)) angle <- 0
+            if (is.na(axis_x)) axis_x <- 0
+            if (is.na(axis_y)) axis_y <- 0
+            if (is.na(width)) width <- cfg$get_width(piece_side, suit, rank)
+            if (is.na(height)) height <- cfg$get_height(piece_side, suit, rank)
+            if (is.na(depth)) depth <- cfg$get_depth(piece_side, suit, rank)
+            if (is.na(z)) z <- 0.5 * depth
+
+            side <- get_side(piece_side)
+            df <- private$transform_df(piece_side, x, y, z, angle, width, height, depth, axis_x, axis_y, scale)
+            l <- pmap_piece(df, suit = suit, envir = private$envir, .f = piece_mesh, res = res)
+            Reduce(rayvertex::add_shape, l)
         },
         rgl_fn = function() function(piece_side, suit, rank, cfg,
                                      x, y, z, angle, axis_x, axis_y,

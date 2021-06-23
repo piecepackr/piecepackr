@@ -496,6 +496,7 @@ joystick_pawn <- function(shapes) {
     list(grob_fn.pawn = joystick$grob_fn,
          op_grob_fn.pawn = joystick$op_grob_fn,
          rayrender_fn.pawn = joystick$rayrender_fn,
+         rayvertex_fn.pawn = joystick$rayvertex_fn,
          rgl_fn.pawn = joystick$rgl_fn,
          width.pawn=5/8, height.pawn=1.0, depth.pawn=5/8)
 }
