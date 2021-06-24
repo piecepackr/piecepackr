@@ -1,8 +1,20 @@
 piecepackr 1.8.0
 ================
 
+New features
+------------
+
 * The R6 object returned by `pp_shape()` now has a new `pattern()` method that fills 
   the shape with a specified pattern.  Requires the suggested package `{gridpattern}` (#228).
+
+Bug fixes and minor improvements
+--------------------------------
+
+* If the suggested package `{readobj}` is installed then the default
+  ``piece3d()`` method will import Wavefront OBJ files with ``readobj::read.obj()``
+  instead of ``rgl::readOBJ()``.  In particular ``readobj::read.obj()`` can
+  successfully triangulate the "meeple" shape and the "roundrect" shape (#220).
+
 
 piecepackr 1.7.2
 ================
