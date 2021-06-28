@@ -29,6 +29,7 @@ Suggests:
     gridpattern,
     magick,
     rayrender (>= 0.5.8),
+    readobj (>= 0.4.0),
     rgl (>= 0.106.8),
     testthat,
     vdiffr
