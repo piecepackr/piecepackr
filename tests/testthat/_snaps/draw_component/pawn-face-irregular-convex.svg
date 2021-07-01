@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='576.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<polygon points='360.00,252.00 344.41,270.00 344.41,306.00 360.00,324.00 375.59,306.00 375.59,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='381.95,263.64 366.36,245.64 360.00,252.00 375.59,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='366.36,245.64 350.78,263.64 344.41,270.00 360.00,252.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='381.95,299.64 381.95,263.64 375.59,270.00 375.59,306.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='350.78,263.64 350.78,299.64 344.41,306.00 344.41,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='366.36,317.64 381.95,299.64 375.59,306.00 360.00,324.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='350.78,299.64 366.36,317.64 360.00,324.00 344.41,306.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='366.36' y='291.27' text-anchor='middle' style='font-size: 28.00px; fill: #D55E00; font-family: sans;' textLength='16.63px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<text x='366.36' y='264.17' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='18.68px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
+<polygon points='366.36,245.64 350.78,263.64 350.78,299.64 366.36,317.64 381.95,299.64 381.95,263.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+</g>
+</svg>

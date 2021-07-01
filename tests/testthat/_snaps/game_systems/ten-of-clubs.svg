@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='576.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<rect x='270.00' y='162.00' width='180.00' height='252.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<rect x='288.00' y='162.00' width='144.00' height='252.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text transform='translate(360.00,318.58) rotate(-180)' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(324.00,343.78) rotate(-180)' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(396.00,343.78) rotate(-180)' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(324.00,293.38) rotate(-180)' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(396.00,293.38) rotate(-180)' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='324.00' y='282.62' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='396.00' y='282.62' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='324.00' y='232.22' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='396.00' y='232.22' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='360.00' y='257.42' text-anchor='middle' style='font-size: 57.60px; fill: #009E73; font-family: sans;' textLength='37.81px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text x='288.00' y='196.83' text-anchor='middle' style='font-size: 28.00px; fill: #009E73; font-family: sans;' textLength='31.15px' lengthAdjust='spacingAndGlyphs'>10</text>
+<text transform='translate(432.00,379.17) rotate(-180)' text-anchor='middle' style='font-size: 28.00px; fill: #009E73; font-family: sans;' textLength='31.15px' lengthAdjust='spacingAndGlyphs'>10</text>
+<text x='288.00' y='223.41' text-anchor='middle' style='font-size: 32.00px; fill: #009E73; font-family: sans;' textLength='21.00px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<text transform='translate(432.00,352.59) rotate(-180)' text-anchor='middle' style='font-size: 32.00px; fill: #009E73; font-family: sans;' textLength='21.00px' lengthAdjust='spacingAndGlyphs'>♣</text>
+<rect x='270.00' y='162.00' width='180.00' height='252.00' style='stroke-width: 3.00;' />
+</g>
+</svg>

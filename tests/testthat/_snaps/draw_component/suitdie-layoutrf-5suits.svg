@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='576.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<text transform='translate(294.99,324.00) rotate(90)' text-anchor='middle' style='font-size: 32.00px; fill: #BEBEBE; font-family: sans;' textLength='19.55px' lengthAdjust='spacingAndGlyphs'>F</text>
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='288.00,306.00 324.00,306.00 324.00,342.00 288.00,342.00 288.00,306.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<rect x='324.00' y='306.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='342.00' y='335.01' text-anchor='middle' style='font-size: 32.00px; fill: #FFA500; font-family: sans;' textLength='21.35px' lengthAdjust='spacingAndGlyphs'>E</text>
+<rect x='324.00' y='306.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<text transform='translate(330.99,288.00) rotate(90)' text-anchor='middle' style='font-size: 32.00px; fill: #0000FF; font-family: sans;' textLength='23.12px' lengthAdjust='spacingAndGlyphs'>D</text>
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='324.00,270.00 360.00,270.00 360.00,306.00 324.00,306.00 324.00,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<rect x='360.00' y='270.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='378.00' y='299.01' text-anchor='middle' style='font-size: 32.00px; fill: #00FF00; font-family: sans;' textLength='23.12px' lengthAdjust='spacingAndGlyphs'>C</text>
+<rect x='360.00' y='270.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<text transform='translate(366.99,252.00) rotate(90)' text-anchor='middle' style='font-size: 32.00px; font-family: sans;' textLength='21.35px' lengthAdjust='spacingAndGlyphs'>B</text>
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='360.00,234.00 396.00,234.00 396.00,270.00 360.00,270.00 360.00,234.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<rect x='396.00' y='234.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='414.00' y='263.01' text-anchor='middle' style='font-size: 32.00px; fill: #FF0000; font-family: sans;' textLength='21.35px' lengthAdjust='spacingAndGlyphs'>A</text>
+<rect x='396.00' y='234.00' width='36.00' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+</g>
+</svg>

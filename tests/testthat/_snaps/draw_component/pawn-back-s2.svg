@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA='>
+    <rect x='0.00' y='0.00' width='720.00' height='576.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+<polygon points='378.00,319.50 378.00,300.60 371.57,284.32 373.79,282.37 375.59,280.12 376.91,277.64 377.73,274.98 378.00,272.25 377.73,269.52 376.91,266.86 375.59,264.38 373.79,262.13 371.57,260.18 369.00,258.61 366.16,257.45 363.13,256.74 360.00,256.50 356.87,256.74 353.84,257.45 351.00,258.61 348.43,260.18 346.21,262.13 344.41,264.38 343.09,266.86 342.27,269.52 342.00,272.25 342.27,274.98 343.09,277.64 344.41,280.12 346.21,282.37 348.43,284.32 342.00,300.60 342.00,319.50 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<text x='360.00' y='313.38' text-anchor='middle' style='font-size: 28.00px; font-family: sans;' textLength='14.88px' lengthAdjust='spacingAndGlyphs'>♠</text>
+<polygon points='378.00,319.50 378.00,300.60 371.57,284.32 373.79,282.37 375.59,280.12 376.91,277.64 377.73,274.98 378.00,272.25 377.73,269.52 376.91,266.86 375.59,264.38 373.79,262.13 371.57,260.18 369.00,258.61 366.16,257.45 363.13,256.74 360.00,256.50 356.87,256.74 353.84,257.45 351.00,258.61 348.43,260.18 346.21,262.13 344.41,264.38 343.09,266.86 342.27,269.52 342.00,272.25 342.27,274.98 343.09,277.64 344.41,280.12 346.21,282.37 348.43,284.32 342.00,300.60 342.00,319.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+</g>
+</svg>

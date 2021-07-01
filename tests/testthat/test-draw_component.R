@@ -295,7 +295,6 @@ test_that("oblique projection works", {
     expect_doppelganger("coin_face_op", function() dc("coin_face"))
     expect_doppelganger("pawn_face_op", function() dc("pawn_face", cfg=cfg_3d))
     expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))
-    expect_doppelganger("pyramid_face_op", function() dc("pyramid_face"))
     expect_doppelganger("die_face_op", function() dc("die_face"))
     g.p <- function(...) {
         grid.piece(..., op_scale=0.5, default.units="in")
