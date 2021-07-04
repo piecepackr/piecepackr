@@ -14,7 +14,7 @@ Bug fixes and minor improvements
   ``piece3d()`` method will import Wavefront OBJ files with ``readobj::read.obj()``
   instead of ``rgl::readOBJ()``.  In particular ``readobj::read.obj()`` can
   successfully triangulate the "meeple" shape and the "roundrect" shape (#220).
-
+* Fixes bug when setting `alpha` transparency parameter in `grid.piece()` / `pieceGrob()`.
 
 piecepackr 1.7.2
 ================

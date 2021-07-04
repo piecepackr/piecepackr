@@ -151,7 +151,7 @@ makeContext.piece <- function(x) {
         gp$lex <- scale * (gp$lex %||% 1)
     }
     if (alpha != 1) {
-        gp$alpha <- scale * (gp$alpha %||% 1)
+        gp$alpha <- alpha * (gp$alpha %||% 1)
     }
     x$gp <- gp
     x

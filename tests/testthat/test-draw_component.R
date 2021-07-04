@@ -334,10 +334,16 @@ test_that("alpha and scale works", {
     skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
-    expect_doppelganger("alpha_and_scale", function() {
+    expect_doppelganger("alpha", function() {
         cfg <- pp_cfg(list(shape.coin="convex6"))
         df <- tibble(piece_side="coin_back",
-                     x=1:6, y=1, alpha=seq(0, 1, length.out=6),
+                     x=1:6, y=1, alpha=seq(0, 1, length.out=6))
+        pmap_piece(df, default.units="in", cfg=cfg)
+    })
+    expect_doppelganger("scale", function() {
+        cfg <- pp_cfg(list(shape.coin="convex6"))
+        df <- tibble(piece_side="coin_back",
+                     x=1:6, y=1,
                      scale=seq(0, 1, length.out=6))
         pmap_piece(df, default.units="in", cfg=cfg)
     })
