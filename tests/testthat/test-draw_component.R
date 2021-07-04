@@ -116,7 +116,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("tile_back", function() dc("tile_back"))
     expect_doppelganger("tile_back_thickgrid", function() dc("tile_back", cfg=list(gridline_lex.tile_back=5)))
     expect_doppelganger("tile_back_thickborder", function() dc("tile_back", cfg=list(border_lex.tile_back=5)))
-    expect_doppelganger("tile_back-svg", function() dc("tile_back", use_pictureGrob=TRUE))
+    expect_doppelganger("tile_back-svg", function() dc("tile_back", type="picture"))
     expect_doppelganger("tile_back-hex",
                                 function() dc("tile_back", cfg=list(shape.tile_back="convex6")))
     # tile face

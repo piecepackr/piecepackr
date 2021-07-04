@@ -13,10 +13,7 @@
 #' @param y Where to place piece on y axis of viewport
 #' @param z z-coordinate of the piece.  Has no effect if \code{op_scale} is \code{0}.
 #' @param angle Angle (on xy plane) to draw piece at
-#' @param use_pictureGrob If \code{TRUE} instead of directly returning the grob first
-#'            export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.
-#'            This is useful if drawing pieces really big or small and don't want
-#'            to play with re-configuring fontsizes.
+#' @param use_pictureGrob Deprecated argument.  If `TRUE` sets `type` argument to `"picture"`.
 #' @param width Width of piece
 #' @param height Height of piece
 #' @param depth Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.
@@ -36,6 +33,11 @@
 #' @param ... Ignored.
 #' @param scale Multiplicative scaling factor to apply to width, height, and depth.
 #' @param alpha Alpha channel for transparency.
+#' @param type Type of grid grob to use.  Either `"normal"` (default), `"picture"`, or `"raster"`.
+#'             `"picture"` exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
+#'             `"raster"` exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
+#'             The latter two can be useful if drawing pieces really big or small and don't want
+#'             to mess with re-configuring fontsizes and linewidths.
 #' @return A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
 #'         will also draw it to the graphics device.
 #' @examples
@@ -81,10 +83,10 @@ NULL
 
 pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                           angle=0, use_pictureGrob=FALSE,
-                           width=NA, height=NA, depth=NA,
+                           angle=0, width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
-                           default.units = "npc", scale=1, alpha=1, name="") {
+                           default.units = "npc",
+                           scale=1, alpha=1, type=type, name="") {
     if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
     rank <- impute_rank(piece_side, rank, cfg)
@@ -105,15 +107,14 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     depth <- scale * depth
     angle <- angle %% 360
     op_angle <- op_angle %% 360
-    grob_type <- ifelse(use_pictureGrob, "picture", "normal")
     if (op_scale < 0.01) {
-        grob <- cfg$get_grob(piece_side, suit, rank, grob_type)
+        grob <- cfg$get_grob(piece_side, suit, rank, type)
         cvp <- viewport(x, y, width, height, angle=angle)
         name <- paste0("piece_side", name)
         grid::editGrob(grob, vp=cvp, name=name)
     } else {
         grob <- cfg$get_op_grob(piece_side, suit, rank,
-                            x, y, z, angle, grob_type,
+                            x, y, z, angle, type,
                             width, height, depth,
                             op_scale, op_angle)
         name <- paste0("projected_piece", name)
@@ -130,13 +131,19 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                          width=NA, height=NA, depth=NA,
                          op_scale=0, op_angle=45,
                          default.units = "npc", envir=NULL,
-                         name=NULL, gp=NULL, vp=NULL, ..., scale=1, alpha=1) {
+                         name=NULL, gp=NULL, vp=NULL, ...,
+                         scale=1, alpha=1, type="normal") {
+    if (!missing(use_pictureGrob)) {
+        .Deprecated(msg = paste("`use_pictureGrob = TRUE` is deprecated.",
+                                'Use `type = "picture"` instead.'))
+        type <- ifelse(use_pictureGrob, "picture", "normal")
+    }
     gTree(piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
-          x=x, y=y, z=z, angle=angle, use_pictureGrob=use_pictureGrob,
+          x=x, y=y, z=z, angle=angle,
           width=width, height=height, depth=depth,
           op_scale=op_scale, op_angle=op_angle,
           default.units=default.units, envir=envir,
-          scale=scale, alpha=alpha,
+          scale=scale, alpha=alpha, type=type,
           name=name, gp=gp, vp=vp,
           cl="piece")
 }
@@ -160,7 +167,7 @@ makeContext.piece <- function(x) {
 #' @export
 makeContent.piece <- function(x) {
     nn <- max(lengths(list(x$piece_side, x$suit, x$rank, x$x, x$y, x$z, x$angle,
-                           x$use_pictureGrob, x$width, x$height, x$depth)))
+                           x$type, x$width, x$height, x$depth)))
     piece_side <- rep(x$piece_side, length.out=nn)
     suit <- rep(x$suit, length.out=nn)
     rank <- rep(x$rank, length.out=nn)
@@ -168,7 +175,7 @@ makeContent.piece <- function(x) {
     yc <- rep(x$y, length.out=nn)
     zc <- rep(x$z, length.out=nn)
     angle <- rep(x$angle, length.out=nn)
-    use_pictureGrob <- rep(x$use_pictureGrob, length.out=nn)
+    type <- rep(x$type, length.out=nn)
     width <- rep(x$width, length.out=nn)
     height <- rep(x$height, length.out=nn)
     depth <- rep(x$depth, length.out=nn)
@@ -180,10 +187,10 @@ makeContent.piece <- function(x) {
     for (i in seq(nn)) {
         name <- paste0(".", i)
         gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
-                                        xc[i], yc[i], zc[i], angle[i], use_pictureGrob[i],
+                                        xc[i], yc[i], zc[i], angle[i],
                                         width[i], height[i], depth[i],
                                         x$op_scale, x$op_angle, x$default.units,
-                                        x$scale, x$alpha, name)
+                                        x$scale, x$alpha, type[i], name)
     }
     setChildren(x, gl)
 }
@@ -228,12 +235,19 @@ grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
                            op_scale=0, op_angle=45,
                            default.units = "npc", envir=NULL,
                            name=NULL, gp=NULL, draw=TRUE, vp=NULL, ...,
-                           scale=1, alpha=1) {
+                           scale=1, alpha=1, type="normal") {
+    if (!missing(use_pictureGrob)) {
+        .Deprecated(msg = paste("`use_pictureGrob = TRUE` is deprecated.",
+                                'Use `type = "picture"` instead.'))
+        type <- ifelse(use_pictureGrob, "picture", "normal")
+    }
     grob <- pieceGrob(piece_side, suit, rank, cfg,
-                          x, y, z, angle, use_pictureGrob, width, height, depth,
-                          op_scale, op_angle, default.units,
-                          envir, name, gp, vp,
-                          scale=scale, alpha=alpha)
+                          x, y, z, angle,
+                          width = width, height = height, depth = depth,
+                          op_scale = op_scale, op_angle = op_angle,
+                          default.units = default.units,
+                          envir = envir, name = name, gp = gp, vp =vp,
+                          scale = scale, alpha = alpha, type = type)
     if (draw) {
         grid.draw(grob)
         invisible(grob)

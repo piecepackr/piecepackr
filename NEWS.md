@@ -6,6 +6,13 @@ New features
 
 * The R6 object returned by `pp_shape()` now has a new `pattern()` method that fills 
   the shape with a specified pattern.  Requires the suggested package `{gridpattern}` (#228).
+* `pieceGrob()` and `grid.piece()` now support a new `type` argument 
+  which modifies which type of grid grob is used.  
+  Can be either `"normal"` (default), `"picture"`, or `"raster"`.
+  `"picture"` exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
+  `"raster"` exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
+  The latter two can be useful if drawing pieces really big or small and don't want
+  to mess with re-configuring fontsizes and linewidths.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -15,6 +22,12 @@ Bug fixes and minor improvements
   instead of ``rgl::readOBJ()``.  In particular ``readobj::read.obj()`` can
   successfully triangulate the "meeple" shape and the "roundrect" shape (#220).
 * Fixes bug when setting `alpha` transparency parameter in `grid.piece()` / `pieceGrob()`.
+
+Deprecated features
+-------------------
+
+The ``use_pictureGrob`` argument of ``pieceGrob()`` and ``grid.piece()`` is now deprecated 
+in favor of the new ``type`` argument.  Use ``type = "picture"` instead of `use_pictureGrob = TRUE`. 
 
 piecepackr 1.7.2
 ================

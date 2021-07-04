@@ -27,7 +27,8 @@ pieceGrob(
   vp = NULL,
   ...,
   scale = 1,
-  alpha = 1
+  alpha = 1,
+  type = "normal"
 )
 
 grid.piece(
@@ -53,7 +54,8 @@ grid.piece(
   vp = NULL,
   ...,
   scale = 1,
-  alpha = 1
+  alpha = 1,
+  type = "normal"
 )
 }
 \arguments{
@@ -75,10 +77,7 @@ or a character vector of \code{pp_cfg} objects}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
-\item{use_pictureGrob}{If \code{TRUE} instead of directly returning the grob first
-export to (temporary) svg and then re-import as a \code{grImport2::pictureGrob}.
-This is useful if drawing pieces really big or small and don't want
-to play with re-configuring fontsizes.}
+\item{use_pictureGrob}{Deprecated argument.  If \code{TRUE} sets \code{type} argument to \code{"picture"}.}
 
 \item{width}{Width of piece}
 
@@ -110,6 +109,12 @@ and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 \item{scale}{Multiplicative scaling factor to apply to width, height, and depth.}
 
 \item{alpha}{Alpha channel for transparency.}
+
+\item{type}{Type of grid grob to use.  Either \code{"normal"} (default), \code{"picture"}, or \code{"raster"}.
+\code{"picture"} exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
+\code{"raster"} exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
+The latter two can be useful if drawing pieces really big or small and don't want
+to mess with re-configuring fontsizes and linewidths.}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 }
