@@ -91,7 +91,7 @@ makeContent.basic_piece_side <- function(x) {
 #' @export
 picturePieceGrobFn <- function(directory, filename_fn=find_pp_file) {
     function(piece_side, suit, rank, cfg) {
-        if (hasName(formals(find_pp_file), "cfg"))
+        if (hasName(formals(filename_fn), "cfg"))
             f <- filename_fn(directory, piece_side, suit, rank, cfg)
         else
             f <- filename_fn(directory, piece_side, suit, rank)

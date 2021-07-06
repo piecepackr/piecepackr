@@ -27,6 +27,8 @@ Bug fixes and minor improvements
 * Fixes bug when setting `alpha` transparency parameter in `grid.piece()` / `pieceGrob()`.
 * `game_systems()` now provides a `message()` if `style = "dejavu"` and
   `has_font("Dejavu Sans")` is `FALSE`.
+* Fixes bug in `picturePieceGrobFn()` when its `filename_fn` argument does not support
+  a `cfg` argument.
 
 Deprecated features
 -------------------
