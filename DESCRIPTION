@@ -2,13 +2,13 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics
-Version: 1.8.0-4
+Version: 1.8.0-5
 Description: Functions to make board game graphics.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can make graphics for other board game systems.  Includes configurations for several public domain game systems.
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
              person("Delapouite <https://delapouite.com/>", role="dtc",
                      comment = 'Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>'))
 License: CC BY-SA 4.0
-URL: https://trevorldavis.com/piecepackr/, https://groups.google.com/forum/#!forum/piecepackr
+URL: https://trevorldavis.com/piecepackr/ (blog), https://trevorldavis.com/R/piecepackr (pkgdown), https://groups.google.com/forum/#!forum/piecepackr (forum)
 BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyLoad: yes
 Imports:
@@ -31,6 +31,7 @@ Suggests:
     rayrender (>= 0.5.8),
     readobj (>= 0.4.0),
     rgl (>= 0.106.8),
+    systemfonts,
     testthat,
     vdiffr
 SystemRequirements: ghostscript

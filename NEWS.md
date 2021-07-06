@@ -4,6 +4,9 @@ piecepackr 1.8.0
 New features
 ------------
 
+* New function `has_font()` which returns `TRUE` or `FALSE` if it detects a given font is
+  provided by the OS.  Needs either 1) Suggested package `systemfonts` or 
+  2) R compiled with "cairo" support plus system tool `pdffonts` installed.
 * The R6 object returned by `pp_shape()` now has a new `pattern()` method that fills 
   the shape with a specified pattern.  Requires the suggested package `{gridpattern}` (#228).
 * `pieceGrob()` and `grid.piece()` now support a new `type` argument 
@@ -22,6 +25,8 @@ Bug fixes and minor improvements
   instead of ``rgl::readOBJ()``.  In particular ``readobj::read.obj()`` can
   successfully triangulate the "meeple" shape and the "roundrect" shape (#220).
 * Fixes bug when setting `alpha` transparency parameter in `grid.piece()` / `pieceGrob()`.
+* `game_systems()` now provides a `message()` if `style = "dejavu"` and
+  `has_font("Dejavu Sans")` is `FALSE`.
 
 Deprecated features
 -------------------

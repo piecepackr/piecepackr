@@ -1,19 +1,4 @@
-get_embedded_font_helper <- function(font, char) {
-    file <- tempfile(fileext=".pdf")
-    on.exit(unlink(file))
-    grDevices::cairo_pdf(file)
-    grid::grid.text(char, gp=grid::gpar(fontsize=72, fontfamily=font))
-    invisible(grDevices::dev.off())
-
-    pf_output <- system2("pdffonts", file, stdout=TRUE)
-    if (length(pf_output) == 2)
-        embedded_font <- NA # probably some color emoji font used
-    else
-        embedded_font <- gsub(".*\\+(.*)", "\\1", strsplit(pf_output[3], " +")[[1]][1])
-    embedded_font
-}
-
-#' \code{piecepackr} utility functions
+#' Miscellaneous \code{piecepackr} utility functions
 #'
 #' \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 #' \code{cleave} converts a delimiter separated string into a vector.
@@ -30,11 +15,6 @@ get_embedded_font_helper <- function(font, char) {
 #'
 #'  if (require("grid")) {
 #'      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
-#'  }
-#'  if ((Sys.which("pdffonts") != "") && capabilities("cairo")) {
-#'      chars <- c("a", "\u2666")
-#'      fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
-#'      get_embedded_font(fonts, chars)
 #'  }
 #'
 #'  is_color_invisible("transparent")
@@ -54,29 +34,6 @@ is_color_invisible <- function(col) {
     if (grDevices::col2rgb(col, alpha=TRUE)[4] == 0)
         return(TRUE)
     return(FALSE)
-}
-
-#' @rdname pp_utils
-#' @param font A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.
-#' @param char A character vector of character(s) to be embedded by \code{grid::grid.text}
-#' @return \code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.
-#'         \code{NA}'s means no embedded font detected: this either means that no font
-#'          was found or that a color emoji font was found and instead of a font an image was embedded.
-#' @details \code{get_embedded_font} depends on \code{pdffonts} being on the system path
-#'          (on many OSes found in a \code{poppler-utils} package).
-#' @export
-get_embedded_font <- function(font, char) {
-    if (Sys.which("pdffonts") == "") {
-        stop("'get_embedded_font' depends on 'pdffonts' being on the system path. ",
-             " On many OSes it is found in a 'poppler-utils' package.")
-    }
-    df <- expand.grid(char, font, stringsAsFactors=FALSE)
-    names(df) <- c("char", "requested_font")
-    df$embedded_font <- NA
-    for (ii in seq(nrow(df))) {
-        df[ii, 3] <- get_embedded_font_helper(df[ii,2], df[ii,1])
-    }
-    df
 }
 
 #' @rdname pp_utils

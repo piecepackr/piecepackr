@@ -3,15 +3,12 @@
 \name{pp_utils}
 \alias{pp_utils}
 \alias{is_color_invisible}
-\alias{get_embedded_font}
 \alias{inch}
 \alias{cleave}
 \alias{file2grob}
-\title{\code{piecepackr} utility functions}
+\title{Miscellaneous \code{piecepackr} utility functions}
 \usage{
 is_color_invisible(col)
-
-get_embedded_font(font, char)
 
 inch(inches)
 
@@ -21,10 +18,6 @@ file2grob(file, distort = TRUE)
 }
 \arguments{
 \item{col}{Color}
-
-\item{font}{A character vector of font(s) passed to the \code{fontfamily} argument of \code{grid::gpar}.}
-
-\item{char}{A character vector of character(s) to be embedded by \code{grid::grid.text}}
 
 \item{inches}{Number representing number of inches}
 
@@ -41,20 +34,11 @@ file2grob(file, distort = TRUE)
 \item{distort}{Logical value of whether one should preserve the aspect ratio
 or distort to fit the area it is drawn in}
 }
-\value{
-\code{get_embedded_font} returns character vector of fonts that were actually embedded by \code{cairo_pdf}.
-\code{NA}'s means no embedded font detected: this either means that no font
-was found or that a color emoji font was found and instead of a font an image was embedded.
-}
 \description{
 \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 \code{cleave} converts a delimiter separated string into a vector.
 \code{inch(x)} is equivalent to \code{unit(x, "in")}.
 \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
-}
-\details{
-\code{get_embedded_font} depends on \code{pdffonts} being on the system path
-(on many OSes found in a \code{poppler-utils} package).
 }
 \examples{
  to_x(90, 1)
@@ -67,11 +51,6 @@ was found or that a color emoji font was found and instead of a font an image wa
 
  if (require("grid")) {
      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
- }
- if ((Sys.which("pdffonts") != "") && capabilities("cairo")) {
-     chars <- c("a", "\u2666")
-     fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
-     get_embedded_font(fonts, chars)
  }
 
  is_color_invisible("transparent")
