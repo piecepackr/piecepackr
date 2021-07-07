@@ -15,8 +15,10 @@ get_embedded_font_helper <- function(font, char) {
 
 #' Font utility functions
 #'
-#' `get_embedded_font()` returns which font is actually embedded by `cairo_pdf()`.
+#' `get_embedded_font()` returns which font is actually embedded
+#' by `cairo_pdf()` for a given character.
 #' `has_font()` tries to determine if a given font is available on the OS.
+#' @name font_utils
 #' @rdname font_utils
 #' @param font A character vector of font(s).
 #' @param char A character vector of character(s) to be embedded by `grid::grid.text()`
@@ -55,7 +57,7 @@ get_embedded_font <- function(font, char) {
 #' @export
 has_font <- function(font) {
     stopifnot(length(font) == 1)
-    if (requireNamespace("systemfonts")) {
+    if (requireNamespace("systemfonts", quietly = TRUE)) {
         font_file <- basename(systemfonts::match_font(family = font)$path)
         grepl(simplify_font(font), simplify_font(font_file))
     } else if (Sys.which("pdffonts") != "" && capabilities("cairo")) {
@@ -63,7 +65,7 @@ has_font <- function(font) {
         grepl(simplify_font(font), simplify_font(embedded_font))
     } else {
         warning(paste("has_font() needs either the suggested 'systemfonts' package installed",
-                      "or R compiled with 'cairo' support with the system tool 'pdffonts' installed.",
+                      "or R compiled with 'cairo' support plus the system tool 'pdffonts' installed.",
                       "Conservatively returning `FALSE`."))
         FALSE
     }

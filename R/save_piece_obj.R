@@ -13,12 +13,13 @@
 #'     print(files)
 #' @seealso See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 #' @export
-save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
-                         ...,
-                         x = 0, y = 0, z = 0,
-                         angle = 0, axis_x = 0, axis_y = 0,
-                         width = NA, height = NA, depth = NA,
-                         filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
+save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1,
+                           cfg = getOption("piecepackr.cfg", pp_cfg()),
+                           ...,
+                           x = 0, y = 0, z = 0,
+                           angle = 0, axis_x = 0, axis_y = 0,
+                           width = NA, height = NA, depth = NA,
+                           filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(is.na(suit), 1, suit)
     rank <- ifelse(is.na(rank), 1, rank)
@@ -182,12 +183,13 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
 #'                  See \code{\link[rgl]{ellipse3d}}.
 #' @rdname obj_fns
 #' @export
-save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1, cfg = pp_cfg(),
-                              ...,
-                              x = 0, y = 0, z = 0,
-                              angle = 0, axis_x = 0, axis_y = 0,
-                              width = NA, height = NA, depth = NA,
-                              filename = tempfile(fileext = ".obj"), subdivide=3) {
+save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1,
+                               cfg = getOption("piecepackr.cfg", pp_cfg()),
+                               ...,
+                               x = 0, y = 0, z = 0,
+                               angle = 0, axis_x = 0, axis_y = 0,
+                               width = NA, height = NA, depth = NA,
+                               filename = tempfile(fileext = ".obj"), subdivide=3) {
     assert_suggested("rgl")
     cfg <- as_pp_cfg(cfg)
     piece <- get_piece(piece_side)
@@ -226,12 +228,13 @@ save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1, cfg 
 
 #' @rdname obj_fns
 #' @export
-save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1, cfg = pp_cfg(),
-                               ...,
-                               x = 0, y = 0, z = 0,
-                               angle = 0, axis_x = 0, axis_y = 0,
-                               width = NA, height = NA, depth = NA,
-                               filename = tempfile(fileext = ".obj"), res = 72) {
+save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
+                              cfg = getOption("piecepackr.cfg", pp_cfg()),
+                              ...,
+                              x = 0, y = 0, z = 0,
+                              angle = 0, axis_x = 0, axis_y = 0,
+                              width = NA, height = NA, depth = NA,
+                              filename = tempfile(fileext = ".obj"), res = 72) {
 
     assert_suggested("rgl")
     cfg <- as_pp_cfg(cfg)
@@ -498,7 +501,7 @@ write_die_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
 }
 
 draw_piece_and_bleed <- function(piece_side, suit, rank, cfg) {
-    g <- pieceGrob(piece_side, suit, rank, cfg)
+    g <- pieceGrob(piece_side, suit, rank, cfg, default.units = "npc")
     bleed_color <- cfg$get_piece_opt(piece_side, suit, rank)$bleed_color
     b <- pp_shape()$polyclip(g, "minus", gp=gpar(col=NA, fill=bleed_color))
     grid.draw(b)

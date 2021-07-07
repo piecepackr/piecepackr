@@ -5,7 +5,7 @@
 \title{Save piecepack images}
 \usage{
 save_piece_images(
-  cfg = pp_cfg(),
+  cfg = getOption("piecepackr.cfg", pp_cfg()),
   directory = tempdir(),
   format = "svg",
   angle = 0

@@ -9,7 +9,6 @@ reference:
         - grid.piece
         - piece
         - piece3d
-        - save_piece_obj
     - title: "Data frame processors"
       desc: "Functions that process data frame input"
       contents:
@@ -20,10 +19,11 @@ reference:
       contents:
           - pp_cfg
           - game_systems
-    - title: "Save piecepack images"
-      desc: "Function to save piecepack images either as a print-and-play file or as individual images."
+    - title: "Export pieces"
+      desc: "Functions to export board game pieces as print-and-play files, individual images, or Wavefront OBJ files."
       contents:
           - save_piece_images
+          - save_piece_obj
           - save_print_and_play
     - title: "Developer helper functions"
       desc: "Various exported helper functions intended for developers"
@@ -34,6 +34,10 @@ reference:
           - font_utils
           - pp_utils
           - geometry_utils
+    - title: "Overall package description"
+      desc: "Overall package description including supported package options"
+      contents:
+          - piecepackr-package
     - title: "Deprecated functions"
       desc: "Deprecated functions that may be removed in a future version"
       contents:

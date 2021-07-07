@@ -43,8 +43,11 @@
 #'        pmap_piece(df, cfg=cfg, op_scale=0.5, default.units="in")
 #'   }
 #' @export
-pmap_piece <- function(.l, .f = pieceGrob, ..., cfg=NULL, envir=NULL, trans=NULL,
-                       draw=TRUE, name=NULL, gp=NULL, vp=NULL) {
+pmap_piece <- function(.l, .f = pieceGrob, ...,
+                       cfg = getOption("piecepackr.cfg"),
+                       envir = getOption("piecepackr.envir"),
+                       trans = getOption("piecepackr.trans"),
+                       draw = TRUE, name = NULL, gp = NULL, vp = NULL) {
     ce <- default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
     envir <- ce$envir

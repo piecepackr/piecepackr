@@ -5,7 +5,7 @@
 \title{Save piecepack print-and-play (PnP) file}
 \usage{
 save_print_and_play(
-  cfg = pp_cfg(),
+  cfg = getOption("piecepackr.cfg", pp_cfg()),
   output_filename = "piecepack.pdf",
   size = "letter",
   pieces = c("piecepack", "matchsticks", "pyramids"),
@@ -13,7 +13,7 @@ save_print_and_play(
 )
 }
 \arguments{
-\item{cfg}{Piecepack configuration list}
+\item{cfg}{Piecepack configuration list or \code{pp_cfg} object}
 
 \item{output_filename}{Filename for print-and-play file}
 

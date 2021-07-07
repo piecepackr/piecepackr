@@ -8,9 +8,9 @@
 \usage{
 game_systems(style = NULL, round = FALSE, pawn = "token")
 
-to_hexpack(cfg = pp_cfg())
+to_hexpack(cfg = getOption("piecepackr.cfg", pp_cfg()))
 
-to_subpack(cfg = pp_cfg())
+to_subpack(cfg = getOption("piecepackr.cfg", pp_cfg()))
 }
 \arguments{
 \item{style}{If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.

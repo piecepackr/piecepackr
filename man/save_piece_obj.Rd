@@ -8,7 +8,7 @@ save_piece_obj(
   piece_side = "tile_face",
   suit = 1,
   rank = 1,
-  cfg = pp_cfg(),
+  cfg = getOption("piecepackr.cfg", pp_cfg()),
   ...,
   x = 0,
   y = 0,
@@ -33,7 +33,9 @@ save_piece_obj(
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
+or a character vector referring to names in \code{envir}
+or a character vector referring to object names that
+can be retrieved by \code{base::dynGet()}.}
 
 \item{...}{Ignored.}
 

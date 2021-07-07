@@ -58,7 +58,8 @@ piece_filename <- function(directory, piece_side, format, angle,
 #'     }
 #'   }
 #' @export
-save_piece_images <- function(cfg=pp_cfg(), directory=tempdir(), format="svg", angle=0) {
+save_piece_images <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
+                              directory=tempdir(), format="svg", angle=0) {
     current_dev <- grDevices::dev.cur()
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
 

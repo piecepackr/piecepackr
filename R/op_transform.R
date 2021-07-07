@@ -65,8 +65,12 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #'            op_scale=0.5, default.units="in")
 #'
 #' @export
-op_transform <- function(df, ..., cfg=pp_cfg(), envir=NULL, op_angle=45,
-                         pt_thickness = 0.01, as_top = character(0)) {
+op_transform <- function(df, ...,
+                         cfg=getOption("piecepackr.cfg", pp_cfg()),
+                         envir=getOption("piecepackr.envir"),
+                         op_angle = getOption("piecepackr.op_angle", 45),
+                         pt_thickness = 0.01,
+                         as_top = character(0)) {
     for (ps in as_top) {
         indices <- which(df$piece_side == ps)
         piece <- get_piece(ps)

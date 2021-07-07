@@ -8,9 +8,9 @@ pmap_piece(
   .l,
   .f = pieceGrob,
   ...,
-  cfg = NULL,
-  envir = NULL,
-  trans = NULL,
+  cfg = getOption("piecepackr.cfg"),
+  envir = getOption("piecepackr.envir"),
+  trans = getOption("piecepackr.trans"),
   draw = TRUE,
   name = NULL,
   gp = NULL,
@@ -29,7 +29,9 @@ will be called  with. List names will be used if present.}
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
+or a character vector referring to names in \code{envir}
+or a character vector referring to object names that
+can be retrieved by \code{base::dynGet()}.}
 
 \item{envir}{Environment (or named list) containing configuration list(s).}
 

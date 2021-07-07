@@ -4,9 +4,11 @@
 #' \code{pieceGrob} is its \code{grid} \code{grob} counterpart.
 #'
 #' @param piece_side A string with piece and side separated by a underscore e.g. "coin_face"
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object,
-#'        a list of \code{pp_cfg} objects,
-#'        or a character vector of \code{pp_cfg} objects
+#' @param cfg Piecepack configuration list or `pp_cfg` object,
+#'        a list of `pp_cfg` objects,
+#'        or a character vector referring to names in `envir`
+#'        or a character vector referring to object names that
+#'        can be retrieved by `base::dynGet()`.
 #' @param suit Number of suit (starting from 1).
 #' @param rank Number of rank (starting from 1)
 #' @param x Where to place piece on x axis of viewport
@@ -125,12 +127,14 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
 #' @rdname grid.piece
 #' @export
 pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
-                         cfg=pp_cfg(),
+                         cfg=getOption("piecepackr.cfg", pp_cfg()),
                          x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
                          angle=0, use_pictureGrob=FALSE,
                          width=NA, height=NA, depth=NA,
-                         op_scale=0, op_angle=45,
-                         default.units = "npc", envir=NULL,
+                         op_scale = getOption("piecepackr.op_scale", 0),
+                         op_angle = getOption("piecepackr.op_angle", 45),
+                         default.units = getOption("piecepackr.default.units", "npc"),
+                         envir = getOption("piecepackr.envir"),
                          name=NULL, gp=NULL, vp=NULL, ...,
                          scale=1, alpha=1, type="normal") {
     if (!missing(use_pictureGrob)) {
@@ -217,7 +221,7 @@ get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
         }
     } else {
         if (is.list(cfg)) {
-            if (!("pp_cfg" %in% sapply(cfg, class)))
+            if (!all(sapply(cfg, inherits, "pp_cfg")))
                 cfg <- pp_cfg(cfg)
         } else {
             stop("Don't know how to parse cfg argument") # nocov
@@ -228,14 +232,17 @@ get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
 
 #' @rdname grid.piece
 #' @export
-grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                           angle=0, use_pictureGrob=FALSE,
-                           width=NA, height=NA, depth=NA,
-                           op_scale=0, op_angle=45,
-                           default.units = "npc", envir=NULL,
-                           name=NULL, gp=NULL, draw=TRUE, vp=NULL, ...,
-                           scale=1, alpha=1, type="normal") {
+grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA,
+                       cfg=getOption("piecepackr.cfg", pp_cfg()),
+                       x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
+                       angle=0, use_pictureGrob=FALSE,
+                       width=NA, height=NA, depth=NA,
+                       op_scale = getOption("piecepackr.op_scale", 0),
+                       op_angle = getOption("piecepackr.op_angle", 45),
+                       default.units = getOption("piecepackr.default.units", "npc"),
+                       envir = getOption("piecepackr.envir"),
+                       name=NULL, gp=NULL, draw=TRUE, vp=NULL, ...,
+                       scale=1, alpha=1, type="normal") {
     if (!missing(use_pictureGrob)) {
         .Deprecated(msg = paste("`use_pictureGrob = TRUE` is deprecated.",
                                 'Use `type = "picture"` instead.'))

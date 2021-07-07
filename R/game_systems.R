@@ -67,7 +67,6 @@
 #'             if \code{"peg-doll"} the piecepack pawn will be a \dQuote{peg doll} style pawn, and
 #'             if \code{"joystick"} the piecepack pawn will be a \dQuote{joystick} style pawn.
 #'             Note for the latter two pawn styles only \code{pawn_top} will work with \code{grid.piece}.
-#' @param cfg List of configuration options
 #' @examples
 #'        cfgs <- game_systems()
 #'        names(cfgs)
@@ -502,8 +501,9 @@ joystick_pawn <- function(shapes) {
 }
 
 #' @rdname game_systems
+#' @inheritParams pp_cfg
 #' @export
-to_hexpack <- function(cfg=pp_cfg()) {
+to_hexpack <- function(cfg = getOption("piecepackr.cfg", pp_cfg())) {
     cfg <- as_pp_cfg(cfg)
     hexpack <- as.list(cfg)
     hexpack$shape.tile <- "convex6"
@@ -517,8 +517,9 @@ to_hexpack <- function(cfg=pp_cfg()) {
 }
 
 #' @rdname game_systems
+#' @inheritParams pp_cfg
 #' @export
-to_subpack <- function(cfg=pp_cfg()) {
+to_subpack <- function(cfg = getOption("piecepackr.cfg", pp_cfg())) {
     cfg <- as_pp_cfg(cfg)
     subpack <- as.list(cfg)
     subpack$width.tile <- (3/8)*cfg$get_width("tile")

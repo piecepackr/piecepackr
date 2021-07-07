@@ -90,14 +90,19 @@ test_that("no regressions in figures", {
     # playing cards
     cfg <- game_systems("sans3d")$playing_cards_colored
     expect_doppelganger("ten_of_clubs", function()
-        grid.piece("card_face", suit = 3, rank = 10, cfg = cfg))
+        grid.piece("card_face", suit = 3, rank = 10, cfg = cfg,
+                   default.units = "npc"))
     expect_doppelganger("king_of_stars", function()
-        grid.piece("card_face", suit = 5, rank = 13, cfg = cfg))
+        grid.piece("card_face", suit = 5, rank = 13, cfg = cfg,
+                   default.units = "npc"))
     expect_doppelganger("red_joker", function()
-        grid.piece("card_face", suit = 1, rank = 14, cfg = cfg))
+        grid.piece("card_face", suit = 1, rank = 14, cfg = cfg,
+                   default.units = "npc"))
     cfg <- game_systems("sans3d")$playing_cards_tarot
     expect_doppelganger("black_joker_no_star", function()
-        grid.piece("card_face", suit = 3, rank = 15, cfg = cfg))
+        grid.piece("card_face", suit = 3, rank = 15, cfg = cfg,
+                   default.units = "npc"))
     expect_doppelganger("knight_of_diamonds", function()
-        grid.piece("card_face", suit = 4, rank = 12, cfg = cfg))
+        grid.piece("card_face", suit = 4, rank = 12, cfg = cfg,
+                   default.units = "npc"))
 })

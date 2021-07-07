@@ -32,7 +32,7 @@ gappend <- function(ll, g) {
 #'
 #' Save piecepack print-and-play (PnP) file
 #'
-#' @param cfg Piecepack configuration list
+#' @param cfg Piecepack configuration list or `pp_cfg` object
 #' @param output_filename Filename for print-and-play file
 #' @param size PnP output size (currently either "letter", "A4", or "A5")
 #' @param pieces Character vector of desired PnP pieces.
@@ -54,9 +54,10 @@ gappend <- function(ll, g) {
 #'     }
 #'   }
 #' @export
-save_print_and_play <- function(cfg=pp_cfg(), output_filename="piecepack.pdf", size="letter",
-                     pieces=c("piecepack", "matchsticks", "pyramids"),
-                     arrangement="single-sided") {
+save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
+                                output_filename="piecepack.pdf", size="letter",
+                                pieces=c("piecepack", "matchsticks", "pyramids"),
+                                arrangement="single-sided") {
 
     cfg <- as_pp_cfg(cfg)
     n_suits <- cfg$n_suits

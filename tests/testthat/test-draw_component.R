@@ -103,14 +103,14 @@ test_that("no regressions in figures", {
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
-        grid.piece(..., cfg=cfg)
+        grid.piece(..., cfg=cfg, default.units="npc")
     }
     dce <- function(...) {
         tmpfile <- tempfile(fileext=".svg")
         on.exit(unlink(tmpfile))
         svg(tmpfile)
         on.exit(dev.off())
-        grid.piece(...)
+        grid.piece(..., default.units="npc")
     }
     # tile back
     expect_doppelganger("tile_back", function() dc("tile_back"))
@@ -288,7 +288,7 @@ test_that("oblique projection works", {
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
-        grid.piece(..., cfg=cfg, op_scale=0.5)
+        grid.piece(..., cfg=cfg, op_scale=0.5, default.units="npc")
     }
     expect_doppelganger("tile_face_op", function() dc("tile_face"))
     expect_doppelganger("tile_face_op_roundrect", function() dc("tile_face", cfg=list(shape.tile="roundrect")))

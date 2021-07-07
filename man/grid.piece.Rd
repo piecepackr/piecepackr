@@ -9,7 +9,7 @@ pieceGrob(
   piece_side = "tile_back",
   suit = NA,
   rank = NA,
-  cfg = pp_cfg(),
+  cfg = getOption("piecepackr.cfg", pp_cfg()),
   x = unit(0.5, "npc"),
   y = unit(0.5, "npc"),
   z = NA,
@@ -18,10 +18,10 @@ pieceGrob(
   width = NA,
   height = NA,
   depth = NA,
-  op_scale = 0,
-  op_angle = 45,
-  default.units = "npc",
-  envir = NULL,
+  op_scale = getOption("piecepackr.op_scale", 0),
+  op_angle = getOption("piecepackr.op_angle", 45),
+  default.units = getOption("piecepackr.default.units", "npc"),
+  envir = getOption("piecepackr.envir"),
   name = NULL,
   gp = NULL,
   vp = NULL,
@@ -35,7 +35,7 @@ grid.piece(
   piece_side = "tile_back",
   suit = NA,
   rank = NA,
-  cfg = pp_cfg(),
+  cfg = getOption("piecepackr.cfg", pp_cfg()),
   x = unit(0.5, "npc"),
   y = unit(0.5, "npc"),
   z = NA,
@@ -44,10 +44,10 @@ grid.piece(
   width = NA,
   height = NA,
   depth = NA,
-  op_scale = 0,
-  op_angle = 45,
-  default.units = "npc",
-  envir = NULL,
+  op_scale = getOption("piecepackr.op_scale", 0),
+  op_angle = getOption("piecepackr.op_angle", 45),
+  default.units = getOption("piecepackr.default.units", "npc"),
+  envir = getOption("piecepackr.envir"),
   name = NULL,
   gp = NULL,
   draw = TRUE,
@@ -67,7 +67,9 @@ grid.piece(
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
+or a character vector referring to names in \code{envir}
+or a character vector referring to object names that
+can be retrieved by \code{base::dynGet()}.}
 
 \item{x}{Where to place piece on x axis of viewport}
 

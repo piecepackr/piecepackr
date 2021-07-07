@@ -5,17 +5,25 @@ New features
 ------------
 
 * New function `has_font()` which returns `TRUE` or `FALSE` if it detects a given font is
-  provided by the OS.  Needs either 1) Suggested package `systemfonts` or 
+  provided by the OS.  Needs either 1) Suggested package `{systemfonts}` or 
   2) R compiled with "cairo" support plus system tool `pdffonts` installed.
 * The R6 object returned by `pp_shape()` now has a new `pattern()` method that fills 
   the shape with a specified pattern.  Requires the suggested package `{gridpattern}` (#228).
 * `pieceGrob()` and `grid.piece()` now support a new `type` argument 
   which modifies which type of grid grob is used.  
   Can be either `"normal"` (default), `"picture"`, or `"raster"`.
-  `"picture"` exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
-  `"raster"` exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
+  `"picture"` exports to (temporary) svg and re-imports as a `grImport2::pictureGrob`.
+  `"raster"` exports to (temporary) png and re-imports as a `grid::rasterGrob`.
   The latter two can be useful if drawing pieces really big or small and don't want
   to mess with re-configuring fontsizes and linewidths.
+* Now defaults for the following `piecepackr` function arguments may now be set globally via `base::options()`:
+
+  * `piecepackr.cfg` Sets a new default for the `cfg` argument.
+  * `piecepackr.default.units` Sets a new default for the `default.units` argument.
+  * `piecepackr.envir` Sets a new default for the `envir` argument.
+  * `piecepackr.op_angle` Sets a new default for the `op_angle` argument.
+  * `piecepackr.op_scale` Sets a new default for the `op_scale` argument.
+  * `piecepackr.trans` Sets a new default for the `trans` argument.
 
 Bug fixes and minor improvements
 --------------------------------

@@ -7,9 +7,9 @@
 op_transform(
   df,
   ...,
-  cfg = pp_cfg(),
-  envir = NULL,
-  op_angle = 45,
+  cfg = getOption("piecepackr.cfg", pp_cfg()),
+  envir = getOption("piecepackr.envir"),
+  op_angle = getOption("piecepackr.op_angle", 45),
   pt_thickness = 0.01,
   as_top = character(0)
 )

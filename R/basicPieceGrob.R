@@ -125,12 +125,16 @@ piece_filename_helper <- function(directory, piece_side, format, suit, rank, cfg
 #' @export
 pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     g1 <- pieceGrob("pyramid_face",  suit, rank, cfg, type="picture",
+                    default.units = "npc",
                     y=0.75, width=1.0, height=0.5, angle=180, name="face")
     g2 <- pieceGrob("pyramid_back",  suit, rank, cfg, type="picture",
+                    default.units = "npc",
                     y=0.25, width=1.0, height=0.5, angle=  0, name="back")
     g3 <- pieceGrob("pyramid_left",  suit, rank, cfg, type="picture",
+                    default.units = "npc",
                     x=0.25, width=1.0, height=0.5, angle=-90, name="left")
     g4 <- pieceGrob("pyramid_right", suit, rank, cfg, type="picture",
+                    default.units = "npc",
                     x=0.75, width=1.0, height=0.5, angle= 90, name="right")
     grobTree(g3, g4, g1, g2, cl="pyramid_top")
 }
@@ -164,7 +168,7 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     x_tiles <- c(1, 5, 5, 1, 3, 3)
     y_tiles <- c(5, 5, 3, 3, 5, 3)
     gl[["tiles"]] <- pieceGrob(cs_tiles, suit_tiles, rank_tiles, cfg, x_tiles, y_tiles,
-                   default.units="in", name="tiles")
+                               default.units="in", name="tiles")
 
     cs_coins <- rep(c("coin_face", "coin_back"), each=3)
     suit_coins <- c(rep(NA, 3), 4:2)
@@ -175,19 +179,19 @@ previewLayoutGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     if (cfg$n_suits > 5) suit_coins[6] <- 6
 
     gl[["coins"]] <- pieceGrob(cs_coins, suit_coins, rank_coins, cfg, x_coins, y_coins,
-                   default.units="in", name="coins")
+                               default.units="in", name="coins")
 
     gl[["saucers"]] <- pieceGrob(c("saucer_face", "saucer_back"), c(1, NA), NA, cfg,
-                   t_width+1.5*d_width, 0.5*t_width + c(0.5, -0.5)*s_width,
-                   default.units="in", name="saucers")
+                                 t_width+1.5*d_width, 0.5*t_width + c(0.5, -0.5)*s_width,
+                                 default.units="in", name="saucers")
 
     gl[["pawns"]] <- pieceGrob(c("pawn_face", "pawn_back"), 2, NA, cfg,
-                   t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height,
-                   angle=c(0, 180), default.units="in", name="pawns")
+                               t_width+3*d_width, 0.5*t_width + c(0.5, -0.5)*p_height,
+                               angle=c(0, 180), default.units="in", name="pawns")
 
     gl[["suitrankdie"]] <- pieceGrob("suitrankdie_layoutRF", NA, NA, cfg,
-                   preview_width-2*d_width, 0.5*t_width,
-                   default.units="in", name="suitrankdie")
+                                     preview_width-2*d_width, 0.5*t_width,
+                                     default.units="in", name="suitrankdie")
 
     gTree(children=gl, cl="preview_layout")
 }
@@ -250,8 +254,9 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE,
     gl <- gList()
     for (ii in 1:6) {
         gl[[ii]] <- pieceGrob("die_face", rs$suit[ii], rs$rank[ii], cfg,
-                            x=x[ii], y=y_die_layout[ii],
-                            width=1/4, height=1/3, angle=angle[ii])
+                              x=x[ii], y=y_die_layout[ii],
+                              default.units = "npc",
+                              width=1/4, height=1/3, angle=angle[ii])
     }
     gTree(children=gl, name="die_layout")
 }
@@ -268,7 +273,8 @@ suitdieGrob <- function(cfg, flip=FALSE) {
     gl <- gList()
     for (ii in 1:6) {
         vp <- viewport(x=x[ii], y=y_die_layout[ii], angle=angle[ii])
-        gl[[ii]] <- pieceGrob("suitdie_face", suit[ii], NA, cfg, vp=vp)
+        gl[[ii]] <- pieceGrob("suitdie_face", suit[ii], NA, cfg,
+                              default.units = "npc", vp=vp)
     }
     gTree(children=gl, name="suitdie_layout")
 }
@@ -293,9 +299,11 @@ pawnLayoutGrob <- function(piece_side, suit, rank, cfg) {
         yf <- 0.5*ph / denominator
         height <- ph / denominator
         gl[[1]] <- pieceGrob("pawn_face", suit, NA, cfg,
-                             y=1/2-yf, height=height, name="pawn_face")
+                             y=1/2-yf, height=height,
+                             default.units = "npc", name="pawn_face")
         gl[[2]] <- pieceGrob("pawn_back", suit, NA, cfg,
-                             y=1/2+yf, height=height, angle=180, name="pawn_back")
+                             y=1/2+yf, height=height, angle=180,
+                             default.units = "npc", name="pawn_back")
     })
     opt <- cfg$get_piece_opt("pawn_face", suit, 0)
     gp <- gpar(col=opt$border_color, fill=NA)

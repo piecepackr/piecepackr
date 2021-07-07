@@ -60,7 +60,7 @@ test_that("pp_shape() works as expected", {
     })
     expect_doppelganger("polyclip.circle", function() {
         circle <- pp_shape("circle")
-        g <- pieceGrob("coin_face", op_scale=1)
+        g <- pieceGrob("coin_face", op_scale=1, default.units="npc")
         grid.draw(circle$polyclip(g, "minus", gp=gpar(fill="blue")))
     })
     skip_if_not_installed("gridpattern")
