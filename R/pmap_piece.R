@@ -1,29 +1,30 @@
 #' Create graphics using data frame input
 #'
-#' \code{pmap_piece} operates on the rows of a data frame
-#'     applying \code{.f} to each row (usually \code{grid.piece}).
+#' `pmap_piece()` operates on the rows of a data frame
+#'     applying `.f` to each row (usually `grid.piece`).
 #'
-#' \code{pmap_piece} differs from \code{purrr::pmap} in a few ways
+#' `pmap_piece()` differs from `purrr::pmap()` in a few ways:
 #' \enumerate{
-#'    \item{If \code{cfg} and/or \code{envir} are missing attempts to set reasonable defaults.}
-#'    \item{If not \code{NULL} will first apply function \code{trans} to \code{.l}.}
-#'    \item{If the output of \code{.f} is a grid grob object then \code{pmap_piece}
-#'          will return a \code{gTree} object with
-#'          specified \code{name}, \code{gp}, and \code{vp} values and if \code{draw} is true draw it.}
-#'    \item{If \code{.l} lacks a \code{name} column or if \code{name} column is non-unique
-#'          attempts to generate a reasonable new default \code{name} column
-#'          and use that to name the return \code{gTree} children  or \code{list} values.}
+#'    \item{If `cfg` and/or `envir` are missing attempts to set reasonable defaults.}
+#'    \item{If not `NULL` will first apply function `trans` to `.l`.}
+#'    \item{If the output of `.f` is a grid grob object then `pmap_piece`
+#'          will return a `gTree` object with
+#'          specified `name`, `gp`, and `vp` values and if `draw` is true draw it.}
+#'    \item{If `.l` lacks a `name` column or if `name` column is non-unique
+#'          attempts to generate a reasonable new default `name` column
+#'          and use that to name the return `gTree` children  or `list` values.}
 #'  }
 #' @inheritParams grid.piece
-#' @param .l A list of vectors, such as a data frame. The length of \code{.l}
-#'           determines the number of arguments that \code{.f}
+#' @param .l A list of vectors, such as a data frame. The length of `.l`
+#'           determines the number of arguments that `.f`
 #'           will be called  with. List names will be used if present.
-#' @param .f Function to be applied to \code{.l} after adjustments to
-#'        \code{cfg} and \code{envir} and the application of \code{trans}.
-#' @param trans Function to modify \code{.l} before drawing.
-#'        Default (\code{NULL}) is to not modify \code{.l}.  \code{op_transform}
-#'        can help with using an oblique projection (i.e. \code{op_scale} over 0).
-#' @param ... Extra arguments to pass to \code{.f}.
+#' @param .f Function to be applied to `.l` after adjustments to
+#'        `cfg` and `envir` and the application of `trans`.
+#'        Usually [grid.piece()], [pieceGrob()], [piece3d()], or [piece()].
+#' @param trans Function to modify `.l` before drawing.
+#'        Default (`NULL`) is to not modify `.l`.  `op_transform`
+#'        can help with using an oblique projection (i.e. `op_scale` over 0).
+#' @param ... Extra arguments to pass to `.f`.
 #' @examples
 #'   if (require("grid")) {
 #'        dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
@@ -42,6 +43,7 @@
 #'        df <- rbind(df_tiles, df_coins)
 #'        pmap_piece(df, cfg=cfg, op_scale=0.5, default.units="in")
 #'   }
+#' @seealso [render_piece()] is a higher-level function that wraps this function.
 #' @export
 pmap_piece <- function(.l, .f = pieceGrob, ...,
                        cfg = getOption("piecepackr.cfg"),

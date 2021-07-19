@@ -23,7 +23,8 @@ determines the number of arguments that \code{.f}
 will be called  with. List names will be used if present.}
 
 \item{.f}{Function to be applied to \code{.l} after adjustments to
-\code{cfg} and \code{envir} and the application of \code{trans}.}
+\code{cfg} and \code{envir} and the application of \code{trans}.
+Usually \code{\link[=grid.piece]{grid.piece()}}, \code{\link[=pieceGrob]{pieceGrob()}}, \code{\link[=piece3d]{piece3d()}}, or \code{\link[=piece]{piece()}}.}
 
 \item{...}{Extra arguments to pass to \code{.f}.}
 
@@ -48,11 +49,11 @@ can help with using an oblique projection (i.e. \code{op_scale} over 0).}
 \item{vp}{A \code{grid} viewport object (or \code{NULL}).}
 }
 \description{
-\code{pmap_piece} operates on the rows of a data frame
+\code{pmap_piece()} operates on the rows of a data frame
 applying \code{.f} to each row (usually \code{grid.piece}).
 }
 \details{
-\code{pmap_piece} differs from \code{purrr::pmap} in a few ways
+\code{pmap_piece()} differs from \code{purrr::pmap()} in a few ways:
 \enumerate{
 \item{If \code{cfg} and/or \code{envir} are missing attempts to set reasonable defaults.}
 \item{If not \code{NULL} will first apply function \code{trans} to \code{.l}.}
@@ -82,4 +83,7 @@ and use that to name the return \code{gTree} children  or \code{list} values.}
        df <- rbind(df_tiles, df_coins)
        pmap_piece(df, cfg=cfg, op_scale=0.5, default.units="in")
   }
+}
+\seealso{
+\code{\link[=render_piece]{render_piece()}} is a higher-level function that wraps this function.
 }

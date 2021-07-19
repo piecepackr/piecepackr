@@ -70,9 +70,9 @@ Checkers
     pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
 
 .. figure:: man/figures/README-breakthrough-1.png
-    :alt: Starting position for Dan Troyka's abstract game "Breakthrough"
+    :alt: Starting position for Dan Troyka's abstract game &quot;Breakthrough&quot;
 
-    Starting position for Dan Troyka's abstract game "Breakthrough"
+    Starting position for Dan Troyka's abstract game &quot;Breakthrough&quot;
 
 Traditional 6-sided dice
 ~~~~~~~~~~~~~~~~~~~~~~~~

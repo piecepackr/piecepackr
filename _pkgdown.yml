@@ -3,7 +3,7 @@ url: "https://trevorldavis.com/R/piecepackr"
 development:
     mode: auto
 reference:
-    - title: "Drawing functions"
+    - title: "Low-level graphics functions"
       desc: "Functions for directly creating board game graphics via various graphic systems"
       contents:
         - grid.piece
@@ -13,32 +13,34 @@ reference:
       desc: "Functions that process data frame input"
       contents:
         - pmap_piece
+        - render_piece
         - op_transform
+        - aabb_piece
     - title: "Configuration list creators"
       desc: "Functions that create configuration list objects that customize appearance of board game components"
       contents:
-          - pp_cfg
-          - game_systems
+        - pp_cfg
+        - game_systems
     - title: "Export pieces"
       desc: "Functions to export board game pieces as print-and-play files, individual images, or Wavefront OBJ files."
       contents:
-          - save_piece_images
-          - save_piece_obj
-          - save_print_and_play
+        - save_piece_images
+        - save_piece_obj
+        - save_print_and_play
     - title: "Developer helper functions"
-      desc: "Various exported helper functions intended for developers"
+      desc: "Various helper functions intended for developers"
       contents:
-          - pp_shape
-          - basicPieceGrobs
-          - save_ellipsoid_obj
-          - font_utils
-          - pp_utils
-          - geometry_utils
+        - pp_shape
+        - basicPieceGrobs
+        - save_ellipsoid_obj
+        - font_utils
+        - pp_utils
+        - geometry_utils
     - title: "Overall package description"
       desc: "Overall package description including supported package options"
       contents:
-          - piecepackr-package
+        - piecepackr-package
     - title: "Deprecated functions"
       desc: "Deprecated functions that may be removed in a future version"
       contents:
-          - piecepackr-deprecated
+        - piecepackr-deprecated

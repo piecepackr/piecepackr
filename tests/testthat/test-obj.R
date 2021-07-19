@@ -50,7 +50,7 @@ test_that("rayrender works", {
     skip_if_not_installed("rayrender")
     library("rayrender")
     scene <- piece("coin_face", x=-1:1, rank=1:3, cfg = cfg)
-    f <- tempfile(fileext = ".png")
+    f <- tempfile(fileext = ".jpeg")
     png(f)
     render_scene(scene, samples = 1)
     dev.off()

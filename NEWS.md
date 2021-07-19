@@ -4,6 +4,11 @@ piecepackr 1.8.0
 New features
 ------------
 
+* `render_piece()` renders an image of game pieces to a file or graphics device.
+  It is a wrapper around `pmap_piece()` that can auto-size files and graphic devices,
+  apply axes offsets, annotate coordinates, and set up `rayrender` scenes.
+* New function `aabb_piece()` which calculates axis-aligned bounding box (AABB) for set of game pieces
+  with and without an "oblique projection".
 * New function `has_font()` which returns `TRUE` or `FALSE` if it detects a given font is
   provided by the OS.  Needs either 1) Suggested package `{systemfonts}` or 
   2) R compiled with "cairo" support plus system tool `pdffonts` installed.

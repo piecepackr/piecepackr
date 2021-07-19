@@ -6,10 +6,9 @@ COMPONENT_AND_SIDES <- c("tile_back", "tile_face", "coin_back", "coin_face",
            "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right", "pyramid_top",
            "matchstick_face", "matchstick_back")
 
-pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, rank=1,
-                      width=NULL, height=NULL, res=72) {
+piece_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, rank=1,
+                         width=NULL, height=NULL, res=72) {
     cfg <- as_pp_cfg(cfg)
-    format <- tools::file_ext(filename)
     width <- width %||% cfg$get_width(piece_side, suit, rank)
     height <- height %||% cfg$get_height(piece_side, suit, rank)
     if (angle %in% c(90, 270)) {
@@ -17,7 +16,12 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, ra
         height <- width
         width <- twidth
     }
-    bg <- "transparent"
+    pp_device(filename, width, height, res, bg = "transparent")
+    pushViewport(viewport(angle=angle, name="main"))
+}
+
+pp_device <- function(filename, width, height, res=72, bg="transparent") {
+    format <- tools::file_ext(filename)
     switch(format,
            bmp = grDevices::bmp(filename, width, height, "in", res=res, bg=bg),
            jpeg = grDevices::jpeg(filename, width, height, "in", res=res, bg=bg),
@@ -28,7 +32,6 @@ pp_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, ra
            svg = grDevices::svg(filename, width, height, bg=bg),
            svgz = grDevices::svg(filename, width, height, bg=bg),
            tiff = grDevices::tiff(filename, width, height, "in", res=res, bg=bg))
-    pushViewport(viewport(angle=angle, name="main"))
 }
 
 piece_filename <- function(directory, piece_side, format, angle,
@@ -99,14 +102,14 @@ make_images_helper <- function(directory, cfg, format, angle) {
     suppressWarnings({
         for (cs in lacks_rank_lacks_suit) {
             f <- piece_filename(directory, cs, format, angle)
-            pp_device(f, cs, cfg, angle)
+            piece_device(f, cs, cfg, angle)
             grid.piece(cs, NA, NA, cfg)
             pp_dev_off(f, format)
         }
         for (cs in lacks_rank_has_suit) {
             for (suit in 1:cfg$n_suits) {
                 f <- piece_filename(directory, cs, format, angle, suit)
-                pp_device(f, cs, cfg, angle)
+                piece_device(f, cs, cfg, angle)
                 grid.piece(cs, suit, NA, cfg)
                 pp_dev_off(f, format)
             }
@@ -114,7 +117,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
         for (cs in has_rank_lacks_suit) {
             for (rank in 1:cfg$n_ranks) {
                 f <- piece_filename(directory, cs, format, angle, rank=rank)
-                pp_device(f, cs, cfg, angle)
+                piece_device(f, cs, cfg, angle)
                 grid.piece(cs, NA, rank, cfg)
                 pp_dev_off(f, format)
             }
@@ -123,7 +126,7 @@ make_images_helper <- function(directory, cfg, format, angle) {
             for (suit in 1:cfg$n_suits) {
                 for (rank in 1:cfg$n_ranks) {
                     f <- piece_filename(directory, cs, format, angle, suit, rank)
-                    pp_device(f, cs, cfg, angle, rank=rank)
+                    piece_device(f, cs, cfg, angle, rank=rank)
                     grid.piece(cs, suit, rank, cfg)
                     pp_dev_off(f, format)
                 }
