@@ -1,4 +1,4 @@
-#' Draw board game pieces using grid
+#' Draw board game pieces with grid
 #'
 #' \code{grid.piece} draws board game pieces onto the graphics device.
 #' \code{pieceGrob} is its \code{grid} \code{grob} counterpart.

@@ -4,9 +4,19 @@ piecepackr 1.8.0
 New features
 ------------
 
-* `render_piece()` renders an image of game pieces to a file or graphics device.
+* New function `render_piece()` renders an image of game pieces to a file or graphics device.
   It is a wrapper around `pmap_piece()` that can auto-size files and graphic devices,
-  apply axes offsets, annotate coordinates, and set up `rayrender` scenes.
+  apply axes offsets, annotate coordinates, and set up `rayrender` scenes (#245).
+* New function `geom_piece()` provides `{ggplot2}` bindings (#209).
+
+  * Helper function `aes_piece()` helps create an appropriate matching `ggplot2::aes()` "mapping".
+  * `geom_piece()` requires a fixed scale coordinate system with an aspect ratio of 1
+    as provided by `ggplot2::coord_fixed()`.
+  * `geom_piece()` also requires that `cfg` is a character vector (and not a `pp_cfg()` object).
+    In particular if using `op_transform()` one should set its argument `cfg_class = "character"`
+    if intending for use with `geom_piece()`.
+  * Requires Suggested package `{ggplot2}`.
+
 * New function `aabb_piece()` which calculates axis-aligned bounding box (AABB) for set of game pieces
   with and without an "oblique projection".
 * New function `has_font()` which returns `TRUE` or `FALSE` if it detects a given font is

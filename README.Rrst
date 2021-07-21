@@ -21,6 +21,8 @@ piecepackr: Board Game Graphics
 
 .. _piecepack: http://www.ludism.org/ppwiki/HomePage
 
+.. _ggplot2: https://ggplot2.tidyverse.org/
+
 .. _grid: https://www.rdocumentation.org/packages/grid
 
 .. _rayrender: https://www.rayrender.net/
@@ -43,7 +45,7 @@ piecepackr: Board Game Graphics
 knitr::opts_chunk$set(fig.path = "man/figures/README-")
 .. ..
 
-``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
+``piecepackr`` is an R_ package designed to make configurable board game graphics.  It can be used with the ggplot2_, grid_, rayrender_, and rgl_ graphics packages to make board game diagrams, board game animations, and custom `Print & Play layouts`_.    By default it is configured to make piecepack_ game diagrams, animations, and "Print & Play" layouts but can be configured to make graphics for other board game systems as well.
 
 Built-in Game Systems
 ---------------------
@@ -152,10 +154,10 @@ Configurations for the proprietary Looney Pyramids aka Icehouse Pieces game syst
 API Intro
 ---------
 
-grid.piece
-~~~~~~~~~~
+grid.piece() ({grid})
+~~~~~~~~~~~~~~~~~~~~~
 
-``grid.piece`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
+``grid.piece()`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
 
 .. {r intro1, fig.width=5, fig.height=5, fig.cap="Piecepack diagram with default configuration"}
 library("piecepackr")
@@ -254,20 +256,20 @@ g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
 g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
 .. ..
 
-save_print_and_play and save_piece_images
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+save_print_and_play() and save_piece_images()
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-``save_print_and_play`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images`` makes individual images of each piecepack component:
+``save_print_and_play()`` makes a "Print & Play" pdf of a configured piecepack, ``save_piece_images()`` makes individual images of each piecepack component:
 
 .. code:: r
 
    save_print_and_play(cfg, "my_piecepack.pdf", size="letter")
    save_piece_images(cfg)
 
-pmap_piece
-~~~~~~~~~~
+pmap_piece()
+~~~~~~~~~~~~
 
-If you are comfortable using R data frames there is also ``pmap_piece`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
+If you are comfortable using R data frames there is also ``pmap_piece()`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform()`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
 
 .. {r pmap, fig.width=5, fig.height=5, fig.cap="'pmap_piece' lets you use data frames as input"}
 library("dplyr", warn.conflicts=FALSE)
@@ -281,24 +283,44 @@ cfg <- game_systems("dejavu")$piecepack
 pmap_piece(df, cfg=cfg, default.units="in", trans=op_transform, op_scale=0.5, op_angle=135)
 .. ..
 
-piece3d (rgl)
-~~~~~~~~~~~~~
+geom_piece() ({ggplot2})
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-``piece3d`` draws pieces using ``rgl`` graphics.
+``geom_piece()`` creates ggplot2_ "geom" objects.
+
+.. {r ggplot2, fig.width=8, fig.height=6, fig.caption="geom_piece() provides a {ggplot2} binding"}
+library("ggplot2")
+library("ppgames") # remotes::install_github("piecepackr/ppgames")
+library("withr")
+new <- list(piecepackr.cfg = "piecepack",
+            piecepackr.envir = game_systems("dejavu", pawn="joystick"),
+            piecepackr.op_angle = 90,
+            piecepackr.op_scale = 0.80)
+dfc <- ppgames::df_fujisan(seed = 42)
+withr::with_options(new, {
+    dft <- op_transform(dfc, as_top = "pawn_face", cfg_class = "character")
+    ggplot(dft, aes_piece(dft)) + geom_piece() + coord_fixed() + theme_void()
+})
+.. ..
+
+piece3d() ({rgl})
+~~~~~~~~~~~~~~~~~
+
+``piece3d()`` draws pieces using rgl_ graphics.
 
 .. {r rgl}
-library("ppgames") # remotes::install_github("piecepackr/ppgames")
+library("piecenikr") # remotes::install_github("piecepackr/piecenikr")
 library("rgl")
 invisible(rgl::open3d())
-rgl::view3d(phi=-30, zoom = 0.8)
+rgl::view3d(phi=-45, zoom = 0.9)
 
-df <- ppgames::df_four_field_kono()
-envir <- game_systems("dejavu3d")
+df <- piecenikr::df_martian_chess()
+envir <- c(piecenikr::looney_pyramids(), game_systems("sans3d"))
 pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
 .. ..
 .. {r rgl_save, echo=FALSE}
 if (Sys.which("wmctrl") != "") system("wmctrl -r RGL -e 0,-1,-1,600,600") 
-Sys.sleep(2)
+Sys.sleep(3)
 rgl.snapshot("man/figures/README-rgl_snapshot.png", top = FALSE)
 .. ..
 
@@ -307,10 +329,10 @@ rgl.snapshot("man/figures/README-rgl_snapshot.png", top = FALSE)
 
     3D render with rgl package
 
-piece (rayrender)
-~~~~~~~~~~~~~~~~~
+piece() ({rayrender})
+~~~~~~~~~~~~~~~~~~~~~
 
-``piece`` creates ``rayrender`` objects.
+``piece()`` creates rayrender_ objects.
 
 .. {r rayrender, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.caption="3D render with rayrender package"}
 library("ppgames") # remotes::install_github("piecepackr/ppgames")

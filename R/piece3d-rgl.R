@@ -1,4 +1,4 @@
-#' Draw board game pieces using rgl
+#' Render board game pieces with rgl
 #'
 #' \code{piece3d} draws board games pieces using the rgl package.
 #' @inheritParams grid.piece

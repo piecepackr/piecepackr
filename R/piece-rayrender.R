@@ -1,4 +1,4 @@
-#' Create rayrender objects
+#' Render board game pieces with rayrender
 #'
 #' \code{piece} creates 3d board game piece objects for use with the rayrender package.
 #' @inheritParams piece3d

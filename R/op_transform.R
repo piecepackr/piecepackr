@@ -55,6 +55,10 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #'                  placed on top of a larger ranked pyramid (top).
 #' @param as_top Character vector of components whose \dQuote{side}
 #'               should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.
+#' @param cfg_class Either `"list"` (default) or `"character"`.
+#'                  Desired class of the `cfg` column in the returned tibble.
+#'                  `"list"` is more efficient for use with `pmap_piece()` but
+#'                  `geom_piece()` needs `"character"`.
 #' @return A tibble with extra columns added
 #'         and re-sorted rows
 #' @examples
@@ -70,26 +74,43 @@ op_transform <- function(df, ...,
                          envir=getOption("piecepackr.envir"),
                          op_angle = getOption("piecepackr.op_angle", 45),
                          pt_thickness = 0.01,
-                         as_top = character(0)) {
+                         as_top = character(0),
+                         cfg_class = "list") {
     for (ps in as_top) {
         indices <- which(df$piece_side == ps)
         piece <- get_piece(ps)
         df$piece_side[indices] <- gsub(ps, paste0(piece, "_top"), df$piece_side[indices])
     }
-    df <- add_3d_info(df, cfg = cfg, envir = envir, pt_thickness = pt_thickness)
+    df <- add_3d_info(df, cfg = cfg, envir = envir, pt_thickness = pt_thickness, cfg_class = cfg_class)
     df <- op_sort(df, op_angle = op_angle)
     df
 }
 
-add_3d_info <- function(df, ..., cfg=pp_cfg(), envir=NULL, pt_thickness = 0.01) {
+add_3d_info <- function(df, ..., cfg=pp_cfg(), envir=NULL, pt_thickness = 0.01, cfg_class = "list") {
     # Do more stuff if units aren't in inches?
+    if (cfg_class == "character")
+        cfg_character <- get_cfg_character(df, cfg)
     df <- add_cfg(df, cfg, envir)
     df <- add_measurements(df)
     df <- add_bounding_box(df)
     df <- add_z(df, pt_thickness = pt_thickness)
     df <- add_field(df, "zt", df$z + 0.5*df$depth)
     df <- add_field(df, "zb", df$z - 0.5*df$depth)
+    if (cfg_class == "character")
+        df$cfg <- cfg_character
     df
+}
+
+get_cfg_character <- function(df, cfg) {
+    if (hasName(df, "cfg")) {
+        df$cfg
+    } else if (is.null(cfg)) {
+        rep_len("piecepack", nrow(df))
+    } else if (is.character(cfg)) {
+        rep_len(cfg, nrow(df))
+    } else {
+        stop("Can't compute \"character\" `cfg_class`")
+    }
 }
 
 op_sort <- function(df, ..., op_angle=45) {

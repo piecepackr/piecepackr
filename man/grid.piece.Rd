@@ -3,7 +3,7 @@
 \name{grid.piece}
 \alias{grid.piece}
 \alias{pieceGrob}
-\title{Draw board game pieces using grid}
+\title{Draw board game pieces with grid}
 \usage{
 pieceGrob(
   piece_side = "tile_back",

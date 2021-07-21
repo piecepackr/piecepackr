@@ -11,7 +11,8 @@ op_transform(
   envir = getOption("piecepackr.envir"),
   op_angle = getOption("piecepackr.op_angle", 45),
   pt_thickness = 0.01,
-  as_top = character(0)
+  as_top = character(0),
+  cfg_class = "list"
 )
 }
 \arguments{
@@ -33,6 +34,11 @@ placed on top of a larger ranked pyramid (top).}
 
 \item{as_top}{Character vector of components whose \dQuote{side}
 should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.}
+
+\item{cfg_class}{Either \code{"list"} (default) or \code{"character"}.
+Desired class of the \code{cfg} column in the returned tibble.
+\code{"list"} is more efficient for use with \code{pmap_piece()} but
+\code{geom_piece()} needs \code{"character"}.}
 }
 \value{
 A tibble with extra columns added

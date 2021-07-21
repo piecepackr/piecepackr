@@ -2,7 +2,7 @@
 % Please edit documentation in R/piece3d-rgl.R
 \name{piece3d}
 \alias{piece3d}
-\title{Draw board game pieces using rgl}
+\title{Render board game pieces with rgl}
 \usage{
 piece3d(
   piece_side = "tile_back",

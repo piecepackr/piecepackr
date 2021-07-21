@@ -2,7 +2,7 @@
 % Please edit documentation in R/piece-rayrender.R
 \name{piece}
 \alias{piece}
-\title{Create rayrender objects}
+\title{Render board game pieces with rayrender}
 \usage{
 piece(
   piece_side = "tile_back",
