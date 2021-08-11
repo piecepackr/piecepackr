@@ -181,4 +181,3 @@ annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0, annota
         grid.text(n, x = 0.25, y = y_coords + yoffset, default.units = "in", gp = gp)
         invisible(NULL)
 }
-

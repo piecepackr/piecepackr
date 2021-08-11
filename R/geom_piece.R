@@ -171,6 +171,8 @@ makeContext.geom_piece_grob <- function(x) {
     x
 }
 
+# nolint start
+# CoordPiece <- ggplot2::ggproto(
 #   "CoordPiece",
 #   ggplot2::CoordFixed
 # )
@@ -182,7 +184,8 @@ makeContext.geom_piece_grob <- function(x) {
 #     clip = clip
 #   )
 # }
-# coord_piece() ?algebraic
+# coord_piece() algebraic?
+# nolint end
 
 gg_to_in <- function(df, scale) {
     df$x <- convertX(unit(df$x, "npc"), "in", valueOnly = TRUE)

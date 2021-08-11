@@ -2,13 +2,16 @@
 % Please edit documentation in R/piecepackr-package.R
 \docType{package}
 \name{piecepackr-package}
-\alias{piecepackr}
 \alias{piecepackr-package}
+\alias{piecepackr}
 \title{piecepackr: Board Game Graphics}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
-
-Functions to make board game graphics.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can make graphics for other board game systems.  Includes configurations for several public domain game systems.
+Functions to make board game graphics.
+Specializes in game diagrams, animations, and "Print & Play" layouts
+for the 'piecepack' \url{https://www.ludism.org/ppwiki} but can make
+graphics for other board game systems.
+Includes configurations for several public domain game systems.
 }
 \section{Package options}{
 
@@ -26,20 +29,9 @@ The following piecepackr function arguments may be set globally via \code{\link[
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://trevorldavis.com/piecepackr/ (blog)}
-  \item \url{https://trevorldavis.com/R/piecepackr (pkgdown)}
-  \item \url{https://groups.google.com/forum/#!forum/piecepackr (forum)}
-  \item Report bugs at \url{https://github.com/piecepackr/piecepackr/issues}
+\item blog: \url{https://trevorldavis.com/piecepackr/}
+\item pkgdown: \url{https://trevorldavis.com/R/piecepackr/}
+\item forum: \url{https://groups.google.com/forum/#!forum/piecepackr}
+\item Report bugs: \url{https://github.com/piecepackr/piecepackr/issues}
 }
-
 }
-\author{
-\strong{Maintainer}: Trevor L Davis \email{trevor.l.davis@gmail.com}
-
-Other contributors:
-\itemize{
-  \item Delapouite <https://delapouite.com/> (Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>) [data contributor]
-}
-
-}
-\keyword{internal}
