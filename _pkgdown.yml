@@ -9,6 +9,7 @@ reference:
         - grid.piece
         - geom_piece
         - piece
+        - piece_mesh
         - piece3d
     - title: "Data frame processors"
       desc: "Functions that process data frame input"

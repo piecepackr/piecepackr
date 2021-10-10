@@ -116,7 +116,7 @@ styles <- c(paste(c("ps", "dm"),
             "coin_arrangement", "die_arrangement",
             "width", "height", "depth",
             "grob_fn", "op_grob_fn", "shadow_fn",
-            "obj_fn", "rayrender_fn", "rgl_fn",
+            "obj_fn", "rayrender_fn", "rayvertex_fn", "rgl_fn",
             "lacks_rank", "lacks_suit",
             "title", "description", "credit", "copyright")
 is_legit_style <- function(style) {

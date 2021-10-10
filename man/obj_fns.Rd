@@ -91,7 +91,8 @@ in a \code{pp_cfg()} \dQuote{configuration list}.
 with a \dQuote{pawn belt} around it's waste from that suit's and rank's \code{belt_face}.
 }
 \seealso{
-See \code{\link{pp_cfg}} for a discussion of \dQuote{configuration lists}.
-Wavefront OBJ file generators are used by \code{\link{save_piece_obj}} and (by default)
-\code{\link{piece3d}} (\code{rgl} wrapper) and \code{\link{piece}} (\code{rayrender} wrapper).
+See \code{\link[=pp_cfg]{pp_cfg()}} for a discussion of \dQuote{configuration lists}.
+Wavefront OBJ file generators are used by \code{\link[=save_piece_obj]{save_piece_obj()}} and (by default)
+\code{\link[=piece3d]{piece3d()}} (\code{rgl} wrapper), \code{\link[=piece]{piece()}} (\code{rayrender} wrapper),
+and \code{\link[=piece_mesh]{piece_mesh()}} (\code{rayvertex} wrapper).
 }

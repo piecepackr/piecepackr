@@ -65,3 +65,24 @@ test_that("rayrender works", {
     expect_equal(nrow(scene), 9)
     # render_scene(scene, samples = 1, lookfrom=c(0, -5, 5)) # nolint
 })
+
+test_that("rayvertex works", {
+    skip_on_cran()
+    skip_if_not_installed("rayvertex")
+    library("rayvertex")
+    scene <- piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg)
+    f <- tempfile(fileext = ".png")
+    png(f)
+    rasterize_scene(scene, light_info = directional_light(c(0, 0, 1)))
+    dev.off()
+    expect_true(file.exists(f))
+    unlink(f)
+
+    expect_null(piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
+
+    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    skip_if_not_installed("rgl") # needed to generate joystick pawn obj
+    scene <- piece_mesh("pawn_top", x=-1:1, suit=c(1,3,4), cfg = cfg)
+    # rasterize_scene(scene, lookfrom=c(0, -5, 5),
+    #                 light_info = directional_light(c(0, -5, 5))) # nolint
+})
