@@ -1,11 +1,12 @@
 piecepackr 1.9.0
 ================
 
-* New piece_mesh() function that creates {rayvertex} objects (#247).
+* New `piece_mesh()` function that creates `{rayvertex}` objects (#247).
 
-  * Requires suggested package {rayvertex}.
-  * Can further customize how piece_mesh() creates {rayvertex} object
-    by setting {rayvertex_fn} in pp_cfg() configuration list.
+  * Requires suggested package `{rayvertex}`.
+  * Can further customize how piece_mesh() creates `{rayvertex}` object
+    by setting `rayvertex_fn` in `pp_cfg()` configuration list.
+  * `piece_mesh` can be used as the `.f` argument in `render_piece()` (#255)
 
 piecepackr 1.8.1
 ================

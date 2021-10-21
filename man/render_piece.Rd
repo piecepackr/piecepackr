@@ -73,7 +73,7 @@ An invisible list of the dimensions of the image, as a side effect saves a graph
 \description{
 \code{render_piece()} renders an image of game pieces to a file or graphics device.
 It is a wrapper around \code{pmap_piece()} that can auto-size files and graphic devices,
-apply axes offsets, annotate coordinates, and set up \code{rayrender} scenes.
+apply axes offsets, annotate coordinates, and set up \code{rayrender} / \code{rayvertex} scenes.
 }
 \examples{
  df_board <- data.frame(piece_side = "board_face", suit = 3, rank = 8,
@@ -89,12 +89,11 @@ apply axes offsets, annotate coordinates, and set up \code{rayrender} scenes.
 
  render_piece(df)
  render_piece(df, op_scale = 0.5, trans = op_transform, annotate = "algrebraic")
- \dontrun{ # Takes a while to render
- if (require(rayrender)) {
+ \dontrun{ # May takes a while to render
+ if (require(rayvertex)) {
    envir3d <- game_systems("sans3d")
-   render_piece(df, .f = piece, envir = envir3d,
-                op_scale = 0.5, trans = op_transform,
-                samples = 300, clamp_value = 1)
+   render_piece(df, .f = piece_mesh, envir = envir3d,
+                op_scale = 0.5, trans = op_transform)
  }
  }
 }

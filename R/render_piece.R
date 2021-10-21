@@ -2,13 +2,13 @@
 #'
 #' `render_piece()` renders an image of game pieces to a file or graphics device.
 #' It is a wrapper around `pmap_piece()` that can auto-size files and graphic devices,
-#' apply axes offsets, annotate coordinates, and set up `rayrender` scenes.
+#' apply axes offsets, annotate coordinates, and set up `rayrender` / `rayvertex` scenes.
 #' @inheritParams aabb_piece
 #' @param file Filename to save animation unless `NULL`
 #'             in which case it either uses the current graphics device or opens a new device
 #'             (depending on `new_device` argument).
 #' @param ... Arguments to [pmap_piece()]
-#' @param .f Low level graphics function to use e.g. [grid.piece()], [piece3d()], or [piece()].
+#' @param .f Low level graphics function to use e.g. [grid.piece()], [piece3d()], [piece_mesh()], or [piece()].
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
 #' @param width Width of animation (in inches).  Inferred by default.
@@ -43,12 +43,11 @@
 #'
 #'  render_piece(df)
 #'  render_piece(df, op_scale = 0.5, trans = op_transform, annotate = "algrebraic")
-#'  \dontrun{ # Takes a while to render
-#'  if (require(rayrender)) {
+#'  \dontrun{ # May takes a while to render
+#'  if (require(rayvertex)) {
 #'    envir3d <- game_systems("sans3d")
-#'    render_piece(df, .f = piece, envir = envir3d,
-#'                 op_scale = 0.5, trans = op_transform,
-#'                 samples = 300, clamp_value = 1)
+#'    render_piece(df, .f = piece_mesh, envir = envir3d,
+#'                 op_scale = 0.5, trans = op_transform)
 #'  }
 #'  }
 #' @export
@@ -148,6 +147,29 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
                                     fov = fov, samples = samples,
                                     lookat = lookat, lookfrom = lookfrom, clamp_value = clamp_value,
                                     width = width, height = height)
+        }
+    } else if (identical(.f, piece_mesh)) {
+        assert_suggested("rayvertex")
+        function(df, ..., scale = 1,
+                 fov = 20, lookat = NULL, lookfrom = NULL,
+                 table = NA, light_info = NA) {
+            df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
+            df$x <- df$x + xoffset
+            df$y <- df$y + yoffset
+            l <- pmap_piece(df, piece_mesh, ..., envir = envir)
+            if (all(is.na(table))) {
+                table <- rayvertex::sphere_mesh(c(0, 0, -1e3), radius=1e3,
+                                                material=rayvertex::material_list(diffuse="green"))
+            }
+            if (all(is.na(light_info))) {
+                light_info <- rayvertex::directional_light(c(0.5*width/ppi, -4, max(2.0*m+1, 20)), intensity = 2.5)
+            }
+            scene <- Reduce(rayvertex::add_shape, l, init=table)
+            if (is.null(lookat)) lookat <- c(0.5*width/ppi, 0.5*height/ppi, 0)
+            if (is.null(lookfrom)) lookfrom <- c(0.5*width/ppi, -2.0*m, 2.0*m)
+            rayvertex::rasterize_scene(scene, width = width, height = height,
+                                       fov = fov, lookat = lookat, lookfrom = lookfrom,
+                                       light_info = light_info)
         }
     } else {
         .f
