@@ -34,7 +34,7 @@ in which case it either uses the current graphics device or opens a new device
 
 \item{...}{Arguments to \code{\link[=pmap_piece]{pmap_piece()}}}
 
-\item{.f}{Low level graphics function to use e.g. \code{\link[=grid.piece]{grid.piece()}}, \code{\link[=piece3d]{piece3d()}}, or \code{\link[=piece]{piece()}}.}
+\item{.f}{Low level graphics function to use e.g. \code{\link[=grid.piece]{grid.piece()}}, \code{\link[=piece3d]{piece3d()}}, \code{\link[=piece_mesh]{piece_mesh()}}, or \code{\link[=piece]{piece()}}.}
 
 \item{cfg}{A piecepackr configuration list}
 

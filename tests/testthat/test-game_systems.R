@@ -12,12 +12,12 @@ test_that("no regressions in figures", {
     # dominoes
     envir <- game_systems("dejavu")
     expect_doppelganger("dominoes", function()
-        grid.piece("tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+        grid.piece("tile_face", x=rep(6:1, 3), y=rep(2*3:1, each=6), suit=1:18, rank=1:18+1,
                    cfg = paste0("dominoes_", rep(rev(c("black", "red", "green", "blue", "yellow", "white")), 2)),
                    default.units="in", envir=envir, op_scale=0.5)
         )
     expect_error(xya_pips_cards(11), "Don't know pip pattern for 11 pips")
-    expect_error(xya_pips_dominoes(13), "Don't know pip pattern for 13 pips")
+    expect_error(xya_pips_dominoes(19), "Don't know pip pattern for 19 pips")
     for (i in 0:10) expect_equal(nrow(xya_pips_cards(i)), i)
 
     # checkers

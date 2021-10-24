@@ -49,7 +49,8 @@ Color is controlled by suit and number of rows/columns by rank.
 \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
 In each color scheme the number of pips on the \dQuote{top} of the domino is
-controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
+controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.
+Supports up to double-18 sets.}
 \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
 See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 \item{go}{Go stones and lined boards in six color schemes.

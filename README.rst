@@ -83,10 +83,10 @@ Traditional 6-sided dice
 
 ``game_systems()`` returns a ``dice`` configuration which can make standard 6-sided dice in six colors.
 
-Double-12 dominoes
+Double-18 dominoes
 ~~~~~~~~~~~~~~~~~~
 
-``game_systems()`` returns seven different configurations for double-12 dominoes:
+``game_systems()`` returns seven different configurations for double-18 dominoes:
 
 1) ``dominoes``
 2) ``dominoes_black``
@@ -104,7 +104,7 @@ Double-12 dominoes
     library("tibble")
     envir <- game_systems("dejavu")
     
-    df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+    df_dominoes <- tibble(piece_side = "tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=7:18+1,
                           cfg = paste0("dominoes_", rep(c("black", "red", "green", "blue", "yellow", "white"), 2)))
     df_tiles <- tibble(piece_side = "tile_back", x=5.5, y=c(2,4,6), suit=1:3, rank=1:3, cfg="piecepack")
     df_dice <- tibble(piece_side = "die_face", x=6, y=0.5+1:6, suit=1:6, rank=1:6, cfg="dice")
@@ -115,9 +115,9 @@ Double-12 dominoes
     pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
 
 .. figure:: man/figures/README-dominoes-1.png
-    :alt: Double-12 dominoes and standard dice in a variety of colors
+    :alt: Double-18 dominoes and standard dice in a variety of colors
 
-    Double-12 dominoes and standard dice in a variety of colors
+    Double-18 dominoes and standard dice in a variety of colors
 
 Go
 ~~

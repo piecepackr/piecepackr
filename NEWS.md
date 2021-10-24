@@ -8,6 +8,9 @@ piecepackr 1.9.0
     by setting `rayvertex_fn` in `pp_cfg()` configuration list.
   * `piece_mesh` can be used as the `.f` argument in `render_piece()` (#255)
 
+* Domino configurations returned by `game_systems()` now support up to 
+  double-18 sets (previously supported only up to double-12).
+
 piecepackr 1.8.1
 ================
 

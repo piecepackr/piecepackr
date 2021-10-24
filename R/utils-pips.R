@@ -32,52 +32,75 @@ xya_pips_cards <- function(n_pips) {
            )
 }
 
-xya_pips_dominoes <- function(n_pips) {
+xya_pips_dominoes <- function(n_pips, die = FALSE) {
     if (n_pips == 0) {
         return(tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
     }
+    if (die)
+        high <- 0.75
+    else
+        high <- 0.78
+    low <- 1 - high
     switch(n_pips,
            tibble(x = 0.5, y = 0.5, angle = 0), # 1
-           tibble(x = c(0.25, 0.75), y = c(0.75, 0.25), angle = c(0, 180)), # 2
-           tibble(x = c(0.25, 0.5, 0.75),
-                  y = c(0.75, 0.5, 0.25),
+           tibble(x = c(low, high), y = c(high, low), angle = c(0, 180)), # 2
+           tibble(x = c(low, 0.5, high),
+                  y = c(high, 0.5, low),
                   angle = c(0, 0, 180)), # 3
-           tibble(x = rep(c(0.25, 0.75), 2), # 4
-                  y = rep(c(0.25, 0.75), each=2),
+           tibble(x = rep(c(low, high), 2), # 4
+                  y = rep(c(low, high), each=2),
                   angle = rep(c(180, 0), each=2)),
-           tibble(x = c(rep(c(0.25, 0.75), 2), 0.5), # 5
-                  y = c(rep(c(0.25, 0.75), each=2), 0.5),
+           tibble(x = c(rep(c(low, high), 2), 0.5), # 5
+                  y = c(rep(c(low, high), each=2), 0.5),
                   angle = c(rep(180, 2), rep(0, 3))),
-           tibble(x = rep(c(0.25, 0.75), 3),
-                  y = rep(c(0.25, 0.5, 0.75), each=2), # 6
+           tibble(x = rep(c(low, high), 3),
+                  y = rep(c(low, 0.5, high), each=2), # 6
                   angle = c(rep(180, 2), rep(0, 4))),
-           tibble(x = c(rep(c(0.25, 0.75), 3), 0.5), # 7
-                  y = c(rep(c(0.25, 0.5, 0.75), each=2), 0.50),
+           tibble(x = c(rep(c(low, high), 3), 0.5), # 7
+                  y = c(rep(c(low, 0.5, high), each=2), 0.50),
                   angle = c(rep(180, 2), rep(0, 5))),
-           tibble(x = c(0.5, rep(c(0.25, 0.75), 3), 0.5), # 8
-                  y = c(0.25, rep(c(0.25, 0.5, 0.75), each=2), 0.75),
+           tibble(x = c(0.5, rep(c(low, high), 3), 0.5), # 8
+                  y = c(low, rep(c(low, 0.5, high), each=2), high),
                   angle = c(rep(180, 3), rep(0, 5))),
-           tibble(x = c(rep(c(0.25, 0.5, 0.75), 3)), # 9
-                  y = c(rep(c(0.25, 0.5, 0.75), each=3)),
+           tibble(x = c(rep(c(low, 0.5, high), 3)), # 9
+                  y = c(rep(c(low, 0.5, high), each=3)),
                   angle = c(rep(180, 3), rep(0, 6))),
-           tibble(x = c(0.5, rep(c(0.25, 0.75), 4), 0.5), # 10
+           tibble(x = c(0.5, rep(c(0.20, 0.80), 4), 0.5), # 10
                   y = c(0.2, rep(c(0.2, 0.4, 0.6, 0.8), each=2), 0.8),
                   angle = c(rep(180, 5), rep(0, 5))),
-           tibble(x = c(0.5, rep(c(0.25, 0.75), 4), 0.5, 0.5), # 11
+           tibble(x = c(0.5, rep(c(0.20, 0.80), 4), 0.5, 0.5), # 11
                   y = c(0.2, rep(c(0.2, 0.4, 0.6, 0.8), each=2), 0.5, 0.8),
                   angle = c(rep(180, 5), rep(0, 6))),
-           tibble(x = c(rep(c(0.25, 0.5, 0.75), 4)), # 12
+           tibble(x = c(rep(c(0.20, 0.5, 0.80), 4)), # 12
                   y = c(rep(c(0.2, 0.4, 0.6, 0.8), each=3)),
                   angle = c(rep(180, 6), rep(0, 6))),
+           tibble(x = c(rep(c(0.2, 0.4, 0.6, 0.8), 3), 0.5), # 13
+                  y = c(rep(c(0.2, 0.4, 0.6), each=4), 0.8),
+                  angle = c(rep(180, 8), rep(0, 5))),
+           tibble(x = c(rep(c(0.2, 0.4, 0.6, 0.8), 3), 0.3, 0.7), # 14
+                  y = c(rep(c(0.2, 0.4, 0.6), each=4), 0.8, 0.8),
+                  angle = c(rep(180, 8), rep(0, 6))),
+           tibble(x = c(rep(c(0.2, 0.4, 0.6, 0.8), 3), 0.3, 0.5, 0.7), # 15
+                  y = c(rep(c(0.2, 0.4, 0.6), each=4), 0.8, 0.8, 0.8),
+                  angle = c(rep(180, 8), rep(0, 7))),
+           tibble(x = c(rep(c(0.2, 0.4, 0.6, 0.8), 4)), # 16
+                  y = c(rep(c(0.2, 0.4, 0.6, 0.8), each=4)),
+                  angle = c(rep(180, 8), rep(0, 8))),
+           tibble(x = c(rep(c(0.140, 0.340, 0.660, 0.860), 4), 0.5), # 17
+                  y = c(rep(c(0.2, 0.4, 0.6, 0.8), each=4), 0.5),
+                  angle = c(rep(180, 8), rep(0, 9))),
+           tibble(x = c(rep(c(0.140, 0.340, 0.660, 0.860), 4), 0.5, 0.5), # 18
+                  y = c(rep(c(0.2, 0.4, 0.6, 0.8), each=4), 0.3, 0.7),
+                  angle = c(rep(180, 8), rep(0, 8), 180, 0)),
            stop("Don't know pip pattern for ", n_pips, " pips")
            )
 }
 
 #### make.Content
-cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
-    force(card)
-    force(rank_offset)
+cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text") {
     force(type)
+    force(rank_offset)
+    force(grob_type)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -99,7 +122,7 @@ cardGrobFn <- function(rank_offset = 0, card = TRUE, type = "suit") {
                               hjust = 0.5, vjust = 0.5, name = "suit")
 
         # Pips
-        tfn <- pippedGrobFn(rank_offset, card, type, border = FALSE, mat = FALSE)
+        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
         pip_grob <- tfn(piece_side, suit, rank, cfg)
         pip_grob <- grid::editGrob(pip_grob,
                           vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)), name = "pips")
@@ -236,10 +259,10 @@ faceGrob <- function(opt, label = "", placement = "high") {
 
 #### Support roundrect shape
 #### make.Content
-dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
+dominoGrobFn <- function(rank_offset = 0, type = "domino", grob_type = "circle") {
     force(rank_offset)
-    force(card)
     force(type)
+    force(grob_type)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -248,13 +271,13 @@ dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
         mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
 
         # Top (Rank)
-        tfn <- pippedGrobFn(rank_offset, card, type, border = FALSE, mat = FALSE)
+        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
         top_grob <- tfn("tile_face", rank, rank, cfg)
         top_grob <- grid::editGrob(top_grob,
                           vp=viewport(height = 0.5, y = 0.75, angle = 180), name="top_rank")
 
         # Bottom (Suit)
-        bfn <- pippedGrobFn(rank_offset, card, type, border = FALSE, mat = FALSE)
+        bfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
         bot_grob <- bfn("tile_face", suit, suit, cfg)
         bot_grob <- grid::editGrob(bot_grob,
                           vp=viewport(height = 0.5, y = 0.25), name="bottom_suit")
@@ -270,12 +293,12 @@ dominoGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle") {
     }
 }
 
-pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle",
+pippedGrobFn <- function(rank_offset = 0, type = "die", grob_type = "circle",
                          border = TRUE, mat = TRUE) {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        gTree(opt = opt, n_pips = rank + rank_offset, card = card, type = type, border = border, mat = mat,
+        gTree(opt = opt, n_pips = rank + rank_offset, type = type, grob_type = grob_type, border = border, mat = mat,
               name = NULL, gp = gpar(), vp = NULL, cl = "pipped")
     }
 }
@@ -283,8 +306,10 @@ pippedGrobFn <- function(rank_offset = 0, card = FALSE, type = "circle",
 #' @export
 makeContent.pipped <- function(x) {
     opt <- x$opt
-    if (x$card) {
+    if (x$type == "card") {
         xya <- xya_pips_cards(x$n_pips)
+    } else if (x$type == "die") {
+        xya <- xya_pips_dominoes(x$n_pips, die = TRUE)
     } else {
         xya <- xya_pips_dominoes(x$n_pips)
     }
@@ -302,9 +327,9 @@ makeContent.pipped <- function(x) {
 
     # Pips
     if (nrow(xya) > 0) {
-        if (x$type == "circle") {
+        if (x$grob_type == "circle") {
             gp_pip <- gpar(col=opt$dm_color, fill=opt$dm_color)
-            if (!x$card && x$n_pips > 9) r <- 0.06 else r <- 0.08
+            if (x$type != "card" && x$n_pips > 9) r <- 0.06 else r <- 0.08
             pip_grob <- circleGrob(x=xya$x, y=xya$y, r=r, gp=gp_pip, name="pips")
         } else {
             gp_pip <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,

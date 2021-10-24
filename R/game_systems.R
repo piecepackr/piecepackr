@@ -20,7 +20,8 @@
 #' \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 #'      Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
 #'      In each color scheme the number of pips on the \dQuote{top} of the domino is
-#'      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.}
+#'      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.
+#'      Supports up to double-18 sets.}
 #' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
 #'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 #' \item{go}{Go stones and lined boards in six color schemes.
@@ -169,8 +170,8 @@ dice <- function(color_list, rect_shape) {
                       invert_colors = TRUE,
                       die_arrangement = "opposites_sum_to_5",
                       shape.card = rect_shape,
-                      grob_fn.card = cardGrobFn(type = "circle"),
-                      grob_fn.die = pippedGrobFn(0, FALSE))
+                      grob_fn.card = cardGrobFn(grob_type = "circle"),
+                      grob_fn.die = pippedGrobFn(0, "die"))
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE
@@ -191,7 +192,7 @@ meeples <- function(color_list) {
 dominoes <- function(background_color = "white", suit_color = "black", border_color = "black",
                      rect_shape, mat_width = 0) {
     border_lex <- ifelse(border_color == "black", 4, 0)
-    dominoes <- pp_cfg(list(n_suits = 13, n_ranks = 13,
+    dominoes <- pp_cfg(list(n_suits = 18 + 1, n_ranks = 18 + 1,
                             width.tile = 1,
                             height.tile = 2,
                             depth.tile = 0.25, # 3/8 professional, 1/2 jumbo
@@ -200,13 +201,13 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
                             mat_width = mat_width, mat_color = suit_color,
                             border_color = border_color, border_lex = border_lex,
                             die_arrangement = "opposites_sum_to_5",
-                            grob_fn.die = pippedGrobFn(0, FALSE),
-                            grob_fn.card = cardGrobFn(-1, type = "circle"),
+                            grob_fn.die = pippedGrobFn(0, "die"),
+                            grob_fn.card = cardGrobFn(-1, "card", grob_type = "circle"),
                             gridline_color.tile_back = "transparent",
                             gridline_color.tile_face = suit_color,
                             gridline_lex.tile_face = 6,
                             shape.tile = rect_shape, shape.card = rect_shape,
-                            grob_fn.tile_face = dominoGrobFn(-1, FALSE)
+                            grob_fn.tile_face = dominoGrobFn(-1)
                             ))
     dominoes$has_piecepack <- FALSE
     dominoes$has_dice <- TRUE
