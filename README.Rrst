@@ -117,6 +117,11 @@ Go
 
     3D Multi-player Go diagram
 
+Morris/Merels/Mills Games
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``game_systems()`` returns a ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ boards in a variety of colors.
+
 Piecepack
 ~~~~~~~~~
 

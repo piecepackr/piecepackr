@@ -61,6 +61,11 @@ but perhaps unsatisfactory for 3D diagrams.}
 \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
 See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
 \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
+\item{morris}{Various morris aka mills aka merels games in six colors.
+Color is controlled by suit and \dQuote{size} of morris board
+is controlled by rank e.g. \dQuote{Six men's morris} corresponds to a rank of 6 and
+\dQuote{Nine men's morris} corresponds to a rank of 9.
+Game pieces are represented by stones.}
 \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
 See \url{https://www.ludism.org/ppwiki}.
 Configuration also contains the following piecepack accessories:\describe{

@@ -105,4 +105,31 @@ test_that("no regressions in figures", {
     expect_doppelganger("knight_of_diamonds", function()
         grid.piece("card_face", suit = 4, rank = 12, cfg = cfg,
                    default.units = "npc"))
+
+    # morris
+    cfg <- envir$morris
+    expect_doppelganger("two_morris", function() {
+        grid.piece("board_face", x=4, y=4, suit=3, rank=2, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("three_morris", function() {
+        grid.piece("board_face", x=4, y=4, suit=3, rank=3, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("six_morris", function() {
+        grid.piece("board_face", x=4, y=4, suit=3, rank=6, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("seven_morris", function() {
+        grid.piece("board_face", x=4, y=4, suit=3, rank=7, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("nine_morris", function() {
+        grid.piece("board_face", x=4, y=4, suit=3, rank=9, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
+    })
+    expect_doppelganger("twelve_morris", function() {
+        grid.piece("board_face", x=4, y=4, suit=3, rank=12, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
+    })
 })

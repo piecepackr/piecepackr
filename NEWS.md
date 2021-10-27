@@ -1,6 +1,9 @@
 piecepackr 1.9.0
 ================
 
+New features
+------------
+
 * New `piece_mesh()` function that creates `{rayvertex}` objects (#247).
 
   * Requires suggested package `{rayvertex}`.
@@ -10,6 +13,8 @@ piecepackr 1.9.0
 
 * Domino configurations returned by `game_systems()` now support up to 
   double-18 sets (previously supported only up to double-12).
+* `game_systems()` now returns a new "morris" configuration that can produce 
+  Three/Six/Seven/Nine/Twelve Men's Morris boards in a variety of colors (#250).
 
 piecepackr 1.8.1
 ================
