@@ -81,14 +81,17 @@ See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Acc
 \item{playing_cards, playing_cards_colored, playing_cards_tarot}{
 Poker-sized \code{card} components for various playing card decks:\describe{
 \item{playing_cards}{A traditional deck of playing cards with 4 suits
-and 13 ranks (A, 2-10, J, Q, K) plus a 14th "Joker" rank.}
+and 13 ranks (A, 2-10, J, Q, K) plus a 14th \dQuote{Joker} rank.}
 \item{playing_cards_colored}{Like \code{playing_cards} but with five colored suits:
 red hearts, black spades, green clubs, blue diamonds, and yellow stars.}
 \item{playing_cards_tarot}{A (French Bourgeois) deck of tarot playing cards:
 first four suits are hearts, spades, clubs, and diamonds with
-14 ranks (ace through jack, knight, queen, king) plus a 15th "Joker" rank
-and a fifth "suit" of 22 trump cards (1-21 plus an "excuse").}}}
-\item{playing_cards_expansion}{A piecepack with the standard \verb{French'' playing card suits. See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.\} \\item\{subpack\}\{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack }stackpack'' diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
+14 ranks (ace through jack, knight, queen, king) plus a 15th \dQuote{Joker} rank
+and a fifth "suit" of 22 trump cards (1-21 plus an \dQuote{excuse}).}}}
+\item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
+See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
+\item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
+\dQuote{stackpack} diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
 }
 }
 \examples{

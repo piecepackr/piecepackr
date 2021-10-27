@@ -52,17 +52,17 @@
 #' \item{playing_cards, playing_cards_colored, playing_cards_tarot}{
 #'       Poker-sized \code{card} components for various playing card decks:\describe{
 #'        \item{playing_cards}{A traditional deck of playing cards with 4 suits
-#'            and 13 ranks (A, 2-10, J, Q, K) plus a 14th "Joker" rank.}
+#'            and 13 ranks (A, 2-10, J, Q, K) plus a 14th \dQuote{Joker} rank.}
 #'        \item{playing_cards_colored}{Like \code{playing_cards} but with five colored suits:
 #'            red hearts, black spades, green clubs, blue diamonds, and yellow stars.}
 #'        \item{playing_cards_tarot}{A (French Bourgeois) deck of tarot playing cards:
 #'            first four suits are hearts, spades, clubs, and diamonds with
-#'            14 ranks (ace through jack, knight, queen, king) plus a 15th "Joker" rank
-#'            and a fifth "suit" of 22 trump cards (1-21 plus an "excuse").}}}
-#' \item{playing_cards_expansion}{A piecepack with the standard ``French'' playing card suits.
+#'            14 ranks (ace through jack, knight, queen, king) plus a 15th \dQuote{Joker} rank
+#'            and a fifth "suit" of 22 trump cards (1-21 plus an \dQuote{excuse}).}}}
+#' \item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
 #'                                See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
 #' \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
-#'               ``stackpack'' diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
+#'               \dQuote{stackpack} diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'              If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
