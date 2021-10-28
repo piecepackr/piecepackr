@@ -75,7 +75,7 @@ Deprecated features
 -------------------
 
 The ``use_pictureGrob`` argument of ``pieceGrob()`` and ``grid.piece()`` is now deprecated 
-in favor of the new ``type`` argument.  Use ``type = "picture"` instead of `use_pictureGrob = TRUE`. 
+in favor of the new ``type`` argument.  Use ``type = "picture"`` instead of ``use_pictureGrob = TRUE``. 
 
 piecepackr 1.7.2
 ================
