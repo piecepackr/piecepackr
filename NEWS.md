@@ -1,4 +1,4 @@
-piecepackr 1.9.0
+piecepackr 1.9.1
 ================
 
 New features
@@ -11,10 +11,13 @@ New features
     by setting `rayvertex_fn` in `pp_cfg()` configuration list.
   * `piece_mesh` can be used as the `.f` argument in `render_piece()` (#255)
 
-* Domino configurations returned by `game_systems()` now support up to 
-  double-18 sets (previously supported only up to double-12).
-* `game_systems()` now returns a new "morris" configuration that can produce 
-  Three/Six/Seven/Nine/Twelve Men's Morris boards in a variety of colors (#250).
+* The following enhancements to the configurations returned by `game_systems()`:
+
+  + New "alquerque" configuration that produces board/pieces for Alquerque.
+  + Domino configurations now support up to double-18 sets 
+   (previously supported only up to double-12).
+  + New "morris" configuration that can produce 
+    Three/Six/Seven/Nine/Twelve Men's Morris boards in a variety of colors (#250).
 
 piecepackr 1.8.1
 ================

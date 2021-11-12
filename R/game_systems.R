@@ -6,6 +6,7 @@
 #'      subpack and (piecepack) hexpack \code{pp_cfg} R6 objects respectively given a piecepack configuration.
 #'
 #' Contains the following game systems:\describe{
+#' \item{alquerque}{Boards and pieces in six color schemes for Alquerque}
 #' \item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
 #'       Checkers are represented by a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
 #'       and the \dQuote{back} is a lined board.
@@ -125,7 +126,8 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
     cards <- playing_cards(style, rect_shape)
     packs <- piecepack(style, color_list, rect_shape, pawn)
 
-    list(checkers1 = checkers(1, color_list),
+    list(alquerque = alquerque(1, color_list),
+         checkers1 = checkers(1, color_list),
          checkers2 = checkers(2, color_list),
          chess1 = chess(style, 1, color_list),
          chess2 = chess(style, 2, color_list),
@@ -193,6 +195,24 @@ meeples <- function(color_list) {
     meeples$has_piecepack <- FALSE
     meeples$has_bits <- TRUE
     meeples
+}
+
+alquerque <- function(cell_width = 1, color_list = 1) {
+    alquerque <- list(n_suits = 6, n_ranks = 1,
+                      width.board = 5 * cell_width,
+                      height.board = 5 * cell_width,
+                      grob_fn.board_face = alquerqueBoardGrobFn(),
+                      gridline_color.board_face = cb_suit_colors_pure,
+                      gridline_color.board_back = "transparent",
+                      gridline_lex.board = 4,
+                      suit_color = cb_suit_colors_impure,
+                      background_color = color_list$background_color,
+                      gridline_color.s6.board_face = "grey80")
+    alquerque <- pp_cfg(c(alquerque, go_stone(cell_width / 2), color_list))
+    alquerque$has_piecepack <- FALSE
+    alquerque$has_boards <- TRUE
+    alquerque$has_bits <- TRUE
+    alquerque
 }
 
 morris <- function(cell_width = 1, color_list) {

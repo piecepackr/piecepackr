@@ -77,6 +77,26 @@ cycle_elements <- function(x, n = 1) {
 }
 
 #### make.Content
+alquerqueBoardGrobFn <- function() {
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+
+        gp_line <- gpar(col=NA, fill=opt$gridline_color)
+        inner_grob <- alquerqueInnerGrob(gp=gp_line, name = "lines_and_dots")
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
+
+        grobTree(background_grob, inner_grob, border_grob,
+                 name=piece_side, cl = "alquerque_board")
+
+    }
+}
+
+#### make.Content
 morrisBoardGrobFn <- function(n_pieces = 12) {
     force(n_pieces)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
@@ -109,6 +129,31 @@ morrisBoardGrobFn <- function(n_pieces = 12) {
 
     }
 }
+
+alquerqueInnerGrob <- function(gp = gpar(), name = NULL, diag = TRUE) {
+    w <- 1/64
+    wd <- w / sqrt(2) / 2
+    vlines <- rectGrob(x = c(0, 1, 2, 3, 4) / 4, y = 0.5, width = w, height = 1 + w)
+    hlines <- rectGrob(x = 0.5, y = c(0, 1, 2, 3, 4) / 4, height = w, width = 1 + w)
+    tl_br1 <- polygonGrob(x = c(1 - wd, 1 + wd, 1 + wd, 0 + wd, 0 - wd, 0 - wd, 1 - wd),
+                         y = c(0 - wd, 0 - wd, 0 + wd, 1 + wd, 1 + wd, 1 - wd, 0 - wd))
+    tl_br2 <- polygonGrob(x = c(1/2 - wd, 1/2 + wd, 1/2 + wd, 0 + wd, 0 - wd, 0 - wd, 1/2 - wd),
+                         y = c(0 - wd, 0 - wd, 0 + wd, 1/2 + wd, 1/2 + wd, 1/2 - wd, 0 - wd))
+    tl_br3 <- polygonGrob(x = c(1 - wd, 1 + wd, 1 + wd, 1/2 + wd, 1/2 - wd, 1/2 - wd, 1 - wd),
+                         y = c(1/2 - wd, 1/2 - wd, 1/2 + wd, 1 + wd, 1 + wd, 1 - wd, 1/2 - wd))
+    tr_bl1 <- polygonGrob(x = c(0 + wd, 0 - wd, 0 - wd, 1 - wd, 1 + wd, 1 + wd, 0 + wd),
+                         y = c(0 - wd, 0 - wd, 0 + wd, 1 + wd, 1 + wd, 1 - wd, 0 - wd))
+    tr_bl2 <- polygonGrob(x = c(0 + wd, 0 - wd, 0 - wd, 1/2 - wd, 1/2 + wd, 1/2 + wd, 0 + wd),
+                         y = c(1/2 - wd, 1/2 - wd, 1/2 + wd, 1 + wd, 1 + wd, 1 - wd, 1/2 - wd))
+    tr_bl3 <- polygonGrob(x = c(1/2 + wd, 1/2 - wd, 1/2 - wd, 1 - wd, 1 + wd, 1 + wd, 1/2 + wd),
+                         y = c(0 - wd, 0 - wd, 0 + wd, 1/2 + wd, 1/2 + wd, 1/2 - wd, 0 - wd))
+    dots <- circleGrob(x = rep(0:4, 5) / 4, y = rep(0:4, each = 5) / 4, r = 1.5 * w)
+
+    grobTree(vlines, hlines, tl_br1, tl_br2, tl_br3, tr_bl1, tr_bl2, tr_bl3, dots,
+             name = name, cl = "alquerque_board_inner", gp = gp,
+             vp = viewport(width = 4/5, height = 4/5))
+}
+
 
 morrisBoard3Grob <- function(gp = gpar(), name = NULL, diag = TRUE) {
     w <- 1/64

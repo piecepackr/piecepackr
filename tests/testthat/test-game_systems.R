@@ -132,4 +132,11 @@ test_that("no regressions in figures", {
         grid.piece("board_face", x=4, y=4, suit=3, rank=12, cfg = cfg, default.units = "in")
         grid.piece("bit_back", x=0:5, y=0:5, suit=1:6, cfg = cfg, default.units = "in")
     })
+
+    # alquerque
+    cfg <- envir$alquerque
+    expect_doppelganger("alquerque", function() {
+        grid.piece("board_face", x=3, y=3, suit=3, cfg = cfg, default.units = "in")
+        grid.piece("bit_back", x=1:5, y=1:5, suit=1:5, cfg = cfg, default.units = "in")
+    })
 })

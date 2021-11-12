@@ -35,6 +35,7 @@ subpack and (piecepack) hexpack \code{pp_cfg} R6 objects respectively given a pi
 }
 \details{
 Contains the following game systems:\describe{
+\item{alquerque}{Boards and pieces in six color schemes for Alquerque}
 \item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
 Checkers are represented by a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
 and the \dQuote{back} is a lined board.
