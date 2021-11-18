@@ -560,6 +560,7 @@ joystick_pawn <- function(shapes) {
     joystick <- CompositePiece$new(df_joystick, envir=list(shapes=shapes))
 
     list(grob_fn.pawn = joystick$grob_fn,
+         obj_fn.pawn = joystick$obj_fn,
          op_grob_fn.pawn = joystick$op_grob_fn,
          rayrender_fn.pawn = joystick$rayrender_fn,
          rayvertex_fn.pawn = joystick$rayvertex_fn,

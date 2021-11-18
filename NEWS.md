@@ -1,3 +1,15 @@
+piecepackr 1.9.2
+================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* We now throw a more helpful error message if one uses
+  `save_piece_obj()` on a "joystick" pawn (returned
+  by some `game_systems()` configurations if `pawn = "joystick"`).
+  In general we cannot save Wavefront OBJ files for "composite" pieces
+  such as "joystick" pawns although "peg-doll" pawns are an exception.
+
 piecepackr 1.9.1
 ================
 

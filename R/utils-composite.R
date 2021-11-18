@@ -13,6 +13,12 @@ CompositePiece <- R6Class("pp_composite",
             #### set a different grob?
             pmap_piece(df, suit=suit, envir = private$envir, draw = FALSE)
         },
+        obj_fn = function() function(piece_side, suit, rank, cfg,
+                                     x, y, z, angle, axis_x, axis_y,
+                                     width, height, depth,
+                                     filename, scale, res) {
+            stop("Generally can't save Wavefront OBJ files for 'composite' pieces")
+        },
         op_grob_fn = function() function(piece_side, suit, rank, cfg,
                                          x, y, z, angle, type, width, height, depth,
                                          op_scale, op_angle) {
