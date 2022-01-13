@@ -74,9 +74,9 @@ Checkers
     pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
 
 .. figure:: man/figures/README-breakthrough-1.png
-    :alt: Starting position for Dan Troyka's abstract game &quot;Breakthrough&quot;
+    :alt: Starting position for Dan Troyka's abstract game Breakthrough
 
-    Starting position for Dan Troyka's abstract game &quot;Breakthrough&quot;
+    Starting position for Dan Troyka's abstract game Breakthrough
 
 Traditional 6-sided dice
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -129,11 +129,6 @@ Go
 
     3D Multi-player Go diagram
 
-Morris/Merels/Mills Games
-~~~~~~~~~~~~~~~~~~~~~~~~~
-
-``game_systems()`` returns a ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ boards in a variety of colors.
-
 Piecepack
 ~~~~~~~~~
 
@@ -170,6 +165,13 @@ Playing Cards
     :alt: Playing Cards
 
     Playing Cards
+
+Other traditional abstracts
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* An ``alquereque`` configuration that produces boards/pieces for `Alquerque <https://en.wikipedia.org/wiki/Alquerque>`__ in a variety of colors.
+* A ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ boards in a variety of colors.
+
 
 Looney Pyramids
 ---------------
@@ -354,6 +356,32 @@ geom_piece() ({ggplot2})
     
 
     library("ggplot2")
+    envir <- game_systems("sans")
+    df_board <- tibble(piece_side = "board_face", suit = 3, rank = 12,
+                       x = 4, y = 4)
+    df_b <- tibble(piece_side = "bit_face", suit = 2, rank = 1,
+                   x = c(2, 3, 3, 4, 4), y = c(6, 5, 4, 5, 2))
+    df_w <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+                   x = c(2, 2, 3, 4, 5, 5), y = c(4, 3, 6, 5, 4, 6))
+    df <- rbind(df_board, df_w, df_b)
+    
+    ggplot(df, aes_piece(df)) +
+        geom_piece(cfg = "morris", envir = envir) +
+        coord_fixed() +
+        scale_x_piece(breaks = 1:7, limits = c(0.5, 7.5)) +
+        scale_y_piece(breaks = 1:7, limits = c(0.5, 7.5)) +
+        theme_minimal(32) +
+        theme(panel.grid = element_blank())
+
+.. figure:: man/figures/README-ggplot2_2d-1.png
+    :alt: Twelve men's morris game diagram
+
+    Twelve men's morris game diagram
+
+
+.. sourcecode:: r
+    
+
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("withr")
     new <- list(piecepackr.cfg = "piecepack",
@@ -367,9 +395,9 @@ geom_piece() ({ggplot2})
     })
 
 .. figure:: man/figures/README-ggplot2-1.png
-    :alt: plot of chunk ggplot2
+    :alt: Fuji-san starting diagram in an oblique projection
 
-    plot of chunk ggplot2
+    Fuji-san starting diagram in an oblique projection
 
 piece3d() ({rgl})
 ~~~~~~~~~~~~~~~~~
@@ -418,9 +446,9 @@ piece() ({rayrender})
                             width = 500, height = 500, samples=200, clamp_value=8)
 
 .. figure:: man/figures/README-rayrender-1.png
-    :alt: plot of chunk rayrender
+    :alt: 3D render with rayrender package
 
-    plot of chunk rayrender
+    3D render with rayrender package
 
 piece_mesh ({rayvertex})
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -461,9 +489,9 @@ piece_mesh ({rayvertex})
                                light_info = directional_light(c(5, -7, 7), intensity = 2.5))
 
 .. figure:: man/figures/README-rayvertex-1.png
-    :alt: plot of chunk rayvertex
+    :alt: 3D render with rayvertex package
 
-    plot of chunk rayvertex
+    3D render with rayvertex package
 
 Further documentation
 ~~~~~~~~~~~~~~~~~~~~~
@@ -595,7 +623,7 @@ The default piecepackr configuration should work out on the box on most modern O
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
 
-**Note**  ``piecpackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
+**Note**  ``piecepackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
 
 .. code:: r
 

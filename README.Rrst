@@ -59,7 +59,7 @@ Checkers
 
 ``game_systems()`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
 
-.. {r breakthrough, fig.width=9, fig.height=9, fig.cap='Starting position for Dan Troyka\'s abstract game "Breakthrough"'}
+.. {r breakthrough, fig.width=9, fig.height=9, fig.cap='Starting position for Dan Troyka\'s abstract game Breakthrough'}
 library("piecepackr")
 library("tibble")
 df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
@@ -297,8 +297,27 @@ geom_piece() ({ggplot2})
 
 ``geom_piece()`` creates ggplot2_ "geom" objects.
 
-.. {r ggplot2, fig.width=8, fig.height=6, fig.caption="geom_piece() provides a {ggplot2} binding"}
+.. {r ggplot2_2d, fig.width=6, fig.height=6, fig.cap="Twelve men's morris game diagram"}
 library("ggplot2")
+envir <- game_systems("sans")
+df_board <- tibble(piece_side = "board_face", suit = 3, rank = 12,
+                   x = 4, y = 4)
+df_b <- tibble(piece_side = "bit_face", suit = 2, rank = 1,
+               x = c(2, 3, 3, 4, 4), y = c(6, 5, 4, 5, 2))
+df_w <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+               x = c(2, 2, 3, 4, 5, 5), y = c(4, 3, 6, 5, 4, 6))
+df <- rbind(df_board, df_w, df_b)
+
+ggplot(df, aes_piece(df)) +
+    geom_piece(cfg = "morris", envir = envir) +
+    coord_fixed() +
+    scale_x_piece(breaks = 1:7, limits = c(0.5, 7.5)) +
+    scale_y_piece(breaks = 1:7, limits = c(0.5, 7.5)) +
+    theme_minimal(32) +
+    theme(panel.grid = element_blank())
+.. ..
+
+.. {r ggplot2, fig.width=8, fig.height=6, fig.cap="Fuji-san starting diagram in an oblique projection"}
 library("ppgames") # remotes::install_github("piecepackr/ppgames")
 library("withr")
 new <- list(piecepackr.cfg = "piecepack",
@@ -343,7 +362,7 @@ piece() ({rayrender})
 
 ``piece()`` creates rayrender_ objects.
 
-.. {r rayrender, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.caption="3D render with rayrender package"}
+.. {r rayrender, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.cap="3D render with rayrender package"}
 library("ppgames") # remotes::install_github("piecepackr/ppgames")
 library("magrittr")
 library("rayrender", warn.conflicts = FALSE)
@@ -362,7 +381,7 @@ piece_mesh ({rayvertex})
 
 ``piece_mesh()`` creates rayvertex_ objects.
 
-.. {r rayvertex, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.caption="3D render with rayvertex package"}
+.. {r rayvertex, fig.width=5, fig.height=5, dpi=100, fig.keep='last', fig.cap="3D render with rayvertex package"}
 library("ppgames") # remotes::install_github("piecepackr/ppgames")
 library("rayvertex")
 df <- ppgames::df_international_chess()
@@ -491,7 +510,7 @@ The default piecepackr configuration should work out on the box on most modern O
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
 
-**Note**  ``piecpackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
+**Note**  ``piecepackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
 
 .. code:: r
 
