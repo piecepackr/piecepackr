@@ -4,23 +4,31 @@
 \alias{scale_x_piece}
 \alias{scale_y_piece}
 \alias{label_letter}
-\title{Alternative ggplot2 position scales}
+\alias{label_counting}
+\alias{breaks_counting}
+\title{ggplot2 game diagram scales}
 \usage{
 scale_x_piece(
   ...,
   name = NULL,
-  breaks = positive_integers,
-  minor_breaks = NULL
+  breaks = breaks_counting(),
+  minor_breaks = NULL,
+  labels = label_letter()
 )
 
 scale_y_piece(
   ...,
   name = NULL,
-  breaks = positive_integers,
-  minor_breaks = NULL
+  breaks = breaks_counting(),
+  minor_breaks = NULL,
+  labels = label_counting()
 )
 
 label_letter()
+
+label_counting()
+
+breaks_counting()
 }
 \arguments{
 \item{...}{Passed to \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} or \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}.}
@@ -50,18 +58,32 @@ each major break)
 \item A function that given the limits returns a vector of minor breaks. Also
 accepts rlang \link[rlang:as_function]{lambda} function notation.
 }}
+
+\item{labels}{One of:
+\itemize{
+\item \code{NULL} for no labels
+\item \code{waiver()} for the default labels computed by the
+transformation object
+\item A character vector giving labels (must be same length as \code{breaks})
+\item A function that takes the breaks as input and returns labels
+as output. Also accepts rlang \link[rlang:as_function]{lambda} function
+notation.
+}}
 }
 \value{
-\code{scale_x_piece()} and \code{scale_y_piece()} return ggplot2 scale objecs.
-\code{label_letter()} returns a function suitable for use with a \code{labels} argument.
+\code{scale_x_piece()} and \code{scale_y_piece()} return ggplot2 scale objects.
+\code{label_letter()} and \code{label_counting()} return functions suitable for use with the \code{labels} scale argument.
+\code{breaks_counting()} returns a function suitable for use with the \code{breaks} scale argument.
 }
 \description{
 \code{scale_x_piece()} and \code{scale_y_piece()} are wrappers
 around \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} and
 \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} with "better"
-defaults for use with \code{\link[=geom_piece]{geom_piece()}}.
-\code{label_letter()} labels numbers with letters
+defaults for board game diagrams.
+\code{label_letter()} labels breaks with letters
+and \code{label_counting()} labels breaks with positive integers
 to more easily generate (i.e. chess) algebraic notation coordinates.
+\code{breaks_counting()} generates breaks of just the positive integers within the limits.
 }
 \examples{
 if (require("ggplot2") && require("tibble")) {
@@ -78,9 +100,9 @@ if (require("ggplot2") && require("tibble")) {
   ggplot(df, aes_piece(df)) +
       geom_piece(cfg = "checkers1", envir = envir) +
       coord_fixed() +
-      scale_x_piece(labels = label_letter()) +
+      scale_x_piece() +
       scale_y_piece() +
-      theme_minimal(32) +
+      theme_minimal(28) +
       theme(panel.grid = element_blank())
 }
 }

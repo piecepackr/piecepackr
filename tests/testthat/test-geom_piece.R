@@ -19,7 +19,7 @@ test_that("geom_piece() works as expected", {
     gg <- ggplot(df, aes_piece(df)) +
         geom_piece(cfg = "checkers1", envir = envir) +
         coord_fixed() +
-        scale_x_piece(labels = label_letter()) +
+        scale_x_piece() +
         scale_y_piece() +
         theme_minimal(32) +
         theme(panel.grid = element_blank())

@@ -51,9 +51,9 @@
 #'   ggplot(df, aes_piece(df)) +
 #'       geom_piece(cfg = "checkers1", envir = envir) +
 #'       coord_fixed() +
-#'       scale_x_piece(labels = label_letter()) +
+#'       scale_x_piece() +
 #'       scale_y_piece() +
-#'       theme_minimal(32) +
+#'       theme_minimal(28) +
 #'       theme(panel.grid = element_blank())
 #' }
 #'
@@ -85,14 +85,16 @@ geom_piece <- function(mapping = NULL, data = NULL,
     )
 }
 
-#' Alternative ggplot2 position scales
+#' ggplot2 game diagram scales
 #'
 #' `scale_x_piece()` and `scale_y_piece()` are wrappers
 #' around [ggplot2::scale_x_continuous()] and
 #' [ggplot2::scale_y_continuous()] with "better"
-#' defaults for use with [geom_piece()].
-#' `label_letter()` labels numbers with letters
+#' defaults for board game diagrams.
+#' `label_letter()` labels breaks with letters
+#' and `label_counting()` labels breaks with positive integers
 #' to more easily generate (i.e. chess) algebraic notation coordinates.
+#' `breaks_counting()` generates breaks of just the positive integers within the limits.
 #' @param ... Passed to [ggplot2::scale_x_continuous()] or [ggplot2::scale_y_continuous()].
 #' @inheritParams ggplot2::scale_x_continuous
 #' @examples
@@ -110,43 +112,60 @@ geom_piece <- function(mapping = NULL, data = NULL,
 #'   ggplot(df, aes_piece(df)) +
 #'       geom_piece(cfg = "checkers1", envir = envir) +
 #'       coord_fixed() +
-#'       scale_x_piece(labels = label_letter()) +
+#'       scale_x_piece() +
 #'       scale_y_piece() +
-#'       theme_minimal(32) +
+#'       theme_minimal(28) +
 #'       theme(panel.grid = element_blank())
 #' }
-#' @return `scale_x_piece()` and `scale_y_piece()` return ggplot2 scale objecs.
-#'         `label_letter()` returns a function suitable for use with a `labels` argument.
+#' @return `scale_x_piece()` and `scale_y_piece()` return ggplot2 scale objects.
+#'         `label_letter()` and `label_counting()` return functions suitable for use with the `labels` scale argument.
+#'         `breaks_counting()` returns a function suitable for use with the `breaks` scale argument.
 #' @rdname scale_piece
 #' @export
-scale_x_piece <- function(..., name = NULL, breaks = positive_integers,
-                          minor_breaks = NULL) {
+scale_x_piece <- function(..., name = NULL,
+                          breaks = breaks_counting(),
+                          minor_breaks = NULL,
+                          labels = label_letter()) {
     assert_suggested("ggplot2")
-    ggplot2::scale_x_continuous(..., name = name, breaks = breaks,
-                                minor_breaks = minor_breaks)
+    ggplot2::scale_x_continuous(..., name = name,
+                                breaks = breaks,
+                                minor_breaks = minor_breaks,
+                                labels = labels)
 }
 
 #' @rdname scale_piece
 #' @export
-scale_y_piece <- function(..., name = NULL, breaks = positive_integers,
-                          minor_breaks = NULL) {
+scale_y_piece <- function(..., name = NULL,
+                          breaks = breaks_counting(),
+                          minor_breaks = NULL,
+                          labels = label_counting()) {
     assert_suggested("ggplot2")
-    ggplot2::scale_y_continuous(..., name = name, breaks = breaks,
-                                minor_breaks = minor_breaks)
+    ggplot2::scale_y_continuous(..., name = name,
+                                breaks = breaks,
+                                minor_breaks = minor_breaks,
+                                labels = labels)
 }
 
 #' @rdname scale_piece
 #' @export
 label_letter <- function() {
-    function(breaks) {
-        letters[seq_along(breaks)]
-    }
+    function(x) letters[seq_along(x)]
 }
 
-positive_integers <- function(limits) {
-    seq.int(from = max(1L, ceiling(limits[1])),
-            to = floor(limits[2]),
-            by = 1L)
+#' @rdname scale_piece
+#' @export
+label_counting <- function() {
+    function(x) as.character(seq_along(x))
+}
+
+#' @rdname scale_piece
+#' @export
+breaks_counting <- function() {
+    function(x) {
+        seq.int(from = max(1L, ceiling(x[1])),
+                to = floor(x[2]),
+                by = 1L)
+    }
 }
 
 # GeomPiece is defined in `.onLoad()` in `hooks.R` so {ggplot2} can be Suggests instead of Imports
