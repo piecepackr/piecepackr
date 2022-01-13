@@ -11,6 +11,7 @@ reference:
         - piece
         - piece_mesh
         - piece3d
+        - scale_x_piece
     - title: "Data frame processors"
       desc: "Functions that process data frame input"
       contents:

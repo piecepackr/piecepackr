@@ -1,4 +1,4 @@
-#' Create rayvertex objects
+#' Create rayvertex board game piece objects
 #'
 #' `piece_mesh()` creates 3d board game piece objects for use with the rayvertex package.
 #' @inheritParams piece3d

@@ -1,3 +1,15 @@
+piecepackr 1.10.0
+=================
+
+New features
+------------
+
+* `scale_x_piece()` and `scale_y_piece()` are wrappers around
+  `ggplot2::scale_x_continuous()` and `ggplot2::scale_y_continuous()`
+  with better defaults for board game diagrams.
+  `label_letter()` labels numbers with letters
+  to more easily generate (i.e. chess) algebraic notation coordinates (#252).
+
 piecepackr 1.9.2
 ================
 

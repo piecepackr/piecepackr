@@ -2,7 +2,7 @@
 % Please edit documentation in R/piece_mesh-rayvertex.R
 \name{piece_mesh}
 \alias{piece_mesh}
-\title{Create rayvertex objects}
+\title{Create rayvertex board game piece objects}
 \usage{
 piece_mesh(
   piece_side = "tile_back",

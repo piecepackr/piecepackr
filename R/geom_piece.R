@@ -33,6 +33,9 @@
 #' @inheritParams render_piece
 #' @param  ... Aesthetics, used to set an aesthetic to a fixed value.
 #' @seealso `geom_piece()` is a wrapper around [pieceGrob()].
+#'         [scale_x_piece()] and [scale_y_piece()] are wrappers
+#'         around [ggplot2::scale_x_continuous()] and [ggplot2::scale_y_continuous()]
+#'         with better defaults for board game diagrams.
 #' @examples
 #' if (require("ggplot2") && require("tibble")) {
 #'
@@ -47,7 +50,11 @@
 #'   # `cfg` must be a character vector for `geom_piece()`
 #'   ggplot(df, aes_piece(df)) +
 #'       geom_piece(cfg = "checkers1", envir = envir) +
-#'       coord_fixed() + theme_void()
+#'       coord_fixed() +
+#'       scale_x_piece(labels = label_letter()) +
+#'       scale_y_piece() +
+#'       theme_minimal(32) +
+#'       theme(panel.grid = element_blank())
 #' }
 #'
 #' @export
@@ -76,6 +83,70 @@ geom_piece <- function(mapping = NULL, data = NULL,
             ...
         )
     )
+}
+
+#' Alternative ggplot2 position scales
+#'
+#' `scale_x_piece()` and `scale_y_piece()` are wrappers
+#' around [ggplot2::scale_x_continuous()] and
+#' [ggplot2::scale_y_continuous()] with "better"
+#' defaults for use with [geom_piece()].
+#' `label_letter()` labels numbers with letters
+#' to more easily generate (i.e. chess) algebraic notation coordinates.
+#' @param ... Passed to [ggplot2::scale_x_continuous()] or [ggplot2::scale_y_continuous()].
+#' @inheritParams ggplot2::scale_x_continuous
+#' @examples
+#' if (require("ggplot2") && require("tibble")) {
+#'
+#'   envir <- game_systems("sans")
+#'   df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
+#'                  x = 4.5, y = 4.5)
+#'   df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
+#'                  x = rep(1:8, 2), y = rep(1:2, each=8))
+#'   df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+#'                  x = rep(1:8, 2), y = rep(7:8, each=8))
+#'   df <- rbind(df_board, df_w, df_b)
+#'   # `cfg` must be a character vector for `geom_piece()`
+#'   ggplot(df, aes_piece(df)) +
+#'       geom_piece(cfg = "checkers1", envir = envir) +
+#'       coord_fixed() +
+#'       scale_x_piece(labels = label_letter()) +
+#'       scale_y_piece() +
+#'       theme_minimal(32) +
+#'       theme(panel.grid = element_blank())
+#' }
+#' @return `scale_x_piece()` and `scale_y_piece()` return ggplot2 scale objecs.
+#'         `label_letter()` returns a function suitable for use with a `labels` argument.
+#' @rdname scale_piece
+#' @export
+scale_x_piece <- function(..., name = NULL, breaks = positive_integers,
+                          minor_breaks = NULL) {
+    assert_suggested("ggplot2")
+    ggplot2::scale_x_continuous(..., name = name, breaks = breaks,
+                                minor_breaks = minor_breaks)
+}
+
+#' @rdname scale_piece
+#' @export
+scale_y_piece <- function(..., name = NULL, breaks = positive_integers,
+                          minor_breaks = NULL) {
+    assert_suggested("ggplot2")
+    ggplot2::scale_y_continuous(..., name = name, breaks = breaks,
+                                minor_breaks = minor_breaks)
+}
+
+#' @rdname scale_piece
+#' @export
+label_letter <- function() {
+    function(breaks) {
+        letters[seq_along(breaks)]
+    }
+}
+
+positive_integers <- function(limits) {
+    seq.int(from = max(1L, ceiling(limits[1])),
+            to = floor(limits[2]),
+            by = 1L)
 }
 
 # GeomPiece is defined in `.onLoad()` in `hooks.R` so {ggplot2} can be Suggests instead of Imports
