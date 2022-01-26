@@ -47,6 +47,7 @@
 #'   df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
 #'                  x = rep(1:8, 2), y = rep(7:8, each=8))
 #'   df <- rbind(df_board, df_w, df_b)
+#'   # 2D example
 #'   # `cfg` must be a character vector for `geom_piece()`
 #'   ggplot(df, aes_piece(df)) +
 #'       geom_piece(cfg = "checkers1", envir = envir) +
@@ -55,6 +56,16 @@
 #'       scale_y_piece() +
 #'       theme_minimal(28) +
 #'       theme(panel.grid = element_blank())
+#'
+#'   # 3D "oblique" projection example
+#'   # `cfg_class` must be "character" when using with `geom_piece()`
+#'   df3d <- op_transform(df, cfg = "checkers1", envir = envir,
+#'                        op_angle = 45, cfg_class = "character")
+#'   ggplot(df3d, aes_piece(df3d)) +
+#'       geom_piece(cfg = "checkers1", envir = envir,
+#'                  op_angle = 45, op_scale = 0.5) +
+#'       coord_fixed() +
+#'       theme_void()
 #' }
 #'
 #' @export
@@ -109,7 +120,6 @@ geom_piece <- function(mapping = NULL, data = NULL,
 #'                  x = rep(1:8, 2), y = rep(7:8, each=8))
 #'   df <- rbind(df_board, df_w, df_b)
 #'
-#'   # 2D example
 #'   # `cfg` must be a character vector for `geom_piece()`
 #'   ggplot(df, aes_piece(df)) +
 #'       geom_piece(cfg = "checkers1", envir = envir) +
@@ -118,16 +128,6 @@ geom_piece <- function(mapping = NULL, data = NULL,
 #'       scale_y_piece() +
 #'       theme_minimal(28) +
 #'       theme(panel.grid = element_blank())
-#'
-#'   # 3D "oblique" projection example
-#'   # `cfg_class` must be "character" when using with `geom_piece()`
-#'   df3d <- op_transform(df, cfg = "checkers1", envir = envir,
-#'                        op_angle = 45, cfg_class = "character")
-#'   ggplot(df3d, aes_piece(df3d)) +
-#'       geom_piece(cfg = "checkers1", envir = envir,
-#'                  op_angle = 45, op_scale = 0.5) +
-#'       coord_fixed() +
-#'       theme_void()
 #' }
 #' @return `scale_x_piece()` and `scale_y_piece()` return ggplot2 scale objects.
 #'         `label_letter()` and `label_counting()` return functions suitable for use with the `labels` scale argument.

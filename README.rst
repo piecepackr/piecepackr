@@ -368,8 +368,8 @@ geom_piece() ({ggplot2})
     ggplot(df, aes_piece(df)) +
         geom_piece(cfg = "morris", envir = envir) +
         coord_fixed() +
-        scale_x_piece(breaks = 1:7, limits = c(0.5, 7.5)) +
-        scale_y_piece(breaks = 1:7, limits = c(0.5, 7.5)) +
+        scale_x_piece(limits = c(0.5, 7.5)) +
+        scale_y_piece(limits = c(0.5, 7.5)) +
         theme_minimal(32) +
         theme(panel.grid = element_blank())
 
