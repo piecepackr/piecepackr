@@ -7,9 +7,11 @@
 save_print_and_play(
   cfg = getOption("piecepackr.cfg", pp_cfg()),
   output_filename = "piecepack.pdf",
-  size = "letter",
+  size = c("letter", "A4", "A5"),
   pieces = c("piecepack", "matchsticks", "pyramids"),
-  arrangement = "single-sided"
+  arrangement = "single-sided",
+  dev = NULL,
+  dev.args = list(family = cfg$fontfamily, onefile = TRUE, bg = "white", res = 72)
 )
 }
 \arguments{
@@ -23,6 +25,11 @@ save_print_and_play(
 Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".}
 
 \item{arrangement}{Either "single-sided" or "double-sided".}
+
+\item{dev}{Graphics device function to use.  If \code{NULL} infer a reasonable choice.}
+
+\item{dev.args}{Additional arguments to pass to \code{dev} (besides \code{filename}, \code{width}, and \code{height}).
+Will filter out any names that aren't in \code{formals(dev)}.}
 }
 \description{
 Save piecepack print-and-play (PnP) file

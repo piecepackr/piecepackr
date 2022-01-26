@@ -50,7 +50,6 @@ test_that("save_print_and_play works as expected", {
     save_print_and_play(cfg_large_dice, pdf_deck_filename_a4, "A4", arrangement = "double-sided")
     save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
 
-    expect_error(save_print_and_play(cfg_default, tempfile(), "A6"), "Don't know how to handle paper A6")
     expect_true(file.exists(pdf_deck_filename))
 
     skip_if(!has_gs(), "Doesn't have ghostscript binary")
@@ -60,7 +59,6 @@ test_that("save_print_and_play works as expected", {
     expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
     skip_if(Sys.which("pdfinfo") == "", "Doesn't have pdfinfo binary")
     expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
-
 })
 
 context("save_piece_images works as expected")

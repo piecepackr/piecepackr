@@ -12,6 +12,15 @@ New features
   and `breaks_counting()` generates breaks at the counting numbers
   to more easily generate (i.e. chess) algebraic notation coordinates
   as commonly used in board game diagrams (#252).
+* Improvements to `save_print_and_play()`:
+
+  * Now supports a `dev` argument and `dev.args` argument
+    that allows one to customize which graphic device (and its arguments) is 
+    used to generate the print-and-play files.
+
+  * Now natively supports bitmap file formats "bmp", "jpeg", "png", and "tiff".
+    but `output_filename` will need to have a "C integer format" in the string 
+    (e.g. `"piecepack%02d.png"`) so it can generate multiple "pages".
 
 Bug fixes and minor improvements
 --------------------------------

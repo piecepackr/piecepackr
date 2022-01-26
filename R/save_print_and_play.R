@@ -7,22 +7,6 @@ A4_HEIGHT <- 11.69
 A5W <- 5 # 5.83"
 A5H <- 7.5 # 8.27"
 
-dev_onefile <- function(filename, family, paper) {
-    dev <- switch(tools::file_ext(filename),
-                  pdf = grDevices::cairo_pdf,
-                  ps = grDevices::cairo_ps,
-                  svg = grDevices::svg)
-    if (paper == "letter") {
-        dev(filename, onefile=TRUE, width=LETTER_HEIGHT, height=LETTER_WIDTH, family=family)
-    } else if (paper == "A4") {
-        dev(filename, onefile=TRUE, width=A4_HEIGHT, height=A4_WIDTH, family=family)
-    } else if (paper == "A5") {
-        dev(filename, onefile=TRUE, width=A4_HEIGHT/2, height=A4_WIDTH, family=family)
-    } else {
-        stop(paste("Don't know how to handle paper", paper))
-    }
-}
-
 gappend <- function(ll, g) {
     ll[[length(ll)+1]] <- g
     ll
@@ -38,6 +22,7 @@ gappend <- function(ll, g) {
 #' @param pieces Character vector of desired PnP pieces.
 #'        Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
 #' @param arrangement Either "single-sided" or "double-sided".
+#' @inheritParams render_piece
 #' @examples
 #'   \donttest{
 #'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
@@ -55,11 +40,64 @@ gappend <- function(ll, g) {
 #'   }
 #' @export
 save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
-                                output_filename="piecepack.pdf", size="letter",
+                                output_filename="piecepack.pdf",
+                                size=c("letter", "A4", "A5"),
                                 pieces=c("piecepack", "matchsticks", "pyramids"),
-                                arrangement="single-sided") {
+                                arrangement=c("single-sided", "double-sided"),
+                                dev = NULL,
+                                dev.args = list(family = cfg$fontfamily,
+                                                onefile = TRUE,
+                                                bg = "white",
+                                                res = 72)) {
+
+    stopifnot(is.null(dev) || is.function(dev))
+    size <- match.arg(size)
+    arrangement <- match.arg(arrangement)
+    if ("all" %in% pieces)
+        pieces <- c("piecepack", "pyramids", "matchsticks", "subpack")
 
     cfg <- as_pp_cfg(cfg)
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+    height <- switch(size,
+                    letter = LETTER_WIDTH,
+                    A4 = A4_WIDTH,
+                    A5 = A4_WIDTH)
+    width <- switch(size,
+                    letter = LETTER_HEIGHT,
+                    A4 = A4_HEIGHT,
+                    A5 = A4_HEIGHT / 2)
+
+    if (is.null(dev))
+        dev <- pp_device_fn(output_filename)
+    args <- list(filename = output_filename, width = width, height = height)
+    args <- c(args, dev.args)
+    args <- args[names(args) %in% names(formals(dev))]
+    onefile <- has_onefile(dev, dev.args)
+    if (!onefile && !has_c_integer_format(output_filename))
+        stop(paste("`save_print_and_play()` generates multiple pages.",
+                   'Either `dev` needs to support `onefile` and `isTRUE(dev.args[["onefile"]])`',
+                   "or else `output_filename` needs a C integer format in the string."))
+    do.call(dev, args)
+
+    pl <- print_and_play_paper(cfg, size, pieces, arrangement)
+
+    invisible(grDevices::dev.off())
+
+    if (onefile && tools::file_ext(output_filename) == "pdf" && has_gs()) {
+        add_pdf_metadata(output_filename, cfg, pl)
+    }
+    invisible(NULL)
+}
+
+has_onefile <- function(dev, dev.args) {
+    hasName(formals(dev), "onefile") && isTRUE(dev.args[["onefile"]])
+}
+has_c_integer_format <- function(filename) {
+    grepl("%[[:digit:]]+d", filename)
+}
+
+print_and_play_paper <- function(cfg, size, pieces, arrangement) {
     n_suits <- cfg$n_suits
 
     if (size == "letter") {
@@ -72,12 +110,6 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
         xl <- 0.5
         xr <- 0.5
     }
-    if ("all" %in% pieces)
-        pieces <- c("piecepack", "pyramids", "matchsticks", "subpack")
-
-    current_dev <- grDevices::dev.cur()
-    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
-    dev_onefile(output_filename, cfg$fontfamily, size)
 
     vpl <- viewport(x=xl, width=inch(A5W), height=inch(A5H))
     vpr <- viewport(x=xr, width=inch(A5W), height=inch(A5H))
@@ -192,11 +224,8 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
             draw_a5_page(gl[[ii]], vpr)
         }
     }
-    invisible(grDevices::dev.off())
-    if (tools::file_ext(output_filename) == "pdf" && has_gs()) {
-        add_pdf_metadata(output_filename, cfg, pl)
-    }
-    invisible(NULL)
+
+    pl
 }
 
 a5_vp <- viewport(width=unit(A5W, "in"), height=unit(A5H, "in"))
