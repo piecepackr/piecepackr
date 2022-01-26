@@ -21,17 +21,25 @@ piece_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1,
 }
 
 pp_device <- function(filename, width, height, res=72, bg="transparent") {
+    args <- list(filename = filename, width = width, height = height,
+                 units = "in", res = res, bg = bg)
+    dev_fn <- pp_device_fn(filename)
+    args <- args[names(args) %in% names(formals(dev_fn))]
+    do.call(dev_fn, args)
+}
+
+pp_device_fn <- function(filename) {
     format <- tools::file_ext(filename)
     switch(format,
-           bmp = grDevices::bmp(filename, width, height, "in", res=res, bg=bg),
-           jpeg = grDevices::jpeg(filename, width, height, "in", res=res, bg=bg),
-           jpg = grDevices::jpeg(filename, width, height, "in", res=res, bg=bg),
-           pdf = grDevices::cairo_pdf(filename, width, height, bg=bg),
-           png = grDevices::png(filename, width, height, "in", res=res, bg=bg),
-           ps = grDevices::cairo_ps(filename, width, height, bg=bg),
-           svg = grDevices::svg(filename, width, height, bg=bg),
-           svgz = grDevices::svg(filename, width, height, bg=bg),
-           tiff = grDevices::tiff(filename, width, height, "in", res=res, bg=bg))
+           bmp = grDevices::bmp,
+           jpeg = grDevices::jpeg,
+           jpg = grDevices::jpeg,
+           pdf = grDevices::cairo_pdf,
+           png = grDevices::png,
+           ps = grDevices::cairo_ps,
+           svg = grDevices::svg,
+           svgz = grDevices::svg,
+           tiff = grDevices::tiff)
 }
 
 piece_filename <- function(directory, piece_side, format, angle,

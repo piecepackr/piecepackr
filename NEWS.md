@@ -13,6 +13,11 @@ New features
   to more easily generate (i.e. chess) algebraic notation coordinates
   as commonly used in board game diagrams (#252).
 
+Bug fixes and minor improvements
+--------------------------------
+
+* `render_piece()` should now handle its `dev.args` argument properly.
+
 piecepackr 1.9.2
 ================
 

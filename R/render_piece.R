@@ -78,13 +78,12 @@ render_piece <- function(df, file = NULL, ...,
         if (new_device) grDevices::dev.new(width = width, height = height, noRstudioGD = TRUE)
     } else {
         stopifnot(is.null(dev) || is.function(dev))
-        if (is.null(dev)) {
-            pp_device(file, width, height, res = ppi, bg = bg)
-        } else {
-            args <- list(filename = file, width = width, height = height)
-            n <- which(names(dev.args) %in% formals(dev))
-            do.call(dev, args[n])
-        }
+        if (is.null(dev))
+            dev <- pp_device_fn(file)
+        args <- list(filename = file, width = width, height = height)
+        args <- c(args, dev.args)
+        args <- args[names(args) %in% names(formals(dev))]
+        do.call(dev, args)
     }
     # plot_fn_helper expected width and height in pixels
     width <- ppi * width
