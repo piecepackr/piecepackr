@@ -26,6 +26,8 @@ Bug fixes and minor improvements
 --------------------------------
 
 * `render_piece()` should now handle its `dev.args` argument properly.
+* `pmap_piece()` now simply returns `list()` if its `.l` argument has zero length
+  or number of rows (instead of throwing an error).
 
 piecepackr 1.9.2
 ================

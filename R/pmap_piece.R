@@ -50,6 +50,8 @@ pmap_piece <- function(.l, .f = pieceGrob, ...,
                        envir = getOption("piecepackr.envir"),
                        trans = getOption("piecepackr.trans"),
                        draw = TRUE, name = NULL, gp = NULL, vp = NULL) {
+    if (length(.l) == 0L || (!is.null(nrow(.l)) && nrow(.l) == 0L))
+        return(list())
     ce <- default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
     envir <- ce$envir
