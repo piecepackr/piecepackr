@@ -7,11 +7,12 @@
 save_print_and_play(
   cfg = getOption("piecepackr.cfg", pp_cfg()),
   output_filename = "piecepack.pdf",
-  size = c("letter", "A4", "A5"),
+  size = c("letter", "A4", "A5", "4x6"),
   pieces = c("piecepack", "matchsticks", "pyramids"),
-  arrangement = "single-sided",
+  arrangement = c("single-sided", "double-sided"),
   dev = NULL,
-  dev.args = list(family = cfg$fontfamily, onefile = TRUE, bg = "white", res = 72)
+  dev.args = list(family = cfg$fontfamily, onefile = TRUE, units = "in", bg = "white",
+    res = 72)
 )
 }
 \arguments{
@@ -19,12 +20,13 @@ save_print_and_play(
 
 \item{output_filename}{Filename for print-and-play file}
 
-\item{size}{PnP output size (currently either "letter", "A4", or "A5")}
+\item{size}{PnP output size (currently either "letter", "A4", "A5", or "4x6")}
 
 \item{pieces}{Character vector of desired PnP pieces.
 Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".}
 
-\item{arrangement}{Either "single-sided" or "double-sided".}
+\item{arrangement}{Either "single-sided" or "double-sided".
+Ignored if \code{size = "4x6"}.}
 
 \item{dev}{Graphics device function to use.  If \code{NULL} infer a reasonable choice.}
 

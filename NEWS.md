@@ -12,15 +12,25 @@ New features
   and `breaks_counting()` generates breaks at the counting numbers
   to more easily generate (i.e. chess) algebraic notation coordinates
   as commonly used in board game diagrams (#252).
+
 * Improvements to `save_print_and_play()`:
 
-  * Now supports a `dev` argument and `dev.args` argument
+  + Now supports a `dev` argument and `dev.args` argument
     that allows one to customize which graphic device (and its arguments) is 
     used to generate the print-and-play files.
 
-  * Now natively supports bitmap file formats "bmp", "jpeg", "png", and "tiff".
+  + Now natively supports bitmap file formats "bmp", "jpeg", "png", and "tiff".
     but `output_filename` will need to have a "C integer format" in the string 
     (e.g. `"piecepack%02d.png"`) so it can generate multiple "pages".
+
+  + Now supports `size` "4x6" to create a piecepack print-and-play layout for
+    4x6 (photo print) size documents (#162).
+
+    - Currently only supports `pieces = "piecepack"`.
+      Will throw an error if you try to create 
+      (piecepack) "pyramids", "matchsticks", or "subpack" print-and-play layouts.
+    - For 4x6 photo prints will probably want to use a bitmap file format e.g. set
+      `output_filename = "piecepack%02d.png"`.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -49,10 +59,10 @@ New features
 
 * New `piece_mesh()` function that creates `{rayvertex}` objects (#247).
 
-  * Requires suggested package `{rayvertex}`.
-  * Can further customize how piece_mesh() creates `{rayvertex}` object
+  + Requires suggested package `{rayvertex}`.
+  + Can further customize how piece_mesh() creates `{rayvertex}` object
     by setting `rayvertex_fn` in `pp_cfg()` configuration list.
-  * `piece_mesh` can be used as the `.f` argument in `render_piece()` (#255)
+  + `piece_mesh` can be used as the `.f` argument in `render_piece()` (#255)
 
 * The following enhancements to the configurations returned by `game_systems()`:
 
@@ -73,13 +83,13 @@ New features
   apply axes offsets, annotate coordinates, and set up `rayrender` scenes (#245).
 * New function `geom_piece()` provides `{ggplot2}` bindings (#209).
 
-  * Helper function `aes_piece()` helps create an appropriate matching `ggplot2::aes()` "mapping".
-  * `geom_piece()` requires a fixed scale coordinate system with an aspect ratio of 1
+  + Helper function `aes_piece()` helps create an appropriate matching `ggplot2::aes()` "mapping".
+  + `geom_piece()` requires a fixed scale coordinate system with an aspect ratio of 1
     as provided by `ggplot2::coord_fixed()`.
-  * `geom_piece()` also requires that `cfg` is a character vector (and not a `pp_cfg()` object).
+  + `geom_piece()` also requires that `cfg` is a character vector (and not a `pp_cfg()` object).
     In particular if using `op_transform()` one should set its argument `cfg_class = "character"`
     if intending for use with `geom_piece()`.
-  * Requires Suggested package `{ggplot2}`.
+  + Requires Suggested package `{ggplot2}`.
 
 * New function `aabb_piece()` which calculates axis-aligned bounding box (AABB) for set of game pieces
   with and without an "oblique projection".
@@ -97,12 +107,12 @@ New features
   to mess with re-configuring fontsizes and linewidths.
 * Now defaults for the following `piecepackr` function arguments may now be set globally via `base::options()`:
 
-  * `piecepackr.cfg` Sets a new default for the `cfg` argument.
-  * `piecepackr.default.units` Sets a new default for the `default.units` argument.
-  * `piecepackr.envir` Sets a new default for the `envir` argument.
-  * `piecepackr.op_angle` Sets a new default for the `op_angle` argument.
-  * `piecepackr.op_scale` Sets a new default for the `op_scale` argument.
-  * `piecepackr.trans` Sets a new default for the `trans` argument.
+  + `piecepackr.cfg` Sets a new default for the `cfg` argument.
+  + `piecepackr.default.units` Sets a new default for the `default.units` argument.
+  + `piecepackr.envir` Sets a new default for the `envir` argument.
+  + `piecepackr.op_angle` Sets a new default for the `op_angle` argument.
+  + `piecepackr.op_scale` Sets a new default for the `op_scale` argument.
+  + `piecepackr.trans` Sets a new default for the `trans` argument.
 
 Bug fixes and minor improvements
 --------------------------------

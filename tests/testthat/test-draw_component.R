@@ -38,6 +38,8 @@ test_that("save_print_and_play works as expected", {
     on.exit(unlink(pdf_deck_filename_a5))
     pdf_deck_filename_5s <- file.path(pdf_deck_dir, "piecepack_deck_5s.pdf")
     on.exit(unlink(pdf_deck_filename_5s))
+    pdf_deck_filename_4x6 <- file.path(pdf_deck_dir, "piecepack_deck_4x6.pdf")
+    on.exit(unlink(pdf_deck_filename_4x6))
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
 
     skip_if_not(capabilities("cairo"))
@@ -46,9 +48,12 @@ test_that("save_print_and_play works as expected", {
 
     save_print_and_play(cfg_default, pdf_deck_filename, "letter")
 
+
     cfg_large_dice <- pp_cfg(list(title="default cfg", width.die = 0.7))
     save_print_and_play(cfg_large_dice, pdf_deck_filename_a4, "A4", arrangement = "double-sided")
     save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
+
+    save_print_and_play(cfg_default, pdf_deck_filename_4x6, "4x6", pieces = "piecepack")
 
     expect_true(file.exists(pdf_deck_filename))
 
@@ -56,6 +61,7 @@ test_that("save_print_and_play works as expected", {
     expect_equal(get_n_pages(pdf_deck_filename), 7)
     expect_equal(get_n_pages(pdf_deck_filename_a4), 10)
     expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
+    expect_equal(get_n_pages(pdf_deck_filename_4x6), 12)
     expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
     skip_if(Sys.which("pdfinfo") == "", "Doesn't have pdfinfo binary")
     expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
