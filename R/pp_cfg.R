@@ -472,11 +472,7 @@ Config <- R6Class("pp_cfg",
                    angle = angle, axis_x = axis_x, axis_y = axis_y,
                    width = width, height = height, depth = depth,
                    filename = filename, res = res)
-        },
         # Deprecated public methods
-        get_pictureGrob = function(piece_side, suit, rank) {
-            .Deprecated('pp_cfg()$get_grob(piece_side, suit, rank, type = "picture")')
-            private$get_grob_picture(piece_side, suit, rank)
         }),
     active = list(
         annotation_color = function(value) {

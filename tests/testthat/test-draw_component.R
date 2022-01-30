@@ -5,9 +5,6 @@ test_that("pp_cfg works as expected", {
     expect_true(inherits(cfg_default, "pp_cfg"))
     expect_equal(class(as.list(cfg_default)), "list")
     expect_output(print(cfg_default), "default cfg")
-    skip_if_not(capabilities("cairo"))
-    skip_on_os("mac")
-    expect_warning(cfg_default$get_pictureGrob("tile_back", 1, 1)) # deprecated
 })
 
 test_that("update_names works as expected", {
