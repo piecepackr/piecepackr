@@ -40,6 +40,7 @@
 #'                  This can be replaced by another cache that
 #'                  implements the cache API used by the `cachem` package}
 #'   \item{`cache_grob`}{Whether we should cache (2D) grobs}
+#'   \item{`cache_grob_with_bleed_fn`}{Whether we should cache the grob with bleed functions}
 #'   \item{`cache_piece_opt`}{Whether we should cache piece opt information}
 #'   \item{`cache_op_fn`}{Whether we should cache the oblique projection functions}
 #'   \item{`cache_obj_fn`}{Whether we should cache any 3D rendering functions}
@@ -159,6 +160,21 @@ Config <- R6Class("pp_cfg",
                    normal = private$get_grob_normal(piece_side, suit, rank),
                    picture = private$get_grob_picture(piece_side, suit, rank),
                    raster = to_rasterGrob(self$get_raster(piece_side, suit, rank, ...)))
+        },
+        get_grob_with_bleed = function(piece_side, suit, rank) {
+            rank <- impute_rank(piece_side, rank, self)
+            suit <- impute_suit(piece_side, suit, self)
+            key <- private$opt_cache_key(piece_side, suit, rank, "grob_with_bleed_fn")
+            grob_fn <- self$cache$get(key, key_missing())
+            if (is.key_missing(grob_fn)) {
+                default_grob_fn <- basicGrobWithBleed
+                grob_fn <- get_style_element("grob_with_bleed_fn", piece_side, private$cfg,
+                                             default_grob_fn, suit, rank)
+                if (is.character(grob_fn))
+                    grob_fn <- match.fun(grob_fn)
+                if (self$cache_grob_with_bleed_fn) self$cache$set(key, grob_fn)
+            }
+            grob_fn(piece_side, suit, rank, self)
         },
         get_piece_opt = function(piece_side, suit=NA, rank=NA) {
             if (is.na(rank)) rank <- 1L
@@ -478,6 +494,13 @@ Config <- R6Class("pp_cfg",
                 private$cache_type(value, "cache_grob_bool", "grob$")
             }
         },
+        cache_grob_with_bleed_fn = function(value) {
+            if (missing(value)) {
+                private$cache_grob_with_bleed_fn_bool
+            } else {
+                private$cache_type(value, "cache_grob_with_bleed_fn_bool", "grob_with_bleed_fn$")
+            }
+        },
         cache_obj_fn = function(value) {
             if (missing(value)) {
                 private$cache_obj_fn_bool
@@ -600,9 +623,13 @@ Config <- R6Class("pp_cfg",
             }
         }),
     private = list(cfg = NULL, prefix = NULL,
-                   cache_grob_bool = TRUE, cache_obj_fn_bool = TRUE,
-                   cache_piece_opt_bool = TRUE, cache_op_fn_bool = TRUE,
-                   n_suits_val = NULL, n_ranks_val = NULL,
+                   cache_grob_bool = TRUE,
+                   cache_grob_with_bleed_fn_bool = TRUE,
+                   cache_obj_fn_bool = TRUE,
+                   cache_piece_opt_bool = TRUE,
+                   cache_op_fn_bool = TRUE,
+                   n_suits_val = NULL,
+                   n_ranks_val = NULL,
         get_grob_normal = function(piece_side, suit, rank) {
             rank <- impute_rank(piece_side, rank, self)
             suit <- impute_suit(piece_side, suit, self)

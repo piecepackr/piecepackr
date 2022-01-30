@@ -28,7 +28,8 @@ pieceGrob(
   ...,
   scale = 1,
   alpha = 1,
-  type = "normal"
+  type = "normal",
+  bleed = FALSE
 )
 
 grid.piece(
@@ -55,7 +56,8 @@ grid.piece(
   ...,
   scale = 1,
   alpha = 1,
-  type = "normal"
+  type = "normal",
+  bleed = FALSE
 )
 }
 \arguments{
@@ -81,9 +83,9 @@ can be retrieved by \code{base::dynGet()}.}
 
 \item{use_pictureGrob}{Deprecated argument.  If \code{TRUE} sets \code{type} argument to \code{"picture"}.}
 
-\item{width}{Width of piece}
+\item{width}{Width of piece (plus bleed if \code{bleed} is \code{TRUE})}
 
-\item{height}{Height of piece}
+\item{height}{Height of piece (plus bleed if \code{bleed} is \code{TRUE})}
 
 \item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
 
@@ -102,7 +104,7 @@ and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 
 \item{name}{A character identifier (for grid)}
 
-\item{gp}{An object of class \code{'gpar'}.}
+\item{gp}{An object of class \dQuote{gpar}.}
 
 \item{vp}{A \code{grid} viewport object (or \code{NULL}).}
 
@@ -118,15 +120,19 @@ and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 The latter two can be useful if drawing pieces really big or small and don't want
 to mess with re-configuring fontsizes and linewidths.}
 
+\item{bleed}{Whether to add a \dQuote{bleed} zone around the piece.
+If \code{width} or \code{height} is \code{NA} we will add 1/8 inch bleeds.
+\code{bleed = TRUE} is incompatible with \code{op_scale > 0}.}
+
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 }
 \value{
-A \code{grob} object.  If \code{draw} is \code{TRUE} then as a side effect
-will also draw it to the graphics device.
+A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
+\code{grid.piece()} will also draw it to the graphics device.
 }
 \description{
-\code{grid.piece} draws board game pieces onto the graphics device.
-\code{pieceGrob} is its \code{grid} \code{grob} counterpart.
+\code{grid.piece()} draws board game pieces onto the graphics device.
+\code{pieceGrob()} is its \code{grid} \dQuote{grob} counterpart.
 }
 \examples{
    if (require("grid")) {
@@ -163,9 +169,7 @@ will also draw it to the graphics device.
        cfg <- pp_cfg(c(cfg, cfg3d))
        draw_pp_diagram(cfg=pp_cfg(cfg), op_scale=0.5)
    }
-
 }
 \seealso{
-\code{\link{pmap_piece}} which applies \code{pieceGrob}
-over rows of a data frame.
+\code{\link[=pmap_piece]{pmap_piece()}} which applies \code{pieceGrob()} over rows of a data frame.
 }

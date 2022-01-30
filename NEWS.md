@@ -32,6 +32,20 @@ New features
     - For 4x6 photo prints will probably want to use a bitmap file format e.g. set
       `output_filename = "piecepack%02d.png"`.
 
+* Improvements to support adding a "bleed" zone around pieces:
+
+  * `pieceGrob()` and `grid.piece()` now support a `bleed` argument.
+
+    + If `bleed = TRUE` we add a "bleed" zone around the piece.
+    + `width` and `height` should be the width and height of the piece plus bleed zone.
+      If `width` or `height` is `NA` we will add 1/8 inch bleeds (about 3.18 mm).
+    + `bleed = TRUE` is incompatible with `op_scale > 0`.
+
+  * `pp_cfg()` now supports a `grob_with_bleed_fn` style that can be 
+    used to set a custom function for drawing the piece with bleed.
+    The default `grob_with_bleed_fn` function tries to guess a 
+    good solid bleed color and draws it around the base piece.
+
 Bug fixes and minor improvements
 --------------------------------
 
@@ -400,7 +414,7 @@ Bug fixes and minor improvements
   to ``"rgb"`` avoids a rglWebGL rendering bug (#187).
 * Utility function ``get_shape_grob_fn()`` now has a ``back`` argument to indicate 
   we are drawing the back of the shape and should reflect it across a vertical axis (#218).
-* Some bug fixes and enhancements in the OBJ export for certain shapes (#207, #208, #215).
+* Some bug fixes and enhancements in the Wavefront OBJ export for certain shapes (#207, #208, #215).
 
 piecepackr 1.3.1
 ================

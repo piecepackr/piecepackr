@@ -44,7 +44,7 @@ can help with using an oblique projection (i.e. \code{op_scale} over 0).}
 
 \item{name}{A character identifier (for grid)}
 
-\item{gp}{An object of class \code{'gpar'}.}
+\item{gp}{An object of class \dQuote{gpar}.}
 
 \item{vp}{A \code{grid} viewport object (or \code{NULL}).}
 }

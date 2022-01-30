@@ -115,7 +115,7 @@ styles <- c(paste(c("ps", "dm"),
             "use_suit_as_ace", "fontfamily", "fontface", "cex", "n_ranks", "n_suits",
             "coin_arrangement", "die_arrangement",
             "width", "height", "depth",
-            "grob_fn", "op_grob_fn", "shadow_fn",
+            "grob_fn", "op_grob_fn", "shadow_fn", "grob_with_bleed_fn",
             "obj_fn", "rayrender_fn", "rayvertex_fn", "rgl_fn",
             "lacks_rank", "lacks_suit",
             "title", "description", "credit", "copyright")

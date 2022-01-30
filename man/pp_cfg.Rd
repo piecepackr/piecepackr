@@ -64,6 +64,7 @@ Default is a memory-cache that does not prune.
 This can be replaced by another cache that
 implements the cache API used by the \code{cachem} package}
 \item{\code{cache_grob}}{Whether we should cache (2D) grobs}
+\item{\code{cache_grob_with_bleed_fn}}{Whether we should cache the grob with bleed functions}
 \item{\code{cache_piece_opt}}{Whether we should cache piece opt information}
 \item{\code{cache_op_fn}}{Whether we should cache the oblique projection functions}
 \item{\code{cache_obj_fn}}{Whether we should cache any 3D rendering functions}

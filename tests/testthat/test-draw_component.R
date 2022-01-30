@@ -117,7 +117,7 @@ test_that("no regressions in figures", {
         grid.piece(..., default.units="npc")
     }
     # tile back
-    expect_doppelganger("tile_back", function() dc("tile_back"))
+    expect_doppelganger("tile_back", function() dc("tile_back", bleed=TRUE))
     expect_doppelganger("tile_back_thickgrid", function() dc("tile_back", cfg=list(gridline_lex.tile_back=5)))
     expect_doppelganger("tile_back_thickborder", function() dc("tile_back", cfg=list(border_lex.tile_back=5)))
     expect_doppelganger("tile_back-svg", function() dc("tile_back", type="picture"))
