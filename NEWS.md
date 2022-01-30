@@ -1,6 +1,23 @@
 piecepackr 1.10.0
 =================
 
+Breaking changes
+----------------
+
+The following utility functions which were deprecated in piecepackr v1.5.1 (2020-08-10) 
+in favor of methods provided by `pp_shape()` objects have been removed:
+
+* `checkersGrob(c, s, t, n)`, use `pp_shape(s, t)$checkers(n, gp=gpar(fill=c))` instead.
+* `concaveGrobFn(n, t, r)`, use `pp_shape(paste0("concave", n), t, r)$shape` instead.
+* `convexGrobFn(n, t)`, use `pp_shape(paste0("convex", n), t)$shape` instead.
+* `get_shape_grob_fn(s, t, r, b)`, use `pp_shape(s, t, r, b)$shape` instead.
+* `gridlinesGrob(c, s, t, l, n)`, use `pp_shape(s, t)$gridlines(n, gp=gpar(col=c, lex=l))` instead.
+* `halmaGrob(...)`, use `pp_shape("halma")$shape(...)` instead.
+* `hexlinesGrob(c, s, n)`, use `pp_shape(s)$hexlines(n, gp=gpar(col=c))` instead.
+* `kiteGrob(...)`, use `pp_shape("kite")$shape(...)` instead.
+* `matGrob(c, s, t, mw, n)`, use `pp_shape(s, t)$mat(mw, n, gp=gpar(fill=c))` instead.
+* `pyramidGrob(...)`, use `pp_shape("pyramid")$shape(...)` instead.
+
 New features
 ------------
 

@@ -12,7 +12,6 @@ URL: https://trevorldavis.com/piecepackr/ (blog), https://trevorldavis.com/R/pie
 BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyLoad: yes
 Imports:
-    backports,
     grid,
     gridGeometry,
     grImport2,

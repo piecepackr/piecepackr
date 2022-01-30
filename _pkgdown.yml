@@ -43,7 +43,7 @@ reference:
       desc: "Overall package description including supported package options"
       contents:
         - piecepackr-package
-    - title: "Deprecated functions"
-      desc: "Deprecated functions that may be removed in a future version"
+    - title: "Defunct functions"
+      desc: "Defunct functions that have been removed"
       contents:
-        - piecepackr-deprecated
+        - piecepackr-defunct
