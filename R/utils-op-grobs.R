@@ -8,10 +8,9 @@ basicOpGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
             cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
             grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
 
-            shadow_fn <- cfg$get_shadow_fn(piece_side, suit, rank)
-            edge <- shadow_fn(piece_side, suit, rank, cfg,
-                                x, y, z, angle, width, height, depth,
-                                op_scale, op_angle)
+            edge <- basicShadowGrob(piece_side, suit, rank, cfg,
+                                    x, y, z, angle, width, height, depth,
+                                    op_scale, op_angle)
             edge <- grid::editGrob(edge, name="other_faces")
 
             grobTree(edge, grob, cl="basic_projected_piece")

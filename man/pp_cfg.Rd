@@ -91,8 +91,14 @@ implements the cache API used by the \code{cachem} package}
 \section{Deprecated \code{pp_cfg} R6 Class attributes}{
 \describe{
 \item{\code{cache_shadow}}{Use \code{cache_op_fn} instead}
-\item{\code{get_pictureGrob()}}{Use \code{get_grob(..., type = "picture")} instead}
+\item{\code{get_shadow_fn}}{\code{get_op_grob()} returns complete oblique projection grob}
 \item{\code{i_unsuit}}{Instead add \code{1L} to \code{n_suits}}
+}
+}
+
+\section{Defunct \code{pp_cfg} R6 Class attributes which have been removed}{
+\describe{
+\item{\code{get_pictureGrob()}}{Use \code{get_grob(..., type = "picture")} instead}
 }
 }
 

@@ -25,6 +25,11 @@ Several features that were deprecated in previous versions of piecepackr have be
 
   + ``get_pictureGrob()``, use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
 
+* The following ``pp_cfg()`` "style" which was deprecated in piecepackr v1.3.1 (2020-05-13)
+  has been removed.
+
+  + `shadow_fn`, use `op_grob_fn` to indicate a custom function for drawing in an oblique projection.
+
 New features
 ------------
 
@@ -76,6 +81,13 @@ Bug fixes and minor improvements
 * `render_piece()` should now handle its `dev.args` argument properly.
 * `pmap_piece()` now simply returns `list()` if its `.l` argument has zero length
   or number of rows (instead of throwing an error).
+
+Deprecated features
+-------------------
+
+The following ``pp_cfg()`` R6 class public method has been deprecated:
+
+* ``get_shadow_fn()``, use ``get_op_grob()`` to get complete oblique projection **grob**.
 
 piecepackr 1.9.2
 ================
