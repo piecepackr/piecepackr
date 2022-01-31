@@ -52,24 +52,22 @@ Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{domi
 In each color scheme the number of pips on the \dQuote{top} of the domino is
 controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.
 Supports up to double-18 sets.}
-\item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
-See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 \item{go}{Go stones and lined boards in six color schemes.
 Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
 Color is controlled by suit and number of rows/columns by rank
 Currently the "stones" look like "checkers" which is okay for 2D diagrams
 but perhaps unsatisfactory for 3D diagrams.}
-\item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
-See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
 \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
 \item{morris}{Various morris aka mills aka merels games in six colors.
 Color is controlled by suit and \dQuote{size} of morris board
 is controlled by rank e.g. \dQuote{Six men's morris} corresponds to a rank of 6 and
 \dQuote{Nine men's morris} corresponds to a rank of 9.
 Game pieces are represented by stones.}
-\item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
-See \url{https://www.ludism.org/ppwiki}.
-Configuration also contains the following piecepack accessories:\describe{
+\item{piecepack, dual_piecepacks_expansion, playing_cards_expansion, hexpack, subpack, piecepack_inverted}{
+The piecepack is a public domain game system invented by James "Kyle" Droscha.
+See \url{https://www.ludism.org/ppwiki} for more info about the piecepack and its accessories/expansions.
+\describe{
+\item{piecepack}{A standard piecepack.  The configuration also contains the following piecepack accessories:\describe{
 \item{piecepack dice cards}{An accessory proposed by John Braley.
 See \url{https://www.ludism.org/ppwiki/PiecepackDiceCards}.}
 \item{piecepack matchsticks}{A public domain accessory developed by Dan Burkey.
@@ -77,7 +75,17 @@ See \url{https://www.ludism.org/ppwiki/PiecepackMatchsticks}.}
 \item{piecepack pyramids}{A public domain accessory developed by Tim Schutz.
 See \url{https://www.ludism.org/ppwiki/PiecepackPyramids}.}
 \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
-See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}
+See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}}}
+\item{piecepack_inverted}{The standard piecepack with its color scheme inverted.
+Intended to aid in highlighting special pieces in diagrams.}
+\item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
+See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
+\item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
+See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
+\item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
+See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
+\item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
+\dQuote{stackpack} diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
 }}
 \item{playing_cards, playing_cards_colored, playing_cards_tarot}{
 Poker-sized \code{card} components for various playing card decks:\describe{
@@ -89,10 +97,6 @@ red hearts, black spades, green clubs, blue diamonds, and yellow stars.}
 first four suits are hearts, spades, clubs, and diamonds with
 14 ranks (ace through jack, knight, queen, king) plus a 15th \dQuote{Joker} rank
 and a fifth "suit" of 22 trump cards (1-21 plus an \dQuote{excuse}).}}}
-\item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
-See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
-\item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
-\dQuote{stackpack} diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
 }
 }
 \examples{

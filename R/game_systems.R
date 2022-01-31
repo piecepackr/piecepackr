@@ -23,24 +23,23 @@
 #'      In each color scheme the number of pips on the \dQuote{top} of the domino is
 #'      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.
 #'      Supports up to double-18 sets.}
-#' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
-#'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
 #' \item{go}{Go stones and lined boards in six color schemes.
 #'           Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
 #'           Color is controlled by suit and number of rows/columns by rank
 #'           Currently the "stones" look like "checkers" which is okay for 2D diagrams
 #'           but perhaps unsatisfactory for 3D diagrams.}
-#' \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
-#'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
 #' \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
 #' \item{morris}{Various morris aka mills aka merels games in six colors.
 #'               Color is controlled by suit and \dQuote{size} of morris board
 #'               is controlled by rank e.g. \dQuote{Six men's morris} corresponds to a rank of 6 and
 #'               \dQuote{Nine men's morris} corresponds to a rank of 9.
 #'               Game pieces are represented by stones.}
-#' \item{piecepack}{A public domain game system invented by James "Kyle" Droscha.
-#'   See \url{https://www.ludism.org/ppwiki}.
-#'   Configuration also contains the following piecepack accessories:\describe{
+#' \item{piecepack, dual_piecepacks_expansion, playing_cards_expansion, hexpack, subpack, piecepack_inverted}{
+#'   The piecepack is a public domain game system invented by James "Kyle" Droscha.
+#    There are also several public domain accessories and expansions:
+#'   See \url{https://www.ludism.org/ppwiki} for more info about the piecepack and its accessories/expansions.
+#'   \describe{
+#'   \item{piecepack}{A standard piecepack.  The configuration also contains the following piecepack accessories:\describe{
 #'     \item{piecepack dice cards}{An accessory proposed by John Braley.
 #'                                 See \url{https://www.ludism.org/ppwiki/PiecepackDiceCards}.}
 #'     \item{piecepack matchsticks}{A public domain accessory developed by Dan Burkey.
@@ -48,8 +47,18 @@
 #'     \item{piecepack pyramids}{A public domain accessory developed by Tim Schutz.
 #'                              See \url{https://www.ludism.org/ppwiki/PiecepackPyramids}.}
 #'     \item{piecepack saucers}{A public domain accessory developed by Karol M. Boyle at Mesomorph Games.
-#'              See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}
-#'   }}
+#'              See \url{https://web.archive.org/web/20190719155827/http://www.piecepack.org/Accessories.html}.}}}
+#' \item{piecepack_inverted}{The standard piecepack with its color scheme inverted.
+#'           Intended to aid in highlighting special pieces in diagrams.}
+#' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
+#'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
+#' \item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
+#'                                See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
+#' \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
+#'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
+#' \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
+#'               \dQuote{stackpack} diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
+#'}}
 #' \item{playing_cards, playing_cards_colored, playing_cards_tarot}{
 #'       Poker-sized \code{card} components for various playing card decks:\describe{
 #'        \item{playing_cards}{A traditional deck of playing cards with 4 suits
@@ -60,10 +69,6 @@
 #'            first four suits are hearts, spades, clubs, and diamonds with
 #'            14 ranks (ace through jack, knight, queen, king) plus a 15th \dQuote{Joker} rank
 #'            and a fifth "suit" of 22 trump cards (1-21 plus an \dQuote{excuse}).}}}
-#' \item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
-#'                                See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
-#' \item{subpack}{A mini piecepack.  Designed to be used with the \code{piecepack} to make piecepack
-#'               \dQuote{stackpack} diagrams.  See \url{https://www.ludism.org/ppwiki/StackPack}.}
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'              If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
@@ -145,6 +150,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          meeples = meeples(color_list),
          morris = morris(1, color_list),
          piecepack = packs$base,
+         piecepack_inverted = packs$inverted,
          playing_cards = cards$base,
          playing_cards_colored = cards$color,
          playing_cards_tarot = cards$tarot,
@@ -411,6 +417,7 @@ piecepack <- function(style, color_list, rect_shape, pawn) {
                            rank_text=",a,2,3,4,5",
                            use_suit_as_ace=TRUE,
                            rank_text.pyramid=LETTERS[1:6],
+                           suit_text.saucer_back="", suit_cex.saucer_face = 0.9,
                            suit_cex.pyramid_face=0.5, ps_r.pyramid_face=-0.08,
                            dm_cex.pyramid_face=4.0, dm_text.pyramid_face="|", dm_r.pyramid_face=-0.22,
                            ps_cex.pyramid_left=0.7, ps_r.pyramid_left=-0.00,
@@ -433,16 +440,24 @@ piecepack <- function(style, color_list, rect_shape, pawn) {
                                  width.tile=4/sqrt(3), height.tile=4/sqrt(3),
                                  shape.coin="convex3"))
 
-    dpe_base <- c(invert_colors.suited=TRUE,
-                  mat_color.tile_face="white", mat_width.tile_face=0.05,
-                  border_color.s2.die="grey40", border_color.s2.pawn="grey40")
+    dpe_base <- list(invert_colors.suited=TRUE,
+                     mat_color.tile_face="white", mat_width.tile_face=0.05,
+                     border_color.s2.die="grey40", border_color.s2.pawn="grey40")
 
     dual_piecepacks_expansion <- c(piecepack, dpe_base)
     dual_piecepacks_expansion$suit_text <- pce_suit_text
 
+    pi_base <- c(invert_colors = TRUE,
+                 mat_color.tile="white", mat_width.tile=0.05,
+                 mat_color.coin="white", mat_width.coin=0.07,
+                 mat_color.die ="white", mat_width.die =0.09,
+                 mat_color.pawn="white", mat_width.pawn=0.08)
+    piecepack_inverted <- c(pi_base, piecepack)
+
     list(base = pp_cfg(piecepack),
          dpe = pp_cfg(dual_piecepacks_expansion),
          hex = to_hexpack(piecepack),
+         inverted = pp_cfg(piecepack_inverted),
          pce = pp_cfg(playing_cards_expansion),
          subpack = to_subpack(piecepack))
 }

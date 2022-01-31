@@ -4,10 +4,9 @@ piecepackr 1.10.0
 Breaking changes
 ----------------
 
-Several features that were deprecated in previous versions of piecepackr have been removed:
+Several features that were deprecated in 2020 have been removed:
 
-* The following utility functions which were deprecated in piecepackr v1.5.1 (2020-08-10) 
-  in favor of methods provided by `pp_shape()` objects have been removed:
+* The following utility functions have been removed:
   
   + `checkersGrob(c, s, t, n)`, use `pp_shape(s, t)$checkers(n, gp=gpar(fill=c))` instead.
   + `concaveGrobFn(n, t, r)`, use `pp_shape(paste0("concave", n), t, r)$shape` instead.
@@ -20,13 +19,11 @@ Several features that were deprecated in previous versions of piecepackr have be
   + `matGrob(c, s, t, mw, n)`, use `pp_shape(s, t)$mat(mw, n, gp=gpar(fill=c))` instead.
   + `pyramidGrob(...)`, use `pp_shape("pyramid")$shape(...)` instead.
 
-* The following ``pp_cfg()`` R6 class public method which was deprecated in piecepackr v1.3.1 (2020-05-13)
-  has been removed:
+* The following ``pp_cfg()`` R6 class public method has been removed:
 
   + ``get_pictureGrob()``, use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
 
-* The following ``pp_cfg()`` "style" which was deprecated in piecepackr v1.3.1 (2020-05-13)
-  has been removed.
+* The following ``pp_cfg()`` "style" has been removed:
 
   + `shadow_fn`, use `op_grob_fn` to indicate a custom function for drawing in an oblique projection.
 
@@ -75,12 +72,20 @@ New features
     The default `grob_with_bleed_fn` function tries to guess a 
     good solid bleed color and draws it around the base piece.
 
+* The following enhancements to the configurations returned by `game_systems()`:
+
+  + New "piecepack_inverted" configuration (#256). 
+    The standard piecepack with its color scheme inverted.
+    Intended to aid in highlighting special pieces in diagrams.
+
 Bug fixes and minor improvements
 --------------------------------
 
 * `render_piece()` should now handle its `dev.args` argument properly.
 * `pmap_piece()` now simply returns `list()` if its `.l` argument has zero length
   or number of rows (instead of throwing an error).
+* The "saucer" pieces in `game_systems()`'s piecepack configurations have been improved.
+  The suit text on the backs are better sized and the suit text has been removed from the faces.
 
 Deprecated features
 -------------------
