@@ -86,6 +86,7 @@ Bug fixes and minor improvements
   or number of rows (instead of throwing an error).
 * The "saucer" pieces in `game_systems()`'s piecepack configurations have been improved.
   The suit text on the backs are better sized and the suit text has been removed from the faces.
+* The "joystick" or "peg-doll" pawns now have support for `piece_side = "pawn_base"` with `pieceGrob()`.
 
 Deprecated features
 -------------------

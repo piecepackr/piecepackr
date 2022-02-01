@@ -84,7 +84,7 @@ write_mtl <- function(mtl_filename, png_filename) {
 # 1,2,3,4 -> 1,4,3,2
 rev_shift <- function(x) c(x[1], rev(x[-1]))
 
-# 2-sided token angle
+# (2-sided token) rotation matrix to move from "face" to `side`
 side_R <- function(side) {
     switch(side,
            back = R_y(180),
@@ -92,6 +92,16 @@ side_R <- function(side) {
            left = R_y(-90) %*% R_z(-90),
            right = R_y(90) %*% R_z(90),
            top = R_x(90) %*% R_z(180),
+           diag(3))
+}
+# (2-sided token) rotation matrix to return to "face" from `side`
+side_R_rev <- function(side) {
+    switch(side,
+           back = R_y(-180),
+           base = R_x(90),
+           left = R_z(90) %*% R_y(90),
+           right = R_z(-90) %*% R_y(-90),
+           top = R_z(-180) %*% R_x(-90),
            diag(3))
 }
 
