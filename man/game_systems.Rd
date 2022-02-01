@@ -97,6 +97,12 @@ red hearts, black spades, green clubs, blue diamonds, and yellow stars.}
 first four suits are hearts, spades, clubs, and diamonds with
 14 ranks (ace through jack, knight, queen, king) plus a 15th \dQuote{Joker} rank
 and a fifth "suit" of 22 trump cards (1-21 plus an \dQuote{excuse}).}}}
+\item{reversi}{Boards and pieces for Reversi.
+"board_face" provides lined boards with colored backgrounds.
+"board_back" provides checkered boards.
+"bit_face" / "bit_back" provides circular game tokens with differently colored sides:
+red paired with green, black paired with white, and blue paired with yellow.
+}
 }
 }
 \examples{

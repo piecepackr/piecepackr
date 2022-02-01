@@ -74,9 +74,15 @@ New features
 
 * The following enhancements to the configurations returned by `game_systems()`:
 
-  + New "piecepack_inverted" configuration (#256). 
+  + New `piecepack_inverted` configuration (#256). 
     The standard piecepack with its color scheme inverted.
     Intended to aid in highlighting special pieces in diagrams.
+
+  + New `reversi` configuration (#258).
+    "board_face" provides lined boards with colored backgrounds.
+    "board_back" provides checkered boards.
+    "bit_face" / "bit_back" provides circular game tokens with differently colored sides: 
+    red paired with green, black paired with white, and blue paired with yellow.
 
 Bug fixes and minor improvements
 --------------------------------

@@ -69,6 +69,12 @@
 #'            first four suits are hearts, spades, clubs, and diamonds with
 #'            14 ranks (ace through jack, knight, queen, king) plus a 15th \dQuote{Joker} rank
 #'            and a fifth "suit" of 22 trump cards (1-21 plus an \dQuote{excuse}).}}}
+#' \item{reversi}{Boards and pieces for Reversi.
+#'    "board_face" provides lined boards with colored backgrounds.
+#'    "board_back" provides checkered boards.
+#'    "bit_face" / "bit_back" provides circular game tokens with differently colored sides:
+#'    red paired with green, black paired with white, and blue paired with yellow.
+#'}
 #' }
 #' @param style If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 #'              If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
@@ -155,6 +161,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          playing_cards_colored = cards$color,
          playing_cards_tarot = cards$tarot,
          playing_cards_expansion = packs$pce,
+         reversi = reversi(1, color_list),
          subpack = packs$subpack)
 }
 
@@ -525,6 +532,31 @@ playing_cards <- function(style, rect_shape) {
     list(base = playing_cards, color = playing_cards_colored, tarot = playing_cards_tarot)
 }
 
+reversi <- function(cell_width = 1, color_list) {
+    reversi <- list(n_suits = 6, n_ranks = 12,
+                     width.board = 8 * cell_width,
+                     height.board = 8 * cell_width,
+                     grob_fn.r1.board_face = linedBoardGrobFn(8, 8),
+                     grob_fn.r1.board_back = checkeredBoardGrobFn(8, 8),
+                     background_color.board_face = cb_suit_colors_impure,
+                     gridline_color.board_face = "black",
+                     gridline_lex.board = 4,
+                     suit_color = cb_suit_colors_impure,
+                     background_color = "white",
+                     gridline_color.s6.board_back = "grey80")
+    for (i in seq(2, 12)) {
+        reversi[[paste0("width.r", i, ".board")]] <- i * cell_width
+        reversi[[paste0("height.r", i, ".board")]] <- i * cell_width
+        reversi[[paste0("grob_fn.r", i, ".board_face")]] <- linedBoardGrobFn(i, i)
+        reversi[[paste0("grob_fn.r", i, ".board_back")]] <- checkeredBoardGrobFn(i, i)
+    }
+    reversi <- pp_cfg(c(reversi, reversi_piece(cell_width, color_list), color_list))
+    reversi$has_piecepack <- FALSE
+    reversi$has_boards <- TRUE
+    reversi$has_bits <- TRUE
+    reversi
+}
+
 shapes_cfg <- function(color_list) {
     shapes <- list(n_suits = 6, n_ranks = 4,
                    invert_colors = TRUE,
@@ -538,6 +570,31 @@ shapes_cfg <- function(color_list) {
                    shape.r3.bit = "pyramid",
                    shape.r4.bit = "rect")
     pp_cfg(c(shapes, color_list))
+}
+
+reversi_piece <- function(cell_width, color_list) {
+
+    shapes_top <- shapes_cfg(color_list)
+    color_list$suit_color <- color_list$suit_color[c(3, 6, 1, 5, 4, 2)]
+    shapes_bot <- shapes_cfg(color_list)
+    envir <- list(shapes_top = shapes_top, shapes_bot = shapes_bot)
+
+    df_reversi <- tibble(piece_side = "bit_back", rank = 1,
+                         width = 1, height = 1, depth = c(0.5, 0.5),
+                         x = 0.5, y = 0.5, z = c(0.25, 0.75),
+                         cfg = c("shapes_bot", "shapes_top"))
+
+    reversi_piece <- CompositePiece$new(df_reversi, envir=envir, ref_side="face")
+
+    list(width.bit= 0.75 * cell_width,
+         height.bit = 0.70 * cell_width,
+         depth.bit = 0.25 * cell_width,
+         grob_fn.bit = reversi_piece$grob_fn,
+         obj_fn.bit = reversi_piece$obj_fn,
+         op_grob_fn.bit = reversi_piece$op_grob_fn,
+         rayrender_fn.bit = reversi_piece$rayrender_fn,
+         rayvertex_fn.bit = reversi_piece$rayvertex_fn,
+         rgl_fn.bit = reversi_piece$rgl_fn)
 }
 
 peg_doll_pawn <- function(shapes) {
