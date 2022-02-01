@@ -151,10 +151,9 @@ Other traditional abstracts
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * An ``alquerque`` configuration that produces "boards"/"bits" for `Alquerque <https://en.wikipedia.org/wiki/Alquerque>`__ in a variety of colors.
-* ``chess1`` and `chess2`` configurations with checkered "boards" and matching chess "bits" (currently "disc" pieces instead of "Staunton" pieces).
+* ``chess1`` and ``chess2`` configurations with checkered "boards" and matching chess "bits" (currently "disc" pieces instead of "Staunton" pieces).
 * A ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ "board"/"bits" in a variety of colors.
-* A ``reversi`` configuration that can produce "boards"/"bits" for `Reversi <https://en.wikipedia.org/wiki/Reversi>`__ in a variet of colors.
-
+* A ``reversi`` configuration that can produce "boards"/"bits" for `Reversi <https://en.wikipedia.org/wiki/Reversi>`__ in a variety of colors.
 
 Looney Pyramids
 ---------------
