@@ -2,12 +2,14 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics
-Version: 1.10.0-7
-Description: Functions to make board game graphics.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can make graphics for other board game systems.  Includes configurations for several public domain game systems.
+Version: 1.10.0-8
+Description: Functions to make board game graphics with the 'ggplot2', 'grid', 'rayrender', 'rayvertex', and 'rgl' packages.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can make graphics for other board game systems.  Includes configurations for several public domain game systems such as checkers, (double-18) dominoes, go, 'piecepack', playing cards, etc.
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
-             person("Delapouite <https://delapouite.com/>", role="dtc",
-                     comment = 'Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>'))
-License: CC BY-SA 4.0
+             person("Delapouite <https://delapouite.com/>", role="ill",
+                     comment = 'Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>'),
+             person("Creative Commons", role="ill",
+                    comment = '`save_print_and_play()` uses "license badges" from Creative Commons to describe the generated print-and-play file\'s license'))
+License: MIT + file LICENSE
 URL: https://trevorldavis.com/piecepackr/ (blog), https://trevorldavis.com/R/piecepackr/ (pkgdown), https://groups.google.com/forum/#!forum/piecepackr (forum)
 BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyLoad: yes
