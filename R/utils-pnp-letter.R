@@ -275,8 +275,6 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
 }
 
 a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE) {
-    current_dev <- grDevices::dev.cur()
-    if (current_dev > 1) grDevices::dev.set(current_dev)
 
     # Title
     y_title <- unit(1, "npc") - unit(0.2, "in")
@@ -314,7 +312,9 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE) {
             grob_cc <- nullGrob()
         } else {
             cc_file <- system.file(paste0("extdata/badges/", spdx[cfg$spdx_id, "badge"]), package="piecepackr")
+            current_dev <- grDevices::dev.cur() # Workaround for {grImport2} v0.2-0 bug
             cc_picture <- grImport2::readPicture(cc_file)
+            if (current_dev > 1) grDevices::dev.set(current_dev)
             grob_cc <- grImport2::symbolsGrob(cc_picture, x=0.50, y=0.05, size=inch(0.9))
         }
         grob_l <- textGrob(license, x=0.1, y=y_license-unit(0.2, "in"), just=c(0,1), gp=gp_text)
