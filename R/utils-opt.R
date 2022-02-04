@@ -118,7 +118,7 @@ styles <- c(paste(c("ps", "dm"),
             "grob_fn", "op_grob_fn", "grob_with_bleed_fn",
             "obj_fn", "rayrender_fn", "rayvertex_fn", "rgl_fn",
             "lacks_rank", "lacks_suit",
-            "title", "description", "credit", "copyright")
+            "title", "description", "credit", "copyright", "spdx_id")
 is_legit_style <- function(style) {
     style %in% styles
 }

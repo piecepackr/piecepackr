@@ -16,6 +16,7 @@
 ^cran-comments.rst$
 
 .*\.eps$
+^inst/extdata/badges/.*\.svg$
 .*\.xml$
 
 ^collections$

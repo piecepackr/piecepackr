@@ -4,28 +4,34 @@ piecepackr 1.10.0
 Breaking changes
 ----------------
 
-Several features that were deprecated in 2020 have been removed:
+* `save_print_and_play()` no longer automatically assumes that the
+  generated print-and-play file should automatically be released under the CC BY-SA 4.0 license.
+  To continue to release under the CC BY-SA 4.0 license you should set the `cfg` argument's
+  `spdx_id` style/binding to "CC-BY-SA-4.0" (i.e. `cfg$spdx_id = "CC-BY-SA-4.0")
+  before calling `save_print_and_play()`.
 
-* The following utility functions have been removed:
+* Several features that were deprecated in 2020 have been removed:
+
+  + The following utility functions have been removed:
+    
+    - `checkersGrob(c, s, t, n)`, use `pp_shape(s, t)$checkers(n, gp=gpar(fill=c))` instead.
+    - `concaveGrobFn(n, t, r)`, use `pp_shape(paste0("concave", n), t, r)$shape` instead.
+    - `convexGrobFn(n, t)`, use `pp_shape(paste0("convex", n), t)$shape` instead.
+    - `get_shape_grob_fn(s, t, r, b)`, use `pp_shape(s, t, r, b)$shape` instead.
+    - `gridlinesGrob(c, s, t, l, n)`, use `pp_shape(s, t)$gridlines(n, gp=gpar(col=c, lex=l))` instead.
+    - `halmaGrob(...)`, use `pp_shape("halma")$shape(...)` instead.
+    - `hexlinesGrob(c, s, n)`, use `pp_shape(s)$hexlines(n, gp=gpar(col=c))` instead.
+    - `kiteGrob(...)`, use `pp_shape("kite")$shape(...)` instead.
+    - `matGrob(c, s, t, mw, n)`, use `pp_shape(s, t)$mat(mw, n, gp=gpar(fill=c))` instead.
+    - `pyramidGrob(...)`, use `pp_shape("pyramid")$shape(...)` instead.
   
-  + `checkersGrob(c, s, t, n)`, use `pp_shape(s, t)$checkers(n, gp=gpar(fill=c))` instead.
-  + `concaveGrobFn(n, t, r)`, use `pp_shape(paste0("concave", n), t, r)$shape` instead.
-  + `convexGrobFn(n, t)`, use `pp_shape(paste0("convex", n), t)$shape` instead.
-  + `get_shape_grob_fn(s, t, r, b)`, use `pp_shape(s, t, r, b)$shape` instead.
-  + `gridlinesGrob(c, s, t, l, n)`, use `pp_shape(s, t)$gridlines(n, gp=gpar(col=c, lex=l))` instead.
-  + `halmaGrob(...)`, use `pp_shape("halma")$shape(...)` instead.
-  + `hexlinesGrob(c, s, n)`, use `pp_shape(s)$hexlines(n, gp=gpar(col=c))` instead.
-  + `kiteGrob(...)`, use `pp_shape("kite")$shape(...)` instead.
-  + `matGrob(c, s, t, mw, n)`, use `pp_shape(s, t)$mat(mw, n, gp=gpar(fill=c))` instead.
-  + `pyramidGrob(...)`, use `pp_shape("pyramid")$shape(...)` instead.
-
-* The following ``pp_cfg()`` R6 class public method has been removed:
-
-  + ``get_pictureGrob()``, use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
-
-* The following ``pp_cfg()`` "style" has been removed:
-
-  + `shadow_fn`, use `op_grob_fn` to indicate a custom function for drawing in an oblique projection.
+  + The following ``pp_cfg()`` R6 class public method has been removed:
+  
+    - ``get_pictureGrob()``, use ``get_grob(piece_type, suit, rank, type="picture")`` instead.
+  
+  + The following ``pp_cfg()`` "style" has been removed:
+  
+    - `shadow_fn`, use `op_grob_fn` to indicate a custom function for drawing in an oblique projection.
 
 New features
 ------------
@@ -38,6 +44,18 @@ New features
   and `breaks_counting()` generates breaks at the counting numbers
   to more easily generate (i.e. chess) algebraic notation coordinates
   as commonly used in board game diagrams (#252).
+
+* The following enhancements to the configurations returned by `game_systems()`:
+
+  + New `piecepack_inverted` configuration (#256). 
+    The standard piecepack with its color scheme inverted.
+    Intended to aid in highlighting special pieces in diagrams.
+
+  + New `reversi` configuration (#258).
+    "board_face" provides lined boards with colored backgrounds.
+    "board_back" provides checkered boards.
+    "bit_face" / "bit_back" provides circular game tokens with differently colored sides: 
+    red paired with green, black paired with white, and blue paired with yellow.
 
 * Improvements to `save_print_and_play()`:
 
@@ -58,6 +76,20 @@ New features
     - For 4x6 photo prints will probably want to use a bitmap file format e.g. set
       `output_filename = "piecepack%02d.png"`.
 
+  + The license of the generated print-and-play file is now customized by 
+    the `cfg` argument's `spdx_id` style/binding (#235).  
+    `save_print_and_play()` will then create a license section with
+    that license's "full name", a URL, and in case of a Creative Commons license
+    add a "button mark" badge.
+    If left `NULL` we will now omit the license section but print a message 
+    saying we omitted it (unless `quietly = TRUE`).
+
+  + New argument `quietly`.
+    Unless `quietly = FALSE` will now `message()` about missing metadata.
+
+  + The "title" page was tweaked and improved.  In particular it should
+    now be able to handle any license with a [SPDX Identifier](https://spdx.org/licenses/).
+
 * Improvements to support adding a "bleed" zone around pieces:
 
   * `pieceGrob()` and `grid.piece()` now support a `bleed` argument.
@@ -72,17 +104,11 @@ New features
     The default `grob_with_bleed_fn` function tries to guess a 
     good solid bleed color and draws it around the base piece.
 
-* The following enhancements to the configurations returned by `game_systems()`:
-
-  + New `piecepack_inverted` configuration (#256). 
-    The standard piecepack with its color scheme inverted.
-    Intended to aid in highlighting special pieces in diagrams.
-
-  + New `reversi` configuration (#258).
-    "board_face" provides lined boards with colored backgrounds.
-    "board_back" provides checkered boards.
-    "bit_face" / "bit_back" provides circular game tokens with differently colored sides: 
-    red paired with green, black paired with white, and blue paired with yellow.
+* `pp_cfg()` supports a new `spdx_id` "style" and an associated active binding to update it.
+  This is meant to refer to the [SPDX Identifier](https://spdx.org/licenses/) for
+  the graphical design license. 
+  `save_print_and_play()` can now use this field to customize the License info
+  for the generated print-and-play layout (#235).
 
 Bug fixes and minor improvements
 --------------------------------

@@ -3,7 +3,7 @@ README.html
 README.md
 pkgdown/
 *.swp
-*by-sa*
+inst/extdata/badges/*.svg
 *png
 codecov.yml
 collections
@@ -14,3 +14,5 @@ tmp
 TODO.rst
 bookmarks.txt
 raw-data/meeple[23].svg
+raw-data/cc-assets/
+raw-data/spdx_license_list.html

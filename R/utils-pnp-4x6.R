@@ -1,4 +1,4 @@
-print_and_play_4x6 <- function(cfg, pieces) {
+print_and_play_4x6 <- function(cfg, pieces, quietly) {
     n_suits <- cfg$n_suits
     n_ranks <- cfg$n_ranks
 
@@ -13,7 +13,8 @@ print_and_play_4x6 <- function(cfg, pieces) {
 
     pl <- list()
 
-    # tiles
+    draw_4x6_title(cfg, pieces, quietly)
+
     n_pages_tiles <- 2 * n_suits
     for (i_suit in seq.int(n_suits))
         draw_4x6_tiles(cfg, i_suit)
@@ -36,10 +37,17 @@ print_and_play_4x6 <- function(cfg, pieces) {
         draw_4x6_pawns(cfg, suits)
     }
 
-    n_pages <- n_pages_tiles + 2 * n_pages_coins + n_pages_dice + n_pages_pawns
+    n_pages <- 1 + n_pages_tiles + 2 * n_pages_coins + n_pages_dice + n_pages_pawns
 
     pl$Piecepack <- n_pages
     pl
+}
+
+draw_4x6_title <- function(cfg, pieces, quietly) {
+    vp <- viewport(width = inch(6), height = inch(4))
+    grob <- a5_title_grob(cfg, pieces, quietly, FALSE)
+    grob <- editGrob(grob, vp = vp)
+    grid.draw(grob)
 }
 
 draw_4x6_tiles <- function(cfg, i_suit) {

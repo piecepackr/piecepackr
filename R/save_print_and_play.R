@@ -14,12 +14,19 @@ A4_HEIGHT <- 11.69
 #'        Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
 #' @param arrangement Either "single-sided" or "double-sided".
 #'                    Ignored if `size = "4x6"`.
+#' @param quietly Whether to hide messages about missing metadata
+#'                in the provided configuration.
 #' @inheritParams render_piece
 #' @examples
 #'   \donttest{
 #'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
 #'     if (capabilities("cairo") && !is_mac) {
 #'         cfg <- pp_cfg(list(invert_colors.suited=TRUE))
+#'         cfg$description <- 'Piecepack with an "inverted" color scheme.'
+#'         cfg$title <- '"Inverted" piecepack'
+#'         cfg$copyright <- "\u00a9 2022 Trevor L Davis.  Some Right Reserved."
+#'         cfg$spdx_id <- "CC-BY-4.0"
+#'         cfg$credit <- ""
 #'         save_print_and_play(cfg, "my_pnp_file.pdf")
 #'         save_print_and_play(cfg, "my_pnp_file_ds.pdf", arrangement="double-sided")
 #'         save_print_and_play(cfg, "my_pnp_file_A4.pdf", size="A4", pieces="all")
@@ -41,7 +48,8 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                                                 onefile = TRUE,
                                                 units = "in",
                                                 bg = "white",
-                                                res = 72)) {
+                                                res = 72),
+                                quietly = FALSE) {
 
     stopifnot(is.null(dev) || is.function(dev))
     size <- match.arg(size)
@@ -77,8 +85,8 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
     do.call(dev, args)
 
     pl <- switch(size,
-                 `4x6` = print_and_play_4x6(cfg, pieces),
-                 print_and_play_paper(cfg, size, pieces, arrangement))
+                 `4x6` = print_and_play_4x6(cfg, pieces, quietly),
+                 print_and_play_paper(cfg, size, pieces, arrangement, quietly))
 
     invisible(grDevices::dev.off())
 

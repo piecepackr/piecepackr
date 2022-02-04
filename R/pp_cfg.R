@@ -16,7 +16,7 @@
 #'   + Suit colors
 #'   + Which types of components are included and/or properly supported
 #'   + What would be a good color to use when adding annotations on top of these components.
-#'   + Title, Description, Copyright, and Credit metadata
+#'   + Title, Description, Copyright, License, and Credit metadata
 #'
 #' @section `pp_cfg` R6 Class Method Arguments:\describe{
 #'   \item{`piece_side`}{A string with piece and side separated by a underscore e.g. "coin_face".}
@@ -60,6 +60,8 @@
 #'   \item{`has_pyramids`}{Whether we should assume this supports "pyramid" pieces}
 #'   \item{`has_saucers`}{Whether we should assume this supports "saucer" pieces}
 #'   \item{`has_tiles`}{Whether we should assume this supports "tile" pieces}
+#'   \item{`spdx_id`}{SPDX Identifier for graphical design license.
+#'                    See \url{https://spdx.org/licenses/} for full list.}
 #'   \item{`title`}{Design title}
 #' }
 #'
@@ -614,6 +616,14 @@ Config <- R6Class("pp_cfg",
         i_unsuit = function(value) {
             .Deprecated("Add '1L' to 'n_suits'")
             self$n_suits + 1L
+        },
+        spdx_id = function(value) {
+            if (missing(value)) {
+                private$cfg$spdx_id
+            } else {
+                stopifnot(is.character(value))
+                private$cfg$spdx_id <- value
+            }
         },
         title = function(value) {
             if (missing(value)) {

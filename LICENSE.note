@@ -2,9 +2,12 @@ The code in piecepackr is licensed under the MIT license.
 
 piecepackr includes the following components from other projects:
 
-* The outline for the meeple shape used in the "meeples" configuration (also used in some face cards in the playing cards configurations) was extracted (converted into a dataset of normalized x, y coordinates) from `Meeple icon <https://game-icons.net/1x1/delapouite/meeple.html>`_ by `Delapouite <https://delapouite.com/>`_ / `CC BY 3.0 <https://creativecommons.org/licenses/by/3.0/>`_.  Since "simple shapes" nor data can be copyrighted under American law this meeple outline is not copyrightable in the United States.  However, in other legal jurisdictions with stricter copyright laws you may need to give the proper CC BY attribution if you use any of the meeples.
+* This packages uses some data from the SPDX License List <https://spdx.org/licenses/>.
+  The SPDX License List is released under the CC0 1.0 Universal Public Domain Dedication license <https://github.com/spdx/license-list-XML/blob/master/package.json>.
 
-* `extdata/by-sa.svgz` is a Creative Commons License "button mark" from https://github.com/creativecommons/cc-assets made available under the following license (https://creativecommons.org/policies):
+* The outline for the meeple shape used in the "meeples" configuration (also used in some face cards in the playing cards configurations) was extracted (converted into a dataset of normalized x, y coordinates) from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> by Delapouite <https://delapouite.com/> originally released under a CC BY 3.0 license <https://creativecommons.org/licenses/by/3.0/>.  Since "simple shapes" nor data can be copyrighted under American law this meeple outline is not copyrightable in the United States.  However, in other legal jurisdictions with stricter copyright laws you may need to give the proper CC BY attribution if you use any of the meeples.
+
+* The "svgz" files in `extdata/badges` are Creative Commons License "button marks" from <https://github.com/creativecommons/cc-assets> made available under the following license <https://creativecommons.org/policies>:
   
   ```
   Creative Commons License Buttons and Icons: Creative Commons licenses the use of its button marks that describe a particular legal tool and its icon marks that describe a key license element, such as BY, NC, ND, and SA, on the conditions that you use the mark solely to describe the Creative Commons legal tool that applies to a particular work and, in a manner reasonable to the medium and context, include the URI or hyperlink to the relevant Commons deed on the Creative Commons server.

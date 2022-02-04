@@ -33,7 +33,7 @@ that maybe of use to developers:
 \item Suit colors
 \item Which types of components are included and/or properly supported
 \item What would be a good color to use when adding annotations on top of these components.
-\item Title, Description, Copyright, and Credit metadata
+\item Title, Description, Copyright, License, and Credit metadata
 }
 }
 }
@@ -84,6 +84,8 @@ implements the cache API used by the \code{cachem} package}
 \item{\code{has_pyramids}}{Whether we should assume this supports "pyramid" pieces}
 \item{\code{has_saucers}}{Whether we should assume this supports "saucer" pieces}
 \item{\code{has_tiles}}{Whether we should assume this supports "tile" pieces}
+\item{\code{spdx_id}}{SPDX Identifier for graphical design license.
+See \url{https://spdx.org/licenses/} for full list.}
 \item{\code{title}}{Design title}
 }
 }
