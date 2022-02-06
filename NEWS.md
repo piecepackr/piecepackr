@@ -36,6 +36,11 @@ Breaking changes
 New features
 ------------
 
+* `animate_piece()` can be used to create board game animations
+  using either the suggested package `{animation}` or `{gifski}` (#251).
+  Adding transition effects between moves (i.e. `n_transitions > 0`) 
+  requires both of the suggested packages `{dplyr}` and `{tweenr}`.
+
 * `scale_x_piece()` and `scale_y_piece()` are wrappers around
   `ggplot2::scale_x_continuous()` and `ggplot2::scale_y_continuous()`
   with better defaults for board game diagrams.

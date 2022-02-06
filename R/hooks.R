@@ -4,12 +4,7 @@
 # Define object at build time
 GeomPiece <- NULL
 
-hasName <- function(x, name) match(name, names(x), nomatch = 0L) > 0L
-
 .onLoad <- function(libname, pkgname) {
-  # backports::import(pkgname, "suppressWarnings")
-  # backports::import(pkgname, "hasName", force = TRUE)
-
   if (requireNamespace("ggplot2", quietly = TRUE)) {
       # Modify object at load time
       GeomPiece <<- create_GeomPiece()

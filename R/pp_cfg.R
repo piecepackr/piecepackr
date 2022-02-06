@@ -136,7 +136,6 @@ impute_suit <- function(piece_side, suit, cfg) {
            ifelse(is.na(suit), 1L, min(suit, cfg$n_suits+2L)))
 }
 
-#' @import R6
 Config <- R6Class("pp_cfg",
     public = list(
         cache = NULL,

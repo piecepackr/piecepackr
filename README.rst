@@ -451,8 +451,8 @@ piece() ({rayrender})
 
     3D render with rayrender package
 
-piece_mesh ({rayvertex})
-~~~~~~~~~~~~~~~~~~~~~~~~
+piece_mesh() ({rayvertex})
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``piece_mesh()`` creates rayvertex_ objects.
 
@@ -493,6 +493,45 @@ piece_mesh ({rayvertex})
     :alt: 3D render with rayvertex package
 
     3D render with rayvertex package
+
+animate_piece()
+~~~~~~~~~~~~~~~
+
+``animate_piece()`` creates animations.
+
+
+.. sourcecode:: r
+    
+
+    library("dplyr")
+    library("gifski")
+    library("piecepackr")
+    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("tweenr")
+    
+    envir <- game_systems("dejavu")
+    cfg <- as.list(envir$piecepack)
+    cfg$suit_color <- "black"
+    cfg$background_color.r1 <- "#E69F00"
+    cfg$background_color.r2 <- "#56B4E9"
+    cfg$background_color.r3 <- "#009E73"
+    cfg$background_color.r4 <- "#F0E442"
+    cfg$background_color.r5 <- "#D55E00"
+    cfg$background_color.r6 <- "#F079A7"
+    envir$piecepack <- pp_cfg(cfg)
+    
+    ppn_file <- system.file("ppn/relativity.ppn", package = "ppgames")
+    game <- read_ppn(ppn_file)[[1]]
+    animate_piece(game$dfs, file = "man/figures/README-relativity.gif", annotate = FALSE,
+                  envir = envir, trans = op_transform, op_scale = 0.5, 
+                  n_transitions = 3, n_pauses = 2, fps = 7)
+
+
+.. figure:: man/figures/relativity.gif
+    :alt: Animation of Marty and Ron Hale-Evans' abstract game Relativity
+    :align: center
+
+    Animation of Marty and Ron Hale-Evans' abstract game Relativity
 
 Further documentation
 ~~~~~~~~~~~~~~~~~~~~~

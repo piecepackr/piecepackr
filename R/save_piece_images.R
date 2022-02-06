@@ -1,5 +1,3 @@
-#' @import grid
-
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", "coin_back", "coin_face",
            "die_face", "suitdie_face",
            "pawn_face", "pawn_back", "belt_face",  "saucer_face", "saucer_back",

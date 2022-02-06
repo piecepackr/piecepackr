@@ -16,6 +16,7 @@ reference:
       desc: "Functions that process data frame input"
       contents:
         - pmap_piece
+        - animate_piece
         - render_piece
         - op_transform
         - aabb_piece

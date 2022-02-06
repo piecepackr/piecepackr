@@ -103,7 +103,6 @@ has_c_integer_format <- function(filename) {
     grepl("%[[:digit:]]+d", filename)
 }
 
-#' @importFrom utils packageDescription
 add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     temp_pdf <- tempfile(fileext=".pdf")
     on.exit(unlink(temp_pdf))
