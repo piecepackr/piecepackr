@@ -527,7 +527,7 @@ animate_piece()
                   n_transitions = 3, n_pauses = 2, fps = 7)
 
 
-.. figure:: man/figures/relativity.gif
+.. figure:: man/figures/README-relativity.gif
     :alt: Animation of Marty and Ron Hale-Evans' abstract game Relativity
     :align: center
 
