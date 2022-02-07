@@ -137,7 +137,7 @@ is_legit_piece <- function(piece) {
 warn_cfg <- function(cfg) {
     for (nn in names(cfg)) {
         if (!is_legit_cfg_style(nn)) {
-            warning(paste(nn, "is not a recognized configuration"))
+            warn(paste(nn, "is not a recognized configuration"))
         }
     }
 }

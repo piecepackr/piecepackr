@@ -79,9 +79,9 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
     args <- args[names(args) %in% names(formals(dev))]
     onefile <- has_onefile(dev, dev.args)
     if (!onefile && !has_c_integer_format(output_filename))
-        stop(paste("`save_print_and_play()` generates multiple pages.",
-                   'Either `dev` needs to support `onefile` and `isTRUE(dev.args[["onefile"]])`',
-                   "or else `output_filename` needs a C integer format in the string."))
+        abort(paste("`save_print_and_play()` generates multiple pages.",
+                    'Either `dev` needs to support `onefile` and `isTRUE(dev.args[["onefile"]])`',
+                    "or else `output_filename` needs a C integer format in the string."))
     do.call(dev, args)
 
     pl <- switch(size,

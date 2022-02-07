@@ -28,7 +28,7 @@ xya_pips_cards <- function(n_pips) {
            tibble(x = c(0.5, rep(c(0.25, 0.75), 4), 0.5), # 10
                   y = c(0.3, rep(c(0.2, 0.4, 0.6, 0.8), each=2), 0.7),
                   angle = c(rep(180, 5), rep(0, 5))),
-           stop("Don't know pip pattern for ", n_pips, " pips")
+           abort(paste0("Don't know pip pattern for ", n_pips, " pips"))
            )
 }
 
@@ -92,7 +92,7 @@ xya_pips_dominoes <- function(n_pips, die = FALSE) {
            tibble(x = c(rep(c(0.140, 0.340, 0.660, 0.860), 4), 0.5, 0.5), # 18
                   y = c(rep(c(0.2, 0.4, 0.6, 0.8), each=4), 0.3, 0.7),
                   angle = c(rep(180, 8), rep(0, 8), 180, 0)),
-           stop("Don't know pip pattern for ", n_pips, " pips")
+           abort(paste0("Don't know pip pattern for ", n_pips, " pips"))
            )
 }
 

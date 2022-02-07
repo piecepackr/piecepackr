@@ -16,7 +16,7 @@ CompositePiece <- R6Class("pp_composite",
                                      x, y, z, angle, axis_x, axis_y,
                                      width, height, depth,
                                      filename, scale, res) {
-            stop("Generally can't save Wavefront OBJ files for 'composite' pieces")
+            abort("Generally can't save Wavefront OBJ files for 'composite' pieces")
         },
         op_grob_fn = function() function(piece_side, suit, rank, cfg,
                                          x, y, z, angle, type, width, height, depth,
@@ -99,7 +99,7 @@ CompositePiece <- R6Class("pp_composite",
             switch(side,
                    face = private$df,
                    back = back_df(private$df),
-                   stop(paste("`CompositePiece()$relative_df()` can't handle relative side", side)))
+                   abort(paste("`CompositePiece()$relative_df()` can't handle relative side", side)))
         },
         transform_df = function(piece_side, x, y, z, angle, width, height, depth, axis_x = 0, axis_y = 0, scale = 1) {
             side <- get_side(piece_side)

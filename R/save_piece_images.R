@@ -72,7 +72,8 @@ save_piece_images <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
     current_dev <- grDevices::dev.cur()
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
 
-    if (!dir.exists(directory)) stop(paste("directory", directory, "does not exist"))
+    stopifnot(dir.exists(directory))
+
     for (f in format) {
         for (a in angle) make_images_helper(directory, cfg, f, a)
     }

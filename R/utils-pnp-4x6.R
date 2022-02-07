@@ -5,11 +5,11 @@ print_and_play_4x6 <- function(cfg, pieces, quietly) {
     stopifnot(n_ranks <= 6)
 
     if ("matchsticks" %in% pieces)
-        stop('"matchsticks" `pieces` not currently supported for `size = "4x6"`')
+        abort('"matchsticks" `pieces` not currently supported for `size = "4x6"`')
     if ("pyramids" %in% pieces)
-        stop('"pyramids" `pieces` not currently supported for `size = "4x6"`')
+        abort('"pyramids" `pieces` not currently supported for `size = "4x6"`')
     if ("subpack" %in% pieces)
-        stop('"subpack" `pieces` not currently supported for `size = "4x6"`')
+        abort('"subpack" `pieces` not currently supported for `size = "4x6"`')
 
     pl <- list()
 

@@ -259,7 +259,7 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     width <- whd$width
     height <- whd$height
     depth <- whd$depth
-    if (!nigh(width, depth)) warning("Base of peg doll is not circular")
+    if (!nigh(width, depth)) warn("Base of peg doll is not circular")
     # base
     circle <- Point2D$new(pp_shape("convex72", back=TRUE)$npc_coords)$translate(x = -0.5, y = -0.5)
     xyz_base <- as.data.frame(Point3D$new(x=circle$x, y=-0.5, z=circle$y))

@@ -38,11 +38,11 @@ get_embedded_font_helper <- function(font, char) {
 #' @export
 get_embedded_font <- function(font, char) {
     if (Sys.which("pdffonts") == "") {
-        stop("'get_embedded_font()' depends on 'pdffonts' being on the system path. ",
-             " On many OSes it is found in a 'poppler-utils' package.")
+        abort("'get_embedded_font()' depends on 'pdffonts' being on the system path. ",
+              " On many OSes it is found in a 'poppler-utils' package.")
     }
     if (!capabilities("cairo")) {
-        stop("'get_embedded_font()' requires that R has been compiled with 'cairo' support. ")
+        abort("'get_embedded_font()' requires that R has been compiled with 'cairo' support. ")
     }
     df <- expand.grid(char, font, stringsAsFactors=FALSE)
     names(df) <- c("char", "requested_font")
@@ -64,9 +64,9 @@ has_font <- function(font) {
         embedded_font <- get_embedded_font(font, "A")$embedded_font
         grepl(simplify_font(font), simplify_font(embedded_font))
     } else {
-        warning(paste("has_font() needs either the suggested 'systemfonts' package installed",
-                      "or R compiled with 'cairo' support plus the system tool 'pdffonts' installed.",
-                      "Conservatively returning `FALSE`."))
+        warn(paste("has_font() needs either the suggested 'systemfonts' package installed",
+                   "or R compiled with 'cairo' support plus the system tool 'pdffonts' installed.",
+                   "Conservatively returning `FALSE`."))
         FALSE
     }
 }

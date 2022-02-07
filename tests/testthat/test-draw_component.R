@@ -71,7 +71,8 @@ test_that("save_piece_images works as expected", {
         grid.piece(..., op_scale=0.5, default.units="in")
     }
 
-    expect_error(save_piece_images(cfg_default, directory), paste("does not exist"))
+    expect_error(save_piece_images(cfg_default, directory),
+                 "dir.exists\\(directory\\) is not TRUE")
     expect_error(grid.piece("tile_back", cfg=cfg), "Couldn't find suitable")
     dir.create(directory)
 

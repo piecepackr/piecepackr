@@ -210,10 +210,10 @@ create_GeomPiece <- function() { # nocov start
     draw_panel = function(self, data, panel_params, coord,
                           envir, op_scale, op_angle) {
         if (coord$is_free()) {
-            stop("'geom_piece()' will not work correctly if not using a fixed scale.")
+            abort("'geom_piece()' will not work correctly if not using a fixed scale.")
         }
         if (hasName(coord, "ratio") && coord$ratio != 1) {
-            stop("'geom_piece()' will not work correctly if not using an aspect ratio of 1.")
+            abort("'geom_piece()' will not work correctly if not using an aspect ratio of 1.")
         }
         data <- gg_impute_missing_data(data, envir, panel_params)
         coord <- coord$transform(data, panel_params)

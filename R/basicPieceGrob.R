@@ -106,7 +106,7 @@ find_pp_file <- function(directory, piece_side, suit, rank, cfg) {
             return(f)
         }
     }
-    stop(paste("Couldn't find suitable", piece_side, "image in", directory))
+    abort(paste("Couldn't find suitable", piece_side, "image in", directory))
 }
 
 piece_filename_helper <- function(directory, piece_side, format, suit, rank, cfg) {

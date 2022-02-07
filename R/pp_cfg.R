@@ -235,7 +235,7 @@ Config <- R6Class("pp_cfg",
                               saucer = 0.75, # better than 7/8" for diagrams of hex games played with coin+pawn
                               suitdie = 0.5,
                               tile = 2,
-                              stop(paste("Don't know width of piece", piece)))
+                              abort(paste("Don't know width of piece", piece)))
             width <- get_style_element("width", piece_side, private$cfg, default, suit, rank)
             self$cache$set(key, width)
             width
@@ -291,7 +291,7 @@ Config <- R6Class("pp_cfg",
                               saucer = width,
                               suitdie = width,
                               tile = width,
-                              stop(paste("Don't know height of piece", piece))) #nocov
+                              abort(paste("Don't know height of piece", piece))) #nocov
             height <- get_style_element("height", piece_side, private$cfg, default, suit, rank)
             self$cache$set(key, height)
             height
@@ -455,7 +455,7 @@ Config <- R6Class("pp_cfg",
                 }
                 obj_fn <- get_style_element("obj_fn", piece_side, private$cfg, default_fn, suit, rank)
                 if (is.null(obj_fn)) {
-                    stop("Don't know how to export ", piece_side, " to Wavefront OBJ format.")
+                    abort(paste("Don't know how to export ", piece_side, " to Wavefront OBJ format."))
                 }
                 if (self$cache_obj_fn) self$cache$set(key, obj_fn)
             }
@@ -575,13 +575,13 @@ Config <- R6Class("pp_cfg",
             if (missing(value))
                 private$cfg$fontfamily %||% "sans"
             else
-                warning("Must set 'fontfamily' at initialization")
+                warn("Must set 'fontfamily' at initialization")
         },
         has_piecepack = function(value) {
             if (missing(value)) {
                 self$has_coins && self$has_tiles && self$has_pawns && self$has_dice
             } else {
-                if (!is.logical(value)) stop(paste(value, "is not logical"))
+                stopifnot(is.logical(value))
                 self$has_coins <- value
                 self$has_tiles <- value
                 self$has_pawns <- value
@@ -592,25 +592,25 @@ Config <- R6Class("pp_cfg",
             if (missing(value))
                 private$cfg$lacks_rank
             else
-                warning("Must set 'lacks_rank' at initialization")
+                warn("Must set 'lacks_rank' at initialization")
         },
         lacks_suit = function(value) {
             if (missing(value))
                 private$cfg$lacks_suit
             else
-                warning("Must set 'lacks_suit' at initialization")
+                warn("Must set 'lacks_suit' at initialization")
         },
         n_ranks = function(value) {
             if (missing(value))
                 private$cfg$n_ranks
             else
-                warning("Must set 'n_ranks' at initialization")
+                warn("Must set 'n_ranks' at initialization")
         },
         n_suits = function(value) {
             if (missing(value))
                 private$cfg$n_suits
             else
-                warning("Must set 'n_suits' at initialization")
+                warn("Must set 'n_suits' at initialization")
         },
         i_unsuit = function(value) {
             .Deprecated("Add '1L' to 'n_suits'")
@@ -690,7 +690,7 @@ Config <- R6Class("pp_cfg",
                 keys <- grep(cache_key, self$cache$keys(), value = TRUE)
                 for (key in keys) self$cache$remove(key)
             } else {
-                stop("value was not a boolean")
+                abort("value was not a boolean")
             }
         })
 )

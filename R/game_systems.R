@@ -168,14 +168,14 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
 game_systems_style <- function(style) {
     styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
     if (!is.null(style) && is.na(match(style, styles))) {
-        stop(paste("Don't have a customized configuration for style", style))
+        abort(paste("Don't have a customized configuration for style", style))
     }
 
     if (is.null(style))
         style <- "sans"
 
     if (grepl("dejavu", style) && !suppressWarnings(has_font("Dejavu Sans")))
-        message(sprintf("'style = \"%s\"' but 'has_font(\"Dejavu Sans\")' is 'FALSE'", style))
+        inform(sprintf("'style = \"%s\"' but 'has_font(\"Dejavu Sans\")' is 'FALSE'", style))
 
     style
 }

@@ -145,7 +145,7 @@ Shape <- R6Class("pp_shape",
         initialize = function(label = "rect", theta = 90,
                               radius = 0.2, back = FALSE) {
             if (!is_known_shape_label(label))
-                stop("Don't recognize shape label ", label)
+                abort(paste("Don't recognize shape label", label))
             private$shape_label <- label
             private$shape_theta <- theta
             private$shape_radius <- radius
@@ -271,7 +271,7 @@ makeContent.gridlines <- function(x) {
         return(setChildren(x, gList(nullGrob(name = "invisible"))))
     }
     if (label %in% c("circle", "kite", "halma", "oval", "meeple")) {
-        stop(paste("Don't know how to add grid lines to shape", label))
+        abort(paste("Don't know how to add grid lines to shape", label))
     }
     gl <- gList()
     if (label %in% c("rect", "roundrect")) {
@@ -326,7 +326,7 @@ makeContent.mat <- function(x) {
     } else if (label %in% c("circle", "roundrect")) {
         gl <- gList(diffMatGrobFn(mat_width, x$shape)())
     } else {
-        stop(paste("Don't know how to add mat to shape", label))
+        abort(paste("Don't know how to add mat to shape", label))
     }
     setChildren(x, gl)
 }
@@ -395,7 +395,7 @@ makeContent.hexlines <- function(x) {
             segmentsGrob(1, 1 - ho, 1 - ho, 1)
         )
     } else {
-        stop(paste("Don't know how to add hexlines to shape", label))
+        abort(paste("Don't know how to add hexlines to shape", label))
     }
     setChildren(x, gl)
 }

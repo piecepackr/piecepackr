@@ -71,7 +71,7 @@ partition_edges <- function(shape) {
     } else if (all(classes == "C1")) {
         list(type = "ring", indices = list(seq_along(classes)))
     } else {
-        if (!(classes[n] == "C0")) stop("Can only handle case when last class is 'C0'")
+        if (!(classes[n] == "C0")) abort("Can only handle case when last class is 'C0'")
         type <- vector("character")
         indices <- vector("list")
         index <- 1

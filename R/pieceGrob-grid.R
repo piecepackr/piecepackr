@@ -232,7 +232,7 @@ get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
             if (!all(sapply(cfg, inherits, "pp_cfg")))
                 cfg <- pp_cfg(cfg)
         } else {
-            stop("Don't know how to parse cfg argument") # nocov
+            abort("Don't know how to parse cfg argument") # nocov
         }
     }
     cfg

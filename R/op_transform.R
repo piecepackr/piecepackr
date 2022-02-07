@@ -109,7 +109,7 @@ get_cfg_character <- function(df, cfg) {
     } else if (is.character(cfg)) {
         rep_len(cfg, nrow(df))
     } else {
-        stop("Can't compute \"character\" `cfg_class`")
+        abort("Can't compute \"character\" `cfg_class`")
     }
 }
 

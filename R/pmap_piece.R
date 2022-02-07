@@ -82,7 +82,7 @@ update_name <- function(.l) {
         if (sum(duplicated(.l$name)) == 0) {
             return(.l)
         } else {
-            warning("the name column in .l is not unique, generating new name column")
+            warn("the name column in .l is not unique, generating new name column")
         }
     }
     if (hasName(.l, "id")) {
@@ -90,7 +90,7 @@ update_name <- function(.l) {
         if (sum(duplicated(.l$name)) == 0) {
             return(.l)
         } else {
-            warning("the id column in .l is not unique, generating new name column")
+            warn("the id column in .l is not unique, generating new name column")
         }
     }
     .l$name <- paste0("piece.", as.character(seq(length(.l[[1]]))))
