@@ -1,4 +1,3 @@
-context("no regressions in figures")
 test_that("no regressions in figures", {
 
     skip_on_ci()

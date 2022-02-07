@@ -1,5 +1,4 @@
 library("tibble")
-context("3d helper function")
 test_that("3d helper functions work", {
 
     dft <- tibble(piece_side="tile_back", x=1.5, y=1.5, rank=NA, width=NA)

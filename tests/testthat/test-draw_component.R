@@ -1,6 +1,5 @@
 cfg_default <- pp_cfg(list(title="default cfg"))
 cfg_3d <- game_systems("sans3d")$piecepack
-context("test pp_cfg")
 test_that("pp_cfg works as expected", {
     expect_true(inherits(cfg_default, "pp_cfg"))
     expect_equal(class(as.list(cfg_default)), "list")
@@ -20,7 +19,6 @@ test_that("update_names works as expected", {
     expect_warning(update_name(df)$name, "the id column in .l is not unique, generating new name column")
 })
 
-context("save_print_and_play works as expected")
 test_that("save_print_and_play works as expected", {
 
     skip_on_cran()
@@ -45,7 +43,6 @@ test_that("save_print_and_play works as expected", {
 
     save_print_and_play(cfg_default, pdf_deck_filename, "letter")
 
-
     cfg_large_dice <- pp_cfg(list(title="default cfg", width.die = 0.7))
     save_print_and_play(cfg_large_dice, pdf_deck_filename_a4, "A4", arrangement = "double-sided")
     save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
@@ -64,7 +61,6 @@ test_that("save_print_and_play works as expected", {
     expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
 })
 
-context("save_piece_images works as expected")
 test_that("save_piece_images works as expected", {
     skip_if_not(capabilities("cairo"))
     skip_on_os("mac")
@@ -96,7 +92,6 @@ test_that("save_piece_images works as expected", {
     })
 })
 
-context("no regressions in figures")
 test_that("no regressions in figures", {
     skip_on_ci()
     skip_if_not(capabilities("cairo"))
@@ -280,7 +275,6 @@ test_that("no regressions in figures", {
         dc("pyramid_face", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
 })
 
-context("oblique projection works")
 test_that("oblique projection works", {
     skip_on_ci()
     skip_on_cran()
@@ -328,7 +322,6 @@ test_that("oblique projection works", {
     })
 })
 
-context("alpha and scale works")
 test_that("alpha and scale works", {
     skip_on_ci()
     skip_if_not(capabilities("cairo"))

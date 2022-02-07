@@ -1,5 +1,4 @@
 library("grid")
-context("pp_shape() works as expected")
 test_that("pp_shape() works as expected", {
     circle <- pp_shape("circle")
     current_dev <- grDevices::dev.cur()
