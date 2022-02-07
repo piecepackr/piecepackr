@@ -137,7 +137,7 @@ animation_fn <- function(file, new_device = TRUE) {
         } else {
             abort(c("At least one the suggested packages 'gifski' or 'animation' is required to use 'animate_game()'.",
                     i = "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")' to install them."),
-                  class = "suggested_package")
+                  class = "piecepackr_suggested_package")
         }
     } else {
         assert_suggested("animation")
