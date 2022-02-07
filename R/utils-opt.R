@@ -140,6 +140,21 @@ warn_cfg <- function(cfg) {
             warn(paste(nn, "is not a recognized configuration"))
         }
     }
+    if (!is.null(cfg$spdx_id)) {
+        check_spdx_id(cfg$spdx_id)
+    }
+}
+
+check_spdx_id <- function(spdx_id) {
+    if (!(spdx_id %in% spdx$id)) {
+        warn(c(sprintf("'%s' not recognized as an appropriate SPDX Identifier.", spdx_id),
+               i = "See https://spdx.org/licenses/ for list of SPDX Identifiers."),
+             class = "piecepackr_unrecognized_spdx_id")
+    } else if (!is.na(spdx[spdx_id, "deprecated"])) {
+        inform(c(sprintf("'%s' is a deprecated SPDX Identifier.", spdx_id),
+                 i = "See https://spdx.org/licenses/ for list of SPDX Identifiers."),
+               class = "piecepackr_deprecated_spdx_id")
+    }
 }
 
 make_get_style_fn <- function(style, default) {

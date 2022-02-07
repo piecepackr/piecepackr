@@ -621,6 +621,7 @@ Config <- R6Class("pp_cfg",
                 private$cfg$spdx_id
             } else {
                 stopifnot(is.character(value))
+                check_spdx_id(value)
                 private$cfg$spdx_id <- value
             }
         },
