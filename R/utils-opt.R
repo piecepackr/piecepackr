@@ -146,11 +146,11 @@ warn_cfg <- function(cfg) {
 }
 
 check_spdx_id <- function(spdx_id) {
-    if (!(spdx_id %in% spdx$id)) {
+    if (!(spdx_id %in% piecepackr::spdx_license_list$id)) {
         warn(c(sprintf("'%s' not recognized as an appropriate SPDX Identifier.", spdx_id),
                i = "See https://spdx.org/licenses/ for list of SPDX Identifiers."),
              class = "piecepackr_unrecognized_spdx_id")
-    } else if (!is.na(spdx[spdx_id, "deprecated"])) {
+    } else if (piecepackr::spdx_license_list[spdx_id, "deprecated"]) {
         inform(c(sprintf("'%s' is a deprecated SPDX Identifier.", spdx_id),
                  i = "See https://spdx.org/licenses/ for list of SPDX Identifiers."),
                class = "piecepackr_deprecated_spdx_id")

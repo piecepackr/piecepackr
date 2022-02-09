@@ -40,6 +40,10 @@ reference:
         - font_utils
         - pp_utils
         - geometry_utils
+    - title: "Developer helper data"
+      desc: "Data intended for developers"
+      contents:
+        - spdx_license_list
     - title: "Overall package description"
       desc: "Overall package description including supported package options"
       contents:

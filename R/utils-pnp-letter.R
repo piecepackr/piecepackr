@@ -305,16 +305,20 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE) {
                              class = "piecepackr_missing_metadata")
         grob_license <- grob_lh <- grob_l <- nullGrob()
     } else {
-        stopifnot(cfg$spdx_id %in% spdx$id)
-        license <- paste(c(
-            paste("\u25cf", spdx[cfg$spdx_id, "name"]),
-            paste("\t", spdx[cfg$spdx_id, "url"])
-                    ), collapse="\n")
+        stopifnot(cfg$spdx_id %in% piecepackr::spdx_license_list$id)
+        url <- piecepackr::spdx_license_list[cfg$spdx_id, "url_alt"]
+        if (is.na(url)) url <- piecepackr::spdx_license_list[cfg$spdx_id, "url"]
+        full_name <- piecepackr::spdx_license_list[cfg$spdx_id, "name"]
+        license <- paste(c(paste("\u25cf", full_name),
+                           paste("\t", url)),
+                         collapse="\n")
         grob_lh <- textGrob("License", x=0.1, y=y_license, just="left", gp=gp_header)
-        if (is.na(spdx[cfg$spdx_id, "badge"])) {
+        badge <- piecepackr::spdx_license_list[cfg$spdx_id, "badge"]
+        if (is.na(badge)) {
             grob_cc <- nullGrob()
         } else {
-            cc_file <- system.file(paste0("extdata/badges/", spdx[cfg$spdx_id, "badge"]), package="piecepackr")
+            cc_file <- system.file(paste0("extdata/badges/", badge),
+                                   package="piecepackr")
             current_dev <- grDevices::dev.cur() # Workaround for {grImport2} v0.2-0 bug
             cc_picture <- grImport2::readPicture(cc_file)
             if (current_dev > 1) grDevices::dev.set(current_dev)

@@ -115,6 +115,10 @@ New features
   `save_print_and_play()` can now use this field to customize the License info
   for the generated print-and-play layout (#235).
 
+* `spdx_license_list` is a dataset for the [SPDX License List](https://spdx.org/licenses/).
+  It is intended as an aid for developers writing print-and-play layout generators
+  or board game ruleset generators.
+
 Bug fixes and minor improvements
 --------------------------------
 
