@@ -1,5 +1,4 @@
 test_that("animate_piece()", {
-    skip_if_not_installed("dplyr")
     skip_if_not_installed("gifski")
     skip_if_not_installed("tweenr")
 

@@ -96,7 +96,7 @@ Nothing, as a side effect creates an animation.
   }
 
   ## Save GIF of game with animation transitions
-  if ((require("animation") || require("gifski")) && require("dplyr") && require("tweenr")) {
+  if ((require("animation") || require("gifski")) && require("tweenr")) {
       animate_piece(dfs, file = "tic-tac-toe.gif", n_transitions = 5L,
                     n_pauses = 2L, fps = 9)
       unlink("tic-tac-toe.gif")

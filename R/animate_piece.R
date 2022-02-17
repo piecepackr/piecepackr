@@ -54,7 +54,7 @@
 #'   }
 #'
 #'   ## Save GIF of game with animation transitions
-#'   if ((require("animation") || require("gifski")) && require("dplyr") && require("tweenr")) {
+#'   if ((require("animation") || require("gifski")) && require("tweenr")) {
 #'       animate_piece(dfs, file = "tic-tac-toe.gif", n_transitions = 5L,
 #'                     n_pauses = 2L, fps = 9)
 #'       unlink("tic-tac-toe.gif")
@@ -69,10 +69,8 @@ animate_piece <- function(dfs, file = "animation.gif", annotate = TRUE, ...,
                           width = NULL, height = NULL, ppi = NULL,
                           new_device = TRUE, annotation_scale = NULL) {
 
-    if (n_transitions > 0L) {
-        assert_suggested("dplyr")
+    if (n_transitions > 0L)
         assert_suggested("tweenr")
-    }
 
     ce <- default_cfg_envir(cfg, envir)
     cfg <- ce$cfg
@@ -165,14 +163,15 @@ get_tweened_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
 }
 
 tween_dfs <- function(df1, df2, n_transitions = 0L) {
+    stopifnot(names(df1) == names(df2))
     df_id_cfg <- get_id_cfg(df1, df2)
     if (nrow(df1) == 0 && nrow(df2) == 0) return(rep(list(df1), n_transitions))
     dfs <- init_dfs(df1, df2)
     df <- tweenr::tween_state(dfs[[1]], dfs[[2]], ease = "cubic-in-out",
                               nframes = n_transitions + 2L, id = .data$id)
-    df <- dplyr::left_join(df, df_id_cfg, by = "id")
+    df <- merge(df, df_id_cfg, by = "id", all.x = TRUE, sort = FALSE)
     id_frames <- as.list(seq.int(max(df$.frame)))
-    l <- lapply(id_frames, function(id_frame) dplyr::filter(df, .data$.frame == id_frame))
+    l <- lapply(id_frames, function(id_frame) df[which(df$.frame == id_frame), , drop = FALSE])
     l <- head(l, -1L)
     l <- tail(l, -1L)
     l
@@ -190,10 +189,10 @@ init_dfs <- function(df1, df2) {
     } else {
         df2i <- get_tweenr_df(df2)
     }
-    df2_anti <- dplyr::filter(df2i, match(.data$id, df1i$id, 0) == 0)
+    df2_anti <- df2i[which(match(df2i$id, df1i$id, 0) == 0), , drop = FALSE]
     df2_anti$scale <- rep(0, nrow(df2_anti))
-    df1 <- dplyr::bind_rows(df1i, df2_anti) # 'added' pieces
-    df1_anti <- dplyr::filter(df1i, match(.data$id, df2i$id, 0) == 0)
+    df1 <- rbind(df1i, df2_anti) # 'added' pieces
+    df1_anti <- df1i[which(match(df1i$id, df2i$id, 0) == 0), , drop = FALSE]
     df1_anti$scale <- rep(0, nrow(df1_anti))
     df2 <- df2i # 'removed' pieces
     while (nrow(df1_anti)) {
@@ -226,8 +225,8 @@ find_good_prev_index <- function(row, df1i, df2i) {
     prev_index
 }
 get_id_cfg <- function(df1, df2) {
-    df <- dplyr::bind_rows(df1, df2)
-    df <- dplyr::select(df, .data$id, .data$cfg)
+    df <- rbind(df1[, c("id", "cfg")],
+                df2[, c("id", "cfg")])
     unique(df)
 }
 get_tweenr_df <- function(df, ...) {
@@ -241,20 +240,22 @@ get_tweenr_df <- function(df, ...) {
     if (!hasName(df, "angle")) df$angle <- 0
     if (!hasName(df, "scale")) df$scale <- 1
 
-    df <- dplyr::select(df, .data$id, .data$piece_side, .data$suit, .data$rank,
-                        .data$x, .data$y, dplyr::matches("^z$"),
-                        .data$angle, .data$scale, .data$alpha)
-    as.data.frame(df)
+    if (hasName(df, "z"))
+        columns <- c("id", "piece_side", "suit", "rank", "x", "y", "z", "angle", "scale", "alpha")
+    else
+        columns <- c("id", "piece_side", "suit", "rank", "x", "y", "angle", "scale", "alpha")
+
+    as.data.frame(df[, columns])
 }
 # Insert `df2` into `df1` after `index`
 # index = 0 means instead at beginning
 insert_df <- function(df1, df2, index = nrow(df1)) {
     if (index == 0L) {
-        dplyr::bind_rows(df2, df1)
+        rbind(df2, df1)
     } else if (index == nrow(df1)) {
-        dplyr::bind_rows(df1, df2)
+        rbind(df1, df2)
     } else {
-        dplyr::bind_rows(df1[seq(index), ], df2, df1[-seq(index), ])
+        rbind(df1[seq(index), ], df2, df1[-seq(index), ])
     }
 }
 

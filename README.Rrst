@@ -400,7 +400,6 @@ animate_piece()
 ``animate_piece()`` creates animations.
 
 .. {r relativity, results='hide', message=FALSE}
-library("dplyr")
 library("gifski")
 library("piecepackr")
 library("ppgames") # remotes::install_github("piecepackr/ppgames")
