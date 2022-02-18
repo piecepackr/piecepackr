@@ -533,7 +533,63 @@ To install the development version use the following commands:
    install.packages("remotes")
    remotes::install_github("piecepackr/piecepackr")
 
-The default piecepackr configuration should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However if you wish to use advanced piecepackr configurations you'll need to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
+Suggested R packages
+~~~~~~~~~~~~~~~~~~~~
+
+Although the "core" ``{piecepackr}`` functionality does not need any additional software installed some non-"core" functionality needs extra suggested software to be installed.  To install **all** of the suggested R packages use:
+
+.. code:: r
+
+    install.packages("piecepackr", dependencies = TRUE)
+
+or (for the development version):
+
+.. code:: r
+
+   install.packages("remotes")
+   remotes::install_github("piecepackr/piecepackr", dependencies = TRUE)
+
+Suggested R packages:
+
+**animation**
+    ``animate_piece()`` uses the ``{animation}`` package to save "html" and "video" (e.g. mp4 and avi) animations.  Additionally, if the ``{gifski}`` package is not installed ``animate_piece()`` will fall back to using ``{animation}`` to make "gif" animations.
+
+**ggplot2**
+    Required by the ``{ggplot2}`` bindings ``geom_piece()`` and its helper functions ``aes_piece()``, ``scale_x_piece()``, and ``scale_y_piece()``.  
+
+**gifski**
+    ``animate_piece()`` uses the ``{gifski}`` package to save "gif" animations.
+
+**gridpattern**
+    The ``pp_shape()`` object's ``pattern()`` method uses ``{gridpattern}`` to make patterned shapes.  In particular can be used to make patterned board game pieces.
+
+**magick**
+    ``file2grob()`` uses ``magick::image_read()`` to import images that are not "png", "jpg/jpeg", or "svg/svgz".
+
+**rayrender**
+    Required for the ``{rayrender}`` binding ``piece()`` and the ``pp_cfg()`` object's ``rayrender_fn()`` method.
+
+**rayvertex**
+    Required for the ``{rayvertex}`` binding ``piece_mesh()`` and the ``pp_cfg()`` object's ``rayvertex_fn()`` method.
+
+**readobj**
+    Allows the ``{rgl}`` bindings to support more shapes.
+
+**rgl**
+    Required for the ``{rgl}`` binding ``piece3d()`` and the ``pp_cfg()`` object's ``rgl_fn()`` method.  Also required for the ``obj_fn()`` method for game pieces with ellipsoid shapes (in particular this may effect ``save_piece_obj()``, ``piece()``, ``piece3d()``, and/or ``piece_mesh()`` when used with the go stones and joystick pawns provided by ``game_systems()``).  You may need to `install extra software <https://github.com/dmurdoch/rgl#installing-opengl-support>`__ for ``{rgl}`` to support OpenGL (in addition to WebGL).
+
+**systemfonts**
+    ``has_font()`` preferably uses ``{systemfonts}`` to determine if a given font is available.  If ``{styemfonts}`` is not available it can fall back on the system tool ``pdffonts`` if ``capabilities("cairo") == TRUE``.
+
+**tweenr**
+    ``animate_piece()`` needs ``{tweenr}`` to do animation transitions (i.e. its ``n_transitions`` argument is greater than the default zero).
+
+Other suggested software
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The default piecepackr ``pp_cfg()`` configuration and the default game systems returned by ``game_systems()`` should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However ``game_systems(style = "dejavu")`` requires that the `Dejavu Sans <https://dejavu-fonts.github.io/Download.html>`_ font is installed.
+
+For more advanced ``{piecepackr}`` configurations you'll want to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
 
 .. code:: bash
 
@@ -557,7 +613,7 @@ The default piecepackr configuration should work out on the box on most modern O
 Also although most users won't need them ``piecpackr`` contains utility functions that depend on the system dependencies ``ghostscript`` and ``poppler-utils``:
 
 1. ``save_print_and_play()`` will embed additional metadata into the pdf if ``ghostscript`` is available.
-2. ``get_embedded_font()`` (a debugging helper function) needs ``pdffonts`` (usually found in ``poppler-utils``)
+2. ``get_embedded_font()`` (a debugging helper function) needs ``pdffonts`` (usually found in ``poppler-utils``).  If the suggeste R package ``{systemfonts}`` is not installed then ``has_font()`` also needs ``pdffonts``.
 
 You can install these utilities on Ubuntu with
 

@@ -1,6 +1,5 @@
 #' Miscellaneous \code{piecepackr} utility functions
 #'
-#' \code{get_embedded_font} returns which font is actually embedded by \code{cairo_pdf}.
 #' \code{cleave} converts a delimiter separated string into a vector.
 #' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
 #' \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
