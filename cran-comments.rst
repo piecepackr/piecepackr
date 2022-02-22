@@ -1,6 +1,3 @@
-* Tweaks example so it should not cause an R CMD check ERROR
-  on the 'M1mac' platform (example no longer needs Dejavu Sans font).
-
 **Test environments**
 
 * local (linux, R 4.1.2) 

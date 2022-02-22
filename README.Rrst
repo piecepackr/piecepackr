@@ -573,7 +573,7 @@ Suggested R packages:
     Required for the ``{rayvertex}`` binding ``piece_mesh()`` and the ``pp_cfg()`` object's ``rayvertex_fn()`` method.
 
 **readobj**
-    Allows the ``{rgl}`` bindings to support more shapes.
+    Allows the ``{rgl}`` bindings to support more game piece shapes; in particular the "meeple", "halma", and "roundrect" shaped token game pieces.
 
 **rgl**
     Required for the ``{rgl}`` binding ``piece3d()`` and the ``pp_cfg()`` object's ``rgl_fn()`` method.  Also required for the ``obj_fn()`` method for game pieces with ellipsoid shapes (in particular this may effect ``save_piece_obj()``, ``piece()``, ``piece3d()``, and/or ``piece_mesh()`` when used with the go stones and joystick pawns provided by ``game_systems()``).  You may need to `install extra software <https://github.com/dmurdoch/rgl#installing-opengl-support>`__ for ``{rgl}`` to support OpenGL (in addition to WebGL).
