@@ -1,3 +1,12 @@
+piecepackr 1.10.2
+=================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* Final page in "4x6" `size` layout produced by `save_print_and_play()`
+  is no longer incorrectly rotated from landscape to portrait mode (#269).
+
 piecepackr 1.10.1
 =================
 

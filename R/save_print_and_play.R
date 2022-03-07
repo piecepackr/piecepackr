@@ -128,6 +128,8 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     txt <- append(txt, line)
     writeLines(txt, temp_txt)
 
-    args <- c("-q", "-o", shQuote(output_filename), "-sDEVICE=pdfwrite", shQuote(temp_txt), shQuote(temp_pdf))
+    args <- c("-q", "-o", shQuote(output_filename),
+              "-sDEVICE=pdfwrite", "-sAutoRotatePages=None",
+              shQuote(temp_txt), shQuote(temp_pdf))
     system2(gs(), args)
 }
