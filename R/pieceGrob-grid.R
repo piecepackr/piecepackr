@@ -156,7 +156,7 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
           default.units=default.units, envir=envir,
           scale=scale, alpha=alpha, type=type, bleed=bleed,
           name=name, gp=gp, vp=vp,
-          cl="piece")
+          cl=c("piece", "pp_grobCoords"))
 }
 
 #' @export
@@ -205,13 +205,6 @@ makeContent.piece <- function(x) {
                                         x$scale, x$alpha, type[i], name, bleed[i])
     }
     setChildren(x, gl)
-}
-
-#' @export
-grobPoints.piece <- function(x, closed = TRUE) {
-    gc <- grobCoords(x, closed = closed)
-    f <- function(x, y) gridGeometry::polyclip(x, y, "union")
-    Reduce(f, gc)
 }
 
 get_cfg <- function(cfg=pp_cfg(), envir=NULL) {

@@ -670,6 +670,8 @@ Config <- R6Class("pp_cfg",
                 if (is.character(grob_fn))
                     grob_fn <- match.fun(grob_fn)
                 grob <- grob_fn(piece_side, suit, rank, self)
+                if (!inherits(grob, "pp_grobCoords"))
+                    class(grob) <- c("pp_grobCoords", class(grob))
                 if (self$cache_grob) self$cache$set(key, grob)
             }
             grob

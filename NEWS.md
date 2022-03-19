@@ -1,6 +1,22 @@
 piecepackr 1.10.2
 =================
 
+Breaking changes
+----------------
+
+* Upcoming breaking changes in R 4.2 for `grid::grobCoords()` and `grid::grobPoints()` 
+  required changes being made in `{piecepackr}` as well.  
+  However `{piecepackr}` users probably won't need to update any of their code due to these changes (#270).:
+
+  + `{piecepackr}` exports new S3 `grobCoords()` / `grobPoints()` methods that
+    works for grob objects returned by `pieceGrob()` and `pp_cfg()$get_grob()` (for `type = "normal"`)
+    as well as grob objects returned by `pmap_piece()`.
+    They return lists of lists with (x,y) coordinates of the polygons that bound the game pieces
+    in the format expected for `grid::grobCoords()` methods according to the R version number.
+  + Instead of `grobPoints.piece()` we now export the S3 method `grobPoints.pp_grobCoords()` and
+    the grob objects returned by `pieceGrob()` and `pp_cfg()$get_grob()` (for `type = "normal"`) now 
+    inherit the additional class "pp_grobCoords".
+
 Bug fixes and minor improvements
 --------------------------------
 

@@ -404,8 +404,9 @@ makeContent.hexlines <- function(x) {
 makeContent.pp_polyclip <- function(x) {
     subject <- x$shape$shape()
     clip <- x$clip
-    if (inherits(clip, "piece") || inherits(clip, "pmap_piece")) {
-        clip <- gridGeometry::xyListPath(grobPoints(clip))
+    if (inherits(clip, "pp_grobCoords") || inherits(clip, "pmap_piece")) {
+        xylist <- grid::grobCoords(clip, closed = TRUE)
+        clip <- gridGeometry::xyListPath(xylist)
     }
     gl <- gList(gridGeometry::polyclipGrob(subject, clip, x$op))
     setChildren(x, gl)

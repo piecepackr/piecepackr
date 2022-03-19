@@ -13,7 +13,7 @@
 ^_pkgdown.yml$
 ^pkgdown$
 ^.travis.yml$
-^cran-comments.rst$
+^cran-comments.md$
 
 .*\.eps$
 ^inst/extdata/badges/.*\.svg$
