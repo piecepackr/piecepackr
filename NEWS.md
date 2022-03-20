@@ -23,6 +23,14 @@ Bug fixes and minor improvements
 * Final page in "4x6" `size` layout produced by `save_print_and_play()`
   is no longer incorrectly rotated from landscape to portrait mode (#269).
 
+Deprecated features
+-------------------
+
+* Using `animate_piece()`'s `annotate` argument unnamed is now deprecated.
+  Instead either use its `annotate` argument named e.g. `annotate = "cartesian"`
+  or instead don't provide this argument (and let it use its default `TRUE` value).
+  In a future version this argument will be moved behind the `...`.
+
 piecepackr 1.10.1
 =================
 

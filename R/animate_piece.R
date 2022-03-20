@@ -69,6 +69,17 @@ animate_piece <- function(dfs, file = "animation.gif", annotate = TRUE, ...,
                           width = NULL, height = NULL, ppi = NULL,
                           new_device = TRUE, annotation_scale = NULL) {
 
+    if (!missing(annotate) && !hasName(as.list(sys.call()), "annotate")) {
+        if (is.character(annotate))
+            annotate_str <- sprintf('"%s"', annotate)
+        else
+            annotate_str <- as.character(annotate)
+        msg <- paste("Using the `annotate` argument unnamed is deprecated.",
+                     sprintf("Use `annotate = %s` in the function call.", annotate_str)
+                     )
+        .Deprecated(msg = msg)
+    }
+
     if (n_transitions > 0L)
         assert_suggested("tweenr")
 
