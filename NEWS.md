@@ -1,4 +1,4 @@
-piecepackr 1.10.2
+piecepackr 1.10.3
 =================
 
 Breaking changes
@@ -17,7 +17,7 @@ Breaking changes
     the grob objects returned by `pieceGrob()` and `pp_cfg()$get_grob()` (for `type = "normal"`) now 
     inherit the additional class "pp_grobCoords".
 
-Bug fixes and minor improvements
+Bug fixes
 --------------------------------
 
 * Final page in "4x6" `size` layout produced by `save_print_and_play()`

@@ -421,7 +421,8 @@ roundrect_xy <- function(shape_r) {
         grDevices::pdf(pdf_file)
         on.exit(grDevices::dev.off())
     }
-    coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")), closed=TRUE)[[1]]
+    coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")),
+                               closed=TRUE)[[1]]
     x <- as.numeric(grid::convertX(grid::unit(coords$x, "in"), "npc"))
     y <- as.numeric(grid::convertY(grid::unit(coords$y, "in"), "npc"))
     list(x = x, y = y, c = rep("C1", length(x)))
