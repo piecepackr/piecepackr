@@ -42,7 +42,7 @@ that maybe of use to developers:
 \item{\code{piece_side}}{A string with piece and side separated by a underscore e.g. "coin_face".}
 \item{\code{suit}}{Number of suit (starting from 1).}
 \item{\code{rank}}{Number of rank (starting from 1).}
-\item{\code{type}}{Which type of grob to return, either \code{"normal"}, \code{"picture"}, or \code{"raster"}.}
+\item{\code{type}}{Which type of grob to return, either \code{"normal"}, \code{"picture"}, \code{"raster"}, or \code{"transformation"}.}
 }
 }
 

@@ -22,7 +22,7 @@
 #'   \item{`piece_side`}{A string with piece and side separated by a underscore e.g. "coin_face".}
 #'   \item{`suit`}{Number of suit (starting from 1).}
 #'   \item{`rank`}{Number of rank (starting from 1).}
-#'   \item{`type`}{Which type of grob to return, either `"normal"`, `"picture"`, or `"raster"`.}
+#'   \item{`type`}{Which type of grob to return, either `"normal"`, `"picture"`, `"raster"`, or `"transformation"`.}
 #' }
 #'
 #' @section `pp_cfg` R6 Class Methods:\describe{
@@ -160,11 +160,15 @@ Config <- R6Class("pp_cfg",
             # so different cfg objects can share the same cache (with high probability)
             private$prefix <- as.hexmode(sample.int(2147483647L, 1L, useHash=TRUE))
         },
-        get_grob = function(piece_side, suit, rank, type = "normal", ...) {
+        get_grob = function(piece_side, suit, rank,
+                            type = c("normal", "picture", "raster", "transformation"),
+                            ...) {
+            type <- match.arg(type)
             switch(type,
                    normal = private$get_grob_normal(piece_side, suit, rank),
                    picture = private$get_grob_picture(piece_side, suit, rank),
-                   raster = to_rasterGrob(self$get_raster(piece_side, suit, rank, ...)))
+                   raster = to_rasterGrob(self$get_raster(piece_side, suit, rank, ...)),
+                   transformation = private$get_grob_transformation(piece_side, suit, rank))
         },
         get_grob_with_bleed = function(piece_side, suit, rank) {
             rank <- impute_rank(piece_side, rank, self)
@@ -375,7 +379,11 @@ Config <- R6Class("pp_cfg",
             on.exit(unlink(png_file))
             current_dev <- grDevices::dev.cur()
             if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
-            png(png_file, width=width, height=height, units="in", res=res, bg="transparent")
+            args <- list(filename=png_file, width=width, height=height,
+                         units="in", res=res, bg="transparent")
+            if (capabilities("cairo"))
+                args$type <- "cairo"
+            do.call(png, args)
             grid.draw(grob)
             invisible(grDevices::dev.off())
             as.raster(png::readPNG(png_file))
@@ -681,6 +689,13 @@ Config <- R6Class("pp_cfg",
             width <- self$get_width(piece_side, suit, rank)
             height <- self$get_height(piece_side, suit, rank)
             as_picture(grob, width, height)
+        },
+        get_grob_transformation = function(piece_side, suit, rank) {
+            grob <- private$get_grob_normal(piece_side, suit, rank)
+            width <- self$get_width(piece_side, suit, rank)
+            height <- self$get_height(piece_side, suit, rank)
+            vp <- viewport(width = inch(width), height = inch(height))
+            transformationGrob(grob, vp.define=vp)
         },
         opt_cache_key = function(piece_side, suit, rank, type) {
             paste(private$prefix, piece_side, suit, rank, type, sep="-")

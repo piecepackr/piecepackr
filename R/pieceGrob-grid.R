@@ -35,10 +35,12 @@
 #' @param ... Ignored.
 #' @param scale Multiplicative scaling factor to apply to width, height, and depth.
 #' @param alpha Alpha channel for transparency.
-#' @param type Type of grid grob to use.  Either `"normal"` (default), `"picture"`, or `"raster"`.
+#' @param type Type of grid grob to use.  Either `"normal"` (default), `"picture"`, `"raster"`, or `"transformation"`.
 #'             `"picture"` exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
 #'             `"raster"` exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
-#'             The latter two can be useful if drawing pieces really big or small and don't want
+#'             `"transformation"` uses the affine transformation feature only supported in
+#'             R 4.2+ within select graphic devices.
+#'             The latter three can be useful if drawing pieces really big or small and don't want
 #'             to mess with re-configuring fontsizes and linewidths.
 #' @param bleed Whether to add a \dQuote{bleed} zone around the piece.
 #'              If `width` or `height` is `NA` we will add 1/8 inch bleeds.
@@ -89,7 +91,7 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
                            angle=0, width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
                            default.units = "npc",
-                           scale=1, alpha=1, type=type, name="", bleed=FALSE) {
+                           scale=1, alpha=1, type="normal", name="", bleed=FALSE) {
     if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
     rank <- impute_rank(piece_side, rank, cfg)

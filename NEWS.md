@@ -1,3 +1,26 @@
+piecepackr 1.11.0
+=================
+
+New features
+------------
+
+* `geom_piece()`, `grid.piece()`, `pieceGrob()`, and `pp_cfg()$get_grob()` now support
+  argument `type = "transformation"` which uses
+  the new affine transformation feature introduced in R 4.2.
+
+  + Should be a faster alternative to the existing "picture" and "raster" types when
+    wishing to faithfully draw game pieces outside their "normal" (viewport) sizes 
+    (and/or dilate them in x/y directions)
+    but will only work in select graphic devices in R 4.2 (or later).
+  + You can tell if the active graphic device supports the affine transformation feature
+    with `isTRUE(dev.capabilities()$transformations)`.
+
+Bug fixes
+---------
+
+* If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
+  now always uses `png(type = "cairo")`.
+
 piecepackr 1.10.3
 =================
 

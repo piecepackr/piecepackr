@@ -114,10 +114,12 @@ and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 
 \item{alpha}{Alpha channel for transparency.}
 
-\item{type}{Type of grid grob to use.  Either \code{"normal"} (default), \code{"picture"}, or \code{"raster"}.
+\item{type}{Type of grid grob to use.  Either \code{"normal"} (default), \code{"picture"}, \code{"raster"}, or \code{"transformation"}.
 \code{"picture"} exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
 \code{"raster"} exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
-The latter two can be useful if drawing pieces really big or small and don't want
+\code{"transformation"} uses the affine transformation feature only supported in
+R 4.2+ within select graphic devices.
+The latter three can be useful if drawing pieces really big or small and don't want
 to mess with re-configuring fontsizes and linewidths.}
 
 \item{bleed}{Whether to add a \dQuote{bleed} zone around the piece.
