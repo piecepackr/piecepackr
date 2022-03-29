@@ -136,9 +136,6 @@ test_that("get_piece_opt works as expected", {
 
 test_that("pp_cfg querying variables work as expected", {
     cfg <- pp_cfg()
-    expect_warning(cfg$cache_shadow, "pp_cfg\\()\\$cache_op_fn")
-    expect_warning(cfg$i_unsuit, "Add '1L' to 'n_suits'")
-    expect_error(suppressWarnings(cfg$cache_shadow <- "boo"), "value was not a boolean")
     expect_true(cfg$has_piecepack)
 
     expect_true(cfg$has_pawns)

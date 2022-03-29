@@ -10,16 +10,22 @@ Breaking changes
   in configurations lists are internally called by `{piecepackr}`.  
   If you use custom *function* style elements it is possible you may be affected:
 
-  * The arguments of custom functions are now called by name (via `do.call()`)
+  + The arguments of custom functions are now called by name (via `do.call()`)
     instead of positionally.
     However, if your custom function used the same argument names 
     as any of `{piecepackr}`'s internal custom functions then there should be no problem.
     The order of arguments no longer matters but the names must be "right".
-  * `op_grob_fn` can now *optionaly* have an additional argument `scale` which would be
+  + `op_grob_fn` can now *optionaly* have an additional argument `scale` which would be
     passed in by `pieceGrob()` / `grid.piece()`.  
     `pieceGrob()` / `grid.piece()` no longer sets `gp = gpar(cex = scale, lex = scale)` 
     when `scale != 1` so such an adjustment must now occur in the `op_grob_fn`.  
     and internal oblique projection grob functions now make such an adjustment.
+
+* A couple `pp_cfg()` R6 class active bindings which were deprecated in v1.7.1 (2021-03-25)
+  have been removed:
+
+  + ``cache_shadow``.  Use the new ``cache_op_fn`` instead.
+  + ``i_unsuit``.  Add one to the ``n_suits`` field instead.
 
 New features
 ------------

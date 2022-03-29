@@ -550,14 +550,6 @@ Config <- R6Class("pp_cfg",
                 private$cache_type(value, "cache_op_fn_bool", "shadow$|op_grob_fn$")
             }
         },
-        cache_shadow = function(value) {
-            .Deprecated("pp_cfg()$cache_op_fn")
-            if (missing(value)) {
-                private$cache_op_fn_bool
-            } else {
-                private$cache_type(value, "cache_op_fn_bool", "shadow$|op_grob_fn$")
-            }
-        },
         coin_arrangement = function(value) {
             if (missing(value)) {
                 as.numeric(private$cfg$coin_arrangement %||% 180)
@@ -637,10 +629,6 @@ Config <- R6Class("pp_cfg",
                 private$cfg$n_suits
             else
                 warn("Must set 'n_suits' at initialization")
-        },
-        i_unsuit = function(value) {
-            .Deprecated("Add '1L' to 'n_suits'")
-            self$n_suits + 1L
         },
         spdx_id = function(value) {
             if (missing(value)) {
