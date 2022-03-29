@@ -1,5 +1,5 @@
-piecepackr 1.11.0
-=================
+piecepackr 1.11.0 (development)
+===============================
 
 Breaking changes
 ----------------
@@ -12,14 +12,10 @@ Breaking changes
 
   + The arguments of custom functions are now called by name (via `do.call()`)
     instead of positionally.
-    However, if your custom function used the same argument names 
+    However, if your custom function uses the same argument names 
     as any of `{piecepackr}`'s internal custom functions then there should be no problem.
-    The order of arguments no longer matters but the names must be "right".
-  + `op_grob_fn` can now *optionaly* have an additional argument `scale` which would be
-    passed in by `pieceGrob()` / `grid.piece()`.  
-    `pieceGrob()` / `grid.piece()` no longer sets `gp = gpar(cex = scale, lex = scale)` 
-    when `scale != 1` so such an adjustment must now occur in the `op_grob_fn`.  
-    and internal oblique projection grob functions now make such an adjustment.
+    The order of arguments no longer matters but the names must be match the
+    names `{piecepackr}` expects.
 
 * A couple `pp_cfg()` R6 class active bindings which were deprecated in v1.7.1 (2021-03-25)
   have been removed:
@@ -30,7 +26,8 @@ Breaking changes
 New features
 ------------
 
-* `geom_piece()`, `grid.piece()`, `pieceGrob()`, and `pp_cfg()$get_grob()` now support
+* `geom_piece()`, `grid.piece()`, `pieceGrob()`, 
+  `pp_cfg()$get_grob()`, and `pp_cfg()$get_op_grob()` now support
   argument `type = "transformation"` which uses
   the new affine transformation feature introduced in R 4.2.
 
@@ -41,12 +38,21 @@ New features
   You can tell if the active graphic device supports the affine transformation feature
   with `isTRUE(dev.capabilities()$transformations)`.
 
+* Tweaks to custom *function* style elements that should be backwards-compatible:
+
+  + `op_grob_fn` custom functions can now *optionaly* take an additional argument `scale` 
+    to support custom scaling adjustments.  
+    If the `op_grob_fn` custom function does **not** have argument `scale` 
+    then we will adjust its returned grob `gp`'s `cex` and `lex` values.
+
 Bug fixes and minor improvements
 --------------------------------
 
 * The `alpha` and `scale` arguments of `pieceGrob()` / `grid.piece()` are now vectorized.
 * If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
   now always uses `png(type = "cairo")`.
+* `pp_cfg()$get_grob()` and `pp_cfg()$get_op_grob()` now support new arguments `scale` and `alpha`
+  which are used to adjust the grob's `alpha`, `cex`, and `lex` `grid::gpar()` values.
 
 piecepackr 1.10.3
 =================

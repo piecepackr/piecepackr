@@ -23,6 +23,8 @@
 #'   \item{`suit`}{Number of suit (starting from 1).}
 #'   \item{`rank`}{Number of rank (starting from 1).}
 #'   \item{`type`}{Which type of grob to return, either `"normal"`, `"picture"`, `"raster"`, or `"transformation"`.}
+#'   \item{`scale`}{"scale" factor}
+#'   \item{`alpha`}{"alpha" value}
 #' }
 #'
 #' @section `pp_cfg` R6 Class Methods:\describe{
@@ -162,13 +164,16 @@ Config <- R6Class("pp_cfg",
         },
         get_grob = function(piece_side, suit, rank,
                             type = c("normal", "picture", "raster", "transformation"),
-                            ...) {
+                            scale = 1, alpha = 1, ...) {
             type <- match.arg(type)
-            switch(type,
-                   normal = private$get_grob_normal(piece_side, suit, rank),
-                   picture = private$get_grob_picture(piece_side, suit, rank),
-                   raster = to_rasterGrob(self$get_raster(piece_side, suit, rank, ...)),
-                   transformation = private$get_grob_transformation(piece_side, suit, rank))
+            grob <- switch(type,
+                           normal = private$get_grob_normal(piece_side, suit, rank, scale),
+                           picture = private$get_grob_picture(piece_side, suit, rank),
+                           raster = to_rasterGrob(self$get_raster(piece_side, suit, rank, ...)),
+                           transformation = private$get_grob_transformation(piece_side, suit, rank))
+            if (!nigh(alpha, 1))
+                grob <- update_gp(grob, gp = gpar(alpha = alpha))
+            grob
         },
         get_grob_with_bleed = function(piece_side, suit, rank) {
             rank <- impute_rank(piece_side, rank, self)
@@ -354,7 +359,8 @@ Config <- R6Class("pp_cfg",
         get_op_grob = function(piece_side, suit, rank,
                                x, y, z, angle, type,
                                width, height, depth,
-                               op_scale, op_angle, scale = 1) {
+                               op_scale, op_angle,
+                               scale = 1, alpha = 1) {
             key <- private$opt_cache_key(piece_side, suit, rank, "op_grob")
             grob_fn <- self$cache$get(key, key_missing())
             if (is.key_missing(grob_fn)) {
@@ -379,7 +385,12 @@ Config <- R6Class("pp_cfg",
                          op_scale = op_scale, op_angle = op_angle)
             if ("scale" %in% names(formals(grob_fn)))
                 args$scale <- scale
-            do.call(grob_fn, args)
+            grob <- do.call(grob_fn, args)
+            if ("scale" %in% names(formals(grob_fn)))
+                gp <- gpar(alpha = alpha)
+            else
+                gp <- gpar(alpha = alpha, cex = scale, lex = scale)
+            update_gp(grob, gp = gp)
         },
         get_raster = function(piece_side, suit, rank, res=72) {
             grob <- private$get_grob_normal(piece_side, suit, rank)
@@ -655,7 +666,7 @@ Config <- R6Class("pp_cfg",
                    cache_op_fn_bool = TRUE,
                    n_suits_val = NULL,
                    n_ranks_val = NULL,
-        get_grob_normal = function(piece_side, suit, rank, gp=gpar()) {
+        get_grob_normal = function(piece_side, suit, rank, scale = 1) {
             rank <- impute_rank(piece_side, rank, self)
             suit <- impute_suit(piece_side, suit, self)
             key <- private$opt_cache_key(piece_side, suit, rank, "grob")
@@ -690,6 +701,9 @@ Config <- R6Class("pp_cfg",
                 if (!inherits(grob, "pp_grobCoords"))
                     class(grob) <- c("pp_grobCoords", class(grob))
                 if (self$cache_grob) self$cache$set(key, grob)
+            }
+            if (!isFALSE(grob$update_gp) && !nigh(scale, 1)) {
+               grob <- update_gp(grob, gp=gpar(cex = scale, lex = scale))
             }
             grob
         },

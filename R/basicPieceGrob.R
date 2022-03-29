@@ -125,7 +125,7 @@ piece_filename_helper <- function(directory, piece_side, format, suit, rank, cfg
 #' @export
 pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     gTree(suit = suit, rank = rank, cfg = cfg,
-          edit_gp = FALSE, cl="pyramid_top")
+          update_gp = FALSE, cl="pyramid_top")
 }
 
 #' @export

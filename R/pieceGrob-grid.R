@@ -113,29 +113,25 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     angle <- angle %% 360
     op_angle <- op_angle %% 360
 
-    gp_alpha <- gpar()
-    if (alpha != 1) {
-        gp_alpha$alpha <- alpha
-    }
-
     if (op_scale < 0.01) {
-        if (bleed)
+        if (bleed) {
+            stopifnot(nigh(scale, 1), nigh(alpha, 1))
             grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
-        else
-            grob <- cfg$get_grob(piece_side, suit, rank, type)
-        cvp <- viewport(x, y, width, height, angle=angle, gp=gp_alpha)
+        } else {
+            grob <- cfg$get_grob(piece_side, suit, rank, type, scale, alpha)
+        }
+        cvp <- viewport(x, y, width, height, angle=angle)
         name <- paste0("piece_side", name)
         grob <- grid::editGrob(grob, vp=cvp, name=name)
-        if (type == "normal" && !isFALSE(grob$edit_gp) && !nigh(scale, 1)) {
-           grob <- grid::editGrob(grob, gp=gpar(cex = scale, lex = scale))
-        }
     } else {
+        stopifnot(isFALSE(bleed))
         grob <- cfg$get_op_grob(piece_side, suit, rank,
                             x, y, z, angle, type,
                             width, height, depth,
-                            op_scale, op_angle, scale)
+                            op_scale, op_angle,
+                            scale, alpha)
         name <- paste0("projected_piece", name)
-        grob <- grid::editGrob(grob, name=name, gp=gp_alpha)
+        grob <- grid::editGrob(grob, name=name)
     }
     grob
 }
@@ -170,22 +166,6 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
           name=name, gp=gp, vp=vp,
           cl=c("piece", "pp_grobCoords"))
 }
-
-# #' @export
-# makeContext.piece <- function(x) {
-#     scale <- x$scale
-#     alpha <- x$alpha
-#     gp <- x$gp %||% gpar()
-#     if (scale != 1) {
-#         gp$cex <- scale * (gp$cex %||% 1)
-#         gp$lex <- scale * (gp$lex %||% 1)
-#     }
-#     if (alpha != 1) {
-#         gp$alpha <- alpha * (gp$alpha %||% 1)
-#     }
-#     x$gp <- gp
-#     x
-# }
 
 #' @export
 makeContent.piece <- function(x) {

@@ -43,6 +43,8 @@ that maybe of use to developers:
 \item{\code{suit}}{Number of suit (starting from 1).}
 \item{\code{rank}}{Number of rank (starting from 1).}
 \item{\code{type}}{Which type of grob to return, either \code{"normal"}, \code{"picture"}, \code{"raster"}, or \code{"transformation"}.}
+\item{\code{scale}}{"scale" factor}
+\item{\code{alpha}}{"alpha" value}
 }
 }
 
