@@ -52,3 +52,7 @@ makeContent.pp_transformation <- function(x) {
     gl <- gList(define, use)
     setChildren(x, gl)
 }
+
+has_transformations <- function() {
+    getRversion() >= '4.2.0' && isTRUE(dev.capabilities()$transformations)
+}

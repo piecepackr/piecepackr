@@ -124,19 +124,36 @@ piece_filename_helper <- function(directory, piece_side, format, suit, rank, cfg
 #' @rdname basicPieceGrobs
 #' @export
 pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
-    g1 <- pieceGrob("pyramid_face",  suit, rank, cfg, type="picture",
+    gTree(suit = suit, rank = rank, cfg = cfg,
+          edit_gp = FALSE, cl="pyramid_top")
+}
+
+#' @export
+makeContent.pyramid_top <- function(x) {
+    # if (has_transformations())
+    #     type <- "transformation"
+    # else
+    #     type <- "picture"
+    type <- "picture"
+    g1 <- pieceGrob("pyramid_face",  x$suit, x$rank, x$cfg, type=type,
                     default.units = "npc",
                     y=0.75, width=1.0, height=0.5, angle=180, name="face")
-    g2 <- pieceGrob("pyramid_back",  suit, rank, cfg, type="picture",
+    g2 <- pieceGrob("pyramid_back",  x$suit, x$rank, x$cfg, type=type,
                     default.units = "npc",
                     y=0.25, width=1.0, height=0.5, angle=  0, name="back")
-    g3 <- pieceGrob("pyramid_left",  suit, rank, cfg, type="picture",
+    g3 <- pieceGrob("pyramid_left",  x$suit, x$rank, x$cfg, type=type,
                     default.units = "npc",
-                    x=0.25, width=1.0, height=0.5, angle=-90, name="left")
-    g4 <- pieceGrob("pyramid_right", suit, rank, cfg, type="picture",
+                    x=0.25,
+                    width=convertHeight(unit(1.0, "npc"), "in"),
+                    height=convertWidth(unit(0.5, "npc"), "in"),
+                    angle=-90, name="left")
+    g4 <- pieceGrob("pyramid_right", x$suit, x$rank, x$cfg, type=type,
                     default.units = "npc",
-                    x=0.75, width=1.0, height=0.5, angle= 90, name="right")
-    grobTree(g3, g4, g1, g2, cl="pyramid_top")
+                    x=0.75,
+                    width=convertHeight(unit(1.0, "npc"), "in"),
+                    height=convertWidth(unit(0.5, "npc"), "in"),
+                    angle= 90, name="right")
+    setChildren(x, gList(g1, g2, g3, g4))
 }
 
 #' @rdname basicPieceGrobs

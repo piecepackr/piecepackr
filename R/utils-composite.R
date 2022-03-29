@@ -20,7 +20,7 @@ CompositePiece <- R6Class("pp_composite",
         },
         op_grob_fn = function() function(piece_side, suit, rank, cfg,
                                          x, y, z, angle, type, width, height, depth,
-                                         op_scale, op_angle) {
+                                         op_scale, op_angle, scale = 1) {
             x <- as.numeric(convertX(x, "in"))
             y <- as.numeric(convertY(y, "in"))
             z <- as.numeric(convertX(z, "in"))
@@ -31,9 +31,11 @@ CompositePiece <- R6Class("pp_composite",
             relative_side <- get_relative_side(piece_side, private$ref_side)
             df <- scale_df(df, relative_side, width, height, depth)
             df <- translate_df(df, relative_side, x, y, z, angle, width, height, depth)
+            # adjust scale for proper adjustment of `cex` / `lex`
+            df <- adjust_scale_df(df, scale = scale)
             #### in future need to re-order elements using `op_sort()`?
             pmap_piece(df, suit = suit, envir = private$envir, draw = FALSE,
-                       default.units = "in", op_scale = op_scale, op_angle = op_angle)
+                       default.units = "in", op_scale = op_scale, op_angle = op_angle, scale = scale)
         },
         rayrender_fn = function() function(piece_side, suit, rank, cfg,
                                            x, y, z, angle, axis_x, axis_y,
@@ -190,6 +192,13 @@ translate_df <- function(df, relative_side, x, y, z, angle, width, height, depth
     df$y <- xyz$y
     df$z <- xyz$z
     df$angle <- angle
+    df
+}
+
+adjust_scale_df <- function(df, scale = 1) {
+    df$height <- df$height / scale
+    df$width <- df$width / scale
+    df$depth <- df$depth / scale
     df
 }
 

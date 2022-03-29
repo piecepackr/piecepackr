@@ -112,22 +112,32 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     depth <- scale * depth
     angle <- angle %% 360
     op_angle <- op_angle %% 360
+
+    gp_alpha <- gpar()
+    if (alpha != 1) {
+        gp_alpha$alpha <- alpha
+    }
+
     if (op_scale < 0.01) {
         if (bleed)
             grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
         else
             grob <- cfg$get_grob(piece_side, suit, rank, type)
+        cvp <- viewport(x, y, width, height, angle=angle, gp=gp_alpha)
         name <- paste0("piece_side", name)
-        cvp <- viewport(x, y, width, height, angle=angle)
-        grid::editGrob(grob, vp=cvp, name=name)
+        grob <- grid::editGrob(grob, vp=cvp, name=name)
+        if (type == "normal" && !isFALSE(grob$edit_gp) && !nigh(scale, 1)) {
+           grob <- grid::editGrob(grob, gp=gpar(cex = scale, lex = scale))
+        }
     } else {
         grob <- cfg$get_op_grob(piece_side, suit, rank,
                             x, y, z, angle, type,
                             width, height, depth,
-                            op_scale, op_angle)
+                            op_scale, op_angle, scale)
         name <- paste0("projected_piece", name)
-        grid::editGrob(grob, name=name)
+        grob <- grid::editGrob(grob, name=name, gp=gp_alpha)
     }
+    grob
 }
 
 #' @rdname grid.piece
@@ -161,26 +171,28 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
           cl=c("piece", "pp_grobCoords"))
 }
 
-#' @export
-makeContext.piece <- function(x) {
-    scale <- x$scale
-    alpha <- x$alpha
-    gp <- x$gp %||% gpar()
-    if (scale != 1) {
-        gp$cex <- scale * (gp$cex %||% 1)
-        gp$lex <- scale * (gp$lex %||% 1)
-    }
-    if (alpha != 1) {
-        gp$alpha <- alpha * (gp$alpha %||% 1)
-    }
-    x$gp <- gp
-    x
-}
+# #' @export
+# makeContext.piece <- function(x) {
+#     scale <- x$scale
+#     alpha <- x$alpha
+#     gp <- x$gp %||% gpar()
+#     if (scale != 1) {
+#         gp$cex <- scale * (gp$cex %||% 1)
+#         gp$lex <- scale * (gp$lex %||% 1)
+#     }
+#     if (alpha != 1) {
+#         gp$alpha <- alpha * (gp$alpha %||% 1)
+#     }
+#     x$gp <- gp
+#     x
+# }
 
 #' @export
 makeContent.piece <- function(x) {
     nn <- max(lengths(list(x$piece_side, x$suit, x$rank, x$x, x$y, x$z, x$angle,
-                           x$type, x$width, x$height, x$depth, x$bleed)))
+                           x$width, x$height, x$depth,
+                           x$scale, x$alpha, x$type,
+                           x$bleed)))
     piece_side <- rep(x$piece_side, length.out=nn)
     suit <- rep(x$suit, length.out=nn)
     rank <- rep(x$rank, length.out=nn)
@@ -188,10 +200,15 @@ makeContent.piece <- function(x) {
     yc <- rep(x$y, length.out=nn)
     zc <- rep(x$z, length.out=nn)
     angle <- rep(x$angle, length.out=nn)
-    type <- rep(x$type, length.out=nn)
+
     width <- rep(x$width, length.out=nn)
     height <- rep(x$height, length.out=nn)
     depth <- rep(x$depth, length.out=nn)
+
+    scale <- rep(x$scale, length.out=nn)
+    alpha <- rep(x$alpha, length.out=nn)
+    type <- rep(x$type, length.out=nn)
+
     bleed <- rep(x$bleed, length.out=nn)
 
     cfg <- get_cfg(x$cfg, x$envir)
@@ -201,10 +218,11 @@ makeContent.piece <- function(x) {
     for (i in seq(nn)) {
         name <- paste0(".", i)
         gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
-                                        xc[i], yc[i], zc[i], angle[i],
-                                        width[i], height[i], depth[i],
-                                        x$op_scale, x$op_angle, x$default.units,
-                                        x$scale, x$alpha, type[i], name, bleed[i])
+                                   xc[i], yc[i], zc[i], angle[i],
+                                   width[i], height[i], depth[i],
+                                   x$op_scale, x$op_angle, x$default.units,
+                                   scale[i], alpha[i], type[i],
+                                   name, bleed[i])
     }
     setChildren(x, gl)
 }
@@ -252,12 +270,12 @@ grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA,
         type <- ifelse(use_pictureGrob, "picture", "normal")
     }
     grob <- pieceGrob(piece_side, suit, rank, cfg,
-                          x, y, z, angle,
-                          width = width, height = height, depth = depth,
-                          op_scale = op_scale, op_angle = op_angle,
-                          default.units = default.units,
-                          envir = envir, name = name, gp = gp, vp =vp,
-                          scale = scale, alpha = alpha, type = type, bleed = bleed)
+                      x, y, z, angle,
+                      width = width, height = height, depth = depth,
+                      op_scale = op_scale, op_angle = op_angle,
+                      default.units = default.units,
+                      envir = envir, name = name, gp = gp, vp =vp,
+                      scale = scale, alpha = alpha, type = type, bleed = bleed)
     if (draw) {
         grid.draw(grob)
         invisible(grob)

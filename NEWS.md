@@ -1,6 +1,26 @@
 piecepackr 1.11.0
 =================
 
+Breaking changes
+----------------
+
+* There were some tweaks on how custom function style elements
+  (i.e. `grob_fn`, `op_grob_fn`, `grob_with_bleed_fn`,
+  `obj_fn`, `rayrender_fn`, `rayvertex_fn`, `rgl_fn`)
+  in configurations lists are internally called by `{piecepackr}`.  
+  If you use custom *function* style elements it is possible you may be affected:
+
+  * The arguments of custom functions are now called by name (via `do.call()`)
+    instead of positionally.
+    However, if your custom function used the same argument names 
+    as any of `{piecepackr}`'s internal custom functions then there should be no problem.
+    The order of arguments no longer matters but the names must be "right".
+  * `op_grob_fn` can now *optionaly* have an additional argument `scale` which would be
+    passed in by `pieceGrob()` / `grid.piece()`.  
+    `pieceGrob()` / `grid.piece()` no longer sets `gp = gpar(cex = scale, lex = scale)` 
+    when `scale != 1` so such an adjustment must now occur in the `op_grob_fn`.  
+    and internal oblique projection grob functions now make such an adjustment.
+
 New features
 ------------
 
@@ -8,16 +28,17 @@ New features
   argument `type = "transformation"` which uses
   the new affine transformation feature introduced in R 4.2.
 
-  + Should be a faster alternative to the existing "picture" and "raster" types when
-    wishing to faithfully draw game pieces outside their "normal" (viewport) sizes 
-    (and/or dilate them in x/y directions)
-    but will only work in select graphic devices in R 4.2 (or later).
-  + You can tell if the active graphic device supports the affine transformation feature
-    with `isTRUE(dev.capabilities()$transformations)`.
+  This should be a faster alternative to the existing "picture" and "raster" types when
+  wishing to "faithfully" draw game pieces outside their "normal" (viewport) sizes 
+  and/or dilate them in x/y directions
+  but will only work in select graphic devices in R 4.2 (or later).
+  You can tell if the active graphic device supports the affine transformation feature
+  with `isTRUE(dev.capabilities()$transformations)`.
 
-Bug fixes
----------
+Bug fixes and minor improvements
+--------------------------------
 
+* The `alpha` and `scale` arguments of `pieceGrob()` / `grid.piece()` are now vectorized.
 * If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
   now always uses `png(type = "cairo")`.
 
@@ -41,7 +62,7 @@ Breaking changes
     inherit the additional class "pp_grobCoords".
 
 Bug fixes
---------------------------------
+---------
 
 * Final page in "4x6" `size` layout produced by `save_print_and_play()`
   is no longer incorrectly rotated from landscape to portrait mode (#269).
