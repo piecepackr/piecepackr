@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics
-Version: 1.11.0-2
+Version: 1.11.0-3
 Description: Functions to make board game graphics with the 'ggplot2', 'grid', 'rayrender', 'rayvertex', and 'rgl' packages.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can make graphics for other board game systems.  Includes configurations for several public domain game systems such as checkers, (double-18) dominoes, go, 'piecepack', playing cards, etc.
 Authors@R: c(person("Trevor L", "Davis", role=c("aut", "cre"), email="trevor.l.davis@gmail.com"),
              person("Linux Foundation", role="dtc",
@@ -40,11 +40,11 @@ Suggests:
     rayvertex (>= 0.3.3),
     readobj (>= 0.4.0),
     rgl (>= 0.106.8),
+    scales (>= 0.5.0),
     systemfonts,
     testthat,
     tweenr,
-    vdiffr,
-    XML (>= 3.99-0.9)
+    vdiffr
 SystemRequirements: ghostscript
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

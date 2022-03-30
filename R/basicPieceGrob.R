@@ -50,7 +50,14 @@
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    gTree(opt=opt, name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
+    gTree(opt=opt, scale=1,
+          name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
+}
+
+#' @export
+makeContext.basic_piece_side <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
 }
 
 #' @export
@@ -125,7 +132,7 @@ piece_filename_helper <- function(directory, piece_side, format, suit, rank, cfg
 #' @export
 pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     gTree(suit = suit, rank = rank, cfg = cfg,
-          update_gp = FALSE, cl="pyramid_top")
+          scale = 1, cl="pyramid_top")
 }
 
 #' @export

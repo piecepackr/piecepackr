@@ -115,24 +115,30 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
 
     if (op_scale < 0.01) {
         if (bleed) {
-            stopifnot(nigh(scale, 1), nigh(alpha, 1))
             grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
         } else {
-            grob <- cfg$get_grob(piece_side, suit, rank, type, scale, alpha)
+            grob <- cfg$get_grob(piece_side, suit, rank, type)
         }
         cvp <- viewport(x, y, width, height, angle=angle)
         name <- paste0("piece_side", name)
-        grob <- grid::editGrob(grob, vp=cvp, name=name)
+        grob <- grid::editGrob(grob, vp=cvp)
     } else {
         stopifnot(isFALSE(bleed))
         grob <- cfg$get_op_grob(piece_side, suit, rank,
                             x, y, z, angle, type,
                             width, height, depth,
-                            op_scale, op_angle,
-                            scale, alpha)
+                            op_scale, op_angle)
         name <- paste0("projected_piece", name)
-        grob <- grid::editGrob(grob, name=name)
     }
+
+    # update name, cex, lex, alpha
+    grob <- grid::editGrob(grob, name=name)
+    if (hasName(grob, "scale"))
+        grob$scale <- scale
+    else
+        grob <- update_gp(grob, gp = gpar(cex = scale, lex = scale))
+    if (!nigh(alpha, 1))
+        grob <- update_gp(grob, gp = gpar(alpha = alpha))
     grob
 }
 

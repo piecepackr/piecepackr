@@ -12,10 +12,16 @@ Breaking changes
 
   + The arguments of custom functions are now called by name (via `do.call()`)
     instead of positionally.
-    However, if your custom function uses the same argument names 
+    If your custom function uses the same argument names 
     as any of `{piecepackr}`'s internal custom functions then there should be no problem.
     The order of arguments no longer matters but the names must be match the
     names `{piecepackr}` expects.
+
+  + If one of the "named slots" of the `{grid}` "grob" returned by a custom
+    `grob_fn`, `op_grob_fn`, or `grob_with_bleed_fn` function is `scale` then
+    `pieceGrob()` / `grid.piece()` will adjust that named slot rather than
+    adjusting that grob's `gp` slot's `cex` and `lex` values.
+    If your "grob" doesn't have a named slot `scale` you shouldn't be affected.
 
 * A couple `pp_cfg()` R6 class active bindings which were deprecated in v1.7.1 (2021-03-25)
   have been removed:
@@ -38,21 +44,12 @@ New features
   You can tell if the active graphic device supports the affine transformation feature
   with `isTRUE(dev.capabilities()$transformations)`.
 
-* Tweaks to custom *function* style elements that should be backwards-compatible:
-
-  + `op_grob_fn` custom functions can now *optionaly* take an additional argument `scale` 
-    to support custom scaling adjustments.  
-    If the `op_grob_fn` custom function does **not** have argument `scale` 
-    then we will adjust its returned grob `gp`'s `cex` and `lex` values.
-
 Bug fixes and minor improvements
 --------------------------------
 
 * The `alpha` and `scale` arguments of `pieceGrob()` / `grid.piece()` are now vectorized.
 * If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
   now always uses `png(type = "cairo")`.
-* `pp_cfg()$get_grob()` and `pp_cfg()$get_op_grob()` now support new arguments `scale` and `alpha`
-  which are used to adjust the grob's `alpha`, `cex`, and `lex` `grid::gpar()` values.
 
 piecepackr 1.10.3
 =================
