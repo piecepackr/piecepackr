@@ -15,7 +15,7 @@ test_that("3d helper functions work", {
     expect_equal(op_transform(df, cfg=list(shape.coin="kite"))$zt, ans)
     # close "pyramids"
     expect_equal(op_transform(df, cfg=list(shape.coin="pyramid"))$zt, ans)
-    expect_warning(pp_cfg(list(shadow_fn = basicShadowGrob)))
+    expect_warning(pp_cfg(list(shadow_fn = basicTokenEdge)))
 
     skip_on_ci()
     skip_if_not_installed("vdiffr")

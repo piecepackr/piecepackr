@@ -362,12 +362,13 @@ Config <- R6Class("pp_cfg",
             grob_fn <- self$cache$get(key, key_missing())
             if (is.key_missing(grob_fn)) {
                 default_fn <- switch(piece_side,
+                                     die_face = basicDieGrob,
                                      pyramid_top = basicPyramidTop,
                                      pyramid_face = basicPyramidSide,
                                      pyramid_back = basicPyramidSide,
                                      pyramid_left = basicPyramidSide,
                                      pyramid_right = basicPyramidSide,
-                                     basicOpGrob)
+                                     basicTokenGrob)
                 grob_fn <- get_style_element("op_grob_fn", piece_side, private$cfg,
                                                 default_fn, suit, rank)
                 if (self$cache_op_fn) self$cache$set(key, grob_fn)

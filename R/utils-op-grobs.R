@@ -1,27 +1,47 @@
-basicOpGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
+op_xy <- function(x, y, z, op_angle=45, op_scale=0) {
+    x <- x + op_scale * z * cos(to_radians(op_angle))
+    y <- y + op_scale * z * sin(to_radians(op_angle))
+    list(x=x, y=y)
+}
+
+## Two-sided token
+basicTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, type="normal",
                             width=NA, height=NA, depth=NA,
                             op_scale=0, op_angle=45) {
 
-            grob <- cfg$get_grob(piece_side, suit, rank, type)
-            xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
-            cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
-            grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
+            side <- get_side(piece_side)
 
-            edge <- basicShadowGrob(piece_side, suit, rank, cfg,
-                                    x, y, z, angle, width, height, depth,
-                                    op_scale, op_angle)
-            edge <- grid::editGrob(edge, name="other_faces")
+            if (side %in% c("face", "back")) {
 
-            gl <- gList(edge, grob)
+                grob <- cfg$get_grob(piece_side, suit, rank, type)
+                xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+                cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
+                grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
 
-            gTree(scale = 1, type = type,
-                  children = gl, cl="basic_projected_piece")
+                edge <- basicTokenEdge(piece_side, suit, rank, cfg,
+                                       x, y, z, angle, width, height, depth,
+                                       op_scale, op_angle)
+                edge <- grid::editGrob(edge, name="other_faces")
+
+                gl <- gList(edge, grob)
+
+                gTree(scale = 1, type = type,
+                      children = gl, cl="basic_projected_token")
+
+            } else {
+                generalTokenGrob(piece_side, suit, rank, cfg,
+                                 x, y, z,
+                                 angle, type,
+                                 width, height, depth,
+                                 op_scale, op_angle)
+            }
+
 }
 
 #' @export
-makeContent.basic_projected_piece <- function(x) {
+makeContent.basic_projected_token <- function(x) {
     gp <- gpar(cex = x$scale, lex = x$scale)
     x$children$other_faces <- update_gp(x$children$other_faces, gp)
 
@@ -33,17 +53,153 @@ makeContent.basic_projected_piece <- function(x) {
     x
 }
 
-op_xy <- function(x, y, z, op_angle=45, op_scale=0) {
-    x <- x + op_scale * z * cos(to_radians(op_angle))
-    y <- y + op_scale * z * sin(to_radians(op_angle))
-    list(x=x, y=y)
+## Token edge-side grobs
+basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                           angle=0, width=NA, height=NA, depth=NA,
+                           op_scale=0, op_angle=45) {
+    cfg <- as_pp_cfg(cfg)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    piece <- get_piece(piece_side)
+    side <- ifelse(opt$back, "back", "face") #### allow limited 3D rotation
+
+    x <- as.numeric(convertX(x, "in"))
+    y <- as.numeric(convertY(y, "in"))
+    z <- as.numeric(convertX(z, "in"))
+    width <- as.numeric(convertX(width, "in"))
+    height <- as.numeric(convertY(height, "in"))
+    depth <- as.numeric(convertX(depth, "in"))
+
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
+    whd <- get_scaling_factors(side, width, height, depth)
+    pc <- Point3D$new(x, y, z)
+    token <- Token2S$new(shape, whd, pc, R)
+
+    gl <- gList()
+    # opposite side
+    #### Could use transformation grob (flipped)
+    opp_side <- ifelse(opt$back, "face", "back")
+    opp_piece_side <- paste0(piece, "_", opp_side)
+    opp_opt <- cfg$get_piece_opt(opp_piece_side, suit, rank)
+    gp_opp <- gpar(col=opp_opt$border_color, fill=opp_opt$background_color, lex=opp_opt$border_lex)
+    xyz_opp <- if (opt$back) token$xyz_face else token$xyz_back
+    xy_opp <- xyz_opp$project_op(op_angle, op_scale)
+
+    grob_opposite <- polygonGrob(x = xy_opp$x, y = xy_opp$y, default.units = "in",
+                          gp = gp_opp, name="opposite_piece_side")
+
+    # edges
+    edges <- token$op_edges(op_angle)
+    for (i in seq_along(edges)) {
+        name <- paste0("edge", i)
+        gl[[i]] <- edges[[i]]$op_grob(op_angle, op_scale, name=name)
+    }
+    gp_edge <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+    grob_edge <- gTree(children=gl, gp=gp_edge, name="token_edges")
+    grobTree(grob_opposite, grob_edge)
 }
 
-## edge-side grobs aka "shadow" effect
-basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
-                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
-                            angle=0, width=NA, height=NA, depth=NA,
-                            op_scale=0, op_angle=45) {
+generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                           angle=0, type="normal",
+                           width=NA, height=NA, depth=NA,
+                           op_scale=0, op_angle=45) {
+
+    cfg <- as_pp_cfg(cfg)
+    piece <- get_piece(piece_side)
+    side <- get_side(piece_side)
+    opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    x <- as.numeric(convertX(x, "in"))
+    y <- as.numeric(convertY(y, "in"))
+    z <- as.numeric(convertX(z, "in"))
+    width <- as.numeric(convertX(width, "in"))
+    height <- as.numeric(convertY(height, "in"))
+    depth <- as.numeric(convertX(depth, "in"))
+
+    #### Generalize axis_x, axis_y
+    axis_x <- 0
+    axis_y <- 0
+
+    # geometric vertices
+    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
+    whd <- get_scaling_factors(side, width, height, depth)
+    pc <- Point3D$new(x, y, z)
+    token <- Token2S$new(shape, whd, pc, R)
+
+    gl <- gList()
+    edges <- token$op_edges(op_angle)
+    for (i in seq_along(edges)) {
+        name <- paste0("edge", i)
+        gl[[i]] <- edges[[i]]$op_grob(op_angle, op_scale, name=name)
+    }
+    gp_edge <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+    grob_edge <- gTree(children=gl, gp=gp_edge, name="token_edges")
+
+
+    side_visible <- token$visible_side(op_angle)
+    piece_side <- paste0(piece, "_", side_visible)
+    xy_vp <- token$op_xy_vp(op_angle, op_scale, side_visible)
+    xy_polygon <- token$xyz_side(side_visible)$project_op(op_angle, op_scale)
+    ps_grob <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon)
+
+    gl <- gList(grob_edge, ps_grob)
+
+    gTree(scale = 1, type = type,
+          children = gl, cl = "general_projected_token")
+}
+
+#' @export
+makeContent.general_projected_token <- function(x) {
+    gp <- gpar(cex = x$scale, lex = x$scale)
+    x$children$token_edges <- update_gp(x$children$token_edges, gp)
+    x$children$piece_side$scale <- x$scale
+    x
+}
+
+## Die
+#### Improved oblique projection 3D effect for dice #173
+basicDieGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                     x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                     angle=0, type="normal",
+                     width=NA, height=NA, depth=NA,
+                     op_scale=0, op_angle=45) {
+
+            grob <- cfg$get_grob(piece_side, suit, rank, type)
+            xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+            cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
+            grob <- grid::editGrob(grob, name="top_face", vp=cvp)
+
+            edge <- basicDieEdge(piece_side, suit, rank, cfg,
+                                 x, y, z, angle, width, height, depth,
+                                 op_scale, op_angle)
+            edge <- grid::editGrob(edge, name="other_faces")
+
+            gl <- gList(edge, grob)
+
+            gTree(scale = 1, type = type,
+                  children = gl, cl="basic_projected_die")
+}
+
+#' @export
+makeContent.basic_projected_die <- function(x) {
+    gp <- gpar(cex = x$scale, lex = x$scale)
+    x$children$other_faces <- update_gp(x$children$other_faces, gp)
+
+    if (hasName(x$children$piece_side, "scale"))
+        x$children$piece_side$scale <- x$scale
+    else if (x$type == "normal")
+        x$children$piece_side <- update_gp(x$children$piece_side, gp)
+
+    x
+}
+
+basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
+                     x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                     angle=0, width=NA, height=NA, depth=NA,
+                     op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
     piece <- get_piece(piece_side)
@@ -65,7 +221,6 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gl <- gList()
     # opposite side
     opp_side <- ifelse(opt$back, "face", "back")
-    #### Improved oblique projection 3D effect for dice #173
     opp_piece_side <- if (piece == "die") piece_side else paste0(piece, "_", opp_side)
     opp_opt <- cfg$get_piece_opt(opp_piece_side, suit, rank)
     gp_opp <- gpar(col=opp_opt$border_color, fill=opp_opt$background_color, lex=opp_opt$border_lex)
@@ -86,6 +241,7 @@ basicShadowGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     grobTree(grob_opposite, grob_edge)
 }
 
+## Ellipsoid
 basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                            angle=0, type="normal",
@@ -127,6 +283,7 @@ ellipse_xyz <- function() {
     Point3D$new(df)
 }
 
+## Pyramid Top
 basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, type="normal",

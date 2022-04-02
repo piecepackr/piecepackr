@@ -177,6 +177,7 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
 makeContent.piece <- function(x) {
     nn <- max(lengths(list(x$piece_side, x$suit, x$rank, x$x, x$y, x$z, x$angle,
                            x$width, x$height, x$depth,
+                           x$op_scale, x$op_angle,
                            x$scale, x$alpha, x$type,
                            x$bleed)))
     piece_side <- rep(x$piece_side, length.out=nn)
@@ -190,6 +191,9 @@ makeContent.piece <- function(x) {
     width <- rep(x$width, length.out=nn)
     height <- rep(x$height, length.out=nn)
     depth <- rep(x$depth, length.out=nn)
+
+    op_scale <- rep(x$op_scale, length.out=nn)
+    op_angle <- rep(x$op_angle, length.out=nn)
 
     scale <- rep(x$scale, length.out=nn)
     alpha <- rep(x$alpha, length.out=nn)
@@ -206,7 +210,7 @@ makeContent.piece <- function(x) {
         gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
                                    xc[i], yc[i], zc[i], angle[i],
                                    width[i], height[i], depth[i],
-                                   x$op_scale, x$op_angle, x$default.units,
+                                   op_scale[i], op_angle[i], x$default.units,
                                    scale[i], alpha[i], type[i],
                                    name, bleed[i])
     }

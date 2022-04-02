@@ -48,8 +48,11 @@ Point2D <- R6Class("point2d",
                                },
                                plot = function(gp = gpar()) {
                                    grid.points(x=self$x, y=self$y, default.units="in", gp = gp)
-                               }
-                               ))
+                               }),
+                   active = list(c = function() {
+                                     Point2D$new(mean(self$x), mean(self$y))
+                                 })
+)
 #' @export
 `[.point2d` <- function(x, i) Point2D$new(x$x[i], x$y[i])
 #' @export

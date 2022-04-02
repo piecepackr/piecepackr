@@ -9,6 +9,7 @@
 #' @section Package options:
 #' The following piecepackr function arguments may be set globally via [base::options()]:
 #'  \describe{
+#'    \item{piecepack.at.inform}{If `FALSE` turns off messages when affine transformation support not detected in active graphics device.}
 #'    \item{piecepackr.cfg}{Sets a new default for the `cfg` argument}
 #'    \item{piecepackr.default.units}{Sets a new default for the `default.units` argument}
 #'    \item{piecepackr.envir}{Sets a new default for the `envir` argument}

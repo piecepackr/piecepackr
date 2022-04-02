@@ -44,10 +44,21 @@ New features
   You can tell if the active graphic device supports the affine transformation feature
   with `isTRUE(dev.capabilities()$transformations)`.
 
+* `grid.piece()` / `pieceGrob()` now has some limited support for
+  drawing two-sided tokens stood up on their sides in an oblique projection (#272).
+
+  Fully rendering the visible side of the piece requires the new "affine transformation" feature
+  which is only supported in select graphic devices in R 4.2 (most notably the "cairo" family of devices).  
+  If this feature is not detected
+  we will output an `inform()` `message()` of class `"piecepackr_affine_transformation"`
+  and fall back to either a `grImport2::pictureGrob()` or `grid::polygonGrob()` alternative.
+  These messages may be suppressed by setting `options(piecepackr.at.inform = FALSE)`.
+
 Bug fixes and minor improvements
 --------------------------------
 
-* The `alpha` and `scale` arguments of `pieceGrob()` / `grid.piece()` are now vectorized.
+* The `op_angle`, `op_scale`, `alpha`, and `scale` arguments of 
+  `pieceGrob()` / `grid.piece()` are now vectorized.
 * If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
   now always uses `png(type = "cairo")`.
 

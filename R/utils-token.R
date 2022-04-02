@@ -8,13 +8,21 @@ Token2S <- R6Class("token2s",
                         xyz_scaled <- Point3D$new(xy_npc)$translate(-0.5, -0.5, 0.5)$dilate(whd)
                         xyz_f <- xyz_scaled$rotate(R)$translate(center)
 
-                        xy_npc <- Point2D$new(shape$npc_coords)
                         xyz_scaled <- Point3D$new(xy_npc)$translate(-0.5, -0.5, -0.5)$dilate(whd)
                         xyz_b <- xyz_scaled$rotate(R)$translate(center)
 
                         self$xyz <- Point3D$new(x = c(xyz_f$x, xyz_b$x),
                                                 y = c(xyz_f$y, xyz_b$y),
                                                 z = c(xyz_f$z, xyz_b$z))
+
+                        xy_vp <- Point2D$new(rect_xy)
+                        xyz_scaled <- Point3D$new(xy_vp)$translate(-0.5, -0.5, 0.5)$dilate(whd)
+                        self$xyz_vp_face <- xyz_scaled$rotate(R)$translate(center)
+
+                        # Flip so back also in "upper_left", "lower_left", "lower_right", "upper_right" order
+                        xy_vp <- Point2D$new(x = rect_xy$x[4:1], y = rect_xy$y[4:1])
+                        xyz_scaled <- Point3D$new(xy_vp)$translate(-0.5, -0.5, -0.5)$dilate(whd)
+                        self$xyz_vp_back <- xyz_scaled$rotate(R)$translate(center)
 
                         # edges
                         edge_partition <- partition_edges(shape)
@@ -39,13 +47,37 @@ Token2S <- R6Class("token2s",
                     op_edges = function(angle) {
                         self$edges[self$op_edge_order(angle)]
                     },
-                    xyz = NULL, edges = NULL
+                    op_xy_vp = function(angle, scale, side) {
+                       switch(side,
+                             face = self$xyz_vp_face$project_op(angle, scale),
+                             back = self$xyz_vp_back$project_op(angle, scale),
+                             abort(paste("Can't handle side", side)))
+                    },
+                    visible_side = function(angle) {
+                        r <- 10 * self$xyz$width
+                        op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
+                        op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
+                        op_ref <- self$xyz$c$translate(op_diff)
+                        if (op_ref$distance_to(self$xyz_face$c) >
+                            op_ref$distance_to(self$xyz_back$c))
+                            "face"
+                        else
+                            "back"
+                    },
+                    xyz_side = function(side) {
+                        switch(side,
+                               face = self$xyz_face,
+                               back = self$xyz_back)
+                    },
+                    xyz = NULL, edges = NULL,
+                    xyz_vp_face = NULL, xyz_vp_back = NULL
    ),
    private = list(),
    active = list(xyz_face = function() {
                     n <- length(self$xyz$x) / 2
                     self$xyz[seq(n)]
-                 }, xyz_back = function() {
+                 },
+                 xyz_back = function() {
                     n <- length(self$xyz$x) / 2
                     self$xyz[seq(n + 1, 2 * n)]
                  })

@@ -17,6 +17,7 @@ Includes configurations for several public domain game systems.
 
 The following piecepackr function arguments may be set globally via \code{\link[base:options]{base::options()}}:
 \describe{
+\item{piecepack.at.inform}{If \code{FALSE} turns off messages when affine transformation support not detected in active graphics device.}
 \item{piecepackr.cfg}{Sets a new default for the \code{cfg} argument}
 \item{piecepackr.default.units}{Sets a new default for the \code{default.units} argument}
 \item{piecepackr.envir}{Sets a new default for the \code{envir} argument}
