@@ -269,9 +269,12 @@ test_that("no regressions in figures", {
     expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", cfg=cfg, suit=3, rank=4))
 
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
-    expect_doppelganger("pyramid_top.s4.r3", function() dc("pyramid_top", suit=4, rank=3))
-    expect_doppelganger("pyramid_top_op", function()
-        dc("pyramid_top", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
+    suppressMessages({
+        expect_doppelganger("pyramid_top.s4.r3", function()
+            dc("pyramid_top", suit=4, rank=3))
+        expect_doppelganger("pyramid_top_op", function()
+            dc("pyramid_top", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
+    }, classes="piecepackr_affine_transformation")
     expect_doppelganger("pyramid_face_op", function()
         dc("pyramid_face", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
 })

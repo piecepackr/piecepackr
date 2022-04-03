@@ -20,8 +20,14 @@ Breaking changes
   + If one of the "named slots" of the `{grid}` "grob" returned by a custom
     `grob_fn`, `op_grob_fn`, or `grob_with_bleed_fn` function is `scale` then
     `pieceGrob()` / `grid.piece()` will adjust that named slot rather than
-    adjusting that grob's `gp` slot's `cex` and `lex` values.
+    adjusting that grob's `gp` slot's `cex` and `lex` values when `scale != 1`.
     If your "grob" doesn't have a named slot `scale` you shouldn't be affected.
+
+  + If one of the "named slots" of the `{grid}` "grob" returned by a custom
+    `grob_fn` function is `border` then `pieceGrob()` / `grid.piece()` will 
+    adjust that named slot to `FALSE`
+    and manually draw new border lines whenever distorting the grob via the
+    affine transformation feature (#277).
 
 * A couple `pp_cfg()` R6 class active bindings which were deprecated in v1.7.1 (2021-03-25)
   have been removed:
@@ -59,6 +65,8 @@ Bug fixes and minor improvements
 
 * The `op_angle`, `op_scale`, `alpha`, and `scale` arguments of 
   `pieceGrob()` / `grid.piece()` are now vectorized.
+* The `op_scale` threshold when `pieceGrob()` / `grid.piece()` switches from "oblique projection"
+  mode to "orthographic projection" mode has been lowered from `0.01` to `0.0001`.
 * If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
   now always uses `png(type = "cairo")`.
 

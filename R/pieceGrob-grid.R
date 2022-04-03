@@ -113,7 +113,7 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     angle <- angle %% 360
     op_angle <- op_angle %% 360
 
-    if (op_scale < 0.01) {
+    if (op_scale < 0.0001) {
         if (bleed) {
             grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
         } else {

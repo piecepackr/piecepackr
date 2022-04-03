@@ -219,26 +219,37 @@ at_inform <- function(fallback = "picture") {
     inform(msg, class = "piecepackr_affine_transformation")
 }
 
-at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon) {
+at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="piece_side") {
     vp_info <- at_vp_info(as.data.frame(xy_vp))
     vp.define = at_vp_define(piece_side, suit, rank, cfg)
 
     if (nigh(vp_info$width, 0) || nigh(vp_info$height, 0)) {
-        ps_grob <- nullGrob(name="piece_side")
+        ps_grob <- nullGrob()
     } else if (nigh(vp_info$width, vp.define$width) &&
                nigh(vp_info$height, vp.define$height)) {
         ps_grob <- cfg$get_grob(piece_side, suit, rank)
     } else if (has_transformations()) {
         grob <- cfg$get_grob(piece_side, suit, rank)
+        has_border <- grob$border
+        if (has_border)
+            grob$border <- FALSE
         ps_grob <- transformationGrob(
                           grob,
                           vp.define = vp.define,
                           vp = at_viewport(vp_info),
                           transform = at_trans(vp_info)
                        )
+        if (has_border) {
+            opt <- cfg$get_piece_opt(piece_side, suit, rank)
+            gp <- gpar(col=opt$border_color, fill="transparent", lex=opt$border_lex)
+            border_grob <- polygonGrob(x=xy_polygon$x, y=xy_polygon$y,
+                                       default.units="in", gp=gp)
+            ps_grob <- gList(ps_grob, border_grob)
+        }
     } else if (nigh(vp_info$shear, 0)) {
         at_inform(fallback = "picture")
         ps_grob <- cfg$get_grob(piece_side, suit, rank, "picture")
+        ps_grob$vp <- at_viewport(vp_info)
     } else {
         at_inform(fallback = "polygon")
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -246,18 +257,23 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon) {
         ps_grob <- polygonGrob(x=xy_polygon$x, y=xy_polygon$y,
                                default.units="in", gp=gp)
     }
-    gTree(scale = 1, name = "piece_side", children = gList(ps_grob),
+    gTree(scale = 1, name = name, children = gList(ps_grob),
           cl = "pp_ps_transformation")
 }
 
 #' @export
 makeContent.pp_ps_transformation <- function(x) {
-    grob <- x$children[[1]]
-    if (inherits(grob, c("polygon", "grob"))) {
-        grob <- update_gp(grob, gp = gpar(cex = x$scale, lex = x$scale))
-    } else if(hasName(grob, "scale")) {
-        grob$scale <- x$scale
+    if (length(x$children) == 1) {
+        grob <- x$children[[1]]
+        if (inherits(grob, c("polygon", "grob"))) {
+            grob <- update_gp(grob, gp = gpar(cex = x$scale, lex = x$scale))
+        } else if(hasName(grob, "scale")) {
+            grob$scale <- x$scale
+        }
+        x$children[[1]] <- grob
+    } else { # transformation grob plus manual border
+        x$children[[2]] <- update_gp(x$children[[2]],
+                                     gp = gpar(cex = x$scale, lex = x$scale))
     }
-    x$children[[1]] <- grob
     x
 }

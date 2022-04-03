@@ -50,7 +50,7 @@
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    gTree(opt=opt, scale=1,
+    gTree(opt=opt, border=TRUE, scale=1,
           name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
 }
 
@@ -83,8 +83,12 @@ makeContent.basic_piece_side <- function(x) {
     dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, hjust = 0.5, vjust = 0.5,
                         gp = gp_dm, name = "directional_mark")
 
-    gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
-    border_grob <- shape$shape(gp=gp_border, name = "border")
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
     gl <- gList(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob)
 
     setChildren(x, gl)
@@ -137,30 +141,36 @@ pyramidTopGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 
 #' @export
 makeContent.pyramid_top <- function(x) {
-    # if (has_transformations())
-    #     type <- "transformation"
-    # else
-    #     type <- "picture"
-    type <- "picture"
-    g1 <- pieceGrob("pyramid_face",  x$suit, x$rank, x$cfg, type=type,
-                    default.units = "npc",
-                    y=0.75, width=1.0, height=0.5, angle=180, name="face")
-    g2 <- pieceGrob("pyramid_back",  x$suit, x$rank, x$cfg, type=type,
-                    default.units = "npc",
-                    y=0.25, width=1.0, height=0.5, angle=  0, name="back")
-    g3 <- pieceGrob("pyramid_left",  x$suit, x$rank, x$cfg, type=type,
-                    default.units = "npc",
-                    x=0.25,
-                    width=convertHeight(unit(1.0, "npc"), "in"),
-                    height=convertWidth(unit(0.5, "npc"), "in"),
-                    angle=-90, name="left")
-    g4 <- pieceGrob("pyramid_right", x$suit, x$rank, x$cfg, type=type,
-                    default.units = "npc",
-                    x=0.75,
-                    width=convertHeight(unit(1.0, "npc"), "in"),
-                    height=convertWidth(unit(0.5, "npc"), "in"),
-                    angle= 90, name="right")
-    setChildren(x, gList(g1, g2, g3, g4))
+    width <- convertWidth(unit(1, "npc"), "in", valueOnly = TRUE)
+    height <- convertHeight(unit(1, "npc"), "in", valueOnly = TRUE)
+
+    # face at top
+    xy_vp <- list(x = c(width, width, 0, 0), y = c(0.5 * height, height, height, 0.5 * height))
+    xy_polygon <- list(x = c(0.5 * height, width, 0), y = c(0.5 * height, height, height))
+    g1 <- at_ps_grob("pyramid_face", x$suit, x$rank, x$cfg, xy_vp, xy_polygon, "face")
+    g1$scale <- x$scale
+
+    # back at bottom
+    xy_vp <- list(x = width * rect_xy$x, y = 0.5 * height * rect_xy$y)
+    xy_polygon <- list(x = width * pyramid_xy$x, y = 0.5 * height * pyramid_xy$y)
+    g2 <- at_ps_grob("pyramid_back", x$suit, x$rank, x$cfg, xy_vp, xy_polygon, "back")
+    g2$scale <- x$scale
+
+    # left at left
+    xy_vp <- list(x = c(0.5 * width, 0, 0, 0.5 * width), y = c(height, height, 0, 0))
+    xy_polygon <- list(x = c(0.5 * width, 0, 0), y = c(0.5 * height, height, 0))
+    g3 <- at_ps_grob("pyramid_left", x$suit, x$rank, x$cfg, xy_vp, xy_polygon, "left")
+    g3$scale <- x$scale
+
+    # right at right
+    xy_vp <- list(x = c(0.5 * width, width, width, 0.5 * width), y = c(0, 0, height, height))
+    xy_polygon <- list(x = c(0.5 * width, width, width), y = c(0.5 * height, 0, height))
+    g4 <- at_ps_grob("pyramid_right", x$suit, x$rank, x$cfg, xy_vp, xy_polygon, "right")
+    g4$scale <- x$scale
+
+    gl <- gList(g1, g2, g3, g4)
+
+    setChildren(x, gl)
 }
 
 #' @rdname basicPieceGrobs
