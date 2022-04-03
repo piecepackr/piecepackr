@@ -226,7 +226,8 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
     if (nigh(vp_info$width, 0) || nigh(vp_info$height, 0)) {
         ps_grob <- nullGrob()
     } else if (nigh(vp_info$width, vp.define$width) &&
-               nigh(vp_info$height, vp.define$height)) {
+               nigh(vp_info$height, vp.define$height) &&
+               !vp_info$flipped) {
         ps_grob <- cfg$get_grob(piece_side, suit, rank)
     } else if (has_transformations()) {
         grob <- cfg$get_grob(piece_side, suit, rank)
@@ -246,7 +247,7 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
                                        default.units="in", gp=gp)
             ps_grob <- gList(ps_grob, border_grob)
         }
-    } else if (nigh(vp_info$shear, 0)) {
+    } else if (nigh(vp_info$shear, 0) && !vp_info$flipped) {
         at_inform(fallback = "picture")
         ps_grob <- cfg$get_grob(piece_side, suit, rank, "picture")
         ps_grob$vp <- at_viewport(vp_info)
