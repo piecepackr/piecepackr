@@ -16,31 +16,48 @@ cellsGrob <- function(nrows = 8, ncols = 8, # nolint
     gTree(children=gl, name = name, gp = gp, vp = vp, cl = "cells")
 }
 
-#### make.Content
 checkeredBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
     force(nrows)
     force(ncols)
+    force(margin)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
-
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-
-        vp_cell <- viewport(width = ncols / (ncols + 2 * margin),
-                            height = nrows / (nrows + 2 * margin))
-        cell_grob <- cellsGrob(nrows, ncols, gp=gpar(fill=opt$gridline_color),
-                               name = "cells", vp = vp_cell)
-
-        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
-        border_grob <- shape$shape(gp=gp_border, name = "border")
-
-        grobTree(background_grob, cell_grob, border_grob,
-                 name=piece_side, cl = "checkered_board")
+        gTree(opt=opt, border=TRUE, scale = 1,
+              nrows=nrows, ncols=ncols, margin=margin,
+              name=piece_side, cl = "checkered_board")
     }
 }
 
-#### make.Content
+#' @export
+makeContext.checkered_board <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
+
+#' @export
+makeContent.checkered_board <- function(x) {
+    opt <- x$opt
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+
+    vp_cell <- viewport(width = x$ncols / (x$ncols + 2 * x$margin),
+                        height = x$nrows / (x$nrows + 2 * x$margin))
+    cell_grob <- cellsGrob(x$nrows, x$ncols, gp=gpar(fill=opt$gridline_color),
+                           name = "cells", vp = vp_cell)
+
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
+
+    gl <- gList(background_grob, cell_grob, border_grob)
+    setChildren(x, gl)
+}
+
 linedBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
     force(nrows)
     force(ncols)
@@ -48,21 +65,39 @@ linedBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+        gTree(opt=opt, border=TRUE, scale = 1,
+              nrows=nrows, ncols=ncols, margin=margin,
+              name=piece_side, cl = "lined_board")
+    }
+}
 
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+#' @export
+makeContext.lined_board <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
 
-        vp_cell <- viewport(width = ncols / (ncols + 2 * margin),
-                            height = nrows / (nrows + 2 * margin))
-        gp_cell <- gpar(col=opt$gridline_color, lex=opt$gridline_lex)
-        cell_grob <- cellsGrob(nrows, ncols, gp=gp_cell, name = "cells", vp = vp_cell)
+#' @export
+makeContent.lined_board <- function(x) {
+    opt <- x$opt
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+
+    vp_cell <- viewport(width = x$ncols / (x$ncols + 2 * x$margin),
+                        height = x$nrows / (x$nrows + 2 * x$margin))
+    gp_cell <- gpar(col=opt$gridline_color, lex=opt$gridline_lex)
+    cell_grob <- cellsGrob(x$nrows, x$ncols, gp=gp_cell, name = "cells", vp = vp_cell)
+
+    if (x$border) {
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
         border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
-
-        grobTree(background_grob, cell_grob, border_grob,
-                 name=piece_side, cl = "lined_board")
+    } else {
+        border_grob <- nullGrob(name = "border")
     }
+
+    gl <- gList(background_grob, cell_grob, border_grob)
+    setChildren(x, gl)
 }
 
 cycle_elements <- function(x, n = 1) {
@@ -76,58 +111,94 @@ cycle_elements <- function(x, n = 1) {
     }
 }
 
-#### make.Content
 alquerqueBoardGrobFn <- function() {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-
-        gp_line <- gpar(col=NA, fill=opt$gridline_color)
-        inner_grob <- alquerqueInnerGrob(gp=gp_line, name = "lines_and_dots")
-        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
-        border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
-
-        grobTree(background_grob, inner_grob, border_grob,
-                 name=piece_side, cl = "alquerque_board")
-
+        gTree(opt = opt,
+              scale = 1, border = TRUE,
+              name=piece_side, cl = "alquerque_board")
     }
 }
 
-#### make.Content
+#' @export
+makeContext.alquerque_board <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
+
+#' @export
+makeContent.alquerque_board <- function(x) {
+    opt <- x$opt
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+
+    gp_line <- gpar(col=NA, fill=opt$gridline_color)
+    inner_grob <- alquerqueInnerGrob(gp=gp_line, name = "lines_and_dots")
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
+
+    gl <- gList(background_grob, inner_grob, border_grob)
+    setChildren(x, gl)
+}
+
 morrisBoardGrobFn <- function(n_pieces = 12) {
     force(n_pieces)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-
-        gp_line <- gpar(col=NA, fill=opt$gridline_color)
-        if (n_pieces < 3) {
-            inner_grob <- morrisBoard3Grob(gp=gp_line, name = "lines_and_dots", diag = FALSE)
-        } else if (n_pieces < 5) {
-            inner_grob <- morrisBoard3Grob(gp=gp_line, name = "lines_and_dots")
-        } else if (n_pieces < 7) {
-            inner_grob <- morrisBoard6Grob(gp=gp_line, name = "lines_and_dots")
-        } else if (n_pieces == 7) {
-            inner_grob <- morrisBoard6Grob(gp=gp_line, name = "lines_and_dots", cross = TRUE)
-        } else if (n_pieces < 11) {
-            inner_grob <- morrisBoard9Grob(gp=gp_line, name = "lines_and_dots")
-        } else {
-            inner_grob <- morrisBoard9Grob(gp=gp_line, name = "lines_and_dots", diag = TRUE)
-        }
-
-        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
-        border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
-
-        grobTree(background_grob, inner_grob, border_grob,
-                 name=piece_side, cl = "morris_board")
+        gTree(opt = opt, n_pieces = n_pieces,
+              scale = 1, border = TRUE,
+              name=piece_side, cl = "morris_board")
 
     }
+}
+
+#' @export
+makeContext.morris_board <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
+
+#' @export
+makeContent.morris_board <- function(x) {
+    n_pieces <- x$n_pieces
+    opt <- x$opt
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+
+    gp_line <- gpar(col=NA, fill=opt$gridline_color)
+    if (n_pieces < 3) {
+        inner_grob <- morrisBoard3Grob(gp=gp_line, name = "lines_and_dots", diag = FALSE)
+    } else if (n_pieces < 5) {
+        inner_grob <- morrisBoard3Grob(gp=gp_line, name = "lines_and_dots")
+    } else if (n_pieces < 7) {
+        inner_grob <- morrisBoard6Grob(gp=gp_line, name = "lines_and_dots")
+    } else if (n_pieces == 7) {
+        inner_grob <- morrisBoard6Grob(gp=gp_line, name = "lines_and_dots", cross = TRUE)
+    } else if (n_pieces < 11) {
+        inner_grob <- morrisBoard9Grob(gp=gp_line, name = "lines_and_dots")
+    } else {
+        inner_grob <- morrisBoard9Grob(gp=gp_line, name = "lines_and_dots", diag = TRUE)
+    }
+
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex), name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
+
+    gl <- gList(background_grob, inner_grob, border_grob)
+    setChildren(x, gl)
 }
 
 alquerqueInnerGrob <- function(gp = gpar(), name = NULL, diag = TRUE) {

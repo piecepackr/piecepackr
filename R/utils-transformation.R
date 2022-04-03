@@ -229,7 +229,8 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
                nigh(vp_info$height, vp.define$height) &&
                !vp_info$flipped) {
         ps_grob <- cfg$get_grob(piece_side, suit, rank)
-    } else if (has_transformations()) {
+        ps_grob$vp <- at_viewport(vp_info)
+    } else if (has_transformations()) { #### && !vp_info$flipped ?
         grob <- cfg$get_grob(piece_side, suit, rank)
         has_border <- grob$border
         if (has_border)

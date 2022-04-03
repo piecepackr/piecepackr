@@ -96,7 +96,6 @@ xya_pips_dominoes <- function(n_pips, die = FALSE) {
            )
 }
 
-#### make.Content
 cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text") {
     force(type)
     force(rank_offset)
@@ -104,65 +103,110 @@ cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text") {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
-
-        gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
-                        fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
-                        lineheight = 0.8)
-        rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
-                              x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
-                              hjust = 0.5, vjust = 0.5, name = "rank")
-        gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
-                        fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
-        suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
-                              x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
-                              hjust = 0.5, vjust = 0.5, name = "suit")
-
-        # Pips
-        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
-        pip_grob <- tfn(piece_side, suit, rank, cfg)
-        pip_grob <- grid::editGrob(pip_grob,
-                          vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)), name = "pips")
-
-        # Border
-        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
-        border_grob <- shape$shape(gp=gp_border, name = "border")
-
-        grobTree(background_grob, pip_grob, rank_grob, suit_grob, mat_grob, border_grob, cl="card_side")
+        gTree(opt=opt,
+              piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
+              type=type, rank_offset=rank_offset, grob_type=grob_type,
+              scale=1, border=TRUE, cl="card_side")
     }
 }
 
-#### make.Content
+#' @export
+makeContext.card_side <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
+
+#' @export
+makeContent.card_side <- function(x) {
+    opt <- x$opt
+
+    type <- x$type
+    rank_offset <- x$rank_offset
+    grob_type <- x$grob_type
+
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+
+    gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                    fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                    lineheight = 0.8)
+    rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
+                          x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
+                          hjust = 0.5, vjust = 0.5, name = "rank")
+    gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
+                    fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
+    suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
+                          x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
+                          hjust = 0.5, vjust = 0.5, name = "suit")
+
+    # Pips
+    tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+    pip_grob <- tfn(x$piece_side, x$suit, x$rank, x$cfg)
+    pip_grob <- grid::editGrob(pip_grob,
+                      vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)), name = "pips")
+
+    # Border
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
+
+    gl <- gList(background_grob, pip_grob, rank_grob, suit_grob, mat_grob, border_grob)
+    setChildren(x, gl)
+}
+
 jokerCardGrobFn <- function(star = TRUE) {
     force(star)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+        gTree(opt = opt, star = star,
+              scale = 1, border = TRUE, cl="joker_card_side")
+    }
+}
 
-        gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
-                        fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
-                        lineheight = 0.8)
-        rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
-                              x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
-                              hjust = 0.5, vjust = 0.5, name = "rank")
+#' @export
+makeContext.joker_card_side <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
 
-        # Joker
-        joker_grob <- jokerGrob(opt, star)
+#' @export
+makeContent.joker_card_side <- function(x) {
 
-        # Border
+    opt <- x$opt
+
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+
+    gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                    fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                    lineheight = 0.8)
+    rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
+                          x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
+                          hjust = 0.5, vjust = 0.5, name = "rank")
+
+    # Joker
+    joker_grob <- jokerGrob(opt, x$star)
+
+    # Border
+    if (x$border) {
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
         border_grob <- shape$shape(gp=gp_border, name = "border")
-
-        grobTree(background_grob, joker_grob, rank_grob,
-                 mat_grob, border_grob, cl="joker_card_side")
+    } else {
+        border_grob <- nullGrob(name = "border")
     }
+
+    gl <- gList(background_grob, joker_grob, rank_grob, mat_grob, border_grob)
+    setChildren(x, gl)
 }
 
 jokerGrob <- function(opt, star = TRUE) {
@@ -185,45 +229,66 @@ jokerGrob <- function(opt, star = TRUE) {
              vp = viewport(width=0.8, height=0.9), cl = "joker")
 }
 
-#### make.Content
 faceCardGrobFn <- function(label = "", placement = "high") {
     force(label)
     force(placement)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+        gTree(opt=opt, label=label, placement=placement,
+              scale=scale, border=TRUE, cl="face_card_side")
+    }
+}
 
-        gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
-                        fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
-                        lineheight = 0.8)
-        rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
-                              x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
-                              hjust = 0.5, vjust = 0.5, name = "rank")
-        gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
-                        fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
-        suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
-                              x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
-                              hjust = 0.5, vjust = 0.5, name = "suit")
+#' @export
+makeContext.face_card_side <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
 
-        # Face
-        top_grob <- faceGrob(opt, label, placement)
-        top_grob <- grid::editGrob(top_grob,
-                          vp=viewport(y=0.75, height = 0.5, width = 0.80), name = "top")
-        bot_grob <- faceGrob(opt, label, placement)
-        bot_grob <- grid::editGrob(top_grob,
-                          vp=viewport(y=0.25, height = 0.5, width = 0.80, angle = 180), name = "bottom")
+#' @export
+makeContent.face_card_side <- function(x) {
+    opt <- x$opt
+    label <- x$label
+    placement <- x$placement
 
-        # Border
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
+    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+
+    gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
+                    fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
+                    lineheight = 0.8)
+    rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
+                          x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
+                          hjust = 0.5, vjust = 0.5, name = "rank")
+    gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
+                    fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
+    suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
+                          x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
+                          hjust = 0.5, vjust = 0.5, name = "suit")
+
+    # Face
+    top_grob <- faceGrob(opt, label, placement)
+    top_grob <- grid::editGrob(top_grob,
+                      vp=viewport(y=0.75, height = 0.5, width = 0.80), name = "top")
+    bot_grob <- faceGrob(opt, label, placement)
+    bot_grob <- grid::editGrob(top_grob,
+                      vp=viewport(y=0.25, height = 0.5, width = 0.80, angle = 180), name = "bottom")
+
+    # Border
+    if (x$border) {
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
         border_grob <- shape$shape(gp=gp_border, name = "border")
-
-        grobTree(background_grob, top_grob, bot_grob, rank_grob,
-                 suit_grob, mat_grob, border_grob, cl="face_card_side")
+    } else {
+        border_grob <- nullGrob(name = "border")
     }
+
+    gl <- gList(background_grob, top_grob, bot_grob, rank_grob,
+                suit_grob, mat_grob, border_grob)
+    setChildren(x, gl)
 }
 
 faceGrob <- function(opt, label = "", placement = "high") {
@@ -258,7 +323,6 @@ faceGrob <- function(opt, label = "", placement = "high") {
 }
 
 #### Support roundrect shape
-#### make.Content
 dominoGrobFn <- function(rank_offset = 0, type = "domino", grob_type = "circle") {
     force(rank_offset)
     force(type)
@@ -266,31 +330,58 @@ dominoGrobFn <- function(rank_offset = 0, type = "domino", grob_type = "circle")
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+        gTree(opt=opt, cfg=cfg, suit=suit, rank=rank,
+              type=type, rank_offset=rank_offset, grob_type=grob_type,
+              scale=1, border=TRUE, cl="domino_side")
+    }
+}
 
-        # Top (Rank)
-        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
-        top_grob <- tfn("tile_face", rank, rank, cfg)
-        top_grob <- grid::editGrob(top_grob,
-                          vp=viewport(height = 0.5, y = 0.75, angle = 180), name="top_rank")
+#' @export
+makeContext.domino_side <- function(x) {
+    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
+    x
+}
 
-        # Bottom (Suit)
-        bfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
-        bot_grob <- bfn("tile_face", suit, suit, cfg)
-        bot_grob <- grid::editGrob(bot_grob,
-                          vp=viewport(height = 0.5, y = 0.25), name="bottom_suit")
+#' @export
+makeContent.domino_side <- function(x) {
+    opt <- x$opt
+    suit <- x$suit
+    rank <- x$rank
+    type <- x$type
+    rank_offset <- x$rank_offset
+    grob_type <- x$grob_type
 
-        gp_gl <- gpar(col = opt$gridline_color, lex = opt$gridline_lex)
-        gl_grob <- segmentsGrob(x0=0.1, x1=0.9, y0 = 0.5, y1 = 0.5,  gp=gp_gl, name="gridlines")
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-        # Border
+    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+
+    # Top (Rank)
+    tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+    top_grob <- tfn("tile_face", rank, rank, x$cfg)
+    top_grob <- grid::editGrob(top_grob,
+                      vp=viewport(height = 0.5, y = 0.75, angle = 180), name="top_rank")
+
+    # Bottom (Suit)
+    bfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+    bot_grob <- bfn("tile_face", suit, suit, x$cfg)
+    bot_grob <- grid::editGrob(bot_grob,
+                      vp=viewport(height = 0.5, y = 0.25), name="bottom_suit")
+
+    gp_gl <- gpar(col = opt$gridline_color, lex = opt$gridline_lex)
+    gl_grob <- segmentsGrob(x0=0.1, x1=0.9, y0 = 0.5, y1 = 0.5,  gp=gp_gl, name="gridlines")
+
+    # Border
+    if (x$border) {
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
         border_grob <- shape$shape(gp=gp_border, name="border")
-
-        grobTree(top_grob, bot_grob, gl_grob, mat_grob, border_grob, cl="domino_side")
+    } else {
+        border_grob <- nullGrob(name="border")
     }
+
+    gl <- gList(top_grob, bot_grob, gl_grob, mat_grob, border_grob)
+    setChildren(x, gl)
+
 }
 
 pippedGrobFn <- function(rank_offset = 0, type = "die", grob_type = "circle",
