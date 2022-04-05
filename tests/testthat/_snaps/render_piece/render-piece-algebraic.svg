@@ -21,8 +21,8 @@
 <polygon points='36.00,-36.00 36.00,540.00 612.00,540.00 612.00,-36.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='618.36,533.64 618.36,-42.36 612.00,-36.00 612.00,540.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='618.36,-42.36 42.36,-42.36 36.00,-36.00 612.00,-36.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
-<polygon points='42.36,533.64 618.36,533.64 612.00,540.00 36.00,540.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='42.36,-42.36 42.36,533.64 36.00,540.00 36.00,-36.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
+<polygon points='42.36,533.64 618.36,533.64 612.00,540.00 36.00,540.00 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <rect x='42.36' y='-42.36' width='576.00' height='576.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='42.36' y='461.64' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt; fill: #009E73;' />
 <rect x='114.36' y='461.64' width='72.00' height='72.00' style='stroke-width: 0.75; stroke: none; stroke-linecap: butt;' />

@@ -36,13 +36,13 @@ test_that("rgl works", {
     f <- tempfile(fileext = ".png")
     rgl.snapshot(f)
     expect_true(file.exists(f))
-    rgl.close()
     unlink(f)
 
     cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
     rgl.clear()
     l <- piece3d("pawn_top", x=-1:1, suit=1:3, cfg = cfg, lit=TRUE)
     expect_true(length(l) > 2)
+    rgl.close()
 })
 
 test_that("rayrender works", {

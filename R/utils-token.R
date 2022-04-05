@@ -38,11 +38,11 @@ Token2S <- R6Class("token2s",
                     },
                     op_edge_order = function(angle) {
                         r <- 10 * self$xyz$width
-                        op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
-                        op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
-                        op_ref <- self$xyz$c$translate(op_diff)
-                        dists <- sapply(self$edges, function(x) op_ref$distance_to(x$vertices$c))
-                        order(dists)
+                        op_ref <- Point2D$new(0, 0)$translate_polar(180 + angle, r)
+                        op_line <- Line$new(angle, op_ref)
+                        depths <- sapply(self$edges, function(x) x$vertices$c$z)
+                        dists <- sapply(self$edges, function(x) op_line$distance_to(x$vertices$c))
+                        order(round(depths, 6), -dists) # `round()` avoids weird sorting errors
                     },
                     op_edges = function(angle) {
                         self$edges[self$op_edge_order(angle)]
@@ -56,10 +56,10 @@ Token2S <- R6Class("token2s",
                     visible_side = function(angle) {
                         r <- 10 * self$xyz$width
                         op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
-                        op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
-                        op_ref <- self$xyz$c$translate(op_diff)
-                        if (op_ref$distance_to(self$xyz_face$c) >
-                            op_ref$distance_to(self$xyz_back$c))
+                        op_ref <- Point2D$new(0, 0)$translate_polar(180 + angle, r)
+                        op_line <- Line$new(angle, op_ref)
+                        if (op_line$distance_to(self$xyz_face$c) <
+                            op_line$distance_to(self$xyz_back$c))
                             "face"
                         else
                             "back"

@@ -232,7 +232,7 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
         ps_grob$vp <- at_viewport(vp_info)
     } else if (has_transformations()) { #### && !vp_info$flipped ?
         grob <- cfg$get_grob(piece_side, suit, rank)
-        has_border <- grob$border
+        has_border <- hasName(grob, "border")
         if (has_border)
             grob$border <- FALSE
         ps_grob <- transformationGrob(

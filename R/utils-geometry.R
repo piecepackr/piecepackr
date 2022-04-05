@@ -271,6 +271,19 @@ LineSegment <- R6Class("line_segment",
 #' @export
 `[.line_segment` <- function(x, i) LineSegment$new(x$p1[i], x$p2[i])
 
+Line <- R6Class("line",
+    public = list(a=NULL, b=NULL, c=NULL,
+                  initialize = function(theta, p) {
+                      # a * x + b * y + c = 0
+                      # cos(theta) * x + sin(theta) * y + c = 0
+                      self$a = cos(to_radians(theta))
+                      self$b = sin(to_radians(theta))
+                      self$c = -self$a * p$x + -self$b * p$y
+                  },
+                  distance_to = function(p) {
+                      abs(self$a * p$x + self$b * p$y + self$c) / sqrt(self$a^2 + self$b^2)
+                  }))
+
 ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
 #### ConcavePolygon, add a list of convex polygons that cover it to test SAT
 #### Most value adding if adding something like megahexes but could be used for stars as well
