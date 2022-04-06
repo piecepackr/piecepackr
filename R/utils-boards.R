@@ -25,14 +25,9 @@ checkeredBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
         gTree(opt=opt, border=TRUE, scale = 1,
               nrows=nrows, ncols=ncols, margin=margin,
-              name=piece_side, cl = "checkered_board")
+              name=piece_side,
+              cl = c("checkered_board", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.checkered_board <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -67,14 +62,9 @@ linedBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
         gTree(opt=opt, border=TRUE, scale = 1,
               nrows=nrows, ncols=ncols, margin=margin,
-              name=piece_side, cl = "lined_board")
+              name=piece_side,
+              cl = c("lined_board", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.lined_board <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -118,14 +108,9 @@ alquerqueBoardGrobFn <- function() {
 
         gTree(opt = opt,
               scale = 1, border = TRUE,
-              name=piece_side, cl = "alquerque_board")
+              name=piece_side,
+              cl = c("alquerque_board", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.alquerque_board <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -156,15 +141,10 @@ morrisBoardGrobFn <- function(n_pieces = 12) {
 
         gTree(opt = opt, n_pieces = n_pieces,
               scale = 1, border = TRUE,
-              name=piece_side, cl = "morris_board")
+              name=piece_side,
+              cl = c("morris_board", "basic_piece_side"))
 
     }
-}
-
-#' @export
-makeContext.morris_board <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -224,7 +204,6 @@ alquerqueInnerGrob <- function(gp = gpar(), name = NULL, diag = TRUE) {
              name = name, cl = "alquerque_board_inner", gp = gp,
              vp = viewport(width = 4/5, height = 4/5))
 }
-
 
 morrisBoard3Grob <- function(gp = gpar(), name = NULL, diag = TRUE) {
     w <- 1/64

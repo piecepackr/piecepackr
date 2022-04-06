@@ -259,8 +259,28 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
         ps_grob <- polygonGrob(x=xy_polygon$x, y=xy_polygon$y,
                                default.units="in", gp=gp)
     }
-    gTree(scale = 1, name = name, children = gList(ps_grob),
+    gTree(scale = 1,
+          vp_info = vp_info,
+          xy_polygon = xy_polygon,
+          name = name,
+          children = gList(ps_grob),
           cl = "pp_ps_transformation")
+}
+
+#' @export
+grobCoords.pp_ps_transformation <- function(x, closed, ...) {
+    if (getRversion() >= '4.2.0' && !closed)
+        return(emptyGrobCoords(x$name))
+
+    if (getRversion() >= '4.2.0' &&
+        (nigh(x$vp_info$width, 0) || nigh(x$vp_info$height, 0)))
+        return(emptyGrobCoords(x$name))
+
+    grobCoords(polygonGrob(x = x$xy_polygon$x,
+                           y = x$xy_polygon$y,
+                           default.units = "in",
+                           vp = x$vp),
+               closed = closed, ...)
 }
 
 #' @export

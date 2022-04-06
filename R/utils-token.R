@@ -179,8 +179,7 @@ FlatEdge <- R6Class("edge_flat", inherit = Edge,
     active = list()
 )
 
-#### Convex, closed, curved edge
-#### algorithm won't necessarily work if disc stood on edge AND rotated orthogonally with regard towards op viewer
+## Convex, closed curved edge
 RingEdge <- R6Class("edge_ring", inherit = Edge,
     public = list(op_grob = function(angle, scale, name = NULL) {
                       if (self$is_perpendicular_xyplane) {

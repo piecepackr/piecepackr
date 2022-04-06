@@ -48,10 +48,5 @@ grobCoords.pp_grobCoords <- function(x, closed, ...) {
 
 #' @export
 grobPoints.pp_grobCoords <- function(x, closed, ...) {
-    if (getRversion() >= '4.2.0' && !closed)
-        return(emptyGrobCoords(x$name))
-
-    coords <- NextMethod()
-    xyl <- coords_to_xylist(coords)
-    xylists_to_grobcoords(xyl, x$name)
+    grobCoords(x, closed)
 }

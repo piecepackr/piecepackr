@@ -107,14 +107,9 @@ cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text") {
         gTree(opt=opt,
               piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
               type=type, rank_offset=rank_offset, grob_type=grob_type,
-              scale=1, border=TRUE, cl="card_side")
+              scale=1, border=TRUE,
+              cl=c("card_side", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.card_side <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -167,14 +162,9 @@ jokerCardGrobFn <- function(star = TRUE) {
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
         gTree(opt = opt, star = star,
-              scale = 1, border = TRUE, cl="joker_card_side")
+              scale = 1, border = TRUE,
+              cl=c("joker_card_side", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.joker_card_side <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -237,14 +227,9 @@ faceCardGrobFn <- function(label = "", placement = "high") {
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
         gTree(opt=opt, label=label, placement=placement,
-              scale=scale, border=TRUE, cl="face_card_side")
+              scale=scale, border=TRUE,
+              cl=c("face_card_side", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.face_card_side <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export
@@ -332,14 +317,9 @@ dominoGrobFn <- function(rank_offset = 0, type = "domino", grob_type = "circle")
 
         gTree(opt=opt, cfg=cfg, suit=suit, rank=rank,
               type=type, rank_offset=rank_offset, grob_type=grob_type,
-              scale=1, border=TRUE, cl="domino_side")
+              scale=1, border=TRUE,
+              cl=c("domino_side", "basic_piece_side"))
     }
-}
-
-#' @export
-makeContext.domino_side <- function(x) {
-    x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
-    x
 }
 
 #' @export

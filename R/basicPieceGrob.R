@@ -61,6 +61,13 @@ makeContext.basic_piece_side <- function(x) {
 }
 
 #' @export
+grobCoords.basic_piece_side <- function(x, closed, ...) {
+    opt <- x$opt
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    grobCoords(shape$shape(vp=x$vp), closed=closed, ...)
+}
+
+#' @export
 makeContent.basic_piece_side <- function(x) {
     opt <- x$opt
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
@@ -171,6 +178,11 @@ makeContent.pyramid_top <- function(x) {
     gl <- gList(g1, g2, g3, g4)
 
     setChildren(x, gl)
+}
+
+#' @export
+grobCoords.pyramid_top <- function(x, closed, ...) {
+    grobCoords(rectGrob(vp=x$vp), closed=closed, ...)
 }
 
 #' @rdname basicPieceGrobs

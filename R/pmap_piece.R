@@ -99,9 +99,7 @@ update_name <- function(.l) {
 
 #' @export
 grobPoints.pmap_piece <- function(x, closed, ...) {
-    gc <- lapply(x$children, grobPoints, closed = closed)
-    f <- function(x, y) gridGeometry::polyclip(x, y, "union")
-    Reduce(f, gc)
+    grobCoords(x, closed)
 }
 
 #' @export

@@ -345,6 +345,7 @@ test_that("alpha and scale works", {
                      scale=seq(0, 1, length.out=6))
         pmap_piece(df, default.units="in", cfg=cfg)
     })
+    skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     expect_doppelganger("alpha_and_scale_op", function() {
         cfg <- pp_cfg(list(shape.coin="convex6"))
         df <- tibble(piece_side="coin_back",
