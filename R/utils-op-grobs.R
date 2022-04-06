@@ -259,12 +259,11 @@ basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     xyz <- ellipse_xyz()$dilate(width, height, depth)$translate(x, y, z)
     xy <- xyz$project_op(op_angle, op_scale)
-    hull <- grDevices::chull(as.matrix(xy))
-    x <- xy$x[hull]
-    y <- xy$y[hull]
+    xy_hull <- xy$convex_hull
 
     gp <- gpar(col=opt$border_color, fill=opt$background_color, lex=opt$border_lex)
-    polygonGrob(x = x, y = y, default.units = "in", gp = gp)
+    polygonGrob(x = xy_hull$x, y = xy_hull$y,
+                default.units = "in", gp = gp)
 }
 
 ellipse_xyz <- function() {

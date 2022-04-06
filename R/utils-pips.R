@@ -322,7 +322,6 @@ faceGrob <- function(opt, label = "", placement = "high") {
     grobTree(meeple_grob, label_grob, suit_grob, cl="face")
 }
 
-#### Support roundrect shape
 dominoGrobFn <- function(rank_offset = 0, type = "domino", grob_type = "circle") {
     force(rank_offset)
     force(type)

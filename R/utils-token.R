@@ -53,6 +53,7 @@ Token2S <- R6Class("token2s",
                              back = self$xyz_vp_back$project_op(angle, scale),
                              abort(paste("Can't handle side", side)))
                     },
+                    #### Handle edge case for token (almost) parallel to xy-axis
                     visible_side = function(angle) {
                         r <- 10 * self$xyz$width
                         op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
@@ -133,12 +134,46 @@ partition_edges <- function(shape) {
     }
 }
 
-FlatEdge <- R6Class("edge_flat",
-    public = list(vertices = NULL,
-                  initialize = function(vertices = NULL) self$vertices <- vertices,
-                  op_grob = function(angle, scale, ...) {
+Edge <- R6Class("edge",
+                public = list(vertices = NULL,
+                          initialize = function(vertices = NULL) self$vertices <- vertices,
+                          visible_side = function(angle) {
+                              r <- 10 * self$vertices$width
+                              op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
+                              op_ref <- Point2D$new(0, 0)$translate_polar(180 + angle, r)
+                              op_line <- Line$new(angle, op_ref)
+                              if (op_line$distance_to(self$vertices_face$c) <
+                                  op_line$distance_to(self$vertices_back$c))
+                                  "face"
+                              else
+                                  "back"
+                          },
+                          vertices_visible_side = function(angle) {
+                              side <- self$visible_side(angle)
+                              switch(side,
+                                     face = self$vertices_face,
+                                     back = self$vertices_back)
+                          }),
+                private = list(),
+                active = list(
+                          # won't work for "FlatEdge" but doesn't need to
+                          is_perpendicular_xyplane = function() {
+                              length(unique(round(self$vertices$z, 6))) == 2
+                          },
+                          vertices_face = function() {
+                                  n <- length(self$vertices$x) / 2
+                                  self$vertices[seq(n)]
+                          },
+                          vertices_back = function() {
+                              n <- length(self$vertices$x) / 2
+                              self$vertices[seq(n + 1, 2 * n)]
+                          })
+)
+
+FlatEdge <- R6Class("edge_flat", inherit = Edge,
+    public = list(op_grob = function(angle, scale, name = NULL) {
                       xy <- self$vertices$project_op(angle, scale)
-                      polygonGrob(xy$x, xy$y, default.units = "in", ...)
+                      polygonGrob(xy$x, xy$y, default.units = "in", name = name)
                   }),
     private = list(),
     active = list()
@@ -146,10 +181,30 @@ FlatEdge <- R6Class("edge_flat",
 
 #### Convex, closed, curved edge
 #### algorithm won't necessarily work if disc stood on edge AND rotated orthogonally with regard towards op viewer
-RingEdge <- R6Class("edge_ring",
-    public = list(vertices = NULL,
-                  initialize = function(vertices = NULL) self$vertices <- vertices,
-                  op_grob = function(angle, scale, ...) {
+RingEdge <- R6Class("edge_ring", inherit = Edge,
+    public = list(op_grob = function(angle, scale, name = NULL) {
+                      if (self$is_perpendicular_xyplane) {
+                          private$op_grob_perpendicular(angle, scale, name = name)
+                      } else {
+                          private$op_grob_nonperpendicular(angle, scale, name = name)
+                      }
+                  }),
+    private = list(
+                   op_grob_nonperpendicular = function(angle, scale, name = NULL) {
+                       xy <- self$vertices$project_op(angle, scale)
+                       xyh <- xy$convex_hull
+
+                       xy_visible <- self$vertices_visible_side(angle)$project_op(angle, scale)
+                       xyh_visible <- xy_visible$convex_hull
+
+                       A <- list(list(x = xyh$x, y = xyh$y))
+                       B <- list(list(x = xyh_visible$x, y = xyh_visible$y))
+                       xy_minus <- gridGeometry::polyclip(A, B, op = "minus")
+
+                       #### also include obscured edge (i.e. A intersection B)?
+                       gridGeometry::xyListPolygon(xy_minus, name = name)
+                   },
+                   op_grob_perpendicular = function(angle, scale, name = NULL) {
                       n <- length(self$vertices) / 2
                       xy_f <- self$vertices[seq(n)]$project_op(angle, scale)
                       projections <- numeric(n)
@@ -192,19 +247,38 @@ RingEdge <- R6Class("edge_ring",
                       polygonGrob(x=c(x_obscured, x_visible),
                                   y=c(y_obscured, y_visible),
                                   id.lengths = c(length(x_obscured), length(x_visible)),
-                                  default.units="in", ...)
-                  }),
-    private = list(),
+                                  default.units="in", name = name)
+                   }),
     active = list()
 )
 
 full_indices <- function(indices, n) c(indices, rev(2 * n + 1 - indices))
 
 ## Convex, open curved edge
-CurvedEdge <- R6Class("edge_curved",
-    public = list(vertices = NULL,
-                  initialize = function(vertices = NULL) self$vertices <- vertices,
-                  op_grob = function(angle, scale, ...) {
+CurvedEdge <- R6Class("edge_curved", inherit = Edge,
+    public = list(op_grob = function(angle, scale, name = NULL) {
+                      if (self$is_perpendicular_xyplane) {
+                          private$op_grob_perpendicular(angle, scale, name = name)
+                      } else {
+                          private$op_grob_nonperpendicular(angle, scale, name = name)
+                      }
+                  }),
+    private = list(
+                   op_grob_nonperpendicular = function(angle, scale, name = NULL) {
+                       xy <- self$vertices$project_op(angle, scale)
+                       xyh <- xy$convex_hull
+
+                       xy_visible <- self$vertices_visible_side(angle)$project_op(angle, scale)
+                       xyh_visible <- xy_visible$convex_hull
+
+                       A <- list(list(x = xyh$x, y = xyh$y))
+                       B <- list(list(x = xyh_visible$x, y = xyh_visible$y))
+                       xy_minus <- gridGeometry::polyclip(A, B, op = "minus")
+
+                       #### also include obscured edge (i.e. A intersection B)?
+                       gridGeometry::xyListPolygon(xy_minus, name = name)
+                   },
+                   op_grob_perpendicular = function(angle, scale, name = NULL) {
                       n <- length(self$vertices) / 2
                       xy_f <- self$vertices[seq(n)]$project_op(angle, scale)
                       projections <- numeric(n)
@@ -252,8 +326,7 @@ CurvedEdge <- R6Class("edge_curved",
                           y <- append(y, xy$y[indices])
                           id <- append(id, rep(i, length(indices)))
                       }
-                      polygonGrob(x=x, y=y, id=id, default.units="in", ...)
+                      polygonGrob(x=x, y=y, id=id, default.units="in", name = name)
                   }),
-    private = list(),
     active = list()
 )

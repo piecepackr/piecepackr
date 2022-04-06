@@ -51,6 +51,12 @@ Point2D <- R6Class("point2d",
                                }),
                    active = list(c = function() {
                                      Point2D$new(mean(self$x), mean(self$y))
+                                 },
+                                 convex_hull = function() {
+                                     hull <- grDevices::chull(as.matrix(self))
+                                     x <- self$x[hull]
+                                     y <- self$y[hull]
+                                     Point2D$new(x, y)
                                  })
 )
 #' @export
