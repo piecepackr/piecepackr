@@ -50,10 +50,14 @@ New features
   You can tell if the active graphic device supports the affine transformation feature
   with `isTRUE(dev.capabilities()$transformations)`.
 
-* `grid.piece()` / `pieceGrob()` now has some limited support for
-  drawing two-sided tokens stood up on their sides in an oblique projection (#272).
+* `grid.piece()` / `pieceGrob()` now has support for
+  drawing two-sided tokens stood up on one of their sides 
+  i.e. ("top", "left", "right", or "base") in an oblique projection (#272).
 
-  Fully rendering the visible side of the piece requires the new "affine transformation" feature
+  `grid.piece()` / pieceGrob()` now also draws more sides of
+  "pyramid\_top" when drawn in an oblique projection (#257).
+
+  Fully rendering the visible sides of the pieces requires the new "affine transformation" feature
   which is only supported in select graphic devices in R 4.2 (most notably the "cairo" family of devices).  
   If this feature is not detected
   we will output an `inform()` `message()` of class `"piecepackr_affine_transformation"`

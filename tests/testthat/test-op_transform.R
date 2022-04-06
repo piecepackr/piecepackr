@@ -48,7 +48,13 @@ test_that("3d helper functions work", {
     df <- rbind(df1, df2, df1, df2, df1, df2)
     expect_doppelganger("matchsticks_045", opf(045))
 
+    # rounding error #163
+    df <- tibble(piece_side = "tile_face", x=rep(seq(1,7,2), 4), y=rep(seq(1,7,2), each=4),
+                 angle = rep(90*0:3, 4), suit = rep(1:4, each=4), rank=rep_len(1:6, 16))
+    expect_doppelganger("rotated_tile_faces", opf(045))
+
     # stacked pyramids
+    suppressMessages({
     df <- tibble(piece_side = "pyramid_top", x = 2, y = 2, rank = 1:6,
                  suit = c(1:4, 1:2))
     expect_doppelganger("pyramid_tops_larger_on_top", opf(045))
@@ -67,12 +73,7 @@ test_that("3d helper functions work", {
                    rank = rep(1:6, length.out=9), suit = 1)[-5, ]
     df <- rbind(dft, dfp1, dfp2)
     expect_doppelganger("oblique_pyramids", opf(045, cfg = cfg))
-
-    # rounding error #163
-    df <- tibble(piece_side = "tile_face", x=rep(seq(1,7,2), 4), y=rep(seq(1,7,2), each=4),
-                 angle = rep(90*0:3, 4), suit = rep(1:4, each=4), rank=rep_len(1:6, 16))
-    expect_doppelganger("rotated_tile_faces", opf(045))
-
+    }, classes="piecepackr_affine_transformation")
 })
 
 test_that("SAT functions work", {

@@ -14,6 +14,10 @@ Point2D <- R6Class("point2d",
                                    self$x <- rep(xt, length.out = n)
                                    self$y <- rep(y, length.out = n)
                                },
+                               angle_to = function(p) {
+                                   p1 = self$diff(p)
+                                   to_t(p1$x, p1$y)
+                               },
                                diff = function(p) {
                                    Vector$new(p$x-self$x, p$y-self$y)
                                },

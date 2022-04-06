@@ -48,5 +48,5 @@ grobCoords.pp_grobCoords <- function(x, closed, ...) {
 
 #' @export
 grobPoints.pp_grobCoords <- function(x, closed, ...) {
-    grobCoords(x, closed)
+    grobCoords(x, closed, ...)
 }
