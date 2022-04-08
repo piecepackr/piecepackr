@@ -270,13 +270,13 @@ test_that("no regressions in figures", {
 
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     suppressMessages({
-        expect_doppelganger("pyramid_top.s4.r3", function()
-            dc("pyramid_top", suit=4, rank=3))
-        expect_doppelganger("pyramid_top_op", function()
-            dc("pyramid_top", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
+      expect_doppelganger("pyramid_top.s4.r3", function()
+          dc("pyramid_top", suit=4, rank=3))
+      expect_doppelganger("pyramid_top_op", function()
+          dc("pyramid_top", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
+      expect_doppelganger("pyramid_face_op", function()
+          dc("pyramid_face", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
     }, classes="piecepackr_affine_transformation")
-    expect_doppelganger("pyramid_face_op", function()
-        dc("pyramid_face", rank = 6, op_angle = 90, op_scale = 0.5, cfg = list(invert_colors = TRUE)))
 })
 
 test_that("oblique projection works", {

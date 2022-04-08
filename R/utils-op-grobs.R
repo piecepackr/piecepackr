@@ -308,26 +308,12 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
         edge <- p$edges[df$index[i]]
 
-        ## xy_vp
-        # "upper_left", "lower_left", "lower_right", "upper_right" order
-        r <- edge$mid_point$distance_to(xy)
-        t <- edge$mid_point$angle_to(xy)
-        ex <- c(edge$p1$translate_polar(t,r)$x,
-                edge$p1$x,
-                edge$p2$x,
-                edge$p2$translate_polar(t,r)$x)
-        ey <- c(edge$p1$translate_polar(t,r)$y,
-                edge$p1$y,
-                edge$p2$y,
-                edge$p2$translate_polar(t,r)$y)
-        ez <- c(z + 0.5 * depth, z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
-        xy_vp <- Point3D$new(x = ex, y = ey, z = ez)$project_op(op_angle, op_scale)
-
-        ## xy_polygon
-        ex <- c(edge$p1$x, edge$p2$x, x)
-        ey <- c(edge$p1$y, edge$p2$y, y)
-        ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
-        xy_polygon <- Point3D$new(x = ex, y = ey, z = ez)$project_op(op_angle, op_scale)
+        ex <- c(x, edge$p1$x, edge$p2$x)
+        ey <- c(y, edge$p1$y, edge$p2$y)
+        ez <- c(z + 0.5 * depth, z - 0.5 * depth, z - 0.5 * depth)
+        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)
+        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
 
         piece_side <- df$edge[i]
         gl[[i]] <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name = piece_side)
@@ -336,7 +322,6 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
 }
 
 ## Pyramid side
-#### Use transformation grobs
 basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                             angle=0, type="normal",
@@ -353,6 +338,7 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     xy_b <- Point2D$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_b)
+    xy_tip <- xy_b[1]
 
     theta <- 2 * asin(0.5 * width / height)
     yt <- 1 - cos(theta)
@@ -360,20 +346,21 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     gl <- gList()
 
-    # opposite edge
+    ## opposite edge
     opposite_edge <- switch(piece_side,
                             "pyramid_face" = "pyramid_back",
                             "pyramid_back" = "pyramid_face",
                             "pyramid_left" = "pyramid_right",
                             "pyramid_right" = "pyramid_left")
-    opt <- cfg$get_piece_opt(opposite_edge, suit, rank)
-    gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
-    exy <- Point3D$new(x = xy_b$x, y = xy_b$y, z = z - 0.5 * depth)$project_op(op_angle, op_scale)
-    gl[[1]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
-    gl[[2]] <- nullGrob()
-    gl[[3]] <- nullGrob()
+    xyz_polygon <- Point3D$new(x = xy_b$x[c(1, 3:2)],
+                               y = xy_b$y[c(1, 3:2)],
+                               z = z - 0.5 * depth)
+    xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+    xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
+    gl[[1]] <- at_ps_grob(opposite_edge, suit, rank, cfg, xy_vp, xy_polygon,
+                          name = opposite_edge)
 
-    # side edges
+    ## side edges
     edge_types <- paste0("pyramid_", switch(piece_side,
                          "pyramid_face" = c("right", "bottom", "left"),
                          "pyramid_left" = c("face", "bottom", "back"),
@@ -392,39 +379,32 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
         opt <- cfg$get_piece_opt(edge_ps, suit, rank)
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
         edge <- p$edges[index]
-        if (index == 1) {
-            ex <- c(edge$p1$x, edge$p2$x, edge$p2$x)
+        if (index == 1) { # right side viewed top (left side viewed on side)
+            ex <- c(edge$p1$x, edge$p2$x, xy_t$x[1])
             ey <- c(edge$p1$y, edge$p2$y, xy_t$y[1])
             ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
-        } else { # index equals 3
-            ex <- c(edge$p1$x, edge$p2$x, edge$p1$x)
-            ey <- c(edge$p1$y, edge$p2$y, xy_t$y[2])
-            ez <- c(z - 0.5 * depth, z - 0.5 * depth, z + 0.5 * depth)
+        } else { # left side viewed top (right side viewed on side)
+            ex <- c(edge$p2$x, xy_t$x[2], edge$p1$x)
+            ey <- c(edge$p2$y, xy_t$y[2], edge$p1$y)
+            ez <- c(z - 0.5 * depth, z + 0.5 * depth, z - 0.5 * depth)
         }
-        exy <- Point3D$new(x = ex, y = ey, z = ez)$project_op(op_angle, op_scale)
-        gl[[gli]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
+        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)
+        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
+        gl[[gli]] <- at_ps_grob(edge_ps, suit, rank, cfg, xy_vp, xy_polygon, name = edge_ps)
         gli <- gli + 1
     }
 
-    # face
-    x_f <- xy_b$x
-    y_f <- c(xy_b$y[1], xy_t$y)
+    ## edge facing up
+    x_f <- c(xy_tip$x, xy_t$x)
+    y_f <- c(xy_tip$y, xy_t$y)
     z_f <- c(z - 0.5 * depth, z + 0.5 * depth, z + 0.5 * depth)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
     gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
-    exy <- Point3D$new(x = x_f, y = y_f, z = z_f)$project_op(op_angle, op_scale)
-    gl[[4]] <- polygonGrob(x = exy$x, y = exy$y, gp = gp, default.units = "in")
-
-    # Check angle and op_angle and if possible draw one of the pyramid faces
-    diff_angle <- (op_angle - angle) %% 360
-    if ((nigh(diff_angle, 90) || nigh(diff_angle, 270)) && nigh(angle %% 90, 0)) {
-        base_mid <- exy[2]$midpoint(exy[3])
-        xy_mid <- base_mid$midpoint(exy[1])
-        vheight <- base_mid$distance_to(exy[1])
-        vp <- viewport(x = xy_mid$x, y = xy_mid$y, default.units = "in", angle = angle,
-                       width = width, height = vheight)
-        gl[[4]] <- grobTree(cfg$get_grob(piece_side, suit, rank, "picture"), vp = vp)
-    }
+    xyz_polygon <- Point3D$new(x = x_f, y = y_f, z = z_f)
+    xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+    xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
+    gl[[4]] <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name = piece_side)
 
     gTree(scale = scale, children=gl, cl="projected_pyramid_side")
 }
@@ -437,4 +417,19 @@ makeContent.projected_pyramid_side <- function(x) {
             x$children[[i]] <- grob
     }
     x
+}
+
+# compute `xy_vp` for pyramid sides
+xy_vp_ps <- function(xyz_polygon, op_scale, op_angle) {
+
+    p_midbottom <- xyz_polygon[2:3]$c
+    p_diff <- p_midbottom$diff(xyz_polygon[1])
+    p_ul <- xyz_polygon[2]$translate(p_diff)
+    p_ur <- xyz_polygon[3]$translate(p_diff)
+
+    x <- c(p_ul$x, xyz_polygon$x[2:3], p_ur$x)
+    y <- c(p_ul$y, xyz_polygon$y[2:3], p_ur$y)
+    z <- c(p_ul$z, xyz_polygon$z[2:3], p_ur$z)
+
+    Point3D$new(x, y, z)$project_op(op_angle, op_scale)
 }

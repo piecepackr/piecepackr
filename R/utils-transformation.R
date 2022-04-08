@@ -186,9 +186,9 @@ at_viewport <- function(vp_info) {
 }
 
 at_trans <- function(vp_info) {
-    function(group) viewportTransform(group,
-                                      shear = groupShear(sx = vp_info$shear),
-                                      flip = groupFlip(flipX = vp_info$flipped))
+    function(group, ...) viewportTransform(group, ...,
+                                  shear = groupShear(sx = vp_info$shear),
+                                  flip = groupFlip(flipX = vp_info$flipped))
 }
 
 at_vp_define <- function(piece_side, suit, rank, cfg) {

@@ -55,7 +55,7 @@ New features
   i.e. ("top", "left", "right", or "base") in an oblique projection (#272).
 
   `grid.piece()` / pieceGrob()` now also draws more sides of
-  "pyramid\_top" when drawn in an oblique projection (#257).
+  pyramid pieces when drawn in an oblique projection (#257).
 
   Fully rendering the visible sides of the pieces requires the new "affine transformation" feature
   which is only supported in select graphic devices in R 4.2 (most notably the "cairo" family of devices).  

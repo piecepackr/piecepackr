@@ -108,6 +108,9 @@ Point3D <- R6Class("point3d",
                                      self$y <- rep(y, length.out = n)
                                      self$z <- rep(z, length.out = n)
                                  },
+                                 diff = function(p) { ### later create Vector3D class?
+                                     Point3D$new(p$x-self$x, p$y-self$y, p$z-self$z)
+                                 },
                                  distance_to = function(p) {
                                      sqrt((p$x - self$x)^2 + (p$y - self$y)^2 + (p$z  - self$z)^2)
                                  },
