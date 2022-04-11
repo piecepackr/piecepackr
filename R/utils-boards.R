@@ -92,8 +92,13 @@ makeContent.lined_board <- function(x) {
 
 cycle_elements <- function(x, n = 1) {
     l <- length(x)
-    if (l < 2 || n == l || n == 0) {
+    if (l < 2 || abs(n) == l || n == 0) {
         x
+    } else if (n < -l) {
+        cycle_elements(cycle_elements(x, -l), n+l)
+    } else if (n < 0) {
+        n <- -n
+        c(x[(l-n+1):l], x[1:(l-n)])
     } else if (n < l) {
         c(x[(n+1):l], x[1:n])
     } else {

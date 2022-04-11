@@ -81,16 +81,18 @@ test_that("save_piece_images works as expected", {
 
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     library("vdiffr")
-    expect_doppelganger("diagram_op_ppgf", function() {
-        g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
-        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
-        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8, cfg=cfg)
-        g.p("die_face", x=1, y=1, z=1/4+1/4, cfg=cfg)
-        g.p("pawn_face", x=1, y=4, z=1/4+1/8, angle=90, cfg=cfg)
-        g.p("coin_face", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
-        g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
-        g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
-    })
+    suppressMessages({
+      expect_doppelganger("diagram_op_ppgf", function() {
+          g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
+          g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
+          g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8, cfg=cfg)
+          g.p("die_face", x=1, y=1, z=1/4+1/4, cfg=cfg)
+          g.p("pawn_face", x=1, y=4, z=1/4+1/8, angle=90, cfg=cfg)
+          g.p("coin_face", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
+          g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
+          g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
+      })
+    }, classes="piecepackr_affine_transformation")
 })
 
 test_that("no regressions in figures", {
@@ -294,22 +296,24 @@ test_that("oblique projection works", {
     expect_doppelganger("coin_face_op", function() dc("coin_face"))
     expect_doppelganger("pawn_face_op", function() dc("pawn_face", cfg=cfg_3d))
     expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))
-    expect_doppelganger("die_face_op", function() dc("die_face"))
-    g.p <- function(...) {
-        grid.piece(..., op_scale=0.5, default.units="in")
-    }
-    cfg <- pp_cfg(list(depth.pawn=1, width.pawn=0.75, height.pawn=0.75,
-                       dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE))
-    expect_doppelganger("diagram_op", function() {
-        g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
-        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
-        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8, cfg=cfg)
-        g.p("die_face", x=1, y=1, z=1/4+1/4, cfg=cfg)
-        g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90, cfg=cfg)
-        g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
-        g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
-        g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
-    })
+    suppressMessages({
+      expect_doppelganger("die_face_op", function() dc("die_face"))
+      g.p <- function(...) {
+          grid.piece(..., op_scale=0.5, default.units="in")
+      }
+      cfg <- pp_cfg(list(depth.pawn=1, width.pawn=0.75, height.pawn=0.75,
+                         dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE))
+      expect_doppelganger("diagram_op", function() {
+          g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1), cfg=cfg)
+          g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8, cfg=cfg)
+          g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8, cfg=cfg)
+          g.p("die_face", x=1, y=1, z=1/4+1/4, cfg=cfg)
+          g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90, cfg=cfg)
+          g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180, cfg=cfg)
+          g.p("coin_back", x=3, y=4, z=1/4+1/8+1/16, angle=180, cfg=cfg)
+          g.p("coin_back", x=3, y=1, z=3/4+1/16, angle=90, cfg=cfg)
+      })
+    }, classes="piecepackr_affine_transformation")
 
     cfg <- pp_cfg(list(depth.pawn = 10/25.4, width.pawn=16/25.4, height.pawn=16/25.4,
                        dm_cex.pawn=0.5, shape.pawn="meeple", invert_colors.pawn=TRUE))

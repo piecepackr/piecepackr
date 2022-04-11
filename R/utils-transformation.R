@@ -227,6 +227,7 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
         ps_grob <- nullGrob()
     } else if (nigh(vp_info$width, vp.define$width) &&
                nigh(vp_info$height, vp.define$height) &&
+               nigh(vp_info$shear, 0) &&
                !vp_info$flipped) {
         ps_grob <- cfg$get_grob(piece_side, suit, rank)
         ps_grob$vp <- at_viewport(vp_info)
@@ -279,7 +280,7 @@ grobCoords.pp_ps_transformation <- function(x, closed, ...) {
     grobCoords(polygonGrob(x = x$xy_polygon$x,
                            y = x$xy_polygon$y,
                            default.units = "in",
-                           vp = x$vp),
+                           vp = x$vp, name=x$name),
                closed = closed, ...)
 }
 

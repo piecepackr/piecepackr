@@ -54,8 +54,11 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
     width <- cfg$get_width(piece_face, suit, rank)
     edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
 
-    grDevices::png(filename, height = height, width = 2.5 * width,
-        units = "in", res = res, bg = "transparent")
+    args <- list(filename = filename, height = height, width = 2.5 * width,
+                 units = "in", res = res, bg = "transparent")
+    if (capabilities("cairo"))
+        args$type <- "cairo"
+    do.call(grDevices::png, args)
 
     # front
     pushViewport(viewport(x = 0.225, width = 0.45))
@@ -378,8 +381,11 @@ write_peg_doll_texture <- function(piece_side = "pawn_face", suit = 1, rank = 1,
     width <- cfg$get_width("belt_face", suit, rank)
     piece <- get_piece(piece_side)
     opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
-    grDevices::png(filename, height = 2 * height, width = width,
-        units = "in", res = res, bg = "transparent")
+    args <- list(filename = filename, height = 2 * height, width = width,
+                 units = "in", res = res, bg = "transparent")
+    if (capabilities("cairo"))
+        args$type <- "cairo"
+    do.call(grDevices::png, args)
     pushViewport(viewport(y=0.875, height=0.25))
     grid.rect(gp = gpar(col=NA_character_, fill=opt$edge_color))
     popViewport()
@@ -409,17 +415,7 @@ save_die_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_c
     ys <- c(1, 0, 0, 1, 1, 0, 0, 1) - 0.5
     zs <- rep(c(1, 0), each = 4) - 0.5
 
-    # figure out rotation to reach each die face
-    rs <- get_die_face_info(suit, cfg$die_arrangement) #### also allow customization of angle #175
-    i <- which(rs$rank == rank)
-    dR <- switch(i,
-                 diag(3),
-                 R_y(-90) %*% R_z(90),
-                 R_x(90) %*% R_z(-90),
-                 R_x(180),
-                 R_y(90) %*% R_z(90),
-                 R_x(-90) %*% R_z(90),
-                 diag(3))
+    dR <- get_die_rotation(suit, rank, cfg)
     R <- dR %*% AA_to_R(angle, axis_x, axis_y)
     xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
 
@@ -454,8 +450,11 @@ write_pyramid_texture <- function(piece_side = "pyramid_face", suit = 1, rank = 
     height <- cfg$get_height("pyramid_face", suit, rank)
     width <- cfg$get_width("pyramid_face", suit, rank)
 
-    grDevices::png(filename, height = height, width = 4 * width,
-        units = "in", res = res, bg = "transparent")
+    args <- list(filename = filename, height = height, width = 4 * width,
+                 units = "in", res = res, bg = "transparent")
+    if (capabilities("cairo"))
+        args$type <- "cairo"
+    do.call(grDevices::png, args)
 
     pushViewport(viewport(x = 0.125, width = 0.25))
     draw_piece_and_bleed("pyramid_face", suit, rank, cfg)
@@ -484,27 +483,36 @@ write_die_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
     width <- cfg$get_width("die_face", suit, rank)
 
-    grDevices::png(filename, height = 3 * width, width = 2 * width,
-                   units = "in", res = res, bg = "transparent")
+    args <- list(filename = filename, height = 3 * width, width = 2 * width,
+                 units = "in", res = res, bg = "transparent")
+    if (capabilities("cairo"))
+        args$type <- "cairo"
+    do.call(grDevices::png, args)
 
-    rs <- get_die_face_info(suit, cfg$die_arrangement) #### also angle
+    rs <- get_die_face_info(suit, cfg$die_arrangement)
     pushViewport(viewport(x = 0.25, width = 0.5, y = 5/6, height = 1/3))
-    grid.piece("die_face", suit = rs$suit[1], rank = rs$rank[1], cfg = cfg)
+    grid.piece("die_face", suit = rs$suit[1], rank = rs$rank[1], cfg = cfg,
+               angle = rs$angle[1])
     popViewport()
     pushViewport(viewport(x = 0.75, width = 0.5, y = 5/6, height = 1/3))
-    grid.piece("die_face", suit = rs$suit[2], rank = rs$rank[2], cfg = cfg)
+    grid.piece("die_face", suit = rs$suit[2], rank = rs$rank[2], cfg = cfg,
+               angle = rs$angle[2])
     popViewport()
     pushViewport(viewport(x = 0.25, width = 0.5, y = 3/6, height = 1/3))
-    grid.piece("die_face", suit = rs$suit[3], rank = rs$rank[3], cfg = cfg)
+    grid.piece("die_face", suit = rs$suit[3], rank = rs$rank[3], cfg = cfg,
+               angle = rs$angle[3])
     popViewport()
     pushViewport(viewport(x = 0.75, width = 0.5, y = 3/6, height = 1/3))
-    grid.piece("die_face", suit = rs$suit[4], rank = rs$rank[4], cfg = cfg)
+    grid.piece("die_face", suit = rs$suit[4], rank = rs$rank[4], cfg = cfg,
+               angle = rs$angle[4])
     popViewport()
     pushViewport(viewport(x = 0.25, width = 0.5, y = 1/6, height = 1/3))
-    grid.piece("die_face", suit = rs$suit[5], rank = rs$rank[5], cfg = cfg)
+    grid.piece("die_face", suit = rs$suit[5], rank = rs$rank[5], cfg = cfg,
+               angle = rs$angle[5])
     popViewport()
     pushViewport(viewport(x = 0.75, width = 0.5, y = 1/6, height = 1/3))
-    grid.piece("die_face", suit = rs$suit[6], rank = rs$rank[6], cfg = cfg)
+    grid.piece("die_face", suit = rs$suit[6], rank = rs$rank[6], cfg = cfg,
+               angle = rs$angle[6])
     popViewport()
 
     grDevices::dev.off()

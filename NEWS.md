@@ -55,7 +55,7 @@ New features
   i.e. ("top", "left", "right", or "base") in an oblique projection (#272).
 
   `grid.piece()` / pieceGrob()` now also draws more sides of
-  pyramid pieces when drawn in an oblique projection (#257).
+  die and pyramid pieces when drawn in an oblique projection (#173, #257).
 
   Fully rendering the visible sides of the pieces requires the new "affine transformation" feature
   which is only supported in select graphic devices in R 4.2 (most notably the "cairo" family of devices).  
@@ -63,6 +63,13 @@ New features
   we will output an `inform()` `message()` of class `"piecepackr_affine_transformation"`
   and fall back to either a `grImport2::pictureGrob()` or `grid::polygonGrob()` alternative.
   These messages may be suppressed by setting `options(piecepackr.at.inform = FALSE)`.
+
+* ``pp_cfg()``'s `die_arrangement` "style" now supports comma-separated strings 
+  of six integers optionally followed by a `^`, `<`, `v`, `>` which can be
+  used to completely customize the arrangement of faces on six-sided dice (#175).
+  The `die_arrangement` "style" continues to also support the values `"counter_up"`,
+  `"opposites_sum_to_5"`, and `"counter_down"` (default) which provide aliases
+  for three popular arrangements.
 
 Bug fixes and minor improvements
 --------------------------------

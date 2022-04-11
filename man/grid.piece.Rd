@@ -137,40 +137,44 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
 \code{pieceGrob()} is its \code{grid} \dQuote{grob} counterpart.
 }
 \examples{
-   if (require("grid")) {
-       draw_pp_diagram <- function(cfg=pp_cfg(), op_scale=0) {
-           g.p <- function(...) {
-               grid.piece(..., op_scale=op_scale, cfg=cfg, default.units="in")
-           }
-           g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
-           g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
-           g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8)
-           g.p("die_face", suit=3, rank=5, x=1, y=1, z=1/4+1/4)
-           g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90)
-           g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180)
-           g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
-           g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
-       }
+  if (require("grid")) {
+    op <- options()
+    on.exit(options(op))
+    options(piecepackr.at.inform = FALSE)
 
-       # default piecepack, orthogonal projection
-       draw_pp_diagram(cfg=pp_cfg())
+    draw_pp_diagram <- function(cfg=pp_cfg(), op_scale=0) {
+        g.p <- function(...) {
+            grid.piece(..., op_scale=op_scale, cfg=cfg, default.units="in")
+        }
+        g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
+        g.p("tile_back", x=0.5+3, y=0.5+1, z=2/4+1/8)
+        g.p("die_face", suit=3, rank=5, x=1, y=1, z=1/4+1/4)
+        g.p("pawn_face", x=1, y=4, z=1/4+1/2, angle=90)
+        g.p("coin_back", x=3, y=4, z=1/4+1/16, angle=180)
+        g.p("coin_back", suit=4, x=3, y=4, z=1/4+1/8+1/16, angle=180)
+        g.p("coin_back", suit=2, x=3, y=1, z=3/4+1/8, angle=90)
+    }
 
-       # custom configuration, orthogonal projection
-       grid.newpage()
-       dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
-                            invert_colors.suited=TRUE, border_color="black", border_lex=2)
-       traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
-       cfg <- c(dark_colorscheme, traditional_ranks)
-       draw_pp_diagram(cfg=pp_cfg(cfg))
+    # default piecepack, orthogonal projection
+    draw_pp_diagram(cfg=pp_cfg())
 
-       # custom configuration, oblique projection
-       grid.newpage()
-       cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,
-                          dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
-                          edge_color.coin="tan", edge_color.tile="tan")
-       cfg <- pp_cfg(c(cfg, cfg3d))
-       draw_pp_diagram(cfg=pp_cfg(cfg), op_scale=0.5)
-   }
+    # custom configuration, orthogonal projection
+    grid.newpage()
+    dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
+                         invert_colors.suited=TRUE, border_color="black", border_lex=2)
+    traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
+    cfg <- c(dark_colorscheme, traditional_ranks)
+    draw_pp_diagram(cfg=pp_cfg(cfg))
+
+    # custom configuration, oblique projection
+    grid.newpage()
+    cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,
+                       dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
+                       edge_color.coin="tan", edge_color.tile="tan")
+    cfg <- pp_cfg(c(cfg, cfg3d))
+    draw_pp_diagram(cfg=pp_cfg(cfg), op_scale=0.5)
+  }
 }
 \seealso{
 \code{\link[=pmap_piece]{pmap_piece()}} which applies \code{pieceGrob()} over rows of a data frame.

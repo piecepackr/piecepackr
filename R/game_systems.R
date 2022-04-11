@@ -90,6 +90,10 @@
 #'        names(cfgs)
 #'
 #'     if (require("grid")) {
+#'        op <- options()
+#'        on.exit(options(op))
+#'        options(piecepackr.at.inform = FALSE)
+#'
 #'        # standard dice
 #'        grid.newpage()
 #'        grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6,

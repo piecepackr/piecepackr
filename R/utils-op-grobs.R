@@ -61,7 +61,7 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
     piece <- get_piece(piece_side)
-    side <- ifelse(opt$back, "back", "face") #### allow limited 3D rotation
+    side <- ifelse(opt$back, "back", "face") #### allow limited 3D rotation #281
 
     x <- as.numeric(convertX(x, "in"))
     y <- as.numeric(convertY(y, "in"))
@@ -119,7 +119,7 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- as.numeric(convertY(height, "in"))
     depth <- as.numeric(convertX(depth, "in"))
 
-    #### Generalize axis_x, axis_y
+    #### Generalize axis_x, axis_y #281
     axis_x <- 0
     axis_y <- 0
 
@@ -160,7 +160,6 @@ makeContent.general_projected_token <- function(x) {
 }
 
 ## Die
-#### Improved oblique projection 3D effect for dice #173
 basicDieGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                      x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
                      angle=0, type="normal",
@@ -185,14 +184,15 @@ basicDieGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
 #' @export
 makeContent.basic_projected_die <- function(x) {
-    gp <- gpar(cex = x$scale, lex = x$scale)
-    x$children$other_faces <- update_gp(x$children$other_faces, gp)
+    x$children$other_faces$children[[1]]$scale <- x$scale
+    x$children$other_faces$children[[2]]$scale <- x$scale
 
-    if (hasName(x$children$piece_side, "scale"))
-        x$children$piece_side$scale <- x$scale
-    else if (x$type == "normal")
-        x$children$piece_side <- update_gp(x$children$piece_side, gp)
-
+    if (hasName(x$children$top_face, "scale")) {
+        x$children$top_face$scale <- x$scale
+    } else if (x$type == "normal") {
+        gp <- gpar(cex = x$scale, lex = x$scale)
+        x$children$top_face <- update_gp(x$children$top_face, gp)
+    }
     x
 }
 
@@ -202,8 +202,6 @@ basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
                      op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    piece <- get_piece(piece_side)
-    side <- ifelse(opt$back, "back", "face") #### allow limited 3D rotation
 
     x <- as.numeric(convertX(x, "in"))
     y <- as.numeric(convertY(y, "in"))
@@ -212,33 +210,26 @@ basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- as.numeric(convertY(height, "in"))
     depth <- as.numeric(convertX(depth, "in"))
 
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
-    R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
-    whd <- get_scaling_factors(side, width, height, depth)
-    pc <- Point3D$new(x, y, z)
-    token <- Token2S$new(shape, whd, pc, R)
+    #### allow limited 3D rotation
+    axis_x <- 0
+    axis_y <- 0
+
+    lf <- get_die_faces(suit, rank, cfg,
+                        x, y, z,
+                        angle, axis_x, axis_y,
+                        width, height, depth)
 
     gl <- gList()
-    # opposite side
-    opp_side <- ifelse(opt$back, "face", "back")
-    opp_piece_side <- if (piece == "die") piece_side else paste0(piece, "_", opp_side)
-    opp_opt <- cfg$get_piece_opt(opp_piece_side, suit, rank)
-    gp_opp <- gpar(col=opp_opt$border_color, fill=opp_opt$background_color, lex=opp_opt$border_lex)
-    xyz_opp <- if (opt$back) token$xyz_face else token$xyz_back
-    xy_opp <- xyz_opp$project_op(op_angle, op_scale)
 
-    grob_opposite <- polygonGrob(x = xy_opp$x, y = xy_opp$y, default.units = "in",
-                          gp = gp_opp, name="opposite_piece_side")
+    indices_visible <- visible_die_faces(lf, op_angle)
 
-    # edges
-    edges <- token$op_edges(op_angle)
-    for (i in seq_along(edges)) {
-        name <- paste0("edge", i)
-        gl[[i]] <- edges[[i]]$op_grob(op_angle, op_scale, name=name)
+    for (i in indices_visible) {
+        xy <- lf$f_xyz[[i]]$project_op(op_angle, op_scale)
+        rank <- lf$die_face_info$rank[i]
+        name <- paste0("die_side", i)
+        gl[[i]] <- at_ps_grob(piece_side, suit, rank, cfg, xy, xy, name = name)
     }
-    gp_edge <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
-    grob_edge <- gTree(children=gl, gp=gp_edge, name="token_edges")
-    grobTree(grob_opposite, grob_edge)
+    gTree(children=gl, name="die_sides", cl="basic_projected_die_edge")
 }
 
 ## Ellipsoid

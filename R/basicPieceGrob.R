@@ -14,6 +14,9 @@
 #'
 #'  is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
 #'  if (require("grid") && capabilities("cairo") && !is_mac) {
+#'     op <- options()
+#'     on.exit(options(op))
+#'     options(piecepackr.at.inform = FALSE)
 #'     cfg <- pp_cfg(list(invert_colors=TRUE))
 #'
 #'     pushViewport(viewport(width=unit(2, "in"), height=unit(2, "in")))
@@ -272,23 +275,10 @@ x_die_layoutRF <- c(1/4, 2/4, 2/4, 3/4, 3/4, 4/4) - 1/8
 x_die_layoutLF <- c(4/4, 3/4, 3/4, 2/4, 2/4, 1/4) - 1/8
 y_die_layout <- c(1/3, 1/3, 2/3, 2/3, 3/3, 3/3) - 1/6
 
-get_die_face_info <- function(suit, arrangement = "counter_down") { #### also angle #175
-    suit <- rep(suit, length.out=6)
-    if (arrangement == "opposites_sum_to_5") {
-        rank <- c(1, 2, 3, 6, 5, 4)
-        suit <- suit[rank]
-    } else if (arrangement == "counter_up") {
-        rank <- 6:1
-        suit <- rev(suit)
-    } else {
-        rank <- 1:6
-    }
-    list(rank = rank, suit = suit)
-}
-
 piecepackDieGrob <- function(suit, cfg, flip=FALSE,
                              arrangement=cfg$die_arrangement) {
     cfg <- as_pp_cfg(cfg)
+    rs <- get_die_face_info(suit, arrangement)
     angle <- rep(c(0, -90), 3)
     if (flip) {
         x <- x_die_layoutLF
@@ -296,7 +286,7 @@ piecepackDieGrob <- function(suit, cfg, flip=FALSE,
     } else {
         x <- x_die_layoutRF
     }
-    rs <- get_die_face_info(suit, arrangement)
+    angle <- angle + rs$angle
     gl <- gList()
     for (ii in 1:6) {
         gl[[ii]] <- pieceGrob("die_face", rs$suit[ii], rs$rank[ii], cfg,
