@@ -462,25 +462,6 @@ piece_mesh() ({rayvertex})
 
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("rayvertex")
-
-
-::
-
-    ## 
-    ## Attaching package: 'rayvertex'
-
-
-
-::
-
-    ## The following object is masked from 'package:rayrender':
-    ## 
-    ##     r_obj
-
-
-.. sourcecode:: r
-    
-
     df <- ppgames::df_international_chess()
     envir <- game_systems("dejavu3d", round=TRUE, pawn="joystick")
     l <- pmap_piece(df, piece_mesh, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")
