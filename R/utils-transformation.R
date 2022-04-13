@@ -215,7 +215,7 @@ at_inform <- function(fallback = "picture") {
                  i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`.")
     }
     msg <- c(msg,
-             i = "These messages can be disable via `options(piecepackr.at.inform = FALSE)`.")
+             i = "These messages can be disabled via `options(piecepackr.at.inform = FALSE)`.")
     inform(msg, class = "piecepackr_affine_transformation")
 }
 
@@ -236,6 +236,8 @@ at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="pie
         has_border <- hasName(grob, "border")
         if (has_border)
             grob$border <- FALSE
+        if (vp_info$flipped && hasName(grob, "flip"))
+            grob$flip <- TRUE
         ps_grob <- transformationGrob(
                           grob,
                           vp.define = vp.define,

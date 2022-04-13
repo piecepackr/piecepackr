@@ -53,7 +53,7 @@
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    gTree(opt=opt, border=TRUE, scale=1,
+    gTree(opt=opt, border=TRUE, flip=FALSE, scale=1,
           name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
 }
 
@@ -99,7 +99,10 @@ makeContent.basic_piece_side <- function(x) {
     } else {
         border_grob <- nullGrob(name = "border")
     }
-    gl <- gList(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob)
+    if (x$flip)
+        gl <- gList(dm_grob, ps_grob, mat_grob, gl_grob, background_grob, border_grob)
+    else
+        gl <- gList(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob)
 
     setChildren(x, gl)
 }
