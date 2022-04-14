@@ -8,9 +8,12 @@
 #' @param res Resolution of the faces.
 #' @return A list with named elements "obj", "mtl", "png" with the created filenames.
 #' @examples
-#'     cfg <- game_systems("sans3d")$dominoes
-#'     files <- save_piece_obj("tile_face", suit = 3+1, rank=6+1, cfg = cfg)
-#'     print(files)
+#'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
+#'     if (all(capabilities(c("cairo", "png"))) && !is_mac) {
+#'       cfg <- game_systems("sans3d")$dominoes
+#'       files <- save_piece_obj("tile_face", suit = 3+1, rank=6+1, cfg = cfg)
+#'       print(files)
+#'     }
 #' @seealso See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 #' @export
 save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1,

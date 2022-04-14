@@ -11,7 +11,8 @@
 #'                If \code{NA} we will read the texture and figure out a reasonable value.
 #' @return A numeric vector of rgl object IDs.
 #' @examples
-#' if (require("rgl")) {
+#' is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
+#' if (require("rgl") && all(capabilities(c("cairo", "png"))) && !is_mac) {
 #'     open3d()
 #'     cfg <- game_systems("sans3d")$piecepack
 #'     piece3d("tile_back", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0)
