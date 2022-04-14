@@ -53,6 +53,14 @@ makeContent.basic_projected_token <- function(x) {
     x
 }
 
+#' @export
+grobCoords.basic_projected_token <- function(x, closed, ...) {
+    if (is.null(x$children$other_faces$coords_xyl))
+        NextMethod()
+    else
+        xylists_to_grobcoords(x$children$other_faces$coords_xyl, x$name, closed)
+}
+
 ## Token edge-side grobs
 basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
@@ -97,7 +105,15 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     }
     gp_edge <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
     grob_edge <- gTree(children=gl, gp=gp_edge, name="token_edges")
-    grobTree(grob_opposite, grob_edge)
+
+    # pre-compute grobCoords
+    if (shape$convex)
+        coords_xyl <- as.list(as.data.frame(token$xyz$project_op(op_angle, op_scale)$convex_hull))
+    else
+        coords_xyl <- NULL
+
+    gTree(coords_xyl = coords_xyl,
+          children = gList(grob_opposite, grob_edge))
 }
 
 generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
@@ -147,7 +163,15 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     gl <- gList(grob_edge, ps_grob)
 
+    # pre-compute grobCoords
+    if (shape$convex)
+        coords_xyl <- as.list(as.data.frame(token$xyz$project_op(op_angle, op_scale)$convex_hull))
+    else
+        coords_xyl <- NULL
+
+
     gTree(scale = 1, type = type,
+          coords_xyl = coords_xyl,
           children = gl, cl = "general_projected_token")
 }
 
@@ -159,6 +183,14 @@ makeContent.general_projected_token <- function(x) {
     x
 }
 
+#' @export
+grobCoords.general_projected_token <- function(x, closed, ...) {
+    if (is.null(x$coords_xyl))
+        NextMethod()
+    else
+        xylists_to_grobcoords(x$coords_xyl, x$name, closed)
+}
+
 ## Die
 basicDieGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                      x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
@@ -166,20 +198,46 @@ basicDieGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                      width=NA, height=NA, depth=NA,
                      op_scale=0, op_angle=45) {
 
-            grob <- cfg$get_grob(piece_side, suit, rank, type)
-            xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
-            cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
-            grob <- grid::editGrob(grob, name="top_face", vp=cvp)
+    grob <- cfg$get_grob(piece_side, suit, rank, type)
+    xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+    cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
+    grob <- grid::editGrob(grob, name="top_face", vp=cvp)
 
-            edge <- basicDieEdge(piece_side, suit, rank, cfg,
-                                 x, y, z, angle, width, height, depth,
-                                 op_scale, op_angle)
-            edge <- grid::editGrob(edge, name="other_faces")
+    x <- as.numeric(convertX(x, "in"))
+    y <- as.numeric(convertY(y, "in"))
+    z <- as.numeric(convertX(z, "in"))
+    width <- as.numeric(convertX(width, "in"))
+    height <- as.numeric(convertY(height, "in"))
+    depth <- as.numeric(convertX(depth, "in"))
 
-            gl <- gList(edge, grob)
+    #### allow limited 3D rotation #281
+    axis_x <- 0
+    axis_y <- 0
 
-            gTree(scale = 1, type = type,
-                  children = gl, cl="basic_projected_die")
+    edge <- basicDieEdge(piece_side, suit, rank, cfg,
+                         x, y, z,
+                         angle, axis_x, axis_y,
+                         width, height, depth,
+                         op_scale, op_angle)
+    edge <- grid::editGrob(edge, name="other_faces")
+
+    gl <- gList(edge, grob)
+
+    # pre-compute grobCoords
+    coords_xyl <- die_grobcoords_xyl(suit, rank, cfg,
+                                     x, y, z,
+                                     angle, axis_x, axis_y,
+                                     width, height, depth,
+                                     op_scale, op_angle)
+
+    gTree(scale = 1, type = type,
+          coords_xyl = coords_xyl,
+          children = gl, cl=c("basic_projected_die", "coords_xyl"))
+}
+
+#' @export
+grobCoords.coords_xyl <- function(x, closed, ...) {
+    xylists_to_grobcoords(x$coords_xyl, x$name, closed)
 }
 
 #' @export
@@ -196,23 +254,28 @@ makeContent.basic_projected_die <- function(x) {
     x
 }
 
+#### What if shape is "roundrect"?
+die_grobcoords_xyl <- function(suit, rank, cfg,
+                              x, y, z,
+                              angle, axis_x, axis_y,
+                              width, height, depth,
+                              op_scale, op_angle) {
+
+    xyz <- die_xyz(suit, rank, cfg,
+                   x, y, z,
+                   angle, axis_x, axis_y,
+                   width, height, depth)
+    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+}
+
 basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
                      x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
-                     angle=0, width=NA, height=NA, depth=NA,
+                     angle=0, axis_x=0, axis_y=0,
+                     width=NA, height=NA, depth=NA,
                      op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
-
-    #### allow limited 3D rotation
-    axis_x <- 0
-    axis_y <- 0
 
     lf <- get_die_faces(suit, rank, cfg,
                         x, y, z,
@@ -309,8 +372,31 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
         piece_side <- df$edge[i]
         gl[[i]] <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name = piece_side)
     }
-    gTree(scale = 1, children=gl, cl="projected_pyramid_top")
+
+    #### allow limited 3D rotation #281
+    axis_x <- 0
+    axis_y <- 0
+    # pre-compute grobCoords
+    coords_xyl <- pt_grobcoords_xyl(x, y, z,
+                                    angle, axis_x, axis_y,
+                                    width, height, depth,
+                                    op_scale, op_angle)
+
+    gTree(scale = 1,
+          coords_xyl = coords_xyl,
+          children=gl, cl=c("projected_pyramid_top", "coords_xyl"))
 }
+
+pt_grobcoords_xyl <- function(x, y, z,
+                              angle, axis_x, axis_y,
+                              width, height, depth,
+                              op_scale, op_angle) {
+    xyz <- pt_xyz(x, y, z,
+                  angle, axis_x, axis_y,
+                  width, height, depth)
+    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+}
+
 
 ## Pyramid side
 basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
@@ -397,7 +483,28 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
     gl[[4]] <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name = piece_side)
 
-    gTree(scale = scale, children=gl, cl="projected_pyramid_side")
+    #### allow limited 3D rotation #281
+    axis_x <- 0
+    axis_y <- 0
+    # pre-compute grobCoords
+    coords_xyl <- ps_grobcoords_xyl(x, y, z,
+                                    angle, axis_x, axis_y,
+                                    width, height, depth,
+                                    op_scale, op_angle)
+
+    gTree(scale = 1,
+          coords_xyl = coords_xyl,
+          children=gl, cl=c("projected_pyramid_side", "coords_xyl"))
+}
+
+ps_grobcoords_xyl <- function(x, y, z,
+                              angle, axis_x, axis_y,
+                              width, height, depth,
+                              op_scale, op_angle) {
+    xyz <- ps_xyz(x, y, z,
+                  angle, axis_x, axis_y,
+                  width, height, depth)
+    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
 }
 
 makeContent.projected_pyramid_side <- function(x) {

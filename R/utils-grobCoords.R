@@ -21,7 +21,10 @@ coords_to_xylist <- function(coords) {
     Reduce(f, xyl)
 }
 
-xylists_to_grobcoords <- function(xyl, name) {
+xylists_to_grobcoords <- function(xyl, name, closed = TRUE) {
+    if (getRversion() >= '4.2.0' && !closed)
+        return(emptyGrobCoords(name))
+
     if (getRversion() < '4.2.0') {
         if (!is.list(xyl[[1]]))
             list(xyl)

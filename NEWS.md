@@ -86,6 +86,8 @@ Bug fixes and minor improvements
   mode to "orthographic projection" mode has been lowered from `0.01` to `0.0001`.
 * If `isTRUE(capabilities("cairo"))` then `pp_cfg()$get_raster()`
   now always uses `png(type = "cairo")`.
+* `grid::grobCoords()` now returns slightly better values for dice, pyramids, and convex
+  two-sided tokens when projected in an oblique projection by `pieceGrob()` / `grid.piece()` (#285).
 
 piecepackr 1.10.3
 =================

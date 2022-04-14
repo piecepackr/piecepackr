@@ -179,10 +179,15 @@ Shape <- R6Class("pp_shape",
                   name = name, gp = gp, vp = vp, cl = "pp_polyclip")
         }),
     active = list(
-        label = function() private$shape_label,
-        theta = function() private$shape_theta,
-        radius = function() private$shape_radius,
         back = function() private$shape_back,
+        convex = function() {
+            if (grepl(self$label, "^concave") ||
+                self$label %in% c("halma", "meeple"))
+                FALSE
+            else
+                TRUE
+        },
+        label = function() private$shape_label,
         npc_coords = function() {
             label <- self$label
             theta <- self$theta
@@ -211,7 +216,10 @@ Shape <- R6Class("pp_shape",
                 if (back) theta <- 180 - theta
                 convex_xy(get_n_vertices(label), theta)
             }
-        }),
+        },
+        radius = function() private$shape_radius,
+        theta = function() private$shape_theta
+        ),
     private = list(
         shape_label = NULL,
         shape_theta = NULL,

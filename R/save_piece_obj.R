@@ -409,15 +409,10 @@ save_die_obj <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_c
 
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    pc <- Point3D$new(x, y, z)
-
-    xs <- c(0, 0, 1, 1, 0, 0, 1, 1) - 0.5
-    ys <- c(1, 0, 0, 1, 1, 0, 0, 1) - 0.5
-    zs <- rep(c(1, 0), each = 4) - 0.5
-
-    dR <- get_die_rotation(suit, rank, cfg)
-    R <- dR %*% AA_to_R(angle, axis_x, axis_y)
-    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+    xyz <- die_xyz(suit, rank, cfg,
+                   x, y, z,
+                   angle, axis_x, axis_y,
+                   width, height, depth)
 
     xy_vt <- list(x = rep(c(0, 0.5, 1), 4),
                   y = rep(c(1, 2/3, 1/3, 0), each = 3))
@@ -538,15 +533,9 @@ save_pt_obj <- function(piece_side = "pyramid_top", suit = 1, rank = 1, cfg = pp
     cfg <- as_pp_cfg(cfg)
 
     # vertices
-    pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(rect_xy)
-    xy <- xy_npc$translate(-0.5, -0.5)
-    xyz_t <- Point3D$new(x = 0.0, y = 0.0, z = 0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
-    xs <- c(xyz_t$x, xyz_b$x)
-    ys <- c(xyz_t$y, xyz_b$y)
-    zs <- c(xyz_t$z, xyz_b$z)
-    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
+    xyz <- pt_xyz(x, y, z,
+                  angle, axis_x, axis_y,
+                  width, height, depth)
 
     # texture coordinates
     xy_vt <- list(x = seq(0, 1, 0.125), y = rep(c(0, 1), length.out = 9))
@@ -579,16 +568,9 @@ save_ps_obj <- function(piece_side = "pyramid_face", suit = 1, rank = 1, cfg = p
     cfg <- as_pp_cfg(cfg)
 
     # geometric vertices
-    pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(pyramid_xy)
-    xy <- xy_npc$translate(-0.5, -0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
-    theta <- 2 * asin(0.5 * width / height)
-    xyz_t <- Point3D$new(x = c(-0.5, 0.5), y = 0.5 - cos(theta), z = 0.5)
-    xs <- c(xyz_t$x, xyz_b$x)
-    ys <- c(xyz_t$y, xyz_b$y)
-    zs <- c(xyz_t$z, xyz_b$z)
-    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
+    xyz <- ps_xyz(x, y, z,
+                  angle, axis_x, axis_y,
+                  width, height, depth)
 
     # texture coordinates
     xy_vt <- list(x = seq(0, 1, 0.125), y = rep(c(0, 1), length.out = 9))
