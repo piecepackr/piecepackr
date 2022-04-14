@@ -71,7 +71,8 @@ A rayvertex object.
 }
 \examples{
   \donttest{
-    if (require("rayvertex")) {
+    is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
+    if (require("rayvertex") && all(capabilities(c("cairo", "png"))) && !is_mac) {
         cfg <- game_systems("sans3d")$piecepack
         rs <- function(shape) {
              rasterize_scene(shape, light_info = directional_light(c(0, 0, 1)))
