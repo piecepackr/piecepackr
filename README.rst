@@ -166,11 +166,13 @@ Playing Cards
 
     Playing Cards
 
-Other traditional abstracts
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Other included games and components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 * An ``alquerque`` configuration that produces "boards"/"bits" for `Alquerque <https://en.wikipedia.org/wiki/Alquerque>`__ in a variety of colors.
 * ``chess1`` and ``chess2`` configurations with checkered "boards" and matching chess "bits" (currently "disc" pieces instead of "Staunton" pieces).
+* A ``dice_fudge`` configuration which can produce `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`__ in a variety of colors.
+* A ``meeples`` configuration that produces "meeple" bits in a variety of colors.
 * A ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ "board"/"bits" in a variety of colors.
 * A ``reversi`` configuration that can produce "boards"/"bits" for `Reversi <https://en.wikipedia.org/wiki/Reversi>`__ in a variety of colors.
 

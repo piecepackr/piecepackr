@@ -77,6 +77,11 @@ New features
   `"opposites_sum_to_5"`, and `"counter_down"` (default) which provide aliases
   for three popular arrangements.
 
+* The following enhancements to the configurations returned by `game_systems()`:
+
+  - New configuration ``dice_fudge`` which provide [Fudge dice](https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice)
+    in six color schemes (#287).
+
 Bug fixes and minor improvements
 --------------------------------
 
