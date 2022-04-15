@@ -3,6 +3,7 @@
 * local(linux, R devel)
 * local (linux, R 4.1.3) 
 * win-builder (windows, R devel)
+* Github Actions (linux, R devel)
 * Github Actions (linux, R release)
 * Github Actions (linux, R oldrel)
 * Github Actions (windows, R release)
@@ -14,8 +15,8 @@
 
 ```
 Undefined global functions or variables:
-  defineGrob emptyGrobCoords gridCoords gridGrobCoords useGrob
-  viewportTransform
+  defineGrob emptyGrobCoords gridCoords gridGrobCoords groupFlip
+  groupShear useGrob viewportTransform
 ```
 
 These functions are only available in the `{grid}` package bundled with R 4.2 and later.
