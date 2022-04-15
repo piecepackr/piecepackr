@@ -38,7 +38,6 @@ test_that("save_print_and_play works as expected", {
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
 
     skip_if_not(capabilities("cairo"))
-    skip_on_os("mac")
     save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5", "all", "double-sided")
 
     save_print_and_play(cfg_default, pdf_deck_filename, "letter")
@@ -63,7 +62,6 @@ test_that("save_print_and_play works as expected", {
 
 test_that("save_piece_images works as expected", {
     skip_if_not(capabilities("cairo"))
-    skip_on_os("mac")
     directory <- tempfile()
     on.exit(unlink(directory))
     cfg <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
@@ -98,7 +96,6 @@ test_that("save_piece_images works as expected", {
 test_that("no regressions in figures", {
     skip_on_ci()
     skip_if_not(capabilities("cairo"))
-    skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
@@ -285,7 +282,6 @@ test_that("oblique projection works", {
     skip_on_ci()
     skip_on_cran()
     skip_if_not(capabilities("cairo"))
-    skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     dc <- function(..., cfg=cfg_default) {
@@ -333,7 +329,6 @@ test_that("oblique projection works", {
 test_that("alpha and scale works", {
     skip_on_ci()
     skip_if_not(capabilities("cairo"))
-    skip_on_os("mac")
     skip_if_not_installed("vdiffr")
     library("vdiffr")
     expect_doppelganger("alpha", function() {

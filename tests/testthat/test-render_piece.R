@@ -44,7 +44,6 @@ test_that("render_piece() works", {
 
     skip_if_not_installed("rgl")
     library("rgl")
-    skip_on_os("mac")
     open3d()
     view3d(0, -30)
     f <- tempfile(fileext = ".tiff")

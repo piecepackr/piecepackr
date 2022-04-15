@@ -19,8 +19,7 @@ A4_HEIGHT <- 11.69
 #' @inheritParams render_piece
 #' @examples
 #'   \donttest{
-#'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
-#'     if (capabilities("cairo") && !is_mac) {
+#'     if (capabilities("cairo")) {
 #'         cfg <- pp_cfg(list(invert_colors.suited=TRUE))
 #'         cfg$description <- 'Piecepack with an "inverted" color scheme.'
 #'         cfg$title <- '"Inverted" piecepack'

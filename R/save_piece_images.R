@@ -59,8 +59,7 @@ piece_filename <- function(directory, piece_side, format, angle,
 #' @param angle Numeric vector of angles to rotate images (in degrees)
 #' @examples
 #'   \donttest{
-#'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
-#'     if (all(capabilities(c("cairo", "png"))) && !is_mac) {
+#'     if (all(capabilities(c("cairo", "png")))) {
 #'         cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
 #'         save_piece_images(cfg, directory=tempdir(), format="svg", angle=0)
 #'         save_piece_images(cfg, directory=tempdir(), format="png", angle=90)

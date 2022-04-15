@@ -1,6 +1,5 @@
 cfg <- piecepackr::game_systems("sans3d")$piecepack
 test_that("save_piece_obj works", {
-    skip_on_os("mac")
     files <- save_piece_obj("tile_face", z = NA, cfg = cfg)
     expect_length(files, 3)
     files <- save_piece_obj("tile_back", cfg = cfg, angle = NA, axis_x = NA, axis_y = NA)
@@ -22,7 +21,6 @@ test_that("save_piece_obj works", {
 
 test_that("rgl works", {
     skip_on_cran()
-    skip_on_os("mac")
     library("rgl")
     # go stone OBJ generation uses "rgl" in background
     files <- save_piece_obj("bit_face", cfg = game_systems("dejavu3d")$go)
@@ -48,7 +46,6 @@ test_that("rgl works", {
 
 test_that("rayrender works", {
     skip_on_cran()
-    skip_on_os("mac")
     skip_if_not_installed("rayrender")
     library("rayrender")
     scene <- piece("coin_face", x=-1:1, rank=1:3, cfg = cfg)
@@ -70,7 +67,6 @@ test_that("rayrender works", {
 
 test_that("rayvertex works", {
     skip_on_cran()
-    skip_on_os("mac")
     skip_if_not_installed("rayvertex")
     library("rayvertex")
     scene <- piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg)

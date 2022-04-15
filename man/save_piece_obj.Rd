@@ -70,8 +70,7 @@ A list with named elements "obj", "mtl", "png" with the created filenames.
 \code{save_piece_obj} saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
 }
 \examples{
-    is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
-    if (all(capabilities(c("cairo", "png"))) && !is_mac) {
+    if (all(capabilities(c("cairo", "png")))) {
       cfg <- game_systems("sans3d")$dominoes
       files <- save_piece_obj("tile_face", suit = 3+1, rank=6+1, cfg = cfg)
       print(files)

@@ -8,8 +8,7 @@
 #' @param res Resolution of the faces.
 #' @return A list with named elements "obj", "mtl", "png" with the created filenames.
 #' @examples
-#'     is_mac <- tolower(Sys.info()[["sysname"]]) == "darwin"
-#'     if (all(capabilities(c("cairo", "png"))) && !is_mac) {
+#'     if (all(capabilities(c("cairo", "png")))) {
 #'       cfg <- game_systems("sans3d")$dominoes
 #'       files <- save_piece_obj("tile_face", suit = 3+1, rank=6+1, cfg = cfg)
 #'       print(files)
