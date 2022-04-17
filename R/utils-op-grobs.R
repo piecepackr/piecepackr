@@ -71,12 +71,12 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     piece <- get_piece(piece_side)
     side <- ifelse(opt$back, "back", "face") #### allow limited 3D rotation #281
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
+    x <- convertX(x, "in", valueOnly = TRUE)
+    y <- convertY(y, "in", valueOnly = TRUE)
+    z <- convertX(z, "in", valueOnly = TRUE)
+    width <- convertX(width, "in", valueOnly = TRUE)
+    height <- convertY(height, "in", valueOnly = TRUE)
+    depth <- convertX(depth, "in", valueOnly = TRUE)
 
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
     R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
@@ -128,12 +128,12 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
+    x <- convertX(x, "in", valueOnly = TRUE)
+    y <- convertY(y, "in", valueOnly = TRUE)
+    z <- convertX(z, "in", valueOnly = TRUE)
+    width <- convertX(width, "in", valueOnly = TRUE)
+    height <- convertY(height, "in", valueOnly = TRUE)
+    depth <- convertX(depth, "in", valueOnly = TRUE)
 
     #### Generalize axis_x, axis_y #281
     axis_x <- 0
@@ -203,12 +203,12 @@ basicDieGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
     grob <- grid::editGrob(grob, name="top_face", vp=cvp)
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
+    x <- convertX(x, "in", valueOnly = TRUE)
+    y <- convertY(y, "in", valueOnly = TRUE)
+    z <- convertX(z, "in", valueOnly = TRUE)
+    width <- convertX(width, "in", valueOnly = TRUE)
+    height <- convertY(height, "in", valueOnly = TRUE)
+    depth <- convertX(depth, "in", valueOnly = TRUE)
 
     #### allow limited 3D rotation #281
     axis_x <- 0
@@ -304,12 +304,12 @@ basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
+    x <- convertX(x, "in", valueOnly = TRUE)
+    y <- convertY(y, "in", valueOnly = TRUE)
+    z <- convertX(z, "in", valueOnly = TRUE)
+    width <- convertX(width, "in", valueOnly = TRUE)
+    height <- convertY(height, "in", valueOnly = TRUE)
+    depth <- convertX(depth, "in", valueOnly = TRUE)
 
     xyz <- ellipse_xyz()$dilate(width, height, depth)$translate(x, y, z)
     xy <- xyz$project_op(op_angle, op_scale)
@@ -344,12 +344,12 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
+    x <- convertX(x, "in", valueOnly = TRUE)
+    y <- convertY(y, "in", valueOnly = TRUE)
+    z <- convertX(z, "in", valueOnly = TRUE)
+    width <- convertX(width, "in", valueOnly = TRUE)
+    height <- convertY(height, "in", valueOnly = TRUE)
+    depth <- convertX(depth, "in", valueOnly = TRUE)
     xy <- Point2D$new(x, y)
     xy_b <- Point2D$new(rect_xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_b)
@@ -406,12 +406,12 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
 
-    x <- as.numeric(convertX(x, "in"))
-    y <- as.numeric(convertY(y, "in"))
-    z <- as.numeric(convertX(z, "in"))
-    width <- as.numeric(convertX(width, "in"))
-    height <- as.numeric(convertY(height, "in"))
-    depth <- as.numeric(convertX(depth, "in"))
+    x <- convertX(x, "in", valueOnly = TRUE)
+    y <- convertY(y, "in", valueOnly = TRUE)
+    z <- convertX(z, "in", valueOnly = TRUE)
+    width <- convertX(width, "in", valueOnly = TRUE)
+    height <- convertY(height, "in", valueOnly = TRUE)
+    depth <- convertX(depth, "in", valueOnly = TRUE)
 
     xy_b <- Point2D$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
     p <- Polygon$new(xy_b)

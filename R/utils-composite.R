@@ -21,12 +21,12 @@ CompositePiece <- R6Class("pp_composite",
         op_grob_fn = function() function(piece_side, suit, rank, cfg,
                                          x, y, z, angle, type, width, height, depth,
                                          op_scale, op_angle, scale = 1) {
-            x <- as.numeric(convertX(x, "in"))
-            y <- as.numeric(convertY(y, "in"))
-            z <- as.numeric(convertX(z, "in"))
-            width <- as.numeric(convertX(width, "in"))
-            height <- as.numeric(convertY(height, "in"))
-            depth <- as.numeric(convertX(depth, "in"))
+            x <- convertX(x, "in", valueOnly = TRUE)
+            y <- convertY(y, "in", valueOnly = TRUE)
+            z <- convertX(z, "in", valueOnly = TRUE)
+            width <- convertX(width, "in", valueOnly = TRUE)
+            height <- convertY(height, "in", valueOnly = TRUE)
+            depth <- convertX(depth, "in", valueOnly = TRUE)
             df <- private$relative_df(piece_side)
             relative_side <- get_relative_side(piece_side, private$ref_side)
             df <- scale_df(df, relative_side, width, height, depth)
