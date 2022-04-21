@@ -29,10 +29,10 @@ cropmarkGrob(
   cm_inside = FALSE
 )
 
-grid.cropmark(..., draw = FALSE)
+grid.cropmark(..., draw = TRUE)
 }
 \arguments{
-\item{...}{Ignored.}
+\item{...}{\code{cropmarkGrob()} ignores; \code{grid.cropmark()} passes to \code{cropmarkGrob()}.}
 
 \item{piece_side}{A string with piece and side separated by a underscore e.g. "coin_face"}
 
@@ -89,7 +89,7 @@ Default "12345678" draws all eight crop marks.}
 
 \item{cm_inside}{Whether crop marks should point inside or outside (default)
 the \dQuote{bleed} zone.
-\code{cm_inside = TRUE} may be appropriate circular tokens.}
+\code{cm_inside = TRUE} may be appropriate for circular tokens.}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 }
