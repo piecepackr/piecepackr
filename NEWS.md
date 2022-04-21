@@ -4,6 +4,15 @@ piecepackr 1.11.0 (development)
 Breaking changes
 ----------------
 
+* Some tweaks to the "bleed" zone feature introduced in v1.10.1:
+
+  + In `grid.piece()` / `pieceGrob()` if `bleed = TRUE` and `width` or `height` is not `NA`
+    then `width` / `height` is now interpreted as the size of the piece *before* "bleed" zone is added.  
+  + A non-unitary `scale` factor will now be applied to piece dimensions *before* "bleed" zone is added.
+  + If one of the "named slots" of the `{grid}` "grob" returned by a custom
+    `grob_with_bleed_fn` function is `bleed` then `pieceGrob()` / `grid.piece()`
+    will adjust that grob's `bleed` slot to the requested "bleed" zone margins.
+
 * There were some tweaks on how custom function style elements
   (i.e. `grob_fn`, `op_grob_fn`, `grob_with_bleed_fn`,
   `obj_fn`, `rayrender_fn`, `rayvertex_fn`, `rgl_fn`)
@@ -43,6 +52,9 @@ Breaking changes
 
 New features
 ------------
+
+* `cropmarkGrob()` / `grid.cropmark()` create/draw "crop mark" grobs (#262).
+  Intended for use in creating print-and-play layouts.
 
 * `geom_piece()`, `grid.piece()`, `pieceGrob()`, 
   `pp_cfg()$get_grob()`, and `pp_cfg()$get_op_grob()` now support

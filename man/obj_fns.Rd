@@ -70,9 +70,9 @@ can be retrieved by \code{base::dynGet()}.}
 
 \item{axis_y}{Second coordinate of the axis unit vector.}
 
-\item{width}{Width of piece (plus bleed if \code{bleed} is \code{TRUE})}
+\item{width}{Width of piece}
 
-\item{height}{Height of piece (plus bleed if \code{bleed} is \code{TRUE})}
+\item{height}{Height of piece}
 
 \item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
 

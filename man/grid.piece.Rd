@@ -83,9 +83,9 @@ can be retrieved by \code{base::dynGet()}.}
 
 \item{use_pictureGrob}{Deprecated argument.  If \code{TRUE} sets \code{type} argument to \code{"picture"}.}
 
-\item{width}{Width of piece (plus bleed if \code{bleed} is \code{TRUE})}
+\item{width}{Width of piece}
 
-\item{height}{Height of piece (plus bleed if \code{bleed} is \code{TRUE})}
+\item{height}{Height of piece}
 
 \item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
 
@@ -122,9 +122,13 @@ R 4.2+ within select graphic devices.
 The latter three can be useful if drawing pieces really big or small and don't want
 to mess with re-configuring fontsizes and linewidths.}
 
-\item{bleed}{Whether to add a \dQuote{bleed} zone around the piece.
-If \code{width} or \code{height} is \code{NA} we will add 1/8 inch bleeds.
-\code{bleed = TRUE} is incompatible with \code{op_scale > 0}.}
+\item{bleed}{If \code{FALSE} do not add a \dQuote{bleed} zone around the piece,
+otherwise add a \dQuote{bleed} zone around the piece:\itemize{
+\item{If \code{bleed} is \code{TRUE} we will add 1/8 inch bleeds}
+\item{If \code{bleed} is a \code{\link[grid:unit]{grid::unit()}} we will use it as bleed size}
+\item{If \code{bleed} is numeric we will convert to \code{\link[grid:unit]{grid::unit()}} via \code{grid::unit(bleed, default.units)}}
+}
+A non-\code{FALSE} \code{bleed} is incompatible with \code{op_scale > 0} (drawing in an \dQuote{oblique projection}).}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 }

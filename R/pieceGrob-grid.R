@@ -16,8 +16,8 @@
 #' @param z z-coordinate of the piece.  Has no effect if \code{op_scale} is \code{0}.
 #' @param angle Angle (on xy plane) to draw piece at
 #' @param use_pictureGrob Deprecated argument.  If `TRUE` sets `type` argument to `"picture"`.
-#' @param width Width of piece (plus bleed if `bleed` is `TRUE`)
-#' @param height Height of piece (plus bleed if `bleed` is `TRUE`)
+#' @param width Width of piece
+#' @param height Height of piece
 #' @param depth Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.
 #' @param op_scale How much to scale the depth of the piece in the oblique projection
 #'              (viewed from the top of the board).
@@ -42,9 +42,13 @@
 #'             R 4.2+ within select graphic devices.
 #'             The latter three can be useful if drawing pieces really big or small and don't want
 #'             to mess with re-configuring fontsizes and linewidths.
-#' @param bleed Whether to add a \dQuote{bleed} zone around the piece.
-#'              If `width` or `height` is `NA` we will add 1/8 inch bleeds.
-#'              `bleed = TRUE` is incompatible with `op_scale > 0`.
+#' @param bleed If `FALSE` do not add a \dQuote{bleed} zone around the piece,
+#'              otherwise add a \dQuote{bleed} zone around the piece:\itemize{
+#'                 \item{If `bleed` is `TRUE` we will add 1/8 inch bleeds}
+#'                 \item{If `bleed` is a [grid::unit()] we will use it as bleed size}
+#'                 \item{If `bleed` is numeric we will convert to [grid::unit()] via `grid::unit(bleed, default.units)`}
+#'              }
+#'              A non-`FALSE` `bleed` is incompatible with `op_scale > 0` (drawing in an \dQuote{oblique projection}).
 #' @return A `grid` grob object.  If `draw` is `TRUE` then as a side effect
 #'         `grid.piece()` will also draw it to the graphics device.
 #' @examples
@@ -95,14 +99,23 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
                            angle=0, width=NA, height=NA, depth=NA,
                            op_scale=0, op_angle=45,
                            default.units = "npc",
-                           scale=1, alpha=1, type="normal", name="", bleed=FALSE) {
+                           scale=1, alpha=1, type="normal", name="",
+                           bleed=FALSE) {
+    stopifnot(isFALSE(bleed) || op_scale < 0.0001)
     if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
     rank <- impute_rank(piece_side, rank, cfg)
     suit <- impute_suit(piece_side, suit, cfg)
     if (is.na(angle)) angle <- 0
-    if (is.na(width)) width <- inch(cfg$get_width(piece_side, suit, rank) + bleed * 0.25)
-    if (is.na(height)) height <- inch(cfg$get_height(piece_side, suit, rank) + bleed * 0.25)
+
+    has_bleed <- !isFALSE(bleed)
+
+    if (isTRUE(bleed)) bleed <- unit(0.125, "in")
+    if (isFALSE(bleed)) bleed <- unit(0, "in")
+    if (!is.unit(bleed)) bleed <- unit(bleed, default.units)
+
+    if (is.na(width)) width <- inch(cfg$get_width(piece_side, suit, rank))
+    if (is.na(height)) height <- inch(cfg$get_height(piece_side, suit, rank))
     if (is.na(depth)) depth <- inch(cfg$get_depth(piece_side, suit, rank))
     if (is.na(z)) z <- 0.5 * depth
     if (!is.unit(x)) x <- unit(x, default.units)
@@ -111,15 +124,17 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
     if (!is.unit(width)) width <- unit(width, default.units)
     if (!is.unit(height)) height <- unit(height, default.units)
     if (!is.unit(depth)) depth <- unit(depth, default.units)
-    width <- scale * width
-    height <- scale * height
+    width <- scale * width + 2 * bleed
+    height <- scale * height + 2 * bleed
     depth <- scale * depth
     angle <- angle %% 360
     op_angle <- op_angle %% 360
 
     if (op_scale < 0.0001) {
-        if (bleed) {
+        if (has_bleed) {
             grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
+            if (hasName(grob, "bleed"))
+                grob$bleed <- bleed
         } else {
             grob <- cfg$get_grob(piece_side, suit, rank, type)
         }
@@ -127,7 +142,6 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
         name <- paste0("piece_side", name)
         grob <- grid::editGrob(grob, vp=cvp)
     } else {
-        stopifnot(isFALSE(bleed))
         grob <- cfg$get_op_grob(piece_side, suit, rank,
                             x, y, z, angle, type,
                             width, height, depth,
@@ -158,7 +172,8 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                          default.units = getOption("piecepackr.default.units", "npc"),
                          envir = getOption("piecepackr.envir"),
                          name=NULL, gp=NULL, vp=NULL, ...,
-                         scale=1, alpha=1, type="normal", bleed = FALSE) {
+                         scale=1, alpha=1, type="normal",
+                         bleed=FALSE) {
 
     stopifnot(!(bleed && op_scale > 0))
 
@@ -172,7 +187,8 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
           width=width, height=height, depth=depth,
           op_scale=op_scale, op_angle=op_angle,
           default.units=default.units, envir=envir,
-          scale=scale, alpha=alpha, type=type, bleed=bleed,
+          scale=scale, alpha=alpha, type=type,
+          bleed=bleed,
           name=name, gp=gp, vp=vp,
           cl=c("piece", "pp_grobCoords"))
 }
@@ -216,7 +232,8 @@ makeContent.piece <- function(x) {
                                    width[i], height[i], depth[i],
                                    op_scale[i], op_angle[i], x$default.units,
                                    scale[i], alpha[i], type[i],
-                                   name, bleed[i])
+                                   name,
+                                   bleed[i])
     }
     setChildren(x, gl)
 }
@@ -257,7 +274,8 @@ grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA,
                        default.units = getOption("piecepackr.default.units", "npc"),
                        envir = getOption("piecepackr.envir"),
                        name=NULL, gp=NULL, draw=TRUE, vp=NULL, ...,
-                       scale=1, alpha=1, type="normal", bleed=FALSE) {
+                       scale=1, alpha=1, type="normal",
+                       bleed=FALSE) {
     if (!missing(use_pictureGrob)) {
         .Deprecated(msg = paste("`use_pictureGrob = TRUE` is deprecated.",
                                 'Use `type = "picture"` instead.'))
@@ -269,7 +287,8 @@ grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA,
                       op_scale = op_scale, op_angle = op_angle,
                       default.units = default.units,
                       envir = envir, name = name, gp = gp, vp =vp,
-                      scale = scale, alpha = alpha, type = type, bleed = bleed)
+                      scale = scale, alpha = alpha, type = type,
+                      bleed = bleed)
     if (draw) {
         grid.draw(grob)
         invisible(grob)
