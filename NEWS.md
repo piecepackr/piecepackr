@@ -56,6 +56,13 @@ New features
 * `cropmarkGrob()` / `grid.cropmark()` create/draw "crop mark" grobs (#262).
   Intended for use in creating print-and-play layouts.
 
+* `save_print_and_play()` supports new argument `bleed` (#259).  
+  If `bleed = TRUE` we provide a new print-and-play layout with 
+  1/8" bleed zones and "crop marks" indicating where to cut the pieces.  
+  Currently this feature only supports `pieces = "piecepack"`, does
+  not support `size = "4x6"`, and requires more paper than the 
+  more compact legacy `bleed = FALSE` layout.
+
 * `geom_piece()`, `grid.piece()`, `pieceGrob()`, 
   `pp_cfg()$get_grob()`, and `pp_cfg()$get_op_grob()` now support
   argument `type = "transformation"` which uses
@@ -105,6 +112,14 @@ Bug fixes and minor improvements
   now always uses `png(type = "cairo")`.
 * `grid::grobCoords()` now returns slightly better values for dice, pyramids, and convex
   two-sided tokens when projected in an oblique projection by `pieceGrob()` / `grid.piece()` (#285).
+* `save_print_and_play()`'s `pieces` argument now defaults to `NULL`.  If the `size` / `bleed` 
+  arguments support the "matchsticks" and "pyramids" pieces it defaults to 
+  `c("piecepack", "pyramids", "matchsticks")` (as before) and if the do not suport those pieces
+  it defaults to just "piecepack".
+* `save_print_and_play()` now shuffles tile back directions (#103).
+  If a user makes tiles by double-sided printing or folding over the "gutter" and the tile 
+  backs are not perfectly symmetric then the tile backs will now leak less information 
+  about the "direction" of the tile faces.
 
 piecepackr 1.10.3
 =================

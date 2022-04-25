@@ -8,12 +8,14 @@ save_print_and_play(
   cfg = getOption("piecepackr.cfg", pp_cfg()),
   output_filename = "piecepack.pdf",
   size = c("letter", "A4", "A5", "4x6"),
-  pieces = c("piecepack", "matchsticks", "pyramids"),
+  pieces = NULL,
   arrangement = c("single-sided", "double-sided"),
   dev = NULL,
   dev.args = list(family = cfg$fontfamily, onefile = TRUE, units = "in", bg = "white",
     res = 72),
-  quietly = FALSE
+  quietly = FALSE,
+  ...,
+  bleed = FALSE
 )
 }
 \arguments{
@@ -21,10 +23,14 @@ save_print_and_play(
 
 \item{output_filename}{Filename for print-and-play file}
 
-\item{size}{PnP output size (currently either "letter", "A4", "A5", or "4x6")}
+\item{size}{PnP output size (currently either "letter", "A4", "A5", or "4x6")
+Size "4x6" currently only supports \code{pieces = "piecepack"}
+and doesn't support \code{bleed = TRUE}.}
 
 \item{pieces}{Character vector of desired PnP pieces.
-Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".}
+Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
+If \code{NULL} and combination of \code{size} / \code{bleed} values supports "matchsticks" and "pyramids"
+then defaults to \code{c("piecepack", "pyramids", "matchsticks")} else just "piecepack".}
 
 \item{arrangement}{Either "single-sided" or "double-sided".
 Ignored if \code{size = "4x6"}.}
@@ -36,6 +42,13 @@ Will filter out any names that aren't in \code{formals(dev)}.}
 
 \item{quietly}{Whether to hide messages about missing metadata
 in the provided configuration.}
+
+\item{...}{Arguments to \code{\link[=pmap_piece]{pmap_piece()}}}
+
+\item{bleed}{If \code{TRUE} produce a variant file with "bleed" zones
+and "crop marks".
+Currently only supports \code{pieces = "piecepack"} and doesn't
+support \code{size = "4x6"}.}
 }
 \description{
 Save piecepack print-and-play (PnP) file

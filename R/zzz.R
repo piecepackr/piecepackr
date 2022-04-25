@@ -1,7 +1,10 @@
 #' @import grid
+
 #' @importFrom R6 R6Class
+
 #' @importFrom grDevices dev.capabilities dev.new devAskNewPage
 #' @importFrom rlang .data abort inform warn %||%
+#' @importFrom tibble tibble
 #' @importFrom utils head packageDescription tail
 NULL
 

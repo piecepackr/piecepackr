@@ -1,14 +1,4 @@
-A5W <- 5 # 5.83"
-A5H <- 7.5 # 8.27"
-
-is_odd <- function(x) as.logical(x %% 2)
-
-gappend <- function(ll, g) {
-    ll[[length(ll)+1]] <- g
-    ll
-}
-
-print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly) {
+print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly) {
     n_suits <- cfg$n_suits
     n_ranks <- cfg$n_ranks
 
@@ -142,23 +132,6 @@ print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly) {
     pl
 }
 
-a5_vp <- viewport(width=unit(A5W, "in"), height=unit(A5H, "in"))
-
-#' @importFrom tibble tibble
-
-gp_title <- gpar(fontsize=15, fontfamily="sans", fontface="bold")
-gp_header <- gpar(fontsize=12, fontfamily="sans", fontface="bold")
-gp_text <- gpar(fontsize=9, fontfamily="sans")
-
-htg <- function(label, x, y, just="center", ...) {
-    textGrob(label, x=inch(x), y=inch(y), just=just,
-             gp=gp_header, ...)
-}
-tg <- function(label, x, y, just="center",...) {
-    textGrob(label, x=inch(x), y=inch(y), just=just,
-             gp=gp_text, ...)
-}
-
 a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     grob_title <- textGrob("Piece Anatomy", y=0.97, just="center", gp=gp_title, name="title")
     # Tile
@@ -271,121 +244,7 @@ a5_inst_grob <- function(cfg=pp_cfg(), pieces) {
     grobTree(grob_title, grob_tile, grob_coin, grob_saucer,
              grob_die, grob_pawn, grob_belt,
              grob_pyramid, grob_matchsticks,
-             name="instructions", vp=a5_vp)
-}
-
-a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE) {
-
-    # Title
-    y_title <- unit(1, "npc") - unit(0.2, "in")
-    if (is.null(cfg$title)) {
-        if (!quietly) inform("`cfg$title` is `NULL`, omitting title",
-                             class = "piecepackr_missing_metadata")
-        grob_title <- nullGrob()
-    } else {
-        grob_title <- textGrob(cfg$title, y=y_title, just="center", gp=gp_title, name="title")
-    }
-
-    # Description
-    y_description <- y_title - grobHeight(grob_title) - unit(0.2, "in")
-    if (is.null(cfg$description)) {
-        if (!quietly) inform("`cfg$description` is `NULL`, omitting description",
-                             class = "piecepackr_missing_metadata")
-        grob_description <- nullGrob()
-    } else {
-        dtext <- paste(strwrap(cfg$description, 72), collapse="\n")
-        grob_description <- textGrob(dtext, x=0.1, y=y_description, just=c(0,1),
-                                      gp=gp_text, name="description")
-    }
-
-    # License
-    y_license <- y_description - grobHeight(grob_description) - unit(0.2, "in")
-    if (is.null(cfg$spdx_id)) {
-        if (!quietly) inform("`cfg$spdx_id` is `NULL`, omitting license",
-                             class = "piecepackr_missing_metadata")
-        grob_license <- grob_lh <- grob_l <- nullGrob()
-    } else {
-        stopifnot(cfg$spdx_id %in% piecepackr::spdx_license_list$id)
-        url <- piecepackr::spdx_license_list[cfg$spdx_id, "url_alt"]
-        if (is.na(url)) url <- piecepackr::spdx_license_list[cfg$spdx_id, "url"]
-        full_name <- piecepackr::spdx_license_list[cfg$spdx_id, "name"]
-        license <- paste(c(paste("\u25cf", full_name),
-                           paste("\t", url)),
-                         collapse="\n")
-        grob_lh <- textGrob("License", x=0.1, y=y_license, just="left", gp=gp_header)
-        badge <- piecepackr::spdx_license_list[cfg$spdx_id, "badge"]
-        if (is.na(badge)) {
-            grob_cc <- nullGrob()
-        } else {
-            cc_file <- system.file(paste0("extdata/badges/", badge),
-                                   package="piecepackr")
-            current_dev <- grDevices::dev.cur() # Workaround for {grImport2} v0.2-0 bug
-            cc_picture <- grImport2::readPicture(cc_file)
-            if (current_dev > 1) grDevices::dev.set(current_dev)
-            grob_cc <- grImport2::symbolsGrob(cc_picture, x=0.50, y=0.05, size=inch(0.9))
-        }
-        grob_l <- textGrob(license, x=0.1, y=y_license-unit(0.2, "in"), just=c(0,1), gp=gp_text)
-
-        grob_license <- grobTree(grob_lh, grob_l, grob_cc, name="license")
-    }
-
-    # Copyright
-    y_copyright <- y_license - grobHeight(grob_lh) - grobHeight(grob_l) - unit(0.3, "in")
-    if (is.null(cfg$copyright) && !quietly)
-        if (!quietly) inform("`cfg$copyright` is `NULL`, omitting copyright",
-                             class = "piecepackr_missing_metadata")
-    if (is.null(cfg$copyright) || cfg$copyright == "") {
-        grob_copyright <- grob_ch <- grob_c <- nullGrob()
-    } else {
-        copyright <- paste(cfg$copyright, collapse="\n")
-        grob_ch <- textGrob("Copyright", x=0.1, y=y_copyright, just="left", gp=gp_header)
-        grob_c <-  textGrob(copyright, x=0.1, y=y_copyright-unit(0.2, "in"), just=c(0,1), gp=gp_text)
-        grob_copyright <- grobTree(grob_ch, grob_c, name="copyright")
-    }
-
-    # Credits
-    y_credits <- y_copyright - grobHeight(grob_ch) - grobHeight(grob_c) - unit(0.3, "in")
-    if (is.null(cfg$credit) && !quietly)
-        inform("`cfg$credit` is `NULL`, omitting custom credits",
-               class = "piecepackr_missing_metadata")
-    if (extra_credit) {
-        credits <- paste(c("\u25cf This print-and-play layout was generated by piecepackr.",
-                           "\thttps://github.com/piecepackr/piecepackr",
-                           '\u25cf The piecepack was invented by James "Kyle" Droscha. Public Domain.',
-                           "\thttps://ludism.org/ppwiki/AnatomyOfAPiecepack",
-                           # "\thttp://www.piecepack.org/Anatomy.html",
-                           "\u25cf Piecepack pyramids were invented by Tim Schutz. Public Domain.",
-                           "\thttps://www.ludism.org/ppwiki/PiecepackPyramids",
-                           "\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.",
-                           "\thttps://web.archive.org/web/2018/http://www.piecepack.org/Accessories.html",
-                           # "\thttp://www.piecepack.org/Accessories.html",
-                           "\u25cf Piecepack matchsticks were invented by Dan Burkey. Public Domain.",
-                           "\thttps://www.ludism.org/ppwiki/PiecepackMatchsticks",
-                           cfg$credit),
-                         collapse="\n")
-    } else {
-        credits <- paste(c("\u25cf This print-and-play layout was generated by piecepackr.",
-                           "\thttps://github.com/piecepackr/piecepackr",
-                           '\u25cf The piecepack was invented by James "Kyle" Droscha. Public Domain.',
-                           "\thttps://ludism.org/ppwiki/AnatomyOfAPiecepack",
-                           cfg$credit),
-                         collapse="\n")
-    }
-    grob_credits <- gTree(name="credits", children=gList(
-        textGrob("Credits", x=0.1, y=y_credits, just="left", gp=gp_header),
-        textGrob(credits, x=0.1, y=y_credits-unit(0.2, "in"), just=c(0,1), gp=gp_text)
-    ))
-
-    grobTree(grob_title, grob_description, grob_license, grob_copyright,
-             grob_credits, name="title_page", vp=a5_vp)
-}
-
-blank_grob <- textGrob("Intentionally left blank")
-
-draw_a5_page <- function(grob, vp) {
-    pushViewport(vp)
-    grid.draw(grob)
-    upViewport()
+             name="instructions", vp=a5_vp())
 }
 
 a5_matchsticks_grob <- function(suits=1:4, cfg=pp_cfg(), front=TRUE) {
@@ -474,7 +333,8 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
     yb <- A5H - pawn_width - 0.5 * cfg$get_height("belt_face") - 0.25
     xsr <- A5W - 0.25 * tile_width
     ysb <- 2.75 * tile_width
-    dft <- tibble(piece_side="tile_face", x=rep(c(xtr,xtl),3),
+    dft <- tibble(piece_side="tile_face",
+                  x=rep(c(xtr,xtl),3),
                   y=rep(c(ytt,ytm,ytb),each=2),
                   suit, rank=1:6, angle=0)
     dfc <- tibble(piece_side="coin_back", x=rep(xc,6),
@@ -495,6 +355,10 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
         df$x <- A5W - df$x
         df$piece_side <- c(rep("coin_face", 6), rep("die_face", 6),
                            "pawn_layout", "belt_face", "saucer_back", rep("tile_back", 6))
+        # Rotate tile backs to partially hide direction of face if tile back are not fully symmetric
+        df$angle <- c(rep(0, 15),
+                      90 * ((df$suit[16:21] + df$rank[16:21]) %% 4))
+
         if (arrangement == "double-sided") {
             df <- df[df$piece_side %in% c("tile_back", "coin_face", "saucer_back"), ]
         }
