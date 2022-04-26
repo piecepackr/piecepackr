@@ -20,10 +20,70 @@ makeContent.basic_grob_with_bleed <- function(x) {
     if (hasName(grob, "scale"))
         grob$scale <- x$scale
 
-    gp_bleed <- gpar(col = NA, lwd = 0, fill = opt$bleed_color)
-    bleed <- rectGrob(gp = gp_bleed, name = "bleed")
+    width <- convertWidth(width, "in", valueOnly = TRUE)
+    height <- convertHeight(height, "in", valueOnly = TRUE)
+    bleed <- convertWidth(x$bleed, "in", valueOnly = TRUE)
+
+    # if easy extend mats and/or gridlines into bleed zone...
+    if (inherits(grob, "basic_piece_side") &&
+        (is_color_invisible(opt$border_color) || nigh(opt$border_lex, 0)) &&
+        (!is_color_invisible(opt$mat_color) && !nigh(opt$mat_width, 0)) &&
+        opt$shape == "rect") {
+        bleed <- rect_mat_bleed(opt, width, height, bleed)
+    } else if (inherits(grob, "basic_piece_side") &&
+        (is_color_invisible(opt$border_color) || nigh(opt$border_lex, 0)) &&
+        (is_color_invisible(opt$mat_color) || nigh(opt$mat_width, 0)) &&
+        (!is_color_invisible(opt$gridline_color) && !nigh(opt$gridline_lex, 0)) &&
+        (opt$shape %in% c("rect", "roundrect"))) {
+        bleed <- rect_gl_bleed(opt)
+    } else {
+        gp_bleed <- gpar(col = NA, lwd = 0, fill = opt$bleed_color)
+        bleed <- rectGrob(gp = gp_bleed, name = "bleed")
+    }
 
     gl <- gList(bleed, grob)
 
     setChildren(x, gl)
+}
+
+rect_mat_bleed <- function(opt, width, height, bleed) {
+    gp_bg <- gpar(col = NA, lwd = 0, fill = opt$background_color)
+    gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+    bg <- rectGrob(gp = gp_bg, name = "background")
+
+    mat_width <- rep(opt$mat_width, length.out=4)
+    x_out <- c(0, 1, 1, 0)
+    y_out <- c(1, 1, 0, 0)
+    x_in <- c(0, 1, 1, 0)
+    y_in <- c(1, 1, 0, 0)
+    if (!nigh(mat_width[1], 0)) {
+        y_in[1:2] <- 1 - (bleed + mat_width[1] * height) / (height + 2 * bleed)
+    }
+    if (!nigh(mat_width[2], 0)) {
+        x_in[2:3] <- 1 - (bleed + mat_width[2] * width) / (width + 2 * bleed)
+    }
+    if (!nigh(mat_width[3], 0)) {
+        y_in[3:4] <- (bleed + mat_width[3] * height) / (height + 2 * bleed)
+    }
+    if (!nigh(mat_width[4], 0)) {
+        x_in[c(1, 4)] <- (bleed + mat_width[4] * width) / (width + 2 * bleed)
+    }
+    x <- c(x_in, x_out)
+    y <- c(y_in, y_out)
+    id <- rep(1:2, each=4)
+    mat <- pathGrob(x, y, id=id, rule="evenodd", gp = gp_mat)
+
+    gList(bg, mat)
+}
+
+rect_gl_bleed <- function(opt) {
+    gp_bg <- gpar(col = NA, lwd = 0, fill = opt$background_color)
+    gp_gl <- gpar(col = opt$gridline_color,
+                  lwd = 8 * opt$gridline_lex,
+                  lineend = "butt")
+    bg <- rectGrob(gp = gp_bg, name = "background")
+    gl_v <- linesGrob(x=0.5, name="line1", gp = gp_gl)
+    gl_h <- linesGrob(y=0.5, name="line2", gp = gp_gl)
+
+    gList(bg, gl_v, gl_h)
 }

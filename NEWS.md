@@ -120,6 +120,8 @@ Bug fixes and minor improvements
   If a user makes tiles by double-sided printing or folding over the "gutter" and the tile 
   backs are not perfectly symmetric then the tile backs will now leak less information 
   about the "direction" of the tile faces.
+* The default "bleed" function (as used by `pp_cfg()$get_grob_with_bleed()` and `pieceGrob(bleed=TRUE)`)
+  now better extends "mat" and "gridlines" from the default "grob" function (#288).
 
 piecepackr 1.10.3
 =================
