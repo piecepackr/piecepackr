@@ -20,9 +20,6 @@
 #'                  Default "12345678" draws all eight crop marks.
 #' @param cm_width Width of crop mark.
 #' @param cm_length Length of crop mark.
-#' @param cm_inside Whether crop marks should point inside or outside (default)
-#'                 the \dQuote{bleed} zone.
-#'                 `cm_inside = TRUE` may be appropriate for circular tokens.
 #' @return A grid grob.
 #' @examples
 #' if (require("grid")) {
@@ -38,7 +35,7 @@
 #'   df <- data.frame(piece_side = "coin_back", suit = 2, rank = 2,
 #'                    x = 2, y = 2, angle = 0,
 #'                    stringsAsFactors = FALSE)
-#'   pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in", cm_inside = TRUE)
+#'   pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in", bleed=TRUE)
 #'   pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed=TRUE)
 #' }
 #' @name grid.cropmark
@@ -57,8 +54,7 @@ cropmarkGrob <- function(...,
                          bleed=unit(0.125, "in"),
                          cm_select = "12345678",
                          cm_width=unit(0.25, "mm"),
-                         cm_length=unit(0.125, "in"),
-                         cm_inside=FALSE) {
+                         cm_length=unit(0.125, "in")) {
 
     if (is.na(width) || is.na(height)) {
         cfg <- get_cfg(cfg, envir)
@@ -89,7 +85,6 @@ cropmarkGrob <- function(...,
           width=width, height=height,
           bleed=bleed, cm_select=cm_select,
           cm_width=cm_width, cm_length=cm_length,
-          cm_inside=cm_inside,
           cl = "pp_cropmark")
 }
 
@@ -108,13 +103,8 @@ grid.cropmark <- function(..., draw = TRUE) {
 
 #' @export
 makeContext.pp_cropmark <- function(x) {
-    if (x$cm_inside) {
-        width <- x$width + 2 * x$bleed
-        height <- x$height + 2 * x$bleed
-    } else {
-        width <- x$width + 2 * x$bleed + 2 * x$cm_length
-        height <- x$height + 2 * x$bleed + 2 * x$cm_length
-    }
+    width <- x$width + 2 * x$bleed + 2 * x$cm_length
+    height <- x$height + 2 * x$bleed + 2 * x$cm_length
     x$vp <- viewport(x=x$x, y=x$y, angle=x$angle, width=width, height=height)
     x
 }
@@ -128,121 +118,73 @@ makeContent.pp_cropmark <- function(x) {
     gp <- gpar(fill = "black", col=NA)
 
     if (grepl("1", x$cm_select)) {
-        if (x$cm_inside)
-            cm1 <- rectGrob(x = xc + 0.5 * x$width,
-                            y = yc + 0.5 * x$height + x$bleed - 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_1")
-        else
-            cm1 <- rectGrob(x = xc + 0.5 * x$width,
-                            y = yc + 0.5 * x$height + x$bleed + 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_1")
+        cm1 <- rectGrob(x = xc + 0.5 * x$width,
+                        y = yc + 0.5 * x$height + x$bleed + 0.5 * x$cm_length,
+                        width = x$cm_width, height = x$cm_length,
+                        gp = gp, name = "crop_mark_1")
     } else {
         cm1 <- nullGrob(name = "crop_mark_1")
     }
 
     if (grepl("2", x$cm_select)) {
-        if (x$cm_inside)
-            cm2 <- rectGrob(x = xc + 0.5 * x$width + x$bleed - 0.5 * x$cm_length,
-                            y = yc + 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_2")
-        else
-            cm2 <- rectGrob(x = xc + 0.5 * x$width + x$bleed + 0.5 * x$cm_length,
-                            y = yc + 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_2")
+        cm2 <- rectGrob(x = xc + 0.5 * x$width + x$bleed + 0.5 * x$cm_length,
+                        y = yc + 0.5 * x$height,
+                        width = x$cm_length, height = x$cm_width,
+                        gp = gp, name = "crop_mark_2")
     } else {
         cm2 <- nullGrob(name = "crop_mark_2")
     }
 
     if (grepl("3", x$cm_select)) {
-        if (x$cm_inside)
-            cm3 <- rectGrob(x = xc + 0.5 * x$width + x$bleed - 0.5 * x$cm_length,
-                            y = yc - 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_3")
-        else
-            cm3 <- rectGrob(x = xc + 0.5 * x$width + x$bleed + 0.5 * x$cm_length,
-                            y = yc - 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_3")
+        cm3 <- rectGrob(x = xc + 0.5 * x$width + x$bleed + 0.5 * x$cm_length,
+                        y = yc - 0.5 * x$height,
+                        width = x$cm_length, height = x$cm_width,
+                        gp = gp, name = "crop_mark_3")
     } else {
         cm3 <- nullGrob(name = "crop_mark_3")
     }
 
     if (grepl("4", x$cm_select)) {
-        if (x$cm_inside)
-            cm4 <- rectGrob(x = xc + 0.5 * x$width,
-                            y = yc - 0.5 * x$height - x$bleed + 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_4")
-        else
-            cm4 <- rectGrob(x = xc + 0.5 * x$width,
-                            y = yc - 0.5 * x$height - x$bleed - 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_4")
+        cm4 <- rectGrob(x = xc + 0.5 * x$width,
+                        y = yc - 0.5 * x$height - x$bleed - 0.5 * x$cm_length,
+                        width = x$cm_width, height = x$cm_length,
+                        gp = gp, name = "crop_mark_4")
     } else {
         cm4 <- nullGrob(name = "crop_mark_4")
     }
 
     if (grepl("5", x$cm_select)) {
-        if (x$cm_inside)
-            cm5 <- rectGrob(x = xc - 0.5 * x$width,
-                            y = yc - 0.5 * x$height - x$bleed + 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_5")
-        else
-            cm5 <- rectGrob(x = xc - 0.5 * x$width,
-                            y = yc - 0.5 * x$height - x$bleed - 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_5")
+        cm5 <- rectGrob(x = xc - 0.5 * x$width,
+                        y = yc - 0.5 * x$height - x$bleed - 0.5 * x$cm_length,
+                        width = x$cm_width, height = x$cm_length,
+                        gp = gp, name = "crop_mark_5")
     } else {
         cm5 <- nullGrob(name = "crop_mark_5")
     }
 
     if (grepl("6", x$cm_select)) {
-        if (x$cm_inside)
-            cm6 <- rectGrob(x = xc - 0.5 * x$width - x$bleed + 0.5 * x$cm_length,
-                            y = yc - 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_6")
-        else
-            cm6 <- rectGrob(x = xc - 0.5 * x$width - x$bleed - 0.5 * x$cm_length,
-                            y = yc - 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_6")
+        cm6 <- rectGrob(x = xc - 0.5 * x$width - x$bleed - 0.5 * x$cm_length,
+                        y = yc - 0.5 * x$height,
+                        width = x$cm_length, height = x$cm_width,
+                        gp = gp, name = "crop_mark_6")
     } else {
         cm6 <- nullGrob(name = "crop_mark_6")
     }
 
     if (grepl("7", x$cm_select)) {
-        if (x$cm_inside)
-            cm7 <- rectGrob(x = xc - 0.5 * x$width - x$bleed + 0.5 * x$cm_length,
-                            y = yc + 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_7")
-        else
-            cm7 <- rectGrob(x = xc - 0.5 * x$width - x$bleed - 0.5 * x$cm_length,
-                            y = yc + 0.5 * x$height,
-                            width = x$cm_length, height = x$cm_width,
-                            gp = gp, name = "crop_mark_7")
+        cm7 <- rectGrob(x = xc - 0.5 * x$width - x$bleed - 0.5 * x$cm_length,
+                        y = yc + 0.5 * x$height,
+                        width = x$cm_length, height = x$cm_width,
+                        gp = gp, name = "crop_mark_7")
     } else {
         cm7 <- nullGrob(name = "crop_mark_7")
     }
 
     if (grepl("8", x$cm_select)) {
-        if (x$cm_inside)
-            cm8 <- rectGrob(x = xc - 0.5 * x$width,
-                            y = yc + 0.5 * x$height + x$bleed - 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_8")
-        else
-            cm8 <- rectGrob(x = xc - 0.5 * x$width,
-                            y = yc + 0.5 * x$height + x$bleed + 0.5 * x$cm_length,
-                            width = x$cm_width, height = x$cm_length,
-                            gp = gp, name = "crop_mark_8")
+        cm8 <- rectGrob(x = xc - 0.5 * x$width,
+                        y = yc + 0.5 * x$height + x$bleed + 0.5 * x$cm_length,
+                        width = x$cm_width, height = x$cm_length,
+                        gp = gp, name = "crop_mark_8")
     } else {
         cm8 <- nullGrob(name = "crop_mark_8")
     }

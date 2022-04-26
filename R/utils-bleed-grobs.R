@@ -21,8 +21,7 @@ makeContent.basic_grob_with_bleed <- function(x) {
         grob$scale <- x$scale
 
     gp_bleed <- gpar(col = NA, lwd = 0, fill = opt$bleed_color)
-    bleed <- shape$polyclip(grob, op = "minus",
-                            gp = gp_bleed, name = "bleed")
+    bleed <- rectGrob(gp = gp_bleed, name = "bleed")
 
     gl <- gList(bleed, grob)
 

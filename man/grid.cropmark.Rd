@@ -25,8 +25,7 @@ cropmarkGrob(
   bleed = unit(0.125, "in"),
   cm_select = "12345678",
   cm_width = unit(0.25, "mm"),
-  cm_length = unit(0.125, "in"),
-  cm_inside = FALSE
+  cm_length = unit(0.125, "in")
 )
 
 grid.cropmark(..., draw = TRUE)
@@ -87,10 +86,6 @@ Default "12345678" draws all eight crop marks.}
 
 \item{cm_length}{Length of crop mark.}
 
-\item{cm_inside}{Whether crop marks should point inside or outside (default)
-the \dQuote{bleed} zone.
-\code{cm_inside = TRUE} may be appropriate for circular tokens.}
-
 \item{draw}{A logical value indicating whether graphics output should be produced.}
 }
 \value{
@@ -116,7 +111,7 @@ if (require("grid")) {
   df <- data.frame(piece_side = "coin_back", suit = 2, rank = 2,
                    x = 2, y = 2, angle = 0,
                    stringsAsFactors = FALSE)
-  pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in", cm_inside = TRUE)
+  pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in", bleed=TRUE)
   pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed=TRUE)
 }
 }

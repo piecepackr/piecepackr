@@ -14,15 +14,10 @@ test_that("crop_marks work as expected", {
     df <- data.frame(piece_side = "coin_back", suit = 2, rank = 2,
                      x = 2, y = 2, angle = 0,
                      stringsAsFactors = FALSE)
-    expect_doppelganger("crop_mark_inside", {
-        pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in", cm_inside = TRUE)
-        pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed=TRUE)
-    })
-
-    expect_doppelganger("crop_mark_inside_x2", {
-        pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in", cm_inside = TRUE,
-                   scale=2, cm_select="1357")
-        pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed=TRUE,
-                   scale=2)
+    expect_doppelganger("crop_mark_outside_x2", {
+        pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in",
+                   bleed=TRUE, scale=2, cm_select="1357")
+        pmap_piece(df, grid.piece, cfg = cfg, default.units = "in",
+                   bleed=TRUE, scale=2)
     })
 })

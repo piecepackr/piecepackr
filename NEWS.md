@@ -114,8 +114,8 @@ Bug fixes and minor improvements
   two-sided tokens when projected in an oblique projection by `pieceGrob()` / `grid.piece()` (#285).
 * `save_print_and_play()`'s `pieces` argument now defaults to `NULL`.  If the `size` / `bleed` 
   arguments support the "matchsticks" and "pyramids" pieces it defaults to 
-  `c("piecepack", "pyramids", "matchsticks")` (as before) and if the do not suport those pieces
-  it defaults to just "piecepack".
+  `c("piecepack", "pyramids", "matchsticks")` (as before) and if they 
+  do not suport those pieces it defaults to just "piecepack".
 * `save_print_and_play()` now shuffles tile back directions (#103).
   If a user makes tiles by double-sided printing or folding over the "gutter" and the tile 
   backs are not perfectly symmetric then the tile backs will now leak less information 

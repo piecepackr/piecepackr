@@ -43,22 +43,22 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly) 
         if (is_odd(n_pages_tiles) && arrangement == "double-sided" && size != "A5")
             n_pages_tiles <- n_pages_tiles + 1
         for (suit in seq(n_pages_tiles)) {
-            gl <- gappend(gl, a5_tile_grob(suit, cfg, TRUE, arrangement))
-            gl <- gappend(gl, a5_tile_grob(suit, cfg, FALSE, arrangement))
+            gl <- gappend(gl, a5_tile_grob(suit, cfg, TRUE, arrangement, size))
+            gl <- gappend(gl, a5_tile_grob(suit, cfg, FALSE, arrangement, size))
         }
         pl$Tiles <- n_pages_tiles
 
         n_pages_coins <- (n_suits-1)%/%4+1
         for (ii in seq(n_pages_coins)) {
             ss <- seq(4*ii-3, 4*ii)
-            gl <- gappend(gl, a5_coin_grob(ss, cfg, TRUE, arrangement))
-            gl <- gappend(gl, a5_coin_grob(ss, cfg, FALSE, arrangement))
+            gl <- gappend(gl, a5_coin_grob(ss, cfg, TRUE, arrangement, size))
+            gl <- gappend(gl, a5_coin_grob(ss, cfg, FALSE, arrangement, size))
         }
         if (is_odd(n_pages_coins) && arrangement == "double-sided" && size != "A5") {
             n_pages_coins <- n_pages_coins + 1
-            ss <- seq(4*n_pages_coins-3, 4*n_pages_coins)
-            gl <- gappend(gl, a5_coin_grob(ss, cfg, TRUE, arrangement))
-            gl <- gappend(gl, a5_coin_grob(ss, cfg, FALSE, arrangement))
+            ss <- 1:4
+            gl <- gappend(gl, a5_coin_grob(ss, cfg, TRUE, arrangement, size))
+            gl <- gappend(gl, a5_coin_grob(ss, cfg, FALSE, arrangement, size))
         }
         pl$Coins <- n_pages_coins
 
@@ -101,7 +101,7 @@ a5_inst_grob_bleed <- function(cfg, pieces) {
     textGrob("Bleed instructions")
 }
 
-a5_tile_grob <- function(i_suit, cfg, front, arrangement) {
+a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {
 
     tile_width <- cfg$get_width("tile_back")
     xtr <- 0.5 * tile_width + 1/8 + 1/8
@@ -123,8 +123,7 @@ a5_tile_grob <- function(i_suit, cfg, front, arrangement) {
         # Rotate tile backs to partially hide direction of face if tile back are not fully symmetric
         df$angle <- 90 * ((df$suit + df$rank) %% 4)
     }
-    #### A5 size
-    if (!front) {
+    if (!front && size != "A5") {
         vline <- linesGrob(x = 0, gp=gpar(lty = "dashed"))
     } else {
         vline <- nullGrob()
@@ -135,7 +134,7 @@ a5_tile_grob <- function(i_suit, cfg, front, arrangement) {
     gList(cm_grob, ps_grob, vline)
 }
 
-a5_coin_grob <- function(suit, cfg, front, arrangement) {
+a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
     coin_width <- cfg$get_width("coin_back")
     xt1 <- 0.5 * coin_width + 1/8 + 1/8
     xt2 <- xt1 + coin_width + 1/4 + 1/8
@@ -162,8 +161,7 @@ a5_coin_grob <- function(suit, cfg, front, arrangement) {
         # Rotate coin faces to desired direction
         df$angle <- cfg$coin_arrangement
     }
-    #### A5 size
-    if (!front) {
+    if (!front && size != "A5") {
         vline <- linesGrob(x = 0, gp=gpar(lty = "dashed"))
     } else {
         vline <- nullGrob()
