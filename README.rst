@@ -181,7 +181,6 @@ Looney Pyramids
 
 Configurations for the proprietary Looney Pyramids aka Icehouse Pieces game system by Andrew Looney can be found in the companion R package ``piecenikr``: https://github.com/piecepackr/piecenikr
 
-
 API Intro
 ---------
 
@@ -463,7 +462,7 @@ piece_mesh() ({rayvertex})
     
 
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
-    library("rayvertex")
+    library("rayvertex", warn.conflicts = FALSE) # masks `rayrender::r_obj`
     df <- ppgames::df_international_chess()
     envir <- game_systems("dejavu3d", round=TRUE, pawn="joystick")
     l <- pmap_piece(df, piece_mesh, trans=op_transform, envir = envir, scale = 0.98, res = 150, as_top="pawn_face")

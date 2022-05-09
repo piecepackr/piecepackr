@@ -122,6 +122,7 @@ Bug fixes and minor improvements
   about the "direction" of the tile faces.
 * The default "bleed" function (as used by `pp_cfg()$get_grob_with_bleed()` and `pieceGrob(bleed=TRUE)`)
   now better extends "mat" and "gridlines" from the default "grob" function (#288).
+* `animate_piece()` now correctly handles `n_pauses != 1`.
 
 piecepackr 1.10.3
 =================

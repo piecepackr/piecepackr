@@ -89,7 +89,9 @@ animate_piece <- function(dfs, file = "animation.gif", annotate = TRUE, ...,
 
     ranges <- lapply(dfs, aabb_piece, cfg = cfg, envir = envir, ...)
     if (n_transitions > 0L) {
-        dfs <- get_tweened_dfs(dfs, n_transitions, ..., cfg = cfg, envir = envir)
+        dfs <- get_tweened_dfs(dfs, n_transitions, n_pauses, ..., cfg = cfg, envir = envir)
+    } else if (n_pauses != 1) {
+        dfs <- rep(dfs, each = n_pauses)
     }
 
     #### Add grid and comment annotations
