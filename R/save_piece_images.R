@@ -27,7 +27,7 @@ pp_device <- function(filename, width, height, res=72, bg="transparent") {
 }
 
 pp_device_fn <- function(filename) {
-    format <- tools::file_ext(filename)
+    format <- tools::file_ext(tolower(filename))
     switch(format,
            bmp = grDevices::bmp,
            jpeg = grDevices::jpeg,

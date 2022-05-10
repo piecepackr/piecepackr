@@ -150,6 +150,13 @@ animation_fn <- function(file, new_device = TRUE) {
                     i = "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")' to install them."),
                   class = "piecepackr_suggested_package")
         }
+    } else if (grepl(".bmp$|.jpg$|.jpeg$|.png$|.tiff$", file)) {
+        stopifnot(has_c_integer_format(file))
+        function(expr, file, width, height, delay, res) {
+            pp_device(file, width = width / res, height = height / res, res=res)
+            eval(expr)
+            grDevices::dev.off()
+        }
     } else {
         assert_suggested("animation")
         function(expr, file, width, height, delay, res) {

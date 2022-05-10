@@ -116,6 +116,8 @@ Bug fixes and minor improvements
   arguments support the "matchsticks" and "pyramids" pieces it defaults to 
   `c("piecepack", "pyramids", "matchsticks")` (as before) and if they 
   do not suport those pieces it defaults to just "piecepack".
+  We are now more selective of which piecepack credits to include based on 
+  which components are in the `pieces` argument.
 * `save_print_and_play()` now shuffles tile back directions (#103).
   If a user makes tiles by double-sided printing or folding over the "gutter" and the tile 
   backs are not perfectly symmetric then the tile backs will now leak less information 
@@ -123,6 +125,9 @@ Bug fixes and minor improvements
 * The default "bleed" function (as used by `pp_cfg()$get_grob_with_bleed()` and `pieceGrob(bleed=TRUE)`)
   now better extends "mat" and "gridlines" from the default "grob" function (#288).
 * `animate_piece()` now correctly handles `n_pauses != 1`.
+* If the `file` argument of `animate_piece()` ends in ".bmp", ".jpg", ".jpeg", ".png", or ".tiff"
+  we will now save individual images of the animation frames.  
+  `file` must have a "C integer format" in the filename.
 
 piecepackr 1.10.3
 =================
