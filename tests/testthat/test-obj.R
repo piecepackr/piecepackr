@@ -29,19 +29,19 @@ test_that("rgl works", {
     files <- save_piece_obj("pawn_top", cfg = game_systems("sans3d", pawn="peg-doll")$piecepack)
     expect_length(files, 3)
 
-    rgl.open()
+    open3d()
     df <- tibble::tibble(piece_side = "tile_face", scale = c(1, 0))
     pmap_piece(df, piece3d, cfg=cfg)
     f <- tempfile(fileext = ".png")
-    rgl.snapshot(f)
+    snapshot3d(f)
     expect_true(file.exists(f))
     unlink(f)
 
     cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
-    rgl.clear()
+    clear3d()
     l <- piece3d("pawn_top", x=-1:1, suit=1:3, cfg = cfg, lit=TRUE)
     expect_true(length(l) > 2)
-    rgl.close()
+    clear3d()
 })
 
 test_that("rayrender works", {

@@ -97,6 +97,6 @@ if (require("rgl") && all(capabilities(c("cairo", "png")))) {
 }
 \seealso{
 See \code{\link[rgl]{rgl-package}} for more information about the \code{rgl} package.
-See \code{\link[rgl:material]{rgl.material}} for more info about setting \code{rgl} material properties.
+See \code{\link[rgl:material]{rgl::material3d()}} for more info about setting \code{rgl} material properties.
 See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 }

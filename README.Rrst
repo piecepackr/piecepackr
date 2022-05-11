@@ -351,7 +351,7 @@ pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 1
 .. {r rgl_save, echo=FALSE}
 if (Sys.which("wmctrl") != "") system("wmctrl -r RGL -e 0,-1,-1,600,600") 
 Sys.sleep(3)
-rgl.snapshot("man/figures/README-rgl_snapshot.png", top = FALSE)
+snapshot3d("man/figures/README-rgl_snapshot.png", top = FALSE)
 .. ..
 
 .. figure:: man/figures/README-rgl_snapshot.png

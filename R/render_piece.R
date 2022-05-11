@@ -116,11 +116,11 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         f <- tempfile(fileext=".png")
         function(df, ..., scale = 1) {
             df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
-            rgl::rgl.clear()
+            rgl::clear3d()
             rgl::points3d(x = rep(c(0, xmax), 2), y = rep(c(0, ymax), each = 2), z = 0, alpha = 0)
             pmap_piece(df, piece3d, ..., envir = envir)
             Sys.sleep(2)
-            rgl::rgl.snapshot(f, top = FALSE)
+            rgl::snapshot3d(f, top = FALSE)
             grid::grid.newpage()
             grid::grid.raster(png::readPNG(f))
         }
