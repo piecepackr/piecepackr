@@ -22,6 +22,9 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1,
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA,
                            filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
+    opt <- options(piecepackr.op_scale = 0)
+    on.exit(options(opt))
+
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(is.na(suit), 1, suit)
     rank <- ifelse(is.na(rank), 1, rank)
@@ -392,7 +395,7 @@ write_peg_doll_texture <- function(piece_side = "pawn_face", suit = 1, rank = 1,
     grid.rect(gp = gpar(col=NA_character_, fill=opt$edge_color))
     popViewport()
     pushViewport(viewport(y=0.500, height=0.50))
-    grid.piece("belt_face", suit = suit, rank = rank, cfg = cfg)
+    grid.piece("belt_face", suit = suit, rank = rank, cfg = cfg, op_scale = 0)
     popViewport()
     pushViewport(viewport(y=0.125, height=0.25))
     grid.rect(gp = gpar(col=NA_character_, fill=opt$edge_color))
@@ -489,27 +492,27 @@ write_die_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     rs <- get_die_face_info(suit, cfg$die_arrangement)
     pushViewport(viewport(x = 0.25, width = 0.5, y = 5/6, height = 1/3))
     grid.piece("die_face", suit = rs$suit[1], rank = rs$rank[1], cfg = cfg,
-               angle = rs$angle[1])
+               angle = rs$angle[1], op_scale = 0)
     popViewport()
     pushViewport(viewport(x = 0.75, width = 0.5, y = 5/6, height = 1/3))
     grid.piece("die_face", suit = rs$suit[2], rank = rs$rank[2], cfg = cfg,
-               angle = rs$angle[2])
+               angle = rs$angle[2], op_scale = 0)
     popViewport()
     pushViewport(viewport(x = 0.25, width = 0.5, y = 3/6, height = 1/3))
     grid.piece("die_face", suit = rs$suit[3], rank = rs$rank[3], cfg = cfg,
-               angle = rs$angle[3])
+               angle = rs$angle[3], op_scale = 0)
     popViewport()
     pushViewport(viewport(x = 0.75, width = 0.5, y = 3/6, height = 1/3))
     grid.piece("die_face", suit = rs$suit[4], rank = rs$rank[4], cfg = cfg,
-               angle = rs$angle[4])
+               angle = rs$angle[4], op_scale = 0)
     popViewport()
     pushViewport(viewport(x = 0.25, width = 0.5, y = 1/6, height = 1/3))
     grid.piece("die_face", suit = rs$suit[5], rank = rs$rank[5], cfg = cfg,
-               angle = rs$angle[5])
+               angle = rs$angle[5], op_scale = 0)
     popViewport()
     pushViewport(viewport(x = 0.75, width = 0.5, y = 1/6, height = 1/3))
     grid.piece("die_face", suit = rs$suit[6], rank = rs$rank[6], cfg = cfg,
-               angle = rs$angle[6])
+               angle = rs$angle[6], op_scale = 0)
     popViewport()
 
     grDevices::dev.off()
@@ -517,7 +520,7 @@ write_die_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
 }
 
 draw_piece_and_bleed <- function(piece_side, suit, rank, cfg) {
-    g <- pieceGrob(piece_side, suit, rank, cfg, default.units = "npc")
+    g <- pieceGrob(piece_side, suit, rank, cfg, default.units = "npc", op_scale = 0)
     bleed_color <- cfg$get_piece_opt(piece_side, suit, rank)$bleed_color
     b <- pp_shape()$polyclip(g, "minus", gp=gpar(col=NA, fill=bleed_color))
     grid.draw(b)

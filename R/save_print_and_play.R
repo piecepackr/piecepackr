@@ -59,6 +59,9 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                                 quietly = FALSE, ...,
                                 bleed = FALSE) {
 
+    opt <- options(piecepackr.op_scale = 0)
+    on.exit(options(opt))
+
     stopifnot(is.null(dev) || is.function(dev))
     size <- match.arg(size)
     arrangement <- match.arg(arrangement)

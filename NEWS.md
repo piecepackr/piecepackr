@@ -128,6 +128,8 @@ Bug fixes and minor improvements
 * If the `file` argument of `animate_piece()` ends in ".bmp", ".jpg", ".jpeg", ".png", or ".tiff"
   we will now save individual images of the animation frames.  
   `file` must have a "C integer format" in the filename.
+* Fixes bug generating textures in `save_piece_obj()` if `options("piecepackr.op_scale")` was 
+  set to a positive number (#293).
 
 piecepackr 1.10.3
 =================

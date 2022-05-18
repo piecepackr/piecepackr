@@ -70,6 +70,8 @@ save_piece_images <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                               directory=tempdir(), format="svg", angle=0) {
     current_dev <- grDevices::dev.cur()
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+    opt <- options(piecepackr.op_scale = 0)
+    on.exit(options(opt))
 
     stopifnot(dir.exists(directory))
 
