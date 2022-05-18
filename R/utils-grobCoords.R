@@ -1,14 +1,4 @@
-# Simplify 'grobCoords'
-coords_to_xylists <- function(coords) {
-    if (inherits(coords, "GridGTreeCoords")) {
-        xyl <- lapply(coords, coords_to_xylist)
-    } else {
-        xyl <- lapply(coords, identity)
-    }
-    f <- function(x, y) gridGeometry::polyclip(x, y, "union")
-    xyl <- Filter(function(x) length(x) > 0, xyl)
-    Reduce(f, xyl)
-}
+# Simplify 'grobCoords' methods
 
 coords_to_xylist <- function(coords) {
     if (inherits(coords, "GridGTreeCoords")) {

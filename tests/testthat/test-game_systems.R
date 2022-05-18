@@ -153,4 +153,10 @@ test_that("no regressions in figures", {
         df <- rbind(df_board, df_bit_face, df_bit_back)
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
     })
+
+    # fudge dice
+    cfg <- envir$dice_fudge
+    expect_doppelganger("fudge", function() {
+        grid.piece("die_face", x = 1:6, y = 2, suit = 1:6, rank = 1:6, cfg = cfg, default.units = "in")
+    })
 })
