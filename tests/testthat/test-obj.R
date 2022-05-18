@@ -29,18 +29,15 @@ test_that("rgl works", {
     files <- save_piece_obj("pawn_top", cfg = game_systems("sans3d", pawn="peg-doll")$piecepack)
     expect_length(files, 3)
 
-    open3d()
+    open3d(useNULL = TRUE)
     df <- tibble::tibble(piece_side = "tile_face", scale = c(1, 0))
     pmap_piece(df, piece3d, cfg=cfg)
-    f <- tempfile(fileext = ".png")
-    snapshot3d(f)
-    expect_true(file.exists(f))
-    unlink(f)
 
-    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
     clear3d()
+    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
     l <- piece3d("pawn_top", x=-1:1, suit=1:3, cfg = cfg, lit=TRUE)
     expect_true(length(l) > 2)
+
     close3d()
 })
 
