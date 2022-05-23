@@ -39,17 +39,17 @@ test_that("save_print_and_play works as expected", {
     cfg_5s <- list(suit_text="♥,★,♣,♦,♠,꩜", suit_color="darkred,gold,darkgreen,darkblue,black,grey")
 
     skip_if_not(capabilities("cairo"))
-    save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5", "all", "double-sided")
+    save_print_and_play(cfg_5s, pdf_deck_filename_5s, "A5", "all", "double-sided", quietly = TRUE)
 
-    save_print_and_play(cfg_default, pdf_deck_filename, "letter")
+    save_print_and_play(cfg_default, pdf_deck_filename, "letter", quietly = TRUE)
 
     cfg_large_dice <- pp_cfg(list(title="default cfg", width.die = 0.7))
-    save_print_and_play(cfg_large_dice, pdf_deck_filename_a4, "A4", arrangement = "double-sided")
-    save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5")
+    save_print_and_play(cfg_large_dice, pdf_deck_filename_a4, "A4", arrangement = "double-sided", quietly = TRUE)
+    save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5", quietly = TRUE)
 
-    save_print_and_play(cfg_default, pdf_deck_filename_4x6, "4x6", pieces = "piecepack")
+    save_print_and_play(cfg_default, pdf_deck_filename_4x6, "4x6", pieces = "piecepack", quietly = TRUE)
 
-    save_print_and_play(cfg_default, pdf_deck_filename_bleed, bleed=TRUE)
+    save_print_and_play(cfg_default, pdf_deck_filename_bleed, bleed=TRUE, quietly = TRUE)
 
     expect_true(file.exists(pdf_deck_filename))
 
@@ -81,6 +81,7 @@ test_that("save_piece_images works as expected", {
     save_piece_images(cfg_default, directory, format="svgz", angle=c(0,90))
     expect_equal(length(list.files(directory)), 496)
 
+    announce_snapshot_file(name = "diagram-op-ppgf.svg")
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     library("vdiffr")
     suppressMessages({
@@ -271,6 +272,9 @@ test_that("no regressions in figures", {
     cfg <- list(invert_colors.suited=TRUE, grob_fn="basicPieceGrob")
     expect_doppelganger("pyramid_layout.s3.r4", function() dc("pyramid_layout", cfg=cfg, suit=3, rank=4))
 
+    announce_snapshot_file(name = "pyramid-face-op.svg")
+    announce_snapshot_file(name = "pyramid-top-op.svg")
+    announce_snapshot_file(name = "pyramid-top-s4-r3.svg")
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     suppressMessages({
       expect_doppelganger("pyramid_top.s4.r3", function()
@@ -348,6 +352,7 @@ test_that("alpha and scale works", {
                      scale=seq(0, 1, length.out=6))
         pmap_piece(df, default.units="in", cfg=cfg)
     })
+    announce_snapshot_file(name = "alpha-and-scale-op.svg")
     skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
     expect_doppelganger("alpha_and_scale_op", function() {
         cfg <- pp_cfg(list(shape.coin="convex6"))

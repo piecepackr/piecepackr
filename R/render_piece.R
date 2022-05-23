@@ -120,7 +120,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
             rgl::points3d(x = rep(c(0, xmax), 2), y = rep(c(0, ymax), each = 2), z = 0, alpha = 0)
             pmap_piece(df, piece3d, ..., envir = envir)
             Sys.sleep(2)
-            rgl::snapshot3d(f, top = FALSE)
+            rgl::snapshot3d(f, top = FALSE, webshot = FALSE)
             grid::grid.newpage()
             grid::grid.raster(png::readPNG(f))
         }
