@@ -210,30 +210,48 @@ a5_die_grob <- function(suit, cfg, front, arrangement) {
 a5_pawn_grob <- function(suit, cfg, front, arrangement) {
 
     belt_width <- cfg$get_width("belt_face")
-    pawn_height <- cfg$get_height("pawn_layout")
+    pawn_height <- cfg$get_height("pawn_face")
 
     x <- A5W * (1:4/ 4 - 1/8)
     yb <- A5H - (0.5 * belt_width + 1/8 + 1/8)
 
-    yp <- 0.5 * pawn_height + 1/8 + 1/8
 
     ys <- 0.5 * A5H
 
     df_b <- tibble::tibble(piece_side = "belt_face",
                            x = x, suit = suit, y = yb, angle = 90)
 
-    df_s <- tibble::tibble(piece_side = "saucer_face",
-                           x = x, suit = suit, y = ys, angle = 0)
+    ypb <- 0.5 * pawn_height + 1/8 + 1/8
+    ypt <- (ypb + 0.5 * pawn_height + 1/8) + 1/2 + (1/8 + 0.5 * pawn_height) # 1/2" gutter = jumbo domino
 
-    df_p <- tibble::tibble(piece_side = "pawn_layout",
-                           x = x, suit = suit, y = yp, angle = 0)
 
-    df <- rbind(df_b, df_s, df_p)
+    if (!front) {
+        df_pb <- tibble::tibble(piece_side = "pawn_back",
+                                x = x, suit = suit, y = ypb, angle = 180)
+        df_pt <- tibble::tibble(piece_side = "pawn_face",
+                                x = x, suit = suit, y = ypt, angle = 0)
 
-    if (!front)
+        # df_s <- tibble::tibble(piece_side = "saucer_face",
+        #                        x = x, suit = suit, y = ys, angle = 0)
+        df <- rbind(df_b, df_pb, df_pt)
+
         df$x <- A5W - df$x
+
+    } else {
+        df_pb <- tibble::tibble(piece_side = "pawn_face",
+                                x = x, suit = suit, y = ypb, angle = 180)
+        df_pt <- tibble::tibble(piece_side = "pawn_back",
+                                x = x, suit = suit, y = ypt, angle = 0)
+
+        # df_s <- tibble::tibble(piece_side = "saucer_back",
+        #                        x = x, suit = suit, y = ys, angle = 0)
+        df <- rbind(df_b, df_pb, df_pt)
+    }
+
+    hline <- linesGrob(y = inch(0.5 * (ypb + ypt)), gp=gpar(lty = "dashed"))
+
 
     cm_grob <- pmap_piece(df, cropmarkGrob, cfg = cfg, default.units = "in", bleed = TRUE, draw=FALSE)
     ps_grob <- pmap_piece(df, pieceGrob, cfg = cfg, default.units = "in", bleed = TRUE, draw=FALSE)
-    gList(cm_grob, ps_grob)
+    gList(cm_grob, ps_grob, hline)
 }
