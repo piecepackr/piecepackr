@@ -1,5 +1,5 @@
-piecepackr 1.11.0 (development)
-===============================
+piecepackr 1.11.1
+=================
 
 Breaking changes
 ----------------
@@ -23,7 +23,7 @@ Breaking changes
     instead of positionally.
     If your custom function uses the same argument names 
     as any of `{piecepackr}`'s internal custom functions then there should be no problem.
-    The order of arguments no longer matters but the names must be match the
+    The order of arguments no longer matters but the names must match the
     names `{piecepackr}` expects.
 
   + If one of the "named slots" of the `{grid}` "grob" returned by a custom

@@ -1,8 +1,8 @@
 **Test environments**
 
-* local(linux, R devel)
-* local (linux, R 4.1.3) 
+* local (linux, R 4.2.0) 
 * win-builder (windows, R devel)
+* mac-builder (osx, R release)
 * Github Actions (linux, R devel)
 * Github Actions (linux, R release)
 * Github Actions (linux, R oldrel)
@@ -11,7 +11,7 @@
 
 **R CMD check --as-cran results**
 
-1 NOTE on 'oldrel' and 'release':
+1 NOTE on 'oldrel':
 
 ```
 Undefined global functions or variables:
