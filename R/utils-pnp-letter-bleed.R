@@ -27,8 +27,8 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly) 
     pl <- list()
 
     ## Front Matter
-    gl <- gappend(gl, a5_title_grob(cfg, pieces, quietly))
-    gl <- gappend(gl, a5_inst_grob_bleed(cfg, pieces))
+    gl <- gappend(gl, a5_title_grob(cfg, pieces, quietly, bleed=TRUE))
+    gl <- gappend(gl, a5_inst_grob_bleed(cfg, pieces, arrangement, size))
     if (arrangement == "double-sided" && size != "A5") {
         gl <- gappend(gl, blank_grob)
         gl <- gappend(gl, blank_grob)
@@ -97,8 +97,79 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly) 
     pl
 }
 
-a5_inst_grob_bleed <- function(cfg, pieces) {
-    textGrob("Bleed instructions")
+a5_inst_grob_bleed <- function(cfg, pieces, arrangement, size) {
+    y_inst <- unit(1, "npc") - unit(0.2, "in")
+    inst <- c("\u25cf See https://www.ludism.org/ppwiki/MakingPiecepacks for general advice")
+
+    # Settings
+    components <- paste(paste0('"', pieces, '"'), collapse=", ")
+    if (TRUE)
+        arrangement <- sprintf('\t\u25cb "%s" arrangement with "bleed" zones', arrangement)
+    inst <- c(inst,
+              "\u25cf This print-and-play layout was generated for:",
+              sprintf('\t\u25cb %s components', components),
+              arrangement,
+              sprintf('\t\u25cb "%s" paper size', size))
+
+    # Tiles
+    tile_crop <- c('\t\u25cb Use "crop" marks as guide to where to cut them out')
+    if (size == "a5")
+        inst <- c(inst,
+                  '\u25cf For each suit we have a page of tile "faces" then a page of tile "backs"',
+                  tile_crop,
+                  '\t\u25cb May place whole sheet on one side and next sheet on the opposite side',
+                  '\t\t of target material before cutting out')
+    else
+        inst <- c(inst,
+                  '\u25cf We have a page of tiles for each suit: "faces" on left and "backs" on right',
+                  tile_crop,
+                  '\t\u25cb Central "gutter" line may help place sheet on both sides of target material',
+                  '\t\t  Line up "gutter" line on the center of edge of target material, fold,',
+                  '\t\t  and cut tiles out.',
+                  '\t\u25cb Alternatively place whole sheet on one side and another on the opposite side')
+
+    # Coins
+    coin_crop <- c('\t\u25cb For those lacking circular cutting tools one may use "crop" marks',
+                  '\t\t as guide to cut out (inferior) square coins',
+                  '\t\u25cb Otherwise use "crop" marks to help center placement of circular cutting tool')
+    if (size == "a5")
+        inst <- c(inst,
+                  "\u25cf We have a page of coin faces then a page of coin backs (per 4 suits)",
+                  coin_crop)
+    else
+        inst <- c(inst,
+                  '\u25cf We have a page of coins (per 4 suits): "backs" on left and "faces" on right',
+                  coin_crop,
+                  '\t\u25cb Central "gutter" line may help place sheet on both sides of target material',
+                  '\t\t  Line up "gutter" line on the center of edge of target material, fold,',
+                  '\t\t  and cut coins out.',
+                  '\t\u25cb Alternatively place whole sheet on one side and a copy on the opposite side')
+
+    # Dice and Pawns
+    dice_crop <- c('\t\u25cb Depending on size of target dice use inner or outer "crop" marks',
+                   '\t\t as guide to cut out dice',
+                   '\t\u25cb Alternatively use "crop" marks to help center placement of circular cutting tool',
+                   '\t\u25cb Use "crop" marks to cut out pawn "belts"',
+                   '\t\u25cb Use "crop" marks to cut out pawn "tokens" (depending on shape of token)',
+                   '\t\t "gutter" line can be used to help place pawn "tokens" on both sides',
+                   '\t\t  of target material ("gutter" line on center of edge of target material)')
+    if (size == "a5")
+        inst <- c(inst,
+                  "\u25cf We have a page of dice faces then a page of pawn belts and pawn tokens (per 4 suits)",
+                  dice_crop)
+    else
+        inst <- c(inst,
+                  '\u25cf We have a page of dice faces, pawn belts, and pawn tokens (per 4 suits):',
+                  '\t\u25cb Dice faces on left, pawn "belts" on top right, pawn "tokens" on bottom right',
+                  dice_crop)
+
+    inst <- paste(inst, collapse="\n")
+
+    gTree(name="instructions", children=gList(
+        # rectGrob(gp=gpar(fill="grey90")),
+        textGrob("Instructions", x=unit(0.5, "cm"), y=y_inst, just="left", gp=gp_header),
+        textGrob(inst, x=unit(0.5, "cm"), y=y_inst-unit(0.2, "in"), just=c(0,1), gp=gp_text)
+    ))
 }
 
 a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {

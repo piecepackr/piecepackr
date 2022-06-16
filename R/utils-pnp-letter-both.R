@@ -32,7 +32,7 @@ tg <- function(label, x, y, just="center",...) {
              gp=gp_text, ...)
 }
 
-a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE) {
+a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE, bleed=FALSE) {
 
     # Title
     y_title <- unit(1, "npc") - unit(0.2, "in")
@@ -112,8 +112,9 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit=TRUE) {
         if ("piecepack" %in% pieces)
             credits <- c(credits,
                          '\u25cf The piecepack was invented by James "Kyle" Droscha. Public Domain.',
-                         "\thttps://ludism.org/ppwiki/AnatomyOfAPiecepack",
-                         # "\thttp://www.piecepack.org/Anatomy.html",
+                         "\thttps://ludism.org/ppwiki/AnatomyOfAPiecepack")
+        if (!bleed && "piecepack" %in% pieces)
+            credits <- c(credits,
                          "\u25cf Pawn saucers were invented by Karol M. Boyle. Public Domain.",
                          "\thttps://web.archive.org/web/2018/http://www.piecepack.org/Accessories.html")
         if ("pyramids" %in% pieces)
