@@ -103,7 +103,7 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
     do.call(dev, args)
 
     pl <- switch(size,
-                 `4x6` = print_and_play_4x6(cfg, pieces, quietly),
+                 `4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed),
                  print_and_play_paper(cfg, size, pieces, arrangement, quietly, bleed))
 
     invisible(grDevices::dev.off())

@@ -1,8 +1,9 @@
-print_and_play_4x6 <- function(cfg, pieces, quietly) {
+print_and_play_4x6 <- function(cfg, pieces, quietly, bleed) {
     n_suits <- cfg$n_suits
     n_ranks <- cfg$n_ranks
 
     stopifnot(n_ranks <= 6)
+    stopifnot(!bleed)
 
     if ("matchsticks" %in% pieces)
         abort('"matchsticks" `pieces` not currently supported for `size = "4x6"`')
