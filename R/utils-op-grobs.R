@@ -286,8 +286,10 @@ basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     indices_visible <- visible_die_faces(lf, op_angle)
 
+    #### For "round" dice add a grob for corners #298
     for (i in indices_visible) {
         xy <- lf$f_xyz[[i]]$project_op(op_angle, op_scale)
+        #### For "round" dice figure out coordinates for border lines #298
         rank <- lf$die_face_info$rank[i]
         name <- paste0("die_side", i)
         gl[[i]] <- at_ps_grob(piece_side, suit, rank, cfg, xy, xy, name = name)
