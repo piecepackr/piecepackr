@@ -55,7 +55,7 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                                                 onefile = TRUE,
                                                 units = "in",
                                                 bg = "white",
-                                                res = 72),
+                                                res = 300),
                                 quietly = FALSE, ...,
                                 bleed = FALSE) {
 

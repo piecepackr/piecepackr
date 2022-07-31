@@ -12,7 +12,7 @@ save_print_and_play(
   arrangement = c("single-sided", "double-sided"),
   dev = NULL,
   dev.args = list(family = cfg$fontfamily, onefile = TRUE, units = "in", bg = "white",
-    res = 72),
+    res = 300),
   quietly = FALSE,
   ...,
   bleed = FALSE

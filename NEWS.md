@@ -1,3 +1,11 @@
+piecepackr 1.11.1 (development)
+===============================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* Default resolution when generating bitmap images with `save_print_and_play()` is now 300 pixels per inch.
+
 piecepackr 1.11.1
 =================
 
