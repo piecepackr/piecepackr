@@ -1,4 +1,4 @@
-piecepackr 1.11.1 (development)
+piecepackr 1.11.2 (development)
 ===============================
 
 Bug fixes and minor improvements

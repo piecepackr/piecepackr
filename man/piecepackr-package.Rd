@@ -2,16 +2,13 @@
 % Please edit documentation in R/piecepackr-package.R
 \docType{package}
 \name{piecepackr-package}
-\alias{piecepackr-package}
 \alias{piecepackr}
+\alias{piecepackr-package}
 \title{piecepackr: Board Game Graphics}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
-Functions to make board game graphics.
-Specializes in game diagrams, animations, and "Print & Play" layouts
-for the 'piecepack' \url{https://www.ludism.org/ppwiki} but can make
-graphics for other board game systems.
-Includes configurations for several public domain game systems.
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
+Functions to make board game graphics with the 'ggplot2', 'grid', 'rayrender', 'rayvertex', and 'rgl' packages. Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' \url{https://www.ludism.org/ppwiki} but can make graphics for other board game systems. Includes configurations for several public domain game systems such as checkers, (double-18) dominoes, go, 'piecepack', playing cards, etc.
 }
 \section{Package options}{
 
@@ -35,4 +32,15 @@ Useful links:
 \item forum: \url{https://groups.google.com/forum/#!forum/piecepackr}
 \item Report bugs: \url{https://github.com/piecepackr/piecepackr/issues}
 }
+}
+\author{
+\strong{Maintainer}: Trevor L Davis \email{trevor.l.davis@gmail.com} (\href{https://orcid.org/0000-0001-6341-4639}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Linux Foundation (Uses some data from the "SPDX License List" <https://github.com/spdx/license-list-XML>) [data contributor]
+  \item Delapouite <https://delapouite.com/> (Meeple shape extracted from "Meeple icon" <https://game-icons.net/1x1/delapouite/meeple.html> / "CC BY 3.0" <https://creativecommons.org/licenses/by/3.0/>) [illustrator]
+  \item Creative Commons (`save_print_and_play()` uses "license badges" from Creative Commons to describe the generated print-and-play file's license) [illustrator]
+}
+
 }

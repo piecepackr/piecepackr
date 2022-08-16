@@ -1,11 +1,3 @@
-#' piecepackr: Board Game Graphics
-#'
-#' \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
-#' Functions to make board game graphics.
-#' Specializes in game diagrams, animations, and "Print & Play" layouts
-#' for the 'piecepack' <https://www.ludism.org/ppwiki> but can make
-#' graphics for other board game systems.
-#' Includes configurations for several public domain game systems.
 #' @section Package options:
 #' The following piecepackr function arguments may be set globally via [base::options()]:
 #'  \describe{
@@ -24,7 +16,4 @@
 #'   * forum: \url{https://groups.google.com/forum/#!forum/piecepackr}
 #'   * Report bugs: \url{https://github.com/piecepackr/piecepackr/issues}
 #'
-#' @docType package
-#' @name piecepackr-package
-#' @aliases piecepackr-package piecepackr
-NULL
+"_PACKAGE"
