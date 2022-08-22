@@ -257,10 +257,11 @@ grob_piece <- function(coord, panel_params, envir, op_scale, op_angle) {
 #' @import grid
 #' @export
 makeContent.geom_piece_grob <- function(x) {
-    piecepackr::pmap_piece(x$df, piecepackr::pieceGrob,
+    grob <- piecepackr::pmap_piece(x$df, piecepackr::pieceGrob,
                            default.units = "inches", draw = FALSE,
                            op_scale = x$op_scale, op_angle = x$op_angle,
                            envir = x$envir, name = "geom_piece")
+    setChildren(x, gList(grob))
 }
 
 #' @export
