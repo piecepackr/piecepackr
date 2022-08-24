@@ -487,7 +487,7 @@ piecepack <- function(style, color_list, rect_shape, pawn) {
 
     list(base = pp_cfg(piecepack),
          dpe = pp_cfg(dual_piecepacks_expansion),
-         hex = to_hexpack(piecepack),
+         hexpack = to_hexpack(piecepack),
          inverted = pp_cfg(piecepack_inverted),
          pce = pp_cfg(playing_cards_expansion),
          subpack = to_subpack(piecepack))

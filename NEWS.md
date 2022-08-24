@@ -5,6 +5,7 @@ Bug fixes and minor improvements
 --------------------------------
 
 * Default resolution when generating bitmap images with `save_print_and_play()` is now 300 pixels per inch.
+* Fixes the "hexpack" configuration returned by `game_systems()`.
 
 piecepackr 1.11.1
 =================
