@@ -9,9 +9,12 @@ A4_HEIGHT <- 11.69
 #'
 #' @param cfg Piecepack configuration list or `pp_cfg` object
 #' @param output_filename Filename for print-and-play file
-#' @param size PnP output size (currently either "letter", "A4", "A5", or "4x6")
+#' @param size PnP output size (currently supports either "letter", "A4", "A5", or "4x6").
+#'             This is the targeted \dQuote{trim} size of the print-and-play file
+#'             (`size_bleed` can be used to make the print-and-play file larger than this).
 #'             Size "4x6" currently only supports `pieces = "piecepack"`
 #'             and doesn't support `bleed = TRUE`.
+#'             "A5" is in \dQuote{portrait} mode whereas the other sizes are in \dQuote{landscape} mode.
 #' @param pieces Character vector of desired PnP pieces.
 #'        Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
 #'        If `NULL` and combination of `size` / `bleed` values supports "matchsticks" and "pyramids"
@@ -20,10 +23,20 @@ A4_HEIGHT <- 11.69
 #'                    Ignored if `size = "4x6"`.
 #' @param quietly Whether to hide messages about missing metadata
 #'                in the provided configuration.
-#' @param bleed If `TRUE` produce a variant file with "bleed" zones
-#'              and "crop marks".
+#' @param ... Currently ignored.
+#' @param bleed If `TRUE` produce a variant print-and-play file with "bleed" zones
+#'              and "crop marks" around game pieces.
 #'              Currently only supports `pieces = "piecepack"` and doesn't
 #'              support `size = "4x6"`.
+#' @param size_bleed A list with names "top", "right", "bottom", "left"
+#'                   containing numeric values indicating the inches "bleed" to add to
+#'                   the `size` of the print-and-play layout.
+#'                   The default `NULL` means no such bleed added to "letter", "A4", "A5"
+#'                   layouts and a small bleed added to "4x6" layouts
+#'                   (1/16" to top/bottom and 3/32" to left/right).
+#'                   NB. multiply millimeters by `0.0393700787` to convert to inches.
+#'                   We currently don't support an asymmetric left/right bleed combined with
+#'                   `arrangement = "double-sided"`.
 #' @inheritParams render_piece
 #' @examples
 #'   \donttest{
@@ -57,7 +70,7 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                                                 bg = "white",
                                                 res = 300),
                                 quietly = FALSE, ...,
-                                bleed = FALSE) {
+                                bleed = FALSE, size_bleed = NULL) {
 
     opt <- options(piecepackr.op_scale = 0)
     on.exit(options(opt))
@@ -71,9 +84,17 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
         else
             pieces <- c("piecepack", "pyramids", "matchsticks")
     }
-
     if ("all" %in% pieces)
         pieces <- c("piecepack", "pyramids", "matchsticks", "subpack")
+    if (is.null(size_bleed)) {
+        if (size == "4x6")
+            size_bleed <- list(top = 1/16, right = 3/32, bottom = 1/16, left = 3/32)
+        else
+            size_bleed <- list(top = 0, right = 0, bottom = 0, left = 0)
+    }
+    stopifnot(all(c("top", "right", "bottom", "left") %in% names(size_bleed)),
+              all(sapply(size_bleed, is.numeric)),
+              arrangement == "single-sided" || size_bleed$left == size_bleed$right )
 
     cfg <- as_pp_cfg(cfg)
     current_dev <- grDevices::dev.cur()
@@ -82,12 +103,12 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                     letter = LETTER_WIDTH,
                     A4 = A4_WIDTH,
                     A5 = A4_WIDTH,
-                    `4x6` = 4)
+                    `4x6` = 4) + size_bleed$top + size_bleed$bottom
     width <- switch(size,
                     letter = LETTER_HEIGHT,
                     A4 = A4_HEIGHT,
                     A5 = A4_HEIGHT / 2,
-                    `4x6` = 6)
+                    `4x6` = 6) + size_bleed$right + size_bleed$left
 
     if (is.null(dev))
         dev <- pp_device_fn(output_filename)
@@ -103,8 +124,8 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
     do.call(dev, args)
 
     pl <- switch(size,
-                 `4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed),
-                 print_and_play_paper(cfg, size, pieces, arrangement, quietly, bleed))
+                 `4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed, size_bleed),
+                 print_and_play_paper(cfg, size, pieces, arrangement, quietly, bleed, size_bleed))
 
     invisible(grDevices::dev.off())
 
@@ -152,9 +173,9 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     system2(gs(), args)
 }
 
-print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly, bleed) {
+print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly, bleed, size_bleed) {
     if (bleed)
-        print_and_play_paper_bleed(cfg, size, pieces, arrangement, quietly)
+        print_and_play_paper_bleed(cfg, size, pieces, arrangement, quietly, size_bleed)
     else
-        print_and_play_paper_compact(cfg, size, pieces, arrangement, quietly)
+        print_and_play_paper_compact(cfg, size, pieces, arrangement, quietly, size_bleed)
 }

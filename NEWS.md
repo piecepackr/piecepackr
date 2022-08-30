@@ -1,5 +1,24 @@
-piecepackr 1.11.2 (development)
+piecepackr 1.12.0 (development)
 ===============================
+
+New features
+------------
+
+* `save_print_and_play()` now supports new argument `size_bleed` to add an additional "bleed zone" to
+  the edges of the print-and-play output `size`:
+
+  + A list with names "top", "right", "bottom", "left"
+    containing numeric values indicating the inches "bleed" to add to
+    the `size` of the print-and-play layout.
+  + The default `NULL` means no such bleed added to "letter", "A4", and "A5"
+    `size` layouts and a small bleed added to "4x6" `size` layouts
+    (1/16" to top/bottom and 3/32" to left/right).
+    Light prototyping at my local photo print service indicates adding such a bleed delivers
+    better results for 4x6 photo prints but your results my vary.
+  + Multiply millimeters by `0.0393700787` to convert to inches.
+  + We currently don't support an asymmetric left/right bleed combined with `arrangement = "double-sided"`.
+  + Not to be confused with the `bleed` argument which if `TRUE` switches to an alternative layout
+    which adds a bleed zone and crop marks around the game pieces.
 
 Bug fixes and minor improvements
 --------------------------------

@@ -1,22 +1,25 @@
-print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly) {
+print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly, size_bleed) {
     n_suits <- cfg$n_suits
     n_ranks <- cfg$n_ranks
 
     stopifnot(n_ranks <= 6)
 
     if (size == "letter") {
-        xl <- inch(LETTER_HEIGHT / 2 - A5W / 2)
-        xr <- inch(LETTER_HEIGHT / 2 + A5W / 2)
+        xl <- inch(LETTER_HEIGHT / 2 - A5W / 2 + size_bleed$left)
+        xr <- inch(LETTER_HEIGHT / 2 + A5W / 2 + size_bleed$left)
+        y <- inch(LETTER_WIDTH / 2 + size_bleed$bottom)
     } else if (size == "A4") {
-        xl <- inch(A4_HEIGHT / 2 - A5W / 2)
-        xr <- inch(A4_HEIGHT / 2 + A5W / 2)
+        xl <- inch(A4_HEIGHT / 2 - A5W / 2 + size_bleed$left)
+        xr <- inch(A4_HEIGHT / 2 + A5W / 2 + size_bleed$left)
+        y <- inch(A4_WIDTH / 2 + size_bleed$bottom)
     } else { # size is "A5"
-        xl <- 0.5
-        xr <- 0.5
+        xl <- inch(A5W / 2 + size_bleed$left)
+        xr <- inch(A5W / 2 + size_bleed$left)
+        y <- inch(A5H / 2 + size_bleed$bottom)
     }
 
-    vpl <- viewport(x=xl, width=inch(A5W), height=inch(A5H))
-    vpr <- viewport(x=xr, width=inch(A5W), height=inch(A5H))
+    vpl <- viewport(x=xl, y=y, width=inch(A5W), height=inch(A5H))
+    vpr <- viewport(x=xr, y=y, width=inch(A5W), height=inch(A5H))
     gl <- list()
     pl <- list()
 

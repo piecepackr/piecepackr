@@ -15,7 +15,8 @@ save_print_and_play(
     res = 300),
   quietly = FALSE,
   ...,
-  bleed = FALSE
+  bleed = FALSE,
+  size_bleed = NULL
 )
 }
 \arguments{
@@ -23,9 +24,12 @@ save_print_and_play(
 
 \item{output_filename}{Filename for print-and-play file}
 
-\item{size}{PnP output size (currently either "letter", "A4", "A5", or "4x6")
+\item{size}{PnP output size (currently supports either "letter", "A4", "A5", or "4x6").
+This is the targeted \dQuote{trim} size of the print-and-play file
+(\code{size_bleed} can be used to make the print-and-play file larger than this).
 Size "4x6" currently only supports \code{pieces = "piecepack"}
-and doesn't support \code{bleed = TRUE}.}
+and doesn't support \code{bleed = TRUE}.
+"A5" is in \dQuote{portrait} mode whereas the other sizes are in \dQuote{landscape} mode.}
 
 \item{pieces}{Character vector of desired PnP pieces.
 Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
@@ -43,12 +47,22 @@ Will filter out any names that aren't in \code{formals(dev)}.}
 \item{quietly}{Whether to hide messages about missing metadata
 in the provided configuration.}
 
-\item{...}{Arguments to \code{\link[=pmap_piece]{pmap_piece()}}}
+\item{...}{Currently ignored.}
 
-\item{bleed}{If \code{TRUE} produce a variant file with "bleed" zones
-and "crop marks".
+\item{bleed}{If \code{TRUE} produce a variant print-and-play file with "bleed" zones
+and "crop marks" around game pieces.
 Currently only supports \code{pieces = "piecepack"} and doesn't
 support \code{size = "4x6"}.}
+
+\item{size_bleed}{A list with names "top", "right", "bottom", "left"
+containing numeric values indicating the inches "bleed" to add to
+the \code{size} of the print-and-play layout.
+The default \code{NULL} means no such bleed added to "letter", "A4", "A5"
+layouts and a small bleed added to "4x6" layouts
+(1/16" to top/bottom and 3/32" to left/right).
+NB. multiply millimeters by \code{0.0393700787} to convert to inches.
+We currently don't support an asymmetric left/right bleed combined with
+\code{arrangement = "double-sided"}.}
 }
 \description{
 Save piecepack print-and-play (PnP) file

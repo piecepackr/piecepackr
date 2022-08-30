@@ -1,4 +1,4 @@
-print_and_play_4x6 <- function(cfg, pieces, quietly, bleed) {
+print_and_play_4x6 <- function(cfg, pieces, quietly, bleed, size_bleed) {
     n_suits <- cfg$n_suits
     n_ranks <- cfg$n_ranks
 
@@ -14,28 +14,32 @@ print_and_play_4x6 <- function(cfg, pieces, quietly, bleed) {
 
     pl <- list()
 
-    draw_4x6_title(cfg, pieces, quietly)
+    vp <- viewport(x = inch(3 + size_bleed$left),
+                   y = inch(2 + size_bleed$bottom),
+                   width = inch(6), height = inch(4))
+
+    draw_4x6_title(cfg, pieces, quietly, vp)
 
     n_pages_tiles <- 2 * n_suits
     for (i_suit in seq.int(n_suits))
-        draw_4x6_tiles(cfg, i_suit)
+        draw_4x6_tiles(cfg, i_suit, vp)
 
     n_pages_coins <- (n_suits-1) %/%4 + 1
     for (i_page in seq.int(n_pages_coins)) {
         suits <- seq(4*i_page-3, 4*i_page)
-        draw_4x6_coins(cfg, suits)
+        draw_4x6_coins(cfg, suits, vp)
     }
 
     n_pages_dice <- (n_suits-1) %/%4 + 1
     for (i_page in seq.int(n_pages_dice)) {
         suits <- seq(4*i_page-3, 4*i_page)
-        draw_4x6_dice(cfg, suits)
+        draw_4x6_dice(cfg, suits, vp)
     }
 
     n_pages_pawns <- (n_suits-1) %/%4 + 1
     for (i_page in seq.int(n_pages_pawns)) {
         suits <- seq(4*i_page-3, 4*i_page)
-        draw_4x6_pawns(cfg, suits)
+        draw_4x6_pawns(cfg, suits, vp)
     }
 
     n_pages <- 1 + n_pages_tiles + 2 * n_pages_coins + n_pages_dice + n_pages_pawns
@@ -44,15 +48,13 @@ print_and_play_4x6 <- function(cfg, pieces, quietly, bleed) {
     pl
 }
 
-draw_4x6_title <- function(cfg, pieces, quietly) {
-    vp <- viewport(width = inch(6), height = inch(4))
+draw_4x6_title <- function(cfg, pieces, quietly, vp) {
     grob <- a5_title_grob(cfg, pieces, quietly, FALSE)
     grob <- editGrob(grob, vp = vp)
     grid.draw(grob)
 }
 
-draw_4x6_tiles <- function(cfg, i_suit) {
-    vp <- viewport(width = inch(6), height = inch(4))
+draw_4x6_tiles <- function(cfg, i_suit, vp) {
     df <- tibble::tibble(piece_side = "tile_face",
                          x = rep(1:3 / 3 - 1/6, each = 2),
                          y = rep(2:1 / 2 - 1/4, 3),
@@ -72,8 +74,7 @@ draw_4x6_tiles <- function(cfg, i_suit) {
     popViewport()
 }
 
-draw_4x6_coins <- function(cfg, suits) {
-    vp <- viewport(width = inch(6), height = inch(4))
+draw_4x6_coins <- function(cfg, suits, vp) {
     df <- tibble::tibble(piece_side = "coin_back",
                          x = rep(1:6 / 6 - 1/12, 4),
                          y = rep(4:1 / 4 - 1/8, each = 6),
@@ -92,8 +93,7 @@ draw_4x6_coins <- function(cfg, suits) {
     popViewport()
 }
 
-draw_4x6_dice <- function(cfg, suits) {
-    vp <- viewport(width = inch(6), height = inch(4))
+draw_4x6_dice <- function(cfg, suits, vp) {
     df <- tibble::tibble(piece_side = "die_face",
                          x = rep(1:6 / 6 - 1/12, 4),
                          y = rep(4:1 / 4 - 1/8, each = 6),
@@ -106,8 +106,7 @@ draw_4x6_dice <- function(cfg, suits) {
     popViewport()
 }
 
-draw_4x6_pawns <- function(cfg, suits) {
-    vp <- viewport(width = inch(6), height = inch(4))
+draw_4x6_pawns <- function(cfg, suits, vp) {
 
     dfp <- tibble::tibble(piece_side = "pawn_layout",
                           x = 0.25, y = 4:1 / 4 - 1/8,

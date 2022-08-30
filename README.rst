@@ -421,6 +421,13 @@ piece3d() ({rgl})
 
 
 
+::
+
+    ## Warning in snapshot3d("man/figures/README-rgl_snapshot.png", top = FALSE):
+    ## webshot2::webshot() failed; trying rgl.snapshot()
+
+
+
 .. figure:: man/figures/README-rgl_snapshot.png
     :alt: 3D render with rgl package
 
@@ -517,7 +524,7 @@ animate_piece()
 Further documentation
 ~~~~~~~~~~~~~~~~~~~~~
 
-A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several `piecepackr demos <https://trevorldavis.com/piecepackr/category/demos.html>`_ and other `piecpackr docs <https://trevorldavis.com/piecepackr/category/docs.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's built-in `man pages`_.
+A slightly longer `intro to piecepackr's API <https://trevorldavis.com/piecepackr/intro-to-piecepackrs-api.html>`_ plus several other `piecepackr articles <https://trevorldavis.com/piecepackr/tag/piecepackr-features.html>`_ are available at piecepackr's `companion website <https://trevorldavis.com/piecepackr/>`_ as well as some `demos <https://trevorldavis.com/piecepackr/pages/about.html#demos>`_ and pre-configured `Print & Play PDFs <https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html>`_.  More API documentation is also available in the package's built-in `man pages`_.
 
 Tak Example
 ~~~~~~~~~~~
