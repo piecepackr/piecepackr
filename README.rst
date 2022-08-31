@@ -218,6 +218,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 .. sourcecode:: r
     
 
+    library("piecepackr")
     dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
                          invert_colors.suited=TRUE, border_color="black", border_lex=2)
     piecepack_suits <- list(suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
@@ -251,6 +252,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
 
     library("grid")
     library("gridpattern")
+    library("piecepackr")
     
     tilings <- c("hexagonal", "snub_square", "pythagorean",
                  "truncated_square", "triangular", "trihexagonal")
@@ -293,6 +295,7 @@ oblique 3D projection
 .. sourcecode:: r
     
 
+    library("piecepackr")
     cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
                        dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
                        edge_color.coin="tan", edge_color.tile="tan")
@@ -334,6 +337,7 @@ If you are comfortable using R data frames there is also ``pmap_piece()`` that p
     
 
     library("dplyr", warn.conflicts=FALSE)
+    library("piecepackr")
     library("tibble")
     df_tiles <- tibble(piece_side="tile_back", x=0.5+c(3,1,3,1,1,1), y=0.5+c(3,3,1,1,1,1))
     df_coins <- tibble(piece_side="coin_back", x=rep(1:4, 4), y=rep(c(4,1), each=8),
@@ -358,6 +362,7 @@ geom_piece() ({ggplot2})
     
 
     library("ggplot2")
+    library("piecepackr")
     envir <- game_systems("sans")
     df_board <- tibble(piece_side = "board_face", suit = 3, rank = 12,
                        x = 4, y = 4)
@@ -384,6 +389,8 @@ geom_piece() ({ggplot2})
 .. sourcecode:: r
     
 
+    library("ggplot2")
+    library("piecepackr")
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("withr")
     new <- list(piecepackr.cfg = "piecepack",
@@ -410,6 +417,7 @@ piece3d() ({rgl})
 .. sourcecode:: r
     
 
+    library("piecepackr")
     library("piecenikr") # remotes::install_github("piecepackr/piecenikr")
     library("rgl")
     invisible(rgl::open3d())
@@ -418,13 +426,6 @@ piece3d() ({rgl})
     df <- piecenikr::df_martian_chess()
     envir <- c(piecenikr::looney_pyramids(), game_systems("sans3d"))
     pmap_piece(df, piece3d, trans=op_transform, envir = envir, scale = 0.98, res = 150)
-
-
-
-::
-
-    ## Warning in snapshot3d("man/figures/README-rgl_snapshot.png", top = FALSE):
-    ## webshot2::webshot() failed; trying rgl.snapshot()
 
 
 
@@ -442,6 +443,7 @@ piece() ({rayrender})
 .. sourcecode:: r
     
 
+    library("piecepackr")
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("magrittr")
     library("rayrender", warn.conflicts = FALSE)
@@ -468,6 +470,7 @@ piece_mesh() ({rayvertex})
 .. sourcecode:: r
     
 
+    library("piecepackr")
     library("ppgames") # remotes::install_github("piecepackr/ppgames")
     library("rayvertex", warn.conflicts = FALSE) # masks `rayrender::r_obj`
     df <- ppgames::df_international_chess()
@@ -764,6 +767,7 @@ Also as a sanity check use the command-line tool ``fc-match`` (or the R function
 
 .. code:: r
 
+    library("piecepackr")
     fonts <- c('Noto Sans Symbols2', 'Noto Emoji', 'sans')
     chars <- c('♥', '♠', '♣', '♦', '🌞' ,'🌜' ,'꩜')
     get_embedded_font(fonts, chars)
