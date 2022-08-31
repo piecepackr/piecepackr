@@ -1,5 +1,5 @@
-piecepackr 1.12.0 (development)
-===============================
+piecepackr 1.12.0
+=================
 
 New features
 ------------
