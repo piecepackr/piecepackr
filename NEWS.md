@@ -1,3 +1,13 @@
+piecepackr 1.12.1 (development)
+===============================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* The default function used to create game pieces for use with the `{rayrender}` 
+  graphics system (via the `piece()` function) has been updated to handle
+  some breaking changes in the arguments for `rayrender::obj_model()` (#304).
+
 piecepackr 1.12.0
 =================
 

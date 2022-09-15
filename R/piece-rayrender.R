@@ -62,5 +62,8 @@ rr_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg 
                         angle = angle, axis_x = axis_x, axis_y = axis_y,
                         width = width, height = height, depth = depth,
                         scale = scale, res = res)
-    rayrender::obj_model(filename = obj$obj, texture = TRUE)
+    if (packageVersion("rayrender") < "0.28.0")
+        rayrender::obj_model(filename = obj$obj, texture = TRUE)
+    else
+        rayrender::obj_model(filename = obj$obj, load_material = TRUE, load_textures = TRUE)
 }
