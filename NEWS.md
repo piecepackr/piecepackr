@@ -4,6 +4,8 @@ piecepackr 1.12.1 (development)
 Bug fixes and minor improvements
 --------------------------------
 
+* In `save_print_and_play()` we fix rotation of pawn layout
+  when `bleed = FALSE` and `size` is not "4x6".
 * The default function used to create game pieces for use with the `{rayrender}` 
   graphics system (via the `piece()` function) has been updated to handle
   some breaking changes in the arguments for `rayrender::obj_model()` (#304).

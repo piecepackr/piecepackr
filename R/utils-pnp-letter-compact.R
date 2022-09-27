@@ -359,7 +359,7 @@ a5_piecepack_grob <- function(suit, cfg=pp_cfg(), front=TRUE, arrangement="singl
         df$piece_side <- c(rep("coin_face", 6), rep("die_face", 6),
                            "pawn_layout", "belt_face", "saucer_back", rep("tile_back", 6))
         # Rotate tile backs to partially hide direction of face if tile back are not fully symmetric
-        df$angle <- c(rep(0, 15),
+        df$angle <- c(rep(0, 12), 270, 0, 0,
                       90 * ((df$suit[16:21] + df$rank[16:21]) %% 4))
 
         if (arrangement == "double-sided") {
