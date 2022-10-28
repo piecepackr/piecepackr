@@ -1,6 +1,9 @@
+* This update should fix the "donttest" "Additional issue"
+  due to a breaking API change in {rayrender}
+
 **Test environments**
 
-* local (linux, R 4.2.0) 
+* local (linux, R 4.2.1) 
 * win-builder (windows, R devel)
 * mac-builder (osx, R release)
 * Github Actions (linux, R devel)
