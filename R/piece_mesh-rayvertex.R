@@ -49,7 +49,7 @@ piece_mesh <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_
                      width[i], height[i], depth[i],
                      scale = scale[i], res = res)
     })
-    Reduce(rayvertex::add_shape, l)
+    Reduce(rayvertex::add_shape, Filter(Negate(is.null), l))
 }
 
 rv_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
