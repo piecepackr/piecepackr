@@ -1,6 +1,3 @@
-* This update should fix the "donttest" "Additional issue"
-  due to a breaking API change in {rayrender}
-
 **Test environments**
 
 * local (linux, R 4.2.1) 
@@ -28,4 +25,15 @@ these new functions it falls back to an alternative.
 Hence this package should not depend on R (>= 4.2).
 In particular this package defines custom `grobPoints()` and `grobCoords()` S3 methods
 and we are **supposed** to use some of these functions for their output with R 4.2 and later
-(and we provide an alternative output compatible with previous versions of R).
+(and for previous versions of R we provide an alternative compatible output).
+
+1 NOTE generated on a subset of platforms:
+
+```
+found 3 marked UTF-8 strings 
+```
+
+The `spdx_license_list` data set contains details about 478 open source license
+from the "SPDX License List" <https://spdx.org/licenses/>.
+The "name" column of this data set includes the official name of the licenses.
+Three of these official license names use non-ASCII characters.
