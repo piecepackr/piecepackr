@@ -7,8 +7,8 @@
 animate_piece(
   dfs,
   file = "animation.gif",
-  annotate = TRUE,
   ...,
+  annotate = TRUE,
   .f = piecepackr::grid.piece,
   cfg = getOption("piecepackr.cfg", NULL),
   envir = getOption("piecepackr.envir", game_systems("sans")),
@@ -28,12 +28,12 @@ animate_piece(
 \item{file}{Filename to save animation unless \code{NULL}
 in which case it uses the current graphics device.}
 
+\item{...}{Arguments to \code{pmap_piece}}
+
 \item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
 with \dQuote{algrebraic} coordinates,
 if \code{FALSE} or \code{"none"} don't annotate,
 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
-
-\item{...}{Arguments to \code{pmap_piece}}
 
 \item{.f}{Low level graphics function to use e.g. \code{\link[=grid.piece]{grid.piece()}}, \code{\link[=piece3d]{piece3d()}}, \code{\link[=piece]{piece()}}, or \code{\link[=piece_mesh]{piece_mesh()}}.}
 

@@ -8,10 +8,13 @@ Breaking changes
   Use `type = "picture"` instead of `use_pictureGrob = TRUE`.
   The `...` has also been moved sooner to where `use_pictureGrob` used to be in the argument order so
   the arguments `width`, `height`, `depth`, `op_scale`, `op_angle`, `default.units`, `envir`,
-  `name`, `gp`, and `vp` must now be named arguments (instead of positional arguments).
+  `name`, `gp`, and `vp` must now always be named arguments (instead of positional arguments).
 
 * The `pp_cfg()` R6 class public method `get_shadow_fn()` which was deprecated in v1.10.1 (2022-02-22)
   has been removed. The public method `get_op_grob()` returns the complete oblique projection grob.
+* `animate_pieces()`'s `annotate` argument must now always be set as a named argument
+  (or rely on its default value).
+  Setting it positionally was deprecated in v1.10.3 (2022-03-23).
 
 New features
 ------------
