@@ -1,3 +1,11 @@
+piecepackr 1.13.0 (development)
+===============================
+
+* The following enhancements to the configurations returned by `game_systems()`:
+
+  - New configurations ``dominoes_chinese`` and ``dominoes_chinese_black`` which provide [Chinese dominoes](https://en.wikipedia.org/wiki/Chinese_dominoes) and [Asian-style dice](https://en.wikipedia.org/wiki/Dice#Arrangement).
+  ``dominoes_chinese`` has a white background with black and red pips while ``dominoes_chinese_black`` has a black background with white and red pips (#308).
+
 piecepackr 1.12.2
 =================
 

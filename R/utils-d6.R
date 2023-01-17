@@ -1,4 +1,3 @@
-#### also allow customization of angle #175
 get_die_face_info <- function(suit, arrangement = "counter_down") {
     angle <- rep(0, length.out=6)
     suit <- rep(suit, length.out=6)

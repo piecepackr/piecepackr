@@ -53,3 +53,5 @@ reference:
       desc: "Defunct functions that have been removed"
       contents:
         - piecepackr-defunct
+figures:
+  fig.asp: 0.800

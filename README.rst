@@ -82,6 +82,7 @@ Traditional 6-sided dice
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 ``game_systems()`` returns a ``dice`` configuration which can make standard 6-sided dice in six colors.
+The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations have Asian-style pipped dice.
 
 Double-18 dominoes
 ~~~~~~~~~~~~~~~~~~
@@ -96,6 +97,7 @@ Double-18 dominoes
 6) ``dominoes_white`` (identical to ``dominoes``)
 7) ``dominoes_yellow``
 
+The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://en.wikipedia.org/wiki/Chinese_dominoes>`__.
 
 .. sourcecode:: r
     

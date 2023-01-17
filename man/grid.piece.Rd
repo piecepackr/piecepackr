@@ -162,7 +162,8 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
 
     # default piecepack, orthogonal projection
     draw_pp_diagram(cfg=pp_cfg())
-
+  }
+  if (require("grid")) {
     # custom configuration, orthogonal projection
     grid.newpage()
     dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
@@ -170,7 +171,8 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
     traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
     cfg <- c(dark_colorscheme, traditional_ranks)
     draw_pp_diagram(cfg=pp_cfg(cfg))
-
+  }
+  if (require("grid")) {
     # custom configuration, oblique projection
     grid.newpage()
     cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,

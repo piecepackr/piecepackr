@@ -32,37 +32,79 @@ xya_pips_cards <- function(n_pips) {
            )
 }
 
-xya_pips_dominoes <- function(n_pips, die = FALSE) {
+xya_pips_dominoes <- function(n_pips, die = FALSE, chinese = FALSE, other_pips = NULL) {
     if (n_pips == 0) {
         return(tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
     }
-    if (die)
+    if (die && !chinese) {
         high <- 0.75
-    else
+    } else if (chinese && die) {
+        if (n_pips == 4) {
+            high <- 0.65
+        } else if (n_pips == 6) {
+            high <- 0.75
+        } else {
+            high <- 0.68
+        }
+    } else {
         high <- 0.78
+    }
     low <- 1 - high
+    if (chinese && !die) {
+        low <- 0.2
+        if (n_pips == 3 && other_pips < 5) {
+            high <- 1.0
+        } else if (n_pips == 4 && other_pips == 4) {
+            high <- 0.75
+        } else {
+            high <- 0.84
+        }
+    }
+    if (chinese && die && n_pips == 6) {
+        left <- 0.36
+    } else if (chinese && !die) {
+        left <- 0.30
+    } else {
+        left <- low
+    }
+    right <- 1 - left
+    mid <- 0.5 * (high + low)
     switch(n_pips,
-           tibble(x = 0.5, y = 0.5, angle = 0), # 1
-           tibble(x = c(low, high), y = c(high, low), angle = c(0, 180)), # 2
-           tibble(x = c(low, 0.5, high),
-                  y = c(high, 0.5, low),
+           if (chinese && !die)
+               tibble(x = 0.5, y = low, angle = 0)
+           else
+               tibble(x = 0.5, y = mid, angle = 0), # 1
+           if (chinese)
+               if (die)
+                   tibble(x = 0.5, y = c(low, high), angle = c(0, 180))
+                else
+                   tibble(x = c(left, right), y = low, angle = c(0, 180))
+           else
+               tibble(x = c(left, right), y = c(high, low), angle = c(0, 180)), # 2
+           tibble(x = c(left, 0.5, right),
+                  y = c(high, mid, low),
                   angle = c(0, 0, 180)), # 3
-           tibble(x = rep(c(low, high), 2), # 4
-                  y = rep(c(low, high), each=2),
+           if (chinese && !die && other_pips != 4)
+               tibble(x = rep(c(left, right), 2), # 4
+                      y = rep(c(low, mid), each=2),
+                  angle = rep(c(180, 0), each=2))
+           else
+               tibble(x = rep(c(left, right), 2), # 4
+                      y = rep(c(low, high), each=2),
                   angle = rep(c(180, 0), each=2)),
-           tibble(x = c(rep(c(low, high), 2), 0.5), # 5
-                  y = c(rep(c(low, high), each=2), 0.5),
+           tibble(x = c(rep(c(left, right), 2), 0.5), # 5
+                  y = c(rep(c(low, high), each=2), mid),
                   angle = c(rep(180, 2), rep(0, 3))),
-           tibble(x = rep(c(low, high), 3),
-                  y = rep(c(low, 0.5, high), each=2), # 6
+           tibble(x = rep(c(left, right), 3),
+                  y = rep(c(low, mid, high), each=2), # 6
                   angle = c(rep(180, 2), rep(0, 4))),
-           tibble(x = c(rep(c(low, high), 3), 0.5), # 7
+           tibble(x = c(rep(c(left, right), 3), 0.5), # 7
                   y = c(rep(c(low, 0.5, high), each=2), 0.50),
                   angle = c(rep(180, 2), rep(0, 5))),
-           tibble(x = c(0.5, rep(c(low, high), 3), 0.5), # 8
+           tibble(x = c(0.5, rep(c(left, right), 3), 0.5), # 8
                   y = c(low, rep(c(low, 0.5, high), each=2), high),
                   angle = c(rep(180, 3), rep(0, 5))),
-           tibble(x = c(rep(c(low, 0.5, high), 3)), # 9
+           tibble(x = c(rep(c(left, 0.5, right), 3)), # 9
                   y = c(rep(c(low, 0.5, high), each=3)),
                   angle = c(rep(180, 3), rep(0, 6))),
            tibble(x = c(0.5, rep(c(0.20, 0.80), 4), 0.5), # 10
@@ -333,16 +375,25 @@ makeContent.domino_side <- function(x) {
 
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
+    if (type == "domino_chinese")
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
+    else
+        background_grob <- NULL
+
     mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
 
     # Top (Rank)
-    tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+    tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE,
+                        background = !(type == "domino_chinese"),
+                        other_pips = suit)
     top_grob <- tfn("tile_face", rank, rank, x$cfg)
     top_grob <- grid::editGrob(top_grob,
                       vp=viewport(height = 0.5, y = 0.75, angle = 180), name="top_rank")
 
     # Bottom (Suit)
-    bfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+    bfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE,
+                        background = !(type == "domino_chinese"),
+                        other_pips = rank)
     bot_grob <- bfn("tile_face", suit, suit, x$cfg)
     bot_grob <- grid::editGrob(bot_grob,
                       vp=viewport(height = 0.5, y = 0.25), name="bottom_suit")
@@ -358,17 +409,20 @@ makeContent.domino_side <- function(x) {
         border_grob <- nullGrob(name="border")
     }
 
-    gl <- gList(top_grob, bot_grob, gl_grob, mat_grob, border_grob)
+    gl <- gList(background_grob, top_grob, bot_grob, gl_grob, mat_grob, border_grob)
     setChildren(x, gl)
 
 }
 
 pippedGrobFn <- function(rank_offset = 0, type = "die", grob_type = "circle",
-                         border = TRUE, mat = TRUE) {
+                         border = TRUE, mat = TRUE, background = TRUE,
+                         other_pips = NULL) {
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
-        gTree(opt = opt, n_pips = rank + rank_offset, type = type, grob_type = grob_type, border = border, mat = mat,
+        gTree(opt = opt, n_pips = rank + rank_offset, type = type, grob_type = grob_type,
+              border = border, mat = mat, background = background,
+              other_pips = other_pips + rank_offset,
               name = NULL, gp = gpar(), vp = NULL, cl = "pipped")
     }
 }
@@ -380,13 +434,22 @@ makeContent.pipped <- function(x) {
         xya <- xya_pips_cards(x$n_pips)
     } else if (x$type == "die") {
         xya <- xya_pips_dominoes(x$n_pips, die = TRUE)
+    } else if (x$type == "die_chinese") {
+        xya <- xya_pips_dominoes(x$n_pips, die = TRUE, chinese = TRUE)
+    } else if (x$type == "domino_chinese") {
+        xya <- xya_pips_dominoes(x$n_pips, die = FALSE, chinese = TRUE,
+                                 other_pips = x$other_pips)
     } else {
         xya <- xya_pips_dominoes(x$n_pips)
     }
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     # Background
-    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
+    if (x$background) {
+        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
+    } else {
+        background_grob <- NULL
+    }
 
     # Mat
     if (x$mat) {
@@ -398,8 +461,31 @@ makeContent.pipped <- function(x) {
     # Pips
     if (nrow(xya) > 0) {
         if (x$grob_type == "circle") {
-            gp_pip <- gpar(col=opt$dm_color, fill=opt$dm_color)
-            if (x$type != "card" && x$n_pips > 9) r <- 0.06 else r <- 0.08
+            if (x$type == "die_chinese" && (x$n_pips == 1 || x$n_pips == 4)) {
+                pip_color <- "#D55E00" # or just use "red"?
+            } else if (x$type == "domino_chinese" && (x$n_pips == 1 || x$n_pips == 4)) {
+                pip_color <- "#D55E00" # or just use "red"?
+            } else if (x$type == "domino_chinese" && x$n_pips == 6 && x$other_pips == 6) {
+                pip_color <- rep(c(opt$dm_color, "#D55E00"), 3L)
+            } else {
+                pip_color <- opt$dm_color
+            }
+            gp_pip <- gpar(col=pip_color, fill=pip_color)
+            if (x$type != "card" && x$n_pips > 9) {
+                r <- 0.06
+            } else if (x$type == "die_chinese") {
+                if (x$n_pips == 1) {
+                    r <- 0.20
+                } else if (x$n_pips == 2) {
+                    r <- 0.10
+                } else {
+                    r <- 0.10
+                }
+            } else if (x$type == "domino_chinese") {
+                r <- 0.16
+            } else {
+                r <- 0.08
+            }
             pip_grob <- circleGrob(x=xya$x, y=xya$y, r=r, gp=gp_pip, name="pips")
         } else {
             gp_pip <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,

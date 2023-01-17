@@ -21,6 +21,23 @@ test_that("no regressions in figures", {
     expect_error(xya_pips_dominoes(19), "Don't know pip pattern for 19 pips")
     for (i in 0:10) expect_equal(nrow(xya_pips_cards(i)), i)
 
+    # Chinese dominoes
+    expect_doppelganger("dominoes_chinese", function() {
+        df1 <- tibble(piece_side = "tile_face",
+                      suit = c(rep(1, 6L), 2L, rep(2, 4L), rep(3, 3L), 3, rep(4, 3), 5, 5, 6),
+                      rank = c(1:6, 2L, 3:6, 3:5, 6, 4:6, 5:6, 6),
+                      cfg = c(rep(c("dominoes_chinese", "dominoes_chinese_black", "dominoes_chinese"), each = 7L)),
+                      x = rep(1:7, 3L),
+                      y = c(rep(c(1.5, 4.0, 6.5), each = 7L)))
+        df2 <- tibble(piece_side = "die_face",
+                      suit = 1, rank = 1:6,
+                      cfg = rep(c("dominoes_chinese", "dominoes_chinese_black", "dominoes_chinese"), each = 2L),
+                      x = 8.5, y = c(1, 2.25, 3.5, 4.75, 6.0, 7.25))
+        df <- rbind(df1, df2)
+        pmap_piece(df, envir = game_systems(), default.units = "in",
+                   trans = op_transform, op_scale = 0.5)
+        })
+
     # checkers
     expect_doppelganger("checkers", function() {
         df2 <- tibble(piece_side = "board_face", x = c(4, 6), y=c(4, 6),

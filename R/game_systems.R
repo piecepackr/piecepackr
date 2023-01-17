@@ -25,6 +25,11 @@
 #'      In each color scheme the number of pips on the \dQuote{top} of the domino is
 #'      controlled by their \dQuote{rank} and on the \dQuote{bottom} by their \dQuote{suit}.
 #'      Supports up to double-18 sets.}
+#' \item{dominoes_chinese, dominoes_chinese_black}{`dominoes_chinese` has Asian-style six-sided pipped dice with
+#'       white background and black and red pips.
+#'       The \dQuote{tile}'s are Chinese dominoes (1" x 2.5") whose number of pips are controlled
+#'       by both their \dQuote{rank} and their \dQuote{suit}. `dominoes_chinese_black` are like `dominoes_chinese` but the
+#'       dice and dominoes have a black background and white and red pips.}
 #' \item{go}{Go stones and lined boards in six color schemes.
 #'           Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
 #'           Color is controlled by suit and number of rows/columns by rank
@@ -100,14 +105,16 @@
 #'        grid.newpage()
 #'        grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6,
 #'                   op_scale=0.5, cfg=cfgs$dice)
-#'
+#'     }
+#'     if (require("grid")) {
 #'        # dominoes
 #'        grid.newpage()
 #'        colors <- c("black", "red", "green", "blue", "yellow", "white")
 #'        cfg <- paste0("dominoes_", rep(colors, 2))
-#'        grid.piece("tile_face", x=rep(4:1, 3), y=rep(2*3:1, each=4), suit=1:12, rank=1:12+1,
+#'        grid.piece("tile_face", x=rep(6:1, 2), y=rep(2*2:1, each=6), suit=1:12, rank=1:12+1,
 #'                   cfg=cfg, default.units="in", envir=cfgs, op_scale=0.5)
-#'
+#'     }
+#'     if (require("grid")) {
 #'        # various piecepack expansions
 #'        grid.newpage()
 #'        df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
@@ -117,7 +124,8 @@
 #'                               angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
 #'        df <- rbind(df_tiles, df_coins)
 #'        pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5, default.units="in")
-#'
+#'     }
+#'     if (require("grid")) {
 #'        grid.newpage()
 #'        pmap_piece(df, cfg = cfgs$dual_piecepacks_expansion, op_scale=0.5, default.units="in")
 #'     }
@@ -157,6 +165,8 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          dominoes_red = dominoes(color_list$suit_color[1], "white", color_list$border_color, rect_shape),
          dominoes_white = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
          dominoes_yellow = dominoes(color_list$suit_color[5], "black", color_list$border_color, rect_shape),
+         dominoes_chinese = dominoes_chinese(color_list, rect_shape),
+         dominoes_chinese_black = dominoes_chinese(color_list, rect_shape, invert = TRUE),
          dual_piecepacks_expansion = packs$dpe,
          go = go(1, color_list),
          hexpack = packs$hexpack,
@@ -200,6 +210,31 @@ dice <- function(color_list, rect_shape) {
                       shape.card = rect_shape,
                       grob_fn.card = cardGrobFn(grob_type = "circle"),
                       grob_fn.die = pippedGrobFn(0, "die"))
+    dice <- pp_cfg(c(dice_list, color_list))
+    dice$has_piecepack <- FALSE
+    dice$has_dice <- TRUE
+    dice
+}
+
+dominoes_chinese <- function(color_list, rect_shape, invert = FALSE) {
+    dice_list <- list(n_suits = 6, n_ranks = 6,
+                      rank_text = "1,2,3,4,5,6",
+                      width.die = 16 / 25.4, # 16 mm dice most common
+                      background_color = ifelse(invert, color_list$suit_color[2], "white"),
+                      suit_color = ifelse(invert, "white", "black"),
+                      die_arrangement = "1,2,3,6>,5,4",
+                      grob_fn.die = pippedGrobFn(0, "die_chinese"),
+                      width.tile = 1,
+                      height.tile = 2.5,
+                      depth.tile = 0.5,
+                      gridline_color.tile_back = "transparent",
+                      gridline_color.tile_face = "transparent",
+                      gridline_lex.tile_face = 6,
+                      shape.tile = rect_shape,
+                      grob_fn.tile_face = dominoGrobFn(0, "domino_chinese"),
+                      shape.card = rect_shape,
+                      grob_fn.card = cardGrobFn(grob_type = "circle")
+    )
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE
