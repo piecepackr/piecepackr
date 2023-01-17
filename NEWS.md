@@ -1,6 +1,18 @@
 piecepackr 1.13.0 (development)
 ===============================
 
+Breaking changes
+----------------
+
+* The `use_pictureGrob` argument of `grid.piece()` / `pieceGrob()` which was deprecated in v1.8.1 (2021-08-11) has been removed.  
+  Use `type = "picture"` instead of `use_pictureGrob = TRUE`.
+  The `...` has also been moved sooner to where `use_pictureGrob` used to be in the argument order so
+  the arguments `width`, `height`, `depth`, `op_scale`, `op_angle`, `default.units`, `envir`,
+  `name`, `gp`, and `vp` must now be named arguments (instead of positional arguments).
+
+New features
+------------
+
 * The following enhancements to the configurations returned by `game_systems()`:
 
   - New configurations ``dominoes_chinese`` and ``dominoes_chinese_black`` which provide [Chinese dominoes](https://en.wikipedia.org/wiki/Chinese_dominoes) and [Asian-style dice](https://en.wikipedia.org/wiki/Dice#Arrangement).

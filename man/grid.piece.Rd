@@ -14,7 +14,7 @@ pieceGrob(
   y = unit(0.5, "npc"),
   z = NA,
   angle = 0,
-  use_pictureGrob = FALSE,
+  ...,
   width = NA,
   height = NA,
   depth = NA,
@@ -25,7 +25,6 @@ pieceGrob(
   name = NULL,
   gp = NULL,
   vp = NULL,
-  ...,
   scale = 1,
   alpha = 1,
   type = "normal",
@@ -41,7 +40,7 @@ grid.piece(
   y = unit(0.5, "npc"),
   z = NA,
   angle = 0,
-  use_pictureGrob = FALSE,
+  ...,
   width = NA,
   height = NA,
   depth = NA,
@@ -53,7 +52,6 @@ grid.piece(
   gp = NULL,
   draw = TRUE,
   vp = NULL,
-  ...,
   scale = 1,
   alpha = 1,
   type = "normal",
@@ -81,7 +79,7 @@ can be retrieved by \code{base::dynGet()}.}
 
 \item{angle}{Angle (on xy plane) to draw piece at}
 
-\item{use_pictureGrob}{Deprecated argument.  If \code{TRUE} sets \code{type} argument to \code{"picture"}.}
+\item{...}{Ignored.}
 
 \item{width}{Width of piece}
 
@@ -107,8 +105,6 @@ and \code{1.0} is the scale used in the \dQuote{cavalier} projection.}
 \item{gp}{An object of class \dQuote{gpar}.}
 
 \item{vp}{A \code{grid} viewport object (or \code{NULL}).}
-
-\item{...}{Ignored.}
 
 \item{scale}{Multiplicative scaling factor to apply to width, height, and depth.}
 
