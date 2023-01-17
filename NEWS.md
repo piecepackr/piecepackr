@@ -10,6 +10,9 @@ Breaking changes
   the arguments `width`, `height`, `depth`, `op_scale`, `op_angle`, `default.units`, `envir`,
   `name`, `gp`, and `vp` must now be named arguments (instead of positional arguments).
 
+* The `pp_cfg()` R6 class public method `get_shadow_fn()` which was deprecated in v1.10.1 (2022-02-22)
+  has been removed. The public method `get_op_grob()` returns the complete oblique projection grob.
+
 New features
 ------------
 

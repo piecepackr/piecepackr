@@ -67,14 +67,11 @@
 #'   \item{`title`}{Design title}
 #' }
 #'
-#' @section Deprecated `pp_cfg` R6 Class attributes:\describe{
-#'    \item{`cache_shadow`}{Use `cache_op_fn` instead}
-#'    \item{`get_shadow_fn`}{`get_op_grob()` returns complete oblique projection grob}
-#'    \item{`i_unsuit`}{Instead add `1L` to `n_suits`}
-#' }
-#'
 #' @section Defunct `pp_cfg` R6 Class attributes which have been removed:\describe{
+#'    \item{`cache_shadow`}{Use `cache_op_fn` instead}
+#'    \item{`i_unsuit`}{Instead add `1L` to `n_suits`}
 #'    \item{`get_pictureGrob()`}{Use `get_grob(..., type = "picture")` instead}
+#'    \item{`get_shadow_fn`}{`get_op_grob()` returns complete oblique projection grob}
 #' }
 #'
 #' @seealso [game_systems()] for functions that return configuration list
@@ -492,21 +489,6 @@ Config <- R6Class("pp_cfg",
                          width = width, height = height, depth = depth,
                          filename = filename, res = res)
             do.call(obj_fn, args)
-        },
-        # Deprecated public methods
-        get_shadow_fn = function(piece_side, suit, rank) {
-            .Deprecated("pp_cfg()$get_op_grob() returns complete oblique projection *grob*")
-            key <- private$opt_cache_key(piece_side, suit, rank, "shadow")
-            grobFn <- self$cache$get(key, key_missing())
-            if (is.key_missing(grobFn)) {
-                default_fn <- get_style_element("shadow_fn", piece_side, private$cfg,
-                                                basicShadowGrob, suit, rank)
-                grobFn <- switch(piece_side,
-                                 pyramid_top = function(...) nullGrob(),
-                                 default_fn)
-                if (self$cache_op_fn) self$cache$set(key, grobFn)
-            }
-            grobFn
         }),
     active = list(
         annotation_color = function(value) {
