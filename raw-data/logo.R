@@ -30,8 +30,9 @@ cfg$dm_text.die_face = ""
 # adjust location of suits
 cfg$dm_t.tile_face = 132
 cfg$dm_r.tile_face = 0.33
-cfg$ps_t.die_face = 90
-cfg$ps_r.die_face = 0.1
+cfg$ps_t.r2.die_face = 90
+cfg$ps_r.r2.die_face = 0.1
+cfg$die_arrangement = "6,5,4,2,3,1"
 cfg$ps_t.coin_back = 90
 cfg$ps_r.coin_back = -0.1
 cfg <- pp_cfg(cfg)
