@@ -87,25 +87,36 @@ at_vp_info <- function(df = data.frame(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1))) {
 at_label_face_coords <- function(df ) {
     df$before <- c("upper_left", "lower_left", "lower_right", "upper_right")
     df$after <- ""
-    i_left <- order(df$x, -df$y)[1:2]
-    i_right <- order(df$x, -df$y)[3:4]
+    i_left <- order(df$x, -df$y) # leftmost points with tie-brakes by y
 
+    # "lower-left" will be the lowest of the two left-most vertices
     if (df[i_left[1], "y"] < df[i_left[2], "y"]) {
-        df[i_left[1], "after"] <- "lower_left"
-        df[i_left[2], "after"] <- "upper_left"
+        i_ll <- i_left[1]
     } else {
-        df[i_left[2], "after"] <- "lower_left"
-        df[i_left[1], "after"] <- "upper_left"
+        i_ll <- i_left[2]
     }
-
-    if (df[i_right[1], "y"] < df[i_right[2], "y"]) {
-        df[i_right[1], "after"] <- "lower_right"
-        df[i_right[2], "after"] <- "upper_right"
+    df[i_ll, "after"] <- "lower_left"
+    df[shift_idx(i_ll, 2), "after"] <- "upper_right"
+    # translate lower-left to origin and rotate so lower-left and upper-right on x-axis
+    # then upper-left will be above x-axis and lower-right will be below x-axis
+    df0 <- at_translate_to_origin(df, df[i_ll,])
+    df0 <- at_rotate(df0, df0[shift_idx(i_ll, 2), "theta"])
+    if (df0[shift_idx(i_ll, 1), "y"] > 0) {
+        df[shift_idx(i_ll, 1), "after"] <- "upper_left"
+        df[shift_idx(i_ll, 3), "after"] <- "lower_right"
     } else {
-        df[i_right[2], "after"] <- "lower_right"
-        df[i_right[1], "after"] <- "upper_right"
+        df[shift_idx(i_ll, 1), "after"] <- "lower_right"
+        df[shift_idx(i_ll, 3), "after"] <- "upper_left"
     }
     df
+}
+
+shift_idx <- function(x, i) {
+    x2 <- (x + i) %% 4
+    if (x2 == 0)
+        4
+    else
+        x2
 }
 
 at_is_flipped <- function(df) {

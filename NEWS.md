@@ -24,6 +24,11 @@ New features
   - New configurations ``dominoes_chinese`` and ``dominoes_chinese_black`` which provide [Chinese dominoes](https://en.wikipedia.org/wiki/Chinese_dominoes) and [Asian-style dice](https://en.wikipedia.org/wiki/Dice#Arrangement).
   ``dominoes_chinese`` has a white background with black and red pips while ``dominoes_chinese_black`` has a black background with white and red pips (#308).
 
+Bug fixes and minor improvements
+--------------------------------
+
+* Fixes a mis-rendering bug when using the new affine transformation feature that affected a small subset of game piece faces (#309).
+
 piecepackr 1.12.2
 =================
 
