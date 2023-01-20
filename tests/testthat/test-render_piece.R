@@ -38,7 +38,7 @@ test_that("render_piece() works", {
     f <- tempfile(fileext = ".jpg")
     render_piece(df, file = f, .f = piece, envir = envir3d, new_device = FALSE,
                  op_scale = 0.5, trans = op_transform,
-                 samples = 5, clamp_value = 1)
+                 samples = 5, clamp_value = 1, interactive = FALSE)
     expect_true(file.exists(f))
     unlink(f)
 

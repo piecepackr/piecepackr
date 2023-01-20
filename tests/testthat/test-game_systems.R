@@ -22,7 +22,8 @@ test_that("no regressions in figures", {
     for (i in 0:10) expect_equal(nrow(xya_pips_cards(i)), i)
 
     # Chinese dominoes
-    expect_doppelganger("dominoes_chinese", function() {
+    suppressMessages({
+      expect_doppelganger("dominoes_chinese", function() {
         df1 <- tibble(piece_side = "tile_face",
                       suit = c(rep(1, 6L), 2L, rep(2, 4L), rep(3, 3L), 3, rep(4, 3), 5, 5, 6),
                       rank = c(1:6, 2L, 3:6, 3:5, 6, 4:6, 5:6, 6),
@@ -37,6 +38,7 @@ test_that("no regressions in figures", {
         pmap_piece(df, envir = game_systems(), default.units = "in",
                    trans = op_transform, op_scale = 0.5)
         })
+    }, classes="piecepackr_affine_transformation")
 
     # checkers
     expect_doppelganger("checkers", function() {

@@ -48,7 +48,7 @@ test_that("rayrender works", {
     scene <- piece("coin_face", x=-1:1, rank=1:3, cfg = cfg)
     f <- tempfile(fileext = ".jpeg")
     png(f)
-    render_scene(scene, samples = 1)
+    render_scene(scene, samples = 1, interactive = FALSE)
     dev.off()
     expect_true(file.exists(f))
     unlink(f)

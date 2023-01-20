@@ -128,7 +128,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
         assert_suggested("rayrender")
         function(df, ..., scale = 1,
                  fov = 20, samples=100, lookat = NULL, lookfrom = NULL, clamp_value = Inf,
-                 table = NA) {
+                 table = NA, interactive = TRUE) {
             df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
             df$x <- df$x + xoffset
             df$y <- df$y + yoffset
@@ -145,7 +145,7 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
             rayrender::render_scene(scene,
                                     fov = fov, samples = samples,
                                     lookat = lookat, lookfrom = lookfrom, clamp_value = clamp_value,
-                                    width = width, height = height)
+                                    width = width, height = height, interactive = interactive)
         }
     } else if (identical(.f, piece_mesh)) {
         assert_suggested("rayvertex")
