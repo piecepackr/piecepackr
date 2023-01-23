@@ -230,7 +230,8 @@ at_inform <- function(fallback = "picture") {
     inform(msg, class = "piecepackr_affine_transformation")
 }
 
-at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name="piece_side") {
+at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon,
+                       name="piece_side") {
     vp_info <- at_vp_info(as.data.frame(xy_vp))
     vp.define = at_vp_define(piece_side, suit, rank, cfg)
 

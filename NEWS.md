@@ -21,6 +21,8 @@ New features
 
 * The following enhancements to the configurations returned by `game_systems()`:
 
+  - New configuration ``dice_d4`` which provide four-sided dice in six color schemes (color controlled by their suit).
+    Tetrahedrons with the rank as a numeral at the top point (#286).
   - New configurations ``dominoes_chinese`` and ``dominoes_chinese_black`` which provide [Chinese dominoes](https://en.wikipedia.org/wiki/Chinese_dominoes) and [Asian-style dice](https://en.wikipedia.org/wiki/Dice#Arrangement).
   ``dominoes_chinese`` has a white background with black and red pips while ``dominoes_chinese_black`` has a black background with white and red pips (#308).
 
@@ -28,6 +30,7 @@ Bug fixes and minor improvements
 --------------------------------
 
 * Fixes a mis-rendering bug when using the new affine transformation feature that affected a small subset of game piece faces (#309).
+* Border lines in oblique projected pyramids are now correctly made thicker/thinner when `scale` is different from one (#310).
 
 piecepackr 1.12.2
 =================

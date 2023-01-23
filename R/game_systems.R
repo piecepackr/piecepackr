@@ -18,6 +18,8 @@
 #'       Color is controlled by suit and number of rows/columns by rank.
 #'       \code{chess1} has one inch squares and \code{chess2} has two inch squares.}
 #' \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
+#' \item{dice_d4}{Four-sided dice in six color schemes (color controlled by their suit).
+#'                Tetrahedrons with the rank as a numeral at the top point.}
 #' \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 #'                   \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
 #' \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
@@ -32,9 +34,7 @@
 #'       dice and dominoes have a black background and white and red pips.}
 #' \item{go}{Go stones and lined boards in six color schemes.
 #'           Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
-#'           Color is controlled by suit and number of rows/columns by rank
-#'           Currently the "stones" look like "checkers" which is okay for 2D diagrams
-#'           but perhaps unsatisfactory for 3D diagrams.}
+#'           Color is controlled by suit and number of rows/columns by rank.}
 #' \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
 #' \item{morris}{Various morris aka mills aka merels games in six colors.
 #'               Color is controlled by suit and \dQuote{size} of morris board
@@ -157,6 +157,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          chess1 = chess(style, 1, color_list),
          chess2 = chess(style, 2, color_list),
          dice = dice(color_list, rect_shape),
+         dice_d4 = dice_d4(style, color_list),
          dice_fudge = dice_fudge(color_list, rect_shape),
          dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
          dominoes_black = dominoes(color_list$suit_color[2], "white", color_list$border_color, rect_shape),
@@ -252,6 +253,28 @@ dice_fudge <- function(color_list, rect_shape) {
                       invert_colors = TRUE,
                       die_arrangement = "opposites_sum_to_5",
                       shape.card = rect_shape)
+    dice <- pp_cfg(c(dice_list, color_list))
+    dice$has_piecepack <- FALSE
+    dice$has_dice <- TRUE
+    dice
+}
+
+dice_d4 <- function(style, color_list) {
+    dice_list <- list(n_suits = 6, n_ranks = 4,
+                      rank_text.die = "1,2,3,4",
+                      dm_text.die = "",
+                      ps_cex.die = 1,
+                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      grob_fn.die = d4Grob,
+                      op_grob_fn.die = d4TopGrob,
+                      obj_fn.die = d4_obj,
+                      width.die =  21 / 0.8660254 / 25.4, # if 21 mm vertex to vertex
+                      height.die =  21 / 0.8660254 / 25.4, # if 21 mm vertex to vertex
+                      depth.die = sqrt(6) * 21 / 3 / 25.4,
+                      background_color = "white,white,white,white,black,black",
+                      shape.die = "convex3",
+                      shape_t.die = 90,
+                      invert_colors = TRUE)
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE

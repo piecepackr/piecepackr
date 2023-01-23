@@ -86,6 +86,32 @@ as.list.point2d <- function(x, ...) {
 as.data.frame.point2d <- function(x, ...) {
     as.data.frame(as.matrix(x))
 }
+#' @export
+Ops.point2d <- function(e1, e2) {
+    if (missing(e2)) {
+        switch(.Generic,
+               "-" = e1$dilate(-1),
+               stop(paste0("unary operation '", .Generic, "' not defined for `point2d` objects"))
+               )
+    } else {
+        if (inherits(e1, "point2d") && inherits(e2, "point2d")) {
+            switch(.Generic,
+                   "+" = e1$translate(e2),
+                   "-" = e2$diff(e1),
+                   stop(paste0("binary operation '", .Generic, "' not defined for `point2d` objects"))
+            )
+        } else if (is.numeric(e1) && inherits(e2, "point2d")) {
+            switch(.Generic,
+                   "*" = e2$dilate(e1),
+                   stop(paste0("binary operation '", .Generic, "' not defined for `point2d` objects"))
+            )
+        } else {
+            switch(.Generic,
+                   stop(paste0("binary operation '", .Generic, "' not defined for `point2d` objects"))
+            )
+        }
+    }
+}
 
 Point3D <- R6Class("point3d",
                    public = list(x=NULL, y=NULL, z=NULL,
@@ -173,6 +199,32 @@ as.matrix.point3d <- function(x, ...) {
 #' @export
 as.data.frame.point3d <- function(x, ...) {
     as.data.frame(as.matrix(x))
+}
+#' @export
+Ops.point3d <- function(e1, e2) {
+    if (missing(e2)) {
+        switch(.Generic,
+               "-" = e1$dilate(-1),
+               stop(paste0("unary operation '", .Generic, "' not defined for `point3d` objects"))
+               )
+    } else {
+        if (inherits(e1, "point3d") && inherits(e2, "point3d")) {
+            switch(.Generic,
+                   "+" = e1$translate(e2),
+                   "-" = e2$diff(e1),
+                   stop(paste0("binary operation '", .Generic, "' not defined for `point3d` objects"))
+            )
+        } else if (is.numeric(e1) && inherits(e2, "point3d")) {
+            switch(.Generic,
+                   "*" = e2$dilate(e1),
+                   stop(paste0("binary operation '", .Generic, "' not defined for `point3d` objects"))
+            )
+        } else {
+            switch(.Generic,
+                   stop(paste0("binary operation '", .Generic, "' not defined for `point3d` objects"))
+            )
+        }
+    }
 }
 
 Vector <- R6Class("geometry_vector", # vector is R builtin class

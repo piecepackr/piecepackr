@@ -384,7 +384,7 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
                                     width, height, depth,
                                     op_scale, op_angle)
 
-    gTree(scale = 1,
+    gTree(scale = 1, type = type,
           coords_xyl = coords_xyl,
           children=gl, cl=c("projected_pyramid_top", "coords_xyl"))
 }
@@ -399,6 +399,17 @@ pt_grobcoords_xyl <- function(x, y, z,
     as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
 }
 
+#' @export
+makeContent.projected_pyramid_top <- function(x) {
+    gp <- gpar(cex = x$scale, lex = x$scale)
+    for (i in 1:4) {
+        if (hasName(x$children[[i]], "scale"))
+            x$children[[i]]$scale <- x$scale
+        else if (x$type == "normal")
+            x$children[[i]] <- update_gp(x$children[[i]], gp)
+    }
+    x
+}
 
 ## Pyramid side
 basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
@@ -494,7 +505,7 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
                                     width, height, depth,
                                     op_scale, op_angle)
 
-    gTree(scale = 1,
+    gTree(scale = 1, type = type,
           coords_xyl = coords_xyl,
           children=gl, cl=c("projected_pyramid_side", "coords_xyl"))
 }
@@ -509,12 +520,14 @@ ps_grobcoords_xyl <- function(x, y, z,
     as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
 }
 
+#' @export
 makeContent.projected_pyramid_side <- function(x) {
+    gp <- gpar(cex = x$scale, lex = x$scale)
     for (i in 1:4) {
-        grob <- x$children[[i]]
-        if (inherits(grob, c("polygon", "grob")))
-            grob <- update_gp(grob, gp = gpar(cex = x$scale, lex = x$scale))
-            x$children[[i]] <- grob
+        if (hasName(x$children[[i]], "scale"))
+            x$children[[i]]$scale <- x$scale
+        else if (x$type == "normal")
+            x$children[[i]] <- update_gp(x$children[[i]], gp)
     }
     x
 }
