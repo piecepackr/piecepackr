@@ -42,7 +42,6 @@ get_die_rotation <- function(suit, rank, cfg) {
     dR %*% R_z(-rs$angle[i])
 }
 
-
 get_die_faces <- function(suit, rank, cfg,
                           x, y, z,
                           angle, axis_x, axis_y,

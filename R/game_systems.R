@@ -267,7 +267,7 @@ dice_d4 <- function(style, color_list) {
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
                       grob_fn.die = d4Grob,
                       op_grob_fn.die = d4TopGrob,
-                      obj_fn.die = d4_obj,
+                      obj_fn.die = save_d4_obj,
                       width.die =  21 / 0.8660254 / 25.4, # if 21 mm vertex to vertex
                       height.die =  21 / 0.8660254 / 25.4, # if 21 mm vertex to vertex
                       depth.die = sqrt(6) * 21 / 3 / 25.4,

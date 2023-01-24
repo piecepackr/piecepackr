@@ -47,6 +47,8 @@ and the \dQuote{back} is a lined board.
 Color is controlled by suit and number of rows/columns by rank.
 \code{chess1} has one inch squares and \code{chess2} has two inch squares.}
 \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
+\item{dice_d4}{Four-sided dice in six color schemes (color controlled by their suit).
+Tetrahedrons with the rank as a numeral at the top point.}
 \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
 \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
@@ -61,9 +63,7 @@ by both their \dQuote{rank} and their \dQuote{suit}. \code{dominoes_chinese_blac
 dice and dominoes have a black background and white and red pips.}
 \item{go}{Go stones and lined boards in six color schemes.
 Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
-Color is controlled by suit and number of rows/columns by rank
-Currently the "stones" look like "checkers" which is okay for 2D diagrams
-but perhaps unsatisfactory for 3D diagrams.}
+Color is controlled by suit and number of rows/columns by rank.}
 \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
 \item{morris}{Various morris aka mills aka merels games in six colors.
 Color is controlled by suit and \dQuote{size} of morris board

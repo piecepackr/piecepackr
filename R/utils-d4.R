@@ -71,20 +71,8 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     df <- tibble(index = 1:3, edge = edge_types)[order, ]
     gl <- gList()
     for (i in 1:3) {
-        if (df$edge[i] == "d4_right") {
-            edge_angle <- (angle + 120) %% 360
-            edge_rank <- switch(rank, 3, 1, 1, 3)
-            vp_rot <- switch(rank, 120, -120, 120, -120)
-        } else if (df$edge[i] == "d4_left") {
-            edge_angle <- (angle - 120) %% 360
-            edge_rank <- switch(rank, 4, 4, 2, 2)
-            vp_rot <- switch(rank, 120, -120, 120, -120)
-        } else { # d4_face
-            edge_angle <- angle
-            edge_rank <- rank
-            vp_rot <- 0
-        }
-        opt <- cfg$get_piece_opt("die_face", suit, edge_rank)
+        l_edge <- d4_edge_info(df$edge[i], rank, angle)
+        opt <- cfg$get_piece_opt("die_face", suit, l_edge$rank)
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
         edge <- p$edges[df$index[i]]
 
@@ -94,9 +82,9 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)
         xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
 
-        xy_vp <- xy_vp_d4(xyz_polygon, op_scale, op_angle, edge_angle, vp_rot)
+        xy_vp <- xy_vp_d4(xyz_polygon, op_scale, op_angle, l_edge$angle, l_edge$vp_rot)
 
-        gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon,
+        gl[[i]] <- at_ps_grob("die_face", suit, l_edge$rank, cfg, xy_vp, xy_polygon,
                               name = df$edge[i])
     }
 
@@ -178,9 +166,140 @@ d4t_xyz <- function(x, y, z,
     Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
 }
 
-d4_obj <- function(piece_side, suit, rank, cfg,
-                            x, y, z, angle, axis_x, axis_y,
-                            width, height, depth,
-                            filename, scale, res) {
-    abort("Can't save Wavefront OBJ files for d4 dice yet")
+save_d4_obj <- function(piece_side, suit, rank, cfg,
+                        x, y, z, angle, axis_x, axis_y,
+                        width, height, depth,
+                        filename, scale, res) {
+    cfg <- as_pp_cfg(cfg)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    xyz <- d4_xyz(suit, rank, cfg,
+                  x, y, z,
+                  angle, axis_x, axis_y,
+                  width, height, depth)
+
+    cxy <- convex_xy(3, 90)
+    xy_vt <- list(x = rep(c(0.5 * cxy$x, 0.5 * cxy$x + 0.5), 2),
+                  y = c(rep(0.5 * cxy$y + 0.5, 2), rep(0.5 * cxy$y, 2)))
+
+    # textured face elements: face, left, right, bottom
+    f <- list()
+    fn_vt <- function(r) switch(r, 1:3, 4:6, 7:9, 10:12)
+    f[[1]] <- list(v = 1:3,   vt = fn_vt(rank))
+    f[[2]] <- list(v = 4:6,
+                   vt = fn_vt(d4_edge_info("d4_left", rank)$rank))
+    f[[3]] <- list(v = 7:9,
+                   vt = fn_vt(d4_edge_info("d4_right", rank)$rank))
+    f[[4]] <- list(v = 10:12,
+                   vt = fn_vt(d4_edge_info("d4_bottom", rank)$rank))
+
+    ext <- tools::file_ext(filename)
+    mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+    png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+    write_obj(filename, v = xyz, vt = xy_vt, f = f)
+    write_d4_texture("die_face", suit, rank, cfg, filename = png_filename, res = res)
+
+    invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+}
+
+d4_edge_info <- function(edge, rank, angle = 0) {
+    if (edge == "d4_left") {
+        edge_angle <- (angle - 120) %% 360
+        edge_rank <- switch(rank, 4, 4, 2, 2)
+        vp_rot <- switch(rank, 120, -120, 120, -120)
+    } else if (edge == "d4_right") {
+        edge_angle <- (angle + 120) %% 360
+        edge_rank <- switch(rank, 3, 1, 1, 3)
+        vp_rot <- switch(rank, 120, -120, 120, -120)
+    } else if (edge == "d4_bottom") {
+        edge_angle <- angle
+        edge_rank <- switch(rank, 2, 3, 4, 1)
+        vp_rot <- switch(rank, 120, 0, 120, 0)
+    } else { # d4_face
+        edge_angle <- angle
+        edge_rank <- rank
+        vp_rot <- 0
+    }
+    list(angle = edge_angle, rank = edge_rank, vp_rot = vp_rot)
+}
+
+cycle_d4 <- function(x, vp_rot) {
+    if (vp_rot == 120)
+        cycle_elements(x, 1)
+    else if (vp_rot == -120)
+        cycle_elements(x, -1)
+    else
+        x
+}
+
+d4_xyz <- function(suit, rank, cfg,
+                   x, y, z,
+                   angle, axis_x, axis_y,
+                   width, height, depth) {
+
+    pc <- Point3D$new(x, y, z)
+    xyz_b <- Point3D$new(convex_xy(3, 90), z = 0)$translate(-0.5, -0.5, -0.5)
+    top <- Point3D$new(0, 0, 0.5)
+
+    edge_types <- paste0("d4_", c("left", "face", "right"))
+
+    # face
+    xs_face <- c(top$x, xyz_b[2:3]$x)
+    ys_face <- c(top$y, xyz_b[2:3]$y)
+    zs_face <- c(top$z, xyz_b[2:3]$z)
+
+    # left
+    lr <- d4_edge_info("d4_left", rank)$vp_rot
+    xs_left <- cycle_d4(c(top$x, xyz_b[1:2]$x), lr)
+    ys_left <- cycle_d4(c(top$y, xyz_b[1:2]$y), lr)
+    zs_left <- cycle_d4(c(top$z, xyz_b[1:2]$z), lr)
+
+    # right
+    rr <- d4_edge_info("d4_right", rank)$vp_rot
+    xs_right <- cycle_d4(c(top$x, xyz_b[c(3, 1)]$x), rr)
+    ys_right <- cycle_d4(c(top$y, xyz_b[c(3, 1)]$y), rr)
+    zs_right <- cycle_d4(c(top$z, xyz_b[c(3, 1)]$z), rr)
+
+    # bottom
+    br <- d4_edge_info("d4_bottom", rank)$vp_rot
+    xs_bottom <- cycle_d4(rev(xyz_b$x), br)
+    ys_bottom <- cycle_d4(rev(xyz_b$y), br)
+    zs_bottom <- cycle_d4(rev(xyz_b$z), br)
+
+    xs <- c(xs_face, xs_left, xs_right, xs_bottom)
+    ys <- c(ys_face, ys_left, ys_right, ys_bottom)
+    zs <- c(zs_face, zs_left, zs_right, zs_bottom)
+
+    R <- AA_to_R(angle, axis_x, axis_y)
+    Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+}
+
+write_d4_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                              ..., filename = tempfile(fileext = ".png"), res = 72) {
+
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+    width <- cfg$get_width("die_face", suit, rank)
+
+    args <- list(filename = filename, height = 2 * width, width = 2 * width,
+                 units = "in", res = res, bg = "transparent")
+    if (capabilities("cairo"))
+        args$type <- "cairo"
+    do.call(grDevices::png, args)
+
+    pushViewport(viewport(x = 0.25, width = 0.5, y = 0.75, height = 0.5))
+    draw_piece_and_bleed("die_face", suit, 1, cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.75, width = 0.5, y = 0.75, height = 0.5))
+    draw_piece_and_bleed("die_face", suit, 2, cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.25, width = 0.5, y = 0.25, height = 0.5))
+    draw_piece_and_bleed("die_face", suit, 3, cfg)
+    popViewport()
+    pushViewport(viewport(x = 0.75, width = 0.5, y = 0.25, height = 0.5))
+    draw_piece_and_bleed("die_face", suit, 4, cfg)
+    popViewport()
+
+    grDevices::dev.off()
+    invisible(filename)
 }

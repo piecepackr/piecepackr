@@ -38,6 +38,11 @@ test_that("rgl works", {
     l <- piece3d("pawn_top", x=-1:1, suit=1:3, cfg = cfg, lit=TRUE)
     expect_true(length(l) > 2)
 
+    clear3d()
+    cfg <- game_systems()$dice_d4
+    l <- piece3d("die_face", x=1:4, suit=1:4, rank=1:4, cfg=cfg)
+    expect_true(length(l) == 4)
+
     close3d()
 })
 
