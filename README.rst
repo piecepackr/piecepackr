@@ -694,6 +694,10 @@ Suggested R packages:
 **tweenr**
     ``animate_piece()`` needs ``{tweenr}`` to do animation transitions (i.e. its ``n_transitions`` argument is greater than the default zero).
 
+**xmpdf**
+    ``save_print_and_play()`` can use ``{xmpdf}`` to embed pdf bookmarks and documentation info metadata into pdf print-and-play files.
+    You may also need the system tools `ghostscript`, `pdftk`, or `exiftool`.
+
 Other suggested software
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
