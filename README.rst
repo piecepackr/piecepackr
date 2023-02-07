@@ -99,6 +99,7 @@ Double-18 dominoes
 
 The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://en.wikipedia.org/wiki/Chinese_dominoes>`__.
 
+
 .. sourcecode:: r
     
 
@@ -695,8 +696,8 @@ Suggested R packages:
     ``animate_piece()`` needs ``{tweenr}`` to do animation transitions (i.e. its ``n_transitions`` argument is greater than the default zero).
 
 **xmpdf**
-    ``save_print_and_play()`` can use ``{xmpdf}`` to embed pdf bookmarks and documentation info metadata into pdf print-and-play files.
-    You may also need the system tools `ghostscript`, `pdftk`, or `exiftool`.
+    ``save_print_and_play()`` can use ``{xmpdf}`` to embed bookmarks, documentation info, and XMP metadata into pdf print-and-play files.
+    You may also need the system tools `ghostscript`, `pdftk`, and/or `exiftool`.
 
 Other suggested software
 ~~~~~~~~~~~~~~~~~~~~~~~~

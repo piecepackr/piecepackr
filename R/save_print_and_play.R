@@ -177,6 +177,22 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
                  i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
         inform(msg, class = "piecepackr_embed_metadata")
     }
+
+    if (xmpdf::supports_set_xmp()) {
+        x <- xmpdf::xmp(title = cfg$title,
+                        creator_tool = paste0("piecepackr v", packageDescription("piecepackr")$Version),
+                        description = cfg$description,
+                        keywords = "piecepack", subject = "piecepack",
+                        rights = cfg$copyright,
+                        spdx_id = cfg$spdx_id
+        )
+        xmpdf::set_xmp(x, output_filename)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf XMP metadata",
+                 xmpdf::enable_feature_message("set_xmp"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        inform(msg, class = "piecepackr_embed_metadata")
+    }
 }
 
 print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly, bleed, size_bleed) {
