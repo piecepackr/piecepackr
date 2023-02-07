@@ -129,8 +129,16 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
 
     invisible(grDevices::dev.off())
 
-    if (onefile && tools::file_ext(output_filename) == "pdf" && requireNamespace("xmpdf", quietly = TRUE)) {
-        add_pdf_metadata(output_filename, cfg, pl)
+    if (onefile && tools::file_ext(output_filename) == "pdf") {
+        if(requireNamespace("xmpdf", quietly = TRUE)) {
+            add_pdf_metadata(output_filename, cfg, pl)
+        } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+            msg <- c(x = "Need the {xmpdf} package to embed pdf metadata",
+                     i = '`remotes::install_github("trevorld/r-xmpdf")`',
+                     i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+            inform(msg, class = "piecepackr_embed_metadata")
+
+        }
     }
     invisible(NULL)
 }
@@ -151,6 +159,11 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
                                   subject = cfg$description,
                                   keywords = "piecepack")
         xmpdf::set_docinfo(docinfo, output_filename)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf documentation info metadata",
+                 xmpdf::enable_feature_message("set_docinfo"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        inform(msg, class = "piecepackr_embed_metadata")
     }
 
     if (xmpdf::supports_set_bookmarks()) {
@@ -158,6 +171,11 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
         bookmarks <- data.frame(title = names(pl), page = starting_pages,
                                 stringsAsFactors = FALSE)
         xmpdf::set_bookmarks(bookmarks, output_filename)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf bookmarks metadata",
+                 xmpdf::enable_feature_message("set_bookmarks"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        inform(msg, class = "piecepackr_embed_metadata")
     }
 }
 
