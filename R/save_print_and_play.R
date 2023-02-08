@@ -156,7 +156,7 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     if (xmpdf::supports_set_docinfo()) {
         docinfo <- xmpdf::docinfo(title = cfg$title,
                                   creator = paste0("piecepackr v", packageDescription("piecepackr")$Version),
-                                  subject = cfg$description,
+                                  subject = paste(cfg$description, collapse = "\n"),
                                   keywords = "piecepack")
         xmpdf::set_docinfo(docinfo, output_filename)
     } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
@@ -181,7 +181,7 @@ add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
     if (xmpdf::supports_set_xmp()) {
         x <- xmpdf::xmp(title = cfg$title,
                         creator_tool = paste0("piecepackr v", packageDescription("piecepackr")$Version),
-                        description = cfg$description,
+                        description = paste(cfg$description, collapse = "\n"),
                         keywords = "piecepack", subject = "piecepack",
                         rights = cfg$copyright,
                         spdx_id = cfg$spdx_id
