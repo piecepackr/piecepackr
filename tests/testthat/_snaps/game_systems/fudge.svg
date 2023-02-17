@@ -18,23 +18,23 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='49.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<polygon points='49.32,409.32 49.32,454.68 94.68,454.68 94.68,409.32 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
 <rect x='56.13' y='429.28' width='31.75' height='5.44' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='49.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 3.00;' />
-<rect x='121.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
-<rect x='121.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 3.00;' />
-<rect x='193.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
+<polygon points='49.32,409.32 49.32,454.68 94.68,454.68 94.68,409.32 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='121.32,409.32 121.32,454.68 166.68,454.68 166.68,409.32 ' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
+<polygon points='121.32,409.32 121.32,454.68 166.68,454.68 166.68,409.32 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='193.32,409.32 193.32,454.68 238.68,454.68 238.68,409.32 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <rect x='213.28' y='416.13' width='5.44' height='31.75' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='200.13' y='429.28' width='31.75' height='5.44' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='193.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 3.00;' />
-<rect x='265.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 0.75; stroke: none; fill: #56B4E9;' />
+<polygon points='193.32,409.32 193.32,454.68 238.68,454.68 238.68,409.32 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='265.32,409.32 265.32,454.68 310.68,454.68 310.68,409.32 ' style='stroke-width: 0.75; stroke: none; fill: #56B4E9;' />
 <rect x='285.28' y='416.13' width='5.44' height='31.75' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='272.13' y='429.28' width='31.75' height='5.44' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<rect x='265.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 3.00;' />
-<rect x='337.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 0.75; stroke: none; fill: #E69F00;' />
-<rect x='337.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 3.00;' />
-<rect x='409.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='265.32,409.32 265.32,454.68 310.68,454.68 310.68,409.32 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='337.32,409.32 337.32,454.68 382.68,454.68 382.68,409.32 ' style='stroke-width: 0.75; stroke: none; fill: #E69F00;' />
+<polygon points='337.32,409.32 337.32,454.68 382.68,454.68 382.68,409.32 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='409.32,409.32 409.32,454.68 454.68,454.68 454.68,409.32 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='416.13' y='429.28' width='31.75' height='5.44' style='stroke-width: 0.75; stroke: none; fill: #000000;' />
-<rect x='409.32' y='409.32' width='45.35' height='45.35' style='stroke-width: 3.00;' />
+<polygon points='409.32,409.32 409.32,454.68 454.68,454.68 454.68,409.32 ' style='stroke-width: 3.00; fill: none;' />
 </g>
 </svg>

@@ -18,7 +18,7 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='36.00' y='36.00' width='504.00' height='504.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='36.00,36.00 36.00,540.00 540.00,540.00 540.00,36.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='68.62' y='68.62' width='6.75' height='438.75' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <rect x='140.62' y='140.62' width='6.75' height='294.75' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <rect x='212.62' y='212.62' width='6.75' height='150.75' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
@@ -63,7 +63,7 @@
 <polygon points='362.39,218.39 357.61,218.39 357.61,213.61 501.61,69.61 506.39,69.61 506.39,74.39 362.39,218.39 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <polygon points='501.61,506.39 506.39,506.39 506.39,501.61 362.39,357.61 357.61,357.61 357.61,362.39 501.61,506.39 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <polygon points='74.39,506.39 69.61,506.39 69.61,501.61 213.61,357.61 218.39,357.61 218.39,362.39 74.39,506.39 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
-<rect x='36.00' y='36.00' width='504.00' height='504.00' style='stroke-width: 3.00;' />
+<polygon points='36.00,36.00 36.00,540.00 540.00,540.00 540.00,36.00 ' style='stroke-width: 3.00; fill: none;' />
 <circle cx='0.00' cy='576.00' r='31.32' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
 <circle cx='0.00' cy='576.00' r='31.32' style='stroke-width: 3.00;' />
 <circle cx='72.00' cy='504.00' r='31.32' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />

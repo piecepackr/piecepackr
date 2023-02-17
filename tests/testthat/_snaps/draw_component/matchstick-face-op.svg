@@ -23,9 +23,9 @@
 <polygon points='383.05,264.95 356.05,264.95 346.50,274.50 373.50,274.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='356.05,264.95 356.05,291.95 346.50,301.50 346.50,274.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='356.05,291.95 383.05,291.95 373.50,301.50 346.50,301.50 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<rect x='356.05' y='264.95' width='27.00' height='27.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='356.05,264.95 356.05,291.95 383.05,291.95 383.05,264.95 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='369.55' y='285.34' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>n</text>
 <text x='362.80' y='275.83' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<rect x='356.05' y='264.95' width='27.00' height='27.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='356.05,264.95 356.05,291.95 383.05,291.95 383.05,264.95 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </g>
 </svg>

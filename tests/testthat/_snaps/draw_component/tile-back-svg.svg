@@ -23,7 +23,7 @@
 <polyline points='360.00,360.00 360.00,216.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='288.00,288.00 432.00,288.00 ' style='stroke-width: 6.00; stroke: none; stroke-linecap: butt; fill: none;' />
 <polyline points='288.00,288.00 432.00,288.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<polygon points='288.00,360.00 432.00,360.00 432.00,216.00 288.00,216.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polyline points='288.00,360.00 432.00,360.00 432.00,216.00 288.00,216.00 288.00,360.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='288.00,216.00 288.00,360.00 432.00,360.00 432.00,216.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polyline points='288.00,216.00 288.00,360.00 432.00,360.00 432.00,216.00 288.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </g>
 </svg>

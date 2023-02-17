@@ -30,7 +30,11 @@ Bug fixes and minor improvements
 --------------------------------
 
 * Fixes a mis-rendering bug when using the new affine transformation feature that affected a small subset of game piece faces (#309).
-* Border lines in oblique projected pyramids are now correctly made thicker/thinner when `scale` is different from one (#310).
+* Border lines in oblique projected pyramids are now correctly made thicker/thinner when `scale` is different from `1` (#310).
+* `pp_shape()`'s `gridlines()` and `shape()` methods takes new argument `mat_width` which can be used to shrink them
+  (to not overlap/extend past a target "mat" effect) for most shapes that support a "mat" effect 
+  (but not "halma" or "roundrect" shapes which will quietly ignore the `mat_width` argument).
+  This is now used in the default grob functions.
 
 piecepackr 1.12.2
 =================

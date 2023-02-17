@@ -51,29 +51,26 @@ makeContent.basic_grob_with_bleed <- function(x) {
 rect_mat_bleed <- function(opt, width, height, bleed) {
     gp_bg <- gpar(col = NA, lwd = 0, fill = opt$background_color)
     gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
-    bg <- rectGrob(gp = gp_bg, name = "background")
 
     mat_width <- rep(opt$mat_width, length.out=4)
-    x_out <- c(0, 1, 1, 0)
-    y_out <- c(1, 1, 0, 0)
-    x_in <- c(0, 1, 1, 0)
-    y_in <- c(1, 1, 0, 0)
     if (!nigh(mat_width[1], 0)) {
-        y_in[1:2] <- 1 - (bleed + mat_width[1] * height) / (height + 2 * bleed)
+        mat_width[1] <- (bleed + mat_width[1] * height) / (height + 2 * bleed)
     }
     if (!nigh(mat_width[2], 0)) {
-        x_in[2:3] <- 1 - (bleed + mat_width[2] * width) / (width + 2 * bleed)
+        mat_width[2] <- (bleed + mat_width[2] * width) / (width + 2 * bleed)
     }
     if (!nigh(mat_width[3], 0)) {
-        y_in[3:4] <- (bleed + mat_width[3] * height) / (height + 2 * bleed)
+        mat_width[3] <- (bleed + mat_width[3] * height) / (height + 2 * bleed)
     }
     if (!nigh(mat_width[4], 0)) {
-        x_in[c(1, 4)] <- (bleed + mat_width[4] * width) / (width + 2 * bleed)
+        mat_width[4] <- (bleed + mat_width[4] * width) / (width + 2 * bleed)
     }
-    x <- c(x_in, x_out)
-    y <- c(y_in, y_out)
-    id <- rep(1:2, each=4)
-    mat <- pathGrob(x, y, id=id, rule="evenodd", gp = gp_mat)
+    mat <- rectMatGrobFn(mat_width)(gp = gp_mat)
+    t <- 1 - mat_width[1]
+    r <- 1 - mat_width[2]
+    b <- mat_width[3]
+    l <- mat_width[4]
+    bg <- polygonGrob(x = c(l, l, r, r), y = c(t, b, b, t), name="background", gp=gp_bg)
 
     gList(bg, mat)
 }

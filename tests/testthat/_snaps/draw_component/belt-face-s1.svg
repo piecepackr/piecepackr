@@ -18,9 +18,10 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='275.18' y='270.00' width='169.65' height='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<path d='M 275.18 277.20 L 444.82 277.20 L 444.82 298.80 L 275.18 298.80 ZM 275.18 270.00 L 444.82 270.00 L 444.82 306.00 L 275.18 306.00 Z' style='fill-rule: evenodd; fill: #D55E00; stroke-width: 0.75; stroke: none;' />
+<polygon points='275.18,277.20 275.18,298.80 444.82,298.80 444.82,277.20 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='275.18,270.00 275.18,277.20 444.82,277.20 444.82,270.00 ' style='stroke-width: 0.00; stroke: none; fill: #D55E00;' />
+<polygon points='275.18,298.80 275.18,306.00 444.82,306.00 444.82,298.80 ' style='stroke-width: 0.00; stroke: none; fill: #D55E00;' />
 <text x='360.00' y='295.57' text-anchor='middle' style='font-size: 22.00px; fill: #D55E00; font-family: sans;' textLength='13.07px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<rect x='275.18' y='270.00' width='169.65' height='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='275.18,270.00 275.18,306.00 444.82,306.00 444.82,270.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </g>
 </svg>

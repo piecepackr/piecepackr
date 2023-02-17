@@ -18,21 +18,21 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='0.00' y='432.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='72.00,576.00 72.00,432.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<polyline points='0.00,504.00 144.00,504.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<rect x='0.00' y='432.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<rect x='144.00' y='432.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='216.00,576.00 216.00,432.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<polyline points='144.00,504.00 288.00,504.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<rect x='144.00' y='432.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<rect x='0.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='72.00,432.00 72.00,288.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<polyline points='0.00,360.00 144.00,360.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<rect x='0.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<rect x='144.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polyline points='216.00,432.00 216.00,288.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<polyline points='144.00,360.00 288.00,360.00 ' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
-<rect x='144.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='0.00,432.00 0.00,576.00 144.00,576.00 144.00,432.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<line x1='72.00' y1='576.00' x2='72.00' y2='432.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<line x1='0.00' y1='504.00' x2='144.00' y2='504.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<polygon points='0.00,432.00 0.00,576.00 144.00,576.00 144.00,432.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='144.00,432.00 144.00,576.00 288.00,576.00 288.00,432.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<line x1='216.00' y1='576.00' x2='216.00' y2='432.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<line x1='144.00' y1='504.00' x2='288.00' y2='504.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<polygon points='144.00,432.00 144.00,576.00 288.00,576.00 288.00,432.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='0.00,288.00 0.00,432.00 144.00,432.00 144.00,288.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<line x1='72.00' y1='432.00' x2='72.00' y2='288.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<line x1='0.00' y1='360.00' x2='144.00' y2='360.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<polygon points='0.00,288.00 0.00,432.00 144.00,432.00 144.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='144.00,288.00 144.00,432.00 288.00,432.00 288.00,288.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<line x1='216.00' y1='432.00' x2='216.00' y2='288.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<line x1='144.00' y1='360.00' x2='288.00' y2='360.00' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
+<polygon points='144.00,288.00 144.00,432.00 288.00,432.00 288.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </g>
 </svg>

@@ -165,7 +165,8 @@ makeContent.card_side <- function(x) {
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+    gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+    mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
 
     gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
                     fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
@@ -217,7 +218,8 @@ makeContent.joker_card_side <- function(x) {
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+    gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+    mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
 
     gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
                     fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
@@ -283,7 +285,8 @@ makeContent.face_card_side <- function(x) {
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+    gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+    mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
 
     gp_rank <- gpar(col = opt$ps_color, fontsize = opt$ps_fontsize,
                     fontfamily = opt$ps_fontfamily, fontface = opt$ps_fontface,
@@ -380,7 +383,8 @@ makeContent.domino_side <- function(x) {
     else
         background_grob <- NULL
 
-    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+    gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+    mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
 
     # Top (Rank)
     tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE,
@@ -453,7 +457,8 @@ makeContent.pipped <- function(x) {
 
     # Mat
     if (x$mat) {
-        mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+        gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+        mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
     } else {
         mat_grob <- NULL
     }

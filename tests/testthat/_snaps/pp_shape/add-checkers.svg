@@ -18,16 +18,16 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='36.00' y='28.80' width='648.00' height='518.40' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
+<polygon points='36.00,28.80 36.00,547.20 684.00,547.20 684.00,28.80 ' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
 <rect x='36.00' y='288.00' width='324.00' height='259.20' style='stroke-width: 0.75; stroke: none; fill: #A020F0;' />
 <rect x='360.00' y='28.80' width='324.00' height='259.20' style='stroke-width: 0.75; stroke: none; fill: #A020F0;' />
-<polyline points='360.00,547.20 360.00,28.80 ' style='stroke-width: 6.00; stroke-linecap: butt;' />
-<polyline points='36.00,288.00 684.00,288.00 ' style='stroke-width: 6.00; stroke-linecap: butt;' />
+<line x1='360.00' y1='547.20' x2='360.00' y2='28.80' style='stroke-width: 6.00; stroke-linecap: butt;' />
+<line x1='36.00' y1='288.00' x2='684.00' y2='288.00' style='stroke-width: 6.00; stroke-linecap: butt;' />
 <path d='M 68.40 54.72 L 651.60 54.72 L 651.60 521.28 L 68.40 521.28 ZM 36.00 28.80 L 684.00 28.80 L 684.00 547.20 L 36.00 547.20 Z' style='fill-rule: evenodd; fill: #00FF00; stroke-width: 0.75; stroke: none;' />
 <line x1='36.00' y1='158.40' x2='198.00' y2='28.80' style='stroke-width: 3.00; stroke: #FFFF00;' />
 <line x1='36.00' y1='417.60' x2='198.00' y2='547.20' style='stroke-width: 3.00; stroke: #FFFF00;' />
 <line x1='684.00' y1='417.60' x2='522.00' y2='547.20' style='stroke-width: 3.00; stroke: #FFFF00;' />
 <line x1='684.00' y1='158.40' x2='522.00' y2='28.80' style='stroke-width: 3.00; stroke: #FFFF00;' />
-<rect x='36.00' y='28.80' width='648.00' height='518.40' style='stroke-width: 3.00;' />
+<polygon points='36.00,28.80 36.00,547.20 684.00,547.20 684.00,28.80 ' style='stroke-width: 3.00; fill: none;' />
 </g>
 </svg>

@@ -39,6 +39,61 @@ diffMatGrobFn <- function(width=0.2, shape = pp_shape()) {
 
 rectMatGrobFn <- function(width=0.2) {
     width <- rep(width, length.out=4)
+    is_zero <- vapply(width, nigh, logical(1), y = 0, USE.NAMES = FALSE)
+    if (all(is_zero)) {
+        function(name=NULL, gp=gpar(), vp=NULL) nullGrob(name=name, vp=vp)
+    } else if (sum(is_zero) == 3 ||
+               all(is_zero == c(TRUE, FALSE, TRUE, FALSE)) ||
+               all(is_zero  == c(FALSE, TRUE, FALSE, TRUE))) {
+        rectMatRectGrobFn(width)
+    } else if (sum(is_zero) == 0) {
+        rectMatPathGrobFn(width)
+    } else {
+        rectMatPolygonGrob(width)
+    }
+}
+
+rectMatRectGrobFn <- function(width) {
+    if (nigh(width[1], 0)) {
+        rt <- nullGrob()
+    } else {
+        y <- 1 - width[1]
+        rt <- polygonGrob(x = c(0, 0, 1, 1), y = c(1, y, y, 1))
+    }
+    if (nigh(width[2], 0)) {
+        rr <- nullGrob()
+    } else {
+        x <- 1 - width[2]
+        rr <- polygonGrob(x = c(x, x, 1, 1), y = c(1, 0, 0, 1))
+    }
+    if (nigh(width[3], 0)) {
+        rb <- nullGrob()
+    } else {
+        y <- width[3]
+        rb <- polygonGrob(x = c(0, 0, 1, 1), y = c(y, 0, 0, y))
+    }
+    if (nigh(width[4], 0)) {
+        rl <- nullGrob()
+    } else {
+        x <- width[4]
+        rl <- rectGrob(x = c(0, 0, x, x), y = c(1, 0, 0, 1))
+    }
+    function(name=NULL, gp=gpar(), vp=NULL) grobTree(rt, rr, rb, rl, name=name, gp=gp, vp=vp)
+}
+
+#### Could figure out actual polygons instead of path hack
+rectMatPolygonGrob <- function(width) {
+    x_out <- c(0, 1, 1, 0)
+    y_out <- c(1, 1, 0, 0)
+    x_in <- c(width[4], 1-width[2], 1-width[2], width[4])
+    y_in <- c(1-width[1], 1-width[1], width[3], width[3])
+    x <- c(x_in, x_out)
+    y <- c(y_in, y_out)
+    id <- rep(1:2, each=4)
+    function(name=NULL, gp=gpar(), vp=NULL) pathGrob(x, y, id=id, rule="evenodd", name=name, gp=gp, vp=vp)
+}
+
+rectMatPathGrobFn <- function(width) {
     x_out <- c(0, 1, 1, 0)
     y_out <- c(1, 1, 0, 0)
     x_in <- c(width[4], 1-width[2], 1-width[2], width[4])

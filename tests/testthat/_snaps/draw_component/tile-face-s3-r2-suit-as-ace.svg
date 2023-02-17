@@ -18,9 +18,9 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='288.00,216.00 288.00,360.00 432.00,360.00 432.00,216.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='360.00' y='312.78' text-anchor='middle' style='font-size: 72.00px; fill: #009E73; font-family: sans;' textLength='47.26px' lengthAdjust='spacingAndGlyphs'>♣</text>
 <text x='324.00' y='265.76' text-anchor='middle' style='font-size: 40.00px; fill: #009E73; font-family: sans;' textLength='26.26px' lengthAdjust='spacingAndGlyphs'>♣</text>
-<rect x='288.00' y='216.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='288.00,216.00 288.00,360.00 432.00,360.00 432.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </g>
 </svg>

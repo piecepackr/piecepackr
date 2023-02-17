@@ -26,19 +26,19 @@
 <rect x='54.00' y='503.65' width='9.00' height='0.71' style='stroke-width: 0.75; stroke: none; fill: #000000;' />
 <rect x='54.00' y='359.65' width='9.00' height='0.71' style='stroke-width: 0.75; stroke: none; fill: #000000;' />
 <rect x='71.65' y='342.00' width='0.71' height='9.00' style='stroke-width: 0.75; stroke: none; fill: #000000;' />
-<rect x='63.00' y='351.00' width='162.00' height='162.00' style='stroke-width: 0.00; stroke: none; fill: #FFFFFF;' />
+<polygon points='79.20,367.20 79.20,496.80 208.80,496.80 208.80,367.20 ' style='stroke-width: 0.00; stroke: none; fill: #FFFFFF;' />
 <path d='M 79.20 367.20 L 208.80 367.20 L 208.80 496.80 L 79.20 496.80 ZM 63.00 351.00 L 225.00 351.00 L 225.00 513.00 L 63.00 513.00 Z' style='fill-rule: evenodd; fill: #FFC0CB; stroke-width: 0.00; stroke: none;' />
-<rect x='72.00' y='360.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<path d='M 79.20 367.20 L 208.80 367.20 L 208.80 496.80 L 79.20 496.80 ZM 72.00 360.00 L 216.00 360.00 L 216.00 504.00 L 72.00 504.00 Z' style='fill-rule: evenodd; fill: #FFC0CB; stroke-width: 0.75; stroke: none;' />
+<polygon points='79.20,367.20 79.20,496.80 208.80,496.80 208.80,367.20 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<path d='M 79.20 367.20 L 208.80 367.20 L 208.80 496.80 L 79.20 496.80 ZM 72.00 360.00 L 216.00 360.00 L 216.00 504.00 L 72.00 504.00 Z' style='fill-rule: evenodd; fill: #FFC0CB; stroke-width: 0.00; stroke: none;' />
 <text x='144.00' y='456.78' text-anchor='middle' style='font-size: 72.00px; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>a</text>
 <text x='108.00' y='409.76' text-anchor='middle' style='font-size: 40.00px; font-family: sans;' textLength='21.26px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<rect x='72.00' y='360.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none;' />
-<rect x='63.00' y='351.00' width='162.00' height='162.00' style='stroke-width: 0.00; stroke: none; fill: #FFFFFF;' />
+<polygon points='72.00,360.00 72.00,504.00 216.00,504.00 216.00,360.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='79.20,367.20 79.20,496.80 208.80,496.80 208.80,367.20 ' style='stroke-width: 0.00; stroke: none; fill: #FFFFFF;' />
 <path d='M 79.20 367.20 L 208.80 367.20 L 208.80 496.80 L 79.20 496.80 ZM 63.00 351.00 L 225.00 351.00 L 225.00 513.00 L 63.00 513.00 Z' style='fill-rule: evenodd; fill: #FFC0CB; stroke-width: 0.00; stroke: none;' />
-<rect x='72.00' y='360.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<path d='M 79.20 367.20 L 208.80 367.20 L 208.80 496.80 L 79.20 496.80 ZM 72.00 360.00 L 216.00 360.00 L 216.00 504.00 L 72.00 504.00 Z' style='fill-rule: evenodd; fill: #FFC0CB; stroke-width: 0.75; stroke: none;' />
+<polygon points='79.20,367.20 79.20,496.80 208.80,496.80 208.80,367.20 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<path d='M 79.20 367.20 L 208.80 367.20 L 208.80 496.80 L 79.20 496.80 ZM 72.00 360.00 L 216.00 360.00 L 216.00 504.00 L 72.00 504.00 Z' style='fill-rule: evenodd; fill: #FFC0CB; stroke-width: 0.00; stroke: none;' />
 <text x='144.00' y='456.78' text-anchor='middle' style='font-size: 72.00px; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>a</text>
 <text x='108.00' y='409.76' text-anchor='middle' style='font-size: 40.00px; font-family: sans;' textLength='21.26px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<rect x='72.00' y='360.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none;' />
+<polygon points='72.00,360.00 72.00,504.00 216.00,504.00 216.00,360.00 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
 </g>
 </svg>

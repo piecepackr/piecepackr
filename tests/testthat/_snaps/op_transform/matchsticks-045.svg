@@ -23,264 +23,216 @@
 <polygon points='228.83,439.45 238.38,429.90 233.60,434.67 224.06,444.22 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='146.10,337.62 136.55,347.17 131.78,351.94 141.33,342.40 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='136.55,347.17 228.83,439.45 224.06,444.22 131.78,351.94 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='228.83,439.45 136.55,347.17 146.10,337.62 238.38,429.90 228.83,439.45 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='228.83,439.45 136.55,347.17 146.10,337.62 238.38,429.90 228.83,439.45 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='136.55,347.17 228.83,439.45 238.38,429.90 146.10,337.62 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(192.33,393.40) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(153.47,354.54) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='228.83,439.45 136.55,347.17 146.10,337.62 238.38,429.90 228.83,439.45 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='228.83,439.45 136.55,347.17 146.10,337.62 238.38,429.90 228.83,439.45 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='136.55,347.17 228.83,439.45 238.38,429.90 146.10,337.62 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='122.11,361.61 214.39,453.89 223.93,444.35 131.65,352.07 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='228.70,439.57 136.43,347.30 131.65,352.07 223.93,444.35 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='219.16,449.12 228.70,439.57 223.93,444.35 214.39,453.89 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='136.43,347.30 126.88,356.84 122.11,361.61 131.65,352.07 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='126.88,356.84 219.16,449.12 214.39,453.89 122.11,361.61 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='219.16,449.12 126.88,356.84 136.43,347.30 228.70,439.57 219.16,449.12 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='219.16,449.12 126.88,356.84 136.43,347.30 228.70,439.57 219.16,449.12 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='126.88,356.84 219.16,449.12 228.70,439.57 136.43,347.30 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(182.66,403.07) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(143.80,364.22) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='219.16,449.12 126.88,356.84 136.43,347.30 228.70,439.57 219.16,449.12 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='219.16,449.12 126.88,356.84 136.43,347.30 228.70,439.57 219.16,449.12 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='126.88,356.84 219.16,449.12 228.70,439.57 136.43,347.30 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='112.43,371.29 204.71,463.57 214.26,454.02 121.98,361.74 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='219.03,449.25 126.75,356.97 121.98,361.74 214.26,454.02 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='209.49,458.79 219.03,449.25 214.26,454.02 204.71,463.57 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='126.75,356.97 117.21,366.51 112.43,371.29 121.98,361.74 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='117.21,366.51 209.49,458.79 204.71,463.57 112.43,371.29 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='209.49,458.79 117.21,366.51 126.75,356.97 219.03,449.25 209.49,458.79 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='209.49,458.79 117.21,366.51 126.75,356.97 219.03,449.25 209.49,458.79 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='117.21,366.51 209.49,458.79 219.03,449.25 126.75,356.97 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(172.99,412.75) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(134.13,373.89) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='209.49,458.79 117.21,366.51 126.75,356.97 219.03,449.25 209.49,458.79 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='209.49,458.79 117.21,366.51 126.75,356.97 219.03,449.25 209.49,458.79 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='117.21,366.51 209.49,458.79 219.03,449.25 126.75,356.97 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='102.76,380.96 195.04,473.24 204.58,463.69 112.31,371.42 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='209.36,458.92 117.08,366.64 112.31,371.42 204.58,463.69 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='199.81,468.47 209.36,458.92 204.58,463.69 195.04,473.24 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='117.08,366.64 107.53,376.19 102.76,380.96 112.31,371.42 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='107.53,376.19 199.81,468.47 195.04,473.24 102.76,380.96 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='199.81,468.47 107.53,376.19 117.08,366.64 209.36,458.92 199.81,468.47 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='199.81,468.47 107.53,376.19 117.08,366.64 209.36,458.92 199.81,468.47 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='107.53,376.19 199.81,468.47 209.36,458.92 117.08,366.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(163.31,422.42) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(124.46,383.56) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='199.81,468.47 107.53,376.19 117.08,366.64 209.36,458.92 199.81,468.47 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='199.81,468.47 107.53,376.19 117.08,366.64 209.36,458.92 199.81,468.47 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='107.53,376.19 199.81,468.47 209.36,458.92 117.08,366.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='199.81,385.99 107.53,478.27 117.08,487.81 209.36,395.53 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='214.13,390.76 204.58,381.22 199.81,385.99 209.36,395.53 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='204.58,381.22 112.31,473.49 107.53,478.27 199.81,385.99 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='121.85,483.04 214.13,390.76 209.36,395.53 117.08,487.81 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='112.31,473.49 121.85,483.04 117.08,487.81 107.53,478.27 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='112.31,473.49 204.58,381.22 214.13,390.76 121.85,483.04 112.31,473.49 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='112.31,473.49 204.58,381.22 214.13,390.76 121.85,483.04 112.31,473.49 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='204.58,381.22 112.31,473.49 121.85,483.04 214.13,390.76 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(158.35,436.99) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(197.21,398.14) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='112.31,473.49 204.58,381.22 214.13,390.76 121.85,483.04 112.31,473.49 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='112.31,473.49 204.58,381.22 214.13,390.76 121.85,483.04 112.31,473.49 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='204.58,381.22 112.31,473.49 121.85,483.04 214.13,390.76 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='209.49,395.66 117.21,487.94 126.75,497.49 219.03,405.21 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='223.80,400.43 214.26,390.89 209.49,395.66 219.03,405.21 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='214.26,390.89 121.98,483.17 117.21,487.94 209.49,395.66 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='131.53,492.71 223.80,400.43 219.03,405.21 126.75,497.49 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='121.98,483.17 131.53,492.71 126.75,497.49 117.21,487.94 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='121.98,483.17 214.26,390.89 223.80,400.43 131.53,492.71 121.98,483.17 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='121.98,483.17 214.26,390.89 223.80,400.43 131.53,492.71 121.98,483.17 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='214.26,390.89 121.98,483.17 131.53,492.71 223.80,400.43 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(168.03,446.67) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(206.88,407.81) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='121.98,483.17 214.26,390.89 223.80,400.43 131.53,492.71 121.98,483.17 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='121.98,483.17 214.26,390.89 223.80,400.43 131.53,492.71 121.98,483.17 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='214.26,390.89 121.98,483.17 131.53,492.71 223.80,400.43 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='219.16,405.34 126.88,497.61 136.43,507.16 228.70,414.88 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='233.48,410.11 223.93,400.56 219.16,405.34 228.70,414.88 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='223.93,400.56 131.65,492.84 126.88,497.61 219.16,405.34 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='141.20,502.39 233.48,410.11 228.70,414.88 136.43,507.16 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='131.65,492.84 141.20,502.39 136.43,507.16 126.88,497.61 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='131.65,492.84 223.93,400.56 233.48,410.11 141.20,502.39 131.65,492.84 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='131.65,492.84 223.93,400.56 233.48,410.11 141.20,502.39 131.65,492.84 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='223.93,400.56 131.65,492.84 141.20,502.39 233.48,410.11 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(177.70,456.34) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(216.56,417.48) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='131.65,492.84 223.93,400.56 233.48,410.11 141.20,502.39 131.65,492.84 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='131.65,492.84 223.93,400.56 233.48,410.11 141.20,502.39 131.65,492.84 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='223.93,400.56 131.65,492.84 141.20,502.39 233.48,410.11 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='228.83,415.01 136.55,507.29 146.10,516.83 238.38,424.55 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='243.15,419.78 233.60,410.24 228.83,415.01 238.38,424.55 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='233.60,410.24 141.33,502.51 136.55,507.29 228.83,415.01 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='150.87,512.06 243.15,419.78 238.38,424.55 146.10,516.83 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='141.33,502.51 150.87,512.06 146.10,516.83 136.55,507.29 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='141.33,502.51 233.60,410.24 243.15,419.78 150.87,512.06 141.33,502.51 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='141.33,502.51 233.60,410.24 243.15,419.78 150.87,512.06 141.33,502.51 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='233.60,410.24 141.33,502.51 150.87,512.06 243.15,419.78 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(187.37,466.01) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(226.23,427.16) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='141.33,502.51 233.60,410.24 243.15,419.78 150.87,512.06 141.33,502.51 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='141.33,502.51 233.60,410.24 243.15,419.78 150.87,512.06 141.33,502.51 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='233.60,410.24 141.33,502.51 150.87,512.06 243.15,419.78 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='141.33,342.40 233.60,434.67 243.15,425.13 150.87,332.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='247.92,420.35 155.65,328.08 150.87,332.85 243.15,425.13 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='238.38,429.90 247.92,420.35 243.15,425.13 233.60,434.67 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='155.65,328.08 146.10,337.62 141.33,342.40 150.87,332.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='146.10,337.62 238.38,429.90 233.60,434.67 141.33,342.40 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='238.38,429.90 146.10,337.62 155.65,328.08 247.92,420.35 238.38,429.90 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='238.38,429.90 146.10,337.62 155.65,328.08 247.92,420.35 238.38,429.90 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='146.10,337.62 238.38,429.90 247.92,420.35 155.65,328.08 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(201.88,383.85) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(163.02,345.00) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='238.38,429.90 146.10,337.62 155.65,328.08 247.92,420.35 238.38,429.90 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='238.38,429.90 146.10,337.62 155.65,328.08 247.92,420.35 238.38,429.90 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='146.10,337.62 238.38,429.90 247.92,420.35 155.65,328.08 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='131.65,352.07 223.93,444.35 233.48,434.80 141.20,342.52 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='238.25,430.03 145.97,337.75 141.20,342.52 233.48,434.80 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='228.70,439.57 238.25,430.03 233.48,434.80 223.93,444.35 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='145.97,337.75 136.43,347.30 131.65,352.07 141.20,342.52 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='136.43,347.30 228.70,439.57 223.93,444.35 131.65,352.07 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='228.70,439.57 136.43,347.30 145.97,337.75 238.25,430.03 228.70,439.57 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='228.70,439.57 136.43,347.30 145.97,337.75 238.25,430.03 228.70,439.57 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='136.43,347.30 228.70,439.57 238.25,430.03 145.97,337.75 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(192.20,393.53) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(153.35,354.67) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='228.70,439.57 136.43,347.30 145.97,337.75 238.25,430.03 228.70,439.57 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='228.70,439.57 136.43,347.30 145.97,337.75 238.25,430.03 228.70,439.57 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='136.43,347.30 228.70,439.57 238.25,430.03 145.97,337.75 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='121.98,361.74 214.26,454.02 223.80,444.47 131.53,352.20 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='228.58,439.70 136.30,347.42 131.53,352.20 223.80,444.47 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='219.03,449.25 228.58,439.70 223.80,444.47 214.26,454.02 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='136.30,347.42 126.75,356.97 121.98,361.74 131.53,352.20 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='126.75,356.97 219.03,449.25 214.26,454.02 121.98,361.74 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='219.03,449.25 126.75,356.97 136.30,347.42 228.58,439.70 219.03,449.25 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='219.03,449.25 126.75,356.97 136.30,347.42 228.58,439.70 219.03,449.25 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='126.75,356.97 219.03,449.25 228.58,439.70 136.30,347.42 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(182.53,403.20) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(143.67,364.34) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='219.03,449.25 126.75,356.97 136.30,347.42 228.58,439.70 219.03,449.25 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='219.03,449.25 126.75,356.97 136.30,347.42 228.58,439.70 219.03,449.25 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='126.75,356.97 219.03,449.25 228.58,439.70 136.30,347.42 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='112.31,371.42 204.58,463.69 214.13,454.15 121.85,361.87 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='218.90,449.37 126.63,357.10 121.85,361.87 214.13,454.15 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='209.36,458.92 218.90,449.37 214.13,454.15 204.58,463.69 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='126.63,357.10 117.08,366.64 112.31,371.42 121.85,361.87 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='117.08,366.64 209.36,458.92 204.58,463.69 112.31,371.42 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='209.36,458.92 117.08,366.64 126.63,357.10 218.90,449.37 209.36,458.92 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='209.36,458.92 117.08,366.64 126.63,357.10 218.90,449.37 209.36,458.92 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='117.08,366.64 209.36,458.92 218.90,449.37 126.63,357.10 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(172.86,412.87) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(134.00,374.02) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='209.36,458.92 117.08,366.64 126.63,357.10 218.90,449.37 209.36,458.92 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='209.36,458.92 117.08,366.64 126.63,357.10 218.90,449.37 209.36,458.92 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='117.08,366.64 209.36,458.92 218.90,449.37 126.63,357.10 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='209.36,376.44 117.08,468.72 126.63,478.27 218.90,385.99 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='223.68,381.22 214.13,371.67 209.36,376.44 218.90,385.99 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='214.13,371.67 121.85,463.95 117.08,468.72 209.36,376.44 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='131.40,473.49 223.68,381.22 218.90,385.99 126.63,478.27 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='121.85,463.95 131.40,473.49 126.63,478.27 117.08,468.72 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='121.85,463.95 214.13,371.67 223.68,381.22 131.40,473.49 121.85,463.95 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='121.85,463.95 214.13,371.67 223.68,381.22 131.40,473.49 121.85,463.95 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='214.13,371.67 121.85,463.95 131.40,473.49 223.68,381.22 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(167.90,427.45) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(206.76,388.59) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='121.85,463.95 214.13,371.67 223.68,381.22 131.40,473.49 121.85,463.95 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='121.85,463.95 214.13,371.67 223.68,381.22 131.40,473.49 121.85,463.95 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='214.13,371.67 121.85,463.95 131.40,473.49 223.68,381.22 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='219.03,386.12 126.75,478.39 136.30,487.94 228.58,395.66 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='233.35,390.89 223.80,381.34 219.03,386.12 228.58,395.66 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='223.80,381.34 131.53,473.62 126.75,478.39 219.03,386.12 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='141.07,483.17 233.35,390.89 228.58,395.66 136.30,487.94 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='131.53,473.62 141.07,483.17 136.30,487.94 126.75,478.39 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='131.53,473.62 223.80,381.34 233.35,390.89 141.07,483.17 131.53,473.62 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='131.53,473.62 223.80,381.34 233.35,390.89 141.07,483.17 131.53,473.62 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='223.80,381.34 131.53,473.62 141.07,483.17 233.35,390.89 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(177.57,437.12) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(216.43,398.26) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='131.53,473.62 223.80,381.34 233.35,390.89 141.07,483.17 131.53,473.62 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='131.53,473.62 223.80,381.34 233.35,390.89 141.07,483.17 131.53,473.62 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='223.80,381.34 131.53,473.62 141.07,483.17 233.35,390.89 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='228.70,395.79 136.43,488.07 145.97,497.61 238.25,405.34 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='243.02,400.56 233.48,391.02 228.70,395.79 238.25,405.34 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='233.48,391.02 141.20,483.29 136.43,488.07 228.70,395.79 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='150.75,492.84 243.02,400.56 238.25,405.34 145.97,497.61 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='141.20,483.29 150.75,492.84 145.97,497.61 136.43,488.07 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='141.20,483.29 233.48,391.02 243.02,400.56 150.75,492.84 141.20,483.29 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='141.20,483.29 233.48,391.02 243.02,400.56 150.75,492.84 141.20,483.29 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='233.48,391.02 141.20,483.29 150.75,492.84 243.02,400.56 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(187.25,446.79) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(226.10,407.94) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='141.20,483.29 233.48,391.02 243.02,400.56 150.75,492.84 141.20,483.29 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='141.20,483.29 233.48,391.02 243.02,400.56 150.75,492.84 141.20,483.29 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='233.48,391.02 141.20,483.29 150.75,492.84 243.02,400.56 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='238.38,405.46 146.10,497.74 155.65,507.29 247.92,415.01 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='252.70,410.24 243.15,400.69 238.38,405.46 247.92,415.01 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='243.15,400.69 150.87,492.97 146.10,497.74 238.38,405.46 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='160.42,502.51 252.70,410.24 247.92,415.01 155.65,507.29 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='150.87,492.97 160.42,502.51 155.65,507.29 146.10,497.74 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='150.87,492.97 243.15,400.69 252.70,410.24 160.42,502.51 150.87,492.97 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='150.87,492.97 243.15,400.69 252.70,410.24 160.42,502.51 150.87,492.97 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='243.15,400.69 150.87,492.97 160.42,502.51 252.70,410.24 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(196.92,456.47) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(235.78,417.61) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='150.87,492.97 243.15,400.69 252.70,410.24 160.42,502.51 150.87,492.97 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='150.87,492.97 243.15,400.69 252.70,410.24 160.42,502.51 150.87,492.97 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='243.15,400.69 150.87,492.97 160.42,502.51 252.70,410.24 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='150.87,332.85 243.15,425.13 252.70,415.58 160.42,323.30 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='257.47,410.81 165.19,318.53 160.42,323.30 252.70,415.58 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='247.92,420.35 257.47,410.81 252.70,415.58 243.15,425.13 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='165.19,318.53 155.65,328.08 150.87,332.85 160.42,323.30 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='155.65,328.08 247.92,420.35 243.15,425.13 150.87,332.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='247.92,420.35 155.65,328.08 165.19,318.53 257.47,410.81 247.92,420.35 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='247.92,420.35 155.65,328.08 165.19,318.53 257.47,410.81 247.92,420.35 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='155.65,328.08 247.92,420.35 257.47,410.81 165.19,318.53 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(211.42,374.31) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(172.57,335.45) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='247.92,420.35 155.65,328.08 165.19,318.53 257.47,410.81 247.92,420.35 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='247.92,420.35 155.65,328.08 165.19,318.53 257.47,410.81 247.92,420.35 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='155.65,328.08 247.92,420.35 257.47,410.81 165.19,318.53 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='141.20,342.52 233.48,434.80 243.02,425.25 150.75,332.98 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='247.80,420.48 155.52,328.20 150.75,332.98 243.02,425.25 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='238.25,430.03 247.80,420.48 243.02,425.25 233.48,434.80 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='155.52,328.20 145.97,337.75 141.20,342.52 150.75,332.98 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='145.97,337.75 238.25,430.03 233.48,434.80 141.20,342.52 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='238.25,430.03 145.97,337.75 155.52,328.20 247.80,420.48 238.25,430.03 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='238.25,430.03 145.97,337.75 155.52,328.20 247.80,420.48 238.25,430.03 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='145.97,337.75 238.25,430.03 247.80,420.48 155.52,328.20 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(201.75,383.98) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(162.89,345.12) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='238.25,430.03 145.97,337.75 155.52,328.20 247.80,420.48 238.25,430.03 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='238.25,430.03 145.97,337.75 155.52,328.20 247.80,420.48 238.25,430.03 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='145.97,337.75 238.25,430.03 247.80,420.48 155.52,328.20 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='131.53,352.20 223.80,444.47 233.35,434.93 141.07,342.65 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='238.12,430.15 145.85,337.88 141.07,342.65 233.35,434.93 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='228.58,439.70 238.12,430.15 233.35,434.93 223.80,444.47 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='145.85,337.88 136.30,347.42 131.53,352.20 141.07,342.65 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='136.30,347.42 228.58,439.70 223.80,444.47 131.53,352.20 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='228.58,439.70 136.30,347.42 145.85,337.88 238.12,430.15 228.58,439.70 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='228.58,439.70 136.30,347.42 145.85,337.88 238.12,430.15 228.58,439.70 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='136.30,347.42 228.58,439.70 238.12,430.15 145.85,337.88 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(192.08,393.66) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(153.22,354.80) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='228.58,439.70 136.30,347.42 145.85,337.88 238.12,430.15 228.58,439.70 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='228.58,439.70 136.30,347.42 145.85,337.88 238.12,430.15 228.58,439.70 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='136.30,347.42 228.58,439.70 238.12,430.15 145.85,337.88 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='121.85,361.87 214.13,454.15 223.68,444.60 131.40,352.32 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='228.45,439.83 136.17,347.55 131.40,352.32 223.68,444.60 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='218.90,449.37 228.45,439.83 223.68,444.60 214.13,454.15 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='136.17,347.55 126.63,357.10 121.85,361.87 131.40,352.32 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='126.63,357.10 218.90,449.37 214.13,454.15 121.85,361.87 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='218.90,449.37 126.63,357.10 136.17,347.55 228.45,439.83 218.90,449.37 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='218.90,449.37 126.63,357.10 136.17,347.55 228.45,439.83 218.90,449.37 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='126.63,357.10 218.90,449.37 228.45,439.83 136.17,347.55 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(182.40,403.33) rotate(-45)' text-anchor='middle' style='font-size: 20.00px; fill: #D55E00; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(143.55,364.47) rotate(-45)' text-anchor='middle' style='font-size: 12.00px; fill: #D55E00; font-family: sans;' textLength='7.13px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='218.90,449.37 126.63,357.10 136.17,347.55 228.45,439.83 218.90,449.37 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='218.90,449.37 126.63,357.10 136.17,347.55 228.45,439.83 218.90,449.37 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='126.63,357.10 218.90,449.37 228.45,439.83 136.17,347.55 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='218.90,366.90 126.63,459.17 136.17,468.72 228.45,376.44 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='233.22,371.67 223.68,362.12 218.90,366.90 228.45,376.44 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='223.68,362.12 131.40,454.40 126.63,459.17 218.90,366.90 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='140.95,463.95 233.22,371.67 228.45,376.44 136.17,468.72 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='131.40,454.40 140.95,463.95 136.17,468.72 126.63,459.17 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='131.40,454.40 223.68,362.12 233.22,371.67 140.95,463.95 131.40,454.40 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='131.40,454.40 223.68,362.12 233.22,371.67 140.95,463.95 131.40,454.40 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='223.68,362.12 131.40,454.40 140.95,463.95 233.22,371.67 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(177.44,417.90) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(216.30,379.04) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='131.40,454.40 223.68,362.12 233.22,371.67 140.95,463.95 131.40,454.40 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='131.40,454.40 223.68,362.12 233.22,371.67 140.95,463.95 131.40,454.40 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='223.68,362.12 131.40,454.40 140.95,463.95 233.22,371.67 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='228.58,376.57 136.30,468.85 145.85,478.39 238.12,386.12 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='242.90,381.34 233.35,371.80 228.58,376.57 238.12,386.12 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='233.35,371.80 141.07,464.07 136.30,468.85 228.58,376.57 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='150.62,473.62 242.90,381.34 238.12,386.12 145.85,478.39 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='141.07,464.07 150.62,473.62 145.85,478.39 136.30,468.85 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='141.07,464.07 233.35,371.80 242.90,381.34 150.62,473.62 141.07,464.07 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='141.07,464.07 233.35,371.80 242.90,381.34 150.62,473.62 141.07,464.07 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='233.35,371.80 141.07,464.07 150.62,473.62 242.90,381.34 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(187.12,427.57) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(225.98,388.72) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='141.07,464.07 233.35,371.80 242.90,381.34 150.62,473.62 141.07,464.07 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='141.07,464.07 233.35,371.80 242.90,381.34 150.62,473.62 141.07,464.07 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='233.35,371.80 141.07,464.07 150.62,473.62 242.90,381.34 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='238.25,386.24 145.97,478.52 155.52,488.07 247.80,395.79 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='252.57,391.02 243.02,381.47 238.25,386.24 247.80,395.79 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='243.02,381.47 150.75,473.75 145.97,478.52 238.25,386.24 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='160.29,483.29 252.57,391.02 247.80,395.79 155.52,488.07 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='150.75,473.75 160.29,483.29 155.52,488.07 145.97,478.52 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='150.75,473.75 243.02,381.47 252.57,391.02 160.29,483.29 150.75,473.75 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='150.75,473.75 243.02,381.47 252.57,391.02 160.29,483.29 150.75,473.75 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='243.02,381.47 150.75,473.75 160.29,483.29 252.57,391.02 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(196.79,437.25) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(235.65,398.39) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='150.75,473.75 243.02,381.47 252.57,391.02 160.29,483.29 150.75,473.75 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='150.75,473.75 243.02,381.47 252.57,391.02 160.29,483.29 150.75,473.75 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='243.02,381.47 150.75,473.75 160.29,483.29 252.57,391.02 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='247.92,395.92 155.65,488.19 165.19,497.74 257.47,405.46 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='262.24,400.69 252.70,391.14 247.92,395.92 257.47,405.46 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='252.70,391.14 160.42,483.42 155.65,488.19 247.92,395.92 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='169.96,492.97 262.24,400.69 257.47,405.46 165.19,497.74 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='160.42,483.42 169.96,492.97 165.19,497.74 155.65,488.19 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='160.42,483.42 252.70,391.14 262.24,400.69 169.96,492.97 160.42,483.42 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<polygon points='160.42,483.42 252.70,391.14 262.24,400.69 169.96,492.97 160.42,483.42 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
+<polygon points='252.70,391.14 160.42,483.42 169.96,492.97 262.24,400.69 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text transform='translate(206.46,446.92) rotate(-315)' text-anchor='middle' style='font-size: 20.00px; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
 <text transform='translate(245.32,408.06) rotate(-315)' text-anchor='middle' style='font-size: 12.00px; font-family: sans;' textLength='6.38px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<polygon points='160.42,483.42 252.70,391.14 262.24,400.69 169.96,492.97 160.42,483.42 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
-<polygon points='160.42,483.42 252.70,391.14 262.24,400.69 169.96,492.97 160.42,483.42 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='252.70,391.14 160.42,483.42 169.96,492.97 262.24,400.69 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </g>
 </svg>

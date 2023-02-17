@@ -75,10 +75,12 @@ makeContent.basic_piece_side <- function(x) {
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     # Background
-    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
-
-    gl_grob <- shape$gridlines(gp = gpar(col = opt$gridline_color, lex = opt$gridline_lex), name = "gridlines")
-    mat_grob <- shape$mat(opt$mat_width, gp = gpar(fill = opt$mat_color), name = "mat")
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color),
+                                   name = "background", mat_width = opt$mat_width)
+    gl_grob <- shape$gridlines(gp = gpar(col = opt$gridline_color, lex = opt$gridline_lex),
+                               name = "gridlines", mat_width = opt$mat_width)
+    gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
+    mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
 
     # Primary symbol
     gp_ps <- gpar(col=opt$ps_color, fontsize=opt$ps_fontsize,

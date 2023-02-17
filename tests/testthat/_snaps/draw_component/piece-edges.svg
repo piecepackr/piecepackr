@@ -18,11 +18,11 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='270.00' y='351.00' width='36.00' height='18.00' style='stroke-width: 0.75; stroke: none; fill: #FF0000;' />
-<rect x='270.00' y='351.00' width='36.00' height='18.00' style='stroke-width: 0.75;' />
-<rect x='333.00' y='283.50' width='54.00' height='9.00' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
-<rect x='333.00' y='283.50' width='54.00' height='9.00' style='stroke-width: 0.75;' />
-<rect x='360.00' y='207.00' width='144.00' height='18.00' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
-<rect x='360.00' y='207.00' width='144.00' height='18.00' style='stroke-width: 0.75;' />
+<polygon points='270.00,351.00 270.00,369.00 306.00,369.00 306.00,351.00 ' style='stroke-width: 0.75; stroke: none; fill: #FF0000;' />
+<polygon points='270.00,351.00 270.00,369.00 306.00,369.00 306.00,351.00 ' style='stroke-width: 0.75; fill: none;' />
+<polygon points='333.00,283.50 333.00,292.50 387.00,292.50 387.00,283.50 ' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
+<polygon points='333.00,283.50 333.00,292.50 387.00,292.50 387.00,283.50 ' style='stroke-width: 0.75; fill: none;' />
+<polygon points='360.00,207.00 360.00,225.00 504.00,225.00 504.00,207.00 ' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
+<polygon points='360.00,207.00 360.00,225.00 504.00,225.00 504.00,207.00 ' style='stroke-width: 0.75; fill: none;' />
 </g>
 </svg>

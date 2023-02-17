@@ -18,21 +18,21 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='216.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='216.00,288.00 216.00,432.00 360.00,432.00 360.00,288.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='288.00' y='384.78' text-anchor='middle' style='font-size: 72.00px; fill: #D55E00; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>n</text>
 <text x='252.00' y='337.76' text-anchor='middle' style='font-size: 40.00px; fill: #D55E00; font-family: sans;' textLength='23.76px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<rect x='216.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<rect x='360.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='216.00,288.00 216.00,432.00 360.00,432.00 360.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='360.00,288.00 360.00,432.00 504.00,432.00 504.00,288.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='432.00' y='384.78' text-anchor='middle' style='font-size: 72.00px; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>a</text>
 <text x='396.00' y='337.76' text-anchor='middle' style='font-size: 40.00px; font-family: sans;' textLength='21.26px' lengthAdjust='spacingAndGlyphs'>♠</text>
-<rect x='360.00' y='288.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<rect x='216.00' y='144.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='360.00,288.00 360.00,432.00 504.00,432.00 504.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='216.00,144.00 216.00,288.00 360.00,288.00 360.00,144.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='288.00' y='240.78' text-anchor='middle' style='font-size: 72.00px; fill: #009E73; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>4</text>
 <text x='252.00' y='193.76' text-anchor='middle' style='font-size: 40.00px; fill: #009E73; font-family: sans;' textLength='26.26px' lengthAdjust='spacingAndGlyphs'>♣</text>
-<rect x='216.00' y='144.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<rect x='360.00' y='144.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='216.00,144.00 216.00,288.00 360.00,288.00 360.00,144.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
+<polygon points='360.00,144.00 360.00,288.00 504.00,288.00 504.00,144.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='432.00' y='240.78' text-anchor='middle' style='font-size: 72.00px; fill: #56B4E9; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>5</text>
 <text x='396.00' y='193.76' text-anchor='middle' style='font-size: 40.00px; fill: #56B4E9; font-family: sans;' textLength='20.42px' lengthAdjust='spacingAndGlyphs'>♦</text>
-<rect x='360.00' y='144.00' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+<polygon points='360.00,144.00 360.00,288.00 504.00,288.00 504.00,144.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 </g>
 </svg>

@@ -18,7 +18,7 @@
   </clipPath>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-<rect x='36.00' y='180.00' width='360.00' height='360.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<polygon points='36.00,180.00 36.00,540.00 396.00,540.00 396.00,180.00 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <rect x='69.75' y='213.75' width='4.50' height='292.50' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <rect x='141.75' y='213.75' width='4.50' height='292.50' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <rect x='213.75' y='213.75' width='4.50' height='292.50' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
@@ -60,7 +60,7 @@
 <circle cx='216.00' cy='216.00' r='6.75' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <circle cx='288.00' cy='216.00' r='6.75' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
 <circle cx='360.00' cy='216.00' r='6.75' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
-<rect x='36.00' y='180.00' width='360.00' height='360.00' style='stroke-width: 3.00;' />
+<polygon points='36.00,180.00 36.00,540.00 396.00,540.00 396.00,180.00 ' style='stroke-width: 3.00; fill: none;' />
 <circle cx='72.00' cy='504.00' r='15.66' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
 <circle cx='72.00' cy='504.00' r='15.66' style='stroke-width: 3.00;' />
 <circle cx='144.00' cy='432.00' r='15.66' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
