@@ -40,40 +40,6 @@ is_color_invisible <- function(col) {
 #' @export
 inch <- function(inches) unit(inches, "in")
 
-get_n_pages_pdfinfo <- function(pdf_filename) {
-    pdf_filename <- shQuote(normalizePath(pdf_filename))
-    pdfinfo <- system2("pdfinfo", pdf_filename, stdout=TRUE)
-    pdfinfo <- grep("^Pages:", pdfinfo, value=TRUE)
-    as.numeric(strsplit(pdfinfo, " +")[[1]][2])
-}
-get_n_pages_gs <- function(pdf_filename) {
-    pdf_filename <- normalizePath(pdf_filename, winslash="/")
-    cmd <- gs()
-    args <- c("-q", "-dNODISPLAY", "-dNOSAFER", "-c",
-              paste(paste0('"(', pdf_filename, ")"),
-                    "(r)", "file", "runpdfbegin", "pdfpagecount", "=", 'quit"'))
-    as.numeric(system2(cmd, args, stdout=TRUE))
-}
-get_n_pages <- function(pdf_filename) {
-    if (Sys.which("pdfinfo") != "") {
-        np <- get_n_pages_pdfinfo(pdf_filename)
-    } else {
-        np <- get_n_pages_gs(pdf_filename)
-    }
-    np
-}
-
-has_gs <- function() {
-    tools::find_gs_cmd() != ""
-}
-
-gs <- function() {
-    cmd <- tools::find_gs_cmd()
-    if (cmd == "")
-        abort("Can't find system dependency ghostscript on PATH")
-    cmd
-}
-
 #' @rdname pp_utils
 #' @param s String to convert
 #' @param sep Delimiter (defaults to ",")

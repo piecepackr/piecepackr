@@ -129,8 +129,16 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
 
     invisible(grDevices::dev.off())
 
-    if (onefile && tools::file_ext(output_filename) == "pdf" && has_gs()) {
-        add_pdf_metadata(output_filename, cfg, pl)
+    if (onefile && tools::file_ext(output_filename) == "pdf") {
+        if(requireNamespace("xmpdf", quietly = TRUE)) {
+            add_pdf_metadata(output_filename, cfg, pl)
+        } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+            msg <- c(x = "Need the {xmpdf} package to embed pdf metadata",
+                     i = '`remotes::install_github("trevorld/r-xmpdf")`',
+                     i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+            inform(msg, class = "piecepackr_embed_metadata")
+
+        }
     }
     invisible(NULL)
 }
@@ -143,34 +151,48 @@ has_c_integer_format <- function(filename) {
 }
 
 add_pdf_metadata <- function(output_filename, cfg=pp_cfg(), pl=list()) {
-    temp_pdf <- tempfile(fileext=".pdf")
-    on.exit(unlink(temp_pdf))
-    temp_txt <- tempfile(fileext=".txt")
-    on.exit(unlink(temp_txt))
-    file.copy(output_filename, temp_pdf)
+    assert_suggested("xmpdf")
 
-    starting_pages <- c(1, 1+cumsum(sapply(pl, identity)))
-    ns <- names(pl)
-    txt <- character(0)
-    for (ii in seq(pl)) {
-        line <- sprintf("[/Page %s /View [/XYZ null null null] /Title (%s) /OUT pdfmark",
-                   starting_pages[ii], ns[ii])
-        txt <- append(txt, line)
+    if (xmpdf::supports_set_docinfo()) {
+        docinfo <- xmpdf::docinfo(title = cfg$title,
+                                  creator = paste0("piecepackr v", packageDescription("piecepackr")$Version),
+                                  subject = paste(cfg$description, collapse = "\n"),
+                                  keywords = "piecepack")
+        xmpdf::set_docinfo(docinfo, output_filename)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf documentation info metadata",
+                 xmpdf::enable_feature_message("set_docinfo"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        inform(msg, class = "piecepackr_embed_metadata")
     }
-    title <- sprintf(" /Title (%s)\n", cfg$title)
-    creator <- sprintf(" /Creator (piecepackr v%s)\n", packageDescription("piecepackr")$Version)
-    subject <- sprintf(" /Subject (%s)\n", cfg$description)
-    keywords <- " /Keywords (piecepack)\n"
-    line <- sprintf("[%s%s%s%s /DOCINFO pdfmark",
-                    ifelse(length(title), title, ""), creator,
-                    ifelse(length(subject), subject, ""), keywords)
-    txt <- append(txt, line)
-    writeLines(txt, temp_txt)
 
-    args <- c("-q", "-o", shQuote(output_filename),
-              "-sDEVICE=pdfwrite", "-sAutoRotatePages=None",
-              shQuote(temp_txt), shQuote(temp_pdf))
-    system2(gs(), args)
+    if (xmpdf::supports_set_bookmarks()) {
+        starting_pages <- head(c(1, 1+cumsum(sapply(pl, identity))), -1)
+        bookmarks <- data.frame(title = names(pl), page = starting_pages,
+                                stringsAsFactors = FALSE)
+        xmpdf::set_bookmarks(bookmarks, output_filename)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf bookmarks metadata",
+                 xmpdf::enable_feature_message("set_bookmarks"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        inform(msg, class = "piecepackr_embed_metadata")
+    }
+
+    if (xmpdf::supports_set_xmp()) {
+        x <- xmpdf::xmp(title = cfg$title,
+                        creator_tool = paste0("piecepackr v", packageDescription("piecepackr")$Version),
+                        description = paste(cfg$description, collapse = "\n"),
+                        keywords = "piecepack", subject = "piecepack",
+                        rights = cfg$copyright,
+                        spdx_id = cfg$spdx_id
+        )
+        xmpdf::set_xmp(x, output_filename)
+    } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
+        msg <- c(x = "Unable to embed pdf XMP metadata",
+                 xmpdf::enable_feature_message("set_xmp"),
+                 i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
+        inform(msg, class = "piecepackr_embed_metadata")
+    }
 }
 
 print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly, bleed, size_bleed) {

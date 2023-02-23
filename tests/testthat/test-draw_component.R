@@ -53,15 +53,12 @@ test_that("save_print_and_play works as expected", {
 
     expect_true(file.exists(pdf_deck_filename))
 
-    skip_if(!has_gs(), "Doesn't have ghostscript binary")
-    expect_equal(get_n_pages(pdf_deck_filename), 7)
-    expect_equal(get_n_pages(pdf_deck_filename_a4), 10)
-    expect_equal(get_n_pages(pdf_deck_filename_a5), 14)
-    expect_equal(get_n_pages(pdf_deck_filename_4x6), 13)
-    expect_equal(get_n_pages(pdf_deck_filename_bleed), 7)
-    expect_equal(get_n_pages_gs(pdf_deck_filename), 7)
-    skip_if(Sys.which("pdfinfo") == "", "Doesn't have pdfinfo binary")
-    expect_equal(get_n_pages_pdfinfo(pdf_deck_filename), 7)
+    skip_if_not_installed("xmpdf")
+    expect_equal(xmpdf::n_pages(pdf_deck_filename), 7, ignore_attr = "names")
+    expect_equal(xmpdf::n_pages(pdf_deck_filename_a4), 10, ignore_attr = "names")
+    expect_equal(xmpdf::n_pages(pdf_deck_filename_a5), 14, ignore_attr = "names")
+    expect_equal(xmpdf::n_pages(pdf_deck_filename_4x6), 13, ignore_attr = "names")
+    expect_equal(xmpdf::n_pages(pdf_deck_filename_bleed), 7, ignore_attr = "names")
 })
 
 test_that("save_piece_images works as expected", {
