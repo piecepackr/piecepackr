@@ -22,6 +22,7 @@
 #'                Tetrahedrons with the rank as a numeral at the top point.}
 #' \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 #'                   \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
+#' \item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
 #' \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 #'      Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
 #'      In each color scheme the number of pips on the \dQuote{top} of the domino is
@@ -159,6 +160,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          dice = dice(color_list, rect_shape),
          dice_d4 = dice_d4(style, color_list),
          dice_fudge = dice_fudge(color_list, rect_shape),
+         dice_numeral = dice_numeral(style, color_list, rect_shape),
          dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
          dominoes_black = dominoes(color_list$suit_color[2], "white", color_list$border_color, rect_shape),
          dominoes_blue = dominoes(color_list$suit_color[4], "white", color_list$border_color, rect_shape),
@@ -275,6 +277,23 @@ dice_d4 <- function(style, color_list) {
                       shape.die = "convex3",
                       shape_t.die = 90,
                       invert_colors = TRUE)
+    dice <- pp_cfg(c(dice_list, color_list))
+    dice$has_piecepack <- FALSE
+    dice$has_dice <- TRUE
+    dice
+}
+
+dice_numeral <- function(style, color_list, rect_shape) {
+    dice_list <- list(n_suits = 6, n_ranks = 6,
+                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      rank_text = "1,2,3,4,5,6\u0331",
+                      suit_text.die = "",
+                      ps_cex.die = 1.8,
+                      width.die = 16 / 25.4, # 16 mm dice most common
+                      background_color = "white,white,white,white,black,black",
+                      invert_colors = TRUE,
+                      die_arrangement = "1<,2>,3>,6v,5,4",
+                      shape.card = rect_shape)
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE

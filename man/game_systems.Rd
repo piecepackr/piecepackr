@@ -51,6 +51,7 @@ Color is controlled by suit and number of rows/columns by rank.
 Tetrahedrons with the rank as a numeral at the top point.}
 \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
+\item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
 \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
 In each color scheme the number of pips on the \dQuote{top} of the domino is

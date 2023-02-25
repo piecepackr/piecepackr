@@ -134,7 +134,7 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
             add_pdf_metadata(output_filename, cfg, pl)
         } else if (!isFALSE(getOption("piecepackr.metadata.inform"))) {
             msg <- c(x = "Need the {xmpdf} package to embed pdf metadata",
-                     i = '`remotes::install_github("trevorld/r-xmpdf")`',
+                     i = '`install.packages("xmpdf")`',
                      i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`.")
             inform(msg, class = "piecepackr_embed_metadata")
 

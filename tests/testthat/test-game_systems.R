@@ -3,12 +3,14 @@ test_that("no regressions in figures", {
     skip_on_ci()
     skip_if_not_installed("vdiffr")
     library("vdiffr")
-    # standard d6 dice
-    cfg <- game_systems()$dice
+    # d6 dice
+    envir <- game_systems()
     suppressMessages({
-      expect_doppelganger("dice_d6", function()
-        grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6, op_scale=0.5, cfg=cfg))
-    }, classes="piecepackr_affine_transformation")
+      expect_doppelganger("dice_d6", function() {
+        grid.piece("die_face", x=1:6, y=1, default.units="in", rank=1:6, suit=1:6, op_scale=0.5, cfg=envir$dice)
+        grid.piece("die_face", x=1:6, y=2, default.units="in", rank=1:6, suit=1:6, op_scale=0.5, cfg=envir$dice_numeral)
+        grid.piece("die_face", x=1:6, y=3, default.units="in", rank=1:6, suit=1:6, op_scale=0.5, cfg=envir$dice_fudge)
+    })}, classes="piecepackr_affine_transformation")
 
     # standard d4 dice
     cfg <- game_systems()$dice_d4
@@ -179,11 +181,5 @@ test_that("no regressions in figures", {
                               suit = 1:6, rank = NA, cfg = "reversi")
         df <- rbind(df_board, df_bit_face, df_bit_back)
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
-    })
-
-    # fudge dice
-    cfg <- envir$dice_fudge
-    expect_doppelganger("fudge", function() {
-        grid.piece("die_face", x = 1:6, y = 2, suit = 1:6, rank = 1:6, cfg = cfg, default.units = "in")
     })
 })
