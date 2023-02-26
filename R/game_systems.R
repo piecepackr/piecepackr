@@ -434,9 +434,11 @@ checkers <- function(cell_width = 1, color_list = color_list_fn()) {
 
 chess <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) {
     if (grepl("^sans", style)) {
+        rank_cex_die <- 1.3
         black_chess_ranks <- c("p", "n", "b", "r", "q", "k")
         white_chess_ranks <- c("P", "N", "B", "R", "Q", "K")
     } else if (grepl("^dejavu", style)) {
+        rank_cex_die <- 1.5
         black_chess_ranks <- c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a")
         white_chess_ranks <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
     }
@@ -452,6 +454,7 @@ chess <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) 
                      gridline_lex.board = 4,
                      suit_text = "",
                      rank_cex.bit = 1.4 * cell_width,
+                     rank_cex.die = rank_cex_die,
                      rank_text = black_chess_ranks,
                      rank_text.s6 = white_chess_ranks,
                      suit_color = cb_suit_colors_pure,
