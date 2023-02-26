@@ -287,6 +287,29 @@ dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
     dice
 }
 
+dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
+    dice_list <- list(n_suits = 6, n_ranks = 8,
+                      rank_text.die = "1,2,3,4,5,6\u0331,7,8",
+                      dm_text.die = "",
+                      ps_cex.die = 1.15,
+                      ps_r.die = 0.03,
+                      ps_t.die = 90,
+                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      op_grob_fn.die = d8TopGrob,
+                      obj_fn.die = save_d8_obj,
+                      width.die =  18 / 0.8660254 / 25.4, # if 18 mm vertex to vertex
+                      height.die =  18 / 0.8660254 / 25.4, # if 18 mm vertex to vertex
+                      depth.die = sqrt(6) * 18 / 3 / 25.4, # inradius = sqrt(6) * a / 6
+                      background_color = "white,white,white,white,black,black",
+                      shape.die = "convex3",
+                      shape_t.die = 90,
+                      invert_colors = TRUE)
+    dice <- pp_cfg(c(dice_list, color_list))
+    dice$has_piecepack <- FALSE
+    dice$has_dice <- TRUE
+    dice
+}
+
 dice_numeral <- function(style = "sans", color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
