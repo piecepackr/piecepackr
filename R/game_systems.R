@@ -137,17 +137,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
 
     is_3d <- grepl("3d$", style)
     rect_shape <- ifelse(round, "roundrect", "rect")
-    if (is_3d) {
-        color_list <- list(background_color="burlywood",
-                           suit_color = cb_suit_colors_pure,
-                           border_color = "transparent", border_lex = 0,
-                           edge_color.board = "black")
-    } else {
-        color_list <- list(background_color="white",
-                           suit_color = cb_suit_colors_impure,
-                           border_color = "black", border_lex = 4,
-                           edge_color.board = "white")
-    }
+    color_list <- color_list_fn(is_3d)
 
     cards <- playing_cards(style, rect_shape)
     packs <- piecepack(style, color_list, rect_shape, pawn)
@@ -185,7 +175,21 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          subpack = packs$subpack)
 }
 
-game_systems_style <- function(style) {
+color_list_fn <- function(is_3d = FALSE) {
+    if (is_3d) {
+        list(background_color="burlywood",
+             suit_color = cb_suit_colors_pure,
+             border_color = "transparent", border_lex = 0,
+             edge_color.board = "black")
+    } else {
+        list(background_color="white",
+             suit_color = cb_suit_colors_impure,
+             border_color = "black", border_lex = 4,
+             edge_color.board = "white")
+    }
+}
+
+game_systems_style <- function(style = "sans") {
     styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
     if (!is.null(style) && is.na(match(style, styles))) {
         abort(paste("Don't have a customized configuration for style", style))
@@ -203,7 +207,7 @@ game_systems_style <- function(style) {
 cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 
-dice <- function(color_list, rect_shape) {
+dice <- function(color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
                       rank_text = "1,2,3,4,5,6",
                       width.die = 16 / 25.4, # 16 mm dice most common
@@ -219,7 +223,7 @@ dice <- function(color_list, rect_shape) {
     dice
 }
 
-dominoes_chinese <- function(color_list, rect_shape, invert = FALSE) {
+dominoes_chinese <- function(color_list = color_list_fn(), rect_shape = "rect", invert = FALSE) {
     dice_list <- list(n_suits = 6, n_ranks = 6,
                       rank_text = "1,2,3,4,5,6",
                       width.die = 16 / 25.4, # 16 mm dice most common
@@ -244,7 +248,7 @@ dominoes_chinese <- function(color_list, rect_shape, invert = FALSE) {
     dice
 }
 
-dice_fudge <- function(color_list, rect_shape) {
+dice_fudge <- function(color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
                       rank_text = "-, ,+,+, ,-",
                       dm_text.die = "",
@@ -261,7 +265,7 @@ dice_fudge <- function(color_list, rect_shape) {
     dice
 }
 
-dice_d4 <- function(style, color_list) {
+dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 4,
                       rank_text.die = "1,2,3,4",
                       dm_text.die = "",
@@ -283,7 +287,7 @@ dice_d4 <- function(style, color_list) {
     dice
 }
 
-dice_numeral <- function(style, color_list, rect_shape) {
+dice_numeral <- function(style = "sans", color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
                       rank_text = "1,2,3,4,5,6\u0331",
@@ -300,7 +304,7 @@ dice_numeral <- function(style, color_list, rect_shape) {
     dice
 }
 
-meeples <- function(color_list) {
+meeples <- function(color_list = color_list_fn()) {
     meeples_list <- list(shape.bit = "meeple", n_suits = 6,
                          width.bit = 16 / 25.4, height.bit = 16 / 25.4, depth.bit = 10 / 25.4,
                          ps_text.bit = "", dm_text.bit = "",
@@ -311,7 +315,7 @@ meeples <- function(color_list) {
     meeples
 }
 
-alquerque <- function(cell_width = 1, color_list = 1) {
+alquerque <- function(cell_width = 1, color_list = color_list_fn()) {
     alquerque <- list(n_suits = 6, n_ranks = 1,
                       width.board = 5 * cell_width,
                       height.board = 5 * cell_width,
@@ -329,7 +333,7 @@ alquerque <- function(cell_width = 1, color_list = 1) {
     alquerque
 }
 
-morris <- function(cell_width = 1, color_list) {
+morris <- function(cell_width = 1, color_list = color_list_fn()) {
     morris <- list(n_suits = 6, n_ranks = 15,
                    width.board = 7 * cell_width,
                    height.board = 7 * cell_width,
@@ -371,7 +375,7 @@ go_stone <- function(cell_width) {
 }
 
 dominoes <- function(background_color = "white", suit_color = "black", border_color = "black",
-                     rect_shape, mat_width = 0) {
+                     rect_shape = "rect", mat_width = 0) {
     border_lex <- ifelse(border_color == "black", 4, 0)
     dominoes <- pp_cfg(list(n_suits = 18 + 1, n_ranks = 18 + 1,
                             width.tile = 1,
@@ -402,7 +406,7 @@ checker_piece <- function(cell_width) {
 
 }
 
-checkers <- function(cell_width = 1, color_list) {
+checkers <- function(cell_width = 1, color_list = color_list_fn()) {
     checkers <- list(n_suits = 6, n_ranks = 12,
                      width.board = 8 * cell_width,
                      height.board = 8 * cell_width,
@@ -428,7 +432,7 @@ checkers <- function(cell_width = 1, color_list) {
     checkers
 }
 
-chess <- function(style, cell_width = 1, color_list) {
+chess <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) {
     if (grepl("^sans", style)) {
         black_chess_ranks <- c("p", "n", "b", "r", "q", "k")
         white_chess_ranks <- c("P", "N", "B", "R", "Q", "K")
@@ -470,7 +474,7 @@ chess <- function(style, cell_width = 1, color_list) {
     chess
 }
 
-go <- function(cell_width = 1, color_list) {
+go <- function(cell_width = 1, color_list = color_list_fn()) {
     go <- list(n_suits = 6, n_ranks = 19,
                width.board = (18 + 1) * cell_width,
                height.board = (18 + 1) * cell_width,
@@ -494,7 +498,7 @@ go <- function(cell_width = 1, color_list) {
     go
 }
 
-piecepack <- function(style, color_list, rect_shape, pawn) {
+piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape = "rect", pawn = "token") {
     if (grepl("^sans", style)) {
         piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
         pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
@@ -570,7 +574,7 @@ piecepack <- function(style, color_list, rect_shape, pawn) {
          subpack = to_subpack(piecepack))
 }
 
-playing_cards <- function(style, rect_shape) {
+playing_cards <- function(style = "sans", rect_shape = "rect") {
     if (grepl("^sans", style)) {
         face_labels <- c("", "\u050a", "\u046a", "\u0238")
         fool_text <- "*"
@@ -633,7 +637,7 @@ playing_cards <- function(style, rect_shape) {
     list(base = playing_cards, color = playing_cards_colored, tarot = playing_cards_tarot)
 }
 
-reversi <- function(cell_width = 1, color_list) {
+reversi <- function(cell_width = 1, color_list = color_list_fn()) {
     reversi <- list(n_suits = 6, n_ranks = 12,
                      width.board = 8 * cell_width,
                      height.board = 8 * cell_width,
@@ -658,7 +662,7 @@ reversi <- function(cell_width = 1, color_list) {
     reversi
 }
 
-shapes_cfg <- function(color_list) {
+shapes_cfg <- function(color_list = color_list_fn()) {
     shapes <- list(n_suits = 6, n_ranks = 4,
                    invert_colors = TRUE,
                    ps_text = "", dm_text = "",
@@ -673,7 +677,7 @@ shapes_cfg <- function(color_list) {
     pp_cfg(c(shapes, color_list))
 }
 
-reversi_piece <- function(cell_width, color_list) {
+reversi_piece <- function(cell_width = 1, color_list = color_list_fn()) {
 
     shapes_top <- shapes_cfg(color_list)
     color_list$suit_color <- color_list$suit_color[c(3, 6, 1, 5, 4, 2)]
