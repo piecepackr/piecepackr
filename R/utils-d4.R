@@ -184,7 +184,8 @@ save_d4_obj <- function(piece_side, suit, rank, cfg,
     # textured face elements: face, left, right, bottom
     f <- list()
     fn_vt <- function(r) switch(r, 1:3, 4:6, 7:9, 10:12)
-    f[[1]] <- list(v = 1:3,   vt = fn_vt(rank))
+    f[[1]] <- list(v = 1:3,
+                   vt = fn_vt(rank))
     f[[2]] <- list(v = 4:6,
                    vt = fn_vt(d4_edge_info("d4_left", rank)$rank))
     f[[3]] <- list(v = 7:9,
