@@ -20,6 +20,14 @@ test_that("no regressions in figures", {
         grid.piece("die_face", x=1:4, y=2, default.units="in", rank=1:4, suit=1:4, op_scale=0.5, cfg=cfg)
     })}, classes="piecepackr_affine_transformation")
 
+    # standard d8 dice
+    cfg <- game_systems()$dice_d8
+    suppressMessages({
+      expect_doppelganger("dice_d8", function() {
+        grid.piece("die_face", x=1:8, y=1, default.units="in", rank=1:8, suit=c(1:6, 1:2), op_scale=0.0, cfg=cfg)
+        grid.piece("die_face", x=1:8, y=2, default.units="in", rank=1:8, suit=c(1:6, 1:2), op_scale=0.5, cfg=cfg)
+    })}, classes="piecepackr_affine_transformation")
+
     # dominoes
     envir <- game_systems("dejavu")
     expect_doppelganger("dominoes", function()

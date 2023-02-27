@@ -15,12 +15,108 @@ d8TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
 
-    rlang::abort("We don't support oblique projection for d8 yet")
-
     #### allow limited 3D rotation #281
     axis_x <- 0
     axis_y <- 0
     ####
+    xyz <- d8t_xyz(x, y, z, angle, axis_x, axis_y, width, height, depth)
+    p <- Polygon$new(convex_xy(6, 0))
+    edge_types <- paste0("d8_", c("right", "back", "left", "opposite_left", "opposite_back", "opposite_right"))
+    order <- p$op_edge_order(op_angle)
+    df <- tibble(index = 1:6, edge = edge_types, level = c(2, 1, 2, 1, 2, 1))[order, ]
+    df <- df[order(df$level), ]
+    gl <- gList()
+    for (i in 1:nrow(df)) {
+        edge <- df$edge[i]
+        edge_rank <- d8_edge_rank(edge, rank)
+        opt <- cfg$get_piece_opt("die_face", suit, edge_rank)
+        gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
+        xyz_polygon <- switch(edge,
+               d8_left = xyz[c(1,5,2)],
+               d8_back = xyz[c(1,6,5)],
+               d8_right = xyz[c(1,3,6)],
+               d8_opposite_left = xyz[c(4,2,5)],
+               d8_opposite_back = xyz[c(4,3,2)],
+               d8_opposite_right = xyz[c(4,6,3)]
+        )
+        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xy_vp <- xy_vp_d8(xyz_polygon, op_scale, op_angle)
+        gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = edge)
+    }
+    # face
+    xyz_polygon <- xyz[1:3]
+    xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+    xy_vp <- xy_vp_d8(xyz_polygon, op_scale, op_angle)
+    gl[[nrow(df)+1]] <- at_ps_grob("die_face", suit, rank, cfg, xy_vp, xy_polygon, name = "d8_face")
+
+    # pre-compute grobCoords
+    coords_xyl <- d8t_grobcoords_xyl(x, y, z,
+                                     angle, axis_x, axis_y,
+                                     width, height, depth,
+                                     op_scale, op_angle)
+
+    gTree(scale = 1,
+          coords_xyl = coords_xyl,
+          children=gl, cl=c("projected_d8_top", "coords_xyl"))
+}
+
+#' @export
+makeContent.projected_d8_top <- function(x) {
+    for (i in seq_along(x$children))
+        x$children[[i]]$scale <- x$scale
+    x
+}
+
+d8t_grobcoords_xyl <- function(x, y, z,
+                              angle, axis_x, axis_y,
+                              width, height, depth,
+                              op_scale, op_angle) {
+    xyz <- d8t_xyz(x, y, z,
+                   angle, axis_x, axis_y,
+                   width, height, depth)
+    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+}
+
+d8t_xyz <- function(x, y, z,
+                    angle, axis_x, axis_y,
+                    width, height, depth) {
+    pc <- Point3D$new(x, y, z)
+    xyz_t <- Point3D$new(convex_xy(3, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)
+    xyz_b <- convex_xy(3, -90)
+    xyz_b <- Point3D$new(x = xyz_b$x[c(1,3,2)], y = xyz_b$y[c(1,3,2)], z = 0.0)$translate(-0.5, -0.5, -0.5)
+    xs <- c(xyz_t$x, xyz_b$x)
+    ys <- c(xyz_t$y, xyz_b$y)
+    zs <- c(xyz_t$z, xyz_b$z)
+    Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
+}
+
+# We need to widen/lengthen and possibly rotate viewport..
+xy_vp_d8 <- function(xyz_polygon, op_scale, op_angle) {
+    p_midbottom <- xyz_polygon[2:3]$c
+
+    # Widen viewport since "convex3" shape doesn't reach edges of viewport
+    p_ll <- xyz_polygon[2]
+    p_lr <- xyz_polygon[3]
+    # p_ll <- p_midbottom + 1.018 * (p_ll - p_midbottom)
+    # p_lr <- p_midbottom + 1.018 * (p_lr - p_midbottom)
+    p_ll <- p_midbottom + 1.183568 * (p_ll - p_midbottom)
+    p_lr <- p_midbottom + 1.183568 * (p_lr - p_midbottom)
+
+    up_diff <- xyz_polygon[1] - p_midbottom
+    p_ul <- p_ll + up_diff
+    p_ur <- p_lr + up_diff
+
+    # Adjust viewport down since "convex3" shape doesn't reach bottom of viewport
+    p_ll <- p_ul - 4.1/3 * up_diff
+    p_lr <- p_ur - 4.1/3 * up_diff
+
+    x <- c(p_ul$x, p_ll$x, p_lr$x, p_ur$x)
+    y <- c(p_ul$y, p_ll$y, p_lr$y, p_ur$y)
+    z <- c(p_ul$z, p_ll$z, p_lr$z, p_ur$z)
+
+    # Rotate viewport to xy-plane, rotate viewport, rotate back
+    p <- Point3D$new(x, y, z)
+    p$project_op(op_angle, op_scale)
 }
 
 save_d8_obj <- function(piece_side, suit, rank, cfg,
@@ -79,9 +175,8 @@ d8_edge_rank <- function(edge, rank) {
            d8_opposite = 9 - rank,
            d8_opposite_left = d8_rank(9 - rank + 2),
            d8_opposite_back = d8_rank(9 - rank + 4),
-           d8_opposite_right = d8_rank(9 - rank + 6),
-           rlang::abort(paste("Don't know edge", edge))
-           )
+           d8_opposite_right = d8_rank(9 - rank + 6)
+    )
 }
 
 d8_xyz <- function(suit, rank, cfg,

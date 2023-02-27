@@ -20,6 +20,8 @@
 #' \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
 #' \item{dice_d4}{Four-sided dice in six color schemes (color controlled by their suit).
 #'                Tetrahedrons with the rank as a numeral at the top point.}
+#' \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
+#'                Octahedron with the rank as a numeral at the top face.}
 #' \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 #'                   \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
 #' \item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
@@ -149,6 +151,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          chess2 = chess(style, 2, color_list),
          dice = dice(color_list, rect_shape),
          dice_d4 = dice_d4(style, color_list),
+         dice_d8 = dice_d8(style, color_list),
          dice_fudge = dice_fudge(color_list, rect_shape),
          dice_numeral = dice_numeral(style, color_list, rect_shape),
          dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
