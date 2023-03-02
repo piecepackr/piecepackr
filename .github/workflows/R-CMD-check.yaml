@@ -42,6 +42,22 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install ghostscript/pdftk/exiftool on Ubuntu
+        if: runner.os == 'Linux'
+        run: |
+            sudo apt-get install -y ghostscript
+            sudo apt-get install -y libimage-exiftool-perl
+            sudo apt-get install -y pdftk
+        shell: bash
+
+      - name: Install ghostscript/pdftk/exiftool on Windows
+        if: runner.os == 'Windows'
+        run: |
+            choco install -y ghostscript
+            choco install -y exiftool
+            choco install -y pdftk-java
+        shell: bash
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
