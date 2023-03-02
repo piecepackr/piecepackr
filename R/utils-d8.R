@@ -50,31 +50,11 @@ d8TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gl[[nrow(df)+1]] <- at_ps_grob("die_face", suit, rank, cfg, xy_vp, xy_polygon, name = "d8_face")
 
     # pre-compute grobCoords
-    coords_xyl <- d8t_grobcoords_xyl(x, y, z,
-                                     angle, axis_x, axis_y,
-                                     width, height, depth,
-                                     op_scale, op_angle)
+    coords_xyl <- as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,
-          children=gl, cl=c("projected_d8_top", "coords_xyl"))
-}
-
-#' @export
-makeContent.projected_d8_top <- function(x) {
-    for (i in seq_along(x$children))
-        x$children[[i]]$scale <- x$scale
-    x
-}
-
-d8t_grobcoords_xyl <- function(x, y, z,
-                              angle, axis_x, axis_y,
-                              width, height, depth,
-                              op_scale, op_angle) {
-    xyz <- d8t_xyz(x, y, z,
-                   angle, axis_x, axis_y,
-                   width, height, depth)
-    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+          children=gl, cl=c("projected_rpg_die", "coords_xyl"))
 }
 
 d8t_xyz <- function(x, y, z,
@@ -131,11 +111,8 @@ save_d8_obj <- function(piece_side, suit, rank, cfg,
                   width, height, depth)
 
     cxy <- convex_xy(3, 90)
-    xy_vt <- list(x = rep(c(0.5 * cxy$x, 0.5 * cxy$x + 0.5), 4),
-                  y = c(rep(0.25 * cxy$y + 0.75, 2),
-                        rep(0.25 * cxy$y + 0.50, 2),
-                        rep(0.25 * cxy$y + 0.25, 2),
-                        rep(0.25 * cxy$y, 2)))
+    xy_vt <- list(x = rep(cxy$x / 2, 8) + rep(rep(0:1 / 2, each = 3), 4),
+                  y = rep(cxy$y / 4, 8) + rep(rep(3:0 / 4, each = 3), each = 2))
 
     # textured face elements: face, left, right, back, opposite, opposite left, opposite right, opposite back
     f <- list()
@@ -238,8 +215,7 @@ d8_xyz <- function(suit, rank, cfg,
 }
 
 d8_rank <- function(x) {
-    x <- x %% 8
-    ifelse(x == 0, 8, x)
+    (x - 1) %% 8 + 1
 }
 
 write_d8_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
@@ -255,30 +231,13 @@ write_d8_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = 
         args$type <- "cairo"
     do.call(grDevices::png, args)
 
-    pushViewport(viewport(x = 0.25, width = 0.5, y = 0.875, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 1, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.75, width = 0.5, y = 0.875, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 2, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.25, width = 0.5, y = 0.625, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 3, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.75, width = 0.5, y = 0.625, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 4, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.25, width = 0.5, y = 0.375, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 5, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.75, width = 0.5, y = 0.375, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 6, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.25, width = 0.5, y = 0.125, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 7, cfg)
-    popViewport()
-    pushViewport(viewport(x = 0.75, width = 0.5, y = 0.125, height = 0.25))
-    draw_piece_and_bleed("die_face", suit, 8, cfg)
-    popViewport()
+    xs <- rep(1:2 / 2 - 1/4, 4)
+    ys <- rep(4:1 / 4 - 1/8, each = 2)
+    for (i in 1:8) {
+        pushViewport(viewport(x = xs[i], width = 1/2, y = ys[i], height = 1/4))
+        draw_piece_and_bleed("die_face", suit, i, cfg)
+        popViewport()
+    }
 
     grDevices::dev.off()
     invisible(filename)

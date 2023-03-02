@@ -25,9 +25,11 @@ New features
 
   - New configuration ``dice_d4`` which provide four-sided dice in six color schemes (color controlled by their suit).
     Tetrahedrons with the rank as a numeral at the top point (#286).
+  - New configuration ``dice_numeral`` which provide six-sided dice with numerals instead of pips in six color schemes (#311).
   - New configuration ``dice_d8`` which provide eight-sided dice in six color schemes (color controlled by their suit).
     Octahedrons with the rank as a numeral at the top face (#312).
-  - New configuration ``dice_numeral`` which provide six-sided dice with numerals instead of pips in six color schemes (#311).
+  - New configuration ``dice_d20`` which provide twenty-sided dice in six color schemes (color controlled by their suit).
+    Icosahedrons with the rank as a numeral at the top face (#317).
   - New configurations ``dominoes_chinese`` and ``dominoes_chinese_black`` which provide [Chinese dominoes](https://en.wikipedia.org/wiki/Chinese_dominoes) and [Asian-style dice](https://en.wikipedia.org/wiki/Dice#Arrangement).
   ``dominoes_chinese`` has a white background with black and red pips while ``dominoes_chinese_black`` has a black background with white and red pips (#308).
   - The dice in ``chess1`` and ``chess2`` now have larger chess symbols (#318).

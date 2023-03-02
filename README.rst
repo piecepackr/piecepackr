@@ -5,8 +5,8 @@ piecepackr: Board Game Graphics
     :target: https://cran.r-project.org/package=piecepackr
     :alt: CRAN Status Badge
 
-.. image:: https://img.shields.io/codecov/c/github/piecepackr/piecepackr/master.svg
-    :target: https://codecov.io/github/piecepackr/piecepackr?branch=master
+.. image:: https://codecov.io/github/piecepackr/piecepackr/branch/master/graph/badge.svg
+    :target: https://app.codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
 
 .. image:: https://github.com/piecepackr/piecepackr/workflows/R-CMD-check/badge.svg

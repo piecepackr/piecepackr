@@ -22,6 +22,8 @@
 #'                Tetrahedrons with the rank as a numeral at the top point.}
 #' \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
 #'                Octahedron with the rank as a numeral at the top face.}
+#' \item{dice_d20}{Twenty-sided dice in six color schemes (color controlled by their suit).
+#'                 Icosahedron with the rank as a numeral at the top face.}
 #' \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 #'                   \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
 #' \item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
@@ -152,6 +154,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          dice = dice(color_list, rect_shape),
          dice_d4 = dice_d4(style, color_list),
          dice_d8 = dice_d8(style, color_list),
+         dice_d20 = dice_d20(style, color_list),
          dice_fudge = dice_fudge(color_list, rect_shape),
          dice_numeral = dice_numeral(style, color_list, rect_shape),
          dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
@@ -307,6 +310,33 @@ dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
                       shape.die = "convex3",
                       shape_t.die = 90,
                       invert_colors = TRUE)
+    dice <- pp_cfg(c(dice_list, color_list))
+    dice$has_piecepack <- FALSE
+    dice$has_dice <- TRUE
+    dice
+}
+
+dice_d20 <- function(style = "sans", color_list = color_list_fn()) {
+    dice_list <- list(n_suits = 6, n_ranks = 20,
+                      rank_text.die = "1,2,3,4,5,6\u0331,7,8,9\u0331,10,11,12,13,14,15,16,17,18,19,20",
+                      dm_text.die = "",
+                      ps_cex.die = 0.65,
+                      ps_r.die =  -0.02,
+                      ps_t.die = 90,
+                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      op_grob_fn.die = d20TopGrob,
+                      obj_fn.die = save_d20_obj,
+                      width.die =  0.5 / 0.8660254, # if 1/2" vertex to vertex
+                      height.die =  0.5 / 0.8660254, # if 1/2" vertex to vertex
+                      depth.die = 2 * 0.5 * (3 * sqrt(3) + sqrt(15)) / 12,
+                      background_color = "white,white,white,white,black,black",
+                      shape.die = "convex3",
+                      shape_t.die = 90,
+                      invert_colors = TRUE)
+    for (i in 1:9) {
+        dice_list[[paste0("ps_cex.r", i, ".die")]] <- 0.72
+        dice_list[[paste0("ps_r.r", i, ".die")]] <- 0.02
+    }
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
     dice$has_dice <- TRUE

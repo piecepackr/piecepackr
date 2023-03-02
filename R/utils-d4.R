@@ -100,12 +100,12 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,
-          children=gl, cl=c("projected_d4_top", "coords_xyl"))
+          children=gl, cl=c("projected_rpg_die", "coords_xyl"))
 }
 
 #' @export
-makeContent.projected_d4_top <- function(x) {
-    for (i in 1:3)
+makeContent.projected_rpg_die <- function(x) {
+    for (i in seq_along(x$children))
         x$children[[i]]$scale <- x$scale
     x
 }

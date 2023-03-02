@@ -13,7 +13,7 @@ test_that("no regressions in figures", {
     })}, classes="piecepackr_affine_transformation")
 
     # standard d4 dice
-    cfg <- game_systems()$dice_d4
+    cfg <- envir$dice_d4
     suppressMessages({
       expect_doppelganger("dice_d4", function() {
         grid.piece("die_face", x=1:4, y=1, default.units="in", rank=1:4, suit=1:4, op_scale=0.0, cfg=cfg)
@@ -21,11 +21,21 @@ test_that("no regressions in figures", {
     })}, classes="piecepackr_affine_transformation")
 
     # standard d8 dice
-    cfg <- game_systems()$dice_d8
+    cfg <- envir$dice_d8
     suppressMessages({
       expect_doppelganger("dice_d8", function() {
         grid.piece("die_face", x=1:8, y=1, default.units="in", rank=1:8, suit=c(1:6, 1:2), op_scale=0.0, cfg=cfg)
         grid.piece("die_face", x=1:8, y=2, default.units="in", rank=1:8, suit=c(1:6, 1:2), op_scale=0.5, cfg=cfg)
+    })}, classes="piecepackr_affine_transformation")
+
+    # standard d20 dice
+    cfg <- envir$dice_d20
+    suppressMessages({
+      expect_doppelganger("dice_d20", function() {
+        grid.piece("die_face", x=rep(1:5, 4),
+                   y=rep(1:4, each=5), default.units="in", rank=1:20,
+                   suit=rep(1:6, length.out=20),
+                   op_scale=0.5, cfg=cfg)
     })}, classes="piecepackr_affine_transformation")
 
     # dominoes
