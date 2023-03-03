@@ -79,10 +79,9 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         ex <- c(x, edge$p1$x, edge$p2$x)
         ey <- c(y, edge$p1$y, edge$p2$y)
         ez <- c(z + 0.5 * depth, z - 0.5 * depth, z - 0.5 * depth)
-        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)
+        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)[cycle_d4(1:3, l_edge$vp_rot)]
         xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
-
-        xy_vp <- xy_vp_d4(xyz_polygon, op_scale, op_angle, l_edge$angle, l_edge$vp_rot)
+        xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
 
         gl[[i]] <- at_ps_grob("die_face", suit, l_edge$rank, cfg, xy_vp, xy_polygon,
                               name = df$edge[i])
@@ -110,37 +109,41 @@ makeContent.projected_rpg_die <- function(x) {
     x
 }
 
-# We need to widen/lengthen and possibly rotate viewport..
-xy_vp_d4 <- function(xyz_polygon, op_scale, op_angle, edge_angle, vp_rot) {
-    p_midbottom <- xyz_polygon[2:3]$c
+# We need to widen/lengthen viewport for "convex" shapes
+# Assuming top vertex in viewport at (0.5, 1)
+xy_vp_convex <- function(xyz_polygon, op_scale, op_angle) {
+    n <- length(xyz_polygon)
 
-    # Widen viewport since "convex3" shape doesn't reach edges of viewport
-    p_ll <- xyz_polygon[2]
-    p_lr <- xyz_polygon[3]
-    # p_ll <- p_midbottom + 1.018 * (p_ll - p_midbottom)
-    # p_lr <- p_midbottom + 1.018 * (p_lr - p_midbottom)
-    p_ll <- p_midbottom + 1.183568 * (p_ll - p_midbottom)
-    p_lr <- p_midbottom + 1.183568 * (p_lr - p_midbottom)
+    xy <- convex_xy(n, 90)
 
-    up_diff <- xyz_polygon[1] - p_midbottom
-    p_ul <- p_ll + up_diff
-    p_ur <- p_lr + up_diff
+    # widen viewport since "convex" shape doesn't reach edges of viewport
+    i_left <- which.min(xy$x)
+    i_right <- n + 2 - i_left
 
-    # Adjust viewport down since "convex3" shape doesn't reach bottom of viewport
-    p_ll <- p_ul - 4.1/3 * up_diff
-    p_lr <- p_ur - 4.1/3 * up_diff
+    p_mid_widest <- xyz_polygon[c(i_left, i_right)]$c
+    m_width <- 1 / (xy$x[i_right] - xy$x[i_left])
+    p_left <- p_mid_widest + m_width * (xyz_polygon[i_left] - p_mid_widest)
+    p_right <- p_mid_widest + m_width * (xyz_polygon[i_right] - p_mid_widest)
+
+    up_diff <- xyz_polygon[1] - p_mid_widest
+    p_ul <- p_left  + up_diff
+    p_ur <- p_right + up_diff
+
+    # lengthen viewport since (odd) "convex" shapes don't reach bottom of viewport
+    i_bottom <- which.min(xy$y)
+    i_top <- which.max(xy$y)
+    m_height <- 1 / (1 - xy$y[i_left])
+    p_ll <- p_ul - m_height * up_diff
+    p_lr <- p_ur - m_height * up_diff
 
     x <- c(p_ul$x, p_ll$x, p_lr$x, p_ur$x)
     y <- c(p_ul$y, p_ll$y, p_lr$y, p_ur$y)
     z <- c(p_ul$z, p_ll$z, p_lr$z, p_ur$z)
 
-    # Rotate viewport to xy-plane, rotate viewport, rotate back
     p <- Point3D$new(x, y, z)
-    a <- 70.530 # manually estimated
-    R <- R_z(-edge_angle) %*% R_x(-a) %*% R_z(vp_rot) %*% R_x(a) %*% R_z(edge_angle)
-    p <- p$translate(-p$c)$rotate(R)$translate(p$c)
     p$project_op(op_angle, op_scale)
 }
+
 
 d4t_grobcoords_xyl <- function(x, y, z,
                               angle, axis_x, axis_y,

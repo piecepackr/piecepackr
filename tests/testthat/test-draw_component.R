@@ -53,6 +53,7 @@ test_that("save_print_and_play works as expected", {
 
     expect_true(file.exists(pdf_deck_filename))
 
+    skip_if_not_installed("qpdf") # avoid potential "n_pages_gs()" bug on Windows
     skip_if_not_installed("xmpdf")
     expect_equal(xmpdf::n_pages(pdf_deck_filename), 7, ignore_attr = "names")
     expect_equal(xmpdf::n_pages(pdf_deck_filename_a4), 10, ignore_attr = "names")

@@ -51,6 +51,8 @@ Color is controlled by suit and number of rows/columns by rank.
 Tetrahedrons with the rank as a numeral at the top point.}
 \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
 Octahedron with the rank as a numeral at the top face.}
+\item{dice_d12}{Twelve-sided dice in six color schemes (color controlled by their suit).
+Dodecahedron with the rank as a numeral at the top face.}
 \item{dice_d20}{Twenty-sided dice in six color schemes (color controlled by their suit).
 Icosahedron with the rank as a numeral at the top face.}
 \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).

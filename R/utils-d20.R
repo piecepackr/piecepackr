@@ -44,7 +44,7 @@ d20TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         idx <- seq.int(3 * edge_rank - 2, length.out = 3)
         xyz_polygon <- xyz[idx]
         xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
-        xy_vp <- xy_vp_d8(xyz_polygon, op_scale, op_angle)
+        xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
         gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = edge)
     }
 
@@ -87,7 +87,6 @@ d20_rot_from_top <- function(rank) {
 }
 
 # if one on top figure out rotation so `rank` on top instead
-#### check / update
 d20_rot_to_top <- function(rank) {
     a1 <- 180 - to_degrees(arccos(-sqrt(5)/3)) # 180 - dihedral angle
     a2 <- 37.4 # equilateral pentagonal pyramid side (face) angle
@@ -113,26 +112,6 @@ d20_rot_to_top <- function(rank) {
            R_x(a2) %*% R_z(-144) %*% R_x(-a2) %*% R_z(120) %*% R_x(-180), # 18
            R_z(-120) %*% R_x(-a1) %*% R_z(-180), # 19
            R_x(-180)) # 20
-}
-
-d20t_xyz <- function(x, y, z,
-                    angle, axis_x, axis_y,
-                    width, height, depth) {
-    pc <- Point3D$new(x, y, z)
-    xs <- numeric(0)
-    ys <- numeric(0)
-    zs <- numeric(0)
-    xyz_t <- Point3D$new(convex_xy(3, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
-    for (i in 1:20) {
-        R_i <- d20_rot_from_top(i)
-        xyz_i <- xyz_t$clone()$rotate(R_i)
-        xs <- append(xs, xyz_i$x)
-        ys <- append(ys, xyz_i$y)
-        zs <- append(zs, xyz_i$z)
-    }
-
-    R <- AA_to_R(angle, axis_x, axis_y)
-    Point3D$new(xs, ys, zs)$rotate(R)$translate(pc)
 }
 
 save_d20_obj <- function(piece_side, suit, rank, cfg,

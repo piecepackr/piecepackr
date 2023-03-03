@@ -40,13 +40,13 @@ d8TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                d8_opposite_right = xyz[c(4,6,3)]
         )
         xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
-        xy_vp <- xy_vp_d8(xyz_polygon, op_scale, op_angle)
+        xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
         gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = edge)
     }
     # face
     xyz_polygon <- xyz[1:3]
     xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
-    xy_vp <- xy_vp_d8(xyz_polygon, op_scale, op_angle)
+    xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
     gl[[nrow(df)+1]] <- at_ps_grob("die_face", suit, rank, cfg, xy_vp, xy_polygon, name = "d8_face")
 
     # pre-compute grobCoords
@@ -68,35 +68,6 @@ d8t_xyz <- function(x, y, z,
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
     Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
-}
-
-# We need to widen/lengthen and possibly rotate viewport..
-xy_vp_d8 <- function(xyz_polygon, op_scale, op_angle) {
-    p_midbottom <- xyz_polygon[2:3]$c
-
-    # Widen viewport since "convex3" shape doesn't reach edges of viewport
-    p_ll <- xyz_polygon[2]
-    p_lr <- xyz_polygon[3]
-    # p_ll <- p_midbottom + 1.018 * (p_ll - p_midbottom)
-    # p_lr <- p_midbottom + 1.018 * (p_lr - p_midbottom)
-    p_ll <- p_midbottom + 1.183568 * (p_ll - p_midbottom)
-    p_lr <- p_midbottom + 1.183568 * (p_lr - p_midbottom)
-
-    up_diff <- xyz_polygon[1] - p_midbottom
-    p_ul <- p_ll + up_diff
-    p_ur <- p_lr + up_diff
-
-    # Adjust viewport down since "convex3" shape doesn't reach bottom of viewport
-    p_ll <- p_ul - 4.1/3 * up_diff
-    p_lr <- p_ur - 4.1/3 * up_diff
-
-    x <- c(p_ul$x, p_ll$x, p_lr$x, p_ur$x)
-    y <- c(p_ul$y, p_ll$y, p_lr$y, p_ur$y)
-    z <- c(p_ul$z, p_ll$z, p_lr$z, p_ur$z)
-
-    # Rotate viewport to xy-plane, rotate viewport, rotate back
-    p <- Point3D$new(x, y, z)
-    p$project_op(op_angle, op_scale)
 }
 
 save_d8_obj <- function(piece_side, suit, rank, cfg,
