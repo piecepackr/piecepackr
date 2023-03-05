@@ -28,6 +28,15 @@ test_that("no regressions in figures", {
         grid.piece("die_face", x=1:8, y=2, default.units="in", rank=1:8, suit=c(1:6, 1:2), op_scale=0.5, cfg=cfg)
     })}, classes="piecepackr_affine_transformation")
 
+    # standard d10 dice
+    cfg <- envir$dice_d10
+    suppressMessages({
+      expect_doppelganger("dice_d10", function() {
+        grid.piece("die_face", x=rep(1:5, 2), y=rep(1:2, each=5),
+                   default.units="in", rank=1:10, suit=rep(1:5, 2),
+                   op_scale=0.5, cfg=cfg)
+    })}, classes="piecepackr_affine_transformation")
+
     # standard d12 dice
     cfg <- envir$dice_d12
     suppressMessages({

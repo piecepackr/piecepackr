@@ -48,6 +48,11 @@ test_that("rgl works", {
     expect_true(length(l) == 8)
 
     clear3d()
+    l <- piece3d("die_face", x=rep(1:5, 2), y=rep(1:2, each=5),
+                 rank=1:10, suit=rep(1:5, 2), cfg=dice_d10())
+    expect_true(length(l) == 10)
+
+    clear3d()
     l <- piece3d("die_face", x=rep(1:6, 2), y=rep(1:2, each=6),
                  rank=1:12, suit=rep(1:6, length.out=12), cfg=dice_d12())
     expect_true(length(l) == 12)

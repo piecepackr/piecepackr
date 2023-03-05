@@ -127,6 +127,10 @@ d8_edge_rank <- function(edge, rank) {
     )
 }
 
+d8_rank <- function(x) {
+    (x - 1) %% 8 + 1
+}
+
 d8_xyz <- function(suit, rank, cfg,
                    x, y, z,
                    angle, axis_x, axis_y,
@@ -183,10 +187,6 @@ d8_xyz <- function(suit, rank, cfg,
 
     R <- AA_to_R(angle, axis_x, axis_y)
     Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
-}
-
-d8_rank <- function(x) {
-    (x - 1) %% 8 + 1
 }
 
 write_d8_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),

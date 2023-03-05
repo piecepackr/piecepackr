@@ -21,11 +21,13 @@
 #' \item{dice_d4}{Four-sided dice in six color schemes (color controlled by their suit).
 #'                Tetrahedrons with the rank as a numeral at the top point.}
 #' \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
-#'                Octahedron with the rank as a numeral at the top face.}
+#'                Octahedrons with the rank as a numeral at the top face.}
+#' \item{dice_d10}{Ten-sided dice in six color schemes (color controlled by their suit).
+#'                Pentagonal trapezohedrons with the rank as a numeral at the top face.}
 #' \item{dice_d12}{Twelve-sided dice in six color schemes (color controlled by their suit).
-#'                Dodecahedron with the rank as a numeral at the top face.}
+#'                Dodecahedrons with the rank as a numeral at the top face.}
 #' \item{dice_d20}{Twenty-sided dice in six color schemes (color controlled by their suit).
-#'                 Icosahedron with the rank as a numeral at the top face.}
+#'                 Icosahedrons with the rank as a numeral at the top face.}
 #' \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 #'                   \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
 #' \item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
@@ -156,6 +158,7 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token") {
          dice = dice(color_list, rect_shape),
          dice_d4 = dice_d4(style, color_list),
          dice_d8 = dice_d8(style, color_list),
+         dice_d10 = dice_d10(style, color_list),
          dice_d12 = dice_d12(style, color_list),
          dice_d20 = dice_d20(style, color_list),
          dice_fudge = dice_fudge(color_list, rect_shape),
@@ -283,9 +286,9 @@ dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
                       grob_fn.die = d4Grob,
                       op_grob_fn.die = d4TopGrob,
                       obj_fn.die = save_d4_obj,
-                      width.die =  21 / 0.8660254 / 25.4, # if 21 mm vertex to vertex
-                      height.die =  21 / 0.8660254 / 25.4, # if 21 mm vertex to vertex
-                      depth.die = sqrt(6) * 21 / 3 / 25.4,
+                      width.die =  (21 / 25.4) / 0.8660254, # if 21 mm vertex to vertex
+                      height.die =  (21 / 25.4) / 0.8660254, # if 21 mm vertex to vertex
+                      depth.die = (sqrt(6) / 3) * (21 / 25.4),
                       background_color = "white,white,white,white,black,black",
                       shape.die = "convex3",
                       shape_t.die = 90,
@@ -312,6 +315,31 @@ dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
                       background_color = "white,white,white,white,black,black",
                       shape.die = "convex3",
                       shape_t.die = 90,
+                      invert_colors = TRUE)
+    dice <- pp_cfg(c(dice_list, color_list))
+    dice$has_piecepack <- FALSE
+    dice$has_dice <- TRUE
+    dice
+}
+
+# We'll use alpha-90-beta-90 angle kites
+# See `utils-d10.R` for more notes on calculations
+dice_d10 <- function(style = "sans", color_list = color_list_fn()) {
+    dice_list <- list(n_suits = 6, n_ranks = 10,
+                      rank_text.die = "1,2,3,4,5,6\u0331,7,8,9\u0331,0",
+                      dm_text.die = "",
+                      ps_cex.die = 1.15,
+                      ps_r.die = -0.08,
+                      ps_t.die = 90,
+                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      op_grob_fn.die = d10TopGrob,
+                      obj_fn.die = save_d10_obj,
+                      width.die =  0.4913446110983896164548, # if kite height 5/8"
+                      height.die =  5 / 8,
+                      depth.die =  0.5621585749837085810299,
+                      background_color = "white,white,white,white,black,black",
+                      shape.die = "kite",
+                      shape_r.die = 0.5 - 0.1909830056250526320039,
                       invert_colors = TRUE)
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE

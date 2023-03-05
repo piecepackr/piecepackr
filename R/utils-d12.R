@@ -96,6 +96,28 @@ d12_rot_to_top <- function(rank) {
            R_x(180)) # 12
 }
 
+d12_xyz <- function(suit, rank, cfg,
+                    x, y, z,
+                    angle, axis_x, axis_y,
+                    width, height, depth) {
+    pc <- Point3D$new(x, y, z)
+    R_rank <- d12_rot_to_top(rank)
+    xs <- numeric(0)
+    ys <- numeric(0)
+    zs <- numeric(0)
+    xyz_t <- Point3D$new(convex_xy(5, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
+    for (i in 1:12) {
+        R_i <- d12_rot_from_top(i)
+        xyz_i <- xyz_t$clone()$rotate(R_i %*% R_rank)
+        xs <- append(xs, xyz_i$x)
+        ys <- append(ys, xyz_i$y)
+        zs <- append(zs, xyz_i$z)
+    }
+
+    R <- AA_to_R(angle, axis_x, axis_y)
+    Point3D$new(xs, ys, zs)$rotate(R)$translate(pc)
+}
+
 save_d12_obj <- function(piece_side, suit, rank, cfg,
                         x, y, z, angle, axis_x, axis_y,
                         width, height, depth,
@@ -127,28 +149,6 @@ save_d12_obj <- function(piece_side, suit, rank, cfg,
     write_d12_texture("die_face", suit, rank, cfg, filename = png_filename, res = res)
 
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
-}
-
-d12_xyz <- function(suit, rank, cfg,
-                    x, y, z,
-                    angle, axis_x, axis_y,
-                    width, height, depth) {
-    pc <- Point3D$new(x, y, z)
-    R_rank <- d12_rot_to_top(rank)
-    xs <- numeric(0)
-    ys <- numeric(0)
-    zs <- numeric(0)
-    xyz_t <- Point3D$new(convex_xy(5, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
-    for (i in 1:12) {
-        R_i <- d12_rot_from_top(i)
-        xyz_i <- xyz_t$clone()$rotate(R_i %*% R_rank)
-        xs <- append(xs, xyz_i$x)
-        ys <- append(ys, xyz_i$y)
-        zs <- append(zs, xyz_i$z)
-    }
-
-    R <- AA_to_R(angle, axis_x, axis_y)
-    Point3D$new(xs, ys, zs)$rotate(R)$translate(pc)
 }
 
 write_d12_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),
