@@ -74,7 +74,8 @@ test_that("pp_shape() works as expected", {
 })
 
 test_that("npc_coords() works", {
-    expect_equal(pp_shape("kite")$npc_coords, kite_xy)
+    expect_equal(pp_shape("kite")$npc_coords, kite_xy(r = 0.2))
+    expect_equal(pp_shape("kite", radius = 0.25)$npc_coords, kite_xy(r = 0.25))
     expect_equal(pp_shape("halma")$npc_coords, halma_xy())
     expect_equal(pp_shape("pyramid")$npc_coords, pyramid_xy)
     expect_equal(pp_shape("concave4")$npc_coords, concave_xy(4, 90, 0.2))

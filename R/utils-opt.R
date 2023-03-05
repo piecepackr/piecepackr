@@ -200,6 +200,7 @@ get_shape_r <- function(piece_side, suit, rank, cfg) {
     shape <- get_shape(piece_side, suit, rank, cfg)
     piece <- get_piece(piece_side)
     default <- switch(shape,
+                      kite = 0.25,
                       roundrect = switch(piece,
                                          tile = 0.12,
                                          0.06),

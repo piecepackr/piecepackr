@@ -201,7 +201,8 @@ Shape <- R6Class("pp_shape",
                 xy$c <- rep("C1", length(xy$x))
                 xy
             } else if (label == "kite") {
-                kite_xy
+                if (back) theta <- 180 - theta
+                kite_xy(theta, radius)
             } else if (label == "halma") {
                 halma_xy()
             } else if (label == "meeple") {
@@ -463,7 +464,19 @@ roundrect_xy <- function(shape_r) {
     list(x = x, y = y, c = rep("C1", length(x)))
 }
 
-kite_xy <- list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.25, 0, 0.25), c = rep("C0", 4))
+kite_xy <- function(t = 90, r = 0.25) {
+    t <- t %% 360
+    stopifnot(nigh(t, 0) || nigh(t, 90) || nigh(t, 180) || nigh(t, 270))
+    if (nigh(t, 0)) {
+        list(x = c(1, 0.5 - r, 0, 0.5 - r), y = c(0.5, 1, 0.5, 0), c = rep("C0", 4))
+    } else if (nigh(t, 90)) {
+        list(x = c(0.5, 0, 0.5, 1), y = c(1, 0.5 - r, 0, 0.5 - r), c = rep("C0", 4))
+    } else if (nigh(t, 180)) {
+        list(x = c(0, 0.5 + r, 1, 0.5 + r), y = c(0.5, 0, 0.5, 1), c = rep("C0", 4))
+    } else {
+        list(x = c(0.5, 1, 0.5, 0), y = c(0, 0.5 + r, 1, 0.5 + r), c = rep("C0", 4))
+    }
+}
 pyramid_xy <- list(x = c(0.5, 0, 1), y = c(1, 0, 0), c = rep("C0", 3))
 rect_xy <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1), c = rep("C0", 4))
 
