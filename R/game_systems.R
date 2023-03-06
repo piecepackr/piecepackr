@@ -284,7 +284,7 @@ dice_fudge <- function(color_list = color_list_fn(), rect_shape = "rect") {
 
 dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 4,
-                      rank_text.die = "1,2,3,4",
+                      rank_text.die = 1:4,
                       dm_text.die = "",
                       ps_cex.die = 1,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
@@ -306,11 +306,15 @@ dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
 
 dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 8,
-                      rank_text.die = "1,2,3,4,5,6\u0331,7,8",
-                      dm_text.die = "",
+                      rank_text.die = 1:8,
                       ps_cex.die = 1.15,
                       ps_r.die = 0.03,
                       ps_t.die = 90,
+                      dm_text.die = "",
+                      dm_text.r6.die = "\u2012",
+                      dm_r.die = ifelse(grepl("^dejavu", style), 0.14, 0.13),
+                      dm_t.die = 270,
+                      dm_cex.die = 1.5,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
                       op_grob_fn.die = d8TopGrob,
                       obj_fn.die = save_d8_obj,
@@ -331,11 +335,16 @@ dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
 # See `utils-d10.R` for more notes on calculations
 dice_d10 <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 10,
-                      rank_text.die = "1,2,3,4,5,6\u0331,7,8,9\u0331,0",
-                      dm_text.die = "",
+                      rank_text.die = c(1:9, 0),
                       ps_cex.die = 1.15,
                       ps_r.die = -0.08,
                       ps_t.die = 90,
+                      dm_text.die = "",
+                      dm_text.r6.die = "\u2012",
+                      dm_text.r9.die = "\u2012",
+                      dm_r.die = ifelse(grepl("^dejavu", style), 0.29, 0.28),
+                      dm_t.die = 270,
+                      dm_cex.die = 1.5,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
                       op_grob_fn.die = d10TopGrob,
                       obj_fn.die = save_d10_obj,
@@ -354,7 +363,7 @@ dice_d10 <- function(style = "sans", color_list = color_list_fn()) {
 
 dice_d10_percentile <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 10,
-                      rank_text.die = "1,2,3,4,5,6,7,8,9,0",
+                      rank_text.die = c(1:9, 0),
                       dm_text.die = "0",
                       dm_cex.die = 1.15,
                       dm_r.die = -0.05,
@@ -381,11 +390,16 @@ dice_d10_percentile <- function(style = "sans", color_list = color_list_fn()) {
 
 dice_d12 <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 12,
-                      rank_text.die = "1,2,3,4,5,6\u0331,7,8,9\u0331,10,11,12",
-                      dm_text.die = "",
+                      rank_text.die = 1:12,
                       ps_cex.die = 1.15,
                       ps_r.die = 0.01,
                       ps_t.die = 90,
+                      dm_text.die = "",
+                      dm_text.r6.die = "\u2012",
+                      dm_text.r9.die = "\u2012",
+                      dm_r.die = ifelse(grepl("^dejavu", style), 0.25, 0.22),
+                      dm_t.die = 270,
+                      dm_cex.die = 1.5,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
                       op_grob_fn.die = d12TopGrob,
                       obj_fn.die = save_d12_obj,
@@ -408,12 +422,17 @@ dice_d12 <- function(style = "sans", color_list = color_list_fn()) {
 
 dice_d20 <- function(style = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 20,
-                      rank_text.die = "1,2,3,4,5,6\u0331,7,8,9\u0331,10,11,12,13,14,15,16,17,18,19,20",
-                      dm_text.die = "",
+                      rank_text.die = 1:20,
                       ps_cex.die = 0.65,
                       ps_r.die =  -0.02,
                       ps_t.die = 90,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      dm_text.die = "",
+                      dm_text.r6.die = "\u2012",
+                      dm_text.r9.die = "\u2012",
+                      dm_r.die = ifelse(grepl("^dejavu", style), 0.12, 0.13),
+                      dm_t.die = 270,
+                      dm_cex.die = 1.0,
                       op_grob_fn.die = d20TopGrob,
                       obj_fn.die = save_d20_obj,
                       width.die =  0.5 / 0.8660254, # if 1/2" vertex to vertex
@@ -436,9 +455,13 @@ dice_d20 <- function(style = "sans", color_list = color_list_fn()) {
 dice_numeral <- function(style = "sans", color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
                       fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
-                      rank_text = "1,2,3,4,5,6\u0331",
-                      suit_text.die = "",
+                      rank_text = 1:6,
                       ps_cex.die = 1.8,
+                      dm_text.die = "",
+                      dm_text.r6.die = "\u2012",
+                      dm_r.die = 0.315,
+                      dm_t.die = 270,
+                      dm_cex.die = 2.4,
                       width.die = 16 / 25.4, # 16 mm dice most common
                       background_color = "white,white,white,white,black,black",
                       invert_colors = TRUE,

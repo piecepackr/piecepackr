@@ -91,7 +91,8 @@
 <polygon points='409.32,409.32 409.32,454.68 425.36,438.64 425.36,393.29 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='409.32,454.68 454.68,454.68 470.71,438.64 425.36,438.64 ' style='stroke-width: 3.00; fill: #FFFFFF;' />
 <polygon points='425.36,393.29 425.36,438.64 470.71,438.64 470.71,393.29 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
-<text x='448.04' y='428.35' text-anchor='middle' style='font-size: 36.00px; font-family: sans;' textLength='20.02px' lengthAdjust='spacingAndGlyphs'>6̱</text>
+<text x='448.04' y='428.35' text-anchor='middle' style='font-size: 36.00px; font-family: sans;' textLength='20.02px' lengthAdjust='spacingAndGlyphs'>6</text>
+<text x='448.04' y='440.16' text-anchor='middle' style='font-size: 28.80px; font-family: sans;' textLength='16.02px' lengthAdjust='spacingAndGlyphs'>‒</text>
 <polygon points='425.36,393.29 425.36,438.64 470.71,438.64 470.71,393.29 ' style='stroke-width: 3.00; fill: none;' />
 <polygon points='65.36,321.29 49.32,337.32 49.32,382.68 65.36,366.64 ' style='stroke-width: 3.00; fill: #D55E00;' />
 <polygon points='110.71,366.64 65.36,366.64 49.32,382.68 94.68,382.68 ' style='stroke-width: 3.00; fill: #D55E00;' />
