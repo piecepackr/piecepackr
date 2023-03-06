@@ -31,7 +31,11 @@ New features
   - New configuration ``dice_d8`` which provide eight-sided dice in six color schemes (color controlled by their suit).
     Octahedrons with the rank as a numeral at the top face (#312).
   - New configuration ``dice_d10`` which provide ten-sided dice in six color schemes (color controlled by their suit).
-    Pentagonal trapezohedrons with the rank as a numeral at the top face (#315).
+    Pentagonal trapezohedrons with the rank as a numeral at the top face.
+    The rank of ten is represented by a zero (#315).
+  - New configuration ``dice_d10_percentile`` which provide ten-sided dice in six color schemes (color controlled by their suit).
+    Pentagonal trapezohedrons with the rank as a numeral followed by a zero at the top face.
+    The rank of ten is represented by a zero (#322).
   - New configuration ``dice_d12`` which provide twelve-sided dice in six color schemes (color controlled by their suit).
     Dodecahedrons with the rank as a numeral at the top face (#316).
   - New configuration ``dice_d20`` which provide twenty-sided dice in six color schemes (color controlled by their suit).

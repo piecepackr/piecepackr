@@ -21,6 +21,7 @@ test_that("save_piece_obj works", {
 
 test_that("rgl works", {
     skip_on_cran()
+    skip_if_not_installed("rgl")
     library("rgl")
     # go stone OBJ generation uses "rgl" in background
     files <- save_piece_obj("bit_face", cfg = game_systems("dejavu3d")$go)
@@ -50,6 +51,11 @@ test_that("rgl works", {
     clear3d()
     l <- piece3d("die_face", x=rep(1:5, 2), y=rep(1:2, each=5),
                  rank=1:10, suit=rep(1:5, 2), cfg=dice_d10())
+    expect_true(length(l) == 10)
+
+    clear3d()
+    l <- piece3d("die_face", x=rep(1:5, 2), y=rep(1:2, each=5),
+                 rank=1:10, suit=rep(1:5, 2), cfg=dice_d10_percentile())
     expect_true(length(l) == 10)
 
     clear3d()

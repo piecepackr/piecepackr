@@ -37,6 +37,15 @@ test_that("no regressions in figures", {
                    op_scale=0.5, cfg=cfg)
     })}, classes="piecepackr_affine_transformation")
 
+    # percentile d10 dice
+    cfg <- envir$dice_d10_percentile
+    suppressMessages({
+      expect_doppelganger("dice_d10_percentile", function() {
+        grid.piece("die_face", x=rep(1:5, 2), y=rep(1:2, each=5),
+                   default.units="in", rank=1:10, suit=rep(1:5, 2),
+                   op_scale=0.5, cfg=cfg)
+    })}, classes="piecepackr_affine_transformation")
+
     # standard d12 dice
     cfg <- envir$dice_d12
     suppressMessages({

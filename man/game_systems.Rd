@@ -52,7 +52,11 @@ Tetrahedrons with the rank as a numeral at the top point.}
 \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
 Octahedrons with the rank as a numeral at the top face.}
 \item{dice_d10}{Ten-sided dice in six color schemes (color controlled by their suit).
-Pentagonal trapezohedrons with the rank as a numeral at the top face.}
+Pentagonal trapezohedrons with the rank as a numeral at the top face.
+The rank of ten is represented by a zero.}
+\item{dice_d10_percentile}{Ten-sided dice in six color schemes (color controlled by their suit).
+Pentagonal trapezohedrons with the rank as a numeral followed by a zero at the top face.
+The rank of ten is represented by a zero.}
 \item{dice_d12}{Twelve-sided dice in six color schemes (color controlled by their suit).
 Dodecahedrons with the rank as a numeral at the top face.}
 \item{dice_d20}{Twenty-sided dice in six color schemes (color controlled by their suit).

@@ -33,6 +33,7 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                       width=NA, height=NA, depth=NA,
                       op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
+    opt <- cfg$get_piece_opt("die_face", suit, rank)
 
     x <- convertX(x, "in", valueOnly = TRUE)
     y <- convertY(y, "in", valueOnly = TRUE)
@@ -64,13 +65,22 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     gl <- gList()
     fn_idx <- function(idx) switch(idx, 1:4, 5:8, 9:12, 13:16, 17:20, 21:24, 25:28, 29:32, 33:36, 37:40)
+    if (nigh(opt$shape_t, 90)) {
+        idx_vp <- 1:4
+    } else if (nigh(opt$shape_t, 0)) {
+        idx_vp <- c(2:4, 1)
+    } else if (nigh(opt$shape_t, 180)) {
+        idx_vp <- c(4, 1:3)
+    } else if (nigh(opt$shape_t, 270)) {
+        idx_vp <- c(3:4, 1:2)
+    }
     for (i in 1:nrow(dfc)) {
         edge_rank <- dfc$rank[i]
         opt <- cfg$get_piece_opt("die_face", suit, edge_rank)
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
         xyz_polygon <- xyz[fn_idx(dfc$idx[i])]
         xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
-        xy_vp <- xy_vp_kite(xyz_polygon, op_scale, op_angle)
+        xy_vp <- xy_vp_kite(xyz_polygon, op_scale, op_angle)[idx_vp]
         gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = dfc$edge[i])
     }
 
@@ -82,10 +92,8 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
           children=gl, cl=c("projected_rpg_die", "coords_xyl"))
 }
 
+# Assumes "acute" angle on top (`theta = 90`)
 xy_vp_kite <- function(xyz_polygon, op_scale, op_angle) {
-
-    # widen viewport since "convex" shape doesn't reach edges of viewport
-
     p_mid <- xyz_polygon[c(2,4)]$c
     p_left <- xyz_polygon[2]
     p_right <- xyz_polygon[4]
@@ -105,53 +113,20 @@ xy_vp_kite <- function(xyz_polygon, op_scale, op_angle) {
     p$project_op(op_angle, op_scale)
 }
 
-# # if `rank` on top figure out rotation so one on top instead
-# # currently just a fixed arrangement
-# d10_rot_from_top <- function(rank) {
-#     # a <- 37.4 # equilateral pentagonal pyramid side (face) angle
-#     a <- 37.4
-#     stopifnot(rank <= 10)
-#     switch(rank,
-#            diag(3), # 1
-#            diag(3), # 2
-#            R_x(a) %*% R_z(144) %*% R_x(-a), # 3
-#            diag(3), # 4
-#            R_x(a) %*% R_z(-144) %*% R_x(-a), # 5
-#            diag(3), # 6
-#            R_x(a) %*% R_z(72) %*% R_x(-a), # 7
-#            R_x(180), # 8
-#            R_x(a) %*% R_z(-72) %*% R_x(-a), # 9
-#            diag(3)) # 0
-# }
-#
-# # if one on top figure out rotation so `rank` on top instead
-# d10_rot_to_top <- function(rank) {
-#     # a <- 37.4 # equilateral pentagonal pyramid side (face) angle
-#     a <- 37.4
-#     stopifnot(rank <= 10)
-#     switch(rank,
-#            diag(3), # 1
-#            diag(3), # 2
-#            R_x(a) %*% R_z(-144) %*% R_x(-a), # 3
-#            diag(3), # 4
-#            R_x(a) %*% R_z(144) %*% R_x(-a), # 5
-#            diag(3), # 6
-#            R_x(a) %*% R_z(-72) %*% R_x(-a), # 7
-#            R_x(-180), # 8
-#            R_x(a) %*% R_z(72) %*% R_x(-a), # 9
-#            diag(3)) # 0
-# }
-
 d10_xyz <- function(suit, rank, cfg,
                     x, y, z,
                     angle, axis_x, axis_y,
                     width, height, depth) {
+    opt <- cfg$get_piece_opt("die_face", suit, rank)
     pc <- Point3D$new(x, y, z)
-    # top face
     xy <- kite_xy(r = 0.5 - 0.1909830056250526320039)
-    xyz_t <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
-    # opposite bottom face
-    xyz_b <- Point3D$new(xy, z=0.0)$translate(-0.5, -0.5, -0.5)$rotate(R_z(180))$dilate(width, height, depth)
+    if (nigh(opt$shape_t, 90) || nigh(opt$shape_t, 270)) {
+        xyz_t <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
+        xyz_b <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, -0.5)$rotate(R_z(180))$dilate(width, height, depth)
+    } else {
+        xyz_t <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(height, width, depth)
+        xyz_b <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, -0.5)$rotate(R_z(180))$dilate(height, width, depth)
+    }
     xyz_b <- xyz_b[c(1,4,3,2)]
 
     xyz_l2 <- kite_xyz_missing_right(xyz_t[1], xyz_b[3], xyz_b[2]) # left2 face
@@ -216,7 +191,7 @@ d10_xyz <- function(suit, rank, cfg,
     zs <- c(z_face, z_left1, z_left2, z_right1, z_right2,
             z_opposite, z_opposite_left1, z_opposite_left2, z_opposite_right1, z_opposite_right2)
 
-    R <- AA_to_R(angle, axis_x, axis_y)
+    R <- R_z(opt$shape_t - 90) %*% AA_to_R(angle, axis_x, axis_y)
     Point3D$new(xs, ys, zs)$rotate(R)$translate(pc)
 }
 
@@ -311,11 +286,18 @@ write_d10_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
 
     current_dev <- grDevices::dev.cur()
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
     height <- cfg$get_height("die_face", suit, rank)
     width <- cfg$get_width("die_face", suit, rank)
 
-    args <- list(filename = filename, height = 5 * height, width = 2 * width,
-                 units = "in", res = res, bg = "transparent")
+    if (nigh(opt$shape_t, 90) || nigh(opt$shape_t, 270)) {
+        args <- list(filename = filename, height = 5 * height, width = 2 * width,
+                     units = "in", res = res, bg = "transparent")
+    } else {
+        args <- list(filename = filename, height = 5 * width, width = 2 * height,
+                     units = "in", res = res, bg = "transparent")
+    }
+    angle <- 90 - opt$shape_t
     if (capabilities("cairo"))
         args$type <- "cairo"
     do.call(grDevices::png, args)
@@ -323,7 +305,7 @@ write_d10_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg =
     xs <- rep(1:2 / 2 - 1/4, 5)
     ys <- rep(5:1 / 5 - 1/10, each = 2)
     for (i in 1:10) {
-        pushViewport(viewport(x = xs[i], width = 1/2, y = ys[i], height = 1/5))
+        pushViewport(viewport(x = xs[i], width = inch(width), y = ys[i], height = inch(height), angle = angle))
         draw_piece_and_bleed("die_face", suit, i, cfg)
         popViewport()
     }
