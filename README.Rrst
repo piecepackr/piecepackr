@@ -73,14 +73,26 @@ df$cfg <- "checkers1"
 pmap_piece(df, envir=game_systems(), default.units="in", trans=op_transform, op_scale=0.5)
 .. ..
 
-Traditional 6-sided dice
-~~~~~~~~~~~~~~~~~~~~~~~~
+Dice
+~~~~
 
-``game_systems()`` returns a ``dice`` configuration which can make standard 6-sided dice in six colors.
-The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations have Asian-style pipped dice.
+``game_systems()`` returns several configurations for dice:
 
-Double-18 dominoes
-~~~~~~~~~~~~~~~~~~
+* The ``dice`` configuration makes standard 6-sided dice with pips.
+* The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations have Asian-style pipped dice.
+* The ``dice_d4``, ``dice_numeral``, ``dice_d8``, ``dice_d10``, ``dice_d10_percentile``, ``dice_d12``, and ``dice_d20`` configurations provide the seven `polyhedral dice <https://en.wikipedia.org/wiki/Dice#Polyhedral_dice>`_ most commonly used by wargames, roleplaying games, and trading card games.
+* The ``dice_fudge`` configuration make the six-sided `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`_ with two plus, two minus, and two blank faces most commonly used in the `Fudge <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)>`_ and `Fate <https://en.wikipedia.org/wiki/Fate_(role-playing_game_system)>`_ roleplaying games.
+
+.. {r polyhedral, fig.width=8, fig.height=2, fig.cap="Polyhedral dice most commonly used in wargames, roleplaying games, and trading card games"}
+library("piecepackr")
+envir <- game_systems()
+grid.piece("die_face", suit = c(1:6, 1), rank = 1:7,
+           cfg = paste0("dice_", c("d4", "numeral", "d8", "d10_percentile", "d10", "d12", "d20")),
+           envir = envir, x = 1:7, y = 1, default.units = "in", op_scale = 0.5)
+.. ..
+
+Dominoes
+~~~~~~~~
 
 ``game_systems()`` returns seven different configurations for double-18 dominoes:
 
@@ -155,7 +167,6 @@ Other included games and components
 
 * An ``alquerque`` configuration that produces "boards"/"bits" for `Alquerque <https://en.wikipedia.org/wiki/Alquerque>`__ in a variety of colors.
 * ``chess1`` and ``chess2`` configurations with checkered "boards" and matching chess "bits" (currently "disc" pieces instead of "Staunton" pieces).
-* A ``dice_fudge`` configuration which can produce `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`__ in a variety of colors.
 * A ``meeples`` configuration that produces "meeple" bits in a variety of colors.
 * A ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ "board"/"bits" in a variety of colors.
 * A ``reversi`` configuration that can produce "boards"/"bits" for `Reversi <https://en.wikipedia.org/wiki/Reversi>`__ in a variety of colors.

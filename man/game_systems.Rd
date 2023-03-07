@@ -47,8 +47,11 @@ and the \dQuote{back} is a lined board.
 Color is controlled by suit and number of rows/columns by rank.
 \code{chess1} has one inch squares and \code{chess2} has two inch squares.}
 \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
+\item{dice_d4, dice_numeral, dice_d8, dice_d10, dice_d10_percentile, dice_d12, dice_d20}{
+Polyhedral dice most commonly used to play wargames, roleplaying games, and trading card games:\describe{
 \item{dice_d4}{Four-sided dice in six color schemes (color controlled by their suit).
 Tetrahedrons with the rank as a numeral at the top point.}
+\item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
 \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
 Octahedrons with the rank as a numeral at the top face.}
 \item{dice_d10}{Ten-sided dice in six color schemes (color controlled by their suit).
@@ -60,10 +63,9 @@ The rank of ten is represented by a zero.}
 \item{dice_d12}{Twelve-sided dice in six color schemes (color controlled by their suit).
 Dodecahedrons with the rank as a numeral at the top face.}
 \item{dice_d20}{Twenty-sided dice in six color schemes (color controlled by their suit).
-Icosahedrons with the rank as a numeral at the top face.}
+Icosahedrons with the rank as a numeral at the top face.}}}
 \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
 \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
-\item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
 \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 Traditional pipped dominoes in six color schemes (\code{dominoes} and \code{dominoes_white} are the same).
 In each color scheme the number of pips on the \dQuote{top} of the domino is
