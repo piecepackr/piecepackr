@@ -66,7 +66,7 @@
 #'                     to control appearance of the shape.
 #' @param back Whether the shape should be reflected across a vertical line in the middle of the viewport.
 #' @examples
-#'  if (require("grid")) {
+#'  if (require("grid", quietly = TRUE)) {
 #'      gp <- gpar(col="black", fill="yellow")
 #'      rect <- pp_shape(label="rect")
 #'      convex6 <- pp_shape(label="convex6")
@@ -92,7 +92,8 @@
 #'      grid.draw(rect$shape(gp=gp))
 #'      grid.draw(rect$mat(mat_width=c(0.2, 0.1, 0.3, 0.4), gp=gpar(fill="blue")))
 #'      popViewport()
-#'
+#'  }
+#'  if (require("grid", quietly = TRUE)) {
 #'      grid.newpage()
 #'      gp <- gpar(col="black", fill="yellow")
 #'
@@ -104,7 +105,8 @@
 #'      grid.draw(pp_shape("kite")$shape(gp=gp, vp=vp))
 #'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("meeple")$shape(gp=gp, vp=vp))
-#'
+#'  }
+#'  if (require("grid", quietly = TRUE)) {
 #'      grid.newpage()
 #'      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("convex3", 0)$shape(gp=gp, vp=vp))
@@ -114,7 +116,8 @@
 #'      grid.draw(pp_shape("convex5", 180)$shape(gp=gp, vp=vp))
 #'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("convex6", 270)$shape(gp=gp, vp=vp))
-#'
+#'  }
+#'  if (require("grid", quietly = TRUE)) {
 #'      grid.newpage()
 #'      vp <- viewport(x=1/4, y=1/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("concave3", 0, 0.1)$shape(gp=gp, vp=vp))
@@ -124,16 +127,16 @@
 #'      grid.draw(pp_shape("concave5", 180, 0.3)$shape(gp=gp, vp=vp))
 #'      vp <- viewport(x=1/4, y=3/4, width=1/2, height=1/2)
 #'      grid.draw(pp_shape("concave6", 270)$shape(gp=gp, vp=vp))
-#'
-#'      if (require("gridpattern")) {
-#'          grid.newpage()
-#'          hex <- pp_shape("convex6")
-#'          gp <- gpar(fill = c("blue", "yellow", "red"), col = "black")
-#'          grid.draw(hex$pattern("polygon_tiling", gp = gp, spacing = 0.1,
-#'                                type = "truncated_trihexagonal"))
-#'          gp <- gpar(fill = "black", col = NA)
-#'          grid.draw(hex$mat(mat_width = 0.025, gp = gp))
-#'      }
+#'  }
+#'  if (require("grid", quietly = TRUE) &&
+#'      requireNamespace("gridpattern", quietly = TRUE)) {
+#'      grid.newpage()
+#'      hex <- pp_shape("convex6")
+#'      gp <- gpar(fill = c("blue", "yellow", "red"), col = "black")
+#'      grid.draw(hex$pattern("polygon_tiling", gp = gp, spacing = 0.1,
+#'                            type = "truncated_trihexagonal"))
+#'      gp <- gpar(fill = "black", col = NA)
+#'      grid.draw(hex$mat(mat_width = 0.025, gp = gp))
 #'  }
 #' @export
 pp_shape <- function(label = "rect", theta = 90, radius = 0.2, back = FALSE) {

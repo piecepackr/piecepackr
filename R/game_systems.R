@@ -8,15 +8,16 @@
 #' Contains the following game systems:\describe{
 #' \item{alquerque}{Boards and pieces in six color schemes for Alquerque}
 #' \item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
-#'       Checkers are represented by a piecepackr \dQuote{bit}.  The \dQuote{board} \dQuote{face} is a checkered board
-#'       and the \dQuote{back} is a lined board.
+#'       Checkers are represented by a piecepackr \dQuote{bit}.
+#'       The \dQuote{board} \dQuote{face} is a checkered board and the \dQuote{back} is a lined board.
 #'       Color is controlled by suit and number of rows/columns by rank.
 #'       \code{checkers1} has one inch squares and \code{checkers2} has two inch squares.}
-#' \item{chess1, chess2}{Chess pieces and checkered boards in six color schemes.
-#'       Chess pieces are represented by a \dQuote{bit} (face).   The \dQuote{board} \dQuote{face} is a checkered board
-#'       and the \dQuote{back} is a lined board.
+#' \item{chess1, chess2}{Chess pieces, boards, and dice in six color schemes.
+#'       Chess pieces are represented by a \dQuote{bit} (face).
+#'       The \dQuote{board} \dQuote{face} is a checkered board and the \dQuote{back} is a lined board.
 #'       Color is controlled by suit and number of rows/columns by rank.
-#'       \code{chess1} has one inch squares and \code{chess2} has two inch squares.}
+#'       \code{chess1} has one inch squares and \code{chess2} has two inch squares.
+#'       Currently uses print-and-play style discs instead of 3D Staunton chess pieces.}
 #' \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
 #' \item{dice_d4, dice_numeral, dice_d8, dice_d10, dice_d10_percentile, dice_d12, dice_d20}{
 #'       Polyhedral dice most commonly used to play wargames, roleplaying games, and trading card games:\describe{
@@ -108,41 +109,56 @@
 #'             if \code{"joystick"} the piecepack pawn will be a \dQuote{joystick} style pawn.
 #'             Note for the latter two pawn styles only \code{pawn_top} will work with \code{grid.piece}.
 #' @examples
-#'        cfgs <- game_systems()
-#'        names(cfgs)
+#'     cfgs <- game_systems(pawn = "joystick")
+#'     names(cfgs)
 #'
-#'     if (require("grid")) {
-#'        op <- options()
-#'        on.exit(options(op))
-#'        options(piecepackr.at.inform = FALSE)
+#'     op <- options()
+#'     on.exit(options(op))
+#'     options(piecepackr.at.inform = FALSE)
 #'
-#'        # standard dice
-#'        grid.newpage()
-#'        grid.piece("die_face", x=1:6, default.units="in", rank=1:6, suit=1:6,
+#'     # standard dice, meeples, and joystick pawns
+#'     if (requireNamespace("grid", quietly = TRUE)) {
+#'        grid::grid.newpage()
+#'        dice <-  c("d4", "numeral", "d8", "d10", "d12", "d20")
+#'        cfg <- paste0("dice_", dice)
+#'        grid.piece("die_face", suit = c(1:6, 1), rank = 1:6,
+#'                   cfg = cfg, envir = cfgs, x = 1:6, y = 1,
+#'                   default.units = "in", op_scale = 0.5)
+#'        grid.piece("die_face", rank=1:6, suit=1:6,
+#'                   x=1:6, y=2, default.units="in",
 #'                   op_scale=0.5, cfg=cfgs$dice)
+#'        grid.piece("bit_face", suit=1:6,
+#'                   x=1:6, y=3, default.units="in",
+#'                   op_scale=0.5, cfg=cfgs$meeple)
+#'        grid.piece("pawn_top", suit=1:6,
+#'                   x=1:6, y=4, default.units="in",
+#'                   op_scale=0.5, cfg=cfgs$piecepack)
 #'     }
-#'     if (require("grid")) {
-#'        # dominoes
-#'        grid.newpage()
+#'     # dominoes
+#'     if (requireNamespace("grid", quietly = TRUE)) {
+#'        grid::grid.newpage()
 #'        colors <- c("black", "red", "green", "blue", "yellow", "white")
 #'        cfg <- paste0("dominoes_", rep(colors, 2))
-#'        grid.piece("tile_face", x=rep(6:1, 2), y=rep(2*2:1, each=6), suit=1:12, rank=1:12+1,
-#'                   cfg=cfg, default.units="in", envir=cfgs, op_scale=0.5)
+#'        grid.piece("tile_face",  suit=1:12, rank=1:12+1,
+#'                   cfg=cfg, envir=cfgs,
+#'                   x=rep(6:1, 2), y=rep(2*2:1, each=6),
+#'                   default.units="in", op_scale=0.5)
 #'     }
-#'     if (require("grid")) {
-#'        # various piecepack expansions
-#'        grid.newpage()
-#'        df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
-#'                               suit=NA, angle=NA, z=NA, stringsAsFactors=FALSE)
-#'        df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),
+#'     # piecepack "playing card expansion"
+#'     if (requireNamespace("grid", quietly = TRUE)) {
+#'        grid::grid.newpage()
+#'        df_tiles <- data.frame(piece_side="tile_back",
+#'                               x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
+#'                               suit=NA, angle=NA, z=1/8,
+#'                               stringsAsFactors=FALSE)
+#'        df_coins <- data.frame(piece_side="coin_back",
+#'                               x=rep(4:1, 4), y=rep(4:1, each=4),
 #'                               suit=c(1,4,1,4,4,1,4,1,2,3,2,3,3,2,3,2),
-#'                               angle=rep(c(180,0), each=8), z=1/4+1/16, stringsAsFactors=FALSE)
+#'                               angle=rep(c(180,0), each=8), z=1/4+1/16,
+#'                               stringsAsFactors=FALSE)
 #'        df <- rbind(df_tiles, df_coins)
-#'        pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5, default.units="in")
-#'     }
-#'     if (require("grid")) {
-#'        grid.newpage()
-#'        pmap_piece(df, cfg = cfgs$dual_piecepacks_expansion, op_scale=0.5, default.units="in")
+#'        pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5,
+#'                   default.units="in")
 #'     }
 #' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 #' @export

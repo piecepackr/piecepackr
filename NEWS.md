@@ -615,7 +615,7 @@ New features
 * Function ``game_systems()`` now returns the following new configurations:
 
   + "go" to make "board" and "stone" "bit" pieces in six colors (#169, #176). 
-  + "chess1", "chess2" to make "board" and "bit" chess pieces in six colors (#167).
+  + "chess1", "chess2" to make "board", "die", and "bit" chess pieces in six colors (#167).
     "chess1"'s "board" has 1" cells while "chess2"'s "board" has 2" cells.
     Currently the chess piece's are print-and-play style discs instead of 3D Staunton style pieces.
 

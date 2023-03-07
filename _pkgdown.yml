@@ -54,4 +54,7 @@ reference:
       contents:
         - piecepackr-defunct
 figures:
+  dev: grDevices::png
+  dev.args:
+    type: "cairo"
   fig.asp: 0.800
