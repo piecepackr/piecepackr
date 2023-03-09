@@ -26,15 +26,20 @@ by \code{cairo_pdf()} for a given character.
 \code{has_font()} tries to determine if a given font is available on the OS.
 }
 \details{
-\code{get_embedded_font()} depends on \code{pdffonts} being on the system path
-(on many OSes found in a \code{poppler-utils} package).
+\code{get_embedded_font()} depends on the suggested \code{pdftools} package being installed
+and R being compiled with Cairo support.
+\code{has_font()} depends on either the suggested \code{systemfonts} (preferred) or \code{pdftools}
+packages being installed.
 }
 \examples{
- if ((Sys.which("pdffonts") != "") && capabilities("cairo")) {
+ if (requireNamespace("pdftools", quietly = TRUE) && capabilities("cairo")) {
      chars <- c("a", "\u2666")
      fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
      get_embedded_font(fonts, chars)
+ }
 
+ if (requireNamespace("systemfonts") ||
+     (requireNamespace("pdftools", quietly = TRUE) && capabilities("cairo"))) {
      has_font("Dejavu Sans")
  }
 }

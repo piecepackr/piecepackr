@@ -102,9 +102,9 @@ Dice
                default.units = "in", op_scale = 0.5)
 
 .. figure:: man/figures/README-polyhedral-1.png
-    :alt: Polyhedral dice most commonly used in wargames, roleplaying games, and trading card games
+    :alt: Polyhedral dice
 
-    Polyhedral dice most commonly used in wargames, roleplaying games, and trading card games
+    Polyhedral dice
 
 Dominoes
 ~~~~~~~~
@@ -737,6 +737,12 @@ Suggested R packages:
 **magick**
     ``file2grob()`` uses ``magick::image_read()`` to import images that are not "png", "jpg/jpeg", or "svg/svgz".
 
+**pdftools**
+   ``get_embedded_font()`` uses ``pdftools::pdf_fonts()``.  
+   It also requires R compiled with Cairo support (i.e. ``capabilities("cairo") == TRUE``).
+   If the suggested R package ``{systemfonts}`` is not installed then ``has_font()`` 
+   can also fall back on using ``get_embedded_font()``.
+
 **rayrender**
     Required for the ``{rayrender}`` binding ``piece()`` and the ``pp_cfg()`` object's ``rayrender_fn()`` method.
 
@@ -748,9 +754,11 @@ Suggested R packages:
 
 **rgl**
     Required for the ``{rgl}`` binding ``piece3d()`` and the ``pp_cfg()`` object's ``rgl_fn()`` method.  Also required for the ``obj_fn()`` method for game pieces with ellipsoid shapes (in particular this may effect ``save_piece_obj()``, ``piece()``, ``piece3d()``, and/or ``piece_mesh()`` when used with the go stones and joystick pawns provided by ``game_systems()``).  You may need to `install extra software <https://github.com/dmurdoch/rgl#installing-opengl-support>`__ for ``{rgl}`` to support OpenGL (in addition to WebGL).
+    Consider also installing ``{readobj}`` which allows the ``{rgl}`` bindings to support more game piece shapes; in particular the "meeple", "halma", and "roundrect" shaped token game pieces.
 
 **systemfonts**
-    ``has_font()`` preferably uses ``{systemfonts}`` to determine if a given font is available.  If ``{styemfonts}`` is not available it can fall back on the system tool ``pdffonts`` if ``capabilities("cairo") == TRUE``.
+    ``has_font()`` preferably uses ``{systemfonts}`` to determine if a given font is available.  
+    If ``{systemfonts}`` is not available then ``has_font`` can fall back on ``{pdftools}`` if ``capabilities("cairo") == TRUE``.
 
 **tweenr**
     ``animate_piece()`` needs ``{tweenr}`` to do animation transitions (i.e. its ``n_transitions`` argument is greater than the default zero).
@@ -777,24 +785,22 @@ For more advanced ``{piecepackr}`` configurations you'll want to install additio
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
 
-**Note**  ``piecepackr`` works best if the version of R installed was compiled with support for Cairo and fortunately this is typically the case.  One can confirm if this is true via R's ``capabilities`` function:
+Certain ``{piecepackr}`` features works best if the version of R installed was compiled with support for Cairo:
+
+* A subset of game system configurations use Unicode glyphs.  The "cairo" graphics devices support Unicode glyphs.
+* 3D ``{grid}`` renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.  
+  In recent versions of R the "cairo" graphics devices support the "affine transformation" feature.
+* The function ``get_embedded_font()`` needs support for the ``cairo_pdf()`` function (which embeds fonts in the pdf)
+  and by default ``render_piece()`` and ``save_print_and_play()`` may try to use "cairo" graphics devices.
+
+Fortunately R is typically compiled with support for Cairo.  
+One can confirm that R was compiled with support for Cairo via R's ``capabilities()`` function:
 
 .. code:: r
 
    > capabilities("cairo")
    cairo
     TRUE
-
-Also although most users won't need them ``{piecepackr}`` contains utility functions that depend on the system dependencies ``poppler-utils``:
-
-1. ``get_embedded_font()`` (a debugging helper function) needs ``pdffonts`` (usually found in ``poppler-utils``).  
-   If the suggested R package ``{systemfonts}`` is not installed then ``has_font()`` also needs ``pdffonts``.
-
-You can install these utilities on Ubuntu with
-
-.. code:: bash
-
-    sudo apt install poppler-utils
 
 Frequently Asked Questions
 --------------------------
@@ -823,7 +829,7 @@ However, third party game configurations `may be encumbered by copyright / trade
 Why does the package sometimes use a different font then the one I instructed it to use for a particular symbol?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Some of R's graphic devices (``cairo_pdf()``, ``svg()``, and ``png()``) use ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (although sometimes the symbol it chooses instead still looks nice in which case maybe you shouldn't sweat it).  It is hard but not impossible to `configure which fonts <https://eev.ee/blog/2015/05/20/i-stared-into-the-fontconfig-and-the-fontconfig-stared-back-at-me/>`_ are dispatched by fontconfig.  A perhaps easier way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to simply temporarily move (or permanently delete) from your system font folders the undesired fonts that ``fontconfig`` chooses over your requested fonts::
+Some of R's graphic devices (``cairo_pdf()``, ``svg()``, and ``png()``) use ``Cairo`` which uses ``fontconfig`` to select fonts.  ``fontconfig`` picks what it thinks is the 'best' font and sometimes it annoyingly decides that the font to use for a particular symbol is not the one you asked it to use (although sometimes the symbol it chooses instead still looks nice in which case maybe you shouldn't sweat it).  It is hard but not impossible to `configure which fonts <https://eev.ee/blog/2015/05/20/i-stared-into-the-fontconfig-and-the-fontconfig-stared-back-at-me/>`_ are dispatched by ``fontconfig``.  A perhaps easier way to guarantee your symbols will be dispatched would be to either make a new font and re-assign the symbols to code points in the Unicode "Private Use Area" that aren't used by any other font on your system or to simply temporarily move (or permanently delete) from your system font folders the undesired fonts that ``fontconfig`` chooses over your requested fonts::
 
     # temporarily force fontconfig to use Noto Emoji instead of Noto Color Emoji in my piecepacks on Ubuntu 18.04
     $ sudo mv /usr/share/fonts/truetype/noto/NotoColorEmoji.ttf ~/
