@@ -713,8 +713,11 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
     piecepack_base <- list(depth.coin=0.25,
                            invert_colors.matchstick = TRUE,
                            ps_cex.r2.matchstick = 0.7,
-                           dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5, suit_color.s2.matchstick = "grey30",
-                           mat_color.tile_back="white", mat_width.tile_back=0.05, suit_color.unsuited="black",
+                           dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5,
+                           suit_color.s2.matchstick = "grey30",
+                           suit_color.s2.bit = "grey30",
+                           mat_color.tile_back="white", mat_width.tile_back=0.05,
+                           suit_color.unsuited="black",
                            invert_colors.bit = TRUE,
                            rank_text=",a,2,3,4,5",
                            use_suit_as_ace=TRUE,
@@ -736,6 +739,9 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
     playing_cards_expansion <- piecepack
     playing_cards_expansion$suit_text <- pce_suit_text
     playing_cards_expansion$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
+    playing_cards_expansion$suit_color.s3.matchstick <- "grey30"
+    playing_cards_expansion$suit_color.s3.bit <- "grey30"
+
 
     hexpack <- c(piecepack, list(shape.tile="convex6", border_lex=3,
                                  shape_t.tile="60",  dm_t.tile_face=-90,
@@ -743,18 +749,24 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
                                  shape.coin="convex3"))
 
     dpe_base <- list(invert_colors.suited=TRUE,
-                     mat_color.tile_face="white", mat_width.tile_face=0.05,
-                     border_color.s2.die="grey40", border_color.s2.pawn="grey40")
+                     border_color.s2.die="black", border_color.s2.pawn="black",
+                     suit_color.s2.board_face = "black")
 
     dual_piecepacks_expansion <- c(piecepack, dpe_base)
     dual_piecepacks_expansion$suit_text <- pce_suit_text
 
-    pi_base <- c(invert_colors = TRUE,
-                 mat_color.tile="white", mat_width.tile=0.05,
-                 mat_color.coin="white", mat_width.coin=0.07,
-                 mat_color.die ="white", mat_width.die =0.09,
-                 mat_color.pawn="white", mat_width.pawn=0.08)
+    pi_base <- list(invert_colors = TRUE,
+                    invert_colors.matchstick = FALSE,
+                    suit_color.s2.matchstick = "black",
+                    suit_color.s2.board_face = "black",
+                    suit_color.card_back = "grey30",
+                    suit_color.coin_face = "grey30",
+                    edge_color.coin = "white",
+                    edge_color.tile = "white")
     piecepack_inverted <- c(pi_base, piecepack)
+
+    piecepack <- c(list(suit_color = cb_suit_colors_pure),
+                   piecepack)
 
     list(base = pp_cfg(piecepack),
          dpe = pp_cfg(dual_piecepacks_expansion),
