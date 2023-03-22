@@ -136,6 +136,7 @@ red paired with green, black paired with white, and blue paired with yellow.
     on.exit(options(op))
     options(piecepackr.at.inform = FALSE)
 
+    \donttest{
     # standard dice, meeples, and joystick pawns
     if (requireNamespace("grid", quietly = TRUE)) {
        grid::grid.newpage()
@@ -153,6 +154,7 @@ red paired with green, black paired with white, and blue paired with yellow.
        grid.piece("pawn_top", suit=1:6,
                   x=1:6, y=4, default.units="in",
                   op_scale=0.5, cfg=cfgs$piecepack)
+    }
     }
     # dominoes
     if (requireNamespace("grid", quietly = TRUE)) {

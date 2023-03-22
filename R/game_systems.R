@@ -116,6 +116,7 @@
 #'     on.exit(options(op))
 #'     options(piecepackr.at.inform = FALSE)
 #'
+#'     \donttest{
 #'     # standard dice, meeples, and joystick pawns
 #'     if (requireNamespace("grid", quietly = TRUE)) {
 #'        grid::grid.newpage()
@@ -133,6 +134,7 @@
 #'        grid.piece("pawn_top", suit=1:6,
 #'                   x=1:6, y=4, default.units="in",
 #'                   op_scale=0.5, cfg=cfgs$piecepack)
+#'     }
 #'     }
 #'     # dominoes
 #'     if (requireNamespace("grid", quietly = TRUE)) {

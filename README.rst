@@ -814,7 +814,7 @@ Where should I ask questions?
 What is the package licence?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The **code** of this software package is licensed under the `MIT license <https://opensource.org/licenses/MIT>`__.
+The **code** of this software package is licensed under the `MIT license <https://opensource.org/license/mit/>`__.
 
 Graphical assets generated using configurations returned by ``game_systems()`` should be usable without attribution:
 

@@ -1,5 +1,5 @@
-piecepackr 1.13.0 (development)
-===============================
+piecepackr 1.13.1
+=================
 
 Breaking changes
 ----------------
