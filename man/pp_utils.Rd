@@ -40,11 +40,6 @@ or distort to fit the area it is drawn in}
 \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
 }
 \examples{
- to_x(90, 1)
- to_y(180, 0.5)
- to_t(0, -1)
- to_r(0.5, 0)
-
  cleave("0.5,0.2,0.4,0.5", float=TRUE)
  cleave("black,darkred,#050EAA,,", color=TRUE)
 
