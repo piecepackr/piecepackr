@@ -9,8 +9,7 @@ basicGrobWithBleed <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 
 #' @export
 makeContent.basic_grob_with_bleed <- function(x) {
-    stopifnot(hasName(x$grob, "vp"),
-              hasName(x$grob, "name"))
+    stopifnot(all(hasName(x$grob, c("name", "vp"))))
     opt <- x$opt
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 

@@ -241,12 +241,7 @@ get_id_cfg <- function(df1, df2) {
     unique(df)
 }
 get_tweenr_df <- function(df, ...) {
-    stopifnot(hasName(df, "id"),
-              hasName(df, "piece_side"),
-              hasName(df, "rank"),
-              hasName(df, "suit"),
-              hasName(df, "x"),
-              hasName(df, "y"))
+    stopifnot(all(hasName(df, c("id", "piece_side", "rank", "suit", "x", "y"))))
     if (!hasName(df, "alpha")) df$alpha <- 1
     if (!hasName(df, "angle")) df$angle <- 0
     if (!hasName(df, "scale")) df$scale <- 1
