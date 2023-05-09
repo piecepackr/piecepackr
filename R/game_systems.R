@@ -112,9 +112,8 @@
 #'     cfgs <- game_systems(pawn = "joystick")
 #'     names(cfgs)
 #'
-#'     op <- options()
-#'     on.exit(options(op))
-#'     options(piecepackr.at.inform = FALSE)
+#'     opt <- options(piecepackr.at.inform = FALSE)
+#'     on.exit(options(opt))
 #'
 #'     \donttest{
 #'     # standard dice, meeples, and joystick pawns

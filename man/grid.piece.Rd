@@ -138,9 +138,8 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
 }
 \examples{
   if (require("grid")) {
-    op <- options()
-    on.exit(options(op))
-    options(piecepackr.at.inform = FALSE)
+    opt <- options(piecepackr.at.inform = FALSE)
+    on.exit(options(opt))
 
     draw_pp_diagram <- function(cfg=pp_cfg(), op_scale=0) {
         g.p <- function(...) {

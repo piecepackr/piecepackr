@@ -41,9 +41,8 @@ found in its \code{directory} argument.
 \examples{
 
  if (require("grid") && all(capabilities(c("cairo", "png")))) {
-    op <- options()
-    on.exit(options(op))
-    options(piecepackr.at.inform = FALSE)
+    opt <- options(piecepackr.at.inform = FALSE)
+    on.exit(options(opt))
     cfg <- pp_cfg(list(invert_colors=TRUE))
 
     pushViewport(viewport(width=unit(2, "in"), height=unit(2, "in")))
