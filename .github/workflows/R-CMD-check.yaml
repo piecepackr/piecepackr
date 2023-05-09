@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
+          # - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
@@ -31,8 +31,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - if: runner.os == 'macOS'
-        run: brew install --cask xquartz
+      # - if: runner.os == 'macOS'
+      #   run: brew install --cask xquartz
 
       - uses: r-lib/actions/setup-pandoc@v2
 
