@@ -391,6 +391,17 @@ do_shapes_overlap <- function(s1, s2) {
     }
 }
 
+# Name 'nigh' to avoid potential conflict with 'dplyr::near()'
+nigh <- function(x, y, tolerance = 1e-6) {
+    if (length(y) < length(x)) y <- rep(y, length.out=length(x))
+    isTRUE(all.equal(x, y, tolerance = tolerance))
+}
+
+# robust version of `acos()` that returns in degrees
+arccos <- function(x) {
+    as.numeric(affiner::arccosine(x, "degrees"))
+}
+
 # Axis-angle representation to rotation matrix
 # https://en.wikipedia.org/wiki/Axis-angle_representation
 # Because we do rotation matrix post-multiplication instead of pre-multiplication we usually need to multiply angles
@@ -410,50 +421,10 @@ AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
         } else {
             axis_z <- sqrt(inner)
         }
-    } else {
-        norm <- sqrt(axis_x^2 + axis_y^2 + axis_z^2)
-        if (!nigh(norm, 1)) {
-            axis_x <- axis_x / norm
-            axis_y <- axis_y / norm
-            axis_z <- axis_z / norm
-        }
     }
-    e <- c(axis_x, axis_y, axis_z)
-    I <- diag(3)
-    K <- cross_matrix(e)
-    c <- cos(to_radians(-angle))
-    s <- sin(to_radians(-angle))
-    R <- I + s * K + (1 - c) * K %*% K
-    R
-}
-
-# "cross" product matrix
-# https://en.wikipedia.org/wiki/Cross_product#Conversion_to_matrix_multiplication
-cross_matrix <- function(v) {
-    m <- matrix(0, nrow=3, ncol=3)
-    m[1, 2] <- -v[3]
-    m[1, 3] <- v[2]
-    m[2, 1] <- v[3]
-    m[2, 3] <- -v[1]
-    m[3, 1] <- -v[2]
-    m[3, 2] <- v[1]
-    m
-}
-
-# trace of a (square) matrix
-trace <- function(m) sum(diag(m))
-
-# Name 'nigh' to avoid potential conflict with 'dplyr::near()'
-nigh <- function(x, y, tolerance = 1e-6) {
-    if (length(y) < length(x)) y <- rep(y, length.out=length(x))
-    isTRUE(all.equal(x, y, tolerance = tolerance))
-}
-
-# more robust handling of arccosine input
-arccos <- function(x) {
-    if (nigh(x, 1) && x > 1) x <- 1
-    if (nigh(x, -1) && x < -1) x <- -1
-    acos(x)
+    axis <- affiner::coord3d(axis_x, axis_y, axis_z)
+    theta <- affiner::angle(angle, "degrees")
+    affiner::rotate3d(axis, theta)[1:3, 1:3]
 }
 
 # Rotation matrix to Axis-angle representation
@@ -462,51 +433,12 @@ arccos <- function(x) {
 #' @rdname geometry_utils
 #' @export
 R_to_AA <- function(R = diag(3)) {
-    t <- arccos(0.5 * (trace(R) - 1))
-    if (nigh(R, diag(3))) { # no rotation
-        t <- 0
-        e <- c(0, 0, 1)
-    } else if (nigh(t, pi)) { # 180 degree rotation
-        t <- pi
-        B <- 0.5 * (R + diag(3))
-        e <- sqrt(diag(B))
-        sB <- sign(B)
-        if (nigh(sB, ppn)) {
-            e[3] <- -e[3]
-            t <- -pi
-        } else if (nigh(sB, pnp)) {
-            e[2] <- -e[2]
-        } else if (nigh(sB, npp)) {
-            e[1] <- -e[1]
-        }
-    } else {
-        e <- numeric(3)
-        e[1] <- R[3,2] - R[2,3]
-        e[2] <- R[1,3] - R[3,1]
-        e[3] <- R[2,1] - R[1,2]
-        e <- e / (2 * sin(-t))
-    }
-    if (e[3] < 0) { # Force z-axis element positive
-        e <- -e
-        t <- -t
-    }
-    list(angle = to_degrees(t), axis_x = e[1], axis_y = e[2], axis_z = e[3])
+    l <- affiner::rotate3d_to_AA(R, unit = "degrees")
+    list(angle = as.numeric(l$theta),
+         axis_x = l$axis$x,
+         axis_y = l$axis$y,
+         axis_z = l$axis$z)
 }
-
-# Sign matrices for "B" matrix used to tell signs for axis unit vector (up to sign ambiguity) when angle = 180 degrees
-# signs for ppp and nnn don't need to be changed
-# ppn and npp
-ppn <- matrix(c(1, 1, -1,
-                1, 1, -1,
-                -1, -1, 1), ncol = 3, byrow = TRUE)
-# pnp and npn
-pnp <- matrix(c(1, -1, 1,
-                -1, 1, -1,
-                1, -1, 1), ncol = 3, byrow = TRUE)
-# pnn and npp
-npp <- matrix(c(1, -1, -1,
-                -1, 1, 1,
-                -1, 1, 1), ncol = 3, byrow = TRUE)
 
 # Basic 3D rotation matrices
 # https://en.wikipedia.org/wiki/Rotation_matrix#In_three_dimensions

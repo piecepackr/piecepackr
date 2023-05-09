@@ -60,7 +60,7 @@ d20TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 # if `rank` on top figure out rotation so one on top instead
 # currently just a fixed arrangement
 d20_rot_from_top <- function(rank) {
-    a1 <- 180 - to_degrees(arccos(-sqrt(5)/3)) # 180 - dihedral angle
+    a1 <- 180 - arccos(-sqrt(5)/3) # 180 - dihedral angle
     a2 <- 37.4 # equilateral pentagonal pyramid side (face) angle
     # a <- 50
     stopifnot(rank <= 20)
@@ -89,7 +89,7 @@ d20_rot_from_top <- function(rank) {
 
 # if one on top figure out rotation so `rank` on top instead
 d20_rot_to_top <- function(rank) {
-    a1 <- 180 - to_degrees(arccos(-sqrt(5)/3)) # 180 - dihedral angle
+    a1 <- 180 - arccos(-sqrt(5)/3) # 180 - dihedral angle
     a2 <- 37.4 # equilateral pentagonal pyramid side (face) angle
     stopifnot(rank <= 20)
     switch(rank,
