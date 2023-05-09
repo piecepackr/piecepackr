@@ -6,7 +6,7 @@ expect_equal(to_r(0, 1), 1)
 f <- function(x) assert_suggested("imaginaryPackage")
 expect_error(f(), "You need to install the suggested package")
 
-skip_if_not_installed("pdffonts")
+skip_if_not_installed("pdftools")
 skip_if(!capabilities("cairo"))
 df <- get_embedded_font("sans", c("♥", "♠", "♣", "♦", "🌞", "🌜", "꩜"))
 expect_false(has_font("thisshouldnotexist"))
