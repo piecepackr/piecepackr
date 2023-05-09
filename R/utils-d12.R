@@ -60,7 +60,7 @@ d12TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
 # if `rank` on top figure out rotation so one on top instead
 d12_rot_from_top <- function(rank) {
-    a <- 180 - to_degrees(arccos(-sqrt(5)/5)) # 180 - dihedral angle
+    a <- 180 - arccos(-sqrt(5)/5) # 180 - dihedral angle
     stopifnot(rank <= 12)
     switch(rank,
            diag(3), # 01
@@ -79,7 +79,7 @@ d12_rot_from_top <- function(rank) {
 
 # if one on top figure out rotation so `rank` on top instead
 d12_rot_to_top <- function(rank) {
-    a <- 180 - to_degrees(arccos(-sqrt(5)/5)) # 180 - dihedral angle
+    a <- 180 - arccos(-sqrt(5)/5) # 180 - dihedral angle
     stopifnot(rank <= 12)
     switch(rank,
            diag(3), # 01

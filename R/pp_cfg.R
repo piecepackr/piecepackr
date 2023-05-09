@@ -691,7 +691,7 @@ Config <- R6Class("pp_cfg",
             width <- self$get_width(piece_side, suit, rank)
             height <- self$get_height(piece_side, suit, rank)
             vp <- viewport(width = inch(width), height = inch(height))
-            transformationGrob(grob, vp.define=vp)
+            affiner::affineGrob(grob, vp_define = vp)
         },
         opt_cache_key = function(piece_side, suit, rank, type) {
             paste(private$prefix, piece_side, suit, rank, type, sep="-")
