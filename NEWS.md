@@ -1,6 +1,13 @@
 piecepackr 1.13.2 (development)
 ===============================
 
+Bug fixes and minor improvements
+--------------------------------
+
+* `is_color_invisible()` now accepts `col` values of length greater than one.
+* `basicPieceGrob()` no longer shrinks its background and gridlines grobs if
+  they would overlap with a transparent mat.
+
 piecepackr 1.13.1
 =================
 

@@ -30,11 +30,11 @@
 <text x='432.00' y='420.78' text-anchor='middle' style='font-size: 72.00px; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>2</text>
 <text x='360.00' y='355.76' text-anchor='middle' style='font-size: 40.00px; font-family: sans;' textLength='21.26px' lengthAdjust='spacingAndGlyphs'>♠</text>
 <polygon points='288.00,288.00 288.00,504.00 576.00,504.00 576.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
-<circle cx='216.00' cy='432.00' r='21.60' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<circle cx='216.00' cy='432.00' r='27.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='216.00' y='443.70' text-anchor='middle' style='font-size: 34.00px; fill: #009E73; font-family: sans;' textLength='22.32px' lengthAdjust='spacingAndGlyphs'>♣</text>
 <text x='216.00' y='417.04' text-anchor='middle' style='font-size: 12.00px; fill: #009E73; font-family: sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='216.00' cy='432.00' r='27.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-<circle cx='288.00' cy='432.00' r='28.80' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
+<circle cx='288.00' cy='432.00' r='36.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='288.00' y='443.70' text-anchor='middle' style='font-size: 34.00px; fill: #009E73; font-family: sans;' textLength='22.32px' lengthAdjust='spacingAndGlyphs'>♣</text>
 <text x='288.00' y='410.67' text-anchor='middle' style='font-size: 12.00px; fill: #009E73; font-family: sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='288.00' cy='432.00' r='36.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />

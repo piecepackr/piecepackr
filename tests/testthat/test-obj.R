@@ -99,7 +99,9 @@ test_that("rayvertex works", {
     scene <- piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg)
     f <- tempfile(fileext = ".png")
     png(f)
-    rasterize_scene(scene, light_info = directional_light(c(0, 0, 1)))
+    rasterize_scene(scene,
+                    light_info = directional_light(c(0, 0, 1)),
+                    lookat = c(0, 0, 0))
     dev.off()
     expect_true(file.exists(f))
     unlink(f)

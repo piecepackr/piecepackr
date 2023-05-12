@@ -23,11 +23,7 @@ NULL
 #' @rdname pp_utils
 #' @export
 is_color_invisible <- function(col) {
-    if (is.na(col))
-        return(TRUE)
-    if (grDevices::col2rgb(col, alpha=TRUE)[4] == 0)
-        return(TRUE)
-    return(FALSE)
+    as.logical(grDevices::col2rgb(col, alpha=TRUE)[4, ] == 0)
 }
 
 #' @rdname pp_utils

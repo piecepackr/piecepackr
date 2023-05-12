@@ -72,12 +72,19 @@ grobCoords.basic_piece_side <- function(x, closed, ...) {
 makeContent.basic_piece_side <- function(x) {
     opt <- x$opt
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    # Possibly shrink background and gridlines to not overlap mat
+    # which sometimes prevents visual glitch if no border line
+    # but do not do this if mat color is transparent.
+    if (any(as.logical(grDevices::col2rgb(opt$mat_color, alpha = TRUE)[4, ] < 255)))
+        bg_mat_width <- 0
+    else
+        bg_mat_width <- opt$mat_width
 
     # Background
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color),
-                                   name = "background", mat_width = opt$mat_width)
+                                   name = "background", mat_width = bg_mat_width)
     gl_grob <- shape$gridlines(gp = gpar(col = opt$gridline_color, lex = opt$gridline_lex),
-                               name = "gridlines", mat_width = opt$mat_width)
+                               name = "gridlines", mat_width = bg_mat_width)
     gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
     mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
 
