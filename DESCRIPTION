@@ -19,6 +19,7 @@ BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyData: true
 LazyLoad: yes
 Imports:
+    affiner (>= 0.1.0-15),
     grid,
     gridGeometry,
     grImport2,
@@ -50,6 +51,7 @@ Suggests:
     vdiffr,
     xmpdf (>= 0.1.1),
     XML (>= 3.99-0.9)
+Remotes: trevorld/affiner
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Config/testthat/edition: 3
