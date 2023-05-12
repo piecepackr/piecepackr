@@ -129,10 +129,12 @@ op_sort <- function(df, ..., op_angle=45) {
 
 # Axis-Aligned Bounding Box (AABB)
 add_bounding_box <- function(df) {
-    ll <- Point2D$new(0, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
-    ul <- Point2D$new(0, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
-    ur <- Point2D$new(1, 1)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
-    lr <- Point2D$new(1, 0)$npc_to_in(df$x, df$y, df$width, df$height, df$angle)
+    zeros <- rep_len(0, nrow(df))
+    ones <- rep_len(1, nrow(df))
+    ll <- npc_to_in(coord2d(zeros, zeros), df$x, df$y, df$width, df$height, df$angle)
+    ul <- npc_to_in(coord2d(zeros, ones), df$x, df$y, df$width, df$height, df$angle)
+    ur <- npc_to_in(coord2d(ones, ones), df$x, df$y, df$width, df$height, df$angle)
+    lr <- npc_to_in(coord2d(ones, zeros), df$x, df$y, df$width, df$height, df$angle)
     df$xll <- ll$x
     df$yll <- ll$y
     df$xul <- ul$x
@@ -216,9 +218,9 @@ get_shapes <- function(df) {
             label <- opt$shape
             if (grepl("^concave", label)) label <- gsub("concave", "convex", label)
             shape <- pp_shape(label, opt$shape_t, opt$shape_r, opt$back)
-            xy_u <- shape$npc_coords
-            xy_c <- Point2D$new(xy_u)$npc_to_in(dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
-            shapes[[ii]] <- ConvexPolygon$new(xy_c)
+            xy_c <- npc_to_in(as_coord2d(shape$npc_coords),
+                              dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
+            shapes[[ii]] <- ConvexPolygon$new(xy_c$x, xy_c$y)
         }
     }
     shapes

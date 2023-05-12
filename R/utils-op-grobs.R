@@ -352,9 +352,8 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
     width <- convertX(width, "in", valueOnly = TRUE)
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
-    xy <- Point2D$new(x, y)
-    xy_b <- Point2D$new(rect_xy)$npc_to_in(x, y, width, height, angle)
-    p <- Polygon$new(xy_b)
+    xy_b <- npc_to_in(as_coord2d(rect_xy), x, y, width, height, angle)
+    p <- Polygon$new(xy_b$x, xy_b$y)
     edge_types <- paste0("pyramid_", c("left", "back", "right", "face"))
     order <- p$op_edge_order(op_angle)
     df <- tibble(index = 1:4, edge = edge_types)[order, ]
@@ -426,13 +425,13 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
 
-    xy_b <- Point2D$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
-    p <- Polygon$new(xy_b)
+    xy_b <- npc_to_in(as_coord2d(pyramid_xy), x, y, width, height, angle)
+    p <- Polygon$new(xy_b$x, xy_b$y)
     xy_tip <- xy_b[1]
 
     theta <- 2 * asin(0.5 * width / height)
     yt <- 1 - cos(theta)
-    xy_t <- Point2D$new(x = 0:1, y = yt)$npc_to_in(x, y, width, height, angle)
+    xy_t <- npc_to_in(coord2d(x = 0:1, y = yt), x, y, width, height, angle)
 
     gl <- gList()
 

@@ -155,10 +155,10 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
 
     # texture coordinates
     back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back)
-    xy_npc <- Point2D$new(shape$npc_coords)
-    xy_npc_back <- Point2D$new(back$npc_coords)
-    xy_vt_f <- xy_npc$dilate(width = 0.4, height = 1)$translate(x = 0.025)
-    xy_vt_b <- xy_npc_back$dilate(width = 0.4, height = 1)$translate(x = 0.575)
+    xy_npc <- as_coord2d(shape$npc_coords)
+    xy_npc_back <- as_coord2d(back$npc_coords)
+    xy_vt_f <- xy_npc$scale(0.4, 1)$translate(coord2d(0.025, 0))
+    xy_vt_b <- xy_npc_back$scale(0.4, 1)$translate(coord2d(0.575, 0))
     xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
     vt <- list(x = c(xy_vt_f$x, xy_vt_b$x, xy_vt_e$x),
                y =  c(xy_vt_f$y, xy_vt_b$y, xy_vt_e$y))
@@ -269,9 +269,9 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     depth <- whd$depth
     if (!nigh(width, depth)) warn("Base of peg doll is not circular")
     # base
-    circle <- Point2D$new(pp_shape("convex72", back=TRUE)$npc_coords)$translate(x = -0.5, y = -0.5)
+    circle <- as_coord2d(pp_shape("convex72", back=TRUE)$npc_coords)$translate(coord2d(-0.5, -0.5))
     xyz_base <- as.data.frame(Point3D$new(x=circle$x, y=-0.5, z=circle$y))
-    vt_base <- as.data.frame(Point2D$new(circle)$dilate(height=0.2)$translate(x = 0.5, y = 0.1))
+    vt_base <- as.data.frame(circle$clone()$scale(0, 0.2)$translate(coord2d(0.5, 0.1)))[, c("x", "y")]
     n_base <- nrow(xyz_base)
     f_base <- list(list(v = seq(n_base), vt = seq(n_base)))
 

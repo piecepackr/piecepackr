@@ -30,8 +30,9 @@ d20TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         dfc <- rbind(dfc, as.data.frame(xyz[idx]$c))
     }
 
-    op_ref <- Point2D$new(as.data.frame(xyz$c))$translate_polar(op_angle + 180, 10 * xyz$width)
-    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z) Point2D$new(x, y)$distance_to(op_ref))
+    op_ref <- as_coord2d(as.data.frame(xyz$c))$
+        translate(angle(op_angle + 180, "degrees"), radius = 10 * xyz$width)
+    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z) abs(coord2d(x, y) - op_ref))
     dfc$rank <- 1:20
     dfc$xy_dists <- xy_dists
     dfc <- dfc[order(round(dfc$z, 2), -xy_dists), ]
