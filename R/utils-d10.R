@@ -54,8 +54,9 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         dfc <- rbind(dfc, as.data.frame(xyz[idx]$c))
     }
 
-    op_ref <- Point2D$new(as.data.frame(xyz$c))$translate_polar(op_angle + 180, 10 * xyz$width)
-    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z) Point2D$new(x, y)$distance_to(op_ref))
+    op_ref <- as_coord2d(as.data.frame(xyz$c))$
+        translate(angle(op_angle + 180, "degrees"), radius = 10 * xyz$width)
+    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z) abs(coord2d(x, y) - op_ref))
     dfc$edge <- paste0("d10_", c("face", "left1", "left2", "right1", "right2",
                                  "opposite", "opposite_left1", "opposite_left2", "opposite_right1", "opposite_right2"))
     dfc$rank <- vapply(dfc$edge, d10_edge_rank, numeric(1), rank = rank, USE.NAMES = FALSE)

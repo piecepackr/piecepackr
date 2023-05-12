@@ -23,10 +23,9 @@ pt_xyz <- function(x, y, z,
                    angle, axis_x, axis_y,
                    width, height, depth) {
     pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(rect_xy)
-    xy <- xy_npc$translate(-0.5, -0.5)
+    xy <- as_coord2d(rect_xy)$translate(coord2d(-0.5, -0.5))
     xyz_t <- Point3D$new(x = 0.0, y = 0.0, z = 0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
+    xyz_b <- Point3D$new(xy$x, xy$y, z = -0.5)
     xs <- c(xyz_t$x, xyz_b$x)
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
@@ -38,9 +37,8 @@ ps_xyz <- function(x, y, z,
                    angle, axis_x, axis_y,
                    width, height, depth) {
     pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(pyramid_xy)
-    xy <- xy_npc$translate(-0.5, -0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
+    xy <- as_coord2d(pyramid_xy)$translate(coord2d(-0.5, -0.5))
+    xyz_b <- Point3D$new(xy$x, xy$y, z = -0.5)
     theta <- 2 * asin(0.5 * width / height)
     xyz_t <- Point3D$new(x = c(-0.5, 0.5), y = 0.5 - cos(theta), z = 0.5)
     xs <- c(xyz_t$x, xyz_b$x)
