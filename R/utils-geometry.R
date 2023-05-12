@@ -1,9 +1,18 @@
+# Adapt `Point2D::npc_to_in()` to `affiner::coord2d()`
+npc_to_in <- function(xy, x=0.5, y=0.5, w=1, h=1, t=0) {
+    xy$translate(coord2d(-0.5, -0.5))$
+       scale(w, h)$
+       rotate(angle(t, "degrees"))$
+       translate(coord2d(x, y))
+    invisible(xy)
+}
+
 # "collision detection" via Separating Axis Theorem
 # Arguments of point is vectorized
 Point2D <- R6Class("point2d",
                  public = list(x=NULL, y=NULL,
                                initialize = function(x=0.5, y=0.5) {
-                                   if (is.list(x) || inherits(x, "point2d")) {
+                                   if (is.list(x) || inherits(x, c("coord2d", "point2d"))) {
                                        xt <- x$x
                                        y <- x$y
                                    } else {
@@ -116,7 +125,7 @@ Ops.point2d <- function(e1, e2) {
 Point3D <- R6Class("point3d",
                    public = list(x=NULL, y=NULL, z=NULL,
                                  initialize = function(x=0, y=0, z=0) {
-                                     if (is.list(x) || inherits(x, "point2d") || inherits(x, "point3d")) {
+                                     if (is.list(x) || inherits(x, c("coord2d", "coord3d", "point2d", "point3d"))) {
                                          xt <- x$x
                                          y <- x$y
                                          z <- x$z %||% z
@@ -168,7 +177,7 @@ Point3D <- R6Class("point3d",
                                      Point3D$new(m %*% R)
                                  },
                                  translate = function(x = 0, y = 0, z = 0) {
-                                     if (is.list(x) || inherits(x, "point2d") || inherits(x, "point3d")) {
+                                     if (is.list(x) || inherits(x, c("point2d", "point3d"))) {
                                          xt <- x$x
                                          y <- x$y
                                          z <- x$z %||% z
@@ -240,7 +249,7 @@ Vector <- R6Class("geometry_vector", # vector is R builtin class
 Circle <- R6Class("circle",
     public = list(c=NULL, r=NULL,
                   initialize = function(x=0.5, y=0.5, r=0.5) {
-                      if (is.list(x) || inherits(x, "point2d")) {
+                      if (is.list(x) || inherits(x, c("coord2d", "point2d"))) {
                           self$c <- Point2D$new(x)
                       } else {
                           self$c <- Point2D$new(x, y)
@@ -341,9 +350,9 @@ Line <- R6Class("line",
                   initialize = function(theta, p) {
                       # a * x + b * y + c = 0
                       # cos(theta) * x + sin(theta) * y + c = 0
-                      self$a = cos(to_radians(theta))
-                      self$b = sin(to_radians(theta))
-                      self$c = -self$a * p$x + -self$b * p$y
+                      self$a <- cos(to_radians(theta))
+                      self$b <- sin(to_radians(theta))
+                      self$c <- -self$a * p$x + -self$b * p$y
                   },
                   distance_to = function(p) {
                       abs(self$a * p$x + self$b * p$y + self$c) / sqrt(self$a^2 + self$b^2)
@@ -422,8 +431,8 @@ AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
             axis_z <- sqrt(inner)
         }
     }
-    axis <- affiner::coord3d(axis_x, axis_y, axis_z)
-    theta <- affiner::angle(angle, "degrees")
+    axis <- coord3d(axis_x, axis_y, axis_z)
+    theta <- angle(angle, "degrees")
     affiner::rotate3d(axis, theta)[1:3, 1:3]
 }
 

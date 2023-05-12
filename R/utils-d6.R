@@ -89,7 +89,8 @@ visible_die_faces <- function(die_faces, op_angle = 45) {
     indices <- setdiff(indices, c(i_top, i_bot))
 
     r <- 10 * die_faces$f_xyz[[1]]$width
-    op_ref <- Point2D$new(0, 0)$translate_polar(180 + op_angle, r)
+    theta <- angle(180 + op_angle, "degrees")
+    op_ref <- coord2d(0, 0)$translate(as_coord2d(theta, radius = r))
     op_line <- Line$new(op_angle, op_ref)
     depths <- sapply(indices, function(i) die_faces$f_xyz[[i]]$c$z)
     dists <- sapply(indices, function(i) op_line$distance_to(die_faces$f_xyz[[i]]$c))

@@ -63,9 +63,8 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     width <- convertX(width, "in", valueOnly = TRUE)
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
-    xy <- Point2D$new(x, y)
-    xy_b <- Point2D$new(convex_xy(3, 90))$npc_to_in(x, y, width, height, angle)
-    p <- Polygon$new(xy_b)
+    xy_b <- npc_to_in(as_coord2d(convex_xy(3, 90)), x, y, width, height, angle)
+    p <- Polygon$new(xy_b$x, xy_b$y)
     edge_types <- paste0("d4_", c("left", "face", "right"))
     order <- p$op_edge_order(op_angle)
     df <- tibble(index = 1:3, edge = edge_types)[order, ]
@@ -159,10 +158,9 @@ d4t_xyz <- function(x, y, z,
                     angle, axis_x, axis_y,
                     width, height, depth) {
     pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(convex_xy(3, 90))
-    xy <- xy_npc$translate(-0.5, -0.5)
+    xy <- as_coord2d(convex_xy(3, 90))$translate(coord2d(-0.5, -0.5))
     xyz_t <- Point3D$new(x = 0.0, y = 0.0, z = 0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
+    xyz_b <- Point3D$new(xy$x, xy$y, z = -0.5)
     xs <- c(xyz_t$x, xyz_b$x)
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
