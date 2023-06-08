@@ -7,6 +7,14 @@ npc_to_in <- function(xy, x=0.5, y=0.5, w=1, h=1, t=0) {
     invisible(xy)
 }
 
+degrees <- function(theta) affiner::angle(theta, "degrees")
+
+#' @export
+as_coord2d.point2d <- function(x, ...) coord2d(x$x, x$y)
+
+#' @export
+as_coord3d.point3d <- function(x, ...) coord3d(x$x, x$y, x$z)
+
 # "collision detection" via Separating Axis Theorem
 # Arguments of point is vectorized
 Point2D <- R6Class("point2d",
@@ -41,11 +49,6 @@ Point2D <- R6Class("point2d",
                                translate = function(x = 0, y = 0) {
                                    Point2D$new(self$x + x, self$y + y)
                                },
-                               translate_polar = function(t = 0, r = 1) {
-                                   x <- self$x + to_x(t, r)
-                                   y <- self$y + to_y(t, r)
-                                   Point2D$new(x, y)
-                               },
                                rotate = function(t = 0) {
                                    x <- self$x * cos(to_radians(t)) - self$y * sin(to_radians(t))
                                    y <- self$x * sin(to_radians(t)) + self$y * cos(to_radians(t))
@@ -55,9 +58,6 @@ Point2D <- R6Class("point2d",
                                    x <- width * self$x
                                    y <- height * self$y
                                    Point2D$new(x, y)
-                               },
-                               npc_to_in = function(x=0.5, y=0.5, w=1, h=1, t=0) {
-                                   self$translate(-0.5, -0.5)$dilate(w, h)$rotate(t)$translate(x, y)
                                },
                                plot = function(gp = gpar()) {
                                    grid.points(x=self$x, y=self$y, default.units="in", gp = gp)
@@ -284,8 +284,8 @@ Polygon <- R6Class("polygon",
                    range(projections)
                },
                op_edge_order = function(angle) {
-                   op_ref <- self$c$translate_polar(angle + 180, 10 * self$width)
-                   dists <- sapply(self$edges$mid_point, function(x) x$distance_to(op_ref))
+                   op_ref <- as_coord2d(self$c)$translate(degrees(angle + 180), 10 * self$width)
+                   dists <- sapply(self$edges$mid_point, function(x) abs(as_coord2d(x) - op_ref))
                    order(dists, decreasing = TRUE)
                },
                op_edges = function(angle) {

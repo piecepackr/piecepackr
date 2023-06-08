@@ -38,7 +38,7 @@ Token2S <- R6Class("token2s",
                     },
                     op_edge_order = function(angle) {
                         r <- 10 * self$xyz$width
-                        op_ref <- coord2d(0, 0)$translate(angle(180 + angle, "degrees"), r)
+                        op_ref <- coord2d(0, 0)$translate(degrees(180 + angle), r)
                         op_line <- Line$new(angle, op_ref)
                         depths <- sapply(self$edges, function(x) x$vertices$c$z)
                         dists <- sapply(self$edges, function(x) op_line$distance_to(x$vertices$c))
@@ -56,7 +56,7 @@ Token2S <- R6Class("token2s",
                     #### Handle edge case for token (almost) parallel to xy-axis
                     visible_side = function(angle) {
                         r <- 10 * self$xyz$width
-                        op_ref <- coord2d(0, 0)$translate(angle(180 + angle, "degrees"), r)
+                        op_ref <- coord2d(0, 0)$translate(degrees(180 + angle), r)
                         op_line <- Line$new(angle, op_ref)
                         if (op_line$distance_to(self$xyz_face$c) <
                             op_line$distance_to(self$xyz_back$c))
@@ -138,7 +138,7 @@ Edge <- R6Class("edge",
                           initialize = function(vertices = NULL) self$vertices <- vertices,
                           visible_side = function(angle) {
                               r <- 10 * self$vertices$width
-                              op_ref <- coord2d(0, 0)$translate(angle(180 + angle, "degrees"), r)
+                              op_ref <- coord2d(0, 0)$translate(degrees(180 + angle), r)
                               op_line <- Line$new(angle, op_ref)
                               if (op_line$distance_to(self$vertices_face$c) <
                                   op_line$distance_to(self$vertices_back$c))
@@ -224,7 +224,7 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                       }
                       # figure out which part farthest
                       r <- 10 * self$vertices$width
-                      op_diff <- coord2d(0, 0)$translate(angle(angle, "degrees"), r)
+                      op_diff <- coord2d(0, 0)$translate(degrees(angle), r)
                       op_diff <- Point3D$new(op_diff$x, op_diff$y, z = r / sqrt(2))
                       op_ref <- self$vertices$c$translate(op_diff)
                       d1 <- op_ref$distance_to(self$vertices[indices1]$c)
@@ -308,7 +308,7 @@ CurvedEdge <- R6Class("edge_curved", inherit = Edge,
 
                       # figure out which part farthest
                       r <- 10 * self$vertices$width
-                      op_diff <- coord2d(0, 0)$translate(angle(angle, "degrees"), r)
+                      op_diff <- coord2d(0, 0)$translate(degrees(angle), r)
                       op_diff <- Point3D$new(op_diff$x, op_diff$y, z = r / sqrt(2))
                       op_ref <- self$vertices$c$translate(op_diff)
                       dists <- sapply(l_indices,
