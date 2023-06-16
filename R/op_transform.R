@@ -131,10 +131,10 @@ op_sort <- function(df, ..., op_angle=45) {
 add_bounding_box <- function(df) {
     zeros <- rep_len(0, nrow(df))
     ones <- rep_len(1, nrow(df))
-    ll <- npc_to_in(coord2d(zeros, zeros), df$x, df$y, df$width, df$height, df$angle)
-    ul <- npc_to_in(coord2d(zeros, ones), df$x, df$y, df$width, df$height, df$angle)
-    ur <- npc_to_in(coord2d(ones, ones), df$x, df$y, df$width, df$height, df$angle)
-    lr <- npc_to_in(coord2d(ones, zeros), df$x, df$y, df$width, df$height, df$angle)
+    ll <- npc_to_in(as_coord2d(zeros, zeros), df$x, df$y, df$width, df$height, df$angle)
+    ul <- npc_to_in(as_coord2d(zeros, ones), df$x, df$y, df$width, df$height, df$angle)
+    ur <- npc_to_in(as_coord2d(ones, ones), df$x, df$y, df$width, df$height, df$angle)
+    lr <- npc_to_in(as_coord2d(ones, zeros), df$x, df$y, df$width, df$height, df$angle)
     df$xll <- ll$x
     df$yll <- ll$y
     df$xul <- ul$x

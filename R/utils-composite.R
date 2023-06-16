@@ -111,9 +111,11 @@ CompositePiece <- R6Class("pp_composite",
             whd <- get_scaling_factors(relative_side, width=scale*width,
                                        height=scale*height, depth=scale*depth)
             R <- side_R_rev(private$ref_side) %*% side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
-            pc <- Point3D$new(x, y, z)
-            xyz_scaled <- Point3D$new(x = df$x, y = df$y, z = df$z)$translate(-0.5, -0.5, -0.5)$dilate(whd)
-            xyz <- xyz_scaled$rotate(R)$translate(pc)
+            xyz <- as_coord3d(x = df$x, y = df$y, z = df$z)$
+                translate(-0.5, -0.5, -0.5)$
+                scale(whd$width, whd$height, whd$depth)$
+                transform(R)$
+                translate(x, y, z)
             df$x <- xyz$x
             df$y <- xyz$y
             df$z <- xyz$z
@@ -185,9 +187,11 @@ translate_df <- function(df, relative_side, x, y, z, angle, width, height, depth
     whd <- get_scaling_factors(relative_side, width=scale*width,
                                height=scale*height, depth=scale*depth)
     R <- R_z(angle)
-    pc <- Point3D$new(x, y, z)
-    xyz_scaled <- Point3D$new(x = df$x, y = df$y, z = df$z)$translate(-0.5, -0.5, -0.5)$dilate(whd)
-    xyz <- xyz_scaled$rotate(R)$translate(pc)
+    xyz <- as_coord3d(x = df$x, y = df$y, z = df$z)$
+        translate(-0.5, -0.5, -0.5)$
+        scale(whd$width, whd$height, whd$depth)$
+        transform(R)$
+        translate(x, y, z)
     df$x <- xyz$x
     df$y <- xyz$y
     df$z <- xyz$z
