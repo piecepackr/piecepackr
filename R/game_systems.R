@@ -239,8 +239,8 @@ game_systems_style <- function(style = "sans") {
     style
 }
 
-cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
+cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
 
 dice <- function(color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,

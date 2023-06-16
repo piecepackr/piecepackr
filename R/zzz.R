@@ -1,6 +1,6 @@
 #' @import grid
 
-#' @importFrom affiner angle as_coord2d coord2d coord3d
+#' @importFrom affiner as_coord2d as_coord3d convex_hull degrees
 #' @importFrom grDevices dev.capabilities dev.new devAskNewPage
 #' @importFrom R6 R6Class
 #' @importFrom rlang .data abort inform warn %||%
