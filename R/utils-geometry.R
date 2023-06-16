@@ -1,26 +1,28 @@
-# Adapt `Point2D::npc_to_in()` to `affiner::coord2d()`
+# Adapt `Point2D::npc_to_in()` to `affiner::Coord2D`
 npc_to_in <- function(xy, x=0.5, y=0.5, w=1, h=1, t=0) {
-    xy$translate(coord2d(-0.5, -0.5))$
+    xy$translate(as_coord2d(-0.5, -0.5))$
        scale(w, h)$
-       rotate(angle(t, "degrees"))$
-       translate(coord2d(x, y))
+       rotate(degrees(t))$
+       translate(as_coord2d(x, y))
     invisible(xy)
 }
 
 degrees <- function(theta) affiner::angle(theta, "degrees")
 
-#' @export
-as_coord2d.point2d <- function(x, ...) coord2d(x$x, x$y)
+radius <- function(x) max(abs(x - mean(x)))
 
 #' @export
-as_coord3d.point3d <- function(x, ...) coord3d(x$x, x$y, x$z)
+as_coord2d.point2d <- function(x, ...) as_coord2d(x$x, x$y)
+
+#' @export
+as_coord3d.point3d <- function(x, ...) as_coord3d(x$x, x$y, x$z)
 
 # "collision detection" via Separating Axis Theorem
 # Arguments of point is vectorized
 Point2D <- R6Class("point2d",
                  public = list(x=NULL, y=NULL,
                                initialize = function(x=0.5, y=0.5) {
-                                   if (is.list(x) || inherits(x, c("coord2d", "point2d"))) {
+                                   if (is.list(x) || inherits(x, c("Coord2D", "point2d"))) {
                                        xt <- x$x
                                        y <- x$y
                                    } else {
@@ -61,27 +63,12 @@ Point2D <- R6Class("point2d",
                                },
                                plot = function(gp = gpar()) {
                                    grid.points(x=self$x, y=self$y, default.units="in", gp = gp)
-                               }),
-                   active = list(c = function() {
-                                     Point2D$new(mean(self$x), mean(self$y))
-                                 },
-                                 convex_hull = function() {
-                                     hull <- grDevices::chull(as.matrix(self))
-                                     x <- self$x[hull]
-                                     y <- self$y[hull]
-                                     Point2D$new(x, y)
-                                 })
+                               })
 )
 #' @export
 `[.point2d` <- function(x, i) Point2D$new(x$x[i], x$y[i])
 #' @export
 length.point2d <- function(x) length(x$x)
-#' @export
-as.matrix.point2d <- function(x, ...) {
-    m <- cbind(x$x, x$y)
-    colnames(m) <- c("x", "y")
-    m
-}
 #' @export
 as.list.point2d <- function(x, ...) {
     n <- length(x)
@@ -90,10 +77,6 @@ as.list.point2d <- function(x, ...) {
         ll[[i]] <- x[i]
     }
     ll
-}
-#' @export
-as.data.frame.point2d <- function(x, ...) {
-    as.data.frame(as.matrix(x))
 }
 #' @export
 Ops.point2d <- function(e1, e2) {
@@ -125,7 +108,7 @@ Ops.point2d <- function(e1, e2) {
 Point3D <- R6Class("point3d",
                    public = list(x=NULL, y=NULL, z=NULL,
                                  initialize = function(x=0, y=0, z=0) {
-                                     if (is.list(x) || inherits(x, c("coord2d", "coord3d", "point2d", "point3d"))) {
+                                     if (is.list(x) || inherits(x, c("Coord2D", "Coord3D", "point2d", "point3d"))) {
                                          xt <- x$x
                                          y <- x$y
                                          z <- x$z %||% z
@@ -148,11 +131,6 @@ Point3D <- R6Class("point3d",
                                  },
                                  distance_to = function(p) {
                                      sqrt((p$x - self$x)^2 + (p$y - self$y)^2 + (p$z  - self$z)^2)
-                                 },
-                                 project_op = function(angle, scale) {
-                                   x <- self$x + scale * self$z * cos(to_radians(angle))
-                                   y <- self$y + scale * self$z * sin(to_radians(angle))
-                                   Point2D$new(x, y)
                                  },
                                  dilate = function(width = 1, height = width, depth = width) {
                                      if (is.list(width)) {
@@ -187,28 +165,12 @@ Point3D <- R6Class("point3d",
                                          z <- z
                                      }
                                     Point3D$new(self$x + xt, self$y + y, self$z + z)
-                                 }),
-                   active = list(c = function() {
-                                     Point3D$new(mean(self$x), mean(self$y), mean(self$z))
-                                 },
-                                 width = function() {
-                                     2 * max(self$distance_to(self$c))
                                  })
 )
 #' @export
 `[.point3d` <- function(x, i) Point3D$new(x$x[i], x$y[i], x$z[i])
 #' @export
 length.point3d <- function(x) length(x$x)
-#' @export
-as.matrix.point3d <- function(x, ...) {
-    m <- cbind(x$x, x$y, x$z)
-    colnames(m) <- c("x", "y", "z")
-    m
-}
-#' @export
-as.data.frame.point3d <- function(x, ...) {
-    as.data.frame(as.matrix(x))
-}
 #' @export
 Ops.point3d <- function(e1, e2) {
     if (missing(e2)) {
@@ -249,7 +211,7 @@ Vector <- R6Class("geometry_vector", # vector is R builtin class
 Circle <- R6Class("circle",
     public = list(c=NULL, r=NULL,
                   initialize = function(x=0.5, y=0.5, r=0.5) {
-                      if (is.list(x) || inherits(x, c("coord2d", "point2d"))) {
+                      if (is.list(x) || inherits(x, c("Coord2D", "point2d"))) {
                           self$c <- Point2D$new(x)
                       } else {
                           self$c <- Point2D$new(x, y)
@@ -431,9 +393,8 @@ AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
             axis_z <- sqrt(inner)
         }
     }
-    axis <- coord3d(axis_x, axis_y, axis_z)
-    theta <- angle(angle, "degrees")
-    affiner::rotate3d(axis, theta)[1:3, 1:3]
+    axis <- as_coord3d(axis_x, axis_y, axis_z)
+    affiner::rotate3d(axis, degrees(angle))[1:3, 1:3]
 }
 
 # Rotation matrix to Axis-angle representation

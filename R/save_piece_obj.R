@@ -148,17 +148,17 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
 
     # geometric vertices
-    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
     whd <- get_scaling_factors(side, width, height, depth)
-    pc <- Point3D$new(x, y, z)
+    pc <- as_coord3d(x, y, z)
+    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
     xyz <- Token2S$new(shape, whd, pc, R)$xyz
 
     # texture coordinates
     back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back)
     xy_npc <- as_coord2d(shape$npc_coords)
     xy_npc_back <- as_coord2d(back$npc_coords)
-    xy_vt_f <- xy_npc$scale(0.4, 1)$translate(coord2d(0.025, 0))
-    xy_vt_b <- xy_npc_back$scale(0.4, 1)$translate(coord2d(0.575, 0))
+    xy_vt_f <- xy_npc$scale(0.4, 1)$translate(as_coord2d(0.025, 0))
+    xy_vt_b <- xy_npc_back$scale(0.4, 1)$translate(as_coord2d(0.575, 0))
     xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
     vt <- list(x = c(xy_vt_f$x, xy_vt_b$x, xy_vt_e$x),
                y =  c(xy_vt_f$y, xy_vt_b$y, xy_vt_e$y))
@@ -217,11 +217,12 @@ save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1,
     # geometric vertices
     R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
     whd <- get_scaling_factors(side, width, height, depth)
-    pc <- Point3D$new(x, y, z)
     e <- rgl::ellipse3d(diag(3), t=0.5, subdivide=subdivide, smooth=FALSE)
     xyz <- as.data.frame(t(e$vb))
     names(xyz) <- c("x", "y", "z", "u")
-    xyz <- Point3D$new(xyz)$dilate(whd)$translate(pc)
+    xyz <- as_coord3d(xyz)$
+        scale(whd$width, whd$height, whd$depth)$
+        translate(as_coord3d(x, y, z))
 
     # texture coordinates
     xy_vt <- list(x = c(0, 0, 1, 1), y = c(1, 0, 0, 1))
@@ -262,16 +263,16 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
 
     R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
     whd <- get_scaling_factors(side, width, height, depth)
-    pc <- Point3D$new(x, y, z)
+    pc <- as_coord3d(x, y, z)
     # normalized peg doll is laying down face up
     width <- whd$width
     height <- whd$height
     depth <- whd$depth
     if (!nigh(width, depth)) warn("Base of peg doll is not circular")
     # base
-    circle <- as_coord2d(pp_shape("convex72", back=TRUE)$npc_coords)$translate(coord2d(-0.5, -0.5))
-    xyz_base <- as.data.frame(Point3D$new(x=circle$x, y=-0.5, z=circle$y))
-    vt_base <- as.data.frame(circle$clone()$scale(0, 0.2)$translate(coord2d(0.5, 0.1)))[, c("x", "y")]
+    circle <- as_coord2d(pp_shape("convex72", back=TRUE)$npc_coords)$translate(as_coord2d(-0.5, -0.5))
+    xyz_base <- data.frame(x=circle$x, y=-0.5, z=circle$y)
+    vt_base <- as.data.frame(circle$clone()$scale(0, 0.2)$translate(as_coord2d(0.5, 0.1)))[, c("x", "y")]
     n_base <- nrow(xyz_base)
     f_base <- list(list(v = seq(n_base), vt = seq(n_base)))
 
@@ -280,7 +281,7 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     head <- width / height
     neck <- 0.1 * head
     y_below <- (1 - head - neck - belt) / 2
-    xyz_below <- as.data.frame(Point3D$new(x=circle$x, y=y_below - 0.5, z=circle$y))
+    xyz_below <- data.frame(x=circle$x, y=y_below - 0.5, z=circle$y)
     vt_body <- data.frame(x = c(0, 0, 1, 1), y = c(0.1, 0, 0, 0.1))
 
     f_below <- list()
@@ -291,7 +292,7 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
                              vt = n_base + 1:4)
     }
     # belt
-    xyz_belt <- as.data.frame(Point3D$new(x=circle$x, y=y_below - 0.5 + belt, z=circle$y))
+    xyz_belt <- data.frame(x=circle$x, y=y_below - 0.5 + belt, z=circle$y)
     vt_belt <- data.frame(x = rep(seq(0, 1, length.out = nrow(xyz_belt) + 1L), 2),
                           y = rep(c(0.75, 0.25), each=nrow(xyz_belt) + 1L))
     f_belt <- list()
@@ -313,7 +314,7 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     }
 
     # body above
-    xyz_above <- as.data.frame(Point3D$new(x=circle$x, y=2 * y_below + belt - 0.5, z=circle$y))
+    xyz_above <- data.frame(x=circle$x, y=2 * y_below + belt - 0.5, z=circle$y)
 
     f_above <- list()
     for (i in seq(n_base)) {
@@ -323,11 +324,11 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
                              vt = n_base + 1:4)
     }
     # neck
-    xyz_neck1 <- as.data.frame(Point3D$new(x=0.95*circle$x, y=0.5-head-0.95*neck, z=0.95*circle$y))
-    xyz_neck2 <- as.data.frame(Point3D$new(x=0.85*circle$x, y=0.5-head-0.7*neck, z=0.85*circle$y))
-    xyz_neck3 <- as.data.frame(Point3D$new(x=0.70*circle$x, y=0.5-head-0.4*neck, z=0.70*circle$y))
-    xyz_neck4 <- as.data.frame(Point3D$new(x=0.50*circle$x, y=0.5-head, z=0.50*circle$y))
-    xyz_neck5 <- as.data.frame(Point3D$new(x=0.50*circle$x, y=0.5-0.9*head, z=0.50*circle$y))
+    xyz_neck1 <- data.frame(x=0.95*circle$x, y=0.5-head-0.95*neck, z=0.95*circle$y)
+    xyz_neck2 <- data.frame(x=0.85*circle$x, y=0.5-head-0.7*neck, z=0.85*circle$y)
+    xyz_neck3 <- data.frame(x=0.70*circle$x, y=0.5-head-0.4*neck, z=0.70*circle$y)
+    xyz_neck4 <- data.frame(x=0.50*circle$x, y=0.5-head, z=0.50*circle$y)
+    xyz_neck5 <- data.frame(x=0.50*circle$x, y=0.5-0.9*head, z=0.50*circle$y)
     xyz_neck <- rbind(xyz_neck1, xyz_neck2, xyz_neck3, xyz_neck4, xyz_neck5)
 
     f_neck <- vector("list", 5 * n_base)
@@ -349,8 +350,11 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     # head
     e <- rgl::ellipse3d(diag(3), t=0.5, subdivide=4, smooth=FALSE)
     xyz <- as.data.frame(t(e$vb))
-    names(xyz) <- c("x", "y", "z", "u")
-    xyz_head <- as.data.frame(Point3D$new(xyz)$dilate(height = width/height)$translate(y = 0.5 - 0.5*width/height))
+    names(xyz) <- c("x", "y", "z", "w")
+    xyz_head <- as_coord3d(xyz)$
+        scale(y = width/height)$
+        translate(as_coord3d(x = 0, y = 0.5 - 0.5*width/height))
+    xyz_head <- as.data.frame(xyz_head)[, c("x", "y", "z")]
 
     vt_head <- data.frame(x = c(0, 0, 1, 1), y = c(1, 0.90, 0.90, 1))
 
@@ -363,7 +367,10 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
 
     xyz <- rbind(xyz_base, xyz_below, xyz_belt, xyz_above, xyz_neck, xyz_head)
-    xyz <- Point3D$new(xyz)$dilate(whd)$rotate(R)$translate(pc)
+    xyz <- as_coord3d(xyz)$
+        scale(whd$width, whd$height, whd$depth)$
+        transform(R)$
+        translate(pc)
 
     xy_vt <- rbind(vt_base, vt_body, vt_belt, vt_head)
 
@@ -373,7 +380,6 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
     write_peg_doll_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
 
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
-
 }
 
 write_peg_doll_texture <- function(piece_side = "pawn_face", suit = 1, rank = 1, cfg = pp_cfg(),
