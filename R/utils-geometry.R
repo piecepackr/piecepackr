@@ -14,9 +14,6 @@ radius <- function(x) max(abs(x - mean(x)))
 #' @export
 as_coord2d.point2d <- function(x, ...) as_coord2d(x$x, x$y)
 
-#' @export
-as_coord3d.point3d <- function(x, ...) as_coord3d(x$x, x$y, x$z)
-
 # "collision detection" via Separating Axis Theorem
 # Arguments of point is vectorized
 Point2D <- R6Class("point2d",
@@ -105,99 +102,6 @@ Ops.point2d <- function(e1, e2) {
     }
 }
 
-Point3D <- R6Class("point3d",
-                   public = list(x=NULL, y=NULL, z=NULL,
-                                 initialize = function(x=0, y=0, z=0) {
-                                     if (is.list(x) || inherits(x, c("Coord2D", "Coord3D", "point2d", "point3d"))) {
-                                         xt <- x$x
-                                         y <- x$y
-                                         z <- x$z %||% z
-                                     } else if (is.matrix(x)) {
-                                         xt <- x[, 1]
-                                         y <- x[, 2]
-                                         z <- x[, 3]
-                                     } else {
-                                         xt <- x
-                                         y <- y
-                                         z <- z
-                                     }
-                                     n <- max(lengths(list(xt, y, z)))
-                                     self$x <- rep(xt, length.out = n)
-                                     self$y <- rep(y, length.out = n)
-                                     self$z <- rep(z, length.out = n)
-                                 },
-                                 diff = function(p) { ### later create Vector3D class?
-                                     Point3D$new(p$x-self$x, p$y-self$y, p$z-self$z)
-                                 },
-                                 distance_to = function(p) {
-                                     sqrt((p$x - self$x)^2 + (p$y - self$y)^2 + (p$z  - self$z)^2)
-                                 },
-                                 dilate = function(width = 1, height = width, depth = width) {
-                                     if (is.list(width)) {
-                                         x <- width$width * self$x
-                                         y <- width$height * self$y
-                                         z <- width$depth * self$z
-                                     } else {
-                                         x <- width * self$x
-                                         y <- height * self$y
-                                         z <- depth * self$z
-                                     }
-                                     Point3D$new(x, y, z)
-                                 },
-                                 # rotation matrix 'R' is post-multiplied...
-                                 rotate = function(t = 0, axis_x = 0, axis_y = 0) {
-                                     m <- as.matrix(self)
-                                     if (is.matrix(t)) {
-                                         R <- t
-                                     } else {
-                                         R <- AA_to_R(t, axis_x, axis_y)
-                                     }
-                                     Point3D$new(m %*% R)
-                                 },
-                                 translate = function(x = 0, y = 0, z = 0) {
-                                     if (is.list(x) || inherits(x, c("point2d", "point3d"))) {
-                                         xt <- x$x
-                                         y <- x$y
-                                         z <- x$z %||% z
-                                     } else {
-                                         xt <- x
-                                         y <- y
-                                         z <- z
-                                     }
-                                    Point3D$new(self$x + xt, self$y + y, self$z + z)
-                                 })
-)
-#' @export
-`[.point3d` <- function(x, i) Point3D$new(x$x[i], x$y[i], x$z[i])
-#' @export
-length.point3d <- function(x) length(x$x)
-#' @export
-Ops.point3d <- function(e1, e2) {
-    if (missing(e2)) {
-        switch(.Generic,
-               "-" = e1$dilate(-1),
-               stop(paste0("unary operation '", .Generic, "' not defined for `point3d` objects"))
-               )
-    } else {
-        if (inherits(e1, "point3d") && inherits(e2, "point3d")) {
-            switch(.Generic,
-                   "+" = e1$translate(e2),
-                   "-" = e2$diff(e1),
-                   stop(paste0("binary operation '", .Generic, "' not defined for `point3d` objects"))
-            )
-        } else if (is.numeric(e1) && inherits(e2, "point3d")) {
-            switch(.Generic,
-                   "*" = e2$dilate(e1),
-                   stop(paste0("binary operation '", .Generic, "' not defined for `point3d` objects"))
-            )
-        } else {
-            switch(.Generic,
-                   stop(paste0("binary operation '", .Generic, "' not defined for `point3d` objects"))
-            )
-        }
-    }
-}
-
 Vector <- R6Class("geometry_vector", # vector is R builtin class
                   inherit = Point2D,
                   public = list(dot = function(v) {
@@ -279,10 +183,10 @@ LineSegment <- R6Class("line_segment",
                   },
                   face_matrix = function(z=0, depth=1) {
                       vs <- list()
-                      vs[[1]] <- Point3D$new(self$p1, z = z - 0.5*depth)
-                      vs[[2]] <- Point3D$new(self$p1, z = z + 0.5*depth)
-                      vs[[3]] <- Point3D$new(self$p2, z = z + 0.5*depth)
-                      vs[[4]] <- Point3D$new(self$p2, z = z - 0.5*depth)
+                      vs[[1]] <- as_coord3d(self$p1, z = z - 0.5*depth)
+                      vs[[2]] <- as_coord3d(self$p1, z = z + 0.5*depth)
+                      vs[[3]] <- as_coord3d(self$p2, z = z + 0.5*depth)
+                      vs[[4]] <- as_coord3d(self$p2, z = z - 0.5*depth)
                       n <- max(lengths(c(self$p1, self$p2)))
                       m <- matrix(0, nrow = 4 * n, ncol = 3)
                       for (i_v in seq_len(n)) {
