@@ -7,130 +7,23 @@ npc_to_in <- function(xy, x=0.5, y=0.5, w=1, h=1, t=0) {
     invisible(xy)
 }
 
-degrees <- function(theta) affiner::angle(theta, "degrees")
-
 radius <- function(x) max(abs(x - mean(x)))
-
-#' @export
-as_coord2d.point2d <- function(x, ...) as_coord2d(x$x, x$y)
-
-# "collision detection" via Separating Axis Theorem
-# Arguments of point is vectorized
-Point2D <- R6Class("point2d",
-                 public = list(x=NULL, y=NULL,
-                               initialize = function(x=0.5, y=0.5) {
-                                   if (is.list(x) || inherits(x, c("Coord2D", "point2d"))) {
-                                       xt <- x$x
-                                       y <- x$y
-                                   } else {
-                                       xt <- x
-                                       y <- y
-                                   }
-                                   n <- max(lengths(list(xt, y)))
-                                   self$x <- rep(xt, length.out = n)
-                                   self$y <- rep(y, length.out = n)
-                               },
-                               angle_to = function(p) {
-                                   p1 = self$diff(p)
-                                   to_t(p1$x, p1$y)
-                               },
-                               diff = function(p) {
-                                   Vector$new(p$x-self$x, p$y-self$y)
-                               },
-                               distance_to = function(p) {
-                                   sqrt((p$x - self$x)^2 + (p$y - self$y)^2)
-                               },
-                               midpoint = function(p) {
-                                   x <- mean(c(p$x, self$x))
-                                   y <- mean(c(p$y, self$y))
-                                   Point2D$new(x, y)
-                               },
-                               translate = function(x = 0, y = 0) {
-                                   Point2D$new(self$x + x, self$y + y)
-                               },
-                               rotate = function(t = 0) {
-                                   x <- self$x * cos(to_radians(t)) - self$y * sin(to_radians(t))
-                                   y <- self$x * sin(to_radians(t)) + self$y * cos(to_radians(t))
-                                   Point2D$new(x, y)
-                               },
-                               dilate = function(width = 1, height = width) {
-                                   x <- width * self$x
-                                   y <- height * self$y
-                                   Point2D$new(x, y)
-                               },
-                               plot = function(gp = gpar()) {
-                                   grid.points(x=self$x, y=self$y, default.units="in", gp = gp)
-                               })
-)
-#' @export
-`[.point2d` <- function(x, i) Point2D$new(x$x[i], x$y[i])
-#' @export
-length.point2d <- function(x) length(x$x)
-#' @export
-as.list.point2d <- function(x, ...) {
-    n <- length(x)
-    ll <- vector("list", n)
-    for (i in seq_len(n)) {
-        ll[[i]] <- x[i]
-    }
-    ll
-}
-#' @export
-Ops.point2d <- function(e1, e2) {
-    if (missing(e2)) {
-        switch(.Generic,
-               "-" = e1$dilate(-1),
-               stop(paste0("unary operation '", .Generic, "' not defined for `point2d` objects"))
-               )
-    } else {
-        if (inherits(e1, "point2d") && inherits(e2, "point2d")) {
-            switch(.Generic,
-                   "+" = e1$translate(e2),
-                   "-" = e2$diff(e1),
-                   stop(paste0("binary operation '", .Generic, "' not defined for `point2d` objects"))
-            )
-        } else if (is.numeric(e1) && inherits(e2, "point2d")) {
-            switch(.Generic,
-                   "*" = e2$dilate(e1),
-                   stop(paste0("binary operation '", .Generic, "' not defined for `point2d` objects"))
-            )
-        } else {
-            switch(.Generic,
-                   stop(paste0("binary operation '", .Generic, "' not defined for `point2d` objects"))
-            )
-        }
-    }
-}
-
-Vector <- R6Class("geometry_vector", # vector is R builtin class
-                  inherit = Point2D,
-                  public = list(dot = function(v) {
-                                    self$x * v$x + self$y * v$y
-                                }),
-                  active = list(orthogonal = function() {
-                                    Vector$new(self$y, -self$x)
-                                }))
-`[.geometry_vector` <- function(x, i) Vector$new(x$x[i], x$y[i])
 
 Circle <- R6Class("circle",
     public = list(c=NULL, r=NULL,
                   initialize = function(x=0.5, y=0.5, r=0.5) {
-                      if (is.list(x) || inherits(x, c("Coord2D", "point2d"))) {
-                          self$c <- Point2D$new(x)
-                      } else {
-                          self$c <- Point2D$new(x, y)
-                      }
+                      self$c <- as_coord2d(x = x, y = y)
                       self$r <- r
                   },
                   project = function(v) {
-                      center <- v$dot(self$c)
+                      center <- v * self$c
                       c(center - self$r, center + self$r)
                   }))
 
 Polygon <- R6Class("polygon",
     public = list(vertices=NULL, edges=NULL, normals=NULL,
                initialize = function(x=c(0, 0.5, 1, 0.5), y=c(0.5, 1, 0.5, 0)) {
-                   self$vertices <- Point2D$new(x, y)
+                   self$vertices <- as_coord2d(x = x, y = y)
                    xy <- cbind(self$x, self$y)
                    n <- length(self$vertices)
                    # edges
@@ -142,16 +35,12 @@ Polygon <- R6Class("polygon",
                    grid.polygon(x=self$x, y=self$y, default.units="in", gp = gp)
                },
                project = function(v) {
-                   n <- length(self$x)
-                   projections <- numeric(n)
-                   for (ii in seq(n)) {
-                       projections[ii] <- v$dot(self$vertices[ii])
-                   }
+                   projections <- v * self$vertices
                    range(projections)
                },
                op_edge_order = function(angle) {
                    op_ref <- as_coord2d(self$c)$translate(degrees(angle + 180), 10 * self$width)
-                   dists <- sapply(self$edges$mid_point, function(x) abs(as_coord2d(x) - op_ref))
+                   dists <- abs(self$edges$mid_point - op_ref)
                    order(dists, decreasing = TRUE)
                },
                op_edges = function(angle) {
@@ -162,9 +51,7 @@ Polygon <- R6Class("polygon",
                   y = function() self$vertices$y,
                   c = function() {
                       if (is.null(private$center)) {
-                          x <- mean(self$vertices$x)
-                          y <- mean(self$vertices$y)
-                          private$center <- Point2D$new(x, y)
+                          private$center <- mean(self$vertices)
                       }
                       private$center
                   },
@@ -202,10 +89,10 @@ LineSegment <- R6Class("line_segment",
    active = list(mid_point = function() {
                      x <- (self$p1$x + self$p2$x) / 2
                      y <- (self$p1$y + self$p2$y) / 2
-                     Point2D$new(x, y)
+                     as_coord2d(x, y)
                   },
                   orthogonal = function() {
-                      self$p1$diff(self$p2)$orthogonal
+                      affiner::normal2d(self$p1 - self$p2)
                   })
     )
 #' @export
@@ -228,12 +115,15 @@ ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
 #### ConcavePolygon, add a list of convex polygons that cover it to test SAT
 #### Most value adding if adding something like megahexes but could be used for stars as well
 
+# "collision detection" via Separating Axis Theorem
 do_projections_overlap <- function(r1, r2) {
     do_ranges_overlap(r1[1], r1[2], r2[1], r2[2])
 }
 
 do_convex_polygons_overlap <- function(s1, s2) {
-    for (n in c(as.list(s1$normals), as.list(s2$normals))) {
+    normals <- c(s1$normals, s2$normals)
+    for (i in seq_along(normals)) {
+        n <- normals[i]
         if (!do_projections_overlap(s1$project(n), s2$project(n))) {
             return(FALSE)
         }
@@ -242,9 +132,12 @@ do_convex_polygons_overlap <- function(s1, s2) {
 }
 
 does_convex_polygon_overlap_circle <- function(p, c) { # nolint
-    n_vertices <- length(p$vertices)
-    c_normals <- p$vertices$diff(c$c)$orthogonal
-    for (n in c(as.list(p$normals), as.list(c_normals))) {
+    c_normals <- affiner::normal2d(p$vertices - c$c)
+    if (any(is.nan(c_normals))) # happens if center of circle same as vertex
+        return(TRUE)
+    normals <- c(p$normals, c_normals)
+    for (i in seq_along(normals)) {
+        n <- normals[i]
         if (!do_projections_overlap(p$project(n), c$project(n))) {
             return(FALSE)
         }
@@ -254,7 +147,7 @@ does_convex_polygon_overlap_circle <- function(p, c) { # nolint
 
 do_shapes_overlap <- function(s1, s2) {
     if (inherits(s1, "circle") && inherits(s2, "circle")) {
-        less_than(s1$c$distance_to(s2$c), s1$r + s2$r)
+        less_than(abs(s1$c - s2$c), s1$r + s2$r)
     } else if (inherits(s1, "convex_polygon") && inherits(s2, "convex_polygon")) {
         do_convex_polygons_overlap(s1, s2)
     } else if (inherits(s1, "convex_polygon") && inherits(s2, "circle")) {
