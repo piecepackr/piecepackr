@@ -84,7 +84,7 @@ test_that("SAT functions work", {
 
     c1 <- Circle$new(x=0.5, y=0.5, r=0.5)
     c2 <- Circle$new(x=1.0, y=1.0, r=0.5)
-    c3 <- Circle$new(Point2D$new(x=2.0, y=2.0), r=0.5)
+    c3 <- Circle$new(as_coord2d(x=2.0, y=2.0), r=0.5)
 
     expect_true(do_shapes_overlap("boo", "bar"))
     expect_true(do_shapes_overlap(r1, r2))

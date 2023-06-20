@@ -211,9 +211,9 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                       n <- length(self$vertices) / 2
                       xy_f <- as_coord2d(self$vertices[seq(n)], alpha = degrees(angle), scale = scale)
                       projections <- numeric(n)
-                      proj_vec <- Vector$new(to_x(angle - 90, 1), to_y(angle - 90, 1))
+                      proj_vec <- as_coord2d(degrees(angle - 90), radius = 1)
                       for (ii in seq(n)) {
-                          projections[ii] <- proj_vec$dot(xy_f[ii])
+                          projections[ii] <- proj_vec * xy_f[ii]
                       }
                       i_min <- which.min(projections)
                       i_max <- which.max(projections)
@@ -285,9 +285,9 @@ CurvedEdge <- R6Class("edge_curved", inherit = Edge,
                       n <- length(self$vertices) / 2
                       xy_f <- as_coord2d(self$vertices[seq(n)], alpha = degrees(angle), scale = scale)
                       projections <- numeric(n)
-                      proj_vec <- Vector$new(to_x(angle - 90, 1), to_y(angle - 90, 1))
+                      proj_vec <- as_coord2d(degrees(angle - 90), radius = 1)
                       for (ii in seq(n)) {
-                          projections[ii] <- proj_vec$dot(xy_f[ii])
+                          projections[ii] <- proj_vec * xy_f[ii]
                       }
                       i_min <- which.min(projections)
                       i_max <- which.max(projections)
