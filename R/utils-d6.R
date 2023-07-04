@@ -89,11 +89,11 @@ visible_die_faces <- function(die_faces, op_angle = 45) {
     i_bot <- which.min(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$z))
     indices <- setdiff(indices, c(i_top, i_bot))
 
-    op_ref <- as_coord2d(degrees(180 + op_angle),
-                         radius = 10 * radius(die_faces$f_xyz[[1]]))
-    op_line <- Line$new(op_angle, op_ref)
+    op_ref <- as_coord3d(degrees(180 + op_angle),
+                         radius = 10 * radius(die_faces$f_xyz[[1]]), z = 0)
+    op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
     depths <- sapply(indices, function(i) mean(die_faces$f_xyz[[i]])$z)
-    dists <- sapply(indices, function(i) op_line$distance_to(mean(die_faces$f_xyz[[i]])))
+    dists <- sapply(indices, function(i) distance3d(op_plane, mean(die_faces$f_xyz[[i]])))
     indices <- indices[order(round(depths, 6), -dists)] # `round()` avoids weird sorting errors
     utils::tail(indices, 2L)
 }

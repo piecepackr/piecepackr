@@ -45,10 +45,10 @@ Token2S <- R6Class("token2s",
                     },
                     op_edge_order = function(angle) {
                         r <- 10 * radius(self$xyz)
-                        op_ref <- as_coord2d(degrees(180 + angle), r)
-                        op_line <- Line$new(angle, op_ref)
+                        op_ref <- as_coord3d(degrees(180 + angle), radius = r, z = 0)
+                        op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
                         depths <- sapply(self$edges, function(x) mean(x$vertices)$z)
-                        dists <- sapply(self$edges, function(x) op_line$distance_to(mean(x$vertices)))
+                        dists <- sapply(self$edges, function(x) distance3d(op_plane, mean(x$vertices)))
                         order(round(depths, 6), -dists) # `round()` avoids weird sorting errors
                     },
                     op_edges = function(angle) {
@@ -63,10 +63,10 @@ Token2S <- R6Class("token2s",
                     #### Handle edge case for token (almost) parallel to xy-axis
                     visible_side = function(angle) {
                         r <- 10 * radius(self$xyz)
-                        op_ref <- as_coord2d(degrees(180 + angle), r)
-                        op_line <- Line$new(angle, op_ref)
-                        if (op_line$distance_to(mean(self$xyz_face)) <
-                            op_line$distance_to(mean(self$xyz_back)))
+                        op_ref <- as_coord3d(degrees(180 + angle), radius = r, z = 0)
+                        op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
+                        if (distance3d(op_plane, mean(self$xyz_face)) <
+                            distance3d(op_plane, mean(self$xyz_back)))
                             "face"
                         else
                             "back"
@@ -145,10 +145,10 @@ Edge <- R6Class("edge",
                           initialize = function(vertices = NULL) self$vertices <- vertices,
                           visible_side = function(angle) {
                               r <- 10 * radius(self$vertices)
-                              op_ref <- as_coord2d(degrees(180 + angle), r)
-                              op_line <- Line$new(angle, op_ref)
-                              if (op_line$distance_to(mean(self$vertices_face)) <
-                                  op_line$distance_to(mean(self$vertices_back)))
+                              op_ref <- as_coord3d(degrees(180 + angle), radius = r, z = 0)
+                              op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
+                              if (distance3d(op_plane, mean(self$vertices_face)) <
+                                  distance3d(op_plane, mean(self$vertices_back)))
                                   "face"
                               else
                                   "back"

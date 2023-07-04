@@ -31,8 +31,8 @@
 <polygon points='186.36,245.64 186.36,389.64 330.36,389.64 330.36,245.64 ' style='stroke-width: 0.75; stroke: none; fill: none;' />
 <polyline points='186.36,245.64 186.36,389.64 330.36,389.64 330.36,245.64 186.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 <polygon points='180.00,252.00 180.00,396.00 36.00,396.00 36.00,252.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='36.00,252.00 180.00,252.00 186.36,245.64 42.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='180.00,252.00 180.00,396.00 186.36,389.64 186.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='36.00,252.00 180.00,252.00 186.36,245.64 42.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='180.00,396.00 36.00,396.00 42.36,389.64 186.36,389.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='36.00,396.00 36.00,252.00 42.36,245.64 42.36,389.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <rect x='42.36' y='245.64' width='144.00' height='144.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
