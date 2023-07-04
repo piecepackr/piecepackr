@@ -21,8 +21,8 @@
 <polygon points='288.00,216.00 288.00,360.00 432.00,360.00 432.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='438.36,353.64 438.36,209.64 432.00,216.00 432.00,360.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='438.36,209.64 294.36,209.64 288.00,216.00 432.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='294.36,209.64 294.36,353.64 288.00,360.00 288.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='294.36,353.64 438.36,353.64 432.00,360.00 288.00,360.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='294.36,209.64 294.36,353.64 288.00,360.00 288.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='294.36,209.64 294.36,353.64 438.36,353.64 438.36,209.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='366.36' y='306.41' text-anchor='middle' style='font-size: 72.00px; fill: #D55E00; font-family: sans;' textLength='40.05px' lengthAdjust='spacingAndGlyphs'>n</text>
 <text x='330.36' y='259.40' text-anchor='middle' style='font-size: 40.00px; fill: #D55E00; font-family: sans;' textLength='23.76px' lengthAdjust='spacingAndGlyphs'>♥</text>

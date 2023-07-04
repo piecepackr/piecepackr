@@ -28,8 +28,8 @@
 <line x1='186.36' y1='317.64' x2='330.36' y2='317.64' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='186.36,245.64 186.36,389.64 330.36,389.64 330.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='180.00,252.00 180.00,396.00 36.00,396.00 36.00,252.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='36.00,252.00 180.00,252.00 186.36,245.64 42.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='180.00,252.00 180.00,396.00 186.36,389.64 186.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='36.00,252.00 180.00,252.00 186.36,245.64 42.36,245.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='180.00,396.00 36.00,396.00 42.36,389.64 186.36,389.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='36.00,396.00 36.00,252.00 42.36,245.64 42.36,389.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='42.36,245.64 42.36,389.64 186.36,389.64 186.36,245.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
