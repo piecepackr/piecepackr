@@ -67,24 +67,6 @@ LineSegment <- R6Class("line_segment",
                   initialize = function(p1, p2) {
                       self$p1 <- p1
                       self$p2 <- p2
-                  },
-                  face_matrix = function(z=0, depth=1) {
-                      vs <- list()
-                      vs[[1]] <- as_coord3d(self$p1, z = z - 0.5*depth)
-                      vs[[2]] <- as_coord3d(self$p1, z = z + 0.5*depth)
-                      vs[[3]] <- as_coord3d(self$p2, z = z + 0.5*depth)
-                      vs[[4]] <- as_coord3d(self$p2, z = z - 0.5*depth)
-                      n <- max(lengths(c(self$p1, self$p2)))
-                      m <- matrix(0, nrow = 4 * n, ncol = 3)
-                      for (i_v in seq_len(n)) {
-                          i_m <- 4 * i_v - 4
-                          for (i in 1:4) {
-                              v <- vs[[i]][i_v]
-                              m[i_m + i, ] <- c(v$x, v$y, v$z)
-                          }
-                      }
-                      colnames(m) <- c("x", "y", "z")
-                      m
                   }),
    active = list(mid_point = function() {
                      x <- (self$p1$x + self$p2$x) / 2
@@ -97,19 +79,6 @@ LineSegment <- R6Class("line_segment",
     )
 #' @export
 `[.line_segment` <- function(x, i) LineSegment$new(x$p1[i], x$p2[i])
-
-Line <- R6Class("line",
-    public = list(a=NULL, b=NULL, c=NULL,
-                  initialize = function(theta, p) {
-                      # a * x + b * y + c = 0
-                      # cos(theta) * x + sin(theta) * y + c = 0
-                      self$a <- cos(to_radians(theta))
-                      self$b <- sin(to_radians(theta))
-                      self$c <- -self$a * p$x + -self$b * p$y
-                  },
-                  distance_to = function(p) {
-                      abs(self$a * p$x + self$b * p$y + self$c) / sqrt(self$a^2 + self$b^2)
-                  }))
 
 ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
 #### ConcavePolygon, add a list of convex polygons that cover it to test SAT
