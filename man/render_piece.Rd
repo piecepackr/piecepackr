@@ -28,7 +28,7 @@ render_piece(
 \item{df}{A data frame of game piece information with (at least) the
 named columns \dQuote{piece_side}, \dQuote{x}, and \dQuote{y}.}
 
-\item{file}{Filename to save animation unless \code{NULL}
+\item{file}{Filename to save image unless \code{NULL}
 in which case it either uses the current graphics device or opens a new device
 (depending on \code{new_device} argument).}
 
@@ -40,11 +40,11 @@ in which case it either uses the current graphics device or opens a new device
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
 
-\item{width}{Width of animation (in inches).  Inferred by default.}
+\item{width}{Width of image (in inches).  Inferred by default.}
 
-\item{height}{Height of animation (in inches).  Inferred by default.}
+\item{height}{Height of image (in inches).  Inferred by default.}
 
-\item{ppi}{Resolution of animation in pixels per inch.}
+\item{ppi}{Resolution of image in pixels per inch.}
 
 \item{bg}{Background color (use \code{"transparent"} for transparent)}
 

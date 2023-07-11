@@ -4,16 +4,16 @@
 #' It is a wrapper around `pmap_piece()` that can auto-size files and graphic devices,
 #' apply axes offsets, annotate coordinates, and set up `rayrender` / `rayvertex` scenes.
 #' @inheritParams aabb_piece
-#' @param file Filename to save animation unless `NULL`
+#' @param file Filename to save image unless `NULL`
 #'             in which case it either uses the current graphics device or opens a new device
 #'             (depending on `new_device` argument).
 #' @param ... Arguments to [pmap_piece()]
 #' @param .f Low level graphics function to use e.g. [grid.piece()], [piece3d()], [piece_mesh()], or [piece()].
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
-#' @param width Width of animation (in inches).  Inferred by default.
-#' @param height Height of animation (in inches).  Inferred by default.
-#' @param ppi Resolution of animation in pixels per inch.
+#' @param width Width of image (in inches).  Inferred by default.
+#' @param height Height of image (in inches).  Inferred by default.
+#' @param ppi Resolution of image in pixels per inch.
 #' @param bg Background color (use `"transparent"` for transparent)
 #' @param xoffset Number to add to the `x` column in `df`.  Inferred by default.
 #' @param yoffset Number to add to the `y` column in `df`.  Inferred by default.
