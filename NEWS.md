@@ -1,3 +1,14 @@
+piecepackr 1.13.5
+=================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* One package example is now wrapped in `try()` to prevent a CRAN check ERROR that
+  occurred on a CRAN Fedora Linux server with R-devel using `_R_CHECK_DONTTEST_EXAMPLES_=true` (#332).
+  This ERROR was unreproducible on my Ubuntu Linux server using `_R_CHECK_DONTTEST_EXAMPLES_=true` and
+  the same version of R-devel.
+
 piecepackr 1.13.3
 =================
 

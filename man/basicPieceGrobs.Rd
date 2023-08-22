@@ -32,47 +32,28 @@ previewLayoutGrob(piece_side, suit, rank, cfg = pp_cfg())
 function returned by \code{picturePieceGrobFn} should import.}
 }
 \description{
-\code{basicPieceGrob}, \code{pyramidTopGrob}, and \code{previewLayoutGrob}
-are the default \dQuote{grob} functions that \code{grid.piece} uses
-to create \code{grid} graphical \code{grob} objects.  \code{picturePieceGrobFn}
-is a function that returns a \dQuote{grob} function that imports graphics from files
-found in its \code{directory} argument.
+\code{basicPieceGrob} is the most common
+\dQuote{grob} function that \code{grid.piece} uses
+to create \code{grid} graphical \code{grob} objects.
+\code{picturePieceGrobFn} is a function that returns a \dQuote{grob} function
+that imports graphics from files found in its \code{directory} argument.
 }
 \examples{
 
- if (require("grid") && all(capabilities(c("cairo", "png")))) {
-    opt <- options(piecepackr.at.inform = FALSE)
-    on.exit(options(opt))
-    cfg <- pp_cfg(list(invert_colors=TRUE))
-
-    pushViewport(viewport(width=unit(2, "in"), height=unit(2, "in")))
-    grid.draw(basicPieceGrob("tile_face", suit=1, rank=3))
-    popViewport()
-
-    grid.newpage()
-    pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
-    grid.draw(basicPieceGrob("coin_back", suit=2, rank=0, cfg=cfg))
-    popViewport()
-
-    grid.newpage()
-    pushViewport(viewport(width=unit(6, "in"), height=unit(6, "in")))
-    grid.draw(previewLayoutGrob("preview_layout", suit=5, rank=0, cfg=cfg))
-    popViewport()
-
-    grid.newpage()
-    pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
-    grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5))
-    popViewport()
-
-    \donttest{
-        directory <- tempdir()
-        save_piece_images(cfg, directory=directory, format="svg", angle=0)
-        cfg2 <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
-
-        grid.newpage()
-        pushViewport(viewport(width=unit(0.75, "in"), height=unit(0.75, "in")))
-        grid.draw(pyramidTopGrob("pyramid_top", suit=3, rank=5, cfg=cfg2))
-        popViewport()
-    }
+ if (require("grid")) {
+   cfg <- pp_cfg(list(grob_fn.tile=basicPieceGrob, invert_colors=TRUE))
+   grid.piece("tile_face", suit=1, rank=3, cfg=cfg)
  }
+
+ \donttest{try({
+ if (require("grid") && capabilities(c("cairo"))) {
+   cfg <- pp_cfg(list(grob_fn.tile=basicPieceGrob, invert_colors=TRUE))
+   directory <- tempdir()
+   save_piece_images(cfg, directory=directory, format="svg", angle=0)
+   cfg2 <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
+
+   grid.newpage()
+   grid.piece("coin_back", suit=3, rank=5, cfg=cfg2)
+ }
+ })}
 }

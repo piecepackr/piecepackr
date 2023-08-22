@@ -1,6 +1,11 @@
+* One package example is now wrapped in `try()` to prevent a CRAN check ERROR that
+  occurred on a CRAN Fedora Linux server with R-devel using `_R_CHECK_DONTTEST_EXAMPLES_=true`.
+  This ERROR was unreproducible on my Ubuntu Linux server using `_R_CHECK_DONTTEST_EXAMPLES_=true` and
+  the same version of R-devel.
+
 **Test environments**
 
-* local (linux, R 4.3.0)
+* local (linux, R 4.3.1)
 * win-builder (windows, R devel)
 * mac-builder (osx, R release)
 * Github Actions (linux, R devel)
