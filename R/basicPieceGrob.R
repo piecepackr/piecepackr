@@ -12,22 +12,24 @@
 #' @inheritParams grid.piece
 #' @examples
 #'
-#'  if (require("grid")) {
+#'  if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
 #'    cfg <- pp_cfg(list(grob_fn.tile=basicPieceGrob, invert_colors=TRUE))
 #'    grid.piece("tile_face", suit=1, rank=3, cfg=cfg)
 #'  }
 #'
-#'  \donttest{try({
-#'  if (require("grid") && capabilities(c("cairo"))) {
-#'    cfg <- pp_cfg(list(grob_fn.tile=basicPieceGrob, invert_colors=TRUE))
-#'    directory <- tempdir()
-#'    save_piece_images(cfg, directory=directory, format="svg", angle=0)
-#'    cfg2 <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
+#'  \donttest{# May take more than 5 seconds on CRAN servers
+#'  try({
+#'    if (requireNamespace("grid", quietly = TRUE) && capabilities(c("cairo"))) {
+#'      cfg <- pp_cfg(list(grob_fn.tile=basicPieceGrob, invert_colors=TRUE))
+#'      directory <- tempdir()
+#'      save_piece_images(cfg, directory=directory, format="svg", angle=0)
+#'      cfg2 <- pp_cfg(list(grob_fn=picturePieceGrobFn(directory)))
 #'
-#'    grid.newpage()
-#'    grid.piece("coin_back", suit=3, rank=5, cfg=cfg2)
+#'      grid::grid.newpage()
+#'      grid.piece("coin_back", suit=3, rank=5, cfg=cfg2)
+#'    }
+#'  })
 #'  }
-#'  })}
 #' @export
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)

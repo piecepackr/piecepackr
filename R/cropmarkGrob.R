@@ -22,16 +22,17 @@
 #' @param cm_length Length of crop mark.
 #' @return A grid grob.
 #' @examples
-#' if (require("grid")) {
+#' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
 #'   cfg <- pp_cfg(list(mat_color = "pink", mat_width=0.05, border_color=NA))
-#'   grid.newpage()
+#'   grid::grid.newpage()
 #'   df <- data.frame(piece_side = "tile_face", suit = 2, rank = 2,
 #'                    x = 2, y = 2, angle = 0,
 #'                    stringsAsFactors = FALSE)
 #'   pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in")
 #'   pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed=TRUE)
-#'
-#'   grid.newpage()
+#' }
+#' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
+#'   grid::grid.newpage()
 #'   df <- data.frame(piece_side = "coin_back", suit = 2, rank = 2,
 #'                    x = 2, y = 2, angle = 0,
 #'                    stringsAsFactors = FALSE)

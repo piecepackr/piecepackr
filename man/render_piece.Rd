@@ -76,20 +76,27 @@ It is a wrapper around \code{pmap_piece()} that can auto-size files and graphic 
 apply axes offsets, annotate coordinates, and set up \code{rayrender} / \code{rayvertex} scenes.
 }
 \examples{
- df_board <- data.frame(piece_side = "board_face", suit = 3, rank = 8,
-                        x = 4.5, y = 4.5, stringsAsFactors = FALSE)
+ df_board <- data.frame(piece_side = "board_face", suit = 3, rank = 5,
+                        x = 3.0, y = 3.0, stringsAsFactors = FALSE)
  df_w <- data.frame(piece_side = "bit_face", suit = 6, rank = 1,
-                    x = rep(1:8, 2), y = rep(1:2, each=8),
+                    x = rep(1:5, 2), y = rep(1:2, each=5),
                     stringsAsFactors = FALSE)
  df_b <- data.frame(piece_side = "bit_face", suit = 1, rank = 1,
-                    x = rep(1:8, 2), y = rep(7:8, each=8),
+                    x = rep(1:5, 2), y = rep(4:5, each=5),
                     stringsAsFactors = FALSE)
  df <- rbind(df_board, df_w, df_b)
  df$cfg <- "checkers1"
 
- render_piece(df)
- render_piece(df, op_scale = 0.5, trans = op_transform, annotate = "algrebraic")
- \dontrun{ # May takes a while to render
+ if (requireNamespace("grid", quietly = TRUE)) {
+   render_piece(df, new_device = FALSE)
+ }
+ if (requireNamespace("grid", quietly = TRUE)) {
+   grid::grid.newpage()
+   render_piece(df, new_device = FALSE,
+                op_scale = 0.5, trans = op_transform,
+                annotate = "algrebraic")
+ }
+ \dontrun{# May take more than 5 seconds on CRAN servers
  if (require(rayvertex)) {
    envir3d <- game_systems("sans3d")
    render_piece(df, .f = piece_mesh, envir = envir3d,

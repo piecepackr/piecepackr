@@ -43,13 +43,13 @@ or distort to fit the area it is drawn in}
  cleave("0.5,0.2,0.4,0.5", float=TRUE)
  cleave("black,darkred,#050EAA,,", color=TRUE)
 
- if (require("grid")) {
-     grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
- }
-
  is_color_invisible("transparent")
  is_color_invisible(NA)
  is_color_invisible("blue")
  is_color_invisible("#05AE9C")
+
+ if (requireNamespace("grid", quietly = TRUE)) {
+     identical(inch(1), grid::unit(1, "inch"))
+ }
 
 }

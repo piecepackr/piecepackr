@@ -11,14 +11,15 @@
 #'                If \code{NA} we will read the texture and figure out a reasonable value.
 #' @return A numeric vector of rgl object IDs.
 #' @examples
-#' if (require("rgl") && all(capabilities(c("cairo", "png")))) {
-#'     open3d()
-#'     cfg <- game_systems("sans3d")$piecepack
-#'     piece3d("tile_back", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0)
-#'     piece3d("coin_back", suit = 4, rank = 2, cfg = cfg, x = 0.5, y = 0.5, z = 0.25)
-#'     piece3d("pawn_top", suit = 1, cfg = cfg, x = -0.5, y = 0.5, z = 0.6)
-#'     piece3d("die_face", suit = 3, cfg = cfg, x = -0.5, y = -0.5, z = 0.375)
-#'     piece3d("pyramid_top", suit = 2, rank = 3, cfg = cfg, x = 1.5, y = 0.0, z = 0.)
+#' if (requireNamespace("rgl", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
+#'   rgl::open3d()
+#'   cfg <- game_systems("sans3d")$piecepack
+#'   piece3d("tile_back", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0)
+#'   piece3d("coin_back", suit = 4, rank = 2, cfg = cfg, x = 0.5, y = 0.5, z = 0.25)
+#'   piece3d("pawn_top", suit = 1, cfg = cfg, x = -0.5, y = 0.5, z = 0.6)
+#'   piece3d("die_face", suit = 3, cfg = cfg, x = -0.5, y = -0.5, z = 0.375)
+#'   piece3d("pyramid_top", suit = 2, rank = 3, cfg = cfg, x = 1.5, y = 0.0, z = 0.31875)
+#'   invisible(NULL)
 #' }
 #' @export
 #' @seealso See \code{\link[rgl]{rgl-package}} for more information about the \code{rgl} package.

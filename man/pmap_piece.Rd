@@ -66,7 +66,7 @@ and use that to name the return \code{gTree} children  or \code{list} values.}
 }
 }
 \examples{
-  if (require("grid")) {
+  if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
        dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
                             invert_colors.suited=TRUE, border_color="black", border_lex=2)
        traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
@@ -74,7 +74,7 @@ and use that to name the return \code{gTree} children  or \code{list} values.}
                           dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
                           edge_color.coin="tan", edge_color.tile="tan")
        cfg <- pp_cfg(c(dark_colorscheme, traditional_ranks, cfg3d))
-       grid.newpage()
+       grid::grid.newpage()
        df_tiles <- data.frame(piece_side="tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
                               suit=NA, angle=NA, z=NA, stringsAsFactors=FALSE)
        df_coins <- data.frame(piece_side="coin_back", x=rep(4:1, 4), y=rep(4:1, each=4),

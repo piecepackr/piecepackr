@@ -39,24 +39,26 @@ A4_HEIGHT <- 11.69
 #'                   `arrangement = "double-sided"`.
 #' @inheritParams render_piece
 #' @examples
-#'   \donttest{
-#'     if (capabilities("cairo")) {
-#'         cfg <- pp_cfg(list(invert_colors.suited=TRUE))
-#'         cfg$description <- 'Piecepack with an "inverted" color scheme.'
-#'         cfg$title <- '"Inverted" piecepack'
-#'         cfg$copyright <- "\u00a9 2022 Trevor L Davis.  Some Right Reserved."
-#'         cfg$spdx_id <- "CC-BY-4.0"
-#'         cfg$credit <- ""
-#'         save_print_and_play(cfg, "my_pnp_file.pdf")
-#'         save_print_and_play(cfg, "my_pnp_file_ds.pdf", arrangement="double-sided")
-#'         save_print_and_play(cfg, "my_pnp_file_A4.pdf", size="A4", pieces="all")
-#'         save_print_and_play(cfg, "my_pnp_file_A5.pdf", size="A5")
-#'         unlink("my_pnp_file.pdf")
-#'         unlink("my_pnp_file_ds.pdf")
-#'         unlink("my_pnp_file_A4.pdf")
-#'         unlink("my_pnp_file_A5.pdf")
-#'     }
-#'   }
+#' \donttest{# May take more than 5 seconds on CRAN servers
+#' if (capabilities("cairo")) {
+#'   cfg <- pp_cfg(list(invert_colors.suited=TRUE))
+#'   cfg$description <- 'Piecepack with an "inverted" color scheme.'
+#'   cfg$title <- '"Inverted" piecepack'
+#'   cfg$copyright <- "\u00a9 2022 Trevor L Davis.  Some Right Reserved."
+#'   cfg$spdx_id <- "CC-BY-4.0"
+#'   cfg$credit <- ""
+#'
+#'   file <- tempfile("my_pnp_file", fileext = ".pdf")
+#'   file_ds <- tempfile("my_pnp_file_ds", fileext = ".pdf")
+#'   file_a4 <- tempfile("my_pnp_file_a4", fileext = ".pdf")
+#'   file_a5 <- tempfile("my_pnp_file_a5", fileext = ".pdf")
+#'
+#'   save_print_and_play(cfg, file)
+#'   save_print_and_play(cfg, file_ds, arrangement="double-sided")
+#'   save_print_and_play(cfg, file_a4, size="A4", pieces="all")
+#'   save_print_and_play(cfg, file_a5, size="A5")
+#' }
+#' }
 #' @export
 save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                                 output_filename = "piecepack.pdf",

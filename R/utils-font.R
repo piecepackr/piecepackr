@@ -21,7 +21,7 @@
 #'      get_embedded_font(fonts, chars)
 #'  }
 #'
-#'  if (requireNamespace("systemfonts") ||
+#'  if (requireNamespace("systemfonts", quietly = TRUE) ||
 #'      (requireNamespace("pdftools", quietly = TRUE) && capabilities("cairo"))) {
 #'      has_font("Dejavu Sans")
 #'  }

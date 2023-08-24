@@ -4,16 +4,23 @@
 #' @inheritParams piece3d
 #' @return A rayvertex object.
 #' @examples
-#'   \donttest{
-#'     if (require("rayvertex") && all(capabilities(c("cairo", "png")))) {
-#'         cfg <- game_systems("sans3d")$piecepack
-#'         rs <- function(shape) {
-#'              rasterize_scene(shape, light_info = directional_light(c(0, 0, 1)))
-#'         }
-#'         rs(piece_mesh("tile_face", suit = 3, rank = 3, cfg = cfg))
-#'         rs(piece_mesh("coin_back", suit = 4, rank = 2, cfg = cfg))
-#'         rs(piece_mesh("pawn_face", suit = 1, cfg = cfg))
-#'     }
+#'   \donttest{# May take more than 5 seconds on CRAN servers
+#'   if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
+#'       cfg <- game_systems("sans3d")$piecepack
+#'       rs <- function(shape) {
+#'            opt <- options(cores = getOption("Ncpus"))
+#'            light <- rayvertex::directional_light(c(0, 0, 1))
+#'            rayvertex::rasterize_scene(shape, light_info = light)
+#'            options(opt)
+#'       }
+#'       rs(piece_mesh("tile_face", suit = 3, rank = 3, cfg = cfg))
+#'   }
+#'   if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
+#'       rs(piece_mesh("coin_back", suit = 4, rank = 2, cfg = cfg))
+#'   }
+#'   if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
+#'       rs(piece_mesh("pawn_face", suit = 1, cfg = cfg))
+#'   }
 #'   }
 #' @export
 #' @seealso See \url{https://www.rayvertex.com} for more information about the \code{rayvertex} package.

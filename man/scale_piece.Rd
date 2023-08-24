@@ -87,8 +87,7 @@ to more easily generate (i.e. chess) algebraic notation coordinates.
 \code{breaks_counting()} generates breaks of just the positive integers within the limits.
 }
 \examples{
-if (require("ggplot2") && require("tibble")) {
-
+if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
   envir <- game_systems("sans")
   df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
                  x = 4.5, y = 4.5)

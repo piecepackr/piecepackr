@@ -114,11 +114,14 @@ See \url{https://spdx.org/licenses/} for full list.}
  cfg$get_width("tile_back")
  cfg$get_height("die_face")
  cfg$get_depth("coin_face")
- \donttest{
-   cfg <- list()
-   system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
-   cfg <- pp_cfg(list())
-   system.time(replicate(100, grid.piece("tile_face", 4, 4, cfg)))
+ \donttest{# May take more than 5 seconds on CRAN servers
+ # `pp_cfg()` objects use a cache to speed up repeated drawing
+ pdf(tempfile(fileext = ".pdf"))
+ cfg <- list()
+ system.time(replicate(100, grid.piece("tile_back", 4, 4, cfg)))
+ cfg <- pp_cfg(list())
+ system.time(replicate(100, grid.piece("tile_back", 4, 4, cfg)))
+ invisible(dev.off())
  }
 
 }

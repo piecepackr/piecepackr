@@ -104,8 +104,7 @@ See \code{\link[=pieceGrob]{pieceGrob()}} for more details.
 }
 
 \examples{
-if (require("ggplot2") && require("tibble")) {
-
+if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
   envir <- game_systems("sans")
   df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
                  x = 4.5, y = 4.5)
@@ -123,7 +122,8 @@ if (require("ggplot2") && require("tibble")) {
       scale_y_piece() +
       theme_minimal(28) +
       theme(panel.grid = element_blank())
-
+}
+if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
   # 3D "oblique" projection example
   # `cfg_class` must be "character" when using with `geom_piece()`
   df3d <- op_transform(df, cfg = "checkers1", envir = envir,
@@ -134,7 +134,6 @@ if (require("ggplot2") && require("tibble")) {
       coord_fixed() +
       theme_void()
 }
-
 }
 \seealso{
 \code{geom_piece()} is a wrapper around \code{\link[=pieceGrob]{pieceGrob()}}.

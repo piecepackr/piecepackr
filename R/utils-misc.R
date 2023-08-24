@@ -7,14 +7,14 @@
 #'  cleave("0.5,0.2,0.4,0.5", float=TRUE)
 #'  cleave("black,darkred,#050EAA,,", color=TRUE)
 #'
-#'  if (require("grid")) {
-#'      grid.rect(width=inch(1), height=inch(3), gp=gpar(fill="blue"))
-#'  }
-#'
 #'  is_color_invisible("transparent")
 #'  is_color_invisible(NA)
 #'  is_color_invisible("blue")
 #'  is_color_invisible("#05AE9C")
+#'
+#'  if (requireNamespace("grid", quietly = TRUE)) {
+#'      identical(inch(1), grid::unit(1, "inch"))
+#'  }
 #'
 #' @name pp_utils
 NULL
@@ -122,5 +122,32 @@ assert_suggested <- function(package) {
                          sQuote(package), sQuote(calling_fn)),
                  i = sprintf("Use %s.", sQuote(sprintf('install.packages("%s")', package))))
         abort(msg, class = "piecepackr_suggested_package")
+    }
+}
+
+# base R's Cairo/Quartz devices as well as {ragg} / {svglite} / {vdiffr} devices
+# should support Unicode without complaint
+# Notably `pdf()` is a device that does not...
+# Any other devices to add?
+device_supports_unicode <- function() {
+    device <- names(grDevices::dev.cur())
+    if (device %in% c("agg_jpeg", "agg_ppm", "agg_png", "agg_tiff", # {ragg}
+                      "devSVG", # {svglite} / {vdiffr}
+                      "quartz", "quartz_off_screen", # Quartz
+                      "cairo_pdf", "cairo_ps", "svg", "X11cairo") # Cairo
+    ) {
+        TRUE
+    } else if (device %in% c("bmp", "jpeg", "png", "tiff")) {
+        # on unix non-"cairo" type have different device names from "cairo" type
+        # but on Windows can't distinguish between `type = "windows"` or `type = "cairo"`
+        # Windows device doesn't support new patterns feature
+        if (getRversion() >= "4.2.0") {
+            dc <- grDevices::dev.capabilities()
+            "LinearGradient" %in% dc$patterns
+        } else {
+            .Platform$OS.type == "unix"
+        }
+    } else {
+        FALSE
     }
 }

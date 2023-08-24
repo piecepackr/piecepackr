@@ -109,58 +109,58 @@
 #'             if \code{"joystick"} the piecepack pawn will be a \dQuote{joystick} style pawn.
 #'             Note for the latter two pawn styles only \code{pawn_top} will work with \code{grid.piece}.
 #' @examples
-#'     cfgs <- game_systems(pawn = "joystick")
-#'     names(cfgs)
+#' cfgs <- game_systems(pawn = "joystick")
+#' names(cfgs)
 #'
-#'     opt <- options(piecepackr.at.inform = FALSE)
-#'     on.exit(options(opt))
 #'
-#'     \donttest{
-#'     # standard dice, meeples, and joystick pawns
-#'     if (requireNamespace("grid", quietly = TRUE)) {
-#'        grid::grid.newpage()
-#'        dice <-  c("d4", "numeral", "d8", "d10", "d12", "d20")
-#'        cfg <- paste0("dice_", dice)
-#'        grid.piece("die_face", suit = c(1:6, 1), rank = 1:6,
-#'                   cfg = cfg, envir = cfgs, x = 1:6, y = 1,
-#'                   default.units = "in", op_scale = 0.5)
-#'        grid.piece("die_face", rank=1:6, suit=1:6,
-#'                   x=1:6, y=2, default.units="in",
-#'                   op_scale=0.5, cfg=cfgs$dice)
-#'        grid.piece("bit_face", suit=1:6,
-#'                   x=1:6, y=3, default.units="in",
-#'                   op_scale=0.5, cfg=cfgs$meeple)
-#'        grid.piece("pawn_top", suit=1:6,
-#'                   x=1:6, y=4, default.units="in",
-#'                   op_scale=0.5, cfg=cfgs$piecepack)
-#'     }
-#'     }
-#'     # dominoes
-#'     if (requireNamespace("grid", quietly = TRUE)) {
-#'        grid::grid.newpage()
-#'        colors <- c("black", "red", "green", "blue", "yellow", "white")
-#'        cfg <- paste0("dominoes_", rep(colors, 2))
-#'        grid.piece("tile_face",  suit=1:12, rank=1:12+1,
-#'                   cfg=cfg, envir=cfgs,
-#'                   x=rep(6:1, 2), y=rep(2*2:1, each=6),
-#'                   default.units="in", op_scale=0.5)
-#'     }
-#'     # piecepack "playing card expansion"
-#'     if (requireNamespace("grid", quietly = TRUE)) {
-#'        grid::grid.newpage()
-#'        df_tiles <- data.frame(piece_side="tile_back",
-#'                               x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
-#'                               suit=NA, angle=NA, z=1/8,
-#'                               stringsAsFactors=FALSE)
-#'        df_coins <- data.frame(piece_side="coin_back",
-#'                               x=rep(4:1, 4), y=rep(4:1, each=4),
-#'                               suit=c(1,4,1,4,4,1,4,1,2,3,2,3,3,2,3,2),
-#'                               angle=rep(c(180,0), each=8), z=1/4+1/16,
-#'                               stringsAsFactors=FALSE)
-#'        df <- rbind(df_tiles, df_coins)
-#'        pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5,
-#'                   default.units="in")
-#'     }
+#' \donttest{# May take more than 5 seconds on CRAN servers
+#' # standard dice, meeples, and joystick pawns
+#' if (requireNamespace("grid", quietly = TRUE)) {
+#'    opt <- options(piecepackr.at.inform = FALSE)
+#'    grid::grid.newpage()
+#'    dice <-  c("d4", "numeral", "d8", "d10", "d12", "d20")
+#'    cfg <- paste0("dice_", dice)
+#'    grid.piece("die_face", suit = c(1:6, 1), rank = 1:6,
+#'               cfg = cfg, envir = cfgs, x = 1:6, y = 1,
+#'               default.units = "in", op_scale = 0.5)
+#'    grid.piece("die_face", rank=1:6, suit=1:6,
+#'               x=1:6, y=2, default.units="in",
+#'               op_scale=0.5, cfg=cfgs$dice)
+#'    grid.piece("bit_face", suit=1:6,
+#'               x=1:6, y=3, default.units="in",
+#'               op_scale=0.5, cfg=cfgs$meeple)
+#'    grid.piece("pawn_top", suit=1:6,
+#'               x=1:6, y=4, default.units="in",
+#'               op_scale=0.5, cfg=cfgs$piecepack)
+#'    options(opt)
+#' }
+#' }
+#' # dominoes
+#' if (requireNamespace("grid", quietly = TRUE)) {
+#'    grid::grid.newpage()
+#'    colors <- c("black", "red", "green", "blue", "yellow", "white")
+#'    cfg <- paste0("dominoes_", rep(colors, 2))
+#'    grid.piece("tile_face",  suit=1:12, rank=1:12+1,
+#'               cfg=cfg, envir=cfgs,
+#'               x=rep(6:1, 2), y=rep(2*2:1, each=6),
+#'               default.units="in", op_scale=0.5)
+#' }
+#' # piecepack "playing card expansion"
+#' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
+#'    grid::grid.newpage()
+#'    df_tiles <- data.frame(piece_side="tile_back",
+#'                           x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1),
+#'                           suit=NA, angle=NA, z=1/8,
+#'                           stringsAsFactors=FALSE)
+#'    df_coins <- data.frame(piece_side="coin_back",
+#'                           x=rep(4:1, 4), y=rep(4:1, each=4),
+#'                           suit=c(1,4,1,4,4,1,4,1,2,3,2,3,3,2,3,2),
+#'                           angle=rep(c(180,0), each=8), z=1/4+1/16,
+#'                           stringsAsFactors=FALSE)
+#'    df <- rbind(df_tiles, df_coins)
+#'    pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5,
+#'               default.units="in")
+#' }
 #' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
 #' @export
 game_systems <- function(style = NULL, round = FALSE, pawn = "token") {

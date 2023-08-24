@@ -137,7 +137,7 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
 \code{pieceGrob()} is its \code{grid} \dQuote{grob} counterpart.
 }
 \examples{
-  if (require("grid")) {
+  if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
     opt <- options(piecepackr.at.inform = FALSE)
     on.exit(options(opt))
 
@@ -158,18 +158,18 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
     # default piecepack, orthogonal projection
     draw_pp_diagram(cfg=pp_cfg())
   }
-  if (require("grid")) {
+  if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
     # custom configuration, orthogonal projection
-    grid.newpage()
+    grid::grid.newpage()
     dark_colorscheme <- list(suit_color="darkred,black,darkgreen,darkblue,black",
                          invert_colors.suited=TRUE, border_color="black", border_lex=2)
     traditional_ranks <- list(use_suit_as_ace=TRUE, rank_text=",a,2,3,4,5")
     cfg <- c(dark_colorscheme, traditional_ranks)
     draw_pp_diagram(cfg=pp_cfg(cfg))
   }
-  if (require("grid")) {
+  if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
     # custom configuration, oblique projection
-    grid.newpage()
+    grid::grid.newpage()
     cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,
                        dm_text.pawn="", shape.pawn="convex6", invert_colors.pawn=TRUE,
                        edge_color.coin="tan", edge_color.tile="tan")

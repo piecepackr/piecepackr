@@ -58,12 +58,12 @@ piece_filename <- function(directory, piece_side, format, angle,
 #' @param format Character vector of formats to save images in
 #' @param angle Numeric vector of angles to rotate images (in degrees)
 #' @examples
-#'   \donttest{
-#'     if (all(capabilities(c("cairo", "png")))) {
-#'         cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
-#'         save_piece_images(cfg, directory=tempdir(), format="svg", angle=0)
-#'         save_piece_images(cfg, directory=tempdir(), format="png", angle=90)
-#'     }
+#'   \donttest{# May take more than 5 seconds on CRAN server
+#'   if (all(capabilities(c("cairo", "png")))) {
+#'       cfg <- pp_cfg(list(suit_color="darkred,black,darkgreen,darkblue,grey"))
+#'       save_piece_images(cfg, directory=tempdir(), format="svg", angle=0)
+#'       save_piece_images(cfg, directory=tempdir(), format="png", angle=90)
+#'   }
 #'   }
 #' @export
 save_piece_images <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),

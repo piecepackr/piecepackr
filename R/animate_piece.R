@@ -54,10 +54,13 @@
 #'   }
 #'
 #'   ## Save GIF of game with animation transitions
-#'   \dontrun{ # May take more than 5 seconds on CRAN machines
-#'   if ((require("animation") || require("gifski")) && require("tweenr")) {
-#'       animate_piece(dfs, file = "tic-tac-toe.gif", n_transitions = 5L,
-#'                     n_pauses = 2L, fps = 9)
+#'   \dontrun{# May take more than 5 seconds on CRAN servers
+#'   if ((requireNamespace("animation", quietly = TRUE) ||
+#'        requireNamespace("gifski", quietly = TRUE)) &&
+#'       requireNamespace("tweenr", quietly = TRUE)) {
+#'       file <- tempfile("tic-tac-toe", fileext = ".gif")
+#'       animate_piece(dfs, file = file,
+#'                     n_transitions = 5L, n_pauses = 2L, fps = 9)
 #'   }
 #'   }
 #'

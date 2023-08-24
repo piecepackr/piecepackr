@@ -60,9 +60,9 @@ by changing the \code{op_angle} or the dimensions of pieces.
 df <- tibble::tibble(piece_side="tile_back",
                      x=c(2,2,2,4,6,6,4,2,5),
                      y=c(4,4,4,4,4,2,2,2,3))
+cfg <- game_systems()$piecepack
 pmap_piece(df, op_angle=135, trans=op_transform,
-           op_scale=0.5, default.units="in")
-
+           op_scale=0.5, default.units="in", cfg=cfg)
 }
 \seealso{
 \url{https://trevorldavis.com/piecepackr/3d-projections.html} for more details

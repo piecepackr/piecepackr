@@ -20,15 +20,16 @@
 #'   # Only works if active graphics device supports affine transformations
 #'   # such as `X11(type="cairo")` on R 4.2+
 #'   \dontrun{
-#'      grid.newpage()
-#'      pushViewport(viewport(width=unit(3, "in"), height=unit(2, "in")))
-#'      grid.draw(grob)
-#'      popViewport()
+#'   # we currently don't export this function nor generate an Rd file
+#'   grid.newpage()
+#'   pushViewport(viewport(width=unit(3, "in"), height=unit(2, "in")))
+#'   grid.draw(grob)
+#'   popViewport()
 #'
-#'      grid.newpage()
-#'      pushViewport(viewport(width=unit(3, "in"), height=unit(2, "in")))
-#'      grid.draw(transformation)
-#'      popViewport()
+#'   grid.newpage()
+#'   pushViewport(viewport(width=unit(3, "in"), height=unit(2, "in")))
+#'   grid.draw(transformation)
+#'   popViewport()
 #'   }
 #' }
 #'

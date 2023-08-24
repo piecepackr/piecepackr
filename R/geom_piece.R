@@ -37,8 +37,7 @@
 #'         around [ggplot2::scale_x_continuous()] and [ggplot2::scale_y_continuous()]
 #'         with better defaults for board game diagrams.
 #' @examples
-#' if (require("ggplot2") && require("tibble")) {
-#'
+#' if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
 #'   envir <- game_systems("sans")
 #'   df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
 #'                  x = 4.5, y = 4.5)
@@ -56,7 +55,8 @@
 #'       scale_y_piece() +
 #'       theme_minimal(28) +
 #'       theme(panel.grid = element_blank())
-#'
+#' }
+#' if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
 #'   # 3D "oblique" projection example
 #'   # `cfg_class` must be "character" when using with `geom_piece()`
 #'   df3d <- op_transform(df, cfg = "checkers1", envir = envir,
@@ -67,7 +67,6 @@
 #'       coord_fixed() +
 #'       theme_void()
 #' }
-#'
 #' @export
 geom_piece <- function(mapping = NULL, data = NULL,
                        stat = "identity", position = "identity",
@@ -109,8 +108,7 @@ geom_piece <- function(mapping = NULL, data = NULL,
 #' @param ... Passed to [ggplot2::scale_x_continuous()] or [ggplot2::scale_y_continuous()].
 #' @inheritParams ggplot2::scale_x_continuous
 #' @examples
-#' if (require("ggplot2") && require("tibble")) {
-#'
+#' if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
 #'   envir <- game_systems("sans")
 #'   df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
 #'                  x = 4.5, y = 4.5)
