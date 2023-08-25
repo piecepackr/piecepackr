@@ -112,10 +112,9 @@
 #' cfgs <- game_systems(pawn = "joystick")
 #' names(cfgs)
 #'
-#'
 #' \donttest{# May take more than 5 seconds on CRAN servers
 #' # standard dice, meeples, and joystick pawns
-#' if (requireNamespace("grid", quietly = TRUE)) {
+#' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
 #'    opt <- options(piecepackr.at.inform = FALSE)
 #'    grid::grid.newpage()
 #'    dice <-  c("d4", "numeral", "d8", "d10", "d12", "d20")
