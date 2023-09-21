@@ -1,38 +1,9 @@
-We make the following tweaks to `\donttest{}` examples requested by Dr. Ligges:
+* Wraps `get_embedded_font()` example with `try()` and skips test on CRAN.
 
-* Each `\donttest{}` example now has the comment "May take more than 5 seconds on CRAN servers"
-
-  I thought longer-running examples that work were SUPPOSED to be wrapped in
- `\donttest{}` instead of `\dontrun{}`.
-  Instead of `\donttest{}` should I instead do something like:
-
-    if (interactive() || identical(Sys.getenv("IN_PKGDOWN"), "true")){}
-
-  So these "Examples with CPU (user + system) or elapsed time > 5s" NOTES 
-  don't arise when CRAN checks `\donttest{}`?
-
-* The `\donttest{}` examples using `{rayrender}` (i.e. "piece") and
-  `{rayvertex}` (i.e. "piece_mesh") packages now have:
-
-     opt <- options(cores = getOption("Ncpus"))
-
-  and:
-
-     options(opt)
-
-  According to the documentation this should limit the number of cores used by
-  `{rayrender}` / `{rayvertex}` to what CRAN is happy with and then restore
-  the options to how they were before the example was run.
-
-* Several `\donttest{}` examples modified so they shouldn't throw:
-
-      Warning in grid.Call.graphics(C_text, as.graphicsAnnot(x$label), x$x,
-x$  y,  :
-     conversion failure on '♥' in 'mbcsToSbcs': dot substituted
-
-  style WARNINGS on certain CRAN servers either by switching to a different example
-  or by wrapping in an `if()` statement so it only runs if the active graphics
-  device should be expected to support Unicode.
+  - This prevents R CMD check ERRORS on CRAN machines with buggy versions of `cairo` installed 
+    (in particular `cairo` versions 1.17.4 to 1.17.8).
+  - Additionally, we'll raise a warning of class `piecepackr_buggy_cairo` if a user tries 
+    to use `get_embedded_font()` with these `cairo` versions.
 
 **Test environments**
 

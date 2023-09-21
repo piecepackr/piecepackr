@@ -32,14 +32,17 @@ and R being compiled with Cairo support.
 packages being installed.
 }
 \examples{
- if (requireNamespace("pdftools", quietly = TRUE) && capabilities("cairo")) {
-     chars <- c("a", "\u2666")
-     fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
-     get_embedded_font(fonts, chars)
+ if (requireNamespace("pdftools", quietly = TRUE) &&
+     capabilities("cairo") &&
+     !piecepackr:::is_cairo_maybe_buggy()) {
+   chars <- c("a", "\u2666")
+   fonts <- c("sans", "Sans Noto", "Noto Sans", "Noto Sans Symbols2")
+   try(get_embedded_font(fonts, chars))
  }
 
  if (requireNamespace("systemfonts", quietly = TRUE) ||
-     (requireNamespace("pdftools", quietly = TRUE) && capabilities("cairo"))) {
-     has_font("Dejavu Sans")
+     (requireNamespace("pdftools", quietly = TRUE) &&
+      capabilities("cairo")) && !piecepackr:::is_cairo_maybe_buggy()) {
+   try(has_font("Dejavu Sans"))
  }
 }

@@ -1,3 +1,13 @@
+piecepackr 1.13.8
+=================
+
+* Wraps `get_embedded_font()` example with `try()` and skips test on CRAN (#333).
+
+  - This prevents R CMD check ERRORS on CRAN machines with buggy versions of `cairo` installed 
+    (in particular `cairo` versions 1.17.4 to 1.17.8).
+  - Additionally, we'll raise a warning of class `piecepackr_buggy_cairo` if a user tries 
+    to use `get_embedded_font()` with these `cairo` versions.
+
 piecepackr 1.13.6
 =================
 

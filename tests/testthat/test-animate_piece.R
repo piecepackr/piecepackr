@@ -1,4 +1,6 @@
 test_that("animate_piece()", {
+    # Prevent weird bug if checked with R compiled with cairo/X11 but X server not started
+    skip_if_not(all(capabilities(c("cairo", "png", "X11"))))
     skip_if_not_installed("gifski")
     skip_if_not_installed("tweenr")
 
