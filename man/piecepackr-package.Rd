@@ -15,10 +15,11 @@ Functions to make board game graphics with the 'ggplot2', 'grid', 'rayrender', '
 The following piecepackr function arguments may be set globally via \code{\link[base:options]{base::options()}}:
 \describe{
 \item{piecepackr.at.inform}{If \code{FALSE} turns off messages when affine transformation support not detected in active graphics device.}
-\item{piecepackr.metadata.inform}{If \code{FALSE} turns off messages when support for embedding metadata not detected.}
 \item{piecepackr.cfg}{Sets a new default for the \code{cfg} argument}
+\item{piecepackr.check.cairo}{If \code{FALSE} don't check the version of cairo}
 \item{piecepackr.default.units}{Sets a new default for the \code{default.units} argument}
 \item{piecepackr.envir}{Sets a new default for the \code{envir} argument}
+\item{piecepackr.metadata.inform}{If \code{FALSE} turns off messages when support for embedding metadata not detected.}
 \item{piecepackr.op_angle}{Sets a new default for the \code{op_angle} argument}
 \item{piecepackr.op_scale}{Sets a new default for the \code{op_scale} argument}
 \item{piecepackr.trans}{Sets a new default for the \code{trans} argument}

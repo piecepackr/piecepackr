@@ -66,6 +66,7 @@ test_that("no regressions in figures", {
     })}, classes="piecepackr_affine_transformation")
 
     # dominoes
+    skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu" style
     envir <- game_systems("dejavu")
     expect_doppelganger("dominoes", function()
         grid.piece("tile_face", x=rep(6:1, 3), y=rep(2*3:1, each=6), suit=1:18, rank=1:18+1,
@@ -227,4 +228,5 @@ test_that("no regressions in figures", {
         df <- rbind(df_board, df_bit_face, df_bit_back)
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
     })
+
 })

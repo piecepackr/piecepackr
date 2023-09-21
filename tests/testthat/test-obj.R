@@ -22,6 +22,7 @@ test_that("save_piece_obj works", {
 test_that("rgl works", {
     skip_on_cran()
     skip_if_not_installed("rgl")
+    skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu3d" style
     library("rgl")
     # go stone OBJ generation uses "rgl" in background
     files <- save_piece_obj("bit_face", cfg = game_systems("dejavu3d")$go)

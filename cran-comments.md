@@ -1,9 +1,10 @@
 * Wraps `get_embedded_font()` example with `try()` and skips test on CRAN.
 
-  - This prevents R CMD check ERRORS on CRAN machines with buggy versions of `cairo` installed 
-    (in particular `cairo` versions 1.17.4 to 1.17.8).
-  - Additionally, we'll raise a warning of class `piecepackr_buggy_cairo` if a user tries 
-    to use `get_embedded_font()` with these `cairo` versions.
+  - This prevents R CMD check ERRORS on CRAN machines with buggy versions of `cairo` installed.
+  - In particular `cairo` versions 1.17.4 to 1.17.8 may be buggy.
+    We'll now also raise a warning if a user tries to use `get_embedded_font()` with these `cairo` versions.
+    These warnings have class `"piecepackr_buggy_cairo"` and can also be suppressed by setting
+    `options(piecepackr.check.cairo = FALSE)`.
 
 **Test environments**
 
@@ -18,6 +19,7 @@
 **R CMD check --as-cran results**
 
 1 NOTE generated on a subset of platforms:
+
 
 ```
 found 3 marked UTF-8 strings 

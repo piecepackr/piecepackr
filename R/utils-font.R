@@ -31,7 +31,7 @@
 #' @export
 get_embedded_font <- function(font, char) {
     if (!capabilities("cairo")) {
-        abort("'get_embedded_font()' requires that R has been compiled with 'cairo' support. ")
+        abort("'get_embedded_font()' requires that R has been compiled with 'cairo' support.")
     }
     if (!requireNamespace("pdftools", quietly = TRUE)) {
        if (Sys.which("pdffonts") == "") {
@@ -41,19 +41,20 @@ get_embedded_font <- function(font, char) {
                                    "Please install the suggested R package `{pdftools}`."))
        }
     }
-    if (is_cairo_maybe_buggy()) {
+    if (!isFALSE(getOption("piecepackr.check.cairo")) && is_cairo_maybe_buggy()) {
         warn(c(sprintf("Your cairographics (version %s) may embed malformed font names.",
                        grDevices::grSoftVersion()[["cairo"]]),
                i = "cairographics 1.17.8 is known to embed malformed font names.",
                i = "cairographics's issue tracker suggests 1.17.4 and 1.17.6 may also do this.",
-               i = "See https://github.com/piecepackr/piecepackr/issues/334 for more info."),
+               i = "See https://github.com/piecepackr/piecepackr/issues/334 for more info.",
+               i = "These warnings can be disabled via `options(piecepackr.check.cairo = FALSE)`."),
              class = "piecepackr_buggy_cairo")
     }
     df <- expand.grid(char, font, stringsAsFactors=FALSE)
     names(df) <- c("char", "requested_font")
     df$embedded_font <- NA
-    for (ii in seq(nrow(df))) {
-        df[ii, 3] <- get_embedded_font_helper(df[ii,2], df[ii,1])
+    for (ii in seq_len(nrow(df))) {
+        df[ii, 3] <- get_embedded_font_helper(df[ii, 2], df[ii, 1])
     }
     df
 }
@@ -67,7 +68,7 @@ get_embedded_font_helper <- function(font, char) {
 
     if (requireNamespace("pdftools", quietly = TRUE)) {
         df <- pdftools::pdf_fonts(file)
-        if(nrow(df) == 0L)
+        if (nrow(df) == 0L)
             embedded_font <- NA # probably some color emoji font used
         else
             embedded_font <- gsub("^[^+]*\\+(.*)", "\\1", df$name)
