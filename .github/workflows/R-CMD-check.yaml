@@ -36,7 +36,7 @@ jobs:
 
       # See https://github.com/r-lib/vdiffr/issues/137 and https://github.com/r-lib/actions/issues/758
       - name: Upgrade gcc to compile vdiffr without error
-        if: matrix.r == 'devel'
+        if: matrix.config.r == 'devel'
         run: |
             gcc --version
             sudo apt-get install -y g++-12 gcc-12
