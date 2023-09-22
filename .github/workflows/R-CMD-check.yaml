@@ -40,8 +40,8 @@ jobs:
         run: |
             gcc --version
             sudo apt-get install -y g++-12 gcc-12
-            update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 60
-            update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 60
+            sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-12 60
+            sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-12 60
             gcc --version
 
       - uses: r-lib/actions/setup-pandoc@v2
