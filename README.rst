@@ -729,7 +729,8 @@ Suggested R packages:
     Required by the ``{ggplot2}`` bindings ``geom_piece()`` and its helper functions ``aes_piece()``, ``scale_x_piece()``, and ``scale_y_piece()``.  
 
 **gifski**
-    ``animate_piece()`` uses the ``{gifski}`` package to save "gif" animations.
+    ``animate_piece()`` preferably uses the ``{gifski}`` package to save "gif" animations.
+    If ``{gifski}`` is not available then ``animate_piece()`` can fall back on ``{animation}`` to make "gif" animations.
 
 **gridpattern**
     The ``pp_shape()`` object's ``pattern()`` method uses ``{gridpattern}`` to make patterned shapes.  In particular can be used to make patterned board game pieces.
@@ -758,7 +759,7 @@ Suggested R packages:
 
 **systemfonts**
     ``has_font()`` preferably uses ``{systemfonts}`` to determine if a given font is available.  
-    If ``{systemfonts}`` is not available then ``has_font`` can fall back on ``{pdftools}`` if ``capabilities("cairo") == TRUE``.
+    If ``{systemfonts}`` is not available then ``has_font()`` can fall back on ``{pdftools}`` if ``capabilities("cairo") == TRUE``.
 
 **tweenr**
     ``animate_piece()`` needs ``{tweenr}`` to do animation transitions (i.e. its ``n_transitions`` argument is greater than the default zero).
