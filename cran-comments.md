@@ -18,7 +18,6 @@
 
 1 NOTE generated on a subset of platforms:
 
-
 ```
 found 3 marked UTF-8 strings 
 ```

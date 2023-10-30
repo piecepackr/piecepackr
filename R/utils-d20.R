@@ -51,7 +51,7 @@ d20TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     }
 
     # pre-compute grobCoords
-    coords_xyl <- as.list(convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+    coords_xyl <- as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,

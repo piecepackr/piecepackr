@@ -50,7 +50,7 @@ d8TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gl[[nrow(df)+1]] <- at_ps_grob("die_face", suit, rank, cfg, xy_vp, xy_polygon, name = "d8_face")
 
     # pre-compute grobCoords
-    coords_xyl <- as.list(convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+    coords_xyl <- as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,
