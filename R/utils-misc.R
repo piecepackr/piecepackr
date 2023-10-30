@@ -142,8 +142,7 @@ device_supports_unicode <- function() {
         # but on Windows can't distinguish between `type = "windows"` or `type = "cairo"`
         # Windows device doesn't support new patterns feature
         if (getRversion() >= "4.2.0") {
-            dc <- grDevices::dev.capabilities()
-            "LinearGradient" %in% dc$patterns
+            "LinearGradient" %in% grDevices::dev.capabilities()$patterns
         } else {
             .Platform$OS.type == "unix"
         }

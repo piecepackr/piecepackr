@@ -1,6 +1,6 @@
 #' @import grid
 
-#' @importFrom affiner as_coord2d as_coord3d as_plane3d convex_hull distance3d degrees
+#' @importFrom affiner as_coord2d as_coord3d as_plane3d convex_hull2d distance3d degrees
 #' @importFrom grDevices dev.capabilities dev.new devAskNewPage
 #' @importFrom R6 R6Class
 #' @importFrom rlang .data abort inform warn %||%
