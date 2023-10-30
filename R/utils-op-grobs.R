@@ -108,7 +108,7 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     # pre-compute grobCoords
     if (shape$convex)
-        coords_xyl <- as.list(convex_hull(as_coord2d(token$xyz, alpha = degrees(op_angle), scale = op_scale)))
+        coords_xyl <- as.list(convex_hull2d(as_coord2d(token$xyz, alpha = degrees(op_angle), scale = op_scale)))
     else
         coords_xyl <- NULL
 
@@ -165,7 +165,7 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     # pre-compute grobCoords
     if (shape$convex)
-        coords_xyl <- as.list(convex_hull(as_coord2d(token$xyz, alpha = degrees(op_angle), scale = op_scale)))
+        coords_xyl <- as.list(convex_hull2d(as_coord2d(token$xyz, alpha = degrees(op_angle), scale = op_scale)))
     else
         coords_xyl <- NULL
 
@@ -265,7 +265,7 @@ die_grobcoords_xyl <- function(suit, rank, cfg,
                    x, y, z,
                    angle, axis_x, axis_y,
                    width, height, depth)
-    as.list(convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
@@ -316,7 +316,7 @@ basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
     xyz <- ellipse_xyz()$
         scale(width, height, depth)$
         translate(x, y, z)
-    xy <- convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale))
+    xy <- convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale))
 
     gp <- gpar(col=opt$border_color, fill=opt$background_color, lex=opt$border_lex)
     polygonGrob(x = xy$x, y = xy$y,
@@ -396,7 +396,7 @@ pt_grobcoords_xyl <- function(x, y, z,
     xyz <- pt_xyz(x, y, z,
                   angle, axis_x, axis_y,
                   width, height, depth)
-    as.list(convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 #' @export
@@ -517,7 +517,7 @@ ps_grobcoords_xyl <- function(x, y, z,
     xyz <- ps_xyz(x, y, z,
                   angle, axis_x, axis_y,
                   width, height, depth)
-    as.list(convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 #' @export

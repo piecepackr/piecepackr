@@ -195,10 +195,10 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                   }),
     private = list(
                    op_grob_nonperpendicular = function(angle, scale, name = NULL) {
-                       xyh <- convex_hull(as_coord2d(self$vertices, alpha = degrees(angle), scale = scale))
+                       xyh <- convex_hull2d(as_coord2d(self$vertices, alpha = degrees(angle), scale = scale))
 
                        xy_visible <- as_coord2d(self$vertices_visible_side(angle), alpha = degrees(angle), scale = scale)
-                       xyh_visible <- convex_hull(xy_visible)
+                       xyh_visible <- convex_hull2d(xy_visible)
 
                        A <- list(list(x = xyh$x, y = xyh$y))
                        B <- list(list(x = xyh_visible$x, y = xyh_visible$y))
@@ -269,10 +269,10 @@ CurvedEdge <- R6Class("edge_curved", inherit = Edge,
     private = list(
                    op_grob_nonperpendicular = function(angle, scale, name = NULL) {
                        xy <- as_coord2d(self$vertices, alpha = degrees(angle), scale = scale)
-                       xyh <- convex_hull(xy)
+                       xyh <- convex_hull2d(xy)
 
                        xy_visible <- as_coord2d(self$vertices_visible_side(angle), alpha = degrees(angle), scale = scale)
-                       xyh_visible <- convex_hull(xy_visible)
+                       xyh_visible <- convex_hull2d(xy_visible)
 
                        A <- list(list(x = xyh$x, y = xyh$y))
                        B <- list(list(x = xyh_visible$x, y = xyh_visible$y))

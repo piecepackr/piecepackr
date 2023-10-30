@@ -149,7 +149,7 @@ d4t_grobcoords_xyl <- function(x, y, z,
     xyz <- d4t_xyz(x, y, z,
                    angle, axis_x, axis_y,
                    width, height, depth)
-    as.list(convex_hull(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 d4t_xyz <- function(x, y, z,
