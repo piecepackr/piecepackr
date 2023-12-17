@@ -75,7 +75,7 @@
 #'           Intended to aid in highlighting special pieces in diagrams.}
 #' \item{dual_piecepacks_expansion}{A companion piecepack with a special suit scheme.
 #'               See \url{https://trevorldavis.com/piecepackr/dual-piecepacks-pnp.html}.}
-#' \item{playing_cards_expansion}{A piecepack with the standard dQuote{French} playing card suits.
+#' \item{playing_cards_expansion}{A piecepack with the standard \dQuote{French} playing card suits.
 #'                                See \url{https://www.ludism.org/ppwiki/PlayingCardsExpansion}.}
 #' \item{hexpack}{A hexagonal extrapolation of the piecepack designed by Nathan Morse and Daniel Wilcox.
 #'                See \url{https://boardgamegeek.com/boardgameexpansion/35424/hexpack}.}
