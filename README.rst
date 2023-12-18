@@ -433,13 +433,13 @@ geom_piece() ({ggplot2})
 
     library("ggplot2")
     library("piecepackr")
-    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("ppdf") # remotes::install_github("piecepackr/ppdf")
     library("withr")
     new <- list(piecepackr.cfg = "piecepack",
                 piecepackr.envir = game_systems("dejavu", pawn="joystick"),
                 piecepackr.op_angle = 90,
                 piecepackr.op_scale = 0.80)
-    dfc <- ppgames::df_fujisan(seed = 42)
+    dfc <- ppdf::piecepack_fujisan(seed = 42)
     withr::with_options(new, {
       dft <- op_transform(dfc, as_top = "pawn_face", cfg_class = "character")
       ggplot(dft, aes_piece(dft)) + 
@@ -490,10 +490,10 @@ piece() ({rayrender})
     
 
     library("piecepackr")
-    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("ppdf") # remotes::install_github("piecepackr/ppdf")
     library("magrittr")
     library("rayrender", warn.conflicts = FALSE)
-    df <- ppgames::df_xiangqi()
+    df <- ppdf::piecepack_xiangqi()
     envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
     l <- pmap_piece(df, piece, envir = envir, trans=op_transform, 
                     scale = 0.98, res = 150, as_top="pawn_face")
@@ -521,15 +521,15 @@ piece_mesh() ({rayvertex})
     
 
     library("piecepackr")
-    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("ppdf") # remotes::install_github("piecepackr/ppdf")
     library("rayvertex", warn.conflicts = FALSE) # masks `rayrender::r_obj`
-    df <- ppgames::df_international_chess()
+    df <- ppdf::piecepack_international_chess()
     envir <- game_systems("dejavu3d", round=TRUE, pawn="joystick")
     l <- pmap_piece(df, piece_mesh, envir = envir, trans=op_transform, 
                     scale = 0.98, res = 150, as_top="pawn_face")
     table <- sphere_mesh(c(0, 0, -1e3), radius=1e3, 
                          material = material_list(diffuse="grey40"))
-    scene <- Reduce(rayvertex::add_shape, l, init=table)
+    scene <- rayvertex::scene_from_list(l) |> add_shape(table)
     light_info <- directional_light(c(5, -7, 7), intensity = 2.5)
     rayvertex::rasterize_scene(scene, 
                                lookat = c(4.5, 4, 0), 
@@ -552,7 +552,7 @@ animate_piece()
 
     library("gifski")
     library("piecepackr")
-    library("ppgames") # remotes::install_github("piecepackr/ppgames")
+    library("ppn") # remotes::install_github("piecepackr/ppn")
     library("tweenr")
     
     envir <- game_systems("dejavu")
@@ -566,7 +566,7 @@ animate_piece()
     cfg$background_color.r6 <- "#F079A7"
     envir$piecepack <- pp_cfg(cfg)
     
-    ppn_file <- system.file("ppn/relativity.ppn", package = "ppgames")
+    ppn_file <- system.file("ppn/relativity.ppn", package = "ppn")
     game <- read_ppn(ppn_file)[[1]]
     animate_piece(game$dfs, file = "man/figures/README-relativity.gif", 
                   annotate = FALSE,
