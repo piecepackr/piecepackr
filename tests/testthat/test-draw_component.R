@@ -80,7 +80,7 @@ test_that("save_piece_images works as expected", {
     expect_equal(length(list.files(directory)), 496)
 
     announce_snapshot_file(name = "diagram-op-ppgf.svg")
-    skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
+    skip_if_not(Sys.info()[["nodename"]] == "pesd-tld-laptop")
     library("vdiffr")
     suppressMessages({
       expect_doppelganger("diagram_op_ppgf", function() {
@@ -273,7 +273,7 @@ test_that("no regressions in figures", {
     announce_snapshot_file(name = "pyramid-face-op.svg")
     announce_snapshot_file(name = "pyramid-top-op.svg")
     announce_snapshot_file(name = "pyramid-top-s4-r3.svg")
-    skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
+    skip_if_not(Sys.info()[["nodename"]] == "pesd-tld-laptop")
     suppressMessages({
       expect_doppelganger("pyramid_top.s4.r3", function()
           dc("pyramid_top", suit=4, rank=3))
@@ -351,7 +351,7 @@ test_that("alpha and scale works", {
         pmap_piece(df, default.units="in", cfg=cfg)
     })
     announce_snapshot_file(name = "alpha-and-scale-op.svg")
-    skip_if_not(Sys.info()[["nodename"]] == "stoic-sloth")
+    skip_if_not(Sys.info()[["nodename"]] == "pesd-tld-laptop")
     expect_doppelganger("alpha_and_scale_op", function() {
         cfg <- pp_cfg(list(shape.coin="convex6"))
         df <- tibble(piece_side="coin_back",

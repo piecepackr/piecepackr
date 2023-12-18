@@ -56,7 +56,14 @@ piece_mesh <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_
                      width[i], height[i], depth[i],
                      scale = scale[i], res = res)
     })
-    rayvertex::scene_from_list(l)
+    l <- Filter(Negate(is.null), l)
+    if (length(l) == 1L) {
+        l[[1L]]
+    } else if (length(l) > 1L) {
+        rayvertex::scene_from_list(l)
+    } else {
+        NULL
+    }
 }
 
 rv_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
