@@ -51,11 +51,12 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     dfc <- data.frame(x = numeric(0), y = numeric(0), z = numeric(0))
     for (i in 1:10) {
         idx <- seq.int(4 * i - 3, length.out = 4)
-        dfc <- rbind(dfc, as.data.frame(xyz[idx]$c))
+        dfc <- rbind(dfc, as.data.frame(mean(xyz[idx])))
     }
 
-    op_ref <- Point2D$new(as.data.frame(xyz$c))$translate_polar(op_angle + 180, 10 * xyz$width)
-    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z) Point2D$new(x, y)$distance_to(op_ref))
+    op_ref <- as_coord2d(mean(xyz))$
+        translate(degrees(op_angle + 180), radius = 10 * radius(xyz))
+    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z, ...) abs(as_coord2d(x, y) - op_ref))
     dfc$edge <- paste0("d10_", c("face", "left1", "left2", "right1", "right2",
                                  "opposite", "opposite_left1", "opposite_left2", "opposite_right1", "opposite_right2"))
     dfc$rank <- vapply(dfc$edge, d10_edge_rank, numeric(1), rank = rank, USE.NAMES = FALSE)
@@ -79,13 +80,13 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         opt <- cfg$get_piece_opt("die_face", suit, edge_rank)
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
         xyz_polygon <- xyz[fn_idx(dfc$idx[i])]
-        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
         xy_vp <- xy_vp_kite(xyz_polygon, op_scale, op_angle)[idx_vp]
         gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = dfc$edge[i])
     }
 
     # pre-compute grobCoords
-    coords_xyl <- as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    coords_xyl <- as.list(convex_hull2d((xy_polygon)))
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,
@@ -94,7 +95,7 @@ d10TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
 # Assumes "acute" angle on top (`theta = 90`)
 xy_vp_kite <- function(xyz_polygon, op_scale, op_angle) {
-    p_mid <- xyz_polygon[c(2,4)]$c
+    p_mid <- mean(xyz_polygon[c(2,4)])
     p_left <- xyz_polygon[2]
     p_right <- xyz_polygon[4]
 
@@ -109,8 +110,9 @@ xy_vp_kite <- function(xyz_polygon, op_scale, op_angle) {
     y <- c(p_ul$y, p_ll$y, p_lr$y, p_ur$y)
     z <- c(p_ul$z, p_ll$z, p_lr$z, p_ur$z)
 
-    p <- Point3D$new(x, y, z)
-    p$project_op(op_angle, op_scale)
+    as_coord2d(as_coord3d(x, y, z),
+               alpha = degrees(op_angle),
+               scale = op_scale)
 }
 
 d10_xyz <- function(suit, rank, cfg,
@@ -118,16 +120,25 @@ d10_xyz <- function(suit, rank, cfg,
                     angle, axis_x, axis_y,
                     width, height, depth) {
     opt <- cfg$get_piece_opt("die_face", suit, rank)
-    pc <- Point3D$new(x, y, z)
     xy <- kite_xy(r = 0.5 - 0.1909830056250526320039)
     if (nigh(opt$shape_t, 90) || nigh(opt$shape_t, 270)) {
-        xyz_t <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
-        xyz_b <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, -0.5)$rotate(R_z(180))$dilate(width, height, depth)
+        xyz_t <- as_coord3d(xy$x, xy$y, 0.0)$
+            translate(as_coord3d(-0.5, -0.5, 0.5))$
+            scale(width, height, depth)
+        xyz_b <- as_coord3d(xy$x, xy$y, 0.0)$
+            translate(as_coord3d(-0.5, -0.5, -0.5))$
+            rotate("z-axis", degrees(180))$
+            scale(width, height, depth)
     } else {
-        xyz_t <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(height, width, depth)
-        xyz_b <- Point3D$new(xy, z = 0.0)$translate(-0.5, -0.5, -0.5)$rotate(R_z(180))$dilate(height, width, depth)
+        xyz_t <- as_coord3d(xy$x, xy$y, z = 0.0)$
+            translate(as_coord3d(-0.5, -0.5, 0.5))$
+            scale(height, width, depth)
+        xyz_b <- as_coord3d(xy$x, xy$y, z = 0.0)$
+            translate(as_coord3d(-0.5, -0.5, -0.5))$
+            rotate("z-axis", degrees(180))$
+            scale(height, width, depth)
     }
-    xyz_b <- xyz_b[c(1,4,3,2)]
+    xyz_b <- xyz_b[c(1, 4, 3, 2)]
 
     xyz_l2 <- kite_xyz_missing_right(xyz_t[1], xyz_b[3], xyz_b[2]) # left2 face
     xyz_r2 <- kite_xyz_missing_left(xyz_t[1], xyz_b[4], xyz_b[3]) # right2 face
@@ -140,9 +151,9 @@ d10_xyz <- function(suit, rank, cfg,
     z_face <- xyz_t$z
 
     # left1
-    x_left1 <- c(xyz_l2$x[c(1,4)], xyz_ol2$x[4], xyz_t$x[2])
-    y_left1 <- c(xyz_l2$y[c(1,4)], xyz_ol2$y[4], xyz_t$y[2])
-    z_left1 <- c(xyz_l2$z[c(1,4)], xyz_ol2$z[4], xyz_t$z[2])
+    x_left1 <- c(xyz_l2$x[c(1, 4)], xyz_ol2$x[4], xyz_t$x[2])
+    y_left1 <- c(xyz_l2$y[c(1, 4)], xyz_ol2$y[4], xyz_t$y[2])
+    z_left1 <- c(xyz_l2$z[c(1, 4)], xyz_ol2$z[4], xyz_t$z[2])
 
     # left2
     x_left2 <- xyz_l2$x
@@ -150,9 +161,9 @@ d10_xyz <- function(suit, rank, cfg,
     z_left2 <- xyz_l2$z
 
     # right1
-    x_right1 <- c(xyz_t$x[c(1,4)], xyz_or2$x[2], xyz_r2$x[2])
-    y_right1 <- c(xyz_t$y[c(1,4)], xyz_or2$y[2], xyz_r2$y[2])
-    z_right1 <- c(xyz_t$z[c(1,4)], xyz_or2$z[2], xyz_r2$z[2])
+    x_right1 <- c(xyz_t$x[c(1, 4)], xyz_or2$x[2], xyz_r2$x[2])
+    y_right1 <- c(xyz_t$y[c(1, 4)], xyz_or2$y[2], xyz_r2$y[2])
+    z_right1 <- c(xyz_t$z[c(1, 4)], xyz_or2$z[2], xyz_r2$z[2])
 
     # right2
     x_right2 <- xyz_r2$x
@@ -165,9 +176,9 @@ d10_xyz <- function(suit, rank, cfg,
     z_opposite <- xyz_b$z
 
     # opposite left1
-    x_opposite_left1 <- c(xyz_ol2$x[c(1,4)], xyz_l2$x[4], xyz_b$x[2])
-    y_opposite_left1 <- c(xyz_ol2$y[c(1,4)], xyz_l2$y[4], xyz_b$y[2])
-    z_opposite_left1 <- c(xyz_ol2$z[c(1,4)], xyz_l2$z[4], xyz_b$z[2])
+    x_opposite_left1 <- c(xyz_ol2$x[c(1, 4)], xyz_l2$x[4], xyz_b$x[2])
+    y_opposite_left1 <- c(xyz_ol2$y[c(1, 4)], xyz_l2$y[4], xyz_b$y[2])
+    z_opposite_left1 <- c(xyz_ol2$z[c(1, 4)], xyz_l2$z[4], xyz_b$z[2])
 
     # opposite left2
     x_opposite_left2 <- xyz_ol2$x
@@ -175,9 +186,9 @@ d10_xyz <- function(suit, rank, cfg,
     z_opposite_left2 <- xyz_ol2$z
 
     # opposite right1
-    x_opposite_right1 <- c(xyz_b$x[c(1,4)], xyz_r2$x[2], xyz_or2$x[2])
-    y_opposite_right1 <- c(xyz_b$y[c(1,4)], xyz_r2$y[2], xyz_or2$y[2])
-    z_opposite_right1 <- c(xyz_b$z[c(1,4)], xyz_r2$z[2], xyz_or2$z[2])
+    x_opposite_right1 <- c(xyz_b$x[c(1, 4)], xyz_r2$x[2], xyz_or2$x[2])
+    y_opposite_right1 <- c(xyz_b$y[c(1, 4)], xyz_r2$y[2], xyz_or2$y[2])
+    z_opposite_right1 <- c(xyz_b$z[c(1, 4)], xyz_r2$z[2], xyz_or2$z[2])
 
     # opposite right2
     x_opposite_right2 <- xyz_or2$x
@@ -191,24 +202,25 @@ d10_xyz <- function(suit, rank, cfg,
     zs <- c(z_face, z_left1, z_left2, z_right1, z_right2,
             z_opposite, z_opposite_left1, z_opposite_left2, z_opposite_right1, z_opposite_right2)
 
+    pc <- as_coord3d(x, y, z)
     R <- R_z(opt$shape_t - 90) %*% AA_to_R(angle, axis_x, axis_y)
-    Point3D$new(xs, ys, zs)$rotate(R)$translate(pc)
+    as_coord3d(xs, ys, zs)$transform(R)$translate(pc)
 }
 
 kite_xyz_missing_right <- function(p_top, p_left, p_bottom) {
     p_mid <- p_bottom + 0.1909830056250526320039 * (p_top - p_bottom)
     p_right <- p_mid + (p_mid - p_left)
-    Point3D$new(x = c(p_top$x, p_left$x, p_bottom$x, p_right$x),
-                y = c(p_top$y, p_left$y, p_bottom$y, p_right$y),
-                z = c(p_top$z, p_left$z, p_bottom$z, p_right$z))
+    as_coord3d(x = c(p_top$x, p_left$x, p_bottom$x, p_right$x),
+               y = c(p_top$y, p_left$y, p_bottom$y, p_right$y),
+               z = c(p_top$z, p_left$z, p_bottom$z, p_right$z))
 }
 
 kite_xyz_missing_left <- function(p_top, p_bottom, p_right) {
     p_mid <- p_bottom + 0.1909830056250526320039 * (p_top - p_bottom)
     p_left <- p_mid + (p_mid - p_right)
-    Point3D$new(x = c(p_top$x, p_left$x, p_bottom$x, p_right$x),
-                y = c(p_top$y, p_left$y, p_bottom$y, p_right$y),
-                z = c(p_top$z, p_left$z, p_bottom$z, p_right$z))
+    as_coord3d(x = c(p_top$x, p_left$x, p_bottom$x, p_right$x),
+               y = c(p_top$y, p_left$y, p_bottom$y, p_right$y),
+               z = c(p_top$z, p_left$z, p_bottom$z, p_right$z))
 }
 
 save_d10_obj <- function(piece_side, suit, rank, cfg,

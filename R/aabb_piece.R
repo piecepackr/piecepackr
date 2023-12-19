@@ -33,6 +33,7 @@ aabb_piece <- function(df,
                        op_scale = getOption("piecepackr.op_scale", 0),
                        op_angle = getOption("piecepackr.op_angle", 45),
                        ...) {
+    rlang::local_options(affiner_angular_unit = "degrees")
     if (nrow(df) == 0) {
         return(list(x = c(NA_real_, NA_real_),
                     y = c(NA_real_, NA_real_),
@@ -46,14 +47,14 @@ aabb_piece <- function(df,
     y <- c(df$yb, df$yt)
     z <- c(df$zb, df$zt)
 
-    llb <- Point3D$new(df$xll, df$yll, df$zb)$project_op(op_angle, op_scale)
-    llt <- Point3D$new(df$xll, df$yll, df$zt)$project_op(op_angle, op_scale)
-    ulb <- Point3D$new(df$xul, df$yul, df$zb)$project_op(op_angle, op_scale)
-    ult <- Point3D$new(df$xul, df$yul, df$zt)$project_op(op_angle, op_scale)
-    lrb <- Point3D$new(df$xlr, df$ylr, df$zb)$project_op(op_angle, op_scale)
-    lrt <- Point3D$new(df$xlr, df$ylr, df$zt)$project_op(op_angle, op_scale)
-    urb <- Point3D$new(df$xur, df$yur, df$zb)$project_op(op_angle, op_scale)
-    urt <- Point3D$new(df$xur, df$yur, df$zt)$project_op(op_angle, op_scale)
+    llb <- as_coord2d(as_coord3d(df$xll, df$yll, df$zb), alpha = op_angle, scale = op_scale)
+    llt <- as_coord2d(as_coord3d(df$xll, df$yll, df$zt), alpha = op_angle, scale = op_scale)
+    ulb <- as_coord2d(as_coord3d(df$xul, df$yul, df$zb), alpha = op_angle, scale = op_scale)
+    ult <- as_coord2d(as_coord3d(df$xul, df$yul, df$zt), alpha = op_angle, scale = op_scale)
+    lrb <- as_coord2d(as_coord3d(df$xlr, df$ylr, df$zb), alpha = op_angle, scale = op_scale)
+    lrt <- as_coord2d(as_coord3d(df$xlr, df$ylr, df$zt), alpha = op_angle, scale = op_scale)
+    urb <- as_coord2d(as_coord3d(df$xur, df$yur, df$zb), alpha = op_angle, scale = op_scale)
+    urt <- as_coord2d(as_coord3d(df$xur, df$yur, df$zt), alpha = op_angle, scale = op_scale)
     x_op <- c(llb$x, llt$x, ulb$x, ult$x, lrb$x, lrt$x, urb$x, urt$x)
     y_op <- c(llb$y, llt$y, ulb$y, ult$y, lrb$y, lrt$y, urb$y, urt$y)
 

@@ -39,18 +39,18 @@ d8TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                d8_opposite_back = xyz[c(4,3,2)],
                d8_opposite_right = xyz[c(4,6,3)]
         )
-        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
         xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
         gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = edge)
     }
     # face
     xyz_polygon <- xyz[1:3]
-    xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+    xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
     xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
     gl[[nrow(df)+1]] <- at_ps_grob("die_face", suit, rank, cfg, xy_vp, xy_polygon, name = "d8_face")
 
     # pre-compute grobCoords
-    coords_xyl <- as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    coords_xyl <- as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,
@@ -60,14 +60,18 @@ d8TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 d8t_xyz <- function(x, y, z,
                     angle, axis_x, axis_y,
                     width, height, depth) {
-    pc <- Point3D$new(x, y, z)
-    xyz_t <- Point3D$new(convex_xy(3, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)
+    xyz_t <- as_coord3d(convex_xy(3, 90), z = 0.0)$
+        translate(as_coord3d(-0.5, -0.5, 0.5))
     xyz_b <- convex_xy(3, -90)
-    xyz_b <- Point3D$new(x = xyz_b$x[c(1,3,2)], y = xyz_b$y[c(1,3,2)], z = 0.0)$translate(-0.5, -0.5, -0.5)
+    xyz_b <- as_coord3d(x = xyz_b$x[c(1, 3, 2)], y = xyz_b$y[c(1, 3, 2)], z = 0.0)$
+        translate(as_coord3d(-0.5, -0.5, -0.5))
     xs <- c(xyz_t$x, xyz_b$x)
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
-    Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
+    as_coord3d(xs, ys, zs)$
+        scale(width, height, depth)$
+        transform(AA_to_R(angle, axis_x, axis_y))$
+        translate(as_coord3d(x, y, z))
 }
 
 save_d8_obj <- function(piece_side, suit, rank, cfg,
@@ -136,10 +140,11 @@ d8_xyz <- function(suit, rank, cfg,
                    angle, axis_x, axis_y,
                    width, height, depth) {
 
-    pc <- Point3D$new(x, y, z)
-    xyz_t <- Point3D$new(convex_xy(3, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)
+    xyz_t <- as_coord3d(convex_xy(3, 90), z = 0.0)$
+        translate(as_coord3d(-0.5, -0.5, 0.5))
     xyz_b <- convex_xy(3, -90)
-    xyz_b <- Point3D$new(x = xyz_b$x[c(1,3,2)], y = xyz_b$y[c(1,3,2)], z = 0.0)$translate(-0.5, -0.5, -0.5)
+    xyz_b <- as_coord3d(x = xyz_b$x[c(1,3,2)], y = xyz_b$y[c(1,3,2)], z = 0.0)$
+        translate(as_coord3d(-0.5, -0.5, -0.5))
 
     # face
     xs_f <- xyz_t$x
@@ -185,8 +190,10 @@ d8_xyz <- function(suit, rank, cfg,
     ys <- c(ys_f, ys_l, ys_r, ys_b, ys_o, ys_ol, ys_or, ys_ob)
     zs <- c(zs_f, zs_l, zs_r, zs_b, zs_o, zs_ol, zs_or, zs_ob)
 
-    R <- AA_to_R(angle, axis_x, axis_y)
-    Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+    as_coord3d(xs, ys, zs)$
+        scale(width, height, depth)$
+        transform(AA_to_R(angle, axis_x, axis_y))$
+        translate(as_coord3d(x, y, z))
 }
 
 write_d8_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),

@@ -79,9 +79,9 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     depth <- convertX(depth, "in", valueOnly = TRUE)
 
     shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
-    R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
     whd <- get_scaling_factors(side, width, height, depth)
-    pc <- Point3D$new(x, y, z)
+    pc <- as_coord3d(x, y, z)
+    R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
     token <- Token2S$new(shape, whd, pc, R)
 
     gl <- gList()
@@ -92,7 +92,7 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     opp_opt <- cfg$get_piece_opt(opp_piece_side, suit, rank)
     gp_opp <- gpar(col=opp_opt$border_color, fill=opp_opt$background_color, lex=opp_opt$border_lex)
     xyz_opp <- if (opt$back) token$xyz_face else token$xyz_back
-    xy_opp <- xyz_opp$project_op(op_angle, op_scale)
+    xy_opp <- as_coord2d(xyz_opp, alpha = degrees(op_angle), scale = op_scale)
 
     grob_opposite <- polygonGrob(x = xy_opp$x, y = xy_opp$y, default.units = "in",
                           gp = gp_opp, name="opposite_piece_side")
@@ -108,7 +108,7 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     # pre-compute grobCoords
     if (shape$convex)
-        coords_xyl <- as.list(as.data.frame(token$xyz$project_op(op_angle, op_scale)$convex_hull))
+        coords_xyl <- as.list(convex_hull2d(as_coord2d(token$xyz, alpha = degrees(op_angle), scale = op_scale)))
     else
         coords_xyl <- NULL
 
@@ -140,9 +140,9 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     axis_y <- 0
 
     # geometric vertices
-    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
     whd <- get_scaling_factors(side, width, height, depth)
-    pc <- Point3D$new(x, y, z)
+    pc <- as_coord3d(x, y, z)
+    R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
     token <- Token2S$new(shape, whd, pc, R)
 
     gl <- gList()
@@ -158,14 +158,14 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     side_visible <- token$visible_side(op_angle)
     piece_side <- paste0(piece, "_", side_visible)
     xy_vp <- token$op_xy_vp(op_angle, op_scale, side_visible)
-    xy_polygon <- token$xyz_side(side_visible)$project_op(op_angle, op_scale)
+    xy_polygon <- as_coord2d(token$xyz_side(side_visible), alpha = degrees(op_angle), scale = op_scale)
     ps_grob <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon)
 
     gl <- gList(grob_edge, ps_grob)
 
     # pre-compute grobCoords
     if (shape$convex)
-        coords_xyl <- as.list(as.data.frame(token$xyz$project_op(op_angle, op_scale)$convex_hull))
+        coords_xyl <- as.list(convex_hull2d(as_coord2d(token$xyz, alpha = degrees(op_angle), scale = op_scale)))
     else
         coords_xyl <- NULL
 
@@ -265,7 +265,7 @@ die_grobcoords_xyl <- function(suit, rank, cfg,
                    x, y, z,
                    angle, axis_x, axis_y,
                    width, height, depth)
-    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
@@ -288,7 +288,7 @@ basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
     #### For "round" dice add a grob for corners #298
     for (i in indices_visible) {
-        xy <- lf$f_xyz[[i]]$project_op(op_angle, op_scale)
+        xy <- as_coord2d(lf$f_xyz[[i]], alpha = degrees(op_angle), scale = op_scale)
         #### For "round" dice figure out coordinates for border lines #298
         rank <- lf$die_face_info$rank[i]
         name <- paste0("die_side", i)
@@ -313,12 +313,13 @@ basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
 
-    xyz <- ellipse_xyz()$dilate(width, height, depth)$translate(x, y, z)
-    xy <- xyz$project_op(op_angle, op_scale)
-    xy_hull <- xy$convex_hull
+    xyz <- ellipse_xyz()$
+        scale(width, height, depth)$
+        translate(x, y, z)
+    xy <- convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale))
 
     gp <- gpar(col=opt$border_color, fill=opt$background_color, lex=opt$border_lex)
-    polygonGrob(x = xy_hull$x, y = xy_hull$y,
+    polygonGrob(x = xy$x, y = xy$y,
                 default.units = "in", gp = gp)
 }
 
@@ -335,7 +336,7 @@ ellipse_xyz <- function() {
     npn <- data.frame(x=-xy$x, y=xy$y, z=-z)
     nnn <- data.frame(x=-xy$x, y=-xy$y, z=-z)
     df <- 0.5 * rbind(ppp, ppn, pnp, pnn, nnp, npp, npn, nnn)
-    Point3D$new(df)
+    as_coord3d(df)
 }
 
 ## Pyramid Top
@@ -352,9 +353,8 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
     width <- convertX(width, "in", valueOnly = TRUE)
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
-    xy <- Point2D$new(x, y)
-    xy_b <- Point2D$new(rect_xy)$npc_to_in(x, y, width, height, angle)
-    p <- Polygon$new(xy_b)
+    xy_b <- npc_to_in(as_coord2d(rect_xy), x, y, width, height, angle)
+    p <- Polygon$new(xy_b$x, xy_b$y)
     edge_types <- paste0("pyramid_", c("left", "back", "right", "face"))
     order <- p$op_edge_order(op_angle)
     df <- tibble(index = 1:4, edge = edge_types)[order, ]
@@ -367,8 +367,8 @@ basicPyramidTop <- function(piece_side, suit, rank, cfg=pp_cfg(),
         ex <- c(x, edge$p1$x, edge$p2$x)
         ey <- c(y, edge$p1$y, edge$p2$y)
         ez <- c(z + 0.5 * depth, z - 0.5 * depth, z - 0.5 * depth)
-        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)
-        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xyz_polygon <- as_coord3d(x = ex, y = ey, z = ez)
+        xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
         xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
 
         piece_side <- df$edge[i]
@@ -396,7 +396,7 @@ pt_grobcoords_xyl <- function(x, y, z,
     xyz <- pt_xyz(x, y, z,
                   angle, axis_x, axis_y,
                   width, height, depth)
-    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 #' @export
@@ -426,13 +426,13 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
 
-    xy_b <- Point2D$new(pyramid_xy)$npc_to_in(x, y, width, height, angle)
-    p <- Polygon$new(xy_b)
+    xy_b <- npc_to_in(as_coord2d(pyramid_xy), x, y, width, height, angle)
+    p <- Polygon$new(xy_b$x, xy_b$y)
     xy_tip <- xy_b[1]
 
     theta <- 2 * asin(0.5 * width / height)
     yt <- 1 - cos(theta)
-    xy_t <- Point2D$new(x = 0:1, y = yt)$npc_to_in(x, y, width, height, angle)
+    xy_t <- npc_to_in(as_coord2d(x = 0:1, y = yt), x, y, width, height, angle)
 
     gl <- gList()
 
@@ -442,10 +442,10 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             "pyramid_back" = "pyramid_face",
                             "pyramid_left" = "pyramid_right",
                             "pyramid_right" = "pyramid_left")
-    xyz_polygon <- Point3D$new(x = xy_b$x[c(1, 3:2)],
-                               y = xy_b$y[c(1, 3:2)],
-                               z = z - 0.5 * depth)
-    xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+    xyz_polygon <- as_coord3d(x = xy_b$x[c(1, 3:2)],
+                              y = xy_b$y[c(1, 3:2)],
+                              z = z - 0.5 * depth)
+    xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
     xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
     gl[[1]] <- at_ps_grob(opposite_edge, suit, rank, cfg, xy_vp, xy_polygon,
                           name = opposite_edge)
@@ -478,8 +478,8 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
             ey <- c(edge$p2$y, xy_t$y[2], edge$p1$y)
             ez <- c(z - 0.5 * depth, z + 0.5 * depth, z - 0.5 * depth)
         }
-        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)
-        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xyz_polygon <- as_coord3d(x = ex, y = ey, z = ez)
+        xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
         xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
         gl[[gli]] <- at_ps_grob(edge_ps, suit, rank, cfg, xy_vp, xy_polygon, name = edge_ps)
         gli <- gli + 1
@@ -491,8 +491,8 @@ basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
     z_f <- c(z - 0.5 * depth, z + 0.5 * depth, z + 0.5 * depth)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
     gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
-    xyz_polygon <- Point3D$new(x = x_f, y = y_f, z = z_f)
-    xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+    xyz_polygon <- as_coord3d(x = x_f, y = y_f, z = z_f)
+    xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
     xy_vp <- xy_vp_ps(xyz_polygon, op_scale, op_angle)
     gl[[4]] <- at_ps_grob(piece_side, suit, rank, cfg, xy_vp, xy_polygon, name = piece_side)
 
@@ -517,7 +517,7 @@ ps_grobcoords_xyl <- function(x, y, z,
     xyz <- ps_xyz(x, y, z,
                   angle, axis_x, axis_y,
                   width, height, depth)
-    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 #' @export
@@ -535,14 +535,14 @@ makeContent.projected_pyramid_side <- function(x) {
 # compute `xy_vp` for pyramid sides
 xy_vp_ps <- function(xyz_polygon, op_scale, op_angle) {
 
-    p_midbottom <- xyz_polygon[2:3]$c
-    p_diff <- p_midbottom$diff(xyz_polygon[1])
-    p_ul <- xyz_polygon[2]$translate(p_diff)
-    p_ur <- xyz_polygon[3]$translate(p_diff)
+    p_midbottom <- mean(xyz_polygon[2:3])
+    p_diff <- xyz_polygon[1] - p_midbottom
+    p_ul <- xyz_polygon[2] + p_diff
+    p_ur <- xyz_polygon[3] + p_diff
 
     x <- c(p_ul$x, xyz_polygon$x[2:3], p_ur$x)
     y <- c(p_ul$y, xyz_polygon$y[2:3], p_ur$y)
     z <- c(p_ul$z, xyz_polygon$z[2:3], p_ur$z)
 
-    Point3D$new(x, y, z)$project_op(op_angle, op_scale)
+    as_coord2d(as_coord3d(x, y, z), alpha = degrees(op_angle), scale = op_scale)
 }

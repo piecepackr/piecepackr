@@ -28,11 +28,12 @@ d12TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     dfc <- data.frame(x = numeric(0), y = numeric(0), z = numeric(0))
     for (i in 1:12) {
         idx <- seq.int(5 * i - 4, length.out = 5)
-        dfc <- rbind(dfc, as.data.frame(xyz[idx]$c))
+        dfc <- rbind(dfc, as.data.frame(mean(xyz[idx])))
     }
 
-    op_ref <- Point2D$new(as.data.frame(xyz$c))$translate_polar(op_angle + 180, 10 * xyz$width)
-    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z) Point2D$new(x, y)$distance_to(op_ref))
+    op_ref <- as_coord2d(mean(xyz))$
+        translate(degrees(op_angle + 180), radius = 10 * radius(xyz))
+    xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z, ...) abs(as_coord2d(x, y) - op_ref))
     dfc$rank <- 1:12
     dfc$xy_dists <- xy_dists
     dfc <- dfc[order(round(dfc$z, 2), -xy_dists), ]
@@ -45,13 +46,13 @@ d12TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         gp <- gpar(col = opt$border_color, lex = opt$border_lex, fill = opt$background_color)
         idx <- seq.int(5 * edge_rank - 4, length.out = 5)
         xyz_polygon <- xyz[idx]
-        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
         xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
         gl[[i]] <- at_ps_grob("die_face", suit, edge_rank, cfg, xy_vp, xy_polygon, name = edge)
     }
 
     # pre-compute grobCoords
-    coords_xyl <- as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    coords_xyl <- as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 
     gTree(scale = 1,
           coords_xyl = coords_xyl,
@@ -60,7 +61,7 @@ d12TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
 
 # if `rank` on top figure out rotation so one on top instead
 d12_rot_from_top <- function(rank) {
-    a <- 180 - to_degrees(arccos(-sqrt(5)/5)) # 180 - dihedral angle
+    a <- 180 - arccos(-sqrt(5)/5) # 180 - dihedral angle
     stopifnot(rank <= 12)
     switch(rank,
            diag(3), # 01
@@ -79,7 +80,7 @@ d12_rot_from_top <- function(rank) {
 
 # if one on top figure out rotation so `rank` on top instead
 d12_rot_to_top <- function(rank) {
-    a <- 180 - to_degrees(arccos(-sqrt(5)/5)) # 180 - dihedral angle
+    a <- 180 - arccos(-sqrt(5)/5) # 180 - dihedral angle
     stopifnot(rank <= 12)
     switch(rank,
            diag(3), # 01
@@ -100,22 +101,21 @@ d12_xyz <- function(suit, rank, cfg,
                     x, y, z,
                     angle, axis_x, axis_y,
                     width, height, depth) {
-    pc <- Point3D$new(x, y, z)
     R_rank <- d12_rot_to_top(rank)
     xs <- numeric(0)
     ys <- numeric(0)
     zs <- numeric(0)
-    xyz_t <- Point3D$new(convex_xy(5, 90), z = 0.0)$translate(-0.5, -0.5, 0.5)$dilate(width, height, depth)
+    xyz_t <- as_coord3d(convex_xy(5, 90), z = 0)$translate(-0.5, -0.5, 0.5)$scale(width, height, depth)
     for (i in 1:12) {
         R_i <- d12_rot_from_top(i)
-        xyz_i <- xyz_t$clone()$rotate(R_i %*% R_rank)
+        xyz_i <- xyz_t$clone()$transform(R_i %*% R_rank)
         xs <- append(xs, xyz_i$x)
         ys <- append(ys, xyz_i$y)
         zs <- append(zs, xyz_i$z)
     }
 
     R <- AA_to_R(angle, axis_x, axis_y)
-    Point3D$new(xs, ys, zs)$rotate(R)$translate(pc)
+    as_coord3d(xs, ys, zs)$transform(R)$translate(x, y, z)
 }
 
 save_d12_obj <- function(piece_side, suit, rank, cfg,

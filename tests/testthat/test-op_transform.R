@@ -84,7 +84,7 @@ test_that("SAT functions work", {
 
     c1 <- Circle$new(x=0.5, y=0.5, r=0.5)
     c2 <- Circle$new(x=1.0, y=1.0, r=0.5)
-    c3 <- Circle$new(Point2D$new(x=2.0, y=2.0), r=0.5)
+    c3 <- Circle$new(as_coord2d(x=2.0, y=2.0), r=0.5)
 
     expect_true(do_shapes_overlap("boo", "bar"))
     expect_true(do_shapes_overlap(r1, r2))
@@ -100,19 +100,6 @@ test_that("SAT functions work", {
     expect_false(do_shapes_overlap(r1, c3))
     expect_true(do_shapes_overlap(c1, r1))
     expect_false(do_shapes_overlap(c3, r1))
-
-    p3 <- Point3D$new(x=1:5, y=1:5, z=1:5)
-    p3p <- p3$translate(1, 2, 3)
-    expect_equal(p3p$z, 4:8)
-    p2 <- p3$project_op(45, 0.5)
-    expect_equal(dim(as.matrix(p2)), c(5, 2))
-
-    skip_on_ci()
-    skip_on_cran()
-    skip_if_not_installed("vdiffr")
-    library("vdiffr")
-    expect_doppelganger("simple_square", function() plot(r1))
-    expect_doppelganger("simple_points", function() plot(p2))
 })
 
 test_that("3D rotation functions work", {
