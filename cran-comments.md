@@ -1,14 +1,12 @@
-* Wraps `get_embedded_font()` example with `try()` and skips test on CRAN.
-
-  - This prevents R CMD check ERRORS on CRAN machines with buggy versions of `cairo` installed.
-  - In particular `cairo` versions 1.17.4 to 1.17.8 may be buggy.
-    We'll now also raise a warning if a user tries to use `get_embedded_font()` with these `cairo` versions.
-    These warnings have class `"piecepackr_buggy_cairo"` and can also be suppressed by setting
-    `options(piecepackr.check.cairo = FALSE)`.
+* We fix an Rd formatting error in `game_systems.Rd`
+  that was triggering a CRAN check NOTE
+* Bumps version of `{rayvertex}` in the `DESCRIPTION` to v0.10.4 to avoid a bug
+  introduced in v0.10.3 that briefly caused a CRAN check ERROR
+  in the `\donttest` "Additional issues"
 
 **Test environments**
 
-* local (linux, R 4.3.1)
+* local (linux, R 4.3.2)
 * win-builder (windows, R devel)
 * mac-builder (osx, R release)
 * Github Actions (linux, R devel)

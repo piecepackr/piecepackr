@@ -1,5 +1,5 @@
-piecepackr 1.13.9
-=================
+piecepackr 1.13.10
+==================
 
 * Bumps version of `{rayvertex}` in the `DESCRIPTION` to v0.10.4 to avoid a bug
   introduced in v0.10.3 that affected `piece_mesh()` (#339).
