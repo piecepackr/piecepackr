@@ -58,7 +58,7 @@ Checkers
 ``game_systems()`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -90,7 +90,7 @@ Dice
 * The ``dice_fudge`` configuration make the six-sided `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`_ with two plus, two minus, and two blank faces most commonly used in the `Fudge <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)>`_ and `Fate <https://en.wikipedia.org/wiki/Fate_(role-playing_game_system)>`_ roleplaying games.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -122,7 +122,7 @@ Dominoes
 The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://en.wikipedia.org/wiki/Chinese_dominoes>`__.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -179,7 +179,7 @@ Playing Cards
 ``game_systems()`` returns ``playing_cards``, ``playing_cards_colored``, and ``playing_cards_tarot`` (French Tarot) configurations for making diagrams with various decks of playing cards.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -220,7 +220,7 @@ grid.piece() ({grid})
 ``grid.piece()`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -245,7 +245,7 @@ configuration lists
 One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ to quickly adjust the appearance of the game components drawn by ``grid.piece``:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -283,7 +283,7 @@ custom grob functions
 One can even specify `custom grob functions <https://trevorldavis.com/piecepackr/custom-grob-functions.html>`_ to completely customize the appearance of one's game pieces.  `piecepackr` comes with a variety of convenience functions such as `pp_shape()` to facilitate creating custom game pieces.  Here is an example of creating "patterned" checkers using ``pp_shape()`` objects' ``pattern()`` method powered by the suggested package `gridpattern <https://github.com/trevorld/gridpattern>`_:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("grid")
@@ -328,7 +328,7 @@ oblique 3D projection
 ``grid.piece`` even has some support for drawing 3D diagrams with an `oblique projection`_:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -370,7 +370,7 @@ pmap_piece()
 If you are comfortable using R data frames there is also ``pmap_piece()`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform()`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("dplyr", warn.conflicts=FALSE)
@@ -400,7 +400,7 @@ geom_piece() ({ggplot2})
 ``geom_piece()`` creates ggplot2_ "geom" objects.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("ggplot2")
@@ -428,7 +428,7 @@ geom_piece() ({ggplot2})
     Twelve men's morris game diagram
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("ggplot2")
@@ -459,7 +459,7 @@ piece3d() ({rgl})
 ``piece3d()`` draws pieces using rgl_ graphics.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -486,7 +486,7 @@ piece() ({rayrender})
 ``piece()`` creates rayrender_ objects.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -517,7 +517,7 @@ piece_mesh() ({rayvertex})
 ``piece_mesh()`` creates rayvertex_ objects.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("piecepackr")
@@ -547,7 +547,7 @@ animate_piece()
 ``animate_piece()`` creates animations.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("gifski")
@@ -593,7 +593,7 @@ Here we'll show an example of configuring piecepackr to draw diagrams for the ab
 Since one often plays Tak on differently sized boards one common Tak board design is to have boards made with colored cells arranged in rings from the center plus extra symbols in rings placed at the points so it is easy to see smaller sub-boards.  To start we'll write a function to draw the Tak board.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     library("grid", warn.conflicts=FALSE)
@@ -623,7 +623,7 @@ Since one often plays Tak on differently sized boards one common Tak board desig
 Then we'll configure a Tak set and write some helper functions to draw Tak pieces with it.
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
@@ -663,7 +663,7 @@ Then we'll configure a Tak set and write some helper functions to draw Tak piece
 Then we'll draw an example Tak game diagram:
 
 
-.. sourcecode:: r
+.. code:: r
     
 
     pushViewport(viewport(width=inch(6), height=inch(6)))
