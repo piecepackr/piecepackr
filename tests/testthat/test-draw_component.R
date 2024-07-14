@@ -20,7 +20,6 @@ test_that("update_names works as expected", {
 })
 
 test_that("save_print_and_play works as expected", {
-
     skip_on_cran()
     pdf_deck_dir <- tempfile()
     dir.create(pdf_deck_dir)
@@ -71,11 +70,16 @@ test_that("save_piece_images works as expected", {
         grid.piece(..., op_scale=0.5, default.units="in")
     }
 
+    current_dev <- grDevices::dev.cur()
     expect_error(save_piece_images(cfg_default, directory),
                  "dir.exists\\(directory\\) is not TRUE")
     expect_error(grid.piece("tile_back", cfg=cfg), "Couldn't find suitable")
-    dir.create(directory)
+    grDevices::dev.off()
+    if (current_dev > 1)  {
+        grDevices::dev.set(current_dev)
+    }
 
+    dir.create(directory)
     save_piece_images(cfg_default, directory, format="svgz", angle=c(0,90))
     expect_equal(length(list.files(directory)), 496)
 
