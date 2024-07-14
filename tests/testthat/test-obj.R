@@ -23,7 +23,8 @@ test_that("rgl works", {
     skip_on_cran()
     skip_if_not_installed("rgl")
     skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu3d" style
-    library("rgl")
+    library("rgl", quietly = TRUE,
+            include.only = c("clear3d", "close3d", "open3d", "view3d"))
     # go stone OBJ generation uses "rgl" in background
     files <- save_piece_obj("bit_face", cfg = game_systems("dejavu3d")$go)
     expect_length(files, 3)
@@ -75,7 +76,7 @@ test_that("rgl works", {
 test_that("rayrender works", {
     skip_on_cran()
     skip_if_not_installed("rayrender")
-    library("rayrender")
+    library("rayrender", include.only = "render_scene", quietly = TRUE)
     scene <- piece("coin_face", x=-1:1, rank=1:3, cfg = cfg)
     f <- tempfile(fileext = ".jpeg")
     png(f)
@@ -96,7 +97,8 @@ test_that("rayrender works", {
 test_that("rayvertex works", {
     skip_on_cran()
     skip_if_not_installed("rayvertex")
-    library("rayvertex")
+    library("rayvertex", quietly = TRUE,
+            include.only = c("directional_light", "rasterize_scene"))
     scene <- piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg)
     f <- tempfile(fileext = ".png")
     png(f)
