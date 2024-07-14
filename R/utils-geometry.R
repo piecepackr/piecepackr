@@ -1,4 +1,3 @@
-# Adapt `Point2D::npc_to_in()` to `affiner::Coord2D`
 npc_to_in <- function(xy, x=0.5, y=0.5, w=1, h=1, t=0) {
     xy$translate(as_coord2d(-0.5, -0.5))$
        scale(w, h)$
@@ -24,7 +23,6 @@ Polygon <- R6Class("polygon",
     public = list(vertices=NULL, edges=NULL, normals=NULL,
                initialize = function(x=c(0, 0.5, 1, 0.5), y=c(0.5, 1, 0.5, 0)) {
                    self$vertices <- as_coord2d(x = x, y = y)
-                   xy <- cbind(self$x, self$y)
                    n <- length(self$vertices)
                    # edges
                    p <- self$vertices[c(seq(2, n), 1)]
@@ -136,7 +134,7 @@ nigh <- function(x, y, tolerance = 1e-6) {
 
 # robust version of `acos()` that returns in degrees
 arccos <- function(x) {
-    as.numeric(affiner::arccosine(x, "degrees"))
+    affiner::arccosine(x, "degrees")
 }
 
 # Axis-angle representation to rotation matrix
@@ -147,7 +145,7 @@ arccos <- function(x) {
 #' @rdname geometry_utils
 #' @inheritParams save_piece_obj
 #' @param axis_z Third coordinate of the axis unit vector (usually inferred).
-#' @param angle Angle in degrees (counter-clockwise)
+#' @param angle Numeric vector in degrees (counter-clockwise) or an [affiner::angle()] vector.
 #' @param ... Ignored
 #' @export
 AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
@@ -233,8 +231,8 @@ NULL
 #' @rdname geometry_utils
 #' @export
 R_x <- function(angle = 0) {
-    c <- cos(to_radians(-angle))
-    s <- sin(to_radians(-angle))
+    c <- affiner::cosine(degrees(-angle))
+    s <- affiner::sine(degrees(-angle))
     matrix(c(1, 0, 0,
              0, c, -s,
              0, s, c),
@@ -244,8 +242,8 @@ R_x <- function(angle = 0) {
 #' @rdname geometry_utils
 #' @export
 R_y <- function(angle = 0) {
-    c <- cos(to_radians(-angle))
-    s <- sin(to_radians(-angle))
+    c <- affiner::cosine(degrees(-angle))
+    s <- affiner::sine(degrees(-angle))
     matrix(c(c, 0, s,
              0, 1, 0,
              -s, 0, c),
@@ -255,8 +253,8 @@ R_y <- function(angle = 0) {
 #' @rdname geometry_utils
 #' @export
 R_z <- function(angle = 0) {
-    c <- cos(to_radians(-angle))
-    s <- sin(to_radians(-angle))
+    c <- affiner::cosine(degrees(-angle))
+    s <- affiner::sine(degrees(-angle))
     matrix(c(c, -s, 0,
              s, c, 0,
              0, 0, 1),
@@ -265,24 +263,24 @@ R_z <- function(angle = 0) {
 
 #' @rdname geometry_utils
 #' @export
-to_radians <- function(t) pi * t / 180
+to_radians <- function(t) as.numeric(affiner::radians(degrees(t)))
 
 #' @rdname geometry_utils
 #' @export
-to_degrees <- function(t) 180 * t / pi
+to_degrees <- function(t) as.numeric(degrees(affiner::radians(t)))
 
 #' @rdname geometry_utils
-#' @param t Angle in degrees (counter-clockwise)
+#' @param t Numeric vector in degrees (or radians for `to_degrees()`) or an [affiner::angle()] vector.
 #' @param r Radial distance
 #' @export
 to_x <- function(t, r) {
-    r * cos(to_radians(t))
+    r * affiner::cosine(degrees(t))
 }
 
 #' @rdname geometry_utils
 #' @export
 to_y <- function(t, r) {
-    r * sin(to_radians(t))
+    r * affiner::sine(degrees(t))
 }
 
 #' @rdname geometry_utils
@@ -296,5 +294,5 @@ to_r <- function(x, y) {
 #' @rdname geometry_utils
 #' @export
 to_t <- function(x, y) {
-    to_degrees(atan2(y, x))
+    180 * atan2(y, x) / pi
 }
