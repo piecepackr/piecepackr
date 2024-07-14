@@ -38,7 +38,7 @@ to_r(x, y)
 to_t(x, y)
 }
 \arguments{
-\item{angle}{Angle in degrees (counter-clockwise)}
+\item{angle}{Numeric vector in degrees (counter-clockwise) or an \code{\link[affiner:angle]{affiner::angle()}} vector.}
 
 \item{axis_x}{First coordinate of the axis unit vector.}
 
@@ -50,7 +50,7 @@ to_t(x, y)
 
 \item{R}{3D rotation matrix (post-multiplied)}
 
-\item{t}{Angle in degrees (counter-clockwise)}
+\item{t}{Numeric vector in degrees (or radians for \code{to_degrees()}) or an \code{\link[affiner:angle]{affiner::angle()}} vector.}
 
 \item{r}{Radial distance}
 

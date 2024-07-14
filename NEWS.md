@@ -1,3 +1,12 @@
+piecepackr (development)
+========================
+
+* Although angles can continue to be numeric vectors they can now also
+  be `affiner::angle()` vectors:
+
+  + The `angle` argument of `AA_to_R()`, `R_x()`, `R_y()`, and `R_z()`.
+  + The `t` argument of `to_x()`, `to_y()`, `to_degrees()`, and `to_radians()`.
+
 piecepackr 1.13.11
 ==================
 

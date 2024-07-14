@@ -19,7 +19,7 @@ BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyData: true
 LazyLoad: yes
 Imports:
-    affiner (>= 0.1.0-16),
+    affiner (>= 0.1.0-21),
     grid,
     gridGeometry,
     grImport2,
