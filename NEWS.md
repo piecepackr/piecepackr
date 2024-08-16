@@ -1,3 +1,9 @@
+piecepackr 1.13.11
+==================
+
+* Bumps version of `{rayrender}` in the `DESCRIPTION` to v0.34.3 to avoid a bug
+  introduced in v0.34.2 that affected `piece()` (#344).
+
 piecepackr 1.13.10
 ==================
 
