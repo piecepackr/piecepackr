@@ -1,12 +1,10 @@
-* We fix an Rd formatting error in `game_systems.Rd`
-  that was triggering a CRAN check NOTE
-* Bumps version of `{rayvertex}` in the `DESCRIPTION` to v0.10.4 to avoid a bug
-  introduced in v0.10.3 that briefly caused a CRAN check ERROR
+* Bumps version of `{rayrender}` in the `DESCRIPTION` to v0.34.3 to avoid a bug
+  introduced in v0.34.2 that briefly caused a CRAN check ERROR
   in the `\donttest` "Additional issues"
 
 **Test environments**
 
-* local (linux, R 4.3.2)
+* local (linux, R 4.4.1)
 * win-builder (windows, R devel)
 * mac-builder (osx, R release)
 * Github Actions (linux, R devel)
@@ -17,7 +15,6 @@
 **R CMD check --as-cran results**
 
 1 NOTE generated on a subset of platforms:
-
 
 ```
 found 3 marked UTF-8 strings 
