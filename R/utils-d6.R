@@ -46,8 +46,6 @@ get_die_faces <- function(suit, rank, cfg,
                           x, y, z,
                           angle, axis_x, axis_y,
                           width, height, depth) {
-    pc <- Point3D$new(x, y, z)
-
     xs <- c(0, 0, 1, 1, 0, 0, 1, 1) - 0.5
     ys <- c(1, 0, 0, 1, 1, 0, 0, 1) - 0.5
     zs <- rep(c(1, 0), each = 4) - 0.5
@@ -55,7 +53,10 @@ get_die_faces <- function(suit, rank, cfg,
     dfi <- get_die_face_info(suit, cfg$die_arrangement)
     dR <- get_die_rotation(suit, rank, cfg)
     R <- dR %*% AA_to_R(angle, axis_x, axis_y)
-    xyz <- Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+    xyz <- as_coord3d(xs, ys, zs)$
+        scale(width, height, depth)$
+        transform(R)$
+        translate(x, y, z)
 
     # textured face elements
     f <- list()
@@ -84,15 +85,15 @@ die_cycle <- function(indices, angle) {
 visible_die_faces <- function(die_faces, op_angle = 45) {
     indices <- 1:6
 
-    i_top <- which.max(sapply(1:6, function(i) die_faces$f_xyz[[i]]$c$z))
-    i_bot <- which.min(sapply(1:6, function(i) die_faces$f_xyz[[i]]$c$z))
+    i_top <- which.max(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$z))
+    i_bot <- which.min(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$z))
     indices <- setdiff(indices, c(i_top, i_bot))
 
-    r <- 10 * die_faces$f_xyz[[1]]$width
-    op_ref <- Point2D$new(0, 0)$translate_polar(180 + op_angle, r)
-    op_line <- Line$new(op_angle, op_ref)
-    depths <- sapply(indices, function(i) die_faces$f_xyz[[i]]$c$z)
-    dists <- sapply(indices, function(i) op_line$distance_to(die_faces$f_xyz[[i]]$c))
+    op_ref <- as_coord3d(degrees(180 + op_angle),
+                         radius = 10 * radius(die_faces$f_xyz[[1]]), z = 0)
+    op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
+    depths <- sapply(indices, function(i) mean(die_faces$f_xyz[[i]])$z)
+    dists <- sapply(indices, function(i) distance3d(op_plane, mean(die_faces$f_xyz[[i]])))
     indices <- indices[order(round(depths, 6), -dists)] # `round()` avoids weird sorting errors
     utils::tail(indices, 2L)
 }

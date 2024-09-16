@@ -55,8 +55,8 @@
 <text x='42.36' y='43.40' text-anchor='middle' style='font-size: 40.00px; fill: #56B4E9; font-family: sans;' textLength='20.42px' lengthAdjust='spacingAndGlyphs'>♦</text>
 <polygon points='6.36,-6.36 6.36,137.64 150.36,137.64 150.36,-6.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='576.00,144.00 432.00,144.00 432.00,288.00 576.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='582.36,137.64 438.36,137.64 432.00,144.00 576.00,144.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='582.36,281.64 582.36,137.64 576.00,144.00 576.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='582.36,137.64 438.36,137.64 432.00,144.00 576.00,144.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='438.36,137.64 438.36,281.64 432.00,288.00 432.00,144.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='438.36,281.64 582.36,281.64 576.00,288.00 432.00,288.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='582.36,137.64 438.36,137.64 438.36,281.64 582.36,281.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />

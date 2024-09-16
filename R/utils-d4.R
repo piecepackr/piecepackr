@@ -63,9 +63,8 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     width <- convertX(width, "in", valueOnly = TRUE)
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
-    xy <- Point2D$new(x, y)
-    xy_b <- Point2D$new(convex_xy(3, 90))$npc_to_in(x, y, width, height, angle)
-    p <- Polygon$new(xy_b)
+    xy_b <- npc_to_in(as_coord2d(convex_xy(3, 90)), x, y, width, height, angle)
+    p <- Polygon$new(xy_b$x, xy_b$y)
     edge_types <- paste0("d4_", c("left", "face", "right"))
     order <- p$op_edge_order(op_angle)
     df <- tibble(index = 1:3, edge = edge_types)[order, ]
@@ -79,8 +78,8 @@ d4TopGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
         ex <- c(x, edge$p1$x, edge$p2$x)
         ey <- c(y, edge$p1$y, edge$p2$y)
         ez <- c(z + 0.5 * depth, z - 0.5 * depth, z - 0.5 * depth)
-        xyz_polygon <- Point3D$new(x = ex, y = ey, z = ez)[cycle_d4(1:3, l_edge$vp_rot)]
-        xy_polygon <- xyz_polygon$project_op(op_angle, op_scale)
+        xyz_polygon <- as_coord3d(x = ex, y = ey, z = ez)[cycle_d4(1:3, l_edge$vp_rot)]
+        xy_polygon <- as_coord2d(xyz_polygon, alpha = degrees(op_angle), scale = op_scale)
         xy_vp <- xy_vp_convex(xyz_polygon, op_scale, op_angle)
 
         gl[[i]] <- at_ps_grob("die_face", suit, l_edge$rank, cfg, xy_vp, xy_polygon,
@@ -120,7 +119,7 @@ xy_vp_convex <- function(xyz_polygon, op_scale, op_angle) {
     i_left <- which.min(xy$x)
     i_right <- n + 2 - i_left
 
-    p_mid_widest <- xyz_polygon[c(i_left, i_right)]$c
+    p_mid_widest <- mean(xyz_polygon[c(i_left, i_right)])
     m_width <- 1 / (xy$x[i_right] - xy$x[i_left])
     p_left <- p_mid_widest + m_width * (xyz_polygon[i_left] - p_mid_widest)
     p_right <- p_mid_widest + m_width * (xyz_polygon[i_right] - p_mid_widest)
@@ -140,10 +139,8 @@ xy_vp_convex <- function(xyz_polygon, op_scale, op_angle) {
     y <- c(p_ul$y, p_ll$y, p_lr$y, p_ur$y)
     z <- c(p_ul$z, p_ll$z, p_lr$z, p_ur$z)
 
-    p <- Point3D$new(x, y, z)
-    p$project_op(op_angle, op_scale)
+    as_coord2d(as_coord3d(x, y, z), alpha = degrees(op_angle), scale = op_scale)
 }
-
 
 d4t_grobcoords_xyl <- function(x, y, z,
                               angle, axis_x, axis_y,
@@ -152,21 +149,22 @@ d4t_grobcoords_xyl <- function(x, y, z,
     xyz <- d4t_xyz(x, y, z,
                    angle, axis_x, axis_y,
                    width, height, depth)
-    as.list(as.data.frame(xyz$project_op(op_angle, op_scale)$convex_hull))
+    as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
 }
 
 d4t_xyz <- function(x, y, z,
                     angle, axis_x, axis_y,
                     width, height, depth) {
-    pc <- Point3D$new(x, y, z)
-    xy_npc <- Point2D$new(convex_xy(3, 90))
-    xy <- xy_npc$translate(-0.5, -0.5)
-    xyz_t <- Point3D$new(x = 0.0, y = 0.0, z = 0.5)
-    xyz_b <- Point3D$new(xy, z = -0.5)
+    xy <- as_coord2d(convex_xy(3, 90))$translate(x = -0.5, y = -0.5)
+    xyz_t <- as_coord3d(x = 0.0, y = 0.0, z = 0.5)
+    xyz_b <- as_coord3d(xy, z = -0.5)
     xs <- c(xyz_t$x, xyz_b$x)
     ys <- c(xyz_t$y, xyz_b$y)
     zs <- c(xyz_t$z, xyz_b$z)
-    Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(angle, axis_x, axis_y)$translate(pc)
+    as_coord3d(xs, ys, zs)$
+        scale(width, height, depth)$
+        transform(AA_to_R(angle, axis_x, axis_y))$
+        translate(x, y, z)
 }
 
 save_d4_obj <- function(piece_side, suit, rank, cfg,
@@ -241,9 +239,8 @@ d4_xyz <- function(suit, rank, cfg,
                    angle, axis_x, axis_y,
                    width, height, depth) {
 
-    pc <- Point3D$new(x, y, z)
-    xyz_b <- Point3D$new(convex_xy(3, 90), z = 0)$translate(-0.5, -0.5, -0.5)
-    top <- Point3D$new(0, 0, 0.5)
+    xyz_b <- as_coord3d(convex_xy(3, 90), z = 0)$translate(-0.5, -0.5, -0.5)
+    top <- as_coord3d(0, 0, 0.5)
 
     edge_types <- paste0("d4_", c("left", "face", "right"))
 
@@ -274,8 +271,10 @@ d4_xyz <- function(suit, rank, cfg,
     ys <- c(ys_face, ys_left, ys_right, ys_bottom)
     zs <- c(zs_face, zs_left, zs_right, zs_bottom)
 
-    R <- AA_to_R(angle, axis_x, axis_y)
-    Point3D$new(xs, ys, zs)$dilate(width, height, depth)$rotate(R)$translate(pc)
+    as_coord3d(xs, ys, zs)$
+        scale(width, height, depth)$
+        transform(AA_to_R(angle, axis_x, axis_y))$
+        translate(x, y, z)
 }
 
 write_d4_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = pp_cfg(),

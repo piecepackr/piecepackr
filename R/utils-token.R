@@ -1,28 +1,35 @@
 Token2S <- R6Class("token2s",
    public = list(initialize = function(shape = pp_shape(),
                                        whd = list(width = 1, height = 1, depth = 1),
-                                       center = Point3D$new(),
+                                       center = as_coord3d(0, 0, 0),
                                        R = diag(3)) {
                         # coordinates
-                        xy_npc <- Point2D$new(shape$npc_coords)
-                        xyz_scaled <- Point3D$new(xy_npc)$translate(-0.5, -0.5, 0.5)$dilate(whd)
-                        xyz_f <- xyz_scaled$rotate(R)$translate(center)
+                        xyz_scaled <- as_coord3d(shape$npc_coords)$
+                            translate(as_coord3d(-0.5, -0.5, 0.5))$
+                            scale(whd$width, whd$height, whd$depth)
+                        xyz_f <- xyz_scaled$transform(R)$translate(center)
 
-                        xyz_scaled <- Point3D$new(xy_npc)$translate(-0.5, -0.5, -0.5)$dilate(whd)
-                        xyz_b <- xyz_scaled$rotate(R)$translate(center)
+                        xyz_scaled <- as_coord3d(shape$npc_coords)$
+                            translate(as_coord3d(-0.5, -0.5, -0.5))$
+                            scale(whd$width, whd$height, whd$depth)
+                        xyz_b <- xyz_scaled$transform(R)$translate(center)
 
-                        self$xyz <- Point3D$new(x = c(xyz_f$x, xyz_b$x),
-                                                y = c(xyz_f$y, xyz_b$y),
-                                                z = c(xyz_f$z, xyz_b$z))
+                        self$xyz <- as_coord3d(x = c(xyz_f$x, xyz_b$x),
+                                               y = c(xyz_f$y, xyz_b$y),
+                                               z = c(xyz_f$z, xyz_b$z))
 
-                        xy_vp <- Point2D$new(rect_xy)
-                        xyz_scaled <- Point3D$new(xy_vp)$translate(-0.5, -0.5, 0.5)$dilate(whd)
-                        self$xyz_vp_face <- xyz_scaled$rotate(R)$translate(center)
+                        xy_vp <- as_coord2d(rect_xy)
+                        xyz_scaled <- as_coord3d(xy_vp)$
+                            translate(as_coord3d(-0.5, -0.5, 0.5))$
+                            scale(whd$width, whd$height, whd$depth)
+                        self$xyz_vp_face <- xyz_scaled$transform(R)$translate(center)
 
                         # Flip so back also in "upper_left", "lower_left", "lower_right", "upper_right" order
-                        xy_vp <- Point2D$new(x = rect_xy$x[4:1], y = rect_xy$y[4:1])
-                        xyz_scaled <- Point3D$new(xy_vp)$translate(-0.5, -0.5, -0.5)$dilate(whd)
-                        self$xyz_vp_back <- xyz_scaled$rotate(R)$translate(center)
+                        xy_vp <- as_coord2d(x = rect_xy$x[4:1], y = rect_xy$y[4:1])
+                        xyz_scaled <- as_coord3d(xy_vp)$
+                            translate(as_coord3d(-0.5, -0.5, -0.5))$
+                            scale(whd$width, whd$height, whd$depth)
+                        self$xyz_vp_back <- xyz_scaled$transform(R)$translate(center)
 
                         # edges
                         edge_partition <- partition_edges(shape)
@@ -37,11 +44,11 @@ Token2S <- R6Class("token2s",
                         self$edges <- edges
                     },
                     op_edge_order = function(angle) {
-                        r <- 10 * self$xyz$width
-                        op_ref <- Point2D$new(0, 0)$translate_polar(180 + angle, r)
-                        op_line <- Line$new(angle, op_ref)
-                        depths <- sapply(self$edges, function(x) x$vertices$c$z)
-                        dists <- sapply(self$edges, function(x) op_line$distance_to(x$vertices$c))
+                        r <- 10 * radius(self$xyz)
+                        op_ref <- as_coord3d(degrees(180 + angle), radius = r, z = 0)
+                        op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
+                        depths <- sapply(self$edges, function(x) mean(x$vertices)$z)
+                        dists <- sapply(self$edges, function(x) distance3d(op_plane, mean(x$vertices)))
                         order(round(depths, 6), -dists) # `round()` avoids weird sorting errors
                     },
                     op_edges = function(angle) {
@@ -49,18 +56,17 @@ Token2S <- R6Class("token2s",
                     },
                     op_xy_vp = function(angle, scale, side) {
                        switch(side,
-                             face = self$xyz_vp_face$project_op(angle, scale),
-                             back = self$xyz_vp_back$project_op(angle, scale),
+                             face = as_coord2d(self$xyz_vp_face, alpha = degrees(angle), scale = scale),
+                             back = as_coord2d(self$xyz_vp_back, alpha = degrees(angle), scale = scale),
                              abort(paste("Can't handle side", side)))
                     },
                     #### Handle edge case for token (almost) parallel to xy-axis
                     visible_side = function(angle) {
-                        r <- 10 * self$xyz$width
-                        op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
-                        op_ref <- Point2D$new(0, 0)$translate_polar(180 + angle, r)
-                        op_line <- Line$new(angle, op_ref)
-                        if (op_line$distance_to(self$xyz_face$c) <
-                            op_line$distance_to(self$xyz_back$c))
+                        r <- 10 * radius(self$xyz)
+                        op_ref <- as_coord3d(degrees(180 + angle), radius = r, z = 0)
+                        op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
+                        if (distance3d(op_plane, mean(self$xyz_face)) <
+                            distance3d(op_plane, mean(self$xyz_back)))
                             "face"
                         else
                             "back"
@@ -75,11 +81,11 @@ Token2S <- R6Class("token2s",
    ),
    private = list(),
    active = list(xyz_face = function() {
-                    n <- length(self$xyz$x) / 2
+                    n <- length(self$xyz) / 2
                     self$xyz[seq(n)]
                  },
                  xyz_back = function() {
-                    n <- length(self$xyz$x) / 2
+                    n <- length(self$xyz) / 2
                     self$xyz[seq(n + 1, 2 * n)]
                  })
 )
@@ -138,12 +144,11 @@ Edge <- R6Class("edge",
                 public = list(vertices = NULL,
                           initialize = function(vertices = NULL) self$vertices <- vertices,
                           visible_side = function(angle) {
-                              r <- 10 * self$vertices$width
-                              op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
-                              op_ref <- Point2D$new(0, 0)$translate_polar(180 + angle, r)
-                              op_line <- Line$new(angle, op_ref)
-                              if (op_line$distance_to(self$vertices_face$c) <
-                                  op_line$distance_to(self$vertices_back$c))
+                              r <- 10 * radius(self$vertices)
+                              op_ref <- as_coord3d(degrees(180 + angle), radius = r, z = 0)
+                              op_plane <- as_plane3d(normal = op_ref, p1 = op_ref)
+                              if (distance3d(op_plane, mean(self$vertices_face)) <
+                                  distance3d(op_plane, mean(self$vertices_back)))
                                   "face"
                               else
                                   "back"
@@ -161,18 +166,18 @@ Edge <- R6Class("edge",
                               length(unique(round(self$vertices$z, 6))) == 2
                           },
                           vertices_face = function() {
-                                  n <- length(self$vertices$x) / 2
+                                  n <- length(self$vertices) / 2
                                   self$vertices[seq(n)]
                           },
                           vertices_back = function() {
-                              n <- length(self$vertices$x) / 2
+                              n <- length(self$vertices) / 2
                               self$vertices[seq(n + 1, 2 * n)]
                           })
 )
 
 FlatEdge <- R6Class("edge_flat", inherit = Edge,
     public = list(op_grob = function(angle, scale, name = NULL) {
-                      xy <- self$vertices$project_op(angle, scale)
+                      xy <- as_coord2d(self$vertices, alpha = degrees(angle), scale = scale)
                       polygonGrob(xy$x, xy$y, default.units = "in", name = name)
                   }),
     private = list(),
@@ -190,11 +195,10 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                   }),
     private = list(
                    op_grob_nonperpendicular = function(angle, scale, name = NULL) {
-                       xy <- self$vertices$project_op(angle, scale)
-                       xyh <- xy$convex_hull
+                       xyh <- convex_hull2d(as_coord2d(self$vertices, alpha = degrees(angle), scale = scale))
 
-                       xy_visible <- self$vertices_visible_side(angle)$project_op(angle, scale)
-                       xyh_visible <- xy_visible$convex_hull
+                       xy_visible <- as_coord2d(self$vertices_visible_side(angle), alpha = degrees(angle), scale = scale)
+                       xyh_visible <- convex_hull2d(xy_visible)
 
                        A <- list(list(x = xyh$x, y = xyh$y))
                        B <- list(list(x = xyh_visible$x, y = xyh_visible$y))
@@ -205,11 +209,11 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                    },
                    op_grob_perpendicular = function(angle, scale, name = NULL) {
                       n <- length(self$vertices) / 2
-                      xy_f <- self$vertices[seq(n)]$project_op(angle, scale)
+                      xy_f <- as_coord2d(self$vertices[seq(n)], alpha = degrees(angle), scale = scale)
                       projections <- numeric(n)
-                      proj_vec <- Vector$new(to_x(angle - 90, 1), to_y(angle - 90, 1))
+                      proj_vec <- as_coord2d(degrees(angle - 90), radius = 1)
                       for (ii in seq(n)) {
-                          projections[ii] <- proj_vec$dot(xy_f[ii])
+                          projections[ii] <- proj_vec * xy_f[ii]
                       }
                       i_min <- which.min(projections)
                       i_max <- which.max(projections)
@@ -225,12 +229,12 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                           indices2 <- seq(i_max + 1, i_min - 1)
                       }
                       # figure out which part farthest
-                      r <- 10 * self$vertices$width
-                      op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
-                      op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
-                      op_ref <- self$vertices$c$translate(op_diff)
-                      d1 <- op_ref$distance_to(self$vertices[indices1]$c)
-                      d2 <- op_ref$distance_to(self$vertices[indices2]$c)
+                      r <- 10 * radius(self$vertices)
+                      op_diff <- as_coord2d(degrees(angle), r)
+                      op_diff <- as_coord3d(op_diff$x, op_diff$y, z = r / sqrt(2))
+                      op_ref <- mean(self$vertices)$translate(op_diff)
+                      d1 <- abs(op_ref - mean(self$vertices[indices1]))
+                      d2 <- abs(op_ref - mean(self$vertices[indices2]))
                       if (d1 > d2) {
                           indices_obscured <- indices2
                           indices_visible <- indices1
@@ -238,7 +242,7 @@ RingEdge <- R6Class("edge_ring", inherit = Edge,
                           indices_obscured <- indices1
                           indices_visible <- indices2
                       }
-                      xy <- self$vertices$project_op(angle, scale)
+                      xy <- as_coord2d(self$vertices, alpha = degrees(angle), scale = scale)
                       x_obscured <- xy$x[full_indices(indices_obscured, n)]
                       y_obscured <- xy$y[full_indices(indices_obscured, n)]
                       x_visible <- xy$x[full_indices(indices_visible, n)]
@@ -264,11 +268,11 @@ CurvedEdge <- R6Class("edge_curved", inherit = Edge,
                   }),
     private = list(
                    op_grob_nonperpendicular = function(angle, scale, name = NULL) {
-                       xy <- self$vertices$project_op(angle, scale)
-                       xyh <- xy$convex_hull
+                       xy <- as_coord2d(self$vertices, alpha = degrees(angle), scale = scale)
+                       xyh <- convex_hull2d(xy)
 
-                       xy_visible <- self$vertices_visible_side(angle)$project_op(angle, scale)
-                       xyh_visible <- xy_visible$convex_hull
+                       xy_visible <- as_coord2d(self$vertices_visible_side(angle), alpha = degrees(angle), scale = scale)
+                       xyh_visible <- convex_hull2d(xy_visible)
 
                        A <- list(list(x = xyh$x, y = xyh$y))
                        B <- list(list(x = xyh_visible$x, y = xyh_visible$y))
@@ -279,11 +283,11 @@ CurvedEdge <- R6Class("edge_curved", inherit = Edge,
                    },
                    op_grob_perpendicular = function(angle, scale, name = NULL) {
                       n <- length(self$vertices) / 2
-                      xy_f <- self$vertices[seq(n)]$project_op(angle, scale)
+                      xy_f <- as_coord2d(self$vertices[seq(n)], alpha = degrees(angle), scale = scale)
                       projections <- numeric(n)
-                      proj_vec <- Vector$new(to_x(angle - 90, 1), to_y(angle - 90, 1))
+                      proj_vec <- as_coord2d(degrees(angle - 90), radius = 1)
                       for (ii in seq(n)) {
-                          projections[ii] <- proj_vec$dot(xy_f[ii])
+                          projections[ii] <- proj_vec * xy_f[ii]
                       }
                       i_min <- which.min(projections)
                       i_max <- which.max(projections)
@@ -303,20 +307,20 @@ CurvedEdge <- R6Class("edge_curved", inherit = Edge,
                           l_indices[[2]] <- seq(i_u + 1, n)
                           l_indices[[3]] <- seq(i_l, i_u)
                       }
-                      xy <- self$vertices$project_op(angle, scale)
+                      xy <- as_coord2d(self$vertices, alpha = degrees(angle), scale = scale)
                       x <- numeric(0)
                       y <- numeric(0)
                       id <- numeric(0)
 
                       # figure out which part farthest
-                      r <- 10 * self$vertices$width
-                      op_diff <- Point2D$new(0, 0)$translate_polar(angle, r)
-                      op_diff <- Point3D$new(op_diff, z = r / sqrt(2))
-                      op_ref <- self$vertices$c$translate(op_diff)
+                      r <- 10 * radius(self$vertices)
+                      op_diff <- as_coord2d(degrees(angle), r)
+                      op_diff <- as_coord3d(op_diff$x, op_diff$y, z = r / sqrt(2))
+                      op_ref <- mean(self$vertices)$translate(op_diff)
                       dists <- sapply(l_indices,
                                       function(x) {
                                           indices <- full_indices(x, n)
-                                          op_ref$distance_to(self$vertices[indices]$c)
+                                          abs(op_ref - mean(self$vertices[indices]))
                                       })
                       l_indices <- l_indices[order(dists)]
                       for (i in seq_along(l_indices)) {
