@@ -2,7 +2,7 @@ Encoding: UTF-8
 Package: piecepackr
 Type: Package
 Title: Board Game Graphics
-Version: 1.13.11
+Version: 1.14.0-1
 Description: Functions to make board game graphics with the 'ggplot2', 'grid', 'rayrender', 'rayvertex', and 'rgl' packages.  Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' <https://www.ludism.org/ppwiki> but can make graphics for other board game systems.  Includes configurations for several public domain game systems such as checkers, (double-18) dominoes, go, 'piecepack', playing cards, etc.
 Authors@R: c(person("Trevor L.", "Davis", role=c("aut", "cre"),
              email="trevor.l.davis@gmail.com",
@@ -19,7 +19,7 @@ BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyData: true
 LazyLoad: yes
 Imports:
-    affiner (>= 0.1.0-21),
+    affiner (>= 0.1.1),
     grid,
     gridGeometry,
     grImport2,
@@ -51,7 +51,6 @@ Suggests:
     vdiffr,
     xmpdf (>= 0.1.1),
     XML (>= 3.99-0.9)
-Remotes: trevorld/affiner
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Config/testthat/edition: 3
