@@ -1,5 +1,17 @@
-piecepackr (development)
-========================
+piecepackr 1.14.0 (development)
+===============================
+
+Breaking changes
+----------------
+
+* Some features which were deprecated by v1.13.1 (2023-03-23) have been removed:
+
+  + `get_embedded_font()` no longer falls back on the use of the command-line utility `pdffonts`
+    if the suggested R package `{pdftools}` is not installed.
+    Please install the suggested R package `{pdftools}` to use `get_embedded_font()`.
+
+Bug fixes and minor improvements
+--------------------------------
 
 * Although angles can continue to be numeric vectors they can now also
   be `affiner::angle()` vectors:
@@ -62,7 +74,7 @@ Breaking changes
   you'll get message informing you that `{piecepackr}` was unable to embed certain metadata.
   These messages have class `"piecepackr_embed_metadata"` and can also be suppressed by setting
   `options(piecepackr.metadata.inform = FALSE)`.
-* Some features which were deprecated by v1.10.3 (2022-03-23) have been removed:
+* Some features which were deprecated by v1.10.3 (2022-03-22) have been removed:
 
   - The `use_pictureGrob` argument of `grid.piece()` / `pieceGrob()` which was deprecated in v1.8.1 (2021-08-11) has been removed.
     Use `type = "picture"` instead of `use_pictureGrob = TRUE`.
@@ -73,7 +85,7 @@ Breaking changes
     has been removed. The public method `get_op_grob()` returns the complete oblique projection grob.
   - `animate_pieces()`'s `annotate` argument must now always be set as a named argument
     (or rely on its default value).
-    Setting it positionally was deprecated in v1.10.3 (2022-03-23).
+    Setting it positionally was deprecated in v1.10.3 (2022-03-22).
 
 Deprecated features
 -------------------
