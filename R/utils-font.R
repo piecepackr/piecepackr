@@ -30,16 +30,11 @@
 #'  }
 #' @export
 get_embedded_font <- function(font, char) {
-    if (!capabilities("cairo")) {
-        abort("'get_embedded_font()' requires that R has been compiled with 'cairo' support.")
+    if (!isTRUE(capabilities("cairo"))) {
+        abort("`get_embedded_font()` requires that R has been compiled with `cairo` support.")
     }
     if (!requireNamespace("pdftools", quietly = TRUE)) {
-       if (Sys.which("pdffonts") == "") {
-           assert_suggested("pdftools")
-       } else {
-           .Deprecated(msg = paste("Using the system command `pdffonts` is deprecated.",
-                                   "Please install the suggested R package `{pdftools}`."))
-       }
+       assert_suggested("pdftools")
     }
     if (!isFALSE(getOption("piecepackr.check.cairo")) && is_cairo_maybe_buggy()) {
         warn(c(sprintf("Your cairographics (version %s) may embed malformed font names.",
@@ -60,25 +55,19 @@ get_embedded_font <- function(font, char) {
 }
 
 get_embedded_font_helper <- function(font, char) {
+    stopifnot(requireNamespace("pdftools", quietly = TRUE))
+
     file <- tempfile(fileext=".pdf")
     on.exit(unlink(file))
     grDevices::cairo_pdf(file)
     grid::grid.text(char, gp=grid::gpar(fontsize=72, fontfamily=font))
     invisible(grDevices::dev.off())
 
-    if (requireNamespace("pdftools", quietly = TRUE)) {
-        df <- pdftools::pdf_fonts(file)
-        if (nrow(df) == 0L)
-            embedded_font <- NA # probably some color emoji font used
-        else
-            embedded_font <- gsub("^[^+]*\\+(.*)", "\\1", df$name)
-    } else {
-        pf_output <- system2("pdffonts", file, stdout=TRUE)
-        if (length(pf_output) == 2)
-            embedded_font <- NA # probably some color emoji font used
-        else
-            embedded_font <- gsub(".*\\+(.*)", "\\1", strsplit(pf_output[3], " +")[[1]][1])
-    }
+    df <- pdftools::pdf_fonts(file)
+    if (nrow(df) == 0L)
+        embedded_font <- NA # probably some color emoji font used
+    else
+        embedded_font <- gsub("^[^+]*\\+(.*)", "\\1", df$name)
     embedded_font
 }
 
@@ -87,13 +76,17 @@ get_embedded_font_helper <- function(font, char) {
 has_font <- function(font) {
     stopifnot(length(font) == 1)
     if (requireNamespace("systemfonts", quietly = TRUE)) {
-        font_file <- basename(systemfonts::match_font(family = font)$path)
+        if (packageVersion("systemfonts") >= '1.1.0')
+            font_file <- basename(systemfonts::match_fonts(family = font)$path)
+        else
+            font_file <- basename(systemfonts::match_font(family = font)$path)
         grepl(simplify_font(font), simplify_font(font_file))
-    } else if (Sys.which("pdffonts") != "" && capabilities("cairo")) {
+    } else if (requireNamespace("pdftools", quietly = TRUE) &&
+               isTRUE(capabilities("cairo"))) {
         embedded_font <- get_embedded_font(font, "A")$embedded_font
         grepl(simplify_font(font), simplify_font(embedded_font))
     } else {
-        warn(paste("has_font() needs either the suggested 'systemfonts' package installed",
+        warn(paste("`has_font()` needs either the suggested 'systemfonts' package installed",
                    "or R compiled with 'cairo' support plus the suggested 'pdftools' package installed.",
                    "Conservatively returning `FALSE`."))
         FALSE

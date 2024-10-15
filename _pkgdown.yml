@@ -2,6 +2,8 @@ destination: "../../websites/R/piecepackr/"
 url: "https://trevorldavis.com/R/piecepackr"
 development:
     mode: auto
+template:
+  bootstrap: 5
 reference:
     - title: "Low-level graphics functions"
       desc: "Functions for directly creating board game graphics via various graphic systems"
