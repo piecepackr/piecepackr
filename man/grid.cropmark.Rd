@@ -20,7 +20,7 @@ cropmarkGrob(
   default.units = "npc",
   envir = getOption("piecepackr.envir"),
   name = NULL,
-  gp = NULL,
+  gp = gpar(),
   vp = NULL,
   bleed = unit(0.125, "in"),
   cm_select = "12345678",

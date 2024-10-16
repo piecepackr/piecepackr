@@ -19,6 +19,8 @@ Bug fixes and minor improvements
   + The `angle` argument of `AA_to_R()`, `R_x()`, `R_y()`, and `R_z()`.
   + The `t` argument of `to_x()`, `to_y()`, `to_degrees()`, and `to_radians()`.
 
+* `cropmarkGrob()` no longer ignores `name`, `gp`, and `vp` arguments (#340).
+
 piecepackr 1.13.11
 ==================
 
