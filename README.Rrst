@@ -31,6 +31,8 @@ piecepackr: Board Game Graphics
 
 .. _rgl: https://www.rdocumentation.org/packages/rgl
 
+.. _piecepackr universe: https://piecepackr.r-universe.dev/builds
+
 .. _R: https://www.r-project.org/
 
 .. _Print & Play layouts: https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html
@@ -597,8 +599,10 @@ To install the development version use the following commands:
 
 .. code:: r
 
-   install.packages("remotes")
-   remotes::install_github("piecepackr/piecepackr")
+    options(repos = c(
+        piecepackr = 'https://piecepackr.r-universe.dev',
+        CRAN = 'https://cloud.r-project.org'))
+    install.packages("piecepackr")
 
 Suggested R packages
 ~~~~~~~~~~~~~~~~~~~~
@@ -609,12 +613,14 @@ Although the "core" ``{piecepackr}`` functionality does not need any additional 
 
     install.packages("piecepackr", dependencies = TRUE)
 
-or (for the development version):
+or (for the development version from the `piecepackr universe`_):
 
 .. code:: r
 
-   install.packages("remotes")
-   remotes::install_github("piecepackr/piecepackr", dependencies = TRUE)
+    options(repos = c(
+        piecepackr = 'https://piecepackr.r-universe.dev',
+        CRAN = 'https://cloud.r-project.org'))
+    install.packages("piecepackr", dependencies = TRUE)
 
 Suggested R packages:
 
@@ -664,12 +670,33 @@ Suggested R packages:
     ``save_print_and_play()`` can use ``{xmpdf}`` to embed bookmarks, documentation info, and XMP metadata into pdf print-and-play files.
     You may also need the system tools `ghostscript`, `pdftk`, and/or `exiftool`.
 
+piecepackr universe
+~~~~~~~~~~~~~~~~~~~
+
+The `piecepackr universe`_ contains other R packages that may also be of interest to fans of ``piecepackr``.  To install them use:
+
+.. code:: r
+
+    # install.packages("piecepackr")
+    piecepackr::install_ppverse(free_libre_only = TRUE)
+
+**ppcli**
+    Functions to visualize board games in plaintext. Provides colorization support for the terminal and HTML via ``cli``.
+**ppdf**
+    Generate ``tibble`` data frames indicating how to set up over a hundred board games playable with public domain game systems. Data format can be used by ``piecepackr`` to generate graphics or by ``ppcli`` to generate plaintext graphics with ``cli``.
+**ppgamer**
+    Functions that provide players for piecepack games like a solver for "Fuji-san".
+**ppn**
+    Parses "Portable Piecepack Notation" files. This allows you to visualize the moves for over one hundred board games using ``piecepackr``.
+**pprules**
+    Functions to generate piecepack game rulesets and books.
+
 Other suggested software
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 The default piecepackr ``pp_cfg()`` configuration and the default game systems returned by ``game_systems()`` should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However ``game_systems(style = "dejavu")`` requires that the `Dejavu Sans <https://dejavu-fonts.github.io/Download.html>`_ font is installed.
 
-For more advanced ``{piecepackr}`` configurations you'll want to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
+For more advanced ``piecepackr`` configurations you'll want to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
 
 .. code:: bash
 
@@ -682,10 +709,10 @@ For more advanced ``{piecepackr}`` configurations you'll want to install additio
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
 
-Certain ``{piecepackr}`` features works best if the version of R installed was compiled with support for Cairo:
+Certain ``piecepackr`` features works best if the version of R installed was compiled with support for Cairo:
 
 * A subset of game system configurations use Unicode glyphs.  The "cairo" graphics devices support Unicode glyphs.
-* 3D ``{grid}`` renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.  
+* 3D grid_ renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.  
   In recent versions of R the "cairo" graphics devices support the "affine transformation" feature.
 * The function ``get_embedded_font()`` needs support for the ``cairo_pdf()`` function (which embeds fonts in the pdf)
   and by default ``render_piece()`` and ``save_print_and_play()`` may try to use "cairo" graphics devices.
