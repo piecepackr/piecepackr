@@ -34,6 +34,10 @@ reference:
         - save_piece_images
         - save_piece_obj
         - save_print_and_play
+    - title: "Install packages from the piecepackr universe"
+      desc: "Functions to install packages from the piecepackr universe"
+      contents:
+        - install_ppverse
     - title: "Developer helper functions"
       desc: "Various helper functions intended for developers"
       contents:

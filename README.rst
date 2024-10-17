@@ -31,6 +31,8 @@ piecepackr: Board Game Graphics
 
 .. _rgl: https://www.rdocumentation.org/packages/rgl
 
+.. _piecepackr universe: https://piecepackr.r-universe.dev/builds
+
 .. _R: https://www.r-project.org/
 
 .. _Print & Play layouts: https://trevorldavis.com/piecepackr/pages/print-and-play-pdfs.html
@@ -58,7 +60,7 @@ Checkers
 ``game_systems()`` returns a ``checkers1`` and ``checkers2`` configuration which has checkered and lined "boards" with matching checker "bits" in various sizes and colors.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -90,7 +92,7 @@ Dice
 * The ``dice_fudge`` configuration make the six-sided `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`_ with two plus, two minus, and two blank faces most commonly used in the `Fudge <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)>`_ and `Fate <https://en.wikipedia.org/wiki/Fate_(role-playing_game_system)>`_ roleplaying games.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -122,7 +124,7 @@ Dominoes
 The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://en.wikipedia.org/wiki/Chinese_dominoes>`__.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -179,7 +181,7 @@ Playing Cards
 ``game_systems()`` returns ``playing_cards``, ``playing_cards_colored``, and ``playing_cards_tarot`` (French Tarot) configurations for making diagrams with various decks of playing cards.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -220,7 +222,7 @@ grid.piece() ({grid})
 ``grid.piece()`` is the core function that can used to draw board game components (by default piecepack_ game components) using grid_:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -245,7 +247,7 @@ configuration lists
 One can use `lists to configure <https://trevorldavis.com/piecepackr/configuration-lists.html>`_ to quickly adjust the appearance of the game components drawn by ``grid.piece``:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -283,7 +285,7 @@ custom grob functions
 One can even specify `custom grob functions <https://trevorldavis.com/piecepackr/custom-grob-functions.html>`_ to completely customize the appearance of one's game pieces.  `piecepackr` comes with a variety of convenience functions such as `pp_shape()` to facilitate creating custom game pieces.  Here is an example of creating "patterned" checkers using ``pp_shape()`` objects' ``pattern()`` method powered by the suggested package `gridpattern <https://github.com/trevorld/gridpattern>`_:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("grid")
@@ -328,7 +330,7 @@ oblique 3D projection
 ``grid.piece`` even has some support for drawing 3D diagrams with an `oblique projection`_:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -370,7 +372,7 @@ pmap_piece()
 If you are comfortable using R data frames there is also ``pmap_piece()`` that processes data frame input.  It accepts an optional ``trans`` argument for a function to pre-process the data frames, in particular if desiring to draw a 3D `oblique projection`_ one can use the function ``op_transform()`` to guess both the pieces' z-coordinates and an appropriate re-ordering of the data frame given the desired angle of the oblique projection.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("dplyr", warn.conflicts=FALSE)
@@ -400,7 +402,7 @@ geom_piece() ({ggplot2})
 ``geom_piece()`` creates ggplot2_ "geom" objects.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("ggplot2")
@@ -428,7 +430,7 @@ geom_piece() ({ggplot2})
     Twelve men's morris game diagram
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("ggplot2")
@@ -459,7 +461,7 @@ piece3d() ({rgl})
 ``piece3d()`` draws pieces using rgl_ graphics.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -486,7 +488,7 @@ piece() ({rayrender})
 ``piece()`` creates rayrender_ objects.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -517,7 +519,7 @@ piece_mesh() ({rayvertex})
 ``piece_mesh()`` creates rayvertex_ objects.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("piecepackr")
@@ -547,7 +549,7 @@ animate_piece()
 ``animate_piece()`` creates animations.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("gifski")
@@ -593,7 +595,7 @@ Here we'll show an example of configuring piecepackr to draw diagrams for the ab
 Since one often plays Tak on differently sized boards one common Tak board design is to have boards made with colored cells arranged in rings from the center plus extra symbols in rings placed at the points so it is easy to see smaller sub-boards.  To start we'll write a function to draw the Tak board.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     library("grid", warn.conflicts=FALSE)
@@ -623,7 +625,7 @@ Since one often plays Tak on differently sized boards one common Tak board desig
 Then we'll configure a Tak set and write some helper functions to draw Tak pieces with it.
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
@@ -663,7 +665,7 @@ Then we'll configure a Tak set and write some helper functions to draw Tak piece
 Then we'll draw an example Tak game diagram:
 
 
-.. code:: r
+.. sourcecode:: r
     
 
     pushViewport(viewport(width=inch(6), height=inch(6)))
@@ -701,8 +703,10 @@ To install the development version use the following commands:
 
 .. code:: r
 
-   install.packages("remotes")
-   remotes::install_github("piecepackr/piecepackr")
+    options(repos = c(
+        piecepackr = 'https://piecepackr.r-universe.dev',
+        CRAN = 'https://cloud.r-project.org'))
+    install.packages("piecepackr")
 
 Suggested R packages
 ~~~~~~~~~~~~~~~~~~~~
@@ -713,12 +717,14 @@ Although the "core" ``{piecepackr}`` functionality does not need any additional 
 
     install.packages("piecepackr", dependencies = TRUE)
 
-or (for the development version):
+or (for the development version from the `piecepackr universe`_):
 
 .. code:: r
 
-   install.packages("remotes")
-   remotes::install_github("piecepackr/piecepackr", dependencies = TRUE)
+    options(repos = c(
+        piecepackr = 'https://piecepackr.r-universe.dev',
+        CRAN = 'https://cloud.r-project.org'))
+    install.packages("piecepackr", dependencies = TRUE)
 
 Suggested R packages:
 
@@ -768,12 +774,33 @@ Suggested R packages:
     ``save_print_and_play()`` can use ``{xmpdf}`` to embed bookmarks, documentation info, and XMP metadata into pdf print-and-play files.
     You may also need the system tools `ghostscript`, `pdftk`, and/or `exiftool`.
 
+piecepackr universe
+~~~~~~~~~~~~~~~~~~~
+
+The `piecepackr universe`_ contains other R packages that may also be of interest to fans of ``piecepackr``.  To install them use:
+
+.. code:: r
+
+    # install.packages("piecepackr")
+    piecepackr::install_ppverse(free_libre_only = TRUE)
+
+**ppcli**
+    Functions to visualize board games in plaintext. Provides colorization support for the terminal and HTML via ``cli``.
+**ppdf**
+    Generate ``tibble`` data frames indicating how to set up over a hundred board games playable with public domain game systems. Data format can be used by ``piecepackr`` to generate graphics or by ``ppcli`` to generate plaintext graphics with ``cli``.
+**ppgamer**
+    Functions that provide players for piecepack games like a solver for "Fuji-san".
+**ppn**
+    Parses "Portable Piecepack Notation" files. This allows you to visualize the moves for over one hundred board games using ``piecepackr``.
+**pprules**
+    Functions to generate piecepack game rulesets and books.
+
 Other suggested software
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
 The default piecepackr ``pp_cfg()`` configuration and the default game systems returned by ``game_systems()`` should work out on the box on most modern OSes including Windows without the user needing to mess with their system fonts.  However ``game_systems(style = "dejavu")`` requires that the `Dejavu Sans <https://dejavu-fonts.github.io/Download.html>`_ font is installed.
 
-For more advanced ``{piecepackr}`` configurations you'll want to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
+For more advanced ``piecepackr`` configurations you'll want to install additional Unicode fonts and Windows users are highly recommended to use and install piecepackr on "Ubuntu on Bash on Windows" if planning on using Unicode symbols from multiple fonts.  The following bash commands will give you a good selection of fonts (Noto, Quivira, and Dejavu) on Ubuntu:
 
 .. code:: bash
 
@@ -786,10 +813,10 @@ For more advanced ``{piecepackr}`` configurations you'll want to install additio
     mv NotoEmoji-Regular.ttf $fonts_dir/
     rm NotoEmoji-unhinted.zip
 
-Certain ``{piecepackr}`` features works best if the version of R installed was compiled with support for Cairo:
+Certain ``piecepackr`` features works best if the version of R installed was compiled with support for Cairo:
 
 * A subset of game system configurations use Unicode glyphs.  The "cairo" graphics devices support Unicode glyphs.
-* 3D ``{grid}`` renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.  
+* 3D grid_ renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.  
   In recent versions of R the "cairo" graphics devices support the "affine transformation" feature.
 * The function ``get_embedded_font()`` needs support for the ``cairo_pdf()`` function (which embeds fonts in the pdf)
   and by default ``render_piece()`` and ``save_print_and_play()`` may try to use "cairo" graphics devices.

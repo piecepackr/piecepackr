@@ -10,11 +10,19 @@ Breaking changes
     if the suggested R package `{pdftools}` is not installed.
     Please install the suggested R package `{pdftools}` to use `get_embedded_font()`.
 
+New features
+------------
+
+* `install_ppverse()` installs non-CRAN packages
+  from the [piecepackr universe](https://piecepackr.r-universe.dev/builds).
+  `pkgs_ppverse()` returns a character vector of R packages
+  in the piecepackr universe (#351).
+
 Bug fixes and minor improvements
 --------------------------------
 
-* Although angles can continue to be numeric vectors they can now also
-  be `affiner::angle()` vectors:
+* Although angles can continue to be numeric vectors of (usually) degrees they can now also
+  be `affiner::angle()` vectors (#350):
 
   + The `angle` argument of `AA_to_R()`, `R_x()`, `R_y()`, and `R_z()`.
   + The `t` argument of `to_x()`, `to_y()`, `to_degrees()`, and `to_radians()`.
