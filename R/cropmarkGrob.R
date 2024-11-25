@@ -1,4 +1,4 @@
-#' Crop Mark Grob
+#' Draw crop marks in grid
 #'
 #' `grid.cropmark()` draws \dQuote{crop marks} to the active graphics device.
 #' `cropmarkGrob()` is its grid grob counterpart.
@@ -22,7 +22,8 @@
 #' @param cm_length Length of crop mark.
 #' @return A grid grob.
 #' @examples
-#' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
+#' if (requireNamespace("grid", quietly = TRUE) &&
+#'     piecepackr:::device_supports_unicode()) {
 #'   cfg <- pp_cfg(list(mat_color = "pink", mat_width=0.05, border_color=NA))
 #'   grid::grid.newpage()
 #'   df <- data.frame(piece_side = "tile_face", suit = 2, rank = 2,
@@ -31,7 +32,8 @@
 #'   pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in")
 #'   pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed=TRUE)
 #' }
-#' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
+#' if (requireNamespace("grid", quietly = TRUE) &&
+#'     piecepackr:::device_supports_unicode()) {
 #'   grid::grid.newpage()
 #'   df <- data.frame(piece_side = "coin_back", suit = 2, rank = 2,
 #'                    x = 2, y = 2, angle = 0,
@@ -78,6 +80,8 @@ cropmarkGrob <- function(...,
     if (!is.unit(y)) y <- unit(y, default.units)
     if (!is.unit(width)) width <- unit(width, default.units)
     if (!is.unit(height)) height <- unit(height, default.units)
+    if (!is.unit(cm_width)) cm_width <- unit(cm_width, default.units)
+    if (!is.unit(cm_length)) cm_length <- unit(cm_length, default.units)
 
     width <- scale * width
     height <- scale * height

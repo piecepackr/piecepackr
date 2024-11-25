@@ -15,6 +15,7 @@ reference:
         - piece3d
         - scale_x_piece
         - grid.cropmark
+        - grid.crosshair
     - title: "Data frame processors"
       desc: "Functions that process data frame input"
       contents:

@@ -13,6 +13,13 @@ Breaking changes
 New features
 ------------
 
+* `crosshairGrob()` / `grid.crosshair()` create/draw "crosshair" grobs.
+  Intended for use in creating print-and-play layouts.
+
+  + `segmentsCrosshairGrob()` simply wraps `grid::segmentsGrob()`.
+  + `squaresCrosshairGrob()` wraps `grid::rectGrob()` and alternates
+  black/white squares for visibility on both light and dark backgrounds.
+
 * `install_ppverse()` installs non-CRAN packages
   from the [piecepackr universe](https://piecepackr.r-universe.dev/builds).
   `pkgs_ppverse()` returns a character vector of R packages
