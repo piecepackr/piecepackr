@@ -9,7 +9,7 @@ piecepackr: Board Game Graphics
     :target: https://app.codecov.io/github/piecepackr/piecepackr?branch=master
     :alt: Coverage Status
 
-.. image:: https://github.com/piecepackr/piecepackr/workflows/R-CMD-check/badge.svg
+.. image:: https://github.com/piecepackr/piecepackr/actions/workflows/R-CMD-check.yaml/badge.svg?branch=master
     :target: https://github.com/piecepackr/piecepackr/actions
     :alt: R-CMD-check
 

@@ -239,8 +239,15 @@ game_systems_style <- function(style = "sans") {
     style
 }
 
+# Okabe-Ito palette i.e. `palette.colors(n = 8, palette = "Okabe-Ito", names=TRUE)` plus white
+#                         vermillion black    bluishgreen  skyblue    orange     white
 cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
-cb_suit_colors_impure <- c("#D55E00", "grey30", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
+# Swap sky blue for blue and orange for yellow
+# cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#F0E442", "#FFFFFF")
+# Swap sky blue for blue (but keep orange)
+# cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#E69F00", "#FFFFFF")
+cb_suit_colors_impure <- cb_suit_colors_pure
+cb_suit_colors_impure[2L] <- "grey30"
 
 dice <- function(color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
@@ -630,26 +637,26 @@ chess <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) 
         white_chess_ranks <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
     }
     chess <- list(n_suits = 6, n_ranks = 12,
-                     width.board = 8 * cell_width,
-                     height.board = 8 * cell_width,
-                     width.bit = 0.75 * cell_width,
-                     ps_text.bit_back = "", dm_text.bit = "",
-                     grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
-                     grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
-                     gridline_color.board_face = cb_suit_colors_impure,
-                     gridline_color.board_back = cb_suit_colors_pure,
-                     gridline_lex.board = 4,
-                     suit_text = "",
-                     rank_cex.bit = 1.4 * cell_width,
-                     rank_cex.die = rank_cex_die,
-                     rank_text = black_chess_ranks,
-                     rank_text.s6 = white_chess_ranks,
-                     suit_color = cb_suit_colors_pure,
-                     suit_color.s6 = "black",
-                     background_color = "white",
-                     edge_color.bit = color_list$edge_color.board,
-                     gridline_color.s6.board_face = "grey80",
-                     gridline_color.s6.board_back = "grey80")
+                  width.board = 8 * cell_width,
+                  height.board = 8 * cell_width,
+                  width.bit = 0.75 * cell_width,
+                  ps_text.bit_back = "", dm_text.bit = "",
+                  grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
+                  grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
+                  gridline_color.board_face = cb_suit_colors_impure,
+                  gridline_color.board_back = cb_suit_colors_pure,
+                  gridline_lex.board = 4,
+                  suit_text = "",
+                  rank_cex.bit = 1.4 * cell_width,
+                  rank_cex.die = rank_cex_die,
+                  rank_text = black_chess_ranks,
+                  rank_text.s6 = white_chess_ranks,
+                  suit_color = cb_suit_colors_pure,
+                  suit_color.s6 = "black",
+                  background_color = "white",
+                  edge_color.bit = color_list$edge_color.board,
+                  gridline_color.s6.board_face = "grey80",
+                  gridline_color.s6.board_back = "grey80")
     for (i in seq(2, 12)) {
         chess[[paste0("width.r", i, ".board")]] <- i * cell_width
         chess[[paste0("height.r", i, ".board")]] <- i * cell_width
