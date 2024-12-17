@@ -30,9 +30,29 @@ crosshairGrob(
 
 grid.crosshair(..., draw = TRUE)
 
-segmentsCrosshairGrob(..., gp = gpar())
+segmentsCrosshairGrob(
+  ...,
+  x = unit(0.5, "npc"),
+  y = unit(0.5, "npc"),
+  width = unit(1, "snpc"),
+  height = unit(1, "snpc"),
+  default.units = "npc",
+  name = NULL,
+  gp = gpar(),
+  vp = NULL
+)
 
-squaresCrosshairGrob(..., gp = gpar())
+squaresCrosshairGrob(
+  ...,
+  x = unit(0.5, "npc"),
+  y = unit(0.5, "npc"),
+  width = unit(1, "snpc"),
+  height = unit(1, "snpc"),
+  default.units = "npc",
+  name = NULL,
+  gp = gpar(),
+  vp = NULL
+)
 }
 \arguments{
 \item{...}{\code{crosshairGrob()} ignores; \code{grid.crosshair()} passes to \code{crosshairGrob()}.}
@@ -85,10 +105,15 @@ black/white squares for visibility on both light and dark backgrounds.}
 A grid grob.
 }
 \description{
-\code{grid.crosshair()} draws \dQuote{crosshair(s)} to the active graphics device.
+\code{grid.crosshair()} draws \dQuote{crosshair(s)} at the corners of a rectangular area.
 \code{crosshairGrob()} is its grid grob counterpart.
-Intended for use in adding crosshairs at the corners of
+They are intended for use in adding crosshairs at the corners of
 game pieces in print-and-play layouts.
+}
+\details{
+One can use the lower level \code{segmentsCrosshairGrob()} and \code{squaresCrosshairGrob()}
+(which can be drawn with \code{\link[grid:grid.draw]{grid::grid.draw()}})
+to add individual crosshairs to specified (x,y) locations.
 }
 \examples{
 if (requireNamespace("grid", quietly = TRUE) &&

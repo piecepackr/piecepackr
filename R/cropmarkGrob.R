@@ -84,7 +84,7 @@ grid.cropmark <- function(..., draw = TRUE) {
 
 #' @export
 makeContext.pp_cropmark <- function(x) {
-    x$gp$fill <- x$gp$fill %||% x$gp$col %||% "black"
+    x$gp$fill <- x$gp$fill %||% x$gp$col %||% get.gpar("col")$col
     x$gp$col <- NA
     x
 }
