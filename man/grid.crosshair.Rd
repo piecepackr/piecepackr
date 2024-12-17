@@ -5,7 +5,7 @@
 \alias{crosshairGrob}
 \alias{segmentsCrosshairGrob}
 \alias{squaresCrosshairGrob}
-\title{Crosshair Grob}
+\title{Draw crosshairs with grid}
 \usage{
 crosshairGrob(
   ...,

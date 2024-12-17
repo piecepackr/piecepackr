@@ -95,12 +95,12 @@
 NULL
 
 pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                           angle=0, width=NA, height=NA, depth=NA,
-                           op_scale=0, op_angle=45,
-                           default.units = "npc",
-                           scale=1, alpha=1, type="normal", name="",
-                           bleed=FALSE) {
+                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
+                            angle=0, width=NA, height=NA, depth=NA,
+                            op_scale=0, op_angle=45,
+                            default.units = "npc",
+                            scale=1, alpha=1, type="normal", name="",
+                            bleed=FALSE) {
     stopifnot(isFALSE(bleed) || op_scale < 0.0001)
     if (scale == 0 || alpha == 0) return(nullGrob())
     cfg <- as_pp_cfg(cfg)
@@ -163,17 +163,17 @@ pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg
 #' @rdname grid.piece
 #' @export
 pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
-                         cfg=getOption("piecepackr.cfg", pp_cfg()),
-                         x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                         angle=0, ...,
-                         width=NA, height=NA, depth=NA,
-                         op_scale = getOption("piecepackr.op_scale", 0),
-                         op_angle = getOption("piecepackr.op_angle", 45),
-                         default.units = getOption("piecepackr.default.units", "npc"),
-                         envir = getOption("piecepackr.envir"),
-                         name=NULL, gp=NULL, vp=NULL,
-                         scale=1, alpha=1, type="normal",
-                         bleed=FALSE) {
+                      cfg=getOption("piecepackr.cfg", pp_cfg()),
+                      x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
+                      angle=0, ...,
+                      width=NA, height=NA, depth=NA,
+                      op_scale = getOption("piecepackr.op_scale", 0),
+                      op_angle = getOption("piecepackr.op_angle", 45),
+                      default.units = getOption("piecepackr.default.units", "npc"),
+                      envir = getOption("piecepackr.envir"),
+                      name=NULL, gp=NULL, vp=NULL,
+                      scale=1, alpha=1, type="normal",
+                      bleed=FALSE) {
 
     stopifnot(!(bleed && op_scale > 0))
 

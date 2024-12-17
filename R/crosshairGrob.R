@@ -1,4 +1,4 @@
-#' Crosshair Grob
+#' Draw crosshairs with grid
 #'
 #' `grid.crosshair()` draws \dQuote{crosshair(s)} to the active graphics device.
 #' `crosshairGrob()` is its grid grob counterpart.

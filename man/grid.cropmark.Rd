@@ -3,7 +3,7 @@
 \name{grid.cropmark}
 \alias{grid.cropmark}
 \alias{cropmarkGrob}
-\title{Crop Mark Grob}
+\title{Draw crop marks with grid}
 \usage{
 cropmarkGrob(
   ...,
