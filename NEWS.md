@@ -31,8 +31,28 @@ Bug fixes and minor improvements
 * Although angles can continue to be numeric vectors of (usually) degrees they can now also
   be `affiner::angle()` vectors (#350):
 
-  + The `angle` argument of `AA_to_R()`, `R_x()`, `R_y()`, and `R_z()`.
+  + The `angle` argument of:
+
+    - `AA_to_R()`
+    - `cropmarkGrob()` / `grid.cropmark()`
+    - `crosshairGrob()` / `grid.crosshair()`
+    - `geom_piece()`
+    - `piece()`
+    - `piece3d()`
+    - `pieceGrob()` / `grid.piece()`
+    - `piece_mesh()`
+    - `R_x()`, `R_y()`, and `R_z()`
+    - `save_piece_obj()`, `save_ellipsoid_obj()`, and `save_peg_doll_obj()`
+
+  + The `op_angle` argument of:
+
+    - `aabb_piece()`
+    - `geom_piece()`
+    - `pieceGrob()` / `grid.piece()`
+    - `op_transform()`
+
   + The `t` argument of `to_x()`, `to_y()`, `to_degrees()`, and `to_radians()`.
+  + The `theta` argument of `pp_shape()`.
 
 * `cropmarkGrob()` / `grid.cropmark()` no longer ignores `name`, `gp`, and `vp` arguments (#340).
 * `cropmarkGrob()` / `grid.cropmark()` is now vectorized in most of its arguments.

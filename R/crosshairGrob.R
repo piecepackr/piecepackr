@@ -58,10 +58,8 @@ crosshairGrob <- function(...,
         if (is.na(height)) height <- inch(cfg$get_height(piece_side, suit, rank))
     }
 
-    if (is.na(angle))
-        angle <- 0
-    else
-        angle <- angle %% 360
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
 
     if (!is.unit(x)) x <- unit(x, default.units)
     if (!is.unit(y)) y <- unit(y, default.units)

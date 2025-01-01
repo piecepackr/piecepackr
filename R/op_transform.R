@@ -76,6 +76,8 @@ op_transform <- function(df, ...,
                          pt_thickness = 0.01,
                          as_top = character(0),
                          cfg_class = "list") {
+    if (is_angle(op_angle))
+        op_angle <- as.double(op_angle, "degrees")
     for (ps in as_top) {
         indices <- which(df$piece_side == ps)
         piece <- get_piece(ps)

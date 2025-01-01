@@ -58,6 +58,8 @@ cropmarkGrob <- function(...,
                          cm_select = "12345678",
                          cm_width = unit(0.25, "mm"),
                          cm_length = unit(0.125, "in")) {
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
 
     gTree(piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
           x=x, y=y, angle=angle,
