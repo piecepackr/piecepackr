@@ -105,7 +105,7 @@ black/white squares for visibility on both light and dark backgrounds.}
 A grid grob.
 }
 \description{
-\code{grid.crosshair()} draws \dQuote{crosshair(s)} at the corners of a rectangular area.
+\code{grid.crosshair()} draws crosshairs at the corners of a rectangular area.
 \code{crosshairGrob()} is its grid grob counterpart.
 They are intended for use in adding crosshairs at the corners of
 game pieces in print-and-play layouts.

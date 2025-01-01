@@ -26,11 +26,13 @@
 #' @seealso See \url{https://www.rayvertex.com} for more information about the \code{rayvertex} package.
 #'          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 piece_mesh <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
-                           x = 0, y = 0, z = NA,
-                           angle = 0, axis_x = 0, axis_y = 0,
-                           width = NA, height = NA, depth = NA,
-                           envir = NULL, ..., scale = 1, res = 72) {
+                       x = 0, y = 0, z = NA,
+                       angle = 0, axis_x = 0, axis_y = 0,
+                       width = NA, height = NA, depth = NA,
+                       envir = NULL, ..., scale = 1, res = 72) {
     assert_suggested("rayvertex")
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
 
     nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, axis_x, axis_y, width, height, depth)))
     piece_side <- rep(piece_side, length.out = nn)

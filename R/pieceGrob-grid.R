@@ -176,6 +176,10 @@ pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
                       bleed=FALSE) {
 
     stopifnot(!(bleed && op_scale > 0))
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
+    if (is_angle(op_angle))
+        op_angle <- as.double(op_angle, "degrees")
 
     gTree(piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
           x=x, y=y, z=z, angle=angle,

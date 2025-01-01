@@ -149,6 +149,8 @@ Shape <- R6Class("pp_shape",
                               radius = 0.2, back = FALSE) {
             if (!is_known_shape_label(label))
                 abort(paste("Don't recognize shape label", label))
+            if (is_angle(theta))
+                theta <- as.double(theta, "degrees")
             private$shape_label <- label
             private$shape_theta <- theta
             private$shape_radius <- radius

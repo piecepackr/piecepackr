@@ -30,6 +30,8 @@ piece <- function(piece_side = "tile_back", suit = NA, rank = NA, # nolint
                   ...,
                   scale = 1, res = 72) {
     assert_suggested("rayrender")
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
 
     nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, axis_x, axis_y, width, height, depth)))
     piece_side <- rep(piece_side, length.out = nn)

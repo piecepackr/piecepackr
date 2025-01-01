@@ -24,6 +24,8 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1,
                            filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
     opt <- options(piecepackr.op_scale = 0)
     on.exit(options(opt))
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
 
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(is.na(suit), 1, suit)
@@ -210,6 +212,9 @@ save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1,
                                width = NA, height = NA, depth = NA,
                                filename = tempfile(fileext = ".obj"), subdivide=3) {
     assert_suggested("rgl")
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
+
     cfg <- as_pp_cfg(cfg)
     piece <- get_piece(piece_side)
     side <- get_side(piece_side)
@@ -257,6 +262,9 @@ save_peg_doll_obj <- function(piece_side = "pawn_top", suit = 1, rank = 1,
                               filename = tempfile(fileext = ".obj"), res = 72) {
 
     assert_suggested("rgl")
+    if (is_angle(angle))
+        angle <- as.double(angle, "degrees")
+
     cfg <- as_pp_cfg(cfg)
     piece <- get_piece(piece_side)
     side <- get_side(piece_side)
