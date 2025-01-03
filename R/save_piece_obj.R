@@ -4,9 +4,9 @@
 #' @inheritParams pieceGrob
 #' @param axis_x First coordinate of the axis unit vector.
 #' @param axis_y Second coordinate of the axis unit vector.
-#' @param filename Name of Wavefront OBJ object.
+#' @param filename Name of Wavefront OBJ object.  By default `tempfile(fileext = ".obj")`.
 #' @param res Resolution of the faces.
-#' @return A list with named elements "obj", "mtl", "png" with the created filenames.
+#' @return A data frame with named elements "obj", "mtl", "png" with the created filenames.
 #' @examples
 #'     if (all(capabilities(c("cairo", "png")))) {
 #'       cfg <- game_systems("sans3d")$dominoes
@@ -21,12 +21,55 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1,
                            x = 0, y = 0, z = 0,
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA,
-                           filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
+                           envir = getOption("piecepackr.envir"),
+                           filename = tempfile(fileext = "%03d.obj"),
+                           scale = 1, res = 72) {
     opt <- options(piecepackr.op_scale = 0)
     on.exit(options(opt))
     if (is_angle(angle))
         angle <- as.double(angle, "degrees")
 
+    nn <- max(lengths(list(piece_side, suit, rank, x, y, z, angle, axis_x, axis_y, width, height, depth)))
+    piece_side <- rep(piece_side, length.out = nn)
+    suit <- rep(suit, length.out = nn)
+    rank <- rep(rank, length.out = nn)
+    x <- rep(x, length.out = nn)
+    y <- rep(y, length.out = nn)
+    z <- rep(z, length.out = nn)
+    angle <- rep(angle, length.out = nn)
+    axis_x <- rep(axis_x, length.out = nn)
+    axis_y <- rep(axis_y, length.out = nn)
+    width <- rep(width, length.out = nn)
+    height <- rep(height, length.out = nn)
+    depth <- rep(depth, length.out = nn)
+    scale <- rep(scale, length.out = nn)
+
+    cfg <- get_cfg(cfg, envir)
+    cfg <- rep(c(cfg), length.out = nn)
+
+    filename <- rep(filename, length.out = nn)
+    if (all(grepl("%[#0+=-]*[0-9.]*[diouxX]", filename)))
+        filename <- sprintf(filename, seq_along(filename))
+    filename <- normalizePath(filename, mustWork = FALSE)
+    stopifnot(!any(duplicated(filename)))
+
+    l <- lapply(seq.int(nn), function(i) {
+        df <- save_piece_obj_helper(piece_side[i], suit[i], rank[i], cfg[[i]],
+                                    x[i], y[i], z[i],
+                                    angle[i], axis_x[i], axis_y[i],
+                                    width[i], height[i], depth[i],
+                                    filename[i], scale[i], res)
+        df
+    })
+    do.call(rbind, l)
+}
+
+save_piece_obj_helper <- function(piece_side = "tile_face", suit = 1, rank = 1,
+                           cfg = getOption("piecepackr.cfg", pp_cfg()),
+                           x = 0, y = 0, z = 0,
+                           angle = 0, axis_x = 0, axis_y = 0,
+                           width = NA, height = NA, depth = NA,
+                           filename = tempfile(fileext = ".obj"), scale = 1, res = 72) {
     cfg <- as_pp_cfg(cfg)
     suit <- ifelse(is.na(suit), 1, suit)
     rank <- ifelse(is.na(rank), 1, rank)
@@ -41,11 +84,12 @@ save_piece_obj <- function(piece_side = "tile_face", suit = 1, rank = 1,
     height <- scale * height
     depth <- scale * depth
 
-    cfg$save_obj(piece_side, suit, rank,
-                 x, y, z,
-                 angle, axis_x, axis_y,
-                 width, height, depth,
-                 filename, res)
+    l <- cfg$save_obj(piece_side, suit, rank,
+                      x, y, z,
+                      angle, axis_x, axis_y,
+                      width, height, depth,
+                      filename, res)
+    as.data.frame(l)
 }
 
 write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),

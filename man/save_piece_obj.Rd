@@ -19,7 +19,8 @@ save_piece_obj(
   width = NA,
   height = NA,
   depth = NA,
-  filename = tempfile(fileext = ".obj"),
+  envir = getOption("piecepackr.envir"),
+  filename = tempfile(fileext = "\%03d.obj"),
   scale = 1,
   res = 72
 )
@@ -57,14 +58,16 @@ can be retrieved by \code{base::dynGet()}.}
 
 \item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
 
-\item{filename}{Name of Wavefront OBJ object.}
+\item{envir}{Environment (or named list) containing configuration list(s).}
+
+\item{filename}{Name of Wavefront OBJ object.  By default \code{tempfile(fileext = ".obj")}.}
 
 \item{scale}{Multiplicative scaling factor to apply to width, height, and depth.}
 
 \item{res}{Resolution of the faces.}
 }
 \value{
-A list with named elements "obj", "mtl", "png" with the created filenames.
+A data frame with named elements "obj", "mtl", "png" with the created filenames.
 }
 \description{
 \code{save_piece_obj} saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
