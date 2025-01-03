@@ -70,34 +70,39 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, # nolint
                      alpha = alpha[i], lit = lit[i],
                      shininess = shininess[i], textype = textype[i])
     })
-    do.call(c, l)
+    unlist(l)
 }
 
 rgl_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg = pp_cfg(), # nolint
-                           x = 0, y = 0, z = NA,
-                           angle = 0, axis_x = 0, axis_y = 0,
-                           width = NA, height = NA, depth = NA,
-                           scale = 1, res = 72,
-                           alpha = 1, lit = FALSE,
-                           shininess = 50.0, textype = NA) {
+                             x = 0, y = 0, z = NA,
+                             angle = 0, axis_x = 0, axis_y = 0,
+                             width = NA, height = NA, depth = NA,
+                             scale = 1, res = 72,
+                             alpha = 1, lit = FALSE,
+                             shininess = 50.0, textype = NA) {
     if (scale == 0 || alpha == 0) return(invisible(numeric(0)))
-    obj <- save_piece_obj(piece_side, suit, rank, cfg,
-                        x = x, y = y, z = z,
-                        angle = angle, axis_x = axis_x, axis_y = axis_y,
-                        width = width, height = height, depth = depth,
-                        scale = scale, res = res)
+    l_obj <- save_piece_obj(piece_side, suit, rank, cfg,
+                            x = x, y = y, z = z,
+                            angle = angle, axis_x = axis_x, axis_y = axis_y,
+                            width = width, height = height, depth = depth,
+                            scale = scale, res = res)
+    l <- purrr::pmap(l_obj, rgl_piece_helper_obj, alpha = alpha, lit = lit, shininess = shininess, textype = textype)
+    unlist(l)
+}
+
+rgl_piece_helper_obj <- function(obj, mtl, png, alpha = 1, lit = FALSE, shininess = 50.0, textype = NA) {
     if (is.na(textype)) {
-        r <- png::readPNG(obj$png)
+        r <- png::readPNG(png)
         textype <- ifelse(dim(r)[3] > 3 && mean(r[,,4]) < 0.999, "rgba", "rgb")
     }
     material <- list(color = "white", alpha = alpha,
                      lit = lit, shininess = shininess,
                      front = "filled", back = "filled",
-                     texture = obj$png, textype = textype)
+                     texture = png, textype = textype)
     if (requireNamespace("readobj", quietly = TRUE))
-        mesh <- readobj::read.obj(obj$obj, convert.rgl = TRUE)
+        mesh <- readobj::read.obj(obj, convert.rgl = TRUE)
     else
-        mesh <- suppressWarnings(rgl::readOBJ(obj$obj))
+        mesh <- suppressWarnings(rgl::readOBJ(obj))
     id <- rgl::shade3d(mesh, material = material)
     invisible(as.numeric(id))
 }

@@ -905,10 +905,7 @@ reversi_piece <- function(cell_width = 1, color_list = color_list_fn()) {
          depth.bit = 0.25 * cell_width,
          grob_fn.bit = reversi_piece$grob_fn,
          obj_fn.bit = reversi_piece$obj_fn,
-         op_grob_fn.bit = reversi_piece$op_grob_fn,
-         rayrender_fn.bit = reversi_piece$rayrender_fn,
-         rayvertex_fn.bit = reversi_piece$rayvertex_fn,
-         rgl_fn.bit = reversi_piece$rgl_fn)
+         op_grob_fn.bit = reversi_piece$op_grob_fn)
 }
 
 peg_doll_pawn <- function(shapes) {
@@ -948,9 +945,6 @@ joystick_pawn <- function(shapes) {
     list(grob_fn.pawn = joystick$grob_fn,
          obj_fn.pawn = joystick$obj_fn,
          op_grob_fn.pawn = joystick$op_grob_fn,
-         rayrender_fn.pawn = joystick$rayrender_fn,
-         rayvertex_fn.pawn = joystick$rayvertex_fn,
-         rgl_fn.pawn = joystick$rgl_fn,
          width.pawn=5/8, height.pawn=1.0, depth.pawn=5/8)
 }
 
