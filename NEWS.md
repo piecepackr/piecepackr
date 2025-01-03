@@ -10,6 +10,15 @@ Breaking changes
     if the suggested R package `{pdftools}` is not installed.
     Please install the suggested R package `{pdftools}` to use `get_embedded_font()`.
 
+* Newly vectorized `save_piece_obj()` now returns a data frame (instead of a named list)
+  with (the same) "obj", "mtl", and "png" names.
+  Each row contains the file paths for a Wavefront ".obj" file and its associated ".mtl" and ".png" files.
+  Each piece may now be represented by one or several ".obj" files.
+  Previously `save_piece_obj()` was not vectorized and returned a list with names "obj", "mtl", and "png"
+  with the file paths for a single Wavefront ".obj" file and its associated ".mtl" and ".png" files and it used
+  to throw an error instead of saving multiple ".obj" files for certain "composite" pieces
+  (like the "joystick" pawn or "reversi" disc).
+
 New features
 ------------
 
@@ -56,6 +65,12 @@ Bug fixes and minor improvements
 
 * `cropmarkGrob()` / `grid.cropmark()` no longer ignores `name`, `gp`, and `vp` arguments (#340).
 * `cropmarkGrob()` / `grid.cropmark()` is now vectorized in most of its arguments.
+* `save_piece_obj()` improvements (#347):
+
+  + Most arguments are now vectorized and `save_piece_obj()` now returns a data frame with "obj", "mtl", and "png" names.
+  + Each row contains the file paths for a Wavefront ".obj" file and its associated ".mtl" and ".png" files.
+  + Each piece may now be represented by one or several ".obj" files.  In particular instead of throwing an error
+    we now generate (multiple) ".obj" files to represent "composite" pieces like the "joystick" pawns and "reversi" discs.
 
 piecepackr 1.13.11
 ==================

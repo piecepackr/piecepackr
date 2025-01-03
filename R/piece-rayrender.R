@@ -65,13 +65,14 @@ rr_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg 
                            angle = 0, axis_x = 0, axis_y = 0,
                            width = NA, height = NA, depth = NA, scale = 1, res = 72) {
     if (scale == 0) return(NULL)
-    obj <- save_piece_obj(piece_side, suit, rank, cfg,
-                        x = x, y = y, z = z,
-                        angle = angle, axis_x = axis_x, axis_y = axis_y,
-                        width = width, height = height, depth = depth,
-                        scale = scale, res = res)
+    l_obj <- save_piece_obj(piece_side, suit, rank, cfg,
+                            x = x, y = y, z = z,
+                            angle = angle, axis_x = axis_x, axis_y = axis_y,
+                            width = width, height = height, depth = depth,
+                            scale = scale, res = res)
     if (packageVersion("rayrender") < "0.28.0")
-        rayrender::obj_model(filename = obj$obj, texture = TRUE)
+        l <- lapply(l_obj$obj, rayrender::obj_model, texture = TRUE)
     else
-        rayrender::obj_model(filename = obj$obj, load_material = TRUE, load_textures = TRUE)
+        l <- lapply(l_obj$obj, rayrender::obj_model, load_material = TRUE, load_textures = TRUE)
+    Reduce(rayrender::add_object, l)
 }

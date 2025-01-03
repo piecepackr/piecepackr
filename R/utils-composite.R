@@ -15,8 +15,28 @@ CompositePiece <- R6Class("pp_composite",
         obj_fn = function() function(piece_side, suit, rank, cfg,
                                      x, y, z, angle, axis_x, axis_y,
                                      width, height, depth,
-                                     filename, scale, res) {
-            abort("Generally can't save Wavefront OBJ files for 'composite' pieces")
+                                     filename, res) {
+            suit <- ifelse(is.na(suit), 1, suit)
+            rank <- ifelse(is.na(rank), 1, rank)
+            if (is.na(angle)) angle <- 0
+            if (is.na(axis_x)) axis_x <- 0
+            if (is.na(axis_y)) axis_y <- 0
+            if (is.na(width)) width <- cfg$get_width(piece_side, suit, rank)
+            if (is.na(height)) height <- cfg$get_height(piece_side, suit, rank)
+            if (is.na(depth)) depth <- cfg$get_depth(piece_side, suit, rank)
+            if (is.na(z)) z <- 0.5 * depth
+
+            df <- private$transform_df(piece_side, x, y, z, angle, width, height, depth, axis_x, axis_y)
+            ext <- tools::file_ext(filename)
+            filename <- gsub(paste0("\\.", ext, "$"),
+                             paste0("_%03d.", ext),
+                             filename)
+            filename <- rep(filename, length.out = nrow(df))
+            filename <- sprintf(filename, seq_along(filename))
+            stopifnot(!any(duplicated(filename)))
+            df$filename <- filename
+            l <- pmap_piece(df, suit = suit, envir = private$envir, .f = save_piece_obj, res = res)
+            do.call(rbind, l)
         },
         op_grob_fn = function() function(piece_side, suit, rank, cfg,
                                          x, y, z, angle, type, width, height, depth,
@@ -36,63 +56,6 @@ CompositePiece <- R6Class("pp_composite",
             #### in future need to re-order elements using `op_sort()`?
             pmap_piece(df, suit = suit, envir = private$envir, draw = FALSE,
                        default.units = "in", op_scale = op_scale, op_angle = op_angle, scale = scale)
-        },
-        rayrender_fn = function() function(piece_side, suit, rank, cfg,
-                                           x, y, z, angle, axis_x, axis_y,
-                                           width, height, depth,
-                                           scale = scale, res = res) {
-            suit <- ifelse(is.na(suit), 1, suit)
-            rank <- ifelse(is.na(rank), 1, rank)
-            if (is.na(angle)) angle <- 0
-            if (is.na(axis_x)) axis_x <- 0
-            if (is.na(axis_y)) axis_y <- 0
-            if (is.na(width)) width <- cfg$get_width(piece_side, suit, rank)
-            if (is.na(height)) height <- cfg$get_height(piece_side, suit, rank)
-            if (is.na(depth)) depth <- cfg$get_depth(piece_side, suit, rank)
-            if (is.na(z)) z <- 0.5 * depth
-
-            df <- private$transform_df(piece_side, x, y, z, angle, width, height, depth, axis_x, axis_y, scale)
-            l <- pmap_piece(df, suit = suit, envir = private$envir, .f = piece, res = res)
-            Reduce(rayrender::add_object, l)
-        },
-        rayvertex_fn = function() function(piece_side, suit, rank, cfg,
-                                           x, y, z, angle, axis_x, axis_y,
-                                           width, height, depth,
-                                           scale = scale, res = res) {
-            suit <- ifelse(is.na(suit), 1, suit)
-            rank <- ifelse(is.na(rank), 1, rank)
-            if (is.na(angle)) angle <- 0
-            if (is.na(axis_x)) axis_x <- 0
-            if (is.na(axis_y)) axis_y <- 0
-            if (is.na(width)) width <- cfg$get_width(piece_side, suit, rank)
-            if (is.na(height)) height <- cfg$get_height(piece_side, suit, rank)
-            if (is.na(depth)) depth <- cfg$get_depth(piece_side, suit, rank)
-            if (is.na(z)) z <- 0.5 * depth
-
-            df <- private$transform_df(piece_side, x, y, z, angle, width, height, depth, axis_x, axis_y, scale)
-            l <- pmap_piece(df, suit = suit, envir = private$envir, .f = piece_mesh, res = res)
-            Reduce(rayvertex::add_shape, l)
-        },
-        rgl_fn = function() function(piece_side, suit, rank, cfg,
-                                     x, y, z, angle, axis_x, axis_y,
-                                     width, height, depth,
-                                     scale = scale, res = res,
-                                     alpha = alpha, lit = lit,
-                                     shininess = shininess, textype = textype) {
-            suit <- ifelse(is.na(suit), 1, suit)
-            rank <- ifelse(is.na(rank), 1, rank)
-            if (is.na(angle)) angle <- 0
-            if (is.na(axis_x)) axis_x <- 0
-            if (is.na(axis_y)) axis_y <- 0
-            if (is.na(width)) width <- cfg$get_width(piece_side, suit, rank)
-            if (is.na(height)) height <- cfg$get_height(piece_side, suit, rank)
-            if (is.na(depth)) depth <- cfg$get_depth(piece_side, suit, rank)
-            if (is.na(z)) z <- 0.5 * depth
-
-            df <- private$transform_df(piece_side, x, y, z, angle, width, height, depth, axis_x, axis_y, scale)
-            l <- pmap_piece(df, suit = suit, envir = private$envir, .f = piece3d,
-                            res = res, alpha = alpha, lit = lit, shininess = shininess, textype = textype)
-            as.integer(unlist(l))
         }),
     private = list(
         df = NULL, envir = NULL, ref_side = NULL,

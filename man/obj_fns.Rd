@@ -76,7 +76,7 @@ can be retrieved by \code{base::dynGet()}.}
 
 \item{depth}{Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.}
 
-\item{filename}{Name of Wavefront OBJ object.}
+\item{filename}{Name of Wavefront OBJ object.  By default \code{tempfile(fileext = ".obj")}.}
 
 \item{subdivide}{Increasing this value makes for a smoother ellipsoid (and larger OBJ file and slower render).
 See \code{\link[rgl]{ellipse3d}}.}
