@@ -3,7 +3,7 @@
 \name{install_ppverse}
 \alias{install_ppverse}
 \alias{pkgs_ppverse}
-\title{Install additonal packages from the piecepackr universe}
+\title{Install additional packages from the piecepackr universe}
 \usage{
 install_ppverse(
   pkgs = pkgs_ppverse(free_libre_only),
@@ -24,7 +24,7 @@ pkgs_ppverse(free_libre_only = TRUE)
 \item{free_libre_only}{Flag to only include packages that are Free/Libre Open Source.}
 }
 \description{
-Use \code{\link[utils:install.packages]{utils::install.packages()}} to install additional R packages
+Uses \code{\link[utils:install.packages]{utils::install.packages()}} to install additional R packages
 from the piecepackr universe \url{https://piecepackr.r-universe.dev/builds}.
 \code{pkgs_ppverse()} returns a character vector of R packages
 in the piecepackr universe.

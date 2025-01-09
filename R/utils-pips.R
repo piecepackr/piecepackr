@@ -3,6 +3,9 @@ xya_pips_cards <- function(n_pips) {
     if (n_pips == 0) {
         return(tibble(x = numeric(0), y = numeric(0), angle = numeric(0)))
     }
+    if (n_pips > 10) {
+       abort(paste0("Don't know pip pattern for ", n_pips, " pips"))
+    }
     switch(n_pips,
            tibble(x = 0.5, y = 0.5, angle = 0), # 1
            tibble(x = 0.5, y = c(0.2, 0.8), angle = c(180, 0)), # 2
@@ -27,8 +30,7 @@ xya_pips_cards <- function(n_pips) {
                   angle = c(rep(180, 4), rep(0, 5))),
            tibble(x = c(0.5, rep(c(0.25, 0.75), 4), 0.5), # 10
                   y = c(0.3, rep(c(0.2, 0.4, 0.6, 0.8), each=2), 0.7),
-                  angle = c(rep(180, 5), rep(0, 5))),
-           abort(paste0("Don't know pip pattern for ", n_pips, " pips"))
+                  angle = c(rep(180, 5), rep(0, 5)))
            )
 }
 
@@ -69,6 +71,9 @@ xya_pips_dominoes <- function(n_pips, die = FALSE, chinese = FALSE, other_pips =
     }
     right <- 1 - left
     mid <- 0.5 * (high + low)
+    if (n_pips > 18L) {
+       abort(paste0("Don't know pip pattern for ", n_pips, " pips"))
+    }
     switch(n_pips,
            if (chinese && !die)
                tibble(x = 0.5, y = low, angle = 0)
@@ -133,15 +138,15 @@ xya_pips_dominoes <- function(n_pips, die = FALSE, chinese = FALSE, other_pips =
                   angle = c(rep(180, 8), rep(0, 9))),
            tibble(x = c(rep(c(0.140, 0.340, 0.660, 0.860), 4), 0.5, 0.5), # 18
                   y = c(rep(c(0.2, 0.4, 0.6, 0.8), each=4), 0.3, 0.7),
-                  angle = c(rep(180, 8), rep(0, 8), 180, 0)),
-           abort(paste0("Don't know pip pattern for ", n_pips, " pips"))
+                  angle = c(rep(180, 8), rep(0, 8), 180, 0))
            )
 }
 
-cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text") {
+cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text", has_pips = TRUE) {
     force(type)
     force(rank_offset)
     force(grob_type)
+    force(has_pips)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -149,7 +154,7 @@ cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text") {
         gTree(opt=opt,
               piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
               type=type, rank_offset=rank_offset, grob_type=grob_type,
-              scale=1, border=TRUE,
+              scale=1, border=TRUE, has_pips=has_pips,
               cl=c("card_side", "basic_piece_side"))
     }
 }
@@ -181,10 +186,14 @@ makeContent.card_side <- function(x) {
                           hjust = 0.5, vjust = 0.5, name = "suit")
 
     # Pips
-    tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
-    pip_grob <- tfn(x$piece_side, x$suit, x$rank, x$cfg)
-    pip_grob <- grid::editGrob(pip_grob,
-                      vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)), name = "pips")
+    if (x$has_pips) {
+        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+        pip_grob <- tfn(x$piece_side, x$suit, x$rank, x$cfg)
+        pip_grob <- grid::editGrob(pip_grob,
+                          vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)), name = "pips")
+    } else {
+        pip_grob <- nullGrob(name = "pips")
+    }
 
     # Border
     if (x$border) {

@@ -1,6 +1,6 @@
-#' Install additonal packages from the piecepackr universe
+#' Install additional packages from the piecepackr universe
 #'
-#' Use [utils::install.packages()] to install additional R packages
+#' Uses [utils::install.packages()] to install additional R packages
 #' from the piecepackr universe <https://piecepackr.r-universe.dev/builds>.
 #' `pkgs_ppverse()` returns a character vector of R packages
 #' in the piecepackr universe.

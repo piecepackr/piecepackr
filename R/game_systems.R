@@ -830,7 +830,6 @@ playing_cards <- function(style = "sans", rect_shape = "rect") {
     playing_cards_tarot$grob_fn.r15.card <- jokerCardGrobFn(TRUE)
     playing_cards_tarot$grob_fn.s3.r15.card <- jokerCardGrobFn(FALSE)
     playing_cards_tarot$grob_fn.s4.r15.card <- jokerCardGrobFn(FALSE)
-    playing_cards_tarot$rank_text.s5 <- c(1:21, fool_text)
     playing_cards_tarot$n_suits <- 5
     playing_cards_tarot$n_ranks <- 22
 
@@ -838,7 +837,13 @@ playing_cards <- function(style = "sans", rect_shape = "rect") {
     playing_cards_tarot$suit_text <- tarot_suit_text
     playing_cards_tarot$suit_text.r14 <- tarot_suit_text
     playing_cards_tarot$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
-    playing_cards_tarot$grob_fn.s5.card <- cardGrobFn(0)
+    playing_cards_tarot$rank_text.s5 <- c(1:21, fool_text)
+    playing_cards_tarot$grob_fn.s5.card <- cardGrobFn(has_pips = FALSE)
+    for (i in 11:15) {
+        name <- paste0("grob_fn.s5.r", i, ".card")
+        playing_cards_tarot[[name]] <- cardGrobFn(has_pips = FALSE)
+    }
+
     playing_cards_tarot <- pp_cfg(playing_cards_tarot)
     playing_cards_tarot$has_piecepack <- FALSE
     playing_cards_tarot$has_cards <- TRUE
