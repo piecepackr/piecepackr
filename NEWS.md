@@ -71,6 +71,9 @@ Bug fixes and minor improvements
   + Each row contains the file paths for a Wavefront ".obj" file and its associated ".mtl" and ".png" files.
   + Each piece may now be represented by one or several ".obj" files.  In particular instead of throwing an error
     we now generate (multiple) ".obj" files to represent "composite" pieces like the "joystick" pawns and "reversi" discs.
+* The following enhancements to the configurations returned by `game_systems()`:
+
+  - In ``playing_cards_tarot`` we have fixed problems with the tarot trump cards higher than 10 (#353).
 
 piecepackr 1.13.11
 ==================
