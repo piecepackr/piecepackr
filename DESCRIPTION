@@ -51,6 +51,7 @@ Suggests:
     vdiffr,
     xmpdf (>= 0.1.1),
     XML (>= 3.99-0.9)
+Remotes: murdoch/rgl
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.1
 Config/testthat/edition: 3
