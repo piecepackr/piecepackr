@@ -139,7 +139,6 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
 \examples{
   if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
     opt <- options(piecepackr.at.inform = FALSE)
-    on.exit(options(opt))
 
     draw_pp_diagram <- function(cfg=pp_cfg(), op_scale=0) {
         g.p <- function(...) {
@@ -157,6 +156,8 @@ A \code{grid} grob object.  If \code{draw} is \code{TRUE} then as a side effect
 
     # default piecepack, orthogonal projection
     draw_pp_diagram(cfg=pp_cfg())
+
+    options(opt) # Reset options
   }
   if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
     # custom configuration, orthogonal projection

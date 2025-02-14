@@ -200,7 +200,7 @@ write_d8_texture <- function(piece_side = "die_face", suit = 1, rank = 1, cfg = 
                               ..., filename = tempfile(fileext = ".png"), res = 72) {
 
     current_dev <- grDevices::dev.cur()
-    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
     width <- cfg$get_width("die_face", suit, rank)
 
     args <- list(filename = filename, height = 4 * width, width = 2 * width,

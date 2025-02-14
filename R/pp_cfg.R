@@ -388,9 +388,9 @@ Config <- R6Class("pp_cfg",
             width <- self$get_width(piece_side, suit, rank)
             height <- self$get_height(piece_side, suit, rank)
             png_file <- tempfile(fileext=".png")
-            on.exit(unlink(png_file))
+            on.exit(unlink(png_file), add = TRUE)
             current_dev <- grDevices::dev.cur()
-            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+            if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
             args <- list(filename=png_file, width=width, height=height,
                          units="in", res=res, bg="transparent")
             if (capabilities("cairo"))
