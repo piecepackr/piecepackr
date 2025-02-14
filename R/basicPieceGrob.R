@@ -47,14 +47,14 @@ makeContext.basic_piece_side <- function(x) {
 #' @export
 grobCoords.basic_piece_side <- function(x, closed, ...) {
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
     grobCoords(shape$shape(vp=x$vp), closed=closed, ...)
 }
 
 #' @export
 makeContent.basic_piece_side <- function(x) {
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
     # Possibly shrink background and gridlines to not overlap mat
     # which sometimes prevents visual glitch if no border line
     # but do not do this if mat color is transparent.

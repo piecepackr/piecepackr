@@ -10,7 +10,7 @@ fudgeGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 #' @export
 makeContent.fudge_die <- function(x) {
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     # Background
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")

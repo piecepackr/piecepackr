@@ -65,6 +65,8 @@
 #' @param radius `concave` polygon and `roundrect` use this
 #'                     to control appearance of the shape.
 #' @param back Whether the shape should be reflected across a vertical line in the middle of the viewport.
+#' @param ... Should be empty
+#' @param width,height Width and height of the piece.
 #' @examples
 #'  if (require("grid", quietly = TRUE)) {
 #'      gp <- gpar(col="black", fill="yellow")
@@ -139,14 +141,17 @@
 #'      grid.draw(hex$mat(mat_width = 0.025, gp = gp))
 #'  }
 #' @export
-pp_shape <- function(label = "rect", theta = 90, radius = 0.2, back = FALSE) {
-    Shape$new(label, theta, radius, back)
+pp_shape <- function(label = "rect", theta = 90, radius = 0.2,
+                     back = FALSE, ..., width = 1, height = 1) {
+    check_dots_empty()
+    Shape$new(label, theta, radius, back, width, height)
 }
 
 Shape <- R6Class("pp_shape",
     public = list(
         initialize = function(label = "rect", theta = 90,
-                              radius = 0.2, back = FALSE) {
+                              radius = 0.2, back = FALSE,
+                              width = 1, height = 1) {
             if (!is_known_shape_label(label))
                 abort(paste("Don't recognize shape label", label))
             if (is_angle(theta))
@@ -155,6 +160,8 @@ Shape <- R6Class("pp_shape",
             private$shape_theta <- theta
             private$shape_radius <- radius
             private$shape_back <- back
+            private$shape_width <- width
+            private$shape_height <- height
         },
         shape = function(name = NULL, gp = gpar(), vp = NULL, mat_width = 0) {
             private$shape_grob_fn(mat_width = mat_width)(name = name, gp = gp, vp = vp)
@@ -199,6 +206,8 @@ Shape <- R6Class("pp_shape",
             theta <- self$theta
             radius <- self$radius
             back <- self$back
+            width <- self$width
+            height <- self$height
             if (label == "rect") {
                 rect_xy
             } else if (grepl(label, "circle|oval")) {
@@ -215,7 +224,7 @@ Shape <- R6Class("pp_shape",
             } else if (label == "pyramid") {
                 pyramid_xy
             } else if (label == "roundrect") {
-                roundrect_xy(radius)
+                roundrect_xy(radius, width, height)
             } else if (grepl("^concave", label)) {
                 if (back) theta <- 180 - theta
                 concave_xy(get_n_vertices(label), theta, radius)
@@ -225,6 +234,8 @@ Shape <- R6Class("pp_shape",
             }
         },
         radius = function() private$shape_radius,
+        width = function() private$shape_width,
+        height = function() private$shape_height,
         theta = function() private$shape_theta
         ),
     private = list(
@@ -232,6 +243,8 @@ Shape <- R6Class("pp_shape",
         shape_theta = NULL,
         shape_radius = NULL,
         shape_back = NULL,
+        shape_width = NULL,
+        shape_height = NULL,
         shape_grob_fn = function(mat_width = 0) {
             label <- self$label
             theta <- self$theta
@@ -456,10 +469,10 @@ makeContent.pp_polyclip <- function(x) {
 }
 
 # xy functions and/or constants
-roundrect_xy <- function(shape_r) {
+roundrect_xy <- function(shape_r, width = 1, height = 1) {
     # Always querying in square `pdf(NULL)` device fixes #254
     current_dev <- grDevices::dev.cur()
-    grDevices::pdf(NULL)
+    grDevices::pdf(NULL, width = width, height = height)
     on.exit(grDevices::dev.off(), add = TRUE)
     if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
     coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")),

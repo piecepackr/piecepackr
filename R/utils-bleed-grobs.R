@@ -11,7 +11,7 @@ basicGrobWithBleed <- function(piece_side, suit, rank, cfg=pp_cfg()) {
 makeContent.basic_grob_with_bleed <- function(x) {
     stopifnot(all(hasName(x$grob, c("name", "vp"))))
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     width <- convertWidth(unit(1, "npc"), "in") - 2 * x$bleed
     height <- convertHeight(unit(1, "npc"), "in") - 2 * x$bleed

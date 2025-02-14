@@ -167,7 +167,7 @@ makeContent.card_side <- function(x) {
     rank_offset <- x$rank_offset
     grob_type <- x$grob_type
 
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
     gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
@@ -224,7 +224,7 @@ makeContent.joker_card_side <- function(x) {
 
     opt <- x$opt
 
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
     gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
@@ -291,7 +291,7 @@ makeContent.face_card_side <- function(x) {
     label <- x$label
     placement <- x$placement
 
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
     gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
@@ -385,12 +385,9 @@ makeContent.domino_side <- function(x) {
     rank_offset <- x$rank_offset
     grob_type <- x$grob_type
 
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
-    if (type == "domino_chinese")
-        background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
-    else
-        background_grob <- NULL
+    background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name="background")
 
     gp_mat <- gpar(col = NA, lwd = 0, fill = opt$mat_color)
     mat_grob <- shape$mat(opt$mat_width, gp = gp_mat, name = "mat")
@@ -455,7 +452,7 @@ makeContent.pipped <- function(x) {
     } else {
         xya <- xya_pips_dominoes(x$n_pips)
     }
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     # Background
     if (x$background) {

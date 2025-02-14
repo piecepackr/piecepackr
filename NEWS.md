@@ -4,8 +4,9 @@ piecepackr 1.14.2 (development)
 Bug fixes and minor improvements
 --------------------------------
 
-* Fixes a bug with "roundrect" shape token edges drawn in an oblique projection in a non-square graphics device (#254).
-
+* `pp_shape()` adds `width` and `height` arguments.  This is needed
+  to accurately calculate the corners for non-square "roundrect" shapes (e.g. domino tiles).
+* Fixes some rendering bugs for "roundrect" shape tokens (#254, #365).
 
 piecepackr 1.14.1
 =================

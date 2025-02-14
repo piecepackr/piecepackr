@@ -219,7 +219,7 @@ get_shapes <- function(df) {
         } else {
             label <- opt$shape
             if (grepl("^concave", label)) label <- gsub("concave", "convex", label)
-            shape <- pp_shape(label, opt$shape_t, opt$shape_r, opt$back)
+            shape <- pp_shape(label, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
             xy_c <- npc_to_in(as_coord2d(shape$npc_coords),
                               dfi$x, dfi$y, dfi$width, dfi$height, dfi$angle)
             shapes[[ii]] <- ConvexPolygon$new(xy_c$x, xy_c$y)
