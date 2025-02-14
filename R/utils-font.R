@@ -58,7 +58,7 @@ get_embedded_font_helper <- function(font, char) {
     stopifnot(requireNamespace("pdftools", quietly = TRUE))
 
     file <- tempfile(fileext=".pdf")
-    on.exit(unlink(file))
+    on.exit(unlink(file), add = TRUE)
     grDevices::cairo_pdf(file)
     grid::grid.text(char, gp=grid::gpar(fontsize=72, fontfamily=font))
     invisible(grDevices::dev.off())

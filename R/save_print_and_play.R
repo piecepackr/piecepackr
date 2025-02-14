@@ -75,7 +75,7 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
                                 bleed = FALSE, size_bleed = NULL) {
 
     opt <- options(piecepackr.op_scale = 0)
-    on.exit(options(opt))
+    on.exit(options(opt), add = TRUE)
 
     stopifnot(is.null(dev) || is.function(dev))
     size <- match.arg(size)
@@ -100,7 +100,7 @@ save_print_and_play <- function(cfg = getOption("piecepackr.cfg", pp_cfg()),
 
     cfg <- as_pp_cfg(cfg)
     current_dev <- grDevices::dev.cur()
-    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev))
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
     height <- switch(size,
                     letter = LETTER_WIDTH,
                     A4 = A4_WIDTH,
