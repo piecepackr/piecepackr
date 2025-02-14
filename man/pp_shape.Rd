@@ -4,7 +4,15 @@
 \alias{pp_shape}
 \title{Shape object for generating various grobs}
 \usage{
-pp_shape(label = "rect", theta = 90, radius = 0.2, back = FALSE)
+pp_shape(
+  label = "rect",
+  theta = 90,
+  radius = 0.2,
+  back = FALSE,
+  ...,
+  width = 1,
+  height = 1
+)
 }
 \arguments{
 \item{label}{Label of the shape.  One of \describe{
@@ -31,6 +39,10 @@ use this to determine where the first point is drawn.}
 to control appearance of the shape.}
 
 \item{back}{Whether the shape should be reflected across a vertical line in the middle of the viewport.}
+
+\item{...}{Should be empty}
+
+\item{width, height}{Width and height of the piece.}
 }
 \description{
 \code{pp_shape()} creates an R6 object with methods for creating various shape based grobs.

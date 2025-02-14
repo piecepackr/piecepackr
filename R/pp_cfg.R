@@ -197,6 +197,8 @@ Config <- R6Class("pp_cfg",
             opt <- self$cache$get(key, key_missing())
             if (is.key_missing(opt)) {
                 opt <- get_piece_opt_helper(piece_side, suit, rank, private$cfg)
+                opt$shape_w <- self$get_width(piece_side, suit, rank)
+                opt$shape_h <- self$get_height(piece_side, suit, rank)
                 if (self$cache_piece_opt) self$cache$set(key, opt)
             }
             opt

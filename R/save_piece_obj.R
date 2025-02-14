@@ -191,7 +191,7 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
     piece <- get_piece(piece_side)
     side <- get_side(piece_side)
     opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     # geometric vertices
     whd <- get_scaling_factors(side, width, height, depth)
@@ -200,7 +200,7 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
     xyz <- Token2S$new(shape, whd, pc, R)$xyz
 
     # texture coordinates
-    back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back)
+    back <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, !opt$back, width = opt$shape_w, height = opt$shape_h)
     xy_npc <- as_coord2d(shape$npc_coords)
     xy_npc_back <- as_coord2d(back$npc_coords)
     xy_vt_f <- xy_npc$scale(0.4, 1)$translate(as_coord2d(0.025, 0))

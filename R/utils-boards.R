@@ -33,7 +33,7 @@ checkeredBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
 #' @export
 makeContent.checkered_board <- function(x) {
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
@@ -70,7 +70,7 @@ linedBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
 #' @export
 makeContent.lined_board <- function(x) {
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
@@ -121,7 +121,7 @@ alquerqueBoardGrobFn <- function() {
 #' @export
 makeContent.alquerque_board <- function(x) {
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 
@@ -156,7 +156,7 @@ morrisBoardGrobFn <- function(n_pieces = 12) {
 makeContent.morris_board <- function(x) {
     n_pieces <- x$n_pieces
     opt <- x$opt
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     background_grob <- shape$shape(gp=gpar(col=NA, fill=opt$background_color), name = "background")
 

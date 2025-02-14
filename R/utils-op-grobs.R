@@ -78,7 +78,7 @@ basicTokenEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     height <- convertY(height, "in", valueOnly = TRUE)
     depth <- convertX(depth, "in", valueOnly = TRUE)
 
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
     whd <- get_scaling_factors(side, width, height, depth)
     pc <- as_coord3d(x, y, z)
     R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
@@ -126,7 +126,7 @@ generalTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
     piece <- get_piece(piece_side)
     side <- get_side(piece_side)
     opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
-    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back)
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
 
     x <- convertX(x, "in", valueOnly = TRUE)
     y <- convertY(y, "in", valueOnly = TRUE)
