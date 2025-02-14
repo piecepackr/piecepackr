@@ -242,6 +242,8 @@ Shape <- R6Class("pp_shape",
                 circleGrobFn(r = 0.5 - mat_width[1])
             } else if (label == "roundrect") {
                 roundrectGrobFn(self$radius)
+                # coords <- roundrect_xy(self$radius)
+                # polygonGrobFn(coords$x, coords$y)
             } else if (grepl("^convex", label)) {
                 if (back) theta <- 180 - theta
                 coords <- convex_xy(get_n_vertices(label), theta, 0.5 - mat_width[1])
@@ -455,13 +457,11 @@ makeContent.pp_polyclip <- function(x) {
 
 # xy functions and/or constants
 roundrect_xy <- function(shape_r) {
-    # avoid opening a blank graphic device window if no graphic devices open
-    if (length(grDevices::dev.list()) == 0) {
-        pdf_file <- tempfile(fileext=".pdf")
-        unlink(pdf_file)
-        grDevices::pdf(pdf_file)
-        on.exit(grDevices::dev.off())
-    }
+    # Always querying in square `pdf(NULL)` device fixes #254
+    current_dev <- grDevices::dev.cur()
+    grDevices::pdf(NULL)
+    on.exit(grDevices::dev.off(), add = TRUE)
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
     coords <- grid::grobCoords(grid::roundrectGrob(r=grid::unit(shape_r, "snpc")),
                                closed=TRUE)[[1]]
     x <- convertX(grid::unit(coords$x, "in"), "npc", valueOnly = TRUE)

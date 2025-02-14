@@ -1,3 +1,12 @@
+piecepackr 1.14.2 (development)
+===============================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* Fixes a bug with "roundrect" shape token edges drawn in an oblique projection in a non-square graphics device (#254).
+
+
 piecepackr 1.14.1
 =================
 
