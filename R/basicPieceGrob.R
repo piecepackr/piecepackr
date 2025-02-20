@@ -38,6 +38,19 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
           name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
 }
 
+
+ellipsoidGrobFn <- function(shading = FALSE) {
+    force(shading)
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+
+        gTree(opt=opt, border=TRUE, flip=FALSE, scale=1, shading=shading,
+              name=NULL, gp=gpar(), vp=NULL,
+              cl=c("basic_ellipsoid", "basic_piece_side"))
+    }
+}
+
 #' @export
 makeContext.basic_piece_side <- function(x) {
     x <- update_gp(x, gp = gpar(cex = x$scale, lex = x$scale))
@@ -93,6 +106,37 @@ makeContent.basic_piece_side <- function(x) {
         gl <- gList(dm_grob, ps_grob, mat_grob, gl_grob, background_grob, border_grob)
     else
         gl <- gList(background_grob, gl_grob, mat_grob, ps_grob, dm_grob, border_grob)
+
+    setChildren(x, gl)
+}
+
+#' @export
+makeContent.basic_ellipsoid <- function(x) {
+    opt <- x$opt
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
+
+    gp_background <- gpar(col=NA, fill=opt$background_color)
+    background_grob <- shape$shape(gp=gp_background, name = "background")
+
+    if (x$shading && getRversion() >= "4.1") {
+        rgr <- radialGradient(c(update_alpha_col(opt$background_color, 0.500), "#00000080"),
+                              r1 = 0.1)
+        gp_gr <- gpar(col=opt$border_color, fill=rgr)
+        shading_grob <- shape$shape(gp = gp_gr, name = "shading")
+    } else {
+        shading_grob <- nullGrob(name = "shading")
+    }
+
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- shape$shape(gp=gp_border, name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
+    if (x$flip)
+        gl <- gList(background_grob, border_grob) # Do anything with shading?
+    else
+        gl <- gList(background_grob, shading_grob, border_grob)
 
     setChildren(x, gl)
 }

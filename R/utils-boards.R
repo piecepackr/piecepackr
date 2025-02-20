@@ -53,7 +53,7 @@ makeContent.checkered_board <- function(x) {
     setChildren(x, gl)
 }
 
-linedBoardGrobFn <- function(nrows = 8, ncols = 8, margin = 0) { # nolint
+linedBoardGrobFn <- function(nrows = 8L, ncols = 8L, margin = 0) { # nolint
     force(nrows)
     force(ncols)
     force(margin)
@@ -89,6 +89,97 @@ makeContent.lined_board <- function(x) {
     gl <- gList(background_grob, cell_grob, border_grob)
     setChildren(x, gl)
 }
+
+holedBoardGrobFn <- function(nrows = 4L, ncols = 4L, margin = 0) { # nolint
+    force(nrows)
+    force(ncols)
+    force(margin)
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        gTree(opt=opt, border=TRUE, scale = 1,
+              nrows=nrows, ncols=ncols, margin=margin,
+              name=piece_side,
+              cl = c("holed_board", "basic_piece_side"))
+    }
+}
+
+npc2snpc <- function(x) {
+    vapply(x,
+        function(x) {
+            max(convertX(unit(x, "npc"), "npc", valueOnly = TRUE),
+                convertY(unit(x, "npc"), "npc", valueOnly = TRUE))
+            },
+        FUN.VALUE = numeric(1L))
+}
+
+#' @export
+grobCoords.holed_board <- function(x, closed, ...) {
+    #### To take into account the holes needs modifying `grobCoords.pp_grobCoords()`
+    # To not undo the holes successfully placed here when merging multiple pieces together
+    # g <- pieceGrob("board_face", cfg=game_systems()$marbles)
+    # grid.newpage(); pp_shape("rect")$polyclip(g, "minus", gp= gpar(col=NA, fill="red")) |> grid.draw()
+    pushViewport(x$vp)
+    xyi <- xyi_holed_board(x$opt, x$nrows, x$ncols, x$margin)
+    popViewport()
+    grobCoords(pathGrob(x = xyi$x, y = xyi$y, id = xyi$id,
+                        rule = "winding",
+                        default.units = "snpc", vp = x$vp),
+               closed = closed, ...)
+}
+
+xyi_holed_board <- function(opt, nrows, ncols, margin) {
+    shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
+    xys <- shape$npc_coords
+    xs <- npc2snpc(xys$x)
+    ys <- npc2snpc(xys$y)
+    dfs <- data.frame(x = xs, y = ys, id = 0L)
+
+    xc <- rep(seq.int(ncols) - 0.5 + margin, times = nrows) / (ncols + 2 * margin)
+    yc <- rep(seq.int(nrows) - 0.5 + margin, each = ncols) / (nrows + 2 * margin)
+    xc <- npc2snpc(xc)
+    yc <- npc2snpc(yc)
+    r <- RADIUS_BOARD_HOLES / (min(nrows, ncols) + 2 * margin)
+
+    circle_offsets <- convex_xy(n_vertices = 36L, t = 0, r = r)
+    circle_offsets$x <- rev_shift(circle_offsets$x) - 0.5
+    circle_offsets$y <- rev_shift(circle_offsets$y) - 0.5
+    l <- purrr::pmap(list(xc = xc, yc = yc, r = r, id = seq_along(xc)),
+                     function(xc, yc, r, id) {
+                         data.frame(x = circle_offsets$x + xc,
+                                    y = circle_offsets$y + yc,
+                                    id = id)
+                     })
+    dfc <- do.call(rbind, l)
+    rbind(dfs, dfc)
+}
+
+#' @export
+makeContent.holed_board <- function(x) {
+    opt <- x$opt
+    xyi <- xyi_holed_board(x$opt, x$nrows, x$ncols, x$margin)
+
+    background_grob <- pathGrob(x = xyi$x, y = xyi$y, id = xyi$id,
+                                default.units = "snpc",
+                                gp = gpar(col = NA, fill = opt$background_color),
+                                rule = "winding",
+                                name = "background")
+
+    if (x$border) {
+        gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        border_grob <- pathGrob(x = xyi$x, y = xyi$y, id = xyi$id,
+                                default.units = "snpc",
+                                gp=gpar(col=opt$border_color, fill=NA, lex=opt$border_lex),
+                                rule = "winding",
+                                name = "border")
+    } else {
+        border_grob <- nullGrob(name = "border")
+    }
+
+    gl <- gList(background_grob, border_grob)
+    setChildren(x, gl)
+}
+
 
 cycle_elements <- function(x, n = 1) {
     l <- length(x)

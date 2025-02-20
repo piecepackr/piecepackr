@@ -2,6 +2,7 @@
 % Please edit documentation in R/op_transform.R
 \name{op_transform}
 \alias{op_transform}
+\alias{marbles_transform}
 \title{Oblique projection helper function}
 \usage{
 op_transform(
@@ -14,11 +15,13 @@ op_transform(
   as_top = character(0),
   cfg_class = "list"
 )
+
+marbles_transform(df, ...)
 }
 \arguments{
 \item{df}{A data frame with coordinates and dimensions in inches}
 
-\item{...}{Ignored}
+\item{...}{Ignored by \code{op_transform()}.  \code{marbles_transform()} passes to \code{op_transform()}.}
 
 \item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
 a list of \code{pp_cfg} objects,
@@ -45,9 +48,11 @@ A tibble with extra columns added
 and re-sorted rows
 }
 \description{
-Guesses \code{z} coordinates and
+\code{op_transform()} guesses \code{z} coordinates and
 sorting order to more easily
-make 3D graphics with \code{pmap_piece}.
+make 3D graphics with \code{\link[=pmap_piece]{pmap_piece()}}.
+\code{marbles_transform()} is a wrapper around \code{op_transform()} that handles the special case
+of stacking 1" marbles in a pyramid with a square base on a holed board.
 }
 \details{
 The heuristics used to generate guesses

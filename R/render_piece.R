@@ -201,11 +201,11 @@ annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0, annota
             l <- as.character(seq_along(x_coords))
         else
             l <- letters[seq_along(x_coords)]
-        l <- stringr::str_pad(l, max(stringr::str_count(l)))
+        l <- str_pad(l, max(str_count(l)))
         grid.text(l, x = x_coords + xoffset, y = 0.25, default.units = "in", gp = gp)
         y_coords <- seq(annotation_scale, floor(ymax), by = annotation_scale)
         n <- as.character(seq_along(y_coords))
-        n <- stringr::str_pad(n, max(stringr::str_count(n)))
+        n <- str_pad(n, max(str_count(n)))
         grid.text(n, x = 0.25, y = y_coords + yoffset, default.units = "in", gp = gp)
         invisible(NULL)
 }
