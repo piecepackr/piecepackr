@@ -92,44 +92,6 @@ save_piece_obj_helper <- function(piece_side = "tile_face", suit = 1, rank = 1,
     as.data.frame(l)
 }
 
-write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
-                             ...,
-                             filename = tempfile(fileext = ".png"), res = 72) {
-
-    current_dev <- grDevices::dev.cur()
-    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
-    piece <- get_piece(piece_side)
-    piece_face <- paste0(piece, "_face")
-    piece_back <- paste0(piece, "_back")
-    height <- cfg$get_height(piece_face, suit, rank)
-    width <- cfg$get_width(piece_face, suit, rank)
-    edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
-
-    args <- list(filename = filename, height = height, width = 2.5 * width,
-                 units = "in", res = res, bg = "transparent")
-    if (capabilities("cairo"))
-        args$type <- "cairo"
-    do.call(grDevices::png, args)
-
-    # front
-    pushViewport(viewport(x = 0.225, width = 0.45))
-    draw_piece_and_bleed(piece_face, suit, rank, cfg)
-    popViewport()
-
-    # edge
-    pushViewport(viewport(x = 0.5, width = 0.1))
-    grid.rect(gp = gpar(col = "transparent", fill = edge_color))
-    popViewport()
-
-    # back
-    pushViewport(viewport(x = 0.775, width = 0.45))
-    draw_piece_and_bleed(piece_back, suit, rank, cfg)
-    popViewport()
-    grDevices::dev.off()
-
-    invisible(filename)
-}
-
 write_mtl <- function(mtl_filename, png_filename) {
     writeLines(c("newmtl material_0", paste("map_Kd", png_filename)),
                mtl_filename)
@@ -219,7 +181,8 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
     for (i in seq(nv)) {
         ir <- i %% nv + 1
         il <- ir %% nv + 1
-        f[[2 + i]] <- list(v = c(ir + nv, il + nv, il, ir), vt = 2 * nv + 1:4)
+        f[[2 + i]] <- list(v = c(ir + nv, il + nv, il, ir),
+                           vt = 2 * nv + 1:4)
     }
 
     ext <- tools::file_ext(filename)
@@ -230,6 +193,44 @@ save_2s_obj <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_c
     write_2s_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
 
     invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+}
+
+write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
+                             ...,
+                             filename = tempfile(fileext = ".png"), res = 72) {
+
+    current_dev <- grDevices::dev.cur()
+    if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
+    piece <- get_piece(piece_side)
+    piece_face <- paste0(piece, "_face")
+    piece_back <- paste0(piece, "_back")
+    height <- cfg$get_height(piece_face, suit, rank)
+    width <- cfg$get_width(piece_face, suit, rank)
+    edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
+
+    args <- list(filename = filename, height = height, width = 2.5 * width,
+                 units = "in", res = res, bg = "transparent")
+    if (capabilities("cairo"))
+        args$type <- "cairo"
+    do.call(grDevices::png, args)
+
+    # front
+    pushViewport(viewport(x = 0.225, width = 0.45))
+    draw_piece_and_bleed(piece_face, suit, rank, cfg)
+    popViewport()
+
+    # edge
+    pushViewport(viewport(x = 0.5, width = 0.1))
+    grid.rect(gp = gpar(col = "transparent", fill = edge_color))
+    popViewport()
+
+    # back
+    pushViewport(viewport(x = 0.775, width = 0.45))
+    draw_piece_and_bleed(piece_back, suit, rank, cfg)
+    popViewport()
+    grDevices::dev.off()
+
+    invisible(filename)
 }
 
 #' Alternative Wavefront OBJ file generators
@@ -699,4 +700,184 @@ write_obj <- function(file, v, vt = NULL, f = NULL) {
             sep = "\n", file = file, append = TRUE)
     }
     invisible(NULL)
+}
+
+# two-sided objects
+save_holed_board_obj_fn <- function(nrows = 4L, ncols = 4L, margin = 0) { # nolint
+    force(nrows)
+    force(ncols)
+    force(margin)
+    stopifnot(nrows == ncols)
+    function(piece_side = "tile_face", suit = 1, rank = 1, cfg = pp_cfg(),
+             ...,
+             x = 0, y = 0, z = 0,
+             angle = 0, axis_x = 0, axis_y = 0,
+             width = NA, height = NA, depth = NA,
+             filename = tempfile(fileext = ".obj"), res = 72) {
+
+        current_dev <- grDevices::dev.cur()
+        if (current_dev > 1) on.exit(grDevices::dev.set(current_dev), add = TRUE)
+
+        cfg <- as_pp_cfg(cfg)
+        piece <- get_piece(piece_side)
+        side <- get_side(piece_side)
+        opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
+
+        grDevices::pdf(NULL, width = width, height = height)
+        # snpc coords are npc if square
+        xyi_npc <- xyi_holed_board(opt, nrows, ncols, margin)
+        grDevices::dev.off()
+
+        # Interior holes as integers
+        xc <- rep(seq.int(ncols), times = nrows)
+        yc <- rep(seq.int(nrows), each = ncols)
+
+        # geometric vertices
+        whd <- get_scaling_factors(side, width, height, depth)
+        pc <- as_coord3d(x, y, z)
+        R <- side_R(side) %*% AA_to_R(angle, axis_x, axis_y)
+
+        xyz_scaled <- as_coord3d(xyi_npc)$
+            translate(as_coord3d(-0.5, -0.5, 0.5))$
+            scale(whd$width, whd$height, whd$depth)
+        xyz_f <- xyz_scaled$transform(R)$translate(pc)
+
+        xyz_scaled <- as_coord3d(xyi_npc)$
+            translate(as_coord3d(-0.5, -0.5, -0.5))$
+            scale(whd$width, whd$height, whd$depth)
+        xyz_b <- xyz_scaled$transform(R)$translate(pc)
+
+        xyz <- as_coord3d(x = c(xyz_f$x, xyz_b$x),
+                          y = c(xyz_f$y, xyz_b$y),
+                          z = c(xyz_f$z, xyz_b$z))
+
+        # texture coordinates
+        xy_npc_top <- as_coord2d(xyi_npc)
+        xy_npc_bot <- as_coord2d(xyi_npc)
+        xy_vt_f <- xy_npc_top$scale(0.4, 1)$translate(as_coord2d(0.025, 0))
+        xy_vt_b <- xy_npc_bot$scale(0.4, 1)$translate(as_coord2d(0.575, 0))
+        xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
+        vt <- list(x = c(xy_vt_f$x, xy_vt_b$x, xy_vt_e$x),
+                   y =  c(xy_vt_f$y, xy_vt_b$y, xy_vt_e$y))
+
+        # textured face elements
+        nv <- length(xyz) / 2
+        f <- list()
+
+        # Outside shape
+        xyio <- xyi_npc[ which(xyi_npc$id == 0), ]
+        nvo <- nrow(xyio)
+
+        # Within a circle which vertices are left, top, right, or bottom?
+        nvc <- nrow(xyi_npc[ which(xyi_npc$id == 1), ])
+        ivc_left <- seq.int(0.25 * nvc + 1, length.out = 0.5 * nvc + 1)
+        ivc_top <- c(seq.int(0.50 * nvc + 1, length.out = 0.5 * nvc), 1)
+        ivc_right <- c(seq.int(0.75 * nvc + 1, length.out = 0.25 * nvc),
+                       seq.int(1, length.out = 0.25 * nvc + 1))
+        ivc_bot <- seq.int(1, length.out = 0.5 * nvc + 1)
+
+        # Left-most
+        idc_left <- order(xc, yc)[seq.int(nrows)] # left-most circles
+        id_left <- which(xyio$x < 0.5)
+        # cycle elements so first one is "top" using `cycle_elements(x, n)`
+        id_leftm <- which.max(xyio[id_left, ]$y)
+        id_left <- cycle_elements(id_left, id_leftm - 1)
+        for (idc in idc_left) {
+            id_left <- c(id_left, nvo + nvc * (idc - 1) + ivc_left)
+        }
+        f[[1L]] <- list(v = id_left, vt = id_left) # top
+        f[[2L]] <- list(v = rev_shift(nv + id_left), vt = rev_shift(nv + id_left)) # bottom
+
+        # Right-most
+        idc_right <- order(-xc, -yc)[seq.int(nrows)]
+        id_right <- which(xyio$x > 0.5)
+        id_rightm <- which.min(xyio[id_right, ]$y)
+        id_right <- cycle_elements(id_right, id_rightm - 1)
+        for (idc in idc_right) {
+            id_right <- c(id_right, nvo + nvc * (idc - 1) + ivc_right)
+        }
+        f[[3L]] <- list(v = id_right, vt = id_right) # top
+        f[[4L]] <- list(v = rev_shift(nv + id_right), vt = rev_shift(nv + id_right)) # bottom
+
+        # Top-most
+        idc_top <- order(-yc, xc)[seq.int(ncols)]
+        id_top <- which(xyio$y > 0.5)
+        id_topm <- which.max(xyio[id_top, ]$x)
+        id_top <- cycle_elements(id_top, id_topm - 1)
+        for (idc in idc_top) {
+            id_top <- c(id_top, nvo + nvc * (idc - 1) + ivc_top)
+        }
+        f[[5L]] <- list(v = id_top, vt = id_top) # top
+        f[[6L]] <- list(v = rev_shift(nv + id_top), vt = rev_shift(nv + id_top)) # bottom
+
+        # Bottom-most
+        idc_bot <- order(yc, -xc)[seq.int(ncols)]
+        id_bot <- which(xyio$y < 0.5)
+        id_botm <- which.min(xyio[id_bot, ]$x)
+        id_bot <- cycle_elements(id_bot, id_botm - 1)
+        for (idc in idc_bot) {
+            id_bot <- c(id_bot, nvo + nvc * (idc - 1) + ivc_bot)
+        }
+        f[[7L]] <- list(v = id_bot, vt = id_bot) # top
+        f[[8L]] <- list(v = rev_shift(nv + id_bot), vt = rev_shift(nv + id_bot)) # bottom
+
+        # Interior
+        ivc_lr <- seq.int(1, length.out = 0.25 * nvc + 1)
+        ivc_ll <- seq.int(0.25 * nvc + 1, length.out = 0.25 * nvc + 1)
+        ivc_ul <- seq.int(0.50 * nvc + 1, length.out = 0.25 * nvc + 1)
+        ivc_ur <- c(seq.int(0.75 * nvc + 1, length.out = 0.25 * nvc), 1)
+        if (nrows > 1L && ncols > 1L) {
+            for (ir in seq.int(nrows - 1L)) {
+                idc_ul <- which(yc == ir + 1L & xc == 1L)
+                id_r <- nvo + nvc * (idc_ul - 1) + ivc_lr
+                idc_ll <- which(yc == ir & xc == 1L)
+                id_r <- c(id_r, nvo + nvc * (idc_ll - 1) + ivc_ur)
+                if (ncols > 2L) {
+                    idc_b <- order(yc, xc)[ncols * (ir - 1) + seq.int(2, ncols - 1)]
+                    for (idc in idc_b) {
+                        id_r <- c(id_r, nvo + nvc * (idc - 1) + ivc_top)
+                    }
+                }
+                idc_lr <- which(yc == ir & xc == ncols)
+                id_r <- c(id_r, nvo + nvc * (idc_lr - 1) + ivc_ul)
+                idc_ur <- which(yc == ir + 1L & xc == ncols)
+                id_r <- c(id_r, nvo + nvc * (idc_ur - 1) + ivc_ll)
+                if (ncols > 2L) {
+                    idc_t <- order(yc, -xc)[ncols * ir + seq.int(2, ncols - 1)]
+                    for (idc in idc_t) {
+                        id_r <- c(id_r, nvo + nvc * (idc - 1) + ivc_bot)
+                    }
+                }
+                f[[length(f) + 1L]] <- list(v = id_r, vt = id_r) # top
+                f[[length(f) + 1L]] <- list(v = rev_shift(nv + id_r), 
+                                            vt = rev_shift(nv + id_r)) # bottom
+            }
+        }
+
+        # Board edges
+        np <- 0
+        for (id in unique(xyi_npc$id)) {
+            no <- length(which(xyi_npc$id == id))
+            for (i in seq.int(no)) {
+                ir <- i %% no + 1
+                il <- ir %% no + 1
+                f[[length(f) + 1L]] <- list(v = c(ir + nv + np, il + nv + np, il + np, ir + np),
+                                            vt = 2 * nv + 1:4)
+            }
+            np <- np + no
+        }
+
+        ext <- tools::file_ext(filename)
+        mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+        png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+        write_obj(filename, v = xyz, vt = vt, f = f)
+
+        grDevices::png(png_filename, bg=opt$background_color)
+        grid.newpage()
+        grDevices::dev.off()
+
+        invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+    }
 }

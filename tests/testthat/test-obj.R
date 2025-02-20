@@ -111,9 +111,15 @@ test_that("rayvertex works", {
 
     expect_null(piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
 
-    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    envir <- game_systems("sans3d", pawn = "joystick")
+    cfg <- envir$piecepack
     skip_if_not_installed("rgl") # needed to generate joystick pawn obj
     scene <- piece_mesh("pawn_top", x=-1:1, suit=c(1,3,4), cfg = cfg)
     # rasterize_scene(scene, lookfrom=c(0, -5, 5),
+    #                 light_info = directional_light(c(0, -5, 5))) # nolint
+
+    cfg <- envir$marbles
+    scene <- piece_mesh("board_face", x= 0, y = 0, cfg = cfg)
+    # rasterize_scene(scene, lookfrom=c(0, -5, 15),
     #                 light_info = directional_light(c(0, -5, 5))) # nolint
 })

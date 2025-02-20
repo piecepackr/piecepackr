@@ -38,7 +38,7 @@ inch <- function(inches) unit(inches, "in")
 #' @param color if `TRUE` convert empty strings to `"transparent"`
 #' @export
 cleave <- function(s, sep=",", float=FALSE, color=FALSE) {
-    vec <- stringr::str_split(s, sep)
+    vec <- str_split(s, sep)
     if (length(vec))
         vec <- vec[[1]]
     if (float) {
@@ -149,4 +149,22 @@ device_supports_unicode <- function() {
     } else {
         FALSE
     }
+}
+
+
+# From `{gridpattern}`
+update_alpha_col <- function (color, alpha = NA_real_) {
+    n <- max(lengths(list(color, alpha)))
+    color <- rep_len(color, n)
+    alpha <- rep_len(alpha, n)
+    m <- grDevices::col2rgb(color, alpha = TRUE)/255
+    m[4, ] <- ifelse(is.na(alpha), m[4, ], alpha)
+    apply(m, 2, function(x) grDevices::rgb(x[1], x[2], x[3], x[4]))
+}
+
+# From `{oblicubes}`
+cheap_darken <- function(color, amount) {
+  mat <- col2rgb(color, alpha = TRUE)
+  mat[1:3, ] <- mat[1:3, ] * (1 - amount)
+  rgb(mat[1, ], mat[2, ], mat[3, ], mat[4, ], maxColorValue = 255)
 }

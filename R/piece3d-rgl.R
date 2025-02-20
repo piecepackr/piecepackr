@@ -61,6 +61,7 @@ piece3d <- function(piece_side = "tile_back", suit = NA, rank = NA, # nolint
 
     cfg <- get_cfg(cfg, envir)
     cfg <- rep(c(cfg), length.out = nn)
+
     l <- lapply(seq(nn), function(i) {
         cfg[[i]]$rgl(piece_side[i], suit[i], rank[i],
                      x[i], y[i], z[i],
@@ -80,12 +81,14 @@ rgl_piece_helper <- function(piece_side = "tile_back", suit = NA, rank = NA, cfg
                              scale = 1, res = 72,
                              alpha = 1, lit = FALSE,
                              shininess = 50.0, textype = NA) {
+
     if (scale == 0 || alpha == 0) return(invisible(numeric(0)))
     l_obj <- save_piece_obj(piece_side, suit, rank, cfg,
                             x = x, y = y, z = z,
                             angle = angle, axis_x = axis_x, axis_y = axis_y,
                             width = width, height = height, depth = depth,
                             scale = scale, res = res)
+
     l <- purrr::pmap(l_obj, rgl_piece_helper_obj, alpha = alpha, lit = lit, shininess = shininess, textype = textype)
     unlist(l)
 }

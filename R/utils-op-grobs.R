@@ -11,32 +11,32 @@ basicTokenGrob <- function(piece_side, suit, rank, cfg=pp_cfg(),
                             width=NA, height=NA, depth=NA,
                             op_scale=0, op_angle=45) {
 
-            side <- get_side(piece_side)
+    side <- get_side(piece_side)
 
-            if (side %in% c("face", "back")) {
+    if (side %in% c("face", "back")) {
 
-                grob <- cfg$get_grob(piece_side, suit, rank, type)
-                xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
-                cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
-                grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
+        grob <- cfg$get_grob(piece_side, suit, rank, type)
+        xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+        cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
+        grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
 
-                edge <- basicTokenEdge(piece_side, suit, rank, cfg,
-                                       x, y, z, angle, width, height, depth,
-                                       op_scale, op_angle)
-                edge <- grid::editGrob(edge, name="other_faces")
+        edge <- basicTokenEdge(piece_side, suit, rank, cfg,
+                               x, y, z, angle, width, height, depth,
+                               op_scale, op_angle)
+        edge <- grid::editGrob(edge, name="other_faces")
 
-                gl <- gList(edge, grob)
+        gl <- gList(edge, grob)
 
-                gTree(scale = 1, type = type,
-                      children = gl, cl="basic_projected_token")
+        gTree(scale = 1, type = type,
+              children = gl, cl="basic_projected_token")
 
-            } else {
-                generalTokenGrob(piece_side, suit, rank, cfg,
-                                 x, y, z,
-                                 angle, type,
-                                 width, height, depth,
-                                 op_scale, op_angle)
-            }
+    } else {
+        generalTokenGrob(piece_side, suit, rank, cfg,
+                         x, y, z,
+                         angle, type,
+                         width, height, depth,
+                         op_scale, op_angle)
+    }
 
 }
 
@@ -297,30 +297,60 @@ basicDieEdge <- function(piece_side, suit, rank, cfg=pp_cfg(),
     gTree(children=gl, name="die_sides", cl="basic_projected_die_edge")
 }
 
-## Ellipsoid
-basicEllipsoid <- function(piece_side, suit, rank, cfg=pp_cfg(),
-                           x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
-                           angle=0, type="normal",
-                           width=NA, height=NA, depth=NA,
-                           op_scale=0, op_angle=45) {
-    cfg <- as_pp_cfg(cfg)
-    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+basicEllipsoidFn <- function(shading = FALSE) {
+    force(shading)
+    function(piece_side, suit, rank, cfg=pp_cfg(),
+             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+             angle=0, type="normal",
+             width=NA, height=NA, depth=NA,
+             op_scale=0, op_angle=45) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
-    x <- convertX(x, "in", valueOnly = TRUE)
-    y <- convertY(y, "in", valueOnly = TRUE)
-    z <- convertX(z, "in", valueOnly = TRUE)
-    width <- convertX(width, "in", valueOnly = TRUE)
-    height <- convertY(height, "in", valueOnly = TRUE)
-    depth <- convertX(depth, "in", valueOnly = TRUE)
+        x <- convertX(x, "in", valueOnly = TRUE)
+        y <- convertY(y, "in", valueOnly = TRUE)
+        z <- convertX(z, "in", valueOnly = TRUE)
+        width <- convertX(width, "in", valueOnly = TRUE)
+        height <- convertY(height, "in", valueOnly = TRUE)
+        depth <- convertX(depth, "in", valueOnly = TRUE)
 
-    xyz <- ellipse_xyz()$
-        scale(width, height, depth)$
-        translate(x, y, z)
-    xy <- convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale))
+        xyz <- ellipse_xyz()$
+            scale(width, height, depth)$
+            translate(x, y, z)
+        xy <- as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)
+        xyh <- convex_hull2d(xy)
 
-    gp <- gpar(col=opt$border_color, fill=opt$background_color, lex=opt$border_lex)
-    polygonGrob(x = xy$x, y = xy$y,
-                default.units = "in", gp = gp)
+        gp_gf <- gpar(col = NA, fill = opt$background_color, lwd = 0)
+        gf <- polygonGrob(x = xyh$x, y = xyh$y,
+                          default.units = "in", gp = gp_gf, name = "background")
+
+        gp_gb <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)
+        gb <- polygonGrob(x = xyh$x, y = xyh$y,
+                          default.units = "in", gp = gp_gb, name = "border")
+
+
+        if (shading && getRversion() >= "4.1") {
+            # Get top of ellipsoid in npc units for gradient fill
+            idm <- which.max(xyz$z)
+            cx <- (xy$x[idm] - range(xyh)$x[1L]) / diff(range(xyh)$x)
+            cy <- (xy$y[idm] - range(xyh)$y[1L]) / diff(range(xyh)$y)
+            rgr <- radialGradient(c(update_alpha_col(opt$background_color, 0.500), "#00000080"),
+                                  r1 = 0.1, cx1 = cx, cx2 = cx, cy1 = cy, cy2 = cy)
+            gp_gr <- gpar(col=opt$border_color, fill=rgr)
+            gr <- polygonGrob(x = xyh$x, y = xyh$y,
+                              default.units = "in", gp = gp_gr, name = "shading")
+        } else {
+            gr <- nullGrob(name = "shading")
+        }
+
+        gl <- gList(gf, gr, gb)
+
+        coords_xyl <- as.list(xyh)
+
+        gTree(scale = 1, type = type,
+              coords_xyl = coords_xyl,
+              children=gl, cl=c("projected_ellipsoid", "coords_xyl"))
+        }
 }
 
 ellipse_xyz <- function() {
@@ -413,10 +443,10 @@ makeContent.projected_pyramid_top <- function(x) {
 
 ## Pyramid side
 basicPyramidSide <- function(piece_side, suit, rank, cfg=pp_cfg(),
-                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
-                            angle=0, type="normal",
-                            width=NA, height=NA, depth=NA,
-                            op_scale=0, op_angle=45) {
+                             x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                             angle=0, type="normal",
+                             width=NA, height=NA, depth=NA,
+                             op_scale=0, op_angle=45) {
     cfg <- as_pp_cfg(cfg)
 
     x <- convertX(x, "in", valueOnly = TRUE)
@@ -546,3 +576,97 @@ xy_vp_ps <- function(xyz_polygon, op_scale, op_angle) {
 
     as_coord2d(as_coord3d(x, y, z), alpha = degrees(op_angle), scale = op_scale)
 }
+
+#### `grobCoords()`
+basicHoledBoardFn <- function(nrows = 4L, ncols = 4L, margin = 0) { # nolint
+    force(nrows)
+    force(ncols)
+    force(margin)
+    function(piece_side, suit, rank, cfg=pp_cfg(),
+                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=unit(0, "npc"),
+                            angle=0, type="normal",
+                            width=NA, height=NA, depth=NA,
+                            op_scale=0, op_angle=45) {
+
+        side <- get_side(piece_side)
+        stopifnot(side %in% c("face", "back"))
+
+        # Top side
+        grob <- cfg$get_grob(piece_side, suit, rank, type)
+        xy_p <- op_xy(x, y, z+0.5*depth, op_angle, op_scale)
+        cvp <- viewport(xy_p$x, xy_p$y, width, height, angle=angle)
+        grob <- grid::editGrob(grob, name="piece_side", vp=cvp)
+
+        # Opposite side
+        xy_op <- op_xy(x, y, z-0.5*depth, op_angle, op_scale)
+        cv_op <- viewport(xy_op$x, xy_op$y, width, height, angle=angle)
+        grob_op <- grid::editGrob(grob, name="opposite_piece_side", vp=cv_op)
+
+        # Edges
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        piece <- get_piece(piece_side)
+        side <- ifelse(opt$back, "back", "face") #### allow limited 3D rotation #281
+
+        x <- convertX(x, "in", valueOnly = TRUE)
+        y <- convertY(y, "in", valueOnly = TRUE)
+        z <- convertX(z, "in", valueOnly = TRUE)
+        width <- convertX(width, "in", valueOnly = TRUE)
+        height <- convertY(height, "in", valueOnly = TRUE)
+        depth <- convertX(depth, "in", valueOnly = TRUE)
+
+        # Exterior edges
+        shape <- pp_shape(opt$shape, opt$shape_t, opt$shape_r, opt$back, width = opt$shape_w, height = opt$shape_h)
+        whd <- get_scaling_factors(side, width, height, depth)
+        pc <- as_coord3d(x, y, z)
+        R <- side_R(side) %*% AA_to_R(angle, axis_x = 0, axis_y = 0)
+        token <- Token2S$new(shape, whd, pc, R)
+
+        gl <- gList()
+        edges <- token$op_edges(op_angle)
+        for (i in seq_along(edges)) {
+            name <- paste0("outside_edge", i)
+            gl[[i]] <- edges[[i]]$op_grob(op_angle, op_scale, name=name)
+        }
+
+        # Interior hole edges
+        xc <- rep(seq.int(ncols) - 0.5 + margin, times = nrows) / (ncols + 2 * margin) # npc
+        yc <- rep(seq.int(nrows) - 0.5 + margin, each = ncols) / (nrows + 2 * margin) # npc
+        r <- RADIUS_BOARD_HOLES / (min(nrows, ncols) + 2 * margin) # snpc
+        # Convert npc units to inches, rotate by `angle`, and translate to `x` and `y`
+        stopifnot(width == height) # snpc `r` may not work for non-square holed boards
+        xc <- width * (xc - 0.5)
+        yc <- height * (yc - 0.5)
+        wc <- 2 * width * r
+        tc <- to_t(xc, yc)
+        rc <- to_r(xc, yc)
+        xc <- to_x(tc + angle, rc) + x
+        yc <- to_y(tc + angle, rc) + y
+
+        shape_circle <- pp_shape("circle")
+        lc <- purrr::pmap(list(xc = xc, yc = yc),
+                          function(xc, yc) {
+                              whd <- get_scaling_factors(side, wc, wc, depth)
+                              pc <- as_coord3d(xc, yc, z)
+                              token <- Token2S$new(shape_circle, whd, pc)
+                          })
+
+        for (i in seq_along(lc)) {
+            edges <- lc[[i]]$op_edges(op_angle)
+            for (j in seq_along(edges)) {
+                name <- str_glue("hole{i}_edge{j}")
+                gl[[length(gl) + 1L]] <- edges[[j]]$op_grob(op_angle, op_scale, name = name)
+            }
+        }
+
+        gp_edge <- gpar(col=opt$border_color, fill=opt$edge_color, lex=opt$border_lex)
+        grob_edge <- gTree(children=gl, gp=gp_edge, name="token_edges")
+
+        gl <- gList(grob_op, grob_edge, grob)
+        gTree(scale = 1, type = type,
+              children = gl, cl="projected_holed_board")
+    }
+}
+
+#' @export
+makeContent.projected_holed_board <- makeContent.basic_projected_token
