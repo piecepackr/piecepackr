@@ -1,14 +1,14 @@
 #' Piece Grob Functions
 #'
-#' \code{basicPieceGrob} is the most common
-#' \dQuote{grob} function that \code{grid.piece} uses
-#' to create \code{grid} graphical \code{grob} objects.
-#' \code{picturePieceGrobFn} is a function that returns a \dQuote{grob} function
-#' that imports graphics from files found in its \code{directory} argument.
+#' `basicPieceGrob()` is the most common
+#' \dQuote{grob} function that [grid.piece()] uses
+#' to create `grid` graphical `grob` objects.
+#' `picturePieceGrobFn()` is a function that returns a \dQuote{grob} function
+#' that imports graphics from files found in its `directory` argument.
 #'
 #' @rdname basicPieceGrobs
 #' @name basicPieceGrobs
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object.
+#' @param cfg Piecepack configuration list or [pp_cfg()] object.
 #' @inheritParams grid.piece
 #' @examples
 #'

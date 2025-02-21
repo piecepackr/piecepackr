@@ -13,17 +13,17 @@
 #' @param rank Number of rank (starting from 1)
 #' @param x Where to place piece on x axis of viewport
 #' @param y Where to place piece on y axis of viewport
-#' @param z z-coordinate of the piece.  Has no effect if \code{op_scale} is \code{0}.
+#' @param z z-coordinate of the piece.  Has no effect if `op_scale` is `0`.
 #' @param angle Angle (on xy plane) to draw piece at
 #' @param width Width of piece
 #' @param height Height of piece
-#' @param depth Depth (thickness) of piece.  Has no effect if \code{op_scale} is \code{0}.
+#' @param depth Depth (thickness) of piece.  Has no effect if `op_scale` is `0`.
 #' @param op_scale How much to scale the depth of the piece in the oblique projection
 #'              (viewed from the top of the board).
-#'              \code{0} (the default) leads to an \dQuote{orthographic} projection,
-#'              \code{0.5} is the most common scale used in the \dQuote{cabinet} projection,
-#'               and \code{1.0} is the scale used in the \dQuote{cavalier} projection.
-#' @param op_angle What is the angle of the oblique projection?  Has no effect if \code{op_scale} is \code{0}.
+#'              `0` (the default) leads to an \dQuote{orthographic} projection,
+#'              `0.5` is the most common scale used in the \dQuote{cabinet} projection,
+#'               and `1.0` is the scale used in the \dQuote{cavalier} projection.
+#' @param op_angle What is the angle of the oblique projection?  Has no effect if `op_scale` is `0`.
 #' @param default.units  A string indicating the default units to use if
 #'   'x', 'y', 'width', and/or 'height' are only given as numeric vectors.
 #' @param envir Environment (or named list) containing configuration list(s).
@@ -35,8 +35,8 @@
 #' @param scale Multiplicative scaling factor to apply to width, height, and depth.
 #' @param alpha Alpha channel for transparency.
 #' @param type Type of grid grob to use.  Either `"normal"` (default), `"picture"`, `"raster"`, or `"transformation"`.
-#'             `"picture"` exports to (temporary) svg and re-imports as a \code{grImport2::pictureGrob}.
-#'             `"raster"` exports to (temporary) png and re-imports as a \code{grid::rasterGrob}.
+#'             `"picture"` exports to (temporary) svg and re-imports as a [grImport2::pictureGrob()].
+#'             `"raster"` exports to (temporary) png and re-imports as a [grid::rasterGrob()].
 #'             `"transformation"` uses the affine transformation feature only supported in
 #'             R 4.2+ within select graphic devices.
 #'             The latter three can be useful if drawing pieces really big or small and don't want

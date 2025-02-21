@@ -115,7 +115,7 @@ npc2snpc <- function(x) {
 
 #' @export
 grobCoords.holed_board <- function(x, closed, ...) {
-    #### To take into account the holes needs modifying `grobCoords.pp_grobCoords()`
+    #### To take into account the holes needs modifying `grobCoords.pp_grobCoords()` #368
     # To not undo the holes successfully placed here when merging multiple pieces together
     # g <- pieceGrob("board_face", cfg=game_systems()$marbles)
     # grid.newpage(); pp_shape("rect")$polyclip(g, "minus", gp= gpar(col=NA, fill="red")) |> grid.draw()

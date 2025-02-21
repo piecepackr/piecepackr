@@ -44,19 +44,19 @@ gdh <- function(piece_side, cfg, ..., suit=1, rank=1) cfg$get_depth(piece_side, 
 #' In some cases you may get better sorting results
 #' by changing the `op_angle` or the dimensions of pieces.
 #' @seealso \url{https://trevorldavis.com/piecepackr/3d-projections.html} for more details
-#'   and examples of oblique projections in \code{piecepackr}.
+#'   and examples of oblique projections in `piecepackr`.
 #' @param df A data frame with coordinates and dimensions in inches
 #' @param ... Ignored by `op_transform()`.  `marbles_transform()` passes to `op_transform()`.
-#' @param cfg Piecepack configuration list or \code{pp_cfg} object,
-#'        a list of \code{pp_cfg} objects,
-#'        or a character vector of \code{pp_cfg} objects
+#' @param cfg Piecepack configuration list or [pp_cfg()] object,
+#'        a list of [pp_cfg()] objects,
+#'        or a character vector of the names of [pp_cfg()] objects contained in `envir`.
 #' @param envir Environment (or named list) containing configuration list(s).
 #' @param op_angle Intended oblique projection angle (used for re-sorting)
 #' @param pt_thickness Thickness of pyramid tip i.e. value to add to the z-value of a pyramid top
 #'                  if it is a (weakly) smaller ranked pyramid (top)
 #'                  placed on top of a larger ranked pyramid (top).
 #' @param as_top Character vector of components whose \dQuote{side}
-#'               should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.
+#'               should be converted to \dQuote{top} e.g. `"pawn_face"`.
 #' @param cfg_class Either `"list"` (default) or `"character"`.
 #'                  Desired class of the `cfg` column in the returned tibble.
 #'                  `"list"` is more efficient for use with `pmap_piece()` but

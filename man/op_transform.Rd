@@ -23,9 +23,9 @@ marbles_transform(df, ...)
 
 \item{...}{Ignored by \code{op_transform()}.  \code{marbles_transform()} passes to \code{op_transform()}.}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object,
-a list of \code{pp_cfg} objects,
-or a character vector of \code{pp_cfg} objects}
+\item{cfg}{Piecepack configuration list or \code{\link[=pp_cfg]{pp_cfg()}} object,
+a list of \code{\link[=pp_cfg]{pp_cfg()}} objects,
+or a character vector of the names of \code{\link[=pp_cfg]{pp_cfg()}} objects contained in \code{envir}.}
 
 \item{envir}{Environment (or named list) containing configuration list(s).}
 
@@ -36,7 +36,7 @@ if it is a (weakly) smaller ranked pyramid (top)
 placed on top of a larger ranked pyramid (top).}
 
 \item{as_top}{Character vector of components whose \dQuote{side}
-should be converted to \dQuote{top} e.g. \code{c("pawn_face")}.}
+should be converted to \dQuote{top} e.g. \code{"pawn_face"}.}
 
 \item{cfg_class}{Either \code{"list"} (default) or \code{"character"}.
 Desired class of the \code{cfg} column in the returned tibble.

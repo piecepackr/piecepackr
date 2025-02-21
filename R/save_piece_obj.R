@@ -1,6 +1,6 @@
 #' Save Wavefront OBJ files of board game pieces
 #'
-#' \code{save_piece_obj} saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
+#' `save_piece_obj()` saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
 #' @inheritParams pieceGrob
 #' @param axis_x First coordinate of the axis unit vector.
 #' @param axis_y Second coordinate of the axis unit vector.
@@ -235,18 +235,18 @@ write_2s_texture <- function(piece_side = "tile_face", suit = 1, rank = 1, cfg =
 
 #' Alternative Wavefront OBJ file generators
 #'
-#' These are alternative Wavefront OBJ generators intended to be used as a \code{obj_fn} attribute
-#' in a \code{pp_cfg()} \dQuote{configuration list}.
-#' \code{save_ellipsoid_obj} saves an ellipsoid with a color equal to that piece's \code{background_color}.
-#' \code{save_peg_doll_obj} saves a \dQuote{peg doll} style doll with a color equal to that piece's \code{edge_color}
-#' with a \dQuote{pawn belt} around it's waste from that suit's and rank's \code{belt_face}.
+#' These are alternative Wavefront OBJ generators intended to be used as a `obj_fn` attribute
+#' in a [pp_cfg()] \dQuote{configuration list}.
+#' `save_ellipsoid_obj()` saves an ellipsoid with a color equal to that piece's `background_color`.
+#' `save_peg_doll_obj()` saves a \dQuote{peg doll} style doll with a color equal to that piece's `edge_color`
+#' with a \dQuote{pawn belt} around it's waste from that suit's and rank's `belt_face`.
 #' @seealso See [pp_cfg()] for a discussion of \dQuote{configuration lists}.
 #'          Wavefront OBJ file generators are used by [save_piece_obj()] and (by default)
 #'          [piece3d()] (`rgl` wrapper), [piece()] (`rayrender` wrapper),
 #'          and [piece_mesh()] (`rayvertex` wrapper).
 #' @inheritParams save_piece_obj
 #' @param subdivide Increasing this value makes for a smoother ellipsoid (and larger OBJ file and slower render).
-#'                  See \code{\link[rgl]{ellipse3d}}.
+#'                  See [rgl::ellipse3d()].
 #' @rdname obj_fns
 #' @export
 save_ellipsoid_obj <- function(piece_side = "bit_face", suit = 1, rank = 1,

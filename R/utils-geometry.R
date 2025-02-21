@@ -179,31 +179,31 @@ R_to_AA <- function(R = diag(3)) {
 
 #' Helper functions for making geometric calculations.
 #'
-#' \code{to_x}, \code{to_y}, \code{to_r}, \code{to_t} convert
+#' `to_x()`, `to_y()`, `to_r()`, `to_t()` convert
 #' between polar coordinates (in degrees) and Cartesian coordinates.
-#' \code{to_degrees} and \code{to_radians} converts between degrees and radians.
-#' \code{AA_to_R} and \code{R_to_AA} convert back and forth between (post-multiplied) rotation matrix
+#' `to_degrees()` and `to_radians()` converts between degrees and radians.
+#' `AA_to_R()` and `R_to_AA()` convert back and forth between (post-multiplied) rotation matrix
 #' and axis-angle representations of 3D rotations.
-#' \code{R_x}, \code{R_y}, and \code{R_z} build (post-multiplied) rotation matrices for simple rotations around
+#' `R_x()`, `R_y()`, and `R_z()` build (post-multiplied) rotation matrices for simple rotations around
 #' the x, y, and z axes.
 #'
-#' \code{pp_cfg} uses polar coordinates to determine where the "primary" and "directional"
-#'      symbols are located on a game piece.
+#' [pp_cfg()] uses polar coordinates to determine where the "primary" and "directional"
+#' symbols are located on a game piece.
 #' They are also useful for drawing certain shapes and for making game diagrams on hex boards.
 #'
-#' \code{piecepackr} and \code{grid} functions use angles in degrees
-#'  but the \code{base} trigonometry functions usually use radians.
+#' `piecepackr` and `grid` functions use angles in degrees
+#'  but the `base` trigonometry functions usually use radians.
 #'
-#' \code{piecepackr}'s 3D graphics functions \code{save_piece_obj}, \code{piece}, and \code{piece3d}
+#' `piecepackr`'s 3D graphics functions [save_piece_obj()], [piece()], [piece3d()], and [piece_mesh()]
 #' use the axis-angle representation for 3D rotations.
 #' The axis-angle representation involves specifying a unit vector
 #' indicating the direction of an axis of rotation and an angle describing the (counter-clockwise)
 #' rotation around that axis.  Because it is a unit vector one only needs to specify the first two elements,
-#' \code{axis_x} and \code{axis_y}, and we are able to infer the 3rd element \code{axis_z}.  The default of
-#' \code{axis = 0}, \code{axis_y = 0}, and implied \code{axis_z = 1}
+#' `axis_x` and `axis_y`, and we are able to infer the 3rd element `axis_z`.  The default of
+#' `axis = 0`, `axis_y = 0`, and implied `axis_z = 1`
 #' corresponds to a rotation around the z-axis which is reverse-compatible
-#' with the originally 2D \code{angle} interpretation in \code{grid.piece}.  In order to figure out the appropriate
-#' axis-angle representation parameters \code{R_to_AA}, \code{R_x}, \code{R_y}, and \code{R_z} allow one
+#' with the originally 2D `angle` interpretation in [grid.piece()].  In order to figure out the appropriate
+#' axis-angle representation parameters `R_to_AA()`, `R_x()`, `R_y()`, and `R_z()` allow one
 #' to first come up with an appropriate (post-multiplied) 3D rotation matrix by chaining simple rotations
 #' and then convert them to the corresponding axis-angle representation.
 #' Pieces are rotated as if their center was at the origin.

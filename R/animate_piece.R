@@ -2,13 +2,13 @@
 #'
 #' `animate_piece()` animates board game pieces.
 #' @param dfs A list of data frames of game data to plot.
-#' @param file Filename to save animation unless \code{NULL}
+#' @param file Filename to save animation unless `NULL`
 #'             in which case it uses the current graphics device.
 #' @param annotate If `TRUE` or `"algebraic"` annotate the plot
 #'                  with \dQuote{algrebraic} coordinates,
 #'                 if `FALSE` or `"none"` don't annotate,
 #'                 if `"cartesian"` annotate the plot with \dQuote{cartesian} coordinates.
-#' @param ... Arguments to \code{pmap_piece}
+#' @param ... Arguments to [pmap_piece()]
 #' @param .f Low level graphics function to use e.g. [grid.piece()], [piece3d()], [piece()], or [piece_mesh()].
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
@@ -20,7 +20,7 @@
 #' @param height Height of animation (in inches).  Inferred by default.
 #' @param ppi Resolution of animation in pixels per inch.
 #'            By default set so image max 600 pixels wide or tall.
-#' @param new_device If \code{file} is \code{NULL} should we open up a new graphics device?
+#' @param new_device If `file` is `NULL` should we open up a new graphics device?
 #' @param annotation_scale Multiplicative factor that scales (stretches) any annotation coordinates.
 #'                         By default uses `attr(df, "scale_factor") %||% 1`.
 #' @return Nothing, as a side effect creates an animation.

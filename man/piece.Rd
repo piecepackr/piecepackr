@@ -67,7 +67,7 @@ can be retrieved by \code{base::dynGet()}.}
 A rayrender object.
 }
 \description{
-\code{piece} creates 3d board game piece objects for use with the rayrender package.
+\code{piece()} creates 3d board game piece objects for use with the rayrender package.
 }
 \examples{
   \donttest{# May take more than 5 seconds on CRAN servers

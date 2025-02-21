@@ -28,14 +28,14 @@
 #' }
 #'
 #' @section `pp_cfg` R6 Class Methods:\describe{
-#'   \item{`get_grob()`}{Returns a \code{grid} \dQuote{grob} for drawing the piece.}
+#'   \item{`get_grob()`}{Returns a `grid` \dQuote{grob} for drawing the piece.}
 #'   \item{`get_piece_opt()`}{Returns a list with info useful for drawing the piece.}
 #'   \item{`get_suit_color()`}{Returns the suit colors.}
 #'   \item{`get_width()`, `get_height()`, `get_depth()`}{
 #'         Dimensions (of the bounding cube) of the piece in inches}
 #' }
 #'
-#' @section \code{pp_cfg} R6 Class Fields and Active Bindings:\describe{
+#' @section `pp_cfg` R6 Class Fields and Active Bindings:\describe{
 #'   \item{`annotation_color`}{Suggestion of a good color to annotate with}
 #'   \item{`cache`}{Cache object which stores intermediate graphical calculations.
 #'                  Default is a memory-cache that does not prune.

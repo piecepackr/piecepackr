@@ -1,6 +1,6 @@
 #' Create rayrender board game piece objects
 #'
-#' \code{piece} creates 3d board game piece objects for use with the rayrender package.
+#' `piece()` creates 3d board game piece objects for use with the rayrender package.
 #' @inheritParams piece3d
 #' @return A rayrender object.
 #' @examples
@@ -19,7 +19,7 @@
 #'   options(opt)
 #'   }
 #' @export
-#' @seealso See \url{https://www.rayrender.net} for more information about the \code{rayrender} package.
+#' @seealso See \url{https://www.rayrender.net} for more information about the `rayrender` package.
 #'          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.
 piece <- function(piece_side = "tile_back", suit = NA, rank = NA, # nolint
                   cfg = getOption("piecepackr.cfg", pp_cfg()),

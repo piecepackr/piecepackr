@@ -193,5 +193,5 @@ if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_uni
 }
 }
 \seealso{
-\code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
+\code{\link[=pp_cfg]{pp_cfg()}} for information about the \code{\link[=pp_cfg]{pp_cfg()}} objects returned by \code{game_systems()}.
 }

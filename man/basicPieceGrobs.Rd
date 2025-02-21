@@ -23,7 +23,7 @@ previewLayoutGrob(piece_side, suit, rank, cfg = pp_cfg())
 
 \item{rank}{Number of rank (starting from 1)}
 
-\item{cfg}{Piecepack configuration list or \code{pp_cfg} object.}
+\item{cfg}{Piecepack configuration list or \code{\link[=pp_cfg]{pp_cfg()}} object.}
 
 \item{directory}{Directory that \code{picturePieceGrobFn} will look in for piece graphics.}
 
@@ -32,10 +32,10 @@ previewLayoutGrob(piece_side, suit, rank, cfg = pp_cfg())
 function returned by \code{picturePieceGrobFn} should import.}
 }
 \description{
-\code{basicPieceGrob} is the most common
-\dQuote{grob} function that \code{grid.piece} uses
+\code{basicPieceGrob()} is the most common
+\dQuote{grob} function that \code{\link[=grid.piece]{grid.piece()}} uses
 to create \code{grid} graphical \code{grob} objects.
-\code{picturePieceGrobFn} is a function that returns a \dQuote{grob} function
+\code{picturePieceGrobFn()} is a function that returns a \dQuote{grob} function
 that imports graphics from files found in its \code{directory} argument.
 }
 \examples{

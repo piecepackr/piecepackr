@@ -155,10 +155,10 @@ library("piecepackr")
 library("tibble")
 set.seed(42)
 envir <- game_systems(round = TRUE, shading = TRUE)
-dfb <- tibble(piece_side = "board_face", suit = 4L, rank = 4L, 
+dfb <- tibble(piece_side = "board_face", suit = 3L, rank = 4L,
               cfg ="marbles", x = 2.5, y = 2.5)
 dfm <- tibble(
-    piece_side = "bit_face",
+    piece_side = "bit_back",
     suit = sample.int(6L, 30L, replace = TRUE),
     rank = 9L,
     cfg = "marbles",

@@ -235,7 +235,7 @@ test_that("no regressions in figures", {
         set.seed(42)
         envir <- game_systems(round = round, shading = shading)
         dfb <- data.frame(piece_side = "board_face", x = 2.5, y = 2.5, suit = 4L, rank = 4L, cfg ="marbles")
-        dfm <- data.frame(piece_side = "bit_face",
+        dfm <- data.frame(piece_side = "bit_back",
                           x = c(rep(1:4, 4L), rep(0.5 + rep(1:3, 3L)), rep(2:3, 2L), 2.5),
                           y = c(rep(1:4, each = 4L), rep(0.5 + rep(1:3, each = 3L)), rep(2:3, each = 2L), 2.5),
                           suit = sample.int(6L, 30L, replace = TRUE), rank = 9L,

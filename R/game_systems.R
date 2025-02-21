@@ -169,7 +169,7 @@
 #'    pmap_piece(df, cfg = cfgs$playing_cards_expansion, op_scale=0.5,
 #'               default.units="in")
 #' }
-#' @seealso \code{\link{pp_cfg}} for information about the \code{pp_cfg} objects returned by \code{game_systems}.
+#' @seealso [pp_cfg()] for information about the [pp_cfg()] objects returned by `game_systems()`.
 #' @export
 game_systems <- function(style = NULL, round = FALSE, pawn = "token", ..., shading = FALSE) {
     check_dots_empty()

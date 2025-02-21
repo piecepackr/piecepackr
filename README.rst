@@ -177,10 +177,10 @@ along with holed square boards sized for the 1" diameter marbles.
     library("tibble")
     set.seed(42)
     envir <- game_systems(round = TRUE, shading = TRUE)
-    dfb <- tibble(piece_side = "board_face", suit = 4L, rank = 4L, 
+    dfb <- tibble(piece_side = "board_face", suit = 3L, rank = 4L,
                   cfg ="marbles", x = 2.5, y = 2.5)
     dfm <- tibble(
-        piece_side = "bit_face",
+        piece_side = "bit_back",
         suit = sample.int(6L, 30L, replace = TRUE),
         rank = 9L,
         cfg = "marbles",
@@ -509,12 +509,6 @@ piece3d() ({rgl})
     envir <- c(piecenikr::looney_pyramids(), game_systems("sans3d"))
     pmap_piece(df, piece3d, envir = envir, trans=op_transform,
                scale = 0.98, res = 150)
-
-
-
-::
-
-    ## file:////tmp/RtmptW6MCn/file1a19f76e7dc839.html screenshot completed
 
 
 

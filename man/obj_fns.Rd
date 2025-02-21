@@ -79,15 +79,15 @@ can be retrieved by \code{base::dynGet()}.}
 \item{filename}{Name of Wavefront OBJ object.  By default \code{tempfile(fileext = ".obj")}.}
 
 \item{subdivide}{Increasing this value makes for a smoother ellipsoid (and larger OBJ file and slower render).
-See \code{\link[rgl]{ellipse3d}}.}
+See \code{\link[rgl:ellipse3d]{rgl::ellipse3d()}}.}
 
 \item{res}{Resolution of the faces.}
 }
 \description{
 These are alternative Wavefront OBJ generators intended to be used as a \code{obj_fn} attribute
-in a \code{pp_cfg()} \dQuote{configuration list}.
-\code{save_ellipsoid_obj} saves an ellipsoid with a color equal to that piece's \code{background_color}.
-\code{save_peg_doll_obj} saves a \dQuote{peg doll} style doll with a color equal to that piece's \code{edge_color}
+in a \code{\link[=pp_cfg]{pp_cfg()}} \dQuote{configuration list}.
+\code{save_ellipsoid_obj()} saves an ellipsoid with a color equal to that piece's \code{background_color}.
+\code{save_peg_doll_obj()} saves a \dQuote{peg doll} style doll with a color equal to that piece's \code{edge_color}
 with a \dQuote{pawn belt} around it's waste from that suit's and rank's \code{belt_face}.
 }
 \seealso{

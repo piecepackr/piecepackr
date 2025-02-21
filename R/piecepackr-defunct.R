@@ -3,16 +3,16 @@
 #' These functions are Defunct and have been removed from piecepackr.
 #'
 #' \enumerate{
-#' \item{For \code{get_shape_grob_fn} use \code{pp_shape()$shape} instead.}
-#' \item{For \code{gridlinesGrob()} use \code{pp_shape()$gridlines()} instead.}
-#' \item{For \code{matGrob()} use \code{pp_shape()$mat()} instead.}
-#' \item{For \code{checkersGrob()}() use \code{pp_shape()$checkers()} instead.}
-#' \item{For \code{hexlinesGrob()} use \code{pp_shape()$hexlines()} instead.}
-#' \item{For \code{halmaGrob()} use \code{pp_shape("halma")$shape()} instead.}
-#' \item{For \code{kiteGrob()} use \code{pp_shape("kite")$shape()} instead.}
-#' \item{For \code{pyramidGrob()} use \code{pp_shape("pyramid")$shape()} instead.}
-#' \item{For \code{convexGrobFn(n, t)} use \code{pp_shape(paste0("convex", n), t)$shape} instead.}
-#' \item{For \code{concaveGrobFn(n, t, r)} use \code{pp_shape(paste0("concave", n), t, r)$shape} instead.}
+#' \item{For `get_shape_grob_fn` use `pp_shape()$shape` instead.}
+#' \item{For `gridlinesGrob()` use `pp_shape()$gridlines()` instead.}
+#' \item{For `matGrob()` use `pp_shape()$mat()` instead.}
+#' \item{For `checkersGrob()`() use `pp_shape()$checkers()` instead.}
+#' \item{For `hexlinesGrob()` use `pp_shape()$hexlines()` instead.}
+#' \item{For `halmaGrob()` use `pp_shape("halma")$shape()` instead.}
+#' \item{For `kiteGrob()` use `pp_shape("kite")$shape()` instead.}
+#' \item{For `pyramidGrob()` use `pp_shape("pyramid")$shape()` instead.}
+#' \item{For `convexGrobFn(n, t)` use `pp_shape(paste0("convex", n), t)$shape` instead.}
+#' \item{For `concaveGrobFn(n, t, r)` use `pp_shape(paste0("concave", n), t, r)$shape` instead.}
 #' }
 #' @param ... Ignored
 #' @name piecepackr-defunct

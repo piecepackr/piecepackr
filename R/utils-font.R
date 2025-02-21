@@ -8,7 +8,7 @@
 #' @param font A character vector of font(s).
 #' @param char A character vector of character(s) to be embedded by `grid::grid.text()`
 #' @return `get_embedded_font()` returns character vector of fonts that were actually embedded by `cairo_pdf()`.
-#'         \code{NA}'s means no embedded font detected: this either means that no font
+#'         `NA`'s means no embedded font detected: this either means that no font
 #'          was found or that a color emoji font was found and instead of a font an image was embedded.
 #' @details `get_embedded_font()` depends on the suggested `pdftools` package being installed
 #'          and R being compiled with Cairo support.

@@ -28,7 +28,7 @@ animate_piece(
 \item{file}{Filename to save animation unless \code{NULL}
 in which case it uses the current graphics device.}
 
-\item{...}{Arguments to \code{pmap_piece}}
+\item{...}{Arguments to \code{\link[=pmap_piece]{pmap_piece()}}}
 
 \item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
 with \dQuote{algrebraic} coordinates,

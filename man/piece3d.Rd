@@ -82,7 +82,7 @@ If \code{NA} we will read the texture and figure out a reasonable value.}
 A numeric vector of rgl object IDs.
 }
 \description{
-\code{piece3d} draws board games pieces using the rgl package.
+\code{piece3d()} draws board games pieces using the rgl package.
 }
 \examples{
 if (requireNamespace("rgl", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {

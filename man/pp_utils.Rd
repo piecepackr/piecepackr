@@ -35,9 +35,9 @@ file2grob(file, distort = TRUE)
 or distort to fit the area it is drawn in}
 }
 \description{
-\code{cleave} converts a delimiter separated string into a vector.
-\code{inch(x)} is equivalent to \code{unit(x, "in")}.
-\code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
+\code{cleave()} converts a delimiter separated string into a vector.
+\code{inch(x)} is equivalent to \code{grid::unit(x, "in")}.
+\code{is_color_invisible()} tells whether the color is transparent (and hence need not be drawn).
 }
 \examples{
  cleave("0.5,0.2,0.4,0.5", float=TRUE)

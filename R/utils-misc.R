@@ -1,8 +1,8 @@
-#' Miscellaneous \code{piecepackr} utility functions
+#' Miscellaneous `piecepackr` utility functions
 #'
-#' \code{cleave} converts a delimiter separated string into a vector.
-#' \code{inch(x)} is equivalent to \code{unit(x, "in")}.
-#' \code{is_color_invisible} tells whether the color is transparent (and hence need not be drawn).
+#' `cleave()` converts a delimiter separated string into a vector.
+#' `inch(x)` is equivalent to `grid::unit(x, "in")`.
+#' `is_color_invisible()` tells whether the color is transparent (and hence need not be drawn).
 #' @examples
 #'  cleave("0.5,0.2,0.4,0.5", float=TRUE)
 #'  cleave("black,darkred,#050EAA,,", color=TRUE)

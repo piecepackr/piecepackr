@@ -70,7 +70,7 @@ can be retrieved by \code{base::dynGet()}.}
 A data frame with named elements "obj", "mtl", "png" with the created filenames.
 }
 \description{
-\code{save_piece_obj} saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
+\code{save_piece_obj()} saves Wavefront OBJ files (including associated MTL and texture image) of board game pieces.
 }
 \examples{
     if (all(capabilities(c("cairo", "png")))) {
