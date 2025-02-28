@@ -23,6 +23,8 @@ Bug fixes and minor improvements
 
 * `pp_shape()` adds `width` and `height` arguments.  This is needed
   to accurately calculate the corners for non-square "roundrect" shapes (e.g. domino tiles).
+* Fixes a bug in `animate_piece()` when removing more than one piece
+  in a single move.
 * Fixes some rendering bugs for "roundrect" shape tokens (#254, #365).
 
 piecepackr 1.14.1
