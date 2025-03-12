@@ -23,6 +23,8 @@
 #'                how many transition frames to add between moves.
 #' @param n_pauses Integer, how many paused frames per completed move.
 #' @param fps Double, frames per second.
+#' @param xbreaks,ybreaks Subset (of integers) to provide axis labels for if `annotate` is `TRUE`.
+#'                        If `NULL` infer a reasonable choice.
 #' @param new_device If `file` is `NULL` should we open up a new graphics device?
 #'                   This argument is deprecated.  Use the `open_device` argument instead.
 #' @return Nothing, as a side effect creates an animation.
@@ -75,6 +77,7 @@ animate_piece <- function(dfs, file = "animation.gif", ...,
                           annotate = TRUE, annotation_scale = NULL,
                           open_device = new_device,
                           n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses,
+                          xbreaks = NULL, ybreaks = NULL,
                           new_device = TRUE) {
     if (!missing(new_device)) {
         warn("The argument `new_device` is deprecated.  Use `open_device` instead.")
@@ -112,7 +115,7 @@ animate_piece <- function(dfs, file = "animation.gif", ...,
     height <- height + (height %% 2)
     width <- width + (width %% 2)
     plot_fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir,
-                              annotate, annotation_scale)
+                              annotate, annotation_scale, xbreaks, ybreaks)
     animation_fn(file, open_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, ppi)
     invisible(NULL)
 }

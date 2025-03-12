@@ -31,6 +31,8 @@ Bug fixes and minor improvements
 
   * Fixes a bug when removing more than one piece in a single move.
   * New argument `open_device` (to use instead of `new_device` to better match the arguments of `render_piece`).
+  * New arguments `xbreaks` and `ybreaks` to provide a subset (of integers) to provide
+    axis labels for if `annotate` is `TRUE`.
 
 * Improvements to `render_piece()`:
 
@@ -38,6 +40,8 @@ Bug fixes and minor improvements
     of the image (using `grDevice::dev.capture()` or  `as.raster(magick::image_read())`).
   + New arguments `open_device` and `close_device` to more finely control
     when to open and/or close a graphics device.
+  * New arguments `xbreaks` and `ybreaks` to provide a subset (of integers) to provide
+    axis labels for if `annotate` is `TRUE`.
   + If closing a graphics device (e.g. `close_device = TRUE`)
     and other graphics devices were already open then we make sure to set
     the active graphics device back to the one that was previously active.

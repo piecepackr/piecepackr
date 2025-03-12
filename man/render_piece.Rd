@@ -24,6 +24,8 @@ render_piece(
   open_device = new_device,
   close_device = open_device && (!is.null(file) || !is.null(dev)),
   image = c("NULL", "raster", "nativeRaster"),
+  xbreaks = NULL,
+  ybreaks = NULL,
   new_device = TRUE
 )
 }
@@ -76,6 +78,9 @@ Will filter out any names that aren't in \code{formals(dev)}.}
 \item{image}{Class of image object to return in the \code{"image"} field of returned list.
 If \code{"NULL"} (the default) return \code{NULL}.
 If \code{"raster"} or \verb{"nativeRaster" try to return a raster object of the image using [grDevices::dev.capture()] or }as.raster(magick::image_read())`.}
+
+\item{xbreaks, ybreaks}{Subset (of integers) to provide axis labels for if \code{annotate} is \code{TRUE}.
+If \code{NULL} infer a reasonable choice.}
 
 \item{new_device}{If \code{FALSE} draw in the active graphics device instead of opening a new graphics device.  This argument is deprecated.  Use the \code{open_device} argument instead.}
 }
