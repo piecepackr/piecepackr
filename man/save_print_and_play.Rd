@@ -39,7 +39,8 @@ then defaults to \code{c("piecepack", "pyramids", "matchsticks")} else just "pie
 \item{arrangement}{Either "single-sided" or "double-sided".
 Ignored if \code{size = "4x6"}.}
 
-\item{dev}{Graphics device function to use.  If \code{NULL} infer a reasonable choice.}
+\item{dev}{Graphics device function to use if \code{open_device} is \code{FALSE}.
+If \code{NULL} infer a reasonable choice from \code{file}.}
 
 \item{dev.args}{Additional arguments to pass to \code{dev} (besides \code{filename}, \code{width}, and \code{height}).
 Will filter out any names that aren't in \code{formals(dev)}.}

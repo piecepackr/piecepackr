@@ -15,19 +15,23 @@ test_that("render_piece() works", {
     library("vdiffr")
 
     envir <- game_systems("sans")
-    expect_doppelganger("render_piece", function() render_piece(df, envir = envir, new_device = FALSE))
+    expect_doppelganger("render_piece", function() 
+        render_piece(df, envir = envir, open_device = FALSE)
+    )
     expect_doppelganger("render_piece_cartesian", function()
-        render_piece(df, envir = envir, annotate = TRUE, new_device = FALSE))
+        render_piece(df, envir = envir, annotate = TRUE, open_device = FALSE)
+    )
     expect_doppelganger("render_piece_algebraic", function()
         render_piece(df, envir = envir,
                      op_scale = 0.5, annotate = "algebraic",
-                     trans = op_transform, new_device = FALSE))
+                     trans = op_transform, open_device = FALSE)
+    )
 
     skip_if_not_installed("rayvertex")
     library("rayvertex")
     envir3d <- game_systems("sans3d")
     f <- tempfile(fileext = ".jpg")
-    render_piece(df, file = f, .f = piece_mesh, envir = envir3d, new_device = FALSE,
+    render_piece(df, file = f, .f = piece_mesh, envir = envir3d,
                  op_scale = 0.5, trans = op_transform)
     expect_true(file.exists(f))
     unlink(f)
@@ -36,7 +40,7 @@ test_that("render_piece() works", {
     library("rayrender")
     envir3d <- game_systems("sans3d")
     f <- tempfile(fileext = ".jpg")
-    render_piece(df, file = f, .f = piece, envir = envir3d, new_device = FALSE,
+    render_piece(df, file = f, .f = piece, envir = envir3d,
                  op_scale = 0.5, trans = op_transform,
                  samples = 5, clamp_value = 1, interactive = FALSE)
     expect_true(file.exists(f))
@@ -47,7 +51,7 @@ test_that("render_piece() works", {
     open3d()
     view3d(0, -30)
     f <- tempfile(fileext = ".tiff")
-    render_piece(df, file = f, .f = piece3d, envir = envir3d, new_device = FALSE,
+    render_piece(df, file = f, .f = piece3d, envir = envir3d,
                  op_scale = 0.5, trans = op_transform, scale = 0.98)
     expect_true(file.exists(f))
     unlink(f)

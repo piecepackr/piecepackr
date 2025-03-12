@@ -8,18 +8,19 @@ animate_piece(
   dfs,
   file = "animation.gif",
   ...,
-  annotate = TRUE,
   .f = piecepackr::grid.piece,
   cfg = getOption("piecepackr.cfg", NULL),
   envir = getOption("piecepackr.envir", game_systems("sans")),
-  n_transitions = 0L,
-  n_pauses = 1L,
-  fps = n_transitions + n_pauses,
   width = NULL,
   height = NULL,
   ppi = NULL,
-  new_device = TRUE,
-  annotation_scale = NULL
+  annotate = TRUE,
+  annotation_scale = NULL,
+  open_device = new_device,
+  n_transitions = 0L,
+  n_pauses = 1L,
+  fps = n_transitions + n_pauses,
+  new_device = TRUE
 )
 }
 \arguments{
@@ -30,23 +31,11 @@ in which case it uses the current graphics device.}
 
 \item{...}{Arguments to \code{\link[=pmap_piece]{pmap_piece()}}}
 
-\item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
-with \dQuote{algrebraic} coordinates,
-if \code{FALSE} or \code{"none"} don't annotate,
-if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
-
 \item{.f}{Low level graphics function to use e.g. \code{\link[=grid.piece]{grid.piece()}}, \code{\link[=piece3d]{piece3d()}}, \code{\link[=piece]{piece()}}, or \code{\link[=piece_mesh]{piece_mesh()}}.}
 
 \item{cfg}{A piecepackr configuration list}
 
 \item{envir}{Environment (or named list) of piecepackr configuration lists}
-
-\item{n_transitions}{Integer, if over zero (the default)
-how many transition frames to add between moves.}
-
-\item{n_pauses}{Integer, how many paused frames per completed move.}
-
-\item{fps}{Double, frames per second.}
 
 \item{width}{Width of animation (in inches).  Inferred by default.}
 
@@ -55,10 +44,25 @@ how many transition frames to add between moves.}
 \item{ppi}{Resolution of animation in pixels per inch.
 By default set so image max 600 pixels wide or tall.}
 
-\item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
+\item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
+with \dQuote{algrebraic} coordinates,
+if \code{FALSE} or \code{"none"} don't annotate,
+if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{annotation_scale}{Multiplicative factor that scales (stretches) any annotation coordinates.
 By default uses \code{attr(df, "scale_factor") \%||\% 1}.}
+
+\item{open_device}{If \code{TRUE} open a new graphics device otherwise draw in the active graphics.}
+
+\item{n_transitions}{Integer, if over zero (the default)
+how many transition frames to add between moves.}
+
+\item{n_pauses}{Integer, how many paused frames per completed move.}
+
+\item{fps}{Double, frames per second.}
+
+\item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?
+This argument is deprecated.  Use the \code{open_device} argument instead.}
 }
 \value{
 Nothing, as a side effect creates an animation.

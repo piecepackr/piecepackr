@@ -17,20 +17,23 @@ render_piece(
   bg = "white",
   xoffset = NULL,
   yoffset = NULL,
-  new_device = TRUE,
+  annotate = FALSE,
+  annotation_scale = NULL,
   dev = NULL,
   dev.args = list(res = ppi, bg = bg, units = "in"),
-  annotate = FALSE,
-  annotation_scale = NULL
+  open_device = new_device,
+  close_device = open_device && (!is.null(file) || !is.null(dev)),
+  image = c("NULL", "raster", "nativeRaster"),
+  new_device = TRUE
 )
 }
 \arguments{
 \item{df}{A data frame of game piece information with (at least) the
 named columns \dQuote{piece_side}, \dQuote{x}, and \dQuote{y}.}
 
-\item{file}{Filename to save image unless \code{NULL}
+\item{file}{Filename to save image to unless \code{NULL}
 in which case it either uses the current graphics device or opens a new device
-(depending on \code{new_device} argument).}
+(depending on \code{open_device} argument).}
 
 \item{...}{Arguments to \code{\link[=pmap_piece]{pmap_piece()}}}
 
@@ -52,13 +55,6 @@ in which case it either uses the current graphics device or opens a new device
 
 \item{yoffset}{Number to add to the \code{y} column in \code{df}.  Inferred by default.}
 
-\item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?}
-
-\item{dev}{Graphics device function to use.  If \code{NULL} infer a reasonable choice.}
-
-\item{dev.args}{Additional arguments to pass to \code{dev} (besides \code{filename}, \code{width}, and \code{height}).
-Will filter out any names that aren't in \code{formals(dev)}.}
-
 \item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
 with \dQuote{algrebraic} coordinates,
 if \code{FALSE} or \code{"none"} don't annotate,
@@ -66,9 +62,27 @@ if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
 \item{annotation_scale}{Multiplicative factor that scales (stretches) any annotation coordinates.
 By default uses \code{attr(df, "scale_factor") \%||\% 1}.}
+
+\item{dev}{Graphics device function to use if \code{open_device} is \code{FALSE}.
+If \code{NULL} infer a reasonable choice from \code{file}.}
+
+\item{dev.args}{Additional arguments to pass to \code{dev} (besides \code{filename}, \code{width}, and \code{height}).
+Will filter out any names that aren't in \code{formals(dev)}.}
+
+\item{open_device}{If \code{TRUE} open a new graphics device otherwise draw in the active graphics.}
+
+\item{close_device}{If \code{TRUE} close the graphics device (if \code{open_device = TRUE} close the newly opened device otherwise close the previously existing graphics device).}
+
+\item{image}{Class of image object to return in the \code{"image"} field of returned list.
+If \code{"NULL"} (the default) return \code{NULL}.
+If \code{"raster"} or \verb{"nativeRaster" try to return a raster object of the image using [grDevices::dev.capture()] or }as.raster(magick::image_read())`.}
+
+\item{new_device}{If \code{FALSE} draw in the active graphics device instead of opening a new graphics device.  This argument is deprecated.  Use the \code{open_device} argument instead.}
 }
 \value{
-An invisible list of the dimensions of the image, as a side effect saves a graphic
+An invisible list of the dimensions of the image and
+possibly an image object specified by \code{image}.
+As a side effect may save a file and/or open/close a graphics device.
 }
 \description{
 \code{render_piece()} renders an image of game pieces to a file or graphics device.
