@@ -33,6 +33,8 @@
 #'              If `"NULL"` (the default) return `NULL`.
 #'              If `"raster"` or `"nativeRaster" try to return a raster object of the image
 #'              using [grDevices::dev.capture()] or `as.raster(magick::image_read())`.
+#' @param xbreaks,ybreaks Subset (of integers) to provide axis labels for if `annotate` is `TRUE`.
+#'                        If `NULL` infer a reasonable choice.
 #' @param new_device If `FALSE` draw in the active graphics device instead of opening a new graphics device.  This argument is deprecated.  Use the `open_device` argument instead.
 #' @return An invisible list of the dimensions of the image and
 #'         possibly an image object specified by `image`.
@@ -80,6 +82,7 @@ render_piece <- function(df, file = NULL, ...,
                          open_device = new_device,
                          close_device = open_device && (!is.null(file) || !is.null(dev)),
                          image = c("NULL", "raster", "nativeRaster"),
+                         xbreaks = NULL, ybreaks = NULL,
                          new_device = TRUE) {
     if (!missing(new_device)) {
         warn("The argument `new_device` is deprecated.  Use `open_device` instead.")
@@ -134,7 +137,7 @@ render_piece <- function(df, file = NULL, ...,
     l <- list(width = width, height = height, image = NULL)
 
     fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir,
-                         annotate, annotation_scale)
+                         annotate, annotation_scale, xbreaks, ybreaks)
     fn(df, ...)
 
     if (!is.null(image)) {
@@ -159,7 +162,8 @@ render_piece <- function(df, file = NULL, ...,
 }
 
 plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
-                           width, height, m, ppi, envir, annotate, annotation_scale) {
+                           width, height, m, ppi, envir,
+                           annotate, annotation_scale, xbreaks, ybreaks) {
     if (identical(.f, grid.piece)) {
         function(df, ..., scale = 1) {
             annotation_scale <- annotation_scale %||% attr(df, "scale_factor") %||% 1
@@ -168,7 +172,8 @@ plot_fn_helper <- function(.f = grid.piece, xmax, ymax, xoffset, yoffset,
             df$scale <- if (hasName(df, "scale")) scale * df$scale else scale
             grid::grid.newpage()
             pmap_piece(df, default.units = "in", ..., envir = envir)
-            annotate_plot(annotate, xmax, ymax, xoffset, yoffset, annotation_scale)
+            annotate_plot(annotate, xmax, ymax, xoffset, yoffset, annotation_scale,
+                          xbreaks, ybreaks)
         }
     } else if (identical(.f, piece3d)) {
         assert_suggested("rgl")
@@ -248,20 +253,38 @@ min2offset <- function(min, lbound = 0.5) {
     }
 }
 
-annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0, annotation_scale = 1) {
+annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0,
+                          annotation_scale = 1, xbreaks = NULL, ybreaks = NULL) {
         if (isFALSE(annotate) || annotate == "none" || is.na(xmax) || is.na(ymax))
             return(invisible(NULL))
         gp <- gpar(fontsize = 18, fontface = "bold")
-        x_coords <- seq(annotation_scale, floor(xmax), by = annotation_scale)
+
+        if (is.null(xbreaks)) {
+            x_coords <- seq(annotation_scale, floor(xmax), by = annotation_scale)
+        } else {
+            xbreaks <- as.integer(xbreaks)
+            x_coords <- seq(annotation_scale, by = annotation_scale,
+                            length.out = max(xbreaks))
+            x_coords <- x_coords[xbreaks]
+        }
         if (annotate == "cartesian")
             l <- as.character(seq_along(x_coords))
         else
             l <- letters[seq_along(x_coords)]
         l <- str_pad(l, max(str_count(l)))
         grid.text(l, x = x_coords + xoffset, y = 0.25, default.units = "in", gp = gp)
-        y_coords <- seq(annotation_scale, floor(ymax), by = annotation_scale)
+
+        if (is.null(ybreaks)) {
+            y_coords <- seq(annotation_scale, floor(ymax), by = annotation_scale)
+        } else {
+            ybreaks <- as.integer(ybreaks)
+            y_coords <- seq(annotation_scale, by = annotation_scale,
+                            length.out = max(ybreaks))
+            y_coords <- y_coords[ybreaks]
+        }
         n <- as.character(seq_along(y_coords))
         n <- str_pad(n, max(str_count(n)))
         grid.text(n, x = 0.25, y = y_coords + yoffset, default.units = "in", gp = gp)
+
         invisible(NULL)
 }

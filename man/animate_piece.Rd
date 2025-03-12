@@ -20,6 +20,8 @@ animate_piece(
   n_transitions = 0L,
   n_pauses = 1L,
   fps = n_transitions + n_pauses,
+  xbreaks = NULL,
+  ybreaks = NULL,
   new_device = TRUE
 )
 }
@@ -60,6 +62,9 @@ how many transition frames to add between moves.}
 \item{n_pauses}{Integer, how many paused frames per completed move.}
 
 \item{fps}{Double, frames per second.}
+
+\item{xbreaks, ybreaks}{Subset (of integers) to provide axis labels for if \code{annotate} is \code{TRUE}.
+If \code{NULL} infer a reasonable choice.}
 
 \item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?
 This argument is deprecated.  Use the \code{open_device} argument instead.}
