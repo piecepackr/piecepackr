@@ -1,6 +1,6 @@
 #' @import grid
 #' @importFrom affiner as_coord2d as_coord3d as_plane3d convex_hull2d distance2d distance3d degrees is_angle
-#' @importFrom grDevices col2rgb dev.capabilities dev.new devAskNewPage rgb
+#' @importFrom grDevices col2rgb dev.capabilities dev.list dev.new devAskNewPage rgb
 #' @importFrom R6 R6Class
 #' @importFrom rlang .data abort inform warn %||% check_dots_empty
 #' @importFrom stringr str_count str_glue str_pad str_split

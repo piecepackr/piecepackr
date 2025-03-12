@@ -1,8 +1,9 @@
 COMPONENT_AND_SIDES <- c("tile_back", "tile_face", "coin_back", "coin_face",
-           "die_face", "suitdie_face",
-           "pawn_face", "pawn_back", "belt_face",  "saucer_face", "saucer_back",
-           "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right", "pyramid_top",
-           "matchstick_face", "matchstick_back")
+                         "die_face", "suitdie_face",
+                         "pawn_face", "pawn_back", "belt_face",
+                         "saucer_face", "saucer_back",
+                         "pyramid_face", "pyramid_back", "pyramid_left", "pyramid_right", "pyramid_top",
+                         "matchstick_face", "matchstick_back")
 
 piece_device <- function(filename, piece_side=NULL, cfg=list(), angle=0, suit=1, rank=1,
                          width=NULL, height=NULL, res=72) {
@@ -27,6 +28,11 @@ pp_device <- function(filename, width, height, res=72, bg="transparent") {
 }
 
 pp_device_fn <- function(filename) {
+    if (is.null(filename)) {
+        dev_new <- function(width, height)
+            grDevices::dev.new(width = width, height = height, noRStudioGD = TRUE)
+        return (dev_new)
+    }
     format <- tools::file_ext(tolower(filename))
     switch(format,
            bmp = grDevices::bmp,

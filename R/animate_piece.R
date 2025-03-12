@@ -4,25 +4,27 @@
 #' @param dfs A list of data frames of game data to plot.
 #' @param file Filename to save animation unless `NULL`
 #'             in which case it uses the current graphics device.
-#' @param annotate If `TRUE` or `"algebraic"` annotate the plot
-#'                  with \dQuote{algrebraic} coordinates,
-#'                 if `FALSE` or `"none"` don't annotate,
-#'                 if `"cartesian"` annotate the plot with \dQuote{cartesian} coordinates.
 #' @param ... Arguments to [pmap_piece()]
 #' @param .f Low level graphics function to use e.g. [grid.piece()], [piece3d()], [piece()], or [piece_mesh()].
 #' @param cfg A piecepackr configuration list
 #' @param envir Environment (or named list) of piecepackr configuration lists
-#' @param n_transitions Integer, if over zero (the default)
-#'                how many transition frames to add between moves.
-#' @param n_pauses Integer, how many paused frames per completed move.
-#' @param fps Double, frames per second.
 #' @param width Width of animation (in inches).  Inferred by default.
 #' @param height Height of animation (in inches).  Inferred by default.
 #' @param ppi Resolution of animation in pixels per inch.
 #'            By default set so image max 600 pixels wide or tall.
-#' @param new_device If `file` is `NULL` should we open up a new graphics device?
+#' @param annotate If `TRUE` or `"algebraic"` annotate the plot
+#'                  with \dQuote{algrebraic} coordinates,
+#'                 if `FALSE` or `"none"` don't annotate,
+#'                 if `"cartesian"` annotate the plot with \dQuote{cartesian} coordinates.
 #' @param annotation_scale Multiplicative factor that scales (stretches) any annotation coordinates.
 #'                         By default uses `attr(df, "scale_factor") %||% 1`.
+#' @param open_device If `TRUE` open a new graphics device otherwise draw in the active graphics.
+#' @param n_transitions Integer, if over zero (the default)
+#'                how many transition frames to add between moves.
+#' @param n_pauses Integer, how many paused frames per completed move.
+#' @param fps Double, frames per second.
+#' @param new_device If `file` is `NULL` should we open up a new graphics device?
+#'                   This argument is deprecated.  Use the `open_device` argument instead.
 #' @return Nothing, as a side effect creates an animation.
 #' @examples
 #'   # Basic tic-tac-toe animation
@@ -66,14 +68,17 @@
 #'
 #' @export
 animate_piece <- function(dfs, file = "animation.gif", ...,
-                          annotate = TRUE,
                           .f = piecepackr::grid.piece,
                           cfg = getOption("piecepackr.cfg", NULL),
                           envir = getOption("piecepackr.envir", game_systems("sans")),
-                          n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses,
                           width = NULL, height = NULL, ppi = NULL,
-                          new_device = TRUE, annotation_scale = NULL) {
-
+                          annotate = TRUE, annotation_scale = NULL,
+                          open_device = new_device,
+                          n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses,
+                          new_device = TRUE) {
+    if (!missing(new_device)) {
+        warn("The argument `new_device` is deprecated.  Use `open_device` instead.")
+    }
     if (n_transitions > 0L)
         assert_suggested("tweenr")
 
@@ -108,14 +113,14 @@ animate_piece <- function(dfs, file = "animation.gif", ...,
     width <- width + (width %% 2)
     plot_fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir,
                               annotate, annotation_scale)
-    animation_fn(file, new_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, ppi)
+    animation_fn(file, open_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, ppi)
     invisible(NULL)
 }
 #### How to handle empty tibbles??
-animation_fn <- function(file, new_device = TRUE) {
+animation_fn <- function(file, open_device = TRUE) {
     if (is.null(file)) {
         function(expr, file, width, height, delay, res) {
-            if (new_device) dev.new(width = width / res, height = height / res, unit = "in", noRstudioGD = TRUE)
+            if (open_device) dev.new(width = width / res, height = height / res, unit = "in", noRstudioGD = TRUE)
             devAskNewPage(TRUE)
             eval(expr)
             devAskNewPage(getOption("device.ask.default"))
