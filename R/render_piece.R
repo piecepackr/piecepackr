@@ -43,21 +43,21 @@
 #' @examples
 #'  df_board <- data.frame(piece_side = "board_face", suit = 3, rank = 5,
 #'                         x = 3.0, y = 3.0, stringsAsFactors = FALSE)
-#'  df_w <- data.frame(piece_side = "bit_face", suit = 6, rank = 1,
+#'  df_w <- data.frame(piece_side = "bit_back", suit = 6, rank = 1,
 #'                     x = rep(1:5, 2), y = rep(1:2, each=5),
 #'                     stringsAsFactors = FALSE)
-#'  df_b <- data.frame(piece_side = "bit_face", suit = 1, rank = 1,
+#'  df_b <- data.frame(piece_side = "bit_back", suit = 1, rank = 1,
 #'                     x = rep(1:5, 2), y = rep(4:5, each=5),
 #'                     stringsAsFactors = FALSE)
 #'  df <- rbind(df_board, df_w, df_b)
 #'  df$cfg <- "checkers1"
 #'
 #'  if (requireNamespace("grid", quietly = TRUE)) {
-#'    render_piece(df, new_device = FALSE)
+#'    render_piece(df, open_device = FALSE)
 #'  }
 #'  if (requireNamespace("grid", quietly = TRUE)) {
 #'    grid::grid.newpage()
-#'    render_piece(df, new_device = FALSE,
+#'    render_piece(df, open_device = FALSE,
 #'                 op_scale = 0.5, trans = op_transform,
 #'                 annotate = "algrebraic")
 #'  }
@@ -65,6 +65,7 @@
 #'  if (require(rayvertex)) {
 #'    envir3d <- game_systems("sans3d")
 #'    render_piece(df, .f = piece_mesh, envir = envir3d,
+#'                 open_device = FALSE,
 #'                 op_scale = 0.5, trans = op_transform)
 #'  }
 #'  }
@@ -265,12 +266,15 @@ annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0,
             xbreaks <- as.integer(xbreaks)
             x_coords <- seq(annotation_scale, by = annotation_scale,
                             length.out = max(xbreaks))
-            x_coords <- x_coords[xbreaks]
         }
         if (annotate == "cartesian")
             l <- as.character(seq_along(x_coords))
         else
             l <- letters[seq_along(x_coords)]
+        if (!is.null(xbreaks)) {
+            x_coords <- x_coords[xbreaks]
+            l <- l[xbreaks]
+        }
         l <- str_pad(l, max(str_count(l)))
         grid.text(l, x = x_coords + xoffset, y = 0.25, default.units = "in", gp = gp)
 
@@ -280,10 +284,13 @@ annotate_plot <- function(annotate, xmax, ymax, xoffset = 0, yoffset = 0,
             ybreaks <- as.integer(ybreaks)
             y_coords <- seq(annotation_scale, by = annotation_scale,
                             length.out = max(ybreaks))
-            y_coords <- y_coords[ybreaks]
         }
         n <- as.character(seq_along(y_coords))
         n <- str_pad(n, max(str_count(n)))
+        if (!is.null(ybreaks)) {
+            y_coords <- y_coords[ybreaks]
+            l <- l[ybreaks]
+        }
         grid.text(n, x = 0.25, y = y_coords + yoffset, default.units = "in", gp = gp)
 
         invisible(NULL)

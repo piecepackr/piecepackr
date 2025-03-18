@@ -1,9 +1,9 @@
 df_board <- data.frame(piece_side = "board_face", suit = 3, rank = 8,
                        x = 4.5, y = 4.5, stringsAsFactors = FALSE)
-df_w <- data.frame(piece_side = "bit_face", suit = 6, rank = 1,
+df_w <- data.frame(piece_side = "bit_back", suit = 6, rank = 1,
                    x = rep(1:8, 2), y = rep(1:2, each=8),
                    stringsAsFactors = FALSE)
-df_b <- data.frame(piece_side = "bit_face", suit = 1, rank = 1,
+df_b <- data.frame(piece_side = "bit_back", suit = 1, rank = 1,
                    x = rep(1:8, 2), y = rep(7:8, each=8),
                    stringsAsFactors = FALSE)
 df <- rbind(df_board, df_w, df_b)
@@ -15,7 +15,7 @@ test_that("render_piece() works", {
     library("vdiffr")
 
     envir <- game_systems("sans")
-    expect_doppelganger("render_piece", function() 
+    expect_doppelganger("render_piece", function()
         render_piece(df, envir = envir, open_device = FALSE)
     )
     expect_doppelganger("render_piece_cartesian", function()

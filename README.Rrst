@@ -66,9 +66,9 @@ library("piecepackr")
 library("tibble")
 df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
                x = 4.5, y = 4.5)
-df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
+df_w <- tibble(piece_side = "bit_back", suit = 6, rank = 1,
                x = rep(1:8, 2), y = rep(1:2, each=8))
-df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+df_b <- tibble(piece_side = "bit_back", suit = 1, rank = 1,
                x = rep(1:8, 2), y = rep(7:8, each=8))
 df <- rbind(df_board, df_w, df_b)
 df$cfg <- "checkers1"
@@ -374,9 +374,9 @@ library("piecepackr")
 envir <- game_systems("sans")
 df_board <- tibble(piece_side = "board_face", suit = 3, rank = 12,
                    x = 4, y = 4)
-df_b <- tibble(piece_side = "bit_face", suit = 2, rank = 1,
+df_b <- tibble(piece_side = "bit_back", suit = 2, rank = 1,
                x = c(2, 3, 3, 4, 4), y = c(6, 5, 4, 5, 2))
-df_w <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+df_w <- tibble(piece_side = "bit_back", suit = 1, rank = 1,
                x = c(2, 2, 3, 4, 5, 5), y = c(4, 3, 6, 5, 4, 6))
 df <- rbind(df_board, df_w, df_b)
 

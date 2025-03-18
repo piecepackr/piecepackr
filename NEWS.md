@@ -19,6 +19,9 @@ New features
     - There are also square holed boards spaced for 1" marbles: their color
       is controlled by suit and number of holes per row/column by rank.
 
+  + In configurations `checkers1` and `checkers2` the "bit\_face" now has a promotion symbol
+    while the "bit\_back" remains plain (#371).
+
   + New `game_systems()` argument `shading` which if `TRUE` adds a shading effect to marbles and stones when drawn with `grid.piece()` or `geom_piece()`.
 
 * `marbles_transform()` is a wrapper around `op_transform()` that handles the special case

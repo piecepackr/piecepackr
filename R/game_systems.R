@@ -189,8 +189,8 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token", ..., shadi
     packs <- piecepack(style, color_list, rect_shape, pawn)
 
     list(alquerque = alquerque(1, color_list, shading),
-         checkers1 = checkers(1, color_list),
-         checkers2 = checkers(2, color_list),
+         checkers1 = checkers(style, 1, color_list),
+         checkers2 = checkers(style, 2, color_list),
          chess1 = chess(style, 1, color_list),
          chess2 = chess(style, 2, color_list),
          dice = dice(color_list, rect_shape),
@@ -654,13 +654,19 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
     dominoes
 }
 
-checker_piece <- function(cell_width) {
-    list(width.bit = 0.75 * cell_width, invert_colors.bit = TRUE,
-         ps_text.bit = "", dm_text.bit = "")
-
+checker_piece <- function(cell_width, ps_text.bit_face = "", ps_cex.bit_face = 1.3) {
+    list(  dm_text.bit = ""
+         , invert_colors.bit = TRUE
+         , ps_text.bit_back = ""
+         , ps_text.bit_face = ps_text.bit_face
+         , ps_cex.bit_face = cell_width * ps_cex.bit_face
+         , width.bit = 0.75 * cell_width
+         , background_color.s5.bit_face = "black"
+         , background_color.s6.bit_face = "black"
+    )
 }
 
-checkers <- function(cell_width = 1, color_list = color_list_fn()) {
+checkers <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) {
     checkers <- list(n_suits = 6, n_ranks = 12,
                      width.board = 8 * cell_width,
                      height.board = 8 * cell_width,
@@ -679,7 +685,14 @@ checkers <- function(cell_width = 1, color_list = color_list_fn()) {
         checkers[[str_glue("grob_fn.r{i}.board_face")]] <- checkeredBoardGrobFn(i, i)
         checkers[[str_glue("grob_fn.r{i}.board_back")]] <- linedBoardGrobFn(i, i)
     }
-    checkers <- pp_cfg(c(checkers, checker_piece(cell_width), color_list))
+    # \u25cb white circle \u25cf black circle \u265b black queen \u2605 black star
+    # \u272a circled white star
+    if (grepl("^sans", style)) {
+        bits <- checker_piece(cell_width, "\u25cb", 1.7)
+    } else {
+        bits <- checker_piece(cell_width, "\u272a", 1.3)
+    }
+    checkers <- pp_cfg(c(checkers, bits, color_list))
     checkers$has_piecepack <- FALSE
     checkers$has_boards <- TRUE
     checkers$has_bits <- TRUE
