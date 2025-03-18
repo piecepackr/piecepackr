@@ -104,10 +104,14 @@ test_that("no regressions in figures", {
                       suit = c(1, 5), rank = c(2, 4), cfg = "checkers1")
         df1b <- tibble(piece_side = "board_back", x = 5, y=1,
                       suit = 1, rank = 2, cfg = "checkers1")
-        df_bit <- tibble(piece_side = "bit_face", x = c(rep(1, 6), 2:7), y = c(rep(1, 6), 2:7),
-                         suit = c(1:6, 6:1), rank = rep(1:6, 2), cfg = "checkers1")
-        df_bit2 <- tibble(piece_side = "bit_back", x = 6, y = 6, suit = 4, rank = 4, cfg = "checkers2")
-        df <- rbind(df2, df1f, df1b, df_bit2, df_bit)
+        df_bit1 <- tibble(piece_side = "bit_back", x = rep_len(1, 6L), y = rep_len(1, 6L),
+                         suit = 1:6, rank = 1:6, cfg = "checkers1")
+        df_bit2 <- tibble(piece_side = "bit_face", x = 2:7, y = 2:7,
+                         suit = 6:1, rank = 1:6, cfg = "checkers1")
+        df_bit3 <- tibble(piece_side = "bit_back", x = 5, y = 7, suit = 4L, rank = 4L, cfg = "checkers2")
+        df <- rbind(df2, df1f, df1b, df_bit3, df_bit2, df_bit1)
+        df_bit4 <- tibble(piece_side = "bit_face", x = 7, y = 5, suit = 2L, rank = 4L, cfg = "checkers2")
+        df <- rbind(df2, df1f, df1b, df_bit4, df_bit3, df_bit2, df_bit1)
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
     })
 

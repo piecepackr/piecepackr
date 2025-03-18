@@ -97,21 +97,21 @@ apply axes offsets, annotate coordinates, and set up \code{rayrender} / \code{ra
 \examples{
  df_board <- data.frame(piece_side = "board_face", suit = 3, rank = 5,
                         x = 3.0, y = 3.0, stringsAsFactors = FALSE)
- df_w <- data.frame(piece_side = "bit_face", suit = 6, rank = 1,
+ df_w <- data.frame(piece_side = "bit_back", suit = 6, rank = 1,
                     x = rep(1:5, 2), y = rep(1:2, each=5),
                     stringsAsFactors = FALSE)
- df_b <- data.frame(piece_side = "bit_face", suit = 1, rank = 1,
+ df_b <- data.frame(piece_side = "bit_back", suit = 1, rank = 1,
                     x = rep(1:5, 2), y = rep(4:5, each=5),
                     stringsAsFactors = FALSE)
  df <- rbind(df_board, df_w, df_b)
  df$cfg <- "checkers1"
 
  if (requireNamespace("grid", quietly = TRUE)) {
-   render_piece(df, new_device = FALSE)
+   render_piece(df, open_device = FALSE)
  }
  if (requireNamespace("grid", quietly = TRUE)) {
    grid::grid.newpage()
-   render_piece(df, new_device = FALSE,
+   render_piece(df, open_device = FALSE,
                 op_scale = 0.5, trans = op_transform,
                 annotate = "algrebraic")
  }
@@ -119,6 +119,7 @@ apply axes offsets, annotate coordinates, and set up \code{rayrender} / \code{ra
  if (require(rayvertex)) {
    envir3d <- game_systems("sans3d")
    render_piece(df, .f = piece_mesh, envir = envir3d,
+                open_device = FALSE,
                 op_scale = 0.5, trans = op_transform)
  }
  }
