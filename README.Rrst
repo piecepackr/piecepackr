@@ -248,7 +248,7 @@ dark_colorscheme <- list(
     invert_colors.suited=TRUE, border_color="black", border_lex=2
 )
 piecepack_suits <- list(
-    suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+    suit_text="\U0001f31e\ufe0e,\U0001f31c\ufe0e,\U0001f451\ufe0e,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
     suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
     suit_cex="0.6,0.7,0.75,0.9,0.9"
 )
@@ -420,13 +420,13 @@ library("rgl")
 invisible(rgl::open3d())
 rgl::view3d(phi=-45, zoom = 0.9)
 
-df <- piecenikr::df_martian_chess()
-envir <- c(piecenikr::looney_pyramids(), game_systems("sans3d"))
+df <- icehouse_martian_chess()
+envir <- c(looney_pyramids(border = FALSE), game_systems("sans3d"))
 pmap_piece(df, piece3d, envir = envir, trans=op_transform,
-           scale = 0.98, res = 150)
+           scale = 0.98, res = 150, lit = TRUE)
 .. ..
 .. {r rgl_save, echo=FALSE, warning=FALSE}
-if (Sys.which("wmctrl") != "") system("wmctrl -r RGL -e 0,-1,-1,600,600") 
+if (nzchar(Sys.which("wmctrl"))) system("wmctrl -r RGL -e 0,-1,-1,600,600") 
 Sys.sleep(3)
 snapshot3d("man/figures/README-rgl_snapshot.png", top = FALSE)
 .. ..

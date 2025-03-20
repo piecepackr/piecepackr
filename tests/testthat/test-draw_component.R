@@ -1,5 +1,4 @@
 cfg_default <- pp_cfg(list(title="default cfg"))
-cfg_3d <- game_systems("sans3d")$piecepack
 test_that("pp_cfg works as expected", {
     expect_true(inherits(cfg_default, "pp_cfg"))
     expect_equal(class(as.list(cfg_default)), "list")
@@ -262,8 +261,6 @@ test_that("no regressions in figures", {
     expect_error(dce("coin_face", rank = 3, cfg=list(mat_width=0.2, mat_color="green", shape="kite")),
                  "Don't know how to add mat to shape kite")
     expect_error(cfg_default$get_width("boo_back"), "Don't know width of piece boo")
-    expect_error(game_systems("boobear"),
-                 "Don't have a customized configuration for style boobear")
 
     # piecepack pyramids
     expect_doppelganger("pyramid_face.s1.r6", function() dc("pyramid_face", suit=1, rank=6))
@@ -300,7 +297,7 @@ test_that("oblique projection works", {
     expect_doppelganger("tile_face_op", function() dc("tile_face"))
     expect_doppelganger("tile_face_op_roundrect", function() dc("tile_face", cfg=list(shape.tile="roundrect")))
     expect_doppelganger("coin_face_op", function() dc("coin_face"))
-    expect_doppelganger("pawn_face_op", function() dc("pawn_face", cfg=cfg_3d))
+    expect_doppelganger("pawn_face_op", function() dc("pawn_face"))
     expect_doppelganger("matchstick_face_op", function() dc("matchstick_face"))
     suppressMessages({
       expect_doppelganger("die_face_op", function() dc("die_face"))

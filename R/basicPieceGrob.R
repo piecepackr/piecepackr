@@ -34,10 +34,16 @@
 basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
     cfg <- as_pp_cfg(cfg)
     opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    gTree(opt=opt, border=TRUE, flip=FALSE, scale=1,
+    gTree(opt=opt, border=TRUE, flip=FALSE, scale=1, fill_stroke=FALSE,
           name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
 }
 
+basicFillStrokeGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
+    cfg <- as_pp_cfg(cfg)
+    opt <- cfg$get_piece_opt(piece_side, suit, rank)
+    gTree(opt=opt, border=TRUE, flip=FALSE, scale=1, fill_stroke=TRUE,
+          name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
+}
 
 ellipsoidGrobFn <- function(shading = FALSE) {
     force(shading)
@@ -89,12 +95,20 @@ makeContent.basic_piece_side <- function(x) {
                   fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
     ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, hjust = 0.5, vjust = 0.5,
                         gp = gp_ps, name = "primary_symbol")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_ps_fs <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
+        ps_grob <- fillStrokeGrob(ps_grob, gp = gp_ps_fs)
+    }
 
     # Directional mark
     gp_dm <- gpar(col=opt$dm_color, fontsize=opt$dm_fontsize,
                   fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
     dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, hjust = 0.5, vjust = 0.5,
                         gp = gp_dm, name = "directional_mark")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_dm_fs <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
+        dm_grob <- fillStrokeGrob(dm_grob, gp = gp_dm_fs)
+    }
 
     if (x$border) {
         gp_border <- gpar(col=opt$border_color, fill=NA, lex=opt$border_lex)

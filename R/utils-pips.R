@@ -142,11 +142,12 @@ xya_pips_dominoes <- function(n_pips, die = FALSE, chinese = FALSE, other_pips =
            )
 }
 
-cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text", has_pips = TRUE) {
+cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text", has_pips = TRUE, fill_stroke = FALSE) {
     force(type)
     force(rank_offset)
     force(grob_type)
     force(has_pips)
+    force(fill_stroke)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
@@ -154,6 +155,7 @@ cardGrobFn <- function(rank_offset = 0, type = "card", grob_type = "text", has_p
         gTree(opt=opt,
               piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
               type=type, rank_offset=rank_offset, grob_type=grob_type,
+              fill_stroke=fill_stroke,
               scale=1, border=TRUE, has_pips=has_pips,
               cl=c("card_side", "basic_piece_side"))
     }
@@ -179,15 +181,24 @@ makeContent.card_side <- function(x) {
     rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
                           x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "rank")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_rank <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
+        rank_grob <- fillStrokeGrob(rank_grob, gp = gp_fs_rank)
+    }
+
     gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
                     fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
     suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
                           x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "suit")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_suit <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
+        suit_grob <- fillStrokeGrob(suit_grob, gp = gp_fs_suit)
+    }
 
     # Pips
     if (x$has_pips) {
-        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE)
+        tfn <- pippedGrobFn(rank_offset, type, grob_type, border = FALSE, mat = FALSE, fill_stroke = x$fill_stroke)
         pip_grob <- tfn(x$piece_side, x$suit, x$rank, x$cfg)
         pip_grob <- grid::editGrob(pip_grob,
                           vp=viewport(height = 1.0, width = 0.80, gp=gpar(cex=1.8)), name = "pips")
@@ -207,13 +218,14 @@ makeContent.card_side <- function(x) {
     setChildren(x, gl)
 }
 
-jokerCardGrobFn <- function(star = TRUE) {
+jokerCardGrobFn <- function(star = TRUE, fill_stroke = FALSE) {
     force(star)
+    force(fill_stroke)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
-        gTree(opt = opt, star = star,
+        gTree(opt = opt, star = star, fill_stroke = fill_stroke,
               scale = 1, border = TRUE,
               cl=c("joker_card_side", "basic_piece_side"))
     }
@@ -236,9 +248,13 @@ makeContent.joker_card_side <- function(x) {
     rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
                           x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "rank")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_rank <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
+        rank_grob <- fillStrokeGrob(rank_grob, gp = gp_fs_rank)
+    }
 
     # Joker
-    joker_grob <- jokerGrob(opt, x$star)
+    joker_grob <- jokerGrob(opt, x$star, x$fill_stroke)
 
     # Border
     if (x$border) {
@@ -252,17 +268,23 @@ makeContent.joker_card_side <- function(x) {
     setChildren(x, gl)
 }
 
-jokerGrob <- function(opt, star = TRUE) {
+jokerGrob <- function(opt, star = TRUE, fill_stroke = FALSE) {
     gp_meeple <- gpar(col = opt$ps_color, lwd = 4)
     vp_meeple <- viewport(height=inch(1.3), width=inch(1.2), y = 0.4)
     meeple_grob <- pp_shape("meeple")$shape(gp=gp_meeple, vp=vp_meeple)
-    gp_triangle <- gpar(fill = opt$ps_color, col = NA_character_)
+    if (fill_stroke) {
+        gp_triangle <- gpar(fill = opt$ps_color, col = opt$border_col, lwd=1.5)
+        gp_circle <- gpar(fill = opt$ps_color, col = opt$border_col, lwd = 1.5)
+    } else {
+        gp_triangle <- gpar(fill = opt$ps_color, col = NA_character_)
+        gp_circle <- gpar(col = opt$ps_color, lwd = 4)
+    }
     y_triangle <- unit(0.4, "npc") + inch(0.5 * 1.3) + inch(0.5 * 0.8) + inch(-0.10)
     vp_triangle <- viewport(height=inch(0.8), width=inch(0.45), y = y_triangle)
     triangle_grob <- pp_shape("pyramid")$shape(gp=gp_triangle, vp=vp_triangle)
     y_circle <- y_triangle + inch(0.5 * 0.8) + inch(0.5 * 0.2) + inch(-0.02)
     vp_circle <- viewport(height=inch(0.2), width=inch(0.2), y = y_circle)
-    circle_grob <- circleGrob(vp = vp_circle, gp = gpar(col = opt$ps_color, lwd = 4))
+    circle_grob <- circleGrob(vp = vp_circle, gp = gp_circle)
     if (star) {
         star_grob <- pp_shape("concave5")$shape(gp = gp_triangle, vp = vp_circle)
     } else {
@@ -272,15 +294,16 @@ jokerGrob <- function(opt, star = TRUE) {
              vp = viewport(width=0.8, height=0.9), cl = "joker")
 }
 
-faceCardGrobFn <- function(label = "", placement = "high") {
+faceCardGrobFn <- function(label = "", placement = "high", fill_stroke = FALSE) {
     force(label)
     force(placement)
+    force(fill_stroke)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
 
         gTree(opt=opt, label=label, placement=placement,
-              scale=scale, border=TRUE,
+              scale=scale, border=TRUE, fill_stroke=fill_stroke,
               cl=c("face_card_side", "basic_piece_side"))
     }
 }
@@ -303,17 +326,26 @@ makeContent.face_card_side <- function(x) {
     rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
                           x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "rank")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_rank <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
+        rank_grob <- fillStrokeGrob(rank_grob, gp = gp_fs_rank)
+    }
+
     gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
                     fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface)
     suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
                           x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "suit")
+    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_suit <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
+        suit_grob <- fillStrokeGrob(suit_grob, gp = gp_fs_suit)
+    }
 
     # Face
-    top_grob <- faceGrob(opt, label, placement)
+    top_grob <- faceGrob(opt, label, placement, fill_stroke = x$fill_stroke)
     top_grob <- grid::editGrob(top_grob,
                       vp=viewport(y=0.75, height = 0.5, width = 0.80), name = "top")
-    bot_grob <- faceGrob(opt, label, placement)
+    bot_grob <- faceGrob(opt, label, placement, fill_stroke = x$fill_stroke)
     bot_grob <- grid::editGrob(top_grob,
                       vp=viewport(y=0.25, height = 0.5, width = 0.80, angle = 180), name = "bottom")
 
@@ -330,7 +362,7 @@ makeContent.face_card_side <- function(x) {
     setChildren(x, gl)
 }
 
-faceGrob <- function(opt, label = "", placement = "high") {
+faceGrob <- function(opt, label = "", placement = "high", fill_stroke = FALSE) {
     if (placement == "high") {
         y <- 0.7
         x_meeple <- 0.5
@@ -350,11 +382,19 @@ faceGrob <- function(opt, label = "", placement = "high") {
                     lineheight = 0.8, cex = cex)
     label_grob <- textGrob(label = label, gp = gp_label, x = 0.5, y = y,
                           hjust = 0.5, vjust = 0.5, rot = rot, name = "label")
+    if (isTRUE(fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_label <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
+        label_grob <- fillStrokeGrob(label_grob, gp = gp_fs_label)
+    }
     gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
                     fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface,
                     cex = in_meeple)
     suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit, x = x_meeple, y = y_meeple,
                           hjust = 0.5, vjust = 0.5, name = "suit")
+    if (isTRUE(fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp_fs_suit <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
+        suit_grob <- fillStrokeGrob(suit_grob, gp = gp_fs_suit)
+    }
     gp_meeple <- gpar(col = opt$ps_color, lwd = 4)
     vp_meeple <- viewport(height=inch(in_meeple), width=inch(in_meeple), x = x_meeple, y = y_meeple)
     meeple_grob <- pp_shape("meeple")$shape(gp = gp_meeple, vp = vp_meeple)
@@ -426,13 +466,21 @@ makeContent.domino_side <- function(x) {
 
 pippedGrobFn <- function(rank_offset = 0, type = "die", grob_type = "circle",
                          border = TRUE, mat = TRUE, background = TRUE,
-                         other_pips = NULL) {
+                         other_pips = NULL, fill_stroke = FALSE) {
+    force(type)
+    force(rank_offset)
+    force(grob_type)
+    force(border)
+    force(mat)
+    force(background)
+    force(other_pips)
+    force(fill_stroke)
     function(piece_side, suit, rank, cfg=pp_cfg()) {
         cfg <- as_pp_cfg(cfg)
         opt <- cfg$get_piece_opt(piece_side, suit, rank)
         gTree(opt = opt, n_pips = rank + rank_offset, type = type, grob_type = grob_type,
               border = border, mat = mat, background = background,
-              other_pips = other_pips + rank_offset,
+              other_pips = other_pips + rank_offset, fill_stroke = fill_stroke,
               name = NULL, gp = gpar(), vp = NULL, cl = "pipped")
     }
 }
@@ -503,6 +551,10 @@ makeContent.pipped <- function(x) {
                           fontfamily=opt$dm_fontfamily, fontface=opt$dm_fontface)
             pip_grob <- textGrob(opt$dm_text, x=xya$x, y=xya$y, rot = xya$angle,
                                gp = gp_pip, hjust = 0.5, vjust = 0.5, name="pips")
+            if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+                gp_fs <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
+                pip_grob <- fillStrokeGrob(pip_grob, gp = gp_fs)
+            }
         }
     } else {
         pip_grob <- nullGrob(name="pips")

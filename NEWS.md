@@ -6,11 +6,22 @@ Deprecated features
 
 * The `new_device` argument of `animate_piece()` and `render_piece()` is now deprecated.
   Use the new argument `open_device` instead.
+* The `style` argument of `game_systems()` is now deprecated.
+  Use the new argument `font` (and possibly the new arguments `border`, `background_color`, and `edge_color`).
+* The (undocumented) use of adding a "3d" at the end of the `font` or `style` argument is now deprecated.
+  Use `border = FALSE` instead (and possible the new arguments `background_color` and `edge_color`).
 
 New features
 ------------
 
 * The following enhancements to the configurations returned by `game_systems()`:
+
+  + New arguments `font`, `border`, `background_color`, and `edge_color`
+    (to replace the deprecated `style` argument).
+  + The "blue" suits (usually the third suit) are now a darker shade of blue.
+  + The "yellow" suits (usually the fifth suit) are now yellower (and less orange)
+    and yellow glyphs should now be surrounded by black outlines
+    (when the `grid::fillStrokeGrob()` feature is supported).
 
   + New configuration `marbles` which provides marbles in nine sizes and six colors represented by a "bit" (#363).
 

@@ -33,7 +33,7 @@
 <text transform='translate(210.05,507.43) rotate(-120)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>4</text>
 <text transform='translate(221.95,507.43) rotate(-240)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>1</text>
 <polygon points='216.00,469.63 186.24,521.18 245.76,521.18 ' style='stroke-width: 3.00; fill: none;' />
-<polygon points='288.00,469.63 258.24,521.18 317.76,521.18 ' style='stroke-width: 0.75; stroke: none; fill: #56B4E9;' />
+<polygon points='288.00,469.63 258.24,521.18 317.76,521.18 ' style='stroke-width: 0.75; stroke: none; fill: #0072B2;' />
 <text x='288.00' y='497.13' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>4</text>
 <text transform='translate(282.05,507.43) rotate(-120)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>2</text>
 <text transform='translate(293.95,507.43) rotate(-240)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>1</text>
@@ -47,8 +47,8 @@
 <polygon points='245.76,449.18 216.00,397.63 233.18,414.82 ' style='stroke-width: 3.00; fill: #009E73;' />
 <polygon points='216.00,397.63 186.24,449.18 233.18,414.82 ' style='stroke-width: 3.00; fill: #009E73;' />
 <polygon points='233.18,414.82 186.24,449.18 245.76,449.18 ' style='stroke-width: 3.00; fill: #009E73;' />
-<polygon points='288.00,397.63 305.18,414.82 317.76,449.18 ' style='stroke-width: 3.00; fill: #56B4E9;' />
-<polygon points='258.24,449.18 305.18,414.82 288.00,397.63 ' style='stroke-width: 3.00; fill: #56B4E9;' />
-<polygon points='305.18,414.82 258.24,449.18 317.76,449.18 ' style='stroke-width: 3.00; fill: #56B4E9;' />
+<polygon points='288.00,397.63 305.18,414.82 317.76,449.18 ' style='stroke-width: 3.00; fill: #0072B2;' />
+<polygon points='258.24,449.18 305.18,414.82 288.00,397.63 ' style='stroke-width: 3.00; fill: #0072B2;' />
+<polygon points='305.18,414.82 258.24,449.18 317.76,449.18 ' style='stroke-width: 3.00; fill: #0072B2;' />
 </g>
 </svg>
