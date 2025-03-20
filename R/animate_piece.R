@@ -80,7 +80,8 @@ animate_piece <- function(dfs, file = "animation.gif", ...,
                           xbreaks = NULL, ybreaks = NULL,
                           new_device = TRUE) {
     if (!missing(new_device)) {
-        warn("The argument `new_device` is deprecated.  Use `open_device` instead.")
+        warn("The argument `new_device` is deprecated.  Use `open_device` instead.",
+             class = "deprecatedWarning")
     }
     if (n_transitions > 0L)
         assert_suggested("tweenr")

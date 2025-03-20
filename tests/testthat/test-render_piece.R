@@ -29,7 +29,7 @@ test_that("render_piece() works", {
 
     skip_if_not_installed("rayvertex")
     library("rayvertex")
-    envir3d <- game_systems("sans3d")
+    envir3d <- game_systems("sans", border = FALSE)
     f <- tempfile(fileext = ".jpg")
     render_piece(df, file = f, .f = piece_mesh, envir = envir3d,
                  op_scale = 0.5, trans = op_transform)
@@ -38,7 +38,6 @@ test_that("render_piece() works", {
 
     skip_if_not_installed("rayrender")
     library("rayrender")
-    envir3d <- game_systems("sans3d")
     f <- tempfile(fileext = ".jpg")
     render_piece(df, file = f, .f = piece, envir = envir3d,
                  op_scale = 0.5, trans = op_transform,

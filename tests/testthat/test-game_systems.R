@@ -1,4 +1,6 @@
-test_that("no regressions in figures", {
+test_that("no regressions in `game_systems()`", {
+    expect_error(game_systems("boobear"),
+                 "Don't have a customized configuration for font")
 
     skip_on_ci()
     skip_if_not_installed("vdiffr")
@@ -115,6 +117,14 @@ test_that("no regressions in figures", {
         pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
     })
 
+    # chess
+    # df <- tibble(piece_side = "bit_face", x = rep(1:6, 6L), y = rep(6:1, each=6L),
+    #              rank = x, suit = y, cfg = "chess1")
+    # pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
+    # df <- tibble(piece_side = "bit_face", x = rep(seq.int(1, by=2, length.out=6L), 6L), y = rep(6:1, each=6L),
+    #              rank = x, suit = y, cfg = "chess2")
+    # pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
+
     # joystick pawns
     cfg <- game_systems(pawn = "joystick")$piecepack
     df <- tibble(piece_side = "pawn_top", x = 1:4, y=1:4, suit=1:4)
@@ -168,7 +178,7 @@ test_that("no regressions in figures", {
     })
 
     # playing cards
-    cfg <- game_systems("sans3d")$playing_cards_colored
+    cfg <- game_systems("sans", border = FALSE)$playing_cards_colored
     expect_doppelganger("ten_of_clubs", function()
         grid.piece("card_face", suit = 3, rank = 10, cfg = cfg,
                    default.units = "npc"))
@@ -178,7 +188,7 @@ test_that("no regressions in figures", {
     expect_doppelganger("red_joker", function()
         grid.piece("card_face", suit = 1, rank = 14, cfg = cfg,
                    default.units = "npc"))
-    cfg <- game_systems("sans3d")$playing_cards_tarot
+    cfg <- game_systems("sans", border = FALSE)$playing_cards_tarot
     expect_doppelganger("black_joker_no_star", function()
         grid.piece("card_face", suit = 3, rank = 15, cfg = cfg,
                    default.units = "npc"))

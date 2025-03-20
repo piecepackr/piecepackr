@@ -86,7 +86,8 @@ render_piece <- function(df, file = NULL, ...,
                          xbreaks = NULL, ybreaks = NULL,
                          new_device = TRUE) {
     if (!missing(new_device)) {
-        warn("The argument `new_device` is deprecated.  Use `open_device` instead.")
+        warn("The argument `new_device` is deprecated.  Use `open_device` instead.",
+             class = "deprecatedWarning")
     }
     stopifnot(is.null(dev) || is.function(dev))
     image <- match.arg(image)

@@ -67,9 +67,9 @@ Checkers
     library("tibble")
     df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
                    x = 4.5, y = 4.5)
-    df_w <- tibble(piece_side = "bit_face", suit = 6, rank = 1,
+    df_w <- tibble(piece_side = "bit_back", suit = 6, rank = 1,
                    x = rep(1:8, 2), y = rep(1:2, each=8))
-    df_b <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+    df_b <- tibble(piece_side = "bit_back", suit = 1, rank = 1,
                    x = rep(1:8, 2), y = rep(7:8, each=8))
     df <- rbind(df_board, df_w, df_b)
     df$cfg <- "checkers1"
@@ -291,7 +291,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
         invert_colors.suited=TRUE, border_color="black", border_lex=2
     )
     piecepack_suits <- list(
-        suit_text="\U0001f31e,\U0001f31c,\U0001f451,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
+        suit_text="\U0001f31e\ufe0e,\U0001f31c\ufe0e,\U0001f451\ufe0e,\u269c,\uaa5c", # 🌞,🌜,👑,⚜,꩜
         suit_fontfamily="Noto Emoji,Noto Sans Symbols2,Noto Emoji,Noto Sans Symbols,Noto Sans Cham",
         suit_cex="0.6,0.7,0.75,0.9,0.9"
     )
@@ -445,9 +445,9 @@ geom_piece() ({ggplot2})
     envir <- game_systems("sans")
     df_board <- tibble(piece_side = "board_face", suit = 3, rank = 12,
                        x = 4, y = 4)
-    df_b <- tibble(piece_side = "bit_face", suit = 2, rank = 1,
+    df_b <- tibble(piece_side = "bit_back", suit = 2, rank = 1,
                    x = c(2, 3, 3, 4, 4), y = c(6, 5, 4, 5, 2))
-    df_w <- tibble(piece_side = "bit_face", suit = 1, rank = 1,
+    df_w <- tibble(piece_side = "bit_back", suit = 1, rank = 1,
                    x = c(2, 2, 3, 4, 5, 5), y = c(4, 3, 6, 5, 4, 6))
     df <- rbind(df_board, df_w, df_b)
     

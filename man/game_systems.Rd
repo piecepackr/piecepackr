@@ -6,14 +6,24 @@
 \alias{to_subpack}
 \title{Standard game systems}
 \usage{
-game_systems(style = NULL, round = FALSE, pawn = "token", ..., shading = FALSE)
+game_systems(
+  font = style,
+  round = FALSE,
+  pawn = "token",
+  ...,
+  shading = FALSE,
+  border = TRUE,
+  background_color = ifelse(border, "white", "burlywood"),
+  edge_color = ifelse(border, "white", "black"),
+  style = NULL
+)
 
 to_hexpack(cfg = getOption("piecepackr.cfg", pp_cfg()))
 
 to_subpack(cfg = getOption("piecepackr.cfg", pp_cfg()))
 }
 \arguments{
-\item{style}{If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
+\item{font}{If \code{NULL} (the default) uses suit glyphs from the default \dQuote{sans} font.
 If \code{"dejavu"} it will use suit glyphs from the "DejaVu Sans" font
 (must be installed on the system).}
 
@@ -30,6 +40,15 @@ Note for the latter two pawn styles only \code{pawn_top} will work with \code{\l
 \item{shading}{If \code{TRUE} add a shading effect to marbles and stones.
 Note your graphics device must be able to support the \code{\link[grid:patterns]{grid::radialGradient()}} fill
 i.e. \code{isTRUE("RadialGradient" \%in\% dev.capabilities())} (when the device is open).}
+
+\item{border}{If \code{TRUE} draw a black border line on piece edges.  Should normally be \code{TRUE} when
+drawing with \code{{grid}} graphics and \code{FALSE} when drawing with 3D graphic systems.}
+
+\item{background_color}{Background color to use for certain pieces like boards and piecepack tiles.}
+
+\item{edge_color}{Edge color to use for certain pieces like boards and piecepack tiles.}
+
+\item{style}{Deprecated argument.}
 
 \item{cfg}{List of configuration options}
 }
@@ -146,6 +165,7 @@ names(cfgs)
 \donttest{# May take more than 5 seconds on CRAN servers
 # standard dice, meeples, and joystick pawns
 if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
+
    opt <- options(piecepackr.at.inform = FALSE)
    grid::grid.newpage()
    dice <-  c("d4", "numeral", "d8", "d10", "d12", "d20")

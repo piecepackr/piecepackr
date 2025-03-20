@@ -1,4 +1,4 @@
-cfg <- piecepackr::game_systems("sans3d")$piecepack
+cfg <- piecepackr::game_systems("sans", border = FALSE)$piecepack
 test_that("save_piece_obj works", {
     files <- save_piece_obj("tile_face", z = NA, cfg = cfg)
     expect_length(files, 3)
@@ -22,14 +22,14 @@ test_that("save_piece_obj works", {
 test_that("rgl works", {
     skip_on_cran()
     skip_if_not_installed("rgl")
-    skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu3d" style
+    skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu" font
     library("rgl", quietly = TRUE,
             include.only = c("clear3d", "close3d", "open3d", "view3d"))
     # go stone OBJ generation uses "rgl" in background
-    files <- save_piece_obj("bit_face", cfg = game_systems("dejavu3d")$go)
+    files <- save_piece_obj("bit_face", cfg = game_systems("dejavu", border = FALSE)$go)
     expect_length(files, 3)
 
-    files <- save_piece_obj("pawn_top", cfg = game_systems("sans3d", pawn="peg-doll")$piecepack)
+    files <- save_piece_obj("pawn_top", cfg = game_systems("sans", border = FALSE, pawn="peg-doll")$piecepack)
     expect_length(files, 3)
 
     open3d(useNULL = TRUE)
@@ -37,7 +37,7 @@ test_that("rgl works", {
     pmap_piece(df, piece3d, cfg=cfg)
 
     clear3d()
-    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    cfg <- game_systems("sans", border = FALSE, pawn = "joystick")$piecepack
     l <- piece3d("pawn_top", x=-1:1, suit=1:3, cfg = cfg, lit=TRUE)
     expect_true(length(l) > 2)
 
@@ -87,7 +87,7 @@ test_that("rayrender works", {
 
     expect_null(piece("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
 
-    cfg <- game_systems("sans3d", pawn = "joystick")$piecepack
+    cfg <- game_systems("sans", border = FALSE, pawn = "joystick")$piecepack
     skip_if_not_installed("rgl") # needed to generate joystick pawn obj
     scene <- piece("pawn_top", x=-1:1, suit=1:3, cfg = cfg)
     expect_equal(nrow(scene), 9)
@@ -111,7 +111,7 @@ test_that("rayvertex works", {
 
     expect_null(piece_mesh("coin_face", x=-1:1, rank=1:3, cfg = cfg, scale = 0))
 
-    envir <- game_systems("sans3d", pawn = "joystick")
+    envir <- game_systems("sans", border = FALSE, pawn = "joystick")
     cfg <- envir$piecepack
     skip_if_not_installed("rgl") # needed to generate joystick pawn obj
     scene <- piece_mesh("pawn_top", x=-1:1, suit=c(1,3,4), cfg = cfg)

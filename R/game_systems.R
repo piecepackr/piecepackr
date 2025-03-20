@@ -104,9 +104,9 @@
 #'    red paired with green, black paired with white, and blue paired with yellow.
 #'}
 #' }
-#' @param style If `NULL` (the default) uses suit glyphs from the default \dQuote{sans} font.
-#'              If `"dejavu"` it will use suit glyphs from the "DejaVu Sans" font
-#'              (must be installed on the system).
+#' @param font If `NULL` (the default) uses suit glyphs from the default \dQuote{sans} font.
+#'             If `"dejavu"` it will use suit glyphs from the "DejaVu Sans" font
+#'             (must be installed on the system).
 #' @param round If `TRUE` the \dQuote{shape} of \dQuote{tiles} and \dQuote{cards} (and some boards)
 #'              will be \dQuote{roundrect} instead of \dQuote{rect} (the default).
 #' @param pawn If `"token"` (default) the piecepack pawn will be a two-sided token in a \dQuote{halma} outline,
@@ -117,6 +117,11 @@
 #' @param shading If `TRUE` add a shading effect to marbles and stones.
 #'                Note your graphics device must be able to support the [grid::radialGradient()] fill
 #'                i.e. `isTRUE("RadialGradient" %in% dev.capabilities())` (when the device is open).
+#' @param border If `TRUE` draw a black border line on piece edges.  Should normally be `TRUE` when
+#'               drawing with `{grid}` graphics and `FALSE` when drawing with 3D graphic systems.
+#' @param background_color Background color to use for certain pieces like boards and piecepack tiles.
+#' @param edge_color Edge color to use for certain pieces like boards and piecepack tiles.
+#' @param style Deprecated argument.
 #' @examples
 #' cfgs <- game_systems(pawn = "joystick")
 #' names(cfgs)
@@ -124,6 +129,7 @@
 #' \donttest{# May take more than 5 seconds on CRAN servers
 #' # standard dice, meeples, and joystick pawns
 #' if (requireNamespace("grid", quietly = TRUE) && piecepackr:::device_supports_unicode()) {
+#'
 #'    opt <- options(piecepackr.at.inform = FALSE)
 #'    grid::grid.newpage()
 #'    dice <-  c("d4", "numeral", "d8", "d10", "d12", "d20")
@@ -171,37 +177,52 @@
 #' }
 #' @seealso [pp_cfg()] for information about the [pp_cfg()] objects returned by `game_systems()`.
 #' @export
-game_systems <- function(style = NULL, round = FALSE, pawn = "token", ..., shading = FALSE) {
+game_systems <- function(font = style, round = FALSE, pawn = "token",
+                         ...,
+                         shading = FALSE,
+                         border = TRUE,
+                         background_color = ifelse(border, "white", "burlywood"),
+                         edge_color = ifelse(border, "white", "black"),
+                         style = NULL) {
     check_dots_empty()
-    style <- game_systems_style(style)
-
-    is_3d <- grepl("3d$", style)
-    if (shading && is_3d) {
-        inform(c(str_glue('Detected `shading = TRUE` and `style = "{style}"`.'),
-                 i = "You probably want `shading = FALSE` and use the 3D renderer's lighting/shading instead.",
-                 i = "For `piece3d()` don't forget the argument `lit = TRUE`.",
-                 i = "Don't forget to add lights for `rayrender::render_scene()` and `rayvertex::rasterize_scene()`."))
+    if (!missing(style)) {
+        warn("The argument `style` is deprecated.  Use the `font`, `border`, `background_color`, and/or `edge_color` arguments instead.",
+             class = "deprecatedWarning")
     }
-    rect_shape <- ifelse(round, "roundrect", "rect")
-    color_list <- color_list_fn(is_3d)
+    if (is.character(font) && grepl("3d$", font)) {
+        warn("Including a '3d' at the end of the `font` or `style` argument is deprecated.  Use the `border`, `background_color`, and/or `edge_color` arguments instead.",
+             class = "deprecatedWarning")
 
-    cards <- playing_cards(style, rect_shape)
-    packs <- piecepack(style, color_list, rect_shape, pawn)
+        if (missing(border))
+            border <- FALSE
+        if (missing(background_color))
+            background_color <- ifelse(border, "white", "burlywood")
+        if (missing(edge_color))
+            edge_color <- ifelse(border, "white", "black")
+        font <- gsub("3d$", "", font)
+    }
+    font <- game_systems_font(font)
+
+    rect_shape <- ifelse(round, "roundrect", "rect")
+    color_list <- color_list_fn(border, background_color, edge_color)
+
+    cards <- playing_cards(font, rect_shape)
+    packs <- piecepack(font, color_list, rect_shape, pawn, background_color, edge_color)
 
     list(alquerque = alquerque(1, color_list, shading),
-         checkers1 = checkers(style, 1, color_list),
-         checkers2 = checkers(style, 2, color_list),
-         chess1 = chess(style, 1, color_list),
-         chess2 = chess(style, 2, color_list),
+         checkers1 = checkers(font, 1, color_list),
+         checkers2 = checkers(font, 2, color_list),
+         chess1 = chess(font, 1, color_list),
+         chess2 = chess(font, 2, color_list),
          dice = dice(color_list, rect_shape),
-         dice_d4 = dice_d4(style, color_list),
-         dice_d8 = dice_d8(style, color_list),
-         dice_d10 = dice_d10(style, color_list),
-         dice_d10_percentile = dice_d10_percentile(style, color_list),
-         dice_d12 = dice_d12(style, color_list),
-         dice_d20 = dice_d20(style, color_list),
+         dice_d4 = dice_d4(font, color_list),
+         dice_d8 = dice_d8(font, color_list),
+         dice_d10 = dice_d10(font, color_list),
+         dice_d10_percentile = dice_d10_percentile(font, color_list),
+         dice_d12 = dice_d12(font, color_list),
+         dice_d20 = dice_d20(font, color_list),
          dice_fudge = dice_fudge(color_list, rect_shape),
-         dice_numeral = dice_numeral(style, color_list, rect_shape),
+         dice_numeral = dice_numeral(font, color_list, rect_shape),
          dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
          dominoes_black = dominoes(color_list$suit_color[2], "white", color_list$border_color, rect_shape),
          dominoes_blue = dominoes(color_list$suit_color[4], "white", color_list$border_color, rect_shape),
@@ -227,41 +248,44 @@ game_systems <- function(style = NULL, round = FALSE, pawn = "token", ..., shadi
          subpack = packs$subpack)
 }
 
-color_list_fn <- function(is_3d = FALSE) {
-    if (is_3d) {
-        list(background_color="burlywood",
-             suit_color = cb_suit_colors_pure,
-             border_color = "transparent", border_lex = 0,
-             edge_color.board = "black")
+color_list_fn <- function(border = TRUE, background_color = "white", edge_color = "white") {
+    if (border) {
+        list(suit_color = cb_suit_colors_impure,
+             border_color = "black",
+             border_lex = 4,
+             background_color = background_color,
+             edge_color.board = edge_color)
     } else {
-        list(background_color="white",
-             suit_color = cb_suit_colors_impure,
-             border_color = "black", border_lex = 4,
-             edge_color.board = "white")
+        list(suit_color = cb_suit_colors_pure,
+             border_color = "transparent",
+             border_lex = 0,
+             background_color = background_color,
+             edge_color.board = edge_color)
     }
 }
 
-game_systems_style <- function(style = "sans") {
-    styles <- c("dejavu", "dejavu3d", "sans", "sans3d")
-    if (!is.null(style) && is.na(match(style, styles))) {
-        abort(paste("Don't have a customized configuration for style", style))
+game_systems_font <- function(font = "sans") {
+    fonts <- c("dejavu", "sans")
+    if (!is.null(font) && is.na(match(font, fonts))) {
+        abort(paste("Don't have a customized configuration for font", dQuote(font)))
     }
 
-    if (is.null(style))
-        style <- "sans"
+    if (is.null(font))
+        font <- "sans"
 
-    if (grepl("dejavu", style) && !suppressWarnings(has_font("Dejavu Sans")))
-        inform(sprintf("'style = \"%s\"' but 'has_font(\"Dejavu Sans\")' is 'FALSE'", style))
+    if (grepl("dejavu", font) && !suppressWarnings(has_font("Dejavu Sans")))
+        inform(sprintf("`font = \"%s\"` but `has_font(\"Dejavu Sans\")` is `FALSE`", font))
 
-    style
+    font
 }
 
 # Okabe-Ito palette i.e. `palette.colors(n = 8, palette = "Okabe-Ito", names=TRUE)` plus white
 #                         vermillion black    bluishgreen  skyblue    orange     white
-cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
-# Swap sky blue for blue and orange for yellow
-# cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#F0E442", "#FFFFFF")
-# Swap sky blue for blue (but keep orange)
+# Sky blue and orange
+# cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
+# Dark blue and yellow
+cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#F0E442", "#FFFFFF")
+# Dark blue and orange
 # cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#E69F00", "#FFFFFF")
 cb_suit_colors_impure <- cb_suit_colors_pure
 cb_suit_colors_impure[2L] <- "grey30"
@@ -324,12 +348,12 @@ dice_fudge <- function(color_list = color_list_fn(), rect_shape = "rect") {
     dice
 }
 
-dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
+dice_d4 <- function(font = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 4,
                       rank_text.die = 1:4,
                       dm_text.die = "",
                       ps_cex.die = 1,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       grob_fn.die = d4Grob,
                       op_grob_fn.die = d4TopGrob,
                       obj_fn.die = save_d4_obj,
@@ -346,7 +370,7 @@ dice_d4 <- function(style = "sans", color_list = color_list_fn()) {
     dice
 }
 
-dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
+dice_d8 <- function(font = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 8,
                       rank_text.die = 1:8,
                       ps_cex.die = 1.15,
@@ -354,10 +378,10 @@ dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
                       ps_t.die = 90,
                       dm_text.die = "",
                       dm_text.r6.die = "\u2012",
-                      dm_r.die = ifelse(grepl("^dejavu", style), 0.14, 0.13),
+                      dm_r.die = ifelse(font == "dejavu", 0.14, 0.13),
                       dm_t.die = 270,
                       dm_cex.die = 1.5,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       op_grob_fn.die = d8TopGrob,
                       obj_fn.die = save_d8_obj,
                       width.die =  (18 / 25.4) / 0.8660254, # if 18 mm vertex to vertex
@@ -375,7 +399,7 @@ dice_d8 <- function(style = "sans", color_list = color_list_fn()) {
 
 # We'll use alpha-90-beta-90 angle kites
 # See `utils-d10.R` for more notes on calculations
-dice_d10 <- function(style = "sans", color_list = color_list_fn()) {
+dice_d10 <- function(font = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 10,
                       rank_text.die = c(1:9, 0),
                       ps_cex.die = 1.15,
@@ -384,10 +408,10 @@ dice_d10 <- function(style = "sans", color_list = color_list_fn()) {
                       dm_text.die = "",
                       dm_text.r6.die = "\u2012",
                       dm_text.r9.die = "\u2012",
-                      dm_r.die = ifelse(grepl("^dejavu", style), 0.29, 0.28),
+                      dm_r.die = ifelse(font == "dejavu", 0.29, 0.28),
                       dm_t.die = 270,
                       dm_cex.die = 1.5,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       op_grob_fn.die = d10TopGrob,
                       obj_fn.die = save_d10_obj,
                       width.die =  0.4913446110983896164548, # if kite height 5/8"
@@ -403,7 +427,7 @@ dice_d10 <- function(style = "sans", color_list = color_list_fn()) {
     dice
 }
 
-dice_d10_percentile <- function(style = "sans", color_list = color_list_fn()) {
+dice_d10_percentile <- function(font = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 10,
                       rank_text.die = c(1:9, 0),
                       dm_text.die = "0",
@@ -413,7 +437,7 @@ dice_d10_percentile <- function(style = "sans", color_list = color_list_fn()) {
                       ps_cex.die = 1.00,
                       ps_r.die = 0.20,
                       ps_t.die = 180,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       op_grob_fn.die = d10TopGrob,
                       obj_fn.die = save_d10_obj,
                       width.die =  5 / 8,
@@ -430,7 +454,7 @@ dice_d10_percentile <- function(style = "sans", color_list = color_list_fn()) {
     dice
 }
 
-dice_d12 <- function(style = "sans", color_list = color_list_fn()) {
+dice_d12 <- function(font = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 12,
                       rank_text.die = 1:12,
                       ps_cex.die = 1.15,
@@ -439,10 +463,10 @@ dice_d12 <- function(style = "sans", color_list = color_list_fn()) {
                       dm_text.die = "",
                       dm_text.r6.die = "\u2012",
                       dm_text.r9.die = "\u2012",
-                      dm_r.die = ifelse(grepl("^dejavu", style), 0.25, 0.22),
+                      dm_r.die = ifelse(font == "dejavu", 0.25, 0.22),
                       dm_t.die = 270,
                       dm_cex.die = 1.5,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       op_grob_fn.die = d12TopGrob,
                       obj_fn.die = save_d12_obj,
                       width.die =  (5 / 16) / 0.5877853, # if 5/16" vertex to vertex
@@ -462,17 +486,17 @@ dice_d12 <- function(style = "sans", color_list = color_list_fn()) {
     dice
 }
 
-dice_d20 <- function(style = "sans", color_list = color_list_fn()) {
+dice_d20 <- function(font = "sans", color_list = color_list_fn()) {
     dice_list <- list(n_suits = 6, n_ranks = 20,
                       rank_text.die = 1:20,
                       ps_cex.die = 0.65,
                       ps_r.die =  -0.02,
                       ps_t.die = 90,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       dm_text.die = "",
                       dm_text.r6.die = "\u2012",
                       dm_text.r9.die = "\u2012",
-                      dm_r.die = ifelse(grepl("^dejavu", style), 0.12, 0.13),
+                      dm_r.die = ifelse(font == "dejavu", 0.12, 0.13),
                       dm_t.die = 270,
                       dm_cex.die = 1.0,
                       op_grob_fn.die = d20TopGrob,
@@ -494,9 +518,9 @@ dice_d20 <- function(style = "sans", color_list = color_list_fn()) {
     dice
 }
 
-dice_numeral <- function(style = "sans", color_list = color_list_fn(), rect_shape = "rect") {
+dice_numeral <- function(font = "sans", color_list = color_list_fn(), rect_shape = "rect") {
     dice_list <- list(n_suits = 6, n_ranks = 6,
-                      fontfamily = ifelse(grepl("^dejavu", style), "DejaVu Sans", "sans"),
+                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       rank_text = 1:6,
                       ps_cex.die = 1.8,
                       dm_text.die = "",
@@ -666,7 +690,7 @@ checker_piece <- function(cell_width, ps_text.bit_face = "", ps_cex.bit_face = 1
     )
 }
 
-checkers <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) {
+checkers <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
     checkers <- list(n_suits = 6, n_ranks = 12,
                      width.board = 8 * cell_width,
                      height.board = 8 * cell_width,
@@ -687,7 +711,7 @@ checkers <- function(style = "sans", cell_width = 1, color_list = color_list_fn(
     }
     # \u25cb white circle \u25cf black circle \u265b black queen \u2605 black star
     # \u272a circled white star
-    if (grepl("^sans", style)) {
+    if (font == "sans") {
         bits <- checker_piece(cell_width, "\u25cb", 1.7)
     } else {
         bits <- checker_piece(cell_width, "\u272a", 1.3)
@@ -699,12 +723,12 @@ checkers <- function(style = "sans", cell_width = 1, color_list = color_list_fn(
     checkers
 }
 
-chess <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) {
-    if (grepl("^sans", style)) {
+chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
+    if (font == "sans") {
         rank_cex_die <- 1.3
         black_chess_ranks <- c("p", "n", "b", "r", "q", "k")
         white_chess_ranks <- c("P", "N", "B", "R", "Q", "K")
-    } else if (grepl("^dejavu", style)) {
+    } else if (font == "dejavu") {
         rank_cex_die <- 1.5
         black_chess_ranks <- c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a")
         white_chess_ranks <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
@@ -716,6 +740,8 @@ chess <- function(style = "sans", cell_width = 1, color_list = color_list_fn()) 
                   ps_text.bit_back = "", dm_text.bit = "",
                   grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
                   grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
+                  grob_fn.s5.bit_face = basicFillStrokeGrob,
+                  # grob_fn.s6.bit_face = basicPieceGrob,
                   gridline_color.board_face = cb_suit_colors_impure,
                   gridline_color.board_back = cb_suit_colors_pure,
                   gridline_lex.board = 4,
@@ -770,35 +796,32 @@ go <- function(cell_width = 1, color_list = color_list_fn(), shading = FALSE) {
     go
 }
 
-piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape = "rect", pawn = "token") {
-    if (grepl("^sans", style)) {
+piecepack <- function(font = "sans", color_list = color_list_fn(),
+                      rect_shape = "rect", pawn = "token",
+                      background_color = "white", edge_color = "white") {
+    if (font == "sans") {
         piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
-        pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u2202"
-    } else if (grepl("^dejavu", style)) {
+        pce_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,*",
+                              suit_cex.s5 = 1.3)
+    } else if (font == "dejavu") {
         piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
                                 suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
-        pce_suit_text <- "\u2665,\u2660,\u2663,\u2666,\u0ed1"
+        pce_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,\u2605",
+                              suit_cex.s5 = 0.92)
     }
-    is_3d <- grepl("3d$", style)
-    if (is_3d) {
-        style_3d <- list(suit_color.s4 = "#0072B2",
-                         invert_colors.pawn = TRUE,
-                         invert_colors.die = TRUE,
-                         background_color.die = "white",
-                         border_color="transparent",
-                         mat_color.tile_back = "burlywood",
-                         edge_color.tile = "black", edge_color.coin = "black",
-                         border_color.pyramid="black", border_lex.pyramid=1, background_color.pyramid="white")
-    } else {
-        style_3d <- NULL
-    }
+
     piecepack_base <- list(depth.coin=0.25,
                            invert_colors.matchstick = TRUE,
                            ps_cex.r2.matchstick = 0.7,
                            dm_r.r1.matchstick = 0, dm_cex.r1.matchstick = 1.5,
                            suit_color.s2.matchstick = "grey30",
                            suit_color.s2.bit = "grey30",
-                           mat_color.tile_back="white", mat_width.tile_back=0.05,
+                           mat_color.tile_back = background_color,
+                           mat_width.tile_back = 0.05,
+                           background_color.die = "white",
+                           background_color.pyramid="white",
+                           edge_color.tile = edge_color,
+                           edge_color.coin = edge_color,
                            suit_color.unsuited="black",
                            invert_colors.bit = TRUE,
                            rank_text=",a,2,3,4,5",
@@ -809,6 +832,8 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
                            dm_cex.pyramid_face=4.0, dm_text.pyramid_face="|", dm_r.pyramid_face=-0.22,
                            ps_cex.pyramid_left=0.7, ps_r.pyramid_left=-0.00,
                            ps_cex.pyramid_right=0.7, ps_r.pyramid_right=-0.00,
+                           grob_fn.s5 = basicFillStrokeGrob,
+                           grob_fn.card = cardGrobFn(-1, fill_stroke = TRUE),
                            use_suit_as_ace.pyramid=FALSE,
                            shape.tile = rect_shape, shape.card = rect_shape)
     shapes <- shapes_cfg(color_list)
@@ -816,11 +841,10 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
                    "peg-doll" = peg_doll_pawn(shapes),
                    "joystick" = joystick_pawn(shapes),
                    NULL)
-    piecepack <- c(pawn, style_3d, piecepack_suits, color_list, piecepack_base)
+    piecepack <- c(pawn, piecepack_suits, color_list, piecepack_base)
 
-    playing_cards_expansion <- piecepack
-    playing_cards_expansion$suit_text <- pce_suit_text
-    playing_cards_expansion$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
+    playing_cards_expansion <- c(pce_suit_text, piecepack)
+    playing_cards_expansion$suit_color <- "#D55E00,#000000,#000000,#D55E00,#F0E442"
     playing_cards_expansion$suit_color.s3.matchstick <- "grey30"
     playing_cards_expansion$suit_color.s3.bit <- "grey30"
 
@@ -834,8 +858,7 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
                      border_color.s2.die="black", border_color.s2.pawn="black",
                      suit_color.s2.board_face = "black")
 
-    dual_piecepacks_expansion <- c(piecepack, dpe_base)
-    dual_piecepacks_expansion$suit_text <- pce_suit_text
+    dual_piecepacks_expansion <- c(pce_suit_text, dpe_base, piecepack)
 
     pi_base <- list(invert_colors = TRUE,
                     invert_colors.matchstick = FALSE,
@@ -858,16 +881,17 @@ piecepack <- function(style = "sans", color_list = color_list_fn(), rect_shape =
          subpack = to_subpack(piecepack))
 }
 
-playing_cards <- function(style = "sans", rect_shape = "rect") {
-    if (grepl("^sans", style)) {
+playing_cards <- function(font = "sans", rect_shape = "rect") {
+    if (font == "sans") {
         face_labels <- c("", "\u050a", "\u046a", "\u0238")
         fool_text <- "*"
         pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,*",
                              suit_cex.s5=1.3)
-    } else if (grepl("^dejavu", style)) {
+    } else if (font == "dejavu") {
         face_labels <- c("", "\u265e", "\u265b", "\u265a")
         fool_text <- "\u2605"
-        pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605")
+        pc_suit_text <- list(suit_text="\u2665,\u2660,\u2663,\u2666,\u2605",
+                             suit_cex.s5=0.92)
     }
 
     playing_cards_list <- list(n_ranks = 14,
@@ -880,11 +904,17 @@ playing_cards <- function(style = "sans", rect_shape = "rect") {
                                shape.card = rect_shape,
                                border_color = "black", border_lex = 4)
     playing_cards_list$n_suits <- 4
-    playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00,#E59F00"
+    playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00,#F0E442"
 
     playing_cards <- c(playing_cards_list, pc_suit_text)
     playing_cards$grob_fn.s3.r14.card <- jokerCardGrobFn(FALSE)
     playing_cards$grob_fn.s4.r14.card <- jokerCardGrobFn(FALSE)
+    playing_cards$grob_fn.s5.card <- cardGrobFn(fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r11.card <- faceCardGrobFn(face_labels[1], fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r12.card <- faceCardGrobFn(face_labels[3], fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r13.card <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r14.card <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
+
     playing_cards <- pp_cfg(playing_cards)
     playing_cards$has_piecepack <- FALSE
     playing_cards$has_cards <- TRUE
@@ -892,6 +922,11 @@ playing_cards <- function(style = "sans", rect_shape = "rect") {
     playing_cards_colored <- c(playing_cards_list, pc_suit_text)
     playing_cards_colored$n_suits <- 5
     playing_cards_colored$suit_color <- cb_suit_colors_pure
+    playing_cards_colored$grob_fn.s5.card <- cardGrobFn(fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r11.card <- faceCardGrobFn(face_labels[1], fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r12.card <- faceCardGrobFn(face_labels[3], fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r13.card <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r14.card <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
 
     playing_cards_colored <- pp_cfg(playing_cards_colored)
     playing_cards_colored$has_piecepack <- FALSE
@@ -1002,7 +1037,6 @@ peg_doll_pawn <- function(shapes) {
 
     list(width.pawn=0.75, depth.pawn=0.75, height.pawn=1.5,
          edge_color.pawn=cb_suit_colors_pure,
-         edge_color.s4.pawn="#0072B2",
          background_color.belt_face="white",
          mat_color.belt_face="transparent",
          suit_cex.belt_face=1.5,
