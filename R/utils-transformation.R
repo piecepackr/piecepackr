@@ -1,33 +1,6 @@
-has_transformations <- function() {
-    getRversion() >= '4.2.0' && isTRUE(dev.capabilities()$transformations)
-}
-
 at_vp_define <- function(piece_side, suit, rank, cfg) {
     viewport(width = inch(cfg$get_width(piece_side, suit, rank)),
              height = inch(cfg$get_height(piece_side, suit, rank)))
-}
-
-at_inform <- function(fallback = "picture") {
-    if(isFALSE(getOption("piecepackr.at.inform")))
-        return(invisible(NULL))
-
-    msg <- "Affine transformation support not detected in the active graphics device."
-    if (fallback == "picture")
-        msg <- paste(msg, "Falling back to rendering piece side with `grImport2::pictureGrob(..., distort=TRUE)`.")
-    else
-        msg <- paste(msg, "Falling back to rendering piece side with a `grid::polygonGrob()`.")
-    if (getRversion() < '4.2.0') {
-        msg <- c(msg,
-                 i = paste("Current R is version `%s`", getRversion()),
-                 i = "Affine transformation support requires R version 4.2 or greater.")
-    } else {
-        msg <- c(msg,
-                 i = "`dev.capabilities()$transformations` is not `TRUE`.",
-                 i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`.")
-    }
-    msg <- c(msg,
-             i = "These messages can be disabled via `options(piecepackr.at.inform = FALSE)`.")
-    inform(msg, class = "piecepackr_affine_transformation")
 }
 
 at_ps_grob <- function(piece_side, suit, rank, cfg, xy_vp, xy_polygon,

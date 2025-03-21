@@ -172,13 +172,50 @@ cheap_darken <- function(color, amount) {
 }
 
 as_fill_stroke_grob <- function(grob, fill, col = "black", lwd = 1.5) {
-    if (getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+    if (has_fill_strokes()) {
         gp <- gpar(fill = fill, col = col, lwd = lwd)
         fillStrokeGrob(grob, gp = gp)
     } else {
         fs_inform()
         grob
     }
+}
+
+has_transformations <- function() {
+    getRversion() >= '4.2.0' && isTRUE(dev.capabilities()$transformations)
+}
+
+has_fill_strokes <- function() {
+    getRversion() >= '4.2.0' && isTRUE(dev.capabilities()$paths)
+}
+
+has_radial_gradients <- function() {
+    getRversion() >= '4.1.0' &&
+        isTRUE("RadialGradient" %in% dev.capabilities("patterns")$patterns)
+}
+
+at_inform <- function(fallback = "picture") {
+    if(isFALSE(getOption("piecepackr.at.inform")))
+        return(invisible(NULL))
+
+    msg <- "Affine transformation support not detected in the active graphics device."
+    if (fallback == "picture")
+        msg <- paste(msg, "Falling back to rendering piece side with `grImport2::pictureGrob(..., distort=TRUE)`.")
+    else
+        msg <- paste(msg, "Falling back to rendering piece side with a `grid::polygonGrob()`.")
+    if (getRversion() < '4.2.0') {
+        msg <- c(msg,
+                 i = paste("Current R is version `%s`", getRversion()),
+                 i = "Affine transformation support requires R version 4.2 or greater.")
+    } else {
+        msg <- c(msg,
+                 i = "`dev.capabilities()$transformations` is not `TRUE`.",
+                 i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`.")
+    }
+    msg <- c(msg,
+             i = "These messages can be disabled via `options(piecepackr.at.inform = FALSE)`.",
+             i = 'These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_affine_transformation")`.')
+    inform(msg, class = "piecepackr_affine_transformation")
 }
 
 fs_inform <- function() {
@@ -197,6 +234,28 @@ fs_inform <- function() {
                  i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`.")
     }
     msg <- c(msg,
-             i = "These messages can be disabled via `options(piecepackr.fs.inform = FALSE)`.")
+             i = "These messages can be disabled via `options(piecepackr.fs.inform = FALSE)`.",
+             i = 'These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_fill_stroke")`.')
     inform(msg, class = "piecepackr_fill_stroke")
+}
+
+rgr_inform <- function() {
+    if(isFALSE(getOption("piecepackr.rgr.inform")))
+        return(invisible(NULL))
+
+    msg <- paste("Radial gradient support not detected in the active graphics device.",
+                 "Falling back to rendering without a gradient.")
+    if (getRversion() < '4.1.0') {
+        msg <- c(msg,
+                 i = paste("Current R is version `%s`", getRversion()),
+                 i = "Radial gradient support requires R version 4.1 or greater.")
+    } else {
+        msg <- c(msg,
+                 i = '`"RadialGradient" not in `dev.capabilities()$patterns`.',
+                 i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`.")
+    }
+    msg <- c(msg,
+             i = "These messages can be disabled via `options(piecepackr.rgr.inform = FALSE)`.",
+             i = 'These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_radial_gradient")`.')
+    inform(msg, class = "piecepackr_radial_gradient")
 }

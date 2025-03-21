@@ -348,9 +348,16 @@ basicEllipsoidFn <- function(shading = FALSE) {
         coords_xyl <- as.list(xyh)
 
         gTree(scale = 1, type = type,
-              coords_xyl = coords_xyl,
+              coords_xyl = coords_xyl, shading = shading,
               children=gl, cl=c("projected_ellipsoid", "coords_xyl"))
         }
+}
+
+#' @export
+makeContent.projected_ellipsoid <- function(x) {
+    if (x$shading && !has_radial_gradients())
+        rgr_inform()
+    x
 }
 
 ellipse_xyz <- function() {

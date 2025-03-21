@@ -37,9 +37,7 @@ Note for the latter two pawn styles only \code{pawn_top} will work with \code{\l
 
 \item{...}{Must be empty}
 
-\item{shading}{If \code{TRUE} add a shading effect to marbles and stones.
-Note your graphics device must be able to support the \code{\link[grid:patterns]{grid::radialGradient()}} fill
-i.e. \code{isTRUE("RadialGradient" \%in\% dev.capabilities())} (when the device is open).}
+\item{shading}{If \code{TRUE} add a shading effect to marbles and stones when drawn with \code{\link[=grid.piece]{grid.piece()}}.}
 
 \item{border}{If \code{TRUE} draw a black border line on piece edges.  Should normally be \code{TRUE} when
 drawing with \code{{grid}} graphics and \code{FALSE} when drawing with 3D graphic systems.}

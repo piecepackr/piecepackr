@@ -24,6 +24,12 @@ New features
       is controlled by suit and number of holes per row/column by rank.
 
   + New argument `shading` which if `TRUE` adds a shading effect to marbles and stones when drawn with `grid.piece()` or `geom_piece()`.
+    Rendering this shading effect requires the new "radial gradient" feature
+    which is only supported in select graphic devices in R versions 4.1 and later
+    (most notably the "cairo" and "ragg" family of devices).
+    If this feature is not detected we will output an `inform()` `message()` of class `"piecepackr_radial_gradient"`
+    and fall back to a non-shaded alternative.
+    These messages may be suppressed by setting `options(piecepackr.rgr.inform = FALSE)`.
 
   + In configurations `checkers1` and `checkers2` the "bit\_face" now has a promotion symbol
     while the "bit\_back" remains plain (#371).

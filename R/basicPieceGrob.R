@@ -130,11 +130,16 @@ makeContent.basic_ellipsoid <- function(x) {
     gp_background <- gpar(col=NA, fill=opt$background_color)
     background_grob <- shape$shape(gp=gp_background, name = "background")
 
-    if (x$shading && getRversion() >= "4.1") {
-        rgr <- radialGradient(c(update_alpha_col(opt$background_color, 0.500), "#00000080"),
-                              r1 = 0.1)
-        gp_gr <- gpar(col=opt$border_color, fill=rgr)
-        shading_grob <- shape$shape(gp = gp_gr, name = "shading")
+    if (x$shading) {
+        if (has_radial_gradients()) {
+            rgr <- radialGradient(c(update_alpha_col(opt$background_color, 0.500), "#00000080"),
+                                  r1 = 0.1)
+            gp_gr <- gpar(col=opt$border_color, fill=rgr)
+            shading_grob <- shape$shape(gp = gp_gr, name = "shading")
+        } else {
+            rgr_inform()
+            shading_grob <- nullGrob(name = "shading")
+        }
     } else {
         shading_grob <- nullGrob(name = "shading")
     }

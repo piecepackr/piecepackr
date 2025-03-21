@@ -114,9 +114,7 @@
 #'             if `"joystick"` the piecepack pawn will be a \dQuote{joystick} style pawn.
 #'             Note for the latter two pawn styles only `pawn_top` will work with [grid.piece()].
 #' @param ... Must be empty
-#' @param shading If `TRUE` add a shading effect to marbles and stones.
-#'                Note your graphics device must be able to support the [grid::radialGradient()] fill
-#'                i.e. `isTRUE("RadialGradient" %in% dev.capabilities())` (when the device is open).
+#' @param shading If `TRUE` add a shading effect to marbles and stones when drawn with [grid.piece()].
 #' @param border If `TRUE` draw a black border line on piece edges.  Should normally be `TRUE` when
 #'               drawing with `{grid}` graphics and `FALSE` when drawing with 3D graphic systems.
 #' @param background_color Background color to use for certain pieces like boards and piecepack tiles.

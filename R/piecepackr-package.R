@@ -10,6 +10,7 @@
 #'    \item{piecepackr.metadata.inform}{If `FALSE` turns off messages when support for embedding metadata not detected.}
 #'    \item{piecepackr.op_angle}{Sets a new default for the `op_angle` argument}
 #'    \item{piecepackr.op_scale}{Sets a new default for the `op_scale` argument}
+#'    \item{piecepackr.rgr.inform}{If `FALSE` turns off messages when radial gradient support not detected in active graphics device.}
 #'    \item{piecepackr.trans}{Sets a new default for the `trans` argument}
 #'  }
 #' @seealso Useful links:
