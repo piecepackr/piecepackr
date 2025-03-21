@@ -170,3 +170,33 @@ cheap_darken <- function(color, amount) {
   mat[1:3, ] <- mat[1:3, ] * (1 - amount)
   rgb(mat[1, ], mat[2, ], mat[3, ], mat[4, ], maxColorValue = 255)
 }
+
+as_fill_stroke_grob <- function(grob, fill, col = "black", lwd = 1.5) {
+    if (getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
+        gp <- gpar(fill = fill, col = col, lwd = lwd)
+        fillStrokeGrob(grob, gp = gp)
+    } else {
+        fs_inform()
+        grob
+    }
+}
+
+fs_inform <- function() {
+    if(isFALSE(getOption("piecepackr.fs.inform")))
+        return(invisible(NULL))
+
+    msg <- paste("Stroking and filling path support not detected in the active graphics device.",
+                 "Falling back to rendering glyph with a `grid::textGrob()`.")
+    if (getRversion() < '4.2.0') {
+        msg <- c(msg,
+                 i = paste("Current R is version `%s`", getRversion()),
+                 i = "Stroking and filling path support requires R version 4.2 or greater.")
+    } else {
+        msg <- c(msg,
+                 i = "`dev.capabilities()$paths` is not `TRUE`.",
+                 i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`.")
+    }
+    msg <- c(msg,
+             i = "These messages can be disabled via `options(piecepackr.fs.inform = FALSE)`.")
+    inform(msg, class = "piecepackr_fill_stroke")
+}

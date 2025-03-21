@@ -181,9 +181,8 @@ makeContent.card_side <- function(x) {
     rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
                           x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "rank")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_rank <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
-        rank_grob <- fillStrokeGrob(rank_grob, gp = gp_fs_rank)
+    if (isTRUE(x$fill_stroke)) {
+        rank_grob <- as_fill_stroke_grob(rank_grob, fill = opt$ps_color)
     }
 
     gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
@@ -191,9 +190,8 @@ makeContent.card_side <- function(x) {
     suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
                           x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "suit")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_suit <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
-        suit_grob <- fillStrokeGrob(suit_grob, gp = gp_fs_suit)
+    if (isTRUE(x$fill_stroke)) {
+        suit_grob <- as_fill_stroke_grob(suit_grob, fill = opt$dm_color)
     }
 
     # Pips
@@ -248,9 +246,8 @@ makeContent.joker_card_side <- function(x) {
     rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
                           x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "rank")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_rank <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
-        rank_grob <- fillStrokeGrob(rank_grob, gp = gp_fs_rank)
+    if (isTRUE(x$fill_stroke)) {
+        rank_grob <- as_fill_stroke_grob(rank_grob, fill = opt$ps_color)
     }
 
     # Joker
@@ -326,9 +323,8 @@ makeContent.face_card_side <- function(x) {
     rank_grob <- textGrob(label = opt$ps_text, gp = gp_rank,
                           x = c(0.1, 0.9), y = c(0.9, 0.1), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "rank")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_rank <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
-        rank_grob <- fillStrokeGrob(rank_grob, gp = gp_fs_rank)
+    if (isTRUE(x$fill_stroke)) {
+        rank_grob <- as_fill_stroke_grob(rank_grob, fill = opt$ps_color)
     }
 
     gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
@@ -336,9 +332,8 @@ makeContent.face_card_side <- function(x) {
     suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit,
                           x = c(0.1, 0.9), y = c(0.8, 0.2), rot = c(0, 180),
                           hjust = 0.5, vjust = 0.5, name = "suit")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_suit <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
-        suit_grob <- fillStrokeGrob(suit_grob, gp = gp_fs_suit)
+    if (isTRUE(x$fill_stroke)) {
+        suit_grob <- as_fill_stroke_grob(suit_grob, fill = opt$dm_color)
     }
 
     # Face
@@ -382,18 +377,16 @@ faceGrob <- function(opt, label = "", placement = "high", fill_stroke = FALSE) {
                     lineheight = 0.8, cex = cex)
     label_grob <- textGrob(label = label, gp = gp_label, x = 0.5, y = y,
                           hjust = 0.5, vjust = 0.5, rot = rot, name = "label")
-    if (isTRUE(fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_label <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
-        label_grob <- fillStrokeGrob(label_grob, gp = gp_fs_label)
+    if (isTRUE(fill_stroke)) {
+        label_grob <- as_fill_stroke_grob(label_grob, fill = opt$ps_color)
     }
     gp_suit <- gpar(col = opt$dm_color, fontsize = opt$dm_fontsize,
                     fontfamily = opt$dm_fontfamily, fontface = opt$dm_fontface,
                     cex = in_meeple)
     suit_grob <- textGrob(label = opt$dm_text, gp = gp_suit, x = x_meeple, y = y_meeple,
                           hjust = 0.5, vjust = 0.5, name = "suit")
-    if (isTRUE(fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_fs_suit <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
-        suit_grob <- fillStrokeGrob(suit_grob, gp = gp_fs_suit)
+    if (isTRUE(fill_stroke)) {
+        suit_grob <- as_fill_stroke_grob(suit_grob, fill = opt$dm_color)
     }
     gp_meeple <- gpar(col = opt$ps_color, lwd = 4)
     vp_meeple <- viewport(height=inch(in_meeple), width=inch(in_meeple), x = x_meeple, y = y_meeple)
@@ -551,9 +544,8 @@ makeContent.pipped <- function(x) {
                           fontfamily=opt$dm_fontfamily, fontface=opt$dm_fontface)
             pip_grob <- textGrob(opt$dm_text, x=xya$x, y=xya$y, rot = xya$angle,
                                gp = gp_pip, hjust = 0.5, vjust = 0.5, name="pips")
-            if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-                gp_fs <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
-                pip_grob <- fillStrokeGrob(pip_grob, gp = gp_fs)
+            if (isTRUE(x$fill_stroke)) {
+                pip_grob <- as_fill_stroke_grob(pip_grob, fill = opt$dm_color)
             }
         }
     } else {

@@ -818,8 +818,9 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
                            suit_color.s2.bit = "grey30",
                            mat_color.tile_back = background_color,
                            mat_width.tile_back = 0.05,
-                           background_color.die = "white",
-                           background_color.pyramid="white",
+                           background_color.die = background_color,
+                           background_color.pyramid = background_color,
+                           background_color.matchstick = background_color,
                            edge_color.tile = edge_color,
                            edge_color.coin = edge_color,
                            suit_color.unsuited="black",
@@ -873,12 +874,36 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
     piecepack <- c(list(suit_color = cb_suit_colors_pure),
                    piecepack)
 
-    list(base = pp_cfg(piecepack),
-         dpe = pp_cfg(dual_piecepacks_expansion),
-         hexpack = to_hexpack(piecepack),
-         inverted = pp_cfg(piecepack_inverted),
-         pce = pp_cfg(playing_cards_expansion),
-         subpack = to_subpack(piecepack))
+    base <- pp_cfg(piecepack)
+    dpe <- pp_cfg(dual_piecepacks_expansion)
+    hexpack <- to_hexpack(piecepack)
+    inverted <- pp_cfg(piecepack_inverted)
+    pce <- pp_cfg(playing_cards_expansion)
+    subpack <- to_subpack(piecepack)
+
+    base$has_cards <- TRUE
+    dpe$has_cards <- TRUE
+    inverted$has_cards <- TRUE
+    pce$has_cards <- TRUE
+
+    base$has_matchsticks <- TRUE
+    dpe$has_matchsticks <- TRUE
+    inverted$has_matchsticks <- TRUE
+    pce$has_matchsticks <- TRUE
+
+    base$has_pyramids <- TRUE
+    dpe$has_pyramids <- TRUE
+    inverted$has_pyramids <- TRUE
+    pce$has_pyramids <- TRUE
+
+    base$has_saucers <- TRUE
+    dpe$has_saucers <- TRUE
+    inverted$has_saucers <- TRUE
+    pce$has_saucers <- TRUE
+
+    list(base = base, dpe = dpe,
+         hexpack = hexpack, inverted = inverted,
+         pce = pce, subpack = subpack)
 }
 
 playing_cards <- function(font = "sans", rect_shape = "rect") {

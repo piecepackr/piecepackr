@@ -16,13 +16,6 @@ New features
 
 * The following enhancements to the configurations returned by `game_systems()`:
 
-  + New arguments `font`, `border`, `background_color`, and `edge_color`
-    (to replace the deprecated `style` argument).
-  + The "blue" suits (usually the third suit) are now a darker shade of blue.
-  + The "yellow" suits (usually the fifth suit) are now yellower (and less orange)
-    and yellow glyphs should now be surrounded by black outlines
-    (when the `grid::fillStrokeGrob()` feature is supported).
-
   + New configuration `marbles` which provides marbles in nine sizes and six colors represented by a "bit" (#363).
 
     - Color is controlled by suit and size of marble by rank.
@@ -30,10 +23,23 @@ New features
     - There are also square holed boards spaced for 1" marbles: their color
       is controlled by suit and number of holes per row/column by rank.
 
+  + New argument `shading` which if `TRUE` adds a shading effect to marbles and stones when drawn with `grid.piece()` or `geom_piece()`.
+
   + In configurations `checkers1` and `checkers2` the "bit\_face" now has a promotion symbol
     while the "bit\_back" remains plain (#371).
 
-  + New `game_systems()` argument `shading` which if `TRUE` adds a shading effect to marbles and stones when drawn with `grid.piece()` or `geom_piece()`.
+  + New arguments `font`, `border`, `background_color`, and `edge_color`
+    (to replace the deprecated `style` argument).
+  + The "blue" suits (usually the third suit) are now a darker shade of blue.
+  + The "yellow" suits (usually the fifth suit) are now yellower (and less orange).
+  + Yellow glyphs should now be surrounded by black outlines.
+    Rendering these black outlines requires the new "stroking and filling path" feature
+    which is only supported in select graphic devices in R 4.2 (most notably the "cairo" family of devices).
+    If this feature is not detected we will output an `inform()` `message()` of class `"piecepackr_fill_stroke"`
+    and fall back to `grid::textGrob()` alternative.
+    These messages may be suppressed by setting `options(piecepackr.fs.inform = FALSE)`.
+
+  + In configurations `piecepack`, `dual_piecepacks_expansion`, `piecepack_inverted`, and `playing_cards_expansion` the bindings `has_cards`, `has_pyramids`, `has_matchsticks`, and `has_saucers` now return `TRUE`.
 
 * `marbles_transform()` is a wrapper around `op_transform()` that handles the special case
   of stacking 1" marbles in a pyramid with a square base on a holed board.
