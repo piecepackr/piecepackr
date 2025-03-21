@@ -741,6 +741,7 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
                   grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
                   grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
                   grob_fn.s5.bit_face = basicFillStrokeGrob,
+                  grob_fn.s5.die_face = basicFillStrokeGrob,
                   # grob_fn.s6.bit_face = basicPieceGrob,
                   gridline_color.board_face = cb_suit_colors_impure,
                   gridline_color.board_back = cb_suit_colors_pure,

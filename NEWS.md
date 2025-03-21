@@ -34,9 +34,10 @@ New features
   + The "yellow" suits (usually the fifth suit) are now yellower (and less orange).
   + Yellow glyphs should now be surrounded by black outlines.
     Rendering these black outlines requires the new "stroking and filling path" feature
-    which is only supported in select graphic devices in R 4.2 (most notably the "cairo" family of devices).
+    which is only supported in select graphic devices in R versions 4.2 and later
+    (most notably the "cairo" and "ragg" family of devices).
     If this feature is not detected we will output an `inform()` `message()` of class `"piecepackr_fill_stroke"`
-    and fall back to `grid::textGrob()` alternative.
+    and fall back to a `grid::textGrob()` alternative.
     These messages may be suppressed by setting `options(piecepackr.fs.inform = FALSE)`.
 
   + In configurations `piecepack`, `dual_piecepacks_expansion`, `piecepack_inverted`, and `playing_cards_expansion` the bindings `has_cards`, `has_pyramids`, `has_matchsticks`, and `has_saucers` now return `TRUE`.
