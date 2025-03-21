@@ -95,9 +95,8 @@ makeContent.basic_piece_side <- function(x) {
                   fontfamily=opt$ps_fontfamily, fontface=opt$ps_fontface)
     ps_grob <- textGrob(opt$ps_text, x=opt$ps_x, y=opt$ps_y, hjust = 0.5, vjust = 0.5,
                         gp = gp_ps, name = "primary_symbol")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_ps_fs <- gpar(fill=opt$ps_color, col=opt$border_color, lwd=1.5)
-        ps_grob <- fillStrokeGrob(ps_grob, gp = gp_ps_fs)
+    if (isTRUE(x$fill_stroke)) {
+        ps_grob <- as_fill_stroke_grob(ps_grob, fill = opt$ps_color)
     }
 
     # Directional mark
@@ -105,9 +104,8 @@ makeContent.basic_piece_side <- function(x) {
                   fontfamily=opt$dm_fontfamily, fontface=opt$ps_fontface)
     dm_grob <- textGrob(opt$dm_text, x=opt$dm_x, y=opt$dm_y, hjust = 0.5, vjust = 0.5,
                         gp = gp_dm, name = "directional_mark")
-    if (isTRUE(x$fill_stroke) && getRversion() >= "4.2" && isTRUE(dev.capabilities("paths")$paths)) {
-        gp_dm_fs <- gpar(fill=opt$dm_color, col=opt$border_color, lwd=1.5)
-        dm_grob <- fillStrokeGrob(dm_grob, gp = gp_dm_fs)
+    if (isTRUE(x$fill_stroke)) {
+        dm_grob <- as_fill_stroke_grob(dm_grob, fill = opt$dm_color)
     }
 
     if (x$border) {

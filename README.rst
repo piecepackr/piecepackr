@@ -326,6 +326,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
     library("grid")
     library("gridpattern")
     library("piecepackr")
+    library("ppdf") # remotes::install_github("piecepackr/ppdf")
     
     tilings <- c("hexagonal", "snub_square", "pythagorean",
                  "truncated_square", "triangular", "trihexagonal")
@@ -346,12 +347,11 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
     
     x1 <- c(1:3, 1:2, 1)
     x2 <- c(6:8, 7:8, 8)
-    df <- tibble::tibble(piece_side = c("board_face", rep_len("bit_back", 24L)),
-                         suit = c(6L, rep(c(1L, 3L, 4L, 5L), each = 6L)),
-                         rank = 8L,
-                         x = c(4.5, x1, rev(x1), x2, rev(x2)),
-                         y = c(4.5, rep(c(1,1,1, 2,2, 3, 6, 7,7, 8,8,8), 2)))
-    
+    df_board <- checker_board(suit = 6L)
+    df_checkers <- checker_bits(suit = rep(c(1L, 3L, 4L, 5L), each = 6L),
+                                x = c(x1, rev(x1), x2, rev(x2)),
+                                y = rep(c(1,1,1, 2,2, 3, 6, 7,7, 8,8,8), 2))
+    df <- rbind(df_board, df_checkers)
     pmap_piece(df, cfg=checkers1, default.units="in")
 
 .. figure:: man/figures/README-pattern-1.png
@@ -505,10 +505,10 @@ piece3d() ({rgl})
     invisible(rgl::open3d())
     rgl::view3d(phi=-45, zoom = 0.9)
     
-    df <- piecenikr::df_martian_chess()
-    envir <- c(piecenikr::looney_pyramids(), game_systems("sans3d"))
+    df <- icehouse_martian_chess()
+    envir <- c(looney_pyramids(border = FALSE), game_systems(border = FALSE))
     pmap_piece(df, piece3d, envir = envir, trans=op_transform,
-               scale = 0.98, res = 150)
+               scale = 0.98, res = 150, lit = TRUE)
 
 
 
@@ -528,20 +528,20 @@ piece() ({rayrender})
 
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
-    library("magrittr")
     library("rayrender", warn.conflicts = FALSE)
-    df <- ppdf::piecepack_xiangqi()
-    envir <- game_systems("dejavu3d", round=TRUE, pawn="peg-doll")
+    df <- ppdf::piecepack_xiangqi() |>
+        transform(cfg = "dual_piecepacks_expansion")
+    envir <- game_systems("dejavu", border = FALSE, round = TRUE, pawn = "peg-doll")
     l <- pmap_piece(df, piece, envir = envir, trans=op_transform, 
                     scale = 0.98, res = 150, as_top="pawn_face")
     light <- sphere(x=5,y=-4, z=30, material=light(intensity=420))
-    table <- sphere(z=-1e3, radius=1e3, material=diffuse(color="green")) %>%
+    table <- sphere(z=-1e3, radius=1e3, material=diffuse(color="green")) |>
              add_object(light)
     scene <- Reduce(rayrender::add_object, l, init=table)
-    rayrender::render_scene(scene, 
+    rayrender::render_scene(scene, preview = FALSE,
                             lookat = c(5, 5, 0), lookfrom = c(5, -7, 25), 
-                            width = 500, height = 500, 
-                            samples=200, clamp_value=8)
+                            sample_method = "sobol", clamp_value = 12,
+                            width = 480, height = 480, samples = 200)
 
 .. figure:: man/figures/README-rayrender-1.png
     :alt: 3D render with rayrender package
@@ -559,9 +559,10 @@ piece_mesh() ({rayvertex})
 
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
-    library("rayvertex", warn.conflicts = FALSE) # masks `rayrender::r_obj`
-    df <- ppdf::piecepack_international_chess()
-    envir <- game_systems("dejavu3d", round=TRUE, pawn="joystick")
+    library("rayvertex", warn.conflicts = FALSE)
+    df <- ppdf::piecepack_international_chess() |>
+        transform(cfg = "dual_piecepacks_expansion")
+    envir <- game_systems("dejavu", border = FALSE, round = TRUE, pawn = "joystick")
     l <- pmap_piece(df, piece_mesh, envir = envir, trans=op_transform, 
                     scale = 0.98, res = 150, as_top="pawn_face")
     table <- sphere_mesh(c(0, 0, -1e3), radius=1e3, 
@@ -673,8 +674,8 @@ Then we'll configure a Tak set and write some helper functions to draw Tak piece
                        depth.r2.bit=0.6, shape.r2.bit="rect", 
                        width.pawn=0.5, height.pawn=0.5, 
                        depth.pawn=0.8, shape.pawn="circle",
-                       edge_color="white,tan4", border_lex=2,
-                       edge_color.board="tan", border_color.board="black"))
+                       edge_color="white,tan4", edge_color.board="tan",
+                       border_lex=3, border_color="black"))
     g.p <- function(...) { 
         grid.piece(..., cfg=cfg, default.units="in",
                    op_scale=0.7, op_angle=45)
