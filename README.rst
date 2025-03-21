@@ -341,9 +341,10 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
         border_grob <- shape$shape(gp=gp_border, name = "border")
         grobTree(pattern_grob, border_grob)
     }
-    checkers1 <- as.list(game_systems()$checkers1)
+    envir <- game_systems()
+    checkers1 <- as.list(envir$checkers1)
     checkers1$grob_fn.bit <- patternedCheckerGrobFn
-    checkers1 <- pp_cfg(checkers1)
+    envir$checkers1 <- pp_cfg(checkers1)
     
     x1 <- c(1:3, 1:2, 1)
     x2 <- c(6:8, 7:8, 8)
@@ -352,7 +353,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
                                 x = c(x1, rev(x1), x2, rev(x2)),
                                 y = rep(c(1,1,1, 2,2, 3, 6, 7,7, 8,8,8), 2))
     df <- rbind(df_board, df_checkers)
-    pmap_piece(df, cfg=checkers1, default.units="in")
+    pmap_piece(df, envir=envir, default.units="in")
 
 .. figure:: man/figures/README-pattern-1.png
     :alt: Patterned checkers via custom grob function
