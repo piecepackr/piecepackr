@@ -183,8 +183,11 @@ test_that("no regressions in `game_systems()`", {
         grid.piece("card_face", suit = 3, rank = 10, cfg = cfg,
                    default.units = "npc"))
     expect_doppelganger("king_of_stars", function()
-        grid.piece("card_face", suit = 5, rank = 13, cfg = cfg,
-                   default.units = "npc"))
+        suppressMessages({
+                grid.piece("card_face", suit = 5, rank = 13, cfg = cfg,
+                           default.units = "npc")},
+            classes = "piecepackr_fill_stroke")
+    )
     expect_doppelganger("red_joker", function()
         grid.piece("card_face", suit = 1, rank = 14, cfg = cfg,
                    default.units = "npc"))

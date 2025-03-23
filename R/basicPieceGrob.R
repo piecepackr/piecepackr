@@ -38,11 +38,15 @@ basicPieceGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
           name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
 }
 
-basicFillStrokeGrob <- function(piece_side, suit, rank, cfg=pp_cfg()) {
-    cfg <- as_pp_cfg(cfg)
-    opt <- cfg$get_piece_opt(piece_side, suit, rank)
-    gTree(opt=opt, border=TRUE, flip=FALSE, scale=1, fill_stroke=TRUE,
-          name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
+basicPieceGrobFn <- function(fill_stroke = FALSE) {
+    force(fill_stroke)
+    function(piece_side, suit, rank, cfg=pp_cfg()) {
+        cfg <- as_pp_cfg(cfg)
+        opt <- cfg$get_piece_opt(piece_side, suit, rank)
+        gTree(opt=opt, border=TRUE, flip=FALSE, scale=1,
+              fill_stroke=fill_stroke,
+              name=NULL, gp=gpar(), vp=NULL, cl="basic_piece_side")
+    }
 }
 
 ellipsoidGrobFn <- function(shading = FALSE) {
