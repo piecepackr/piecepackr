@@ -76,6 +76,7 @@ Bug fixes and minor improvements
 * `pp_shape()` adds `width` and `height` arguments.  This is needed
   to accurately calculate the corners for non-square "roundrect" shapes (e.g. domino tiles).
 * Fixes some rendering bugs for "roundrect" shape tokens (#254, #365).
+* Default grob function for card **backs** is now `basicPieceGrob()`.
 
 piecepackr 1.14.1
 =================

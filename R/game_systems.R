@@ -296,7 +296,7 @@ dice <- function(color_list = color_list_fn(), rect_shape = "rect") {
                       invert_colors = TRUE,
                       die_arrangement = "opposites_sum_to_5",
                       shape.card = rect_shape,
-                      grob_fn.card = cardGrobFn(grob_type = "circle"),
+                      grob_fn.card_face = cardGrobFn(grob_type = "circle"),
                       grob_fn.die = pippedGrobFn(0, "die"))
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
@@ -321,7 +321,7 @@ dominoes_chinese <- function(color_list = color_list_fn(), rect_shape = "rect", 
                       shape.tile = rect_shape,
                       grob_fn.tile_face = dominoGrobFn(0, "domino_chinese"),
                       shape.card = rect_shape,
-                      grob_fn.card = cardGrobFn(grob_type = "circle")
+                      grob_fn.card_face = cardGrobFn(grob_type = "circle")
     )
     dice <- pp_cfg(c(dice_list, color_list))
     dice$has_piecepack <- FALSE
@@ -663,7 +663,7 @@ dominoes <- function(background_color = "white", suit_color = "black", border_co
                             border_color = border_color, border_lex = border_lex,
                             die_arrangement = "opposites_sum_to_5",
                             grob_fn.die = pippedGrobFn(0, "die"),
-                            grob_fn.card = cardGrobFn(-1, "card", grob_type = "circle"),
+                            grob_fn.card_face = cardGrobFn(-1, "card", grob_type = "circle"),
                             gridline_color.tile_back = "transparent",
                             gridline_color.tile_face = suit_color,
                             gridline_lex.tile_face = 6,
@@ -692,6 +692,7 @@ checkers <- function(font = "sans", cell_width = 1, color_list = color_list_fn()
     checkers <- list(n_suits = 6, n_ranks = 12,
                      width.board = 8 * cell_width,
                      height.board = 8 * cell_width,
+                     fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                      grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
                      grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
                      gridline_color.board_face = cb_suit_colors_impure,
@@ -736,10 +737,11 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
                   height.board = 8 * cell_width,
                   width.bit = 0.75 * cell_width,
                   ps_text.bit_back = "", dm_text.bit = "",
+                  fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                   grob_fn.r1.board_face = checkeredBoardGrobFn(8, 8),
                   grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
-                  grob_fn.s5.bit_face = basicFillStrokeGrob,
-                  grob_fn.s5.die_face = basicFillStrokeGrob,
+                  grob_fn.s5.bit_face = basicPieceGrobFn(fill_stroke = TRUE),
+                  grob_fn.s5.die_face = basicPieceGrobFn(fill_stroke = TRUE),
                   # grob_fn.s6.bit_face = basicPieceGrob,
                   gridline_color.board_face = cb_suit_colors_impure,
                   gridline_color.board_back = cb_suit_colors_pure,
@@ -799,14 +801,22 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
                       rect_shape = "rect", pawn = "token",
                       background_color = "white", edge_color = "white") {
     if (font == "sans") {
-        piecepack_suits <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202")
-        pce_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,*",
-                              suit_cex.s5 = 1.3)
+        piecepack_suit_text <- list(suit_text="\u263c,\u25d8,\u0238,\u03ee,\u2202",
+                                    n_suits = 4L)
+        pce_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,\u2202",
+                              n_suits = 4L)
+        dpe_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,*,\u2202",
+                              suit_cex.s5 = 1.3,
+                              n_suits = 5L)
     } else if (font == "dejavu") {
-        piecepack_suits <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
-                                suit_cex.s2=0.9, dm_cex.coin=0.5, fontfamily="DejaVu Sans")
-        pce_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,\u2605",
-                              suit_cex.s5 = 0.92)
+        piecepack_suit_text <- list(suit_text="\u2742,\u25d0,\u265b,\u269c,\u0ed1",
+                                suit_cex.s2=0.9, dm_cex.coin=0.5, n_suits = 4L)
+        pce_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,\u0ed1",
+                              n_suits = 4L)
+        dpe_suit_text <- list(suit_text = "\u2665,\u2660,\u2663,\u2666,\u2605,\u0ed1",
+                              suit_cex.s5 = 0.92, n_suits = 5L,
+                              grob_fn.s5 = basicPieceGrobFn(fill_stroke = TRUE),
+                              grob_fn.s5.card_face = cardGrobFn(-1, fill_stroke = TRUE))
     }
 
     piecepack_base <- list(depth.coin=0.25,
@@ -817,6 +827,7 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
                            suit_color.s2.bit = "grey30",
                            mat_color.tile_back = background_color,
                            mat_width.tile_back = 0.05,
+                           fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                            background_color.die = background_color,
                            background_color.pyramid = background_color,
                            background_color.matchstick = background_color,
@@ -832,8 +843,7 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
                            dm_cex.pyramid_face=4.0, dm_text.pyramid_face="|", dm_r.pyramid_face=-0.22,
                            ps_cex.pyramid_left=0.7, ps_r.pyramid_left=-0.00,
                            ps_cex.pyramid_right=0.7, ps_r.pyramid_right=-0.00,
-                           grob_fn.s5 = basicFillStrokeGrob,
-                           grob_fn.card = cardGrobFn(-1, fill_stroke = TRUE),
+                           grob_fn.card_face = cardGrobFn(-1),
                            use_suit_as_ace.pyramid=FALSE,
                            shape.tile = rect_shape, shape.card = rect_shape)
     shapes <- shapes_cfg(color_list)
@@ -841,13 +851,12 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
                    "peg-doll" = peg_doll_pawn(shapes),
                    "joystick" = joystick_pawn(shapes),
                    NULL)
-    piecepack <- c(pawn, piecepack_suits, color_list, piecepack_base)
+    piecepack <- c(pawn, piecepack_suit_text, color_list, piecepack_base)
 
     playing_cards_expansion <- c(pce_suit_text, piecepack)
     playing_cards_expansion$suit_color <- "#D55E00,#000000,#000000,#D55E00,#F0E442"
     playing_cards_expansion$suit_color.s3.matchstick <- "grey30"
     playing_cards_expansion$suit_color.s3.bit <- "grey30"
-
 
     hexpack <- c(piecepack, list(shape.tile="convex6", border_lex=3,
                                  shape_t.tile="60",  dm_t.tile_face=-90,
@@ -858,7 +867,7 @@ piecepack <- function(font = "sans", color_list = color_list_fn(),
                      border_color.s2.die="black", border_color.s2.pawn="black",
                      suit_color.s2.board_face = "black")
 
-    dual_piecepacks_expansion <- c(pce_suit_text, dpe_base, piecepack)
+    dual_piecepacks_expansion <- c(dpe_suit_text, dpe_base, piecepack)
 
     pi_base <- list(invert_colors = TRUE,
                     invert_colors.matchstick = FALSE,
@@ -920,24 +929,24 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
 
     playing_cards_list <- list(n_ranks = 14,
                                rank_text = "A,2,3,4,5,6,7,8,9,10,J,Q,K,\n\n\n\nJ\nO\nK\nE\nR",
-                               grob_fn.card = cardGrobFn(),
-                               grob_fn.r11.card = faceCardGrobFn(face_labels[1]),
-                               grob_fn.r12.card = faceCardGrobFn(face_labels[3]),
-                               grob_fn.r13.card = faceCardGrobFn(face_labels[4]),
-                               grob_fn.r14.card = jokerCardGrobFn(TRUE),
+                               grob_fn.card_face = cardGrobFn(),
+                               grob_fn.r11.card_face = faceCardGrobFn(face_labels[1]),
+                               grob_fn.r12.card_face = faceCardGrobFn(face_labels[3]),
+                               grob_fn.r13.card_face = faceCardGrobFn(face_labels[4]),
+                               grob_fn.r14.card_face = jokerCardGrobFn(TRUE),
                                shape.card = rect_shape,
                                border_color = "black", border_lex = 4)
     playing_cards_list$n_suits <- 4
-    playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00,#F0E442"
+    playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00"
 
     playing_cards <- c(playing_cards_list, pc_suit_text)
-    playing_cards$grob_fn.s3.r14.card <- jokerCardGrobFn(FALSE)
-    playing_cards$grob_fn.s4.r14.card <- jokerCardGrobFn(FALSE)
-    playing_cards$grob_fn.s5.card <- cardGrobFn(fill_stroke = TRUE)
-    playing_cards$grob_fn.s5.r11.card <- faceCardGrobFn(face_labels[1], fill_stroke = TRUE)
-    playing_cards$grob_fn.s5.r12.card <- faceCardGrobFn(face_labels[3], fill_stroke = TRUE)
-    playing_cards$grob_fn.s5.r13.card <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
-    playing_cards$grob_fn.s5.r14.card <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
+    playing_cards$grob_fn.s3.r14.card_face <- jokerCardGrobFn(FALSE)
+    playing_cards$grob_fn.s4.r14.card_face <- jokerCardGrobFn(FALSE)
+    playing_cards$grob_fn.s5.card_face <- cardGrobFn(fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r11.card_face <- faceCardGrobFn(face_labels[1], fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r12.card_face <- faceCardGrobFn(face_labels[3], fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r13.card_face <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
+    playing_cards$grob_fn.s5.r14.card_face <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
 
     playing_cards <- pp_cfg(playing_cards)
     playing_cards$has_piecepack <- FALSE
@@ -946,11 +955,11 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
     playing_cards_colored <- c(playing_cards_list, pc_suit_text)
     playing_cards_colored$n_suits <- 5
     playing_cards_colored$suit_color <- cb_suit_colors_pure
-    playing_cards_colored$grob_fn.s5.card <- cardGrobFn(fill_stroke = TRUE)
-    playing_cards_colored$grob_fn.s5.r11.card <- faceCardGrobFn(face_labels[1], fill_stroke = TRUE)
-    playing_cards_colored$grob_fn.s5.r12.card <- faceCardGrobFn(face_labels[3], fill_stroke = TRUE)
-    playing_cards_colored$grob_fn.s5.r13.card <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
-    playing_cards_colored$grob_fn.s5.r14.card <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.card_face <- cardGrobFn(fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r11.card_face <- faceCardGrobFn(face_labels[1], fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r12.card_face <- faceCardGrobFn(face_labels[3], fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r13.card_face <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
+    playing_cards_colored$grob_fn.s5.r14.card_face <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
 
     playing_cards_colored <- pp_cfg(playing_cards_colored)
     playing_cards_colored$has_piecepack <- FALSE
@@ -958,12 +967,12 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
 
     playing_cards_tarot <- playing_cards_list
     playing_cards_tarot$rank_text <- "A,2,3,4,5,6,7,8,9,10,J,C,Q,K,\n\n\n\nJ\nO\nK\nE\nR"
-    playing_cards_tarot$grob_fn.r12.card <- faceCardGrobFn(face_labels[2], "low")
-    playing_cards_tarot$grob_fn.r13.card <- faceCardGrobFn(face_labels[3])
-    playing_cards_tarot$grob_fn.r14.card <- faceCardGrobFn(face_labels[4])
-    playing_cards_tarot$grob_fn.r15.card <- jokerCardGrobFn(TRUE)
-    playing_cards_tarot$grob_fn.s3.r15.card <- jokerCardGrobFn(FALSE)
-    playing_cards_tarot$grob_fn.s4.r15.card <- jokerCardGrobFn(FALSE)
+    playing_cards_tarot$grob_fn.r12.card_face <- faceCardGrobFn(face_labels[2], "low")
+    playing_cards_tarot$grob_fn.r13.card_face <- faceCardGrobFn(face_labels[3])
+    playing_cards_tarot$grob_fn.r14.card_face <- faceCardGrobFn(face_labels[4])
+    playing_cards_tarot$grob_fn.r15.card_face <- jokerCardGrobFn(TRUE)
+    playing_cards_tarot$grob_fn.s3.r15.card_face <- jokerCardGrobFn(FALSE)
+    playing_cards_tarot$grob_fn.s4.r15.card_face <- jokerCardGrobFn(FALSE)
     playing_cards_tarot$n_suits <- 5
     playing_cards_tarot$n_ranks <- 22
 
@@ -972,10 +981,10 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
     playing_cards_tarot$suit_text.r14 <- tarot_suit_text
     playing_cards_tarot$suit_color <- "#D55E00,#000000,#000000,#D55E00,#000000"
     playing_cards_tarot$rank_text.s5 <- c(1:21, fool_text)
-    playing_cards_tarot$grob_fn.s5.card <- cardGrobFn(has_pips = FALSE)
+    playing_cards_tarot$grob_fn.s5.card_face <- cardGrobFn(has_pips = FALSE, fill_stroke = FALSE)
     for (i in 11:15) {
-        name <- str_glue("grob_fn.s5.r{i}.card")
-        playing_cards_tarot[[name]] <- cardGrobFn(has_pips = FALSE)
+        name <- str_glue("grob_fn.s5.r{i}.card_face")
+        playing_cards_tarot[[name]] <- cardGrobFn(has_pips = FALSE, fill_stroke = FALSE)
     }
 
     playing_cards_tarot <- pp_cfg(playing_cards_tarot)
@@ -987,16 +996,16 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
 
 reversi <- function(cell_width = 1, color_list = color_list_fn()) {
     reversi <- list(n_suits = 6, n_ranks = 12,
-                     width.board = 8 * cell_width,
-                     height.board = 8 * cell_width,
-                     grob_fn.r1.board_face = linedBoardGrobFn(8, 8),
-                     grob_fn.r1.board_back = checkeredBoardGrobFn(8, 8),
-                     background_color.board_face = cb_suit_colors_impure,
-                     gridline_color.board_face = "black",
-                     gridline_lex.board = 4,
-                     suit_color = cb_suit_colors_impure,
-                     background_color = "white",
-                     gridline_color.s6.board_back = "grey80")
+                    width.board = 8 * cell_width,
+                    height.board = 8 * cell_width,
+                    grob_fn.r1.board_face = linedBoardGrobFn(8, 8),
+                    grob_fn.r1.board_back = checkeredBoardGrobFn(8, 8),
+                    background_color.board_face = cb_suit_colors_impure,
+                    gridline_color.board_face = "black",
+                    gridline_lex.board = 4,
+                    suit_color = cb_suit_colors_impure,
+                    background_color = "white",
+                    gridline_color.s6.board_back = "grey80")
     for (i in seq(2, 12)) {
         reversi[[str_glue("width.r{i}.board")]] <- i * cell_width
         reversi[[str_glue("height.r{i}.board")]] <- i * cell_width

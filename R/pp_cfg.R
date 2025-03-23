@@ -654,7 +654,6 @@ Config <- R6Class("pp_cfg",
                                           board_face = checkeredBoardGrobFn(8, 8),
                                           board_back = linedBoardGrobFn(8, 8),
                                           card_face = cardGrobFn(-1),
-                                          card_back = cardGrobFn(-1),
                                           basicPieceGrob)
                 default_fn <- get_style_element("grob_fn", piece_side, private$cfg,
                                                 default_grob_fn, suit, rank)
