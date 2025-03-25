@@ -77,6 +77,7 @@ Bug fixes and minor improvements
   to accurately calculate the corners for non-square "roundrect" shapes (e.g. domino tiles).
 * Fixes some rendering bugs for "roundrect" shape tokens (#254, #365).
 * Default grob function for card **backs** is now `basicPieceGrob()`.
+* Fixes bug when drawing a go board of rank 19.
 
 piecepackr 1.14.1
 =================
