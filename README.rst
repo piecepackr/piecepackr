@@ -64,17 +64,16 @@ Checkers
     
 
     library("piecepackr")
-    library("tibble")
-    df_board <- tibble(piece_side = "board_face", suit = 3, rank = 8,
-                   x = 4.5, y = 4.5)
-    df_w <- tibble(piece_side = "bit_back", suit = 6, rank = 1,
-                   x = rep(1:8, 2), y = rep(1:2, each=8))
-    df_b <- tibble(piece_side = "bit_back", suit = 1, rank = 1,
-                   x = rep(1:8, 2), y = rep(7:8, each=8))
+    library("ppdf") # remotes::install_github("piecepackr/ppdf")
+    stopifnot(packageVersion("ppdf") >= "0.2.0-13")
+    
+    df_board <- checker_board()
+    df_w <- checker_bits(suit = "white", x = rep(1:8, 2), y = rep(1:2, each=8))
+    df_b <- checker_bits(suit = "red", x = rep(1:8, 2), y = rep(7:8, each=8))
     df <- rbind(df_board, df_w, df_b)
-    df$cfg <- "checkers1"
-    pmap_piece(df, envir=game_systems(), default.units="in", 
-               trans=op_transform, op_scale=0.5)
+    
+    envir <- game_systems()
+    pmap_piece(df, envir=envir, default.units="in", trans=op_transform, op_scale=0.5)
 
 .. figure:: man/figures/README-breakthrough-1.png
     :alt: Starting position for Dan Troyka's abstract game Breakthrough
@@ -129,22 +128,14 @@ The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `
 
     library("piecepackr")
     library("tibble")
-    envir <- game_systems("dejavu")
     
-    colors <- rep(c("black", "red", "green", "blue", "yellow", "white"), 2)
-    df_dominoes <- tibble(piece_side = "tile_face", suit=1:12, rank=7:18+1,
-                          cfg = paste0("dominoes_", colors),
-                          x=rep(4:1, 3), y=rep(2*3:1, each=4))
-    df_tiles <- tibble(piece_side = "tile_back", suit=1:3, rank=1:3, 
-                       cfg="piecepack", x=5.5, y=c(2,4,6))
-    df_dice <- tibble(piece_side = "die_face", suit=1:6, rank=1:6, 
-                      cfg="dice", x=6, y=0.5+1:6)
-    df_coins1 <- tibble(piece_side = "coin_back", suit=1:4, rank=1:4, 
-                        cfg="piecepack", x=5, y=0.5+1:4)
-    df_coins2 <- tibble(piece_side = "coin_face", suit=1:2, rank=1:2,
-                        cfg="piecepack", x=5, y=0.5+5:6)
-    df <- rbind(df_dominoes, df_tiles, df_dice, df_coins1, df_coins2)
+    colors <- rep(c("black", "red", "green", "blue", "yellow", "white"), 2L)
+    df <- tibble(piece_side = "tile_face",
+                 suit=1:12, rank=7:18+1,
+                 cfg = paste0("dominoes_", colors),
+                 x=rep(4:1, 3), y=rep(2*3:1, each=4) - 0.5)
     
+    envir <- game_systems(round = TRUE)
     pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
 
 .. figure:: man/figures/README-dominoes-1.png
@@ -157,10 +148,52 @@ Go
 
 ``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes.  Here are is `an example diagram <https://trevorldavis.com/piecepackr/go.html>`_ for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted using rgl_: 
 
-.. figure:: man/figures/README-go.png
-    :alt: 3D Multi-player Go diagram
 
-    3D Multi-player Go diagram
+.. sourcecode:: r
+    
+
+    library("ppdf")
+    library("piecepackr")
+    stopifnot(packageVersion("ppdf") >= "0.2.0-13")
+    
+    dfb <- go_board()
+    dfB <- go_bits(suit = "blue",
+                   x = c(2,2,2, 3,3, 4,4, 5,5, 6,6,6, 7,7, 8),
+                   y = c(11,13,14, 12,15, 13,16, 12,16, 12,13,16, 15,17, 16))
+    dfR <- go_bits(suit = "red",
+                   x = c(3,3, 4, 5, 6, 7, 8,8, 9),
+                   y = c(2:3, 4, 3, 4, 4, 2:3, 2))
+    dfY <- go_bits(suit = "yellow",
+                   x = 20 - c(3, 4, 5,5, 7, 8, 9,9,9),
+                   y = 20 - c(3, 2, 2:3, 2, 5, 2:4))
+    dfG <- go_bits(suit = "green",
+                   x = 20 - rep.int(3:6, times = c(5L, 4L, 3L, 2L)),
+                   y = c(4,5,7,12,13, 6,7, 10,11, 7,9,10, 8,9))
+    dfK <- go_bits(
+        suit = "black",
+        x = rep.int(2:17,
+                    times = c(5L, 5L, 4L, 5L, 2L, 4L, 7L, 5L, 5L, 4L, 5L, 6L, 2L, 6L, 6L, 2L)),
+        y = c(2:3,8:9,12, 4:5,10,13:14, 5,10,14:15, 6,8,10:11,14, 5,11,
+              5,7,12,14, 4,7,9,11:13,15, 3:4,11,14,16, 8:9,14:16,
+              3,6,8,15, 9:11,16,18, 6,8:9,11:12,16, 6:7,
+              5:6,8,11:12,16, 3,5,12,14,16:17, 3,16)
+    )
+    dfW <- go_bits(
+        suit = "white",
+        x = rep.int(3:14,
+                    times = c(1L, 1L, 1L, 3L, 3L, 2L, 5L, 3L, 4L, 4L, 2L, 1L)),
+        y = c(9,9,9, 7:8,10, 8,10:11, 8,10, 8:10,12:13, 10:11,13,
+              9,11,13:14, 7:8,12:13, 7,10, 11)
+    )
+    df <- rbind(dfb, dfB, dfR, dfY, dfG, dfK, dfW)
+    
+    envir <- game_systems(shading = TRUE, background_color = "burlywood")
+    pmap_piece(df, envir = envir, default.units = "in")
+
+.. figure:: man/figures/README-go-1.png
+    :alt: Multi-player Go diagram
+
+    Multi-player Go diagram
 
 Marbles
 ~~~~~~~
@@ -173,21 +206,20 @@ along with holed square boards sized for the 1" diameter marbles.
 .. sourcecode:: r
     
 
+    library("ppdf")
     library("piecepackr")
-    library("tibble")
+    stopifnot(packageVersion("ppdf") >= "0.2.0-13")
+    
     set.seed(42)
-    envir <- game_systems(round = TRUE, shading = TRUE)
-    dfb <- tibble(piece_side = "board_face", suit = 3L, rank = 4L,
-                  cfg ="marbles", x = 2.5, y = 2.5)
-    dfm <- tibble(
-        piece_side = "bit_back",
+    dfb <- marble_board(suit = "green", nrows = 4L, ncol = 4L, x0 = 1, y0 = 1)
+    dfm <- marble_bits(
         suit = sample.int(6L, 30L, replace = TRUE),
-        rank = 9L,
-        cfg = "marbles",
         x = c(rep(1:4, 4L), rep(0.5 + rep(1:3, 3L)), rep(2:3, 2L), 2.5),
         y = c(rep(1:4, each = 4L), rep(0.5 + rep(1:3, each = 3L)), rep(2:3, each = 2L), 2.5)
     )
     df <- rbind(dfb, dfm)
+    
+    envir <- game_systems(round = TRUE, shading = TRUE)
     pmap_piece(df, default.units = "in", envir = envir, 
                trans = marbles_transform, op_scale = 0.5)
 
@@ -221,12 +253,13 @@ Playing Cards
 
     library("piecepackr")
     library("tibble")
-    envir <- game_systems("dejavu", round=TRUE)
     
     df <- tibble(piece_side = "card_face", 
                  x=1.25 + 2.5 * 0:3, y=2, 
                  suit=1:4, rank=c(1,6,9,12),
                  cfg = "playing_cards")
+    
+    envir <- game_systems("dejavu", round=TRUE)
     pmap_piece(df, default.units="in", envir=envir)
 
 .. figure:: man/figures/README-cards-1.png
@@ -327,6 +360,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
     library("gridpattern")
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
+    stopifnot(packageVersion("ppdf") >= "0.2.0-13")
     
     tilings <- c("hexagonal", "snub_square", "pythagorean",
                  "truncated_square", "triangular", "trihexagonal")
@@ -353,6 +387,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
                                 x = c(x1, rev(x1), x2, rev(x2)),
                                 y = rep(c(1,1,1, 2,2, 3, 6, 7,7, 8,8,8), 2))
     df <- rbind(df_board, df_checkers)
+    
     pmap_piece(df, envir=envir, default.units="in")
 
 .. figure:: man/figures/README-pattern-1.png

@@ -324,10 +324,10 @@ morrisBoard3Grob <- function(gp = gpar(), name = NULL, diag = TRUE) {
 morrisBoard6Grob <- function(gp = gpar(), name = NULL, cross = FALSE) {
     w <- 1/64
     wd <- w / sqrt(2) / 2
-    dots <- circleGrob(x = rep.int(c(0, 1, 2, 3, 4), c(3, 3, 4, 3, 3)) / 4,
-                       y = c(0, 2, 4, 1, 2, 3, 0, 1, 3, 4, 1, 2, 3, 0, 2, 4) / 4,
-                       r = 1.5 * w)
     if (cross) {
+        dots <- circleGrob(x = rep.int(c(0, 1, 2, 3, 4), c(3, 3, 5, 3, 3)) / 4,
+                           y = c(0, 2, 4, 1:3, 0:4, 1:3, 0, 2, 4) / 4,
+                           r = 1.5 * w)
         vlines <- rectGrob(x = c(0, 1, 2,  3, 4) / 4,
                            y = c(2, 2, 2, 2, 2) / 4,
                            width = w,
@@ -337,6 +337,9 @@ morrisBoard6Grob <- function(gp = gpar(), name = NULL, cross = FALSE) {
                            height = w,
                            width = c(4, 2, 4, 2, 4) / 4 + w)
     } else {
+        dots <- circleGrob(x = rep.int(c(0, 1, 2, 3, 4), c(3, 3, 4, 3, 3)) / 4,
+                           y = c(0, 2, 4, 1, 2, 3, 0, 1, 3, 4, 1, 2, 3, 0, 2, 4) / 4,
+                           r = 1.5 * w)
         vlines <- rectGrob(x = c(0, 1, 2, 2, 3, 4) / 4,
                            y = c(2, 2, 0.5, 3.5, 2, 2) / 4,
                            width = w,

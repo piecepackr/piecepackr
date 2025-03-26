@@ -78,6 +78,7 @@ Bug fixes and minor improvements
 * Fixes some rendering bugs for "roundrect" shape tokens (#254, #365).
 * Default grob function for card **backs** is now `basicPieceGrob()`.
 * Fixes bug when drawing a go board of rank 19.
+* Adds missing circle to the seven men's morris board.
 
 piecepackr 1.14.1
 =================
