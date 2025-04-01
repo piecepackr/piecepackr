@@ -130,14 +130,13 @@ assert_suggested <- function(package) {
 # Notably `pdf()` is a device that does not...
 # Any other devices to add?
 device_supports_unicode <- function() {
-    if (identical(Sys.getenv("IN_PKGDOWN"), "true")) # `pdf(NULL)` is okay
-        return (TRUE)
     device <- names(grDevices::dev.cur())
-    if (device %in% c("agg_capture", "agg_jpeg", "agg_ppm", "agg_png", "agg_record", "agg_tiff", # {ragg}
-                      "devSVG", "devSVG_vdiffr", # {svglite} / {vdiffr}
-                      "quartz", "quartz_off_screen", # Quartz
-                      "cairo_pdf", "cairo_ps", "svg", "X11cairo") # Cairo
-    ) {
+    unicode_devices <- c("agg_capture", "agg_jpeg", "agg_ppm", "agg_png", "agg_record", "agg_tiff", # {ragg}
+                         "devSVG", "devSVG_vdiffr", # {svglite} / {vdiffr}
+                         "quartz", "quartz_off_screen", # Quartz
+                         "cairo_pdf", "cairo_ps", "svg", "X11cairo") # Cairo
+    if (any(vapply(unicode_devices, function(x) grepl(paste0("^", x), device),
+                   FUN.VALUE = logical(1L)))) {
         TRUE
     } else if (device %in% c("bmp", "jpeg", "png", "tiff")) {
         # on unix non-"cairo" type have different device names from "cairo" type
