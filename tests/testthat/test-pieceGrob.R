@@ -1,11 +1,11 @@
 cfg_default <- pp_cfg(list(title="default cfg"))
-test_that("pp_cfg works as expected", {
+test_that("`pp_cfg()` works as expected", {
     expect_true(inherits(cfg_default, "pp_cfg"))
     expect_equal(class(as.list(cfg_default)), "list")
     expect_output(print(cfg_default), "default cfg")
 })
 
-test_that("update_names works as expected", {
+test_that("`update_names()` works as expected", {
     df <- tibble(x = 1:4, name = 1:4)
     expect_equal(update_name(df)$name, as.character(1:4))
     df <- tibble(x = 1:4, id = 1:4)
@@ -18,7 +18,7 @@ test_that("update_names works as expected", {
     expect_warning(update_name(df)$name, "the id column in .l is not unique, generating new name column")
 })
 
-test_that("save_print_and_play works as expected", {
+test_that("`save_print_and_play()` works as expected", {
     skip_on_cran()
     pdf_deck_dir <- tempfile()
     dir.create(pdf_deck_dir)
@@ -60,7 +60,7 @@ test_that("save_print_and_play works as expected", {
     expect_equal(xmpdf::n_pages(pdf_deck_filename_bleed), 7, ignore_attr = "names")
 })
 
-test_that("save_piece_images works as expected", {
+test_that("`save_piece_images()` works as expected", {
     skip_if_not(capabilities("cairo"))
     directory <- tempfile()
     on.exit(unlink(directory))
@@ -244,14 +244,14 @@ test_that("no regressions in figures", {
                           "tile_face", 0.75, 0.25, 2, 2,
                           "tile_face", 0.25, 0.75, 3, 5,
                           "tile_face", 0.75, 0.75, 4, 6)
-    expect_doppelganger("draw_components", function() {
-                                    pushViewport(viewport(width=inch(4), height=inch(4)))
-                                    pmap_piece(df, cfg="default", envir=list(default=cfg_default))
-                          })
-    expect_doppelganger("draw_components.default", function() {
-                                    pushViewport(viewport(width=inch(4), height=inch(4)))
-                                    pmap_piece(df, envir=list())
-                          })
+    expect_doppelganger("pmap_piece", function() {
+                            pushViewport(viewport(width=inch(4), height=inch(4)))
+                            pmap_piece(df, cfg="default", envir=list(default=cfg_default))
+                        })
+    expect_doppelganger("pmap_piece.default", function() {
+                            pushViewport(viewport(width=inch(4), height=inch(4)))
+                            pmap_piece(df, envir=list())
+                        })
 
     # errors
     expect_error(dce("coin_face", rank = 3, cfg=list(gridline_color = "grey")),
