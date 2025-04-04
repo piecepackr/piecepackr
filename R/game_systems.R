@@ -278,21 +278,21 @@ game_systems_font <- function(font = "sans") {
 }
 
 # Okabe-Ito palette i.e. `palette.colors(n = 8, palette = "Okabe-Ito", names=TRUE)` plus white
-#                         vermillion black    bluishgreen  skyblue    orange     white
-# Sky blue and orange
-# cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#56B4E9", "#E69F00", "#FFFFFF")
-# Dark blue and yellow
-cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#F0E442", "#FFFFFF")
-# Dark blue and orange
-# cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#E69F00", "#FFFFFF")
+#                         vermillion black    bluishgreen    blue     yellow     white      skyblue reddishpurple orange
+#                         red        black      green      blue       yellow     white      cyan       magenta    orange
+cb_suit_colors_pure <- c("#D55E00", "#000000", "#009E73", "#0072B2", "#F0E442", "#FFFFFF", "#56B4E9", "#CC79A7", "#E69F00")
 cb_suit_colors_impure <- cb_suit_colors_pure
-cb_suit_colors_impure[2L] <- "grey30"
+cb_suit_colors_impure[2L] <- "grey30" # a dark gray to contrast with black borders
+
+DICE_PIP_COLORS <- "white,white,white,white,black,black,black,black,white"
+N_SUITS_COLOR <- 9L
 
 dice <- function(color_list = color_list_fn(), rect_shape = "rect") {
-    dice_list <- list(n_suits = 6, n_ranks = 6,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 6L,
                       rank_text = "1,2,3,4,5,6",
                       width.die = 16 / 25.4, # 16 mm dice most common
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       invert_colors = TRUE,
                       die_arrangement = "opposites_sum_to_5",
                       shape.card = rect_shape,
@@ -305,7 +305,8 @@ dice <- function(color_list = color_list_fn(), rect_shape = "rect") {
 }
 
 dominoes_chinese <- function(color_list = color_list_fn(), rect_shape = "rect", invert = FALSE) {
-    dice_list <- list(n_suits = 6, n_ranks = 6,
+    dice_list <- list(n_suits = 6L,
+                      n_ranks = 6L,
                       rank_text = "1,2,3,4,5,6",
                       width.die = 16 / 25.4, # 16 mm dice most common
                       background_color = ifelse(invert, color_list$suit_color[2], "white"),
@@ -330,13 +331,14 @@ dominoes_chinese <- function(color_list = color_list_fn(), rect_shape = "rect", 
 }
 
 dice_fudge <- function(color_list = color_list_fn(), rect_shape = "rect") {
-    dice_list <- list(n_suits = 6, n_ranks = 6,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 6,
                       rank_text = "-, ,+,+, ,-",
                       dm_text.die = "",
                       ps_cex.die = 2,
                       grob_fn.die = fudgeGrob,
                       width.die = 16 / 25.4, # 16 mm dice most common
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       invert_colors = TRUE,
                       die_arrangement = "opposites_sum_to_5",
                       shape.card = rect_shape)
@@ -347,7 +349,8 @@ dice_fudge <- function(color_list = color_list_fn(), rect_shape = "rect") {
 }
 
 dice_d4 <- function(font = "sans", color_list = color_list_fn()) {
-    dice_list <- list(n_suits = 6, n_ranks = 4,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 4,
                       rank_text.die = 1:4,
                       dm_text.die = "",
                       ps_cex.die = 1,
@@ -358,7 +361,7 @@ dice_d4 <- function(font = "sans", color_list = color_list_fn()) {
                       width.die =  (21 / 25.4) / 0.8660254, # if 21 mm vertex to vertex
                       height.die =  (21 / 25.4) / 0.8660254, # if 21 mm vertex to vertex
                       depth.die = (sqrt(6) / 3) * (21 / 25.4),
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       shape.die = "convex3",
                       shape_t.die = 90,
                       invert_colors = TRUE)
@@ -369,7 +372,8 @@ dice_d4 <- function(font = "sans", color_list = color_list_fn()) {
 }
 
 dice_d8 <- function(font = "sans", color_list = color_list_fn()) {
-    dice_list <- list(n_suits = 6, n_ranks = 8,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 8,
                       rank_text.die = 1:8,
                       ps_cex.die = 1.15,
                       ps_r.die = 0.03,
@@ -385,7 +389,7 @@ dice_d8 <- function(font = "sans", color_list = color_list_fn()) {
                       width.die =  (18 / 25.4) / 0.8660254, # if 18 mm vertex to vertex
                       height.die =  (18 / 25.4) / 0.8660254, # if 18 mm vertex to vertex
                       depth.die = (sqrt(6) / 3) * (18 / 25.4), # inradius = sqrt(6) * a / 6
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       shape.die = "convex3",
                       shape_t.die = 90,
                       invert_colors = TRUE)
@@ -398,7 +402,8 @@ dice_d8 <- function(font = "sans", color_list = color_list_fn()) {
 # We'll use alpha-90-beta-90 angle kites
 # See `utils-d10.R` for more notes on calculations
 dice_d10 <- function(font = "sans", color_list = color_list_fn()) {
-    dice_list <- list(n_suits = 6, n_ranks = 10,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 10L,
                       rank_text.die = c(1:9, 0),
                       ps_cex.die = 1.15,
                       ps_r.die = -0.08,
@@ -415,7 +420,7 @@ dice_d10 <- function(font = "sans", color_list = color_list_fn()) {
                       width.die =  0.4913446110983896164548, # if kite height 5/8"
                       height.die =  5 / 8,
                       depth.die =  0.5621585749837085810299,
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       shape.die = "kite",
                       shape_r.die = 0.5 - 0.1909830056250526320039,
                       invert_colors = TRUE)
@@ -426,7 +431,8 @@ dice_d10 <- function(font = "sans", color_list = color_list_fn()) {
 }
 
 dice_d10_percentile <- function(font = "sans", color_list = color_list_fn()) {
-    dice_list <- list(n_suits = 6, n_ranks = 10,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 10L,
                       rank_text.die = c(1:9, 0),
                       dm_text.die = "0",
                       dm_cex.die = 1.15,
@@ -441,7 +447,7 @@ dice_d10_percentile <- function(font = "sans", color_list = color_list_fn()) {
                       width.die =  5 / 8,
                       height.die =  0.4913446110983896164548,
                       depth.die =  0.5621585749837085810299,
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       shape.die = "kite",
                       shape_r.die = 0.5 - 0.1909830056250526320039,
                       shape_t.die = 0,
@@ -453,7 +459,8 @@ dice_d10_percentile <- function(font = "sans", color_list = color_list_fn()) {
 }
 
 dice_d12 <- function(font = "sans", color_list = color_list_fn()) {
-    dice_list <- list(n_suits = 6, n_ranks = 12,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 12L,
                       rank_text.die = 1:12,
                       ps_cex.die = 1.15,
                       ps_r.die = 0.01,
@@ -470,7 +477,7 @@ dice_d12 <- function(font = "sans", color_list = color_list_fn()) {
                       width.die =  (5 / 16) / 0.5877853, # if 5/16" vertex to vertex
                       height.die =  (5 / 16) / 0.5877853, # if 5/16" vertex to vertex
                       depth.die = 2 * 1.113516364 * (5 / 16), # inradius = 1.113516364 * a
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       shape.die = "convex5",
                       shape_t.die = 90,
                       invert_colors = TRUE)
@@ -485,7 +492,7 @@ dice_d12 <- function(font = "sans", color_list = color_list_fn()) {
 }
 
 dice_d20 <- function(font = "sans", color_list = color_list_fn()) {
-    dice_list <- list(n_suits = 6, n_ranks = 20,
+    dice_list <- list(n_suits = N_SUITS_COLOR, n_ranks = 20L,
                       rank_text.die = 1:20,
                       ps_cex.die = 0.65,
                       ps_r.die =  -0.02,
@@ -502,7 +509,7 @@ dice_d20 <- function(font = "sans", color_list = color_list_fn()) {
                       width.die =  0.5 / 0.8660254, # if 1/2" vertex to vertex
                       height.die =  0.5 / 0.8660254, # if 1/2" vertex to vertex
                       depth.die = 2 * 0.5 * (3 * sqrt(3) + sqrt(15)) / 12,
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       shape.die = "convex3",
                       shape_t.die = 90,
                       invert_colors = TRUE)
@@ -517,7 +524,8 @@ dice_d20 <- function(font = "sans", color_list = color_list_fn()) {
 }
 
 dice_numeral <- function(font = "sans", color_list = color_list_fn(), rect_shape = "rect") {
-    dice_list <- list(n_suits = 6, n_ranks = 6,
+    dice_list <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 6L,
                       fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
                       rank_text = 1:6,
                       ps_cex.die = 1.8,
@@ -527,7 +535,7 @@ dice_numeral <- function(font = "sans", color_list = color_list_fn(), rect_shape
                       dm_t.die = 270,
                       dm_cex.die = 2.4,
                       width.die = 16 / 25.4, # 16 mm dice most common
-                      background_color = "white,white,white,white,black,black",
+                      background_color = DICE_PIP_COLORS,
                       invert_colors = TRUE,
                       die_arrangement = "1<,2>,3>,6v,5,4",
                       shape.card = rect_shape)
@@ -538,10 +546,12 @@ dice_numeral <- function(font = "sans", color_list = color_list_fn(), rect_shape
 }
 
 meeples <- function(color_list = color_list_fn()) {
-    meeples_list <- list(shape.bit = "meeple", n_suits = 6,
+    meeples_list <- list(shape.bit = "meeple",
+                         n_suits = N_SUITS_COLOR,
                          width.bit = 16 / 25.4, height.bit = 16 / 25.4, depth.bit = 10 / 25.4,
                          ps_text.bit = "", dm_text.bit = "",
-                         invert_colors.bit = TRUE, background_color = "white")
+                         invert_colors.bit = TRUE,
+                         background_color = "white")
     meeples <- pp_cfg(c(meeples_list, color_list))
     meeples$has_piecepack <- FALSE
     meeples$has_bits <- TRUE
@@ -549,7 +559,8 @@ meeples <- function(color_list = color_list_fn()) {
 }
 
 alquerque <- function(cell_width = 1, color_list = color_list_fn(), shading = FALSE) {
-    alquerque <- list(n_suits = 6, n_ranks = 1,
+    alquerque <- list(n_suits = N_SUITS_COLOR,
+                      n_ranks = 1L,
                       width.board = 5 * cell_width,
                       height.board = 5 * cell_width,
                       grob_fn.board_face = alquerqueBoardGrobFn(),
@@ -570,7 +581,8 @@ alquerque <- function(cell_width = 1, color_list = color_list_fn(), shading = FA
 
 marbles <- function(color_list = color_list_fn(), rect_shape = "rect", shading = FALSE) {
     margin <- 0.25
-    marbles <- list(n_suits = 6L, n_ranks = 9L,
+    marbles <- list(n_suits = N_SUITS_COLOR,
+                    n_ranks = 9L,
                     width.board = 4 + 2 * margin,
                     invert_colors.bit = TRUE,
                     invert_colors.board = TRUE,
@@ -607,7 +619,8 @@ marbles <- function(color_list = color_list_fn(), rect_shape = "rect", shading =
 }
 
 morris <- function(cell_width = 1, color_list = color_list_fn(), shading = FALSE) {
-    morris <- list(n_suits = 6, n_ranks = 15,
+    morris <- list(n_suits = N_SUITS_COLOR,
+                   n_ranks = 15L,
                    width.board = 7 * cell_width,
                    height.board = 7 * cell_width,
                    grob_fn.r1.board_face = morrisBoardGrobFn(12),
@@ -646,7 +659,8 @@ go_stone <- function(cell_width, shading = FALSE) {
          grob_fn.bit = ellipsoidGrobFn(shading),
          op_grob_fn.bit = basicEllipsoidFn(shading),
          obj_fn.bit = function(...) save_ellipsoid_obj(..., subdivide=4),
-         ps_text.bit = "", dm_text.bit = ""
+         ps_text.bit = "",
+         dm_text.bit = ""
     )
 }
 
@@ -689,7 +703,8 @@ checker_piece <- function(cell_width, ps_text.bit_face = "", ps_cex.bit_face = 1
 }
 
 checkers <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
-    checkers <- list(n_suits = 6, n_ranks = 12,
+    checkers <- list(n_suits = N_SUITS_COLOR,
+                     n_ranks = 12L,
                      width.board = 8 * cell_width,
                      height.board = 8 * cell_width,
                      fontfamily = ifelse(font == "dejavu", "DejaVu Sans", "sans"),
@@ -732,7 +747,8 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
         black_chess_ranks <- c("\u265f", "\u265e", "\u265d", "\u265c", "\u265b", "\u265a")
         white_chess_ranks <- c("\u2659", "\u2658", "\u2657", "\u2656", "\u2655", "\u2654")
     }
-    chess <- list(n_suits = 6, n_ranks = 12,
+    chess <- list(n_suits = N_SUITS_COLOR,
+                  n_ranks = 12L,
                   width.board = 8 * cell_width,
                   height.board = 8 * cell_width,
                   width.bit = 0.75 * cell_width,
@@ -742,6 +758,10 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
                   grob_fn.r1.board_back = linedBoardGrobFn(8, 8),
                   grob_fn.s5.bit_face = basicPieceGrobFn(fill_stroke = TRUE),
                   grob_fn.s5.die_face = basicPieceGrobFn(fill_stroke = TRUE),
+                  grob_fn.s7.bit_face = basicPieceGrobFn(fill_stroke = TRUE),
+                  grob_fn.s7.die_face = basicPieceGrobFn(fill_stroke = TRUE),
+                  grob_fn.s8.bit_face = basicPieceGrobFn(fill_stroke = TRUE),
+                  grob_fn.s8.die_face = basicPieceGrobFn(fill_stroke = TRUE),
                   # grob_fn.s6.bit_face = basicPieceGrob,
                   gridline_color.board_face = cb_suit_colors_impure,
                   gridline_color.board_back = cb_suit_colors_pure,
@@ -772,7 +792,8 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
 }
 
 go <- function(cell_width = 1, color_list = color_list_fn(), shading = FALSE) {
-    go <- list(n_suits = 6, n_ranks = 19,
+    go <- list(n_suits = N_SUITS_COLOR,
+               n_ranks = 19L,
                width.board = 19 * cell_width,
                height.board = 19 * cell_width,
                grob_fn.board_back = basicPieceGrob,
@@ -995,7 +1016,8 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
 }
 
 reversi <- function(cell_width = 1, color_list = color_list_fn()) {
-    reversi <- list(n_suits = 6, n_ranks = 12,
+    reversi <- list(n_suits = 8L, # N_SUITS_COLOR?
+                    n_ranks = 12L,
                     width.board = 8 * cell_width,
                     height.board = 8 * cell_width,
                     grob_fn.r1.board_face = linedBoardGrobFn(8, 8),
@@ -1020,7 +1042,8 @@ reversi <- function(cell_width = 1, color_list = color_list_fn()) {
 }
 
 shapes_cfg <- function(color_list = color_list_fn()) {
-    shapes <- list(n_suits = 6, n_ranks = 4,
+    shapes <- list(n_suits = N_SUITS_COLOR,
+                   n_ranks = 4,
                    invert_colors = TRUE,
                    ps_text = "", dm_text = "",
                    background_color = "white",
@@ -1039,7 +1062,7 @@ shapes_cfg <- function(color_list = color_list_fn()) {
 reversi_piece <- function(cell_width = 1, color_list = color_list_fn()) {
 
     shapes_top <- shapes_cfg(color_list)
-    color_list$suit_color <- color_list$suit_color[c(3, 6, 1, 5, 4, 2)]
+    color_list$suit_color <- color_list$suit_color[c(7L, 6L, 8L, 5L, 4L, 2L, 1L, 3L)]
     shapes_bot <- shapes_cfg(color_list)
     envir <- list(shapes_top = shapes_top, shapes_bot = shapes_bot)
 

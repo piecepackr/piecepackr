@@ -1,6 +1,14 @@
 piecepackr 1.15.0 (development)
 ===============================
 
+Breaking changes
+----------------
+
+* For the colored game pieces returned by `game_systems()` the "blue" suit (usually the third suit)
+  is now a darker blue and the "yellow" suit (usually the fifth suit) is now a brighter yellow.
+  To get pieces that are the previous lighter blue use the new "cyan" suit (usually the seventh suit)
+  and to get the previous darker "yellow" use the new "orange" suit (usually the nineth suit).
+
 Deprecated features
 -------------------
 
@@ -33,18 +41,23 @@ New features
 
   + In configurations `checkers1` and `checkers2` the "bit\_face" now has a promotion symbol
     while the "bit\_back" remains plain (#371).
-
   + New arguments `font`, `border`, `background_color`, and `edge_color`
     (to replace the deprecated `style` argument).
-  + The "blue" suits (usually the third suit) are now a darker shade of blue.
-  + The "yellow" suits (usually the fifth suit) are now yellower (and less orange).
-  + Yellow glyphs should now be surrounded by black outlines.
-    Rendering these black outlines requires the new "stroking and filling path" feature
-    which is only supported in select graphic devices in R versions 4.2 and later
-    (most notably the "cairo" and "ragg" family of devices).
-    If this feature is not detected we will output an `inform()` `message()` of class `"piecepackr_fill_stroke"`
-    and fall back to a `grid::textGrob()` alternative.
-    These messages may be suppressed by setting `options(piecepackr.fs.inform = FALSE)`.
+  + The following color changes (#268):
+
+    - Adds "cyan", "magenta", and "orange" colored pieces to the color suits.
+    - The "blue" color suit is now a darker blue (to better distinguish from the new "cyan")
+      and the "yellow" color suit is now a lighter yellow (to better distinguish from the new "orange").
+    - The opposite side of "red" reversi pieces is now "cyan" (instead of "green")
+      and the opposite side of "green" reversi pieces is now "magenta" (instead of "red").
+      The opposite colors of reversi pieces are now all complementary (CYMK/RGB) colors.
+    - Yellow glyphs should now be surrounded by black outlines.
+      Rendering these black outlines requires the new "stroking and filling path" feature
+      which is only supported in select graphic devices in R versions 4.2 and later
+      (most notably the "cairo" and "ragg" family of devices).
+      If this feature is not detected we will output an `inform()` `message()` of class `"piecepackr_fill_stroke"`
+      and fall back to a `grid::textGrob()` alternative.
+      These messages may be suppressed by setting `options(piecepackr.fs.inform = FALSE)`.
 
   + In configurations `piecepack`, `dual_piecepacks_expansion`, `piecepack_inverted`, and `playing_cards_expansion` the bindings `has_cards`, `has_pyramids`, `has_matchsticks`, and `has_saucers` now return `TRUE`.
 
