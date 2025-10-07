@@ -63,7 +63,7 @@
 #'  }
 #'  \dontrun{# May take more than 5 seconds on CRAN servers
 #'  if (require(rayvertex)) {
-#'    envir3d <- game_systems("sans3d")
+#'    envir3d <- game_systems("sans", border = FALSE)
 #'    render_piece(df, .f = piece_mesh, envir = envir3d,
 #'                 open_device = FALSE,
 #'                 op_scale = 0.5, trans = op_transform)

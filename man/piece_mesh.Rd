@@ -72,7 +72,7 @@ A rayvertex object.
 \examples{
   \donttest{# May take more than 5 seconds on CRAN servers
   if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-      cfg <- game_systems("sans3d")$piecepack
+      cfg <- game_systems("sans", border = FALSE)$piecepack
       rs <- function(shape) {
            opt <- options(cores = getOption("Ncpus"))
            light <- rayvertex::directional_light(c(0, 0, 1))

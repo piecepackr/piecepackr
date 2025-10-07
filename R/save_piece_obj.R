@@ -9,7 +9,7 @@
 #' @return A data frame with named elements "obj", "mtl", "png" with the created filenames.
 #' @examples
 #'     if (all(capabilities(c("cairo", "png")))) {
-#'       cfg <- game_systems("sans3d")$dominoes
+#'       cfg <- game_systems("sans", border = FALSE)$dominoes
 #'       files <- save_piece_obj("tile_face", suit = 3+1, rank=6+1, cfg = cfg)
 #'       print(files)
 #'     }

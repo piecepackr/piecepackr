@@ -72,7 +72,7 @@ A rayrender object.
 \examples{
   \donttest{# May take more than 5 seconds on CRAN servers
   opt <- options(cores = getOption("Ncpus"))
-  cfg <- game_systems("sans3d")$piecepack
+  cfg <- game_systems("sans", border = FALSE)$piecepack
   if (requireNamespace("rayrender", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
       rayrender::render_scene(piece("tile_face", suit = 3, rank = 3, cfg = cfg))
   }
