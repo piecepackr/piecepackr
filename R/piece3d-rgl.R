@@ -13,7 +13,7 @@
 #' @examples
 #' if (requireNamespace("rgl", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
 #'   rgl::open3d()
-#'   cfg <- game_systems("sans3d")$piecepack
+#'   cfg <- game_systems("sans", border = FALSE)$piecepack
 #'   piece3d("tile_back", suit = 3, rank = 3, cfg = cfg, x = 0, y = 0, z = 0)
 #'   piece3d("coin_back", suit = 4, rank = 2, cfg = cfg, x = 0.5, y = 0.5, z = 0.25)
 #'   piece3d("pawn_top", suit = 1, cfg = cfg, x = -0.5, y = 0.5, z = 0.6)
