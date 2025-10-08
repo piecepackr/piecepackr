@@ -70,24 +70,31 @@ A rayvertex object.
 \code{piece_mesh()} creates 3d board game piece objects for use with the rayvertex package.
 }
 \examples{
-  \donttest{# May take more than 5 seconds on CRAN servers
-  if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-      cfg <- game_systems("sans", border = FALSE)$piecepack
-      rs <- function(shape) {
-           opt <- options(cores = getOption("Ncpus"))
-           light <- rayvertex::directional_light(c(0, 0, 1))
-           rayvertex::rasterize_scene(shape, light_info = light)
-           options(opt)
-      }
-      rs(piece_mesh("tile_face", suit = 3, rank = 3, cfg = cfg))
-  }
-  if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-      rs(piece_mesh("coin_back", suit = 4, rank = 2, cfg = cfg))
-  }
-  if (requireNamespace("rayvertex", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-      rs(piece_mesh("pawn_face", suit = 1, cfg = cfg))
-  }
-  }
+\donttest{
+# May take more than 5 seconds on CRAN servers
+cfg <- game_systems("sans", border = FALSE)$piecepack
+rasterize_mesh <- function(mesh) {
+  opt <- options(cores = getOption("Ncpus"))
+  light <- rayvertex::directional_light(c(0, 0, 1))
+  lookat <- c(0, 0, 0)
+  try(rayvertex::rasterize_scene(mesh, light_info = light, lookat = lookat))
+  invisible(options(opt))
+}
+supports_piece_mesh <- requireNamespace("rayvertex", quietly = TRUE) &&
+  all(capabilities(c("cairo", "png")))
+if (supports_piece_mesh) {
+  mesh <- piece_mesh("tile_face", suit = 3, rank = 3, cfg = cfg)
+  rasterize_mesh(mesh)
+}
+if (supports_piece_mesh) {
+  mesh <- piece_mesh("coin_back", suit = 4, rank = 2, cfg = cfg)
+  rasterize_mesh(mesh)
+}
+if (supports_piece_mesh) {
+  mesh <- piece_mesh("pawn_face", suit = 1, cfg = cfg)
+  rasterize_mesh(mesh)
+}
+}
 }
 \seealso{
 See \url{https://www.rayvertex.com} for more information about the \code{rayvertex} package.
