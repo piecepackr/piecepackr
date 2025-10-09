@@ -45,92 +45,106 @@
 #'   }
 #' @seealso [render_piece()] is a higher-level function that wraps this function.
 #' @export
-pmap_piece <- function(.l, .f = pieceGrob, ...,
-                       cfg = getOption("piecepackr.cfg"),
-                       envir = getOption("piecepackr.envir"),
-                       trans = getOption("piecepackr.trans"),
-                       draw = TRUE, name = NULL, gp = NULL, vp = NULL) {
-    if (length(.l) == 0L || (!is.null(nrow(.l)) && nrow(.l) == 0L))
-        return(list())
-    ce <- default_cfg_envir(cfg, envir)
-    cfg <- ce$cfg
-    envir <- ce$envir
+pmap_piece <- function(
+	.l,
+	.f = pieceGrob,
+	...,
+	cfg = getOption("piecepackr.cfg"),
+	envir = getOption("piecepackr.envir"),
+	trans = getOption("piecepackr.trans"),
+	draw = TRUE,
+	name = NULL,
+	gp = NULL,
+	vp = NULL
+) {
+	if (length(.l) == 0L || (!is.null(nrow(.l)) && nrow(.l) == 0L)) {
+		return(list())
+	}
+	ce <- default_cfg_envir(cfg, envir)
+	cfg <- ce$cfg
+	envir <- ce$envir
 
-    .l <- update_name(.l)
-    if (is.function(trans)) {
-        .l <- trans(.l, ..., cfg=cfg, envir=envir)
-        .l <- update_name(.l)
-    }
-    if (hasName(.l, "cfg")) {
-        ll <- purrr::pmap(.l, .f, ..., envir=envir, draw=FALSE)
-    } else {
-        ll <- purrr::pmap(.l, .f, ..., cfg=cfg, envir=envir, draw=FALSE)
-    }
-    if (length(ll) && all(sapply(ll, is.grob))) {
-        grob <- gTree(children=as.gList(ll), name=name, gp=gp, vp=vp, cl="pmap_piece")
-        if (draw) grid.draw(grob)
-        invisible(grob)
-    } else {
-        names(ll) <- .l$name
-        invisible(ll)
-    }
+	.l <- update_name(.l)
+	if (is.function(trans)) {
+		.l <- trans(.l, ..., cfg = cfg, envir = envir)
+		.l <- update_name(.l)
+	}
+	if (hasName(.l, "cfg")) {
+		ll <- purrr::pmap(.l, .f, ..., envir = envir, draw = FALSE)
+	} else {
+		ll <- purrr::pmap(.l, .f, ..., cfg = cfg, envir = envir, draw = FALSE)
+	}
+	if (length(ll) && all(sapply(ll, is.grob))) {
+		grob <- gTree(children = as.gList(ll), name = name, gp = gp, vp = vp, cl = "pmap_piece")
+		if (draw) {
+			grid.draw(grob)
+		}
+		invisible(grob)
+	} else {
+		names(ll) <- .l$name
+		invisible(ll)
+	}
 }
 
 update_name <- function(.l) {
-    if (hasName(.l, "name")) {
-        if (!is.character(.l$name)) .l$name <- as.character(.l$name)
-        if (sum(duplicated(.l$name)) == 0) {
-            return(.l)
-        } else {
-            warn("the name column in .l is not unique, generating new name column")
-        }
-    }
-    if (hasName(.l, "id")) {
-        .l$name <- paste0("piece.", as.character(.l$id))
-        if (sum(duplicated(.l$name)) == 0) {
-            return(.l)
-        } else {
-            warn("the id column in .l is not unique, generating new name column")
-        }
-    }
-    .l$name <- paste0("piece.", as.character(seq(length(.l[[1]]))))
-    .l
+	if (hasName(.l, "name")) {
+		if (!is.character(.l$name)) {
+			.l$name <- as.character(.l$name)
+		}
+		if (sum(duplicated(.l$name)) == 0) {
+			return(.l)
+		} else {
+			warn("the name column in .l is not unique, generating new name column")
+		}
+	}
+	if (hasName(.l, "id")) {
+		.l$name <- paste0("piece.", as.character(.l$id))
+		if (sum(duplicated(.l$name)) == 0) {
+			return(.l)
+		} else {
+			warn("the id column in .l is not unique, generating new name column")
+		}
+	}
+	.l$name <- paste0("piece.", as.character(seq(length(.l[[1]]))))
+	.l
 }
 
 #' @export
 grobPoints.pmap_piece <- function(x, closed, ...) {
-    grobCoords(x, closed)
+	grobCoords(x, closed)
 }
 
 #' @export
 grobCoords.pmap_piece <- function(x, closed, ...) {
-    gc <- lapply(x$children, grobCoords, closed = closed)
-    f <- function(x, y) gridGeometry::polyclip(x, y, "union")
-    Reduce(f, gc)
+	gc <- lapply(x$children, grobCoords, closed = closed)
+	f <- function(x, y) gridGeometry::polyclip(x, y, "union")
+	Reduce(f, gc)
 }
 
 as.gList <- function(ll) {
-    gl <- gList()
-    for (ii in seq(ll)) {
-        gl[[ii]] <- ll[[ii]]
-    }
-    gl
+	gl <- gList()
+	for (ii in seq(ll)) {
+		gl[[ii]] <- ll[[ii]]
+	}
+	gl
 }
 
-default_cfg_envir <- function(cfg=NULL, envir=NULL) {
-    if (is.null(cfg) && is.null(envir)) {
-        cfg <- pp_cfg()
-        envir <- game_systems()
-    } else if (is.null(cfg)) { # and !is.null(envir)
-        if (hasName(envir, "piecepack")) {
-            cfg <- envir[["piecepack"]]
-        } else {
-            cfg <- pp_cfg()
-        }
-    } else if (is.null(envir)) { # and !is.null(cfg)
-        cfg <- get_cfg(cfg)
-        envir <- game_systems()
-        envir[["piecepack"]] <- cfg
-    }
-    list(cfg=cfg, envir=envir)
+default_cfg_envir <- function(cfg = NULL, envir = NULL) {
+	if (is.null(cfg) && is.null(envir)) {
+		cfg <- pp_cfg()
+		envir <- game_systems()
+	} else if (is.null(cfg)) {
+		# and !is.null(envir)
+		if (hasName(envir, "piecepack")) {
+			cfg <- envir[["piecepack"]]
+		} else {
+			cfg <- pp_cfg()
+		}
+	} else if (is.null(envir)) {
+		# and !is.null(cfg)
+		cfg <- get_cfg(cfg)
+		envir <- game_systems()
+		envir[["piecepack"]] <- cfg
+	}
+	list(cfg = cfg, envir = envir)
 }

@@ -27,37 +27,40 @@
 #'  aabb_piece(df, op_scale = 1, op_angle = 45)
 #'  aabb_piece(df, op_scale = 1, op_angle = -90)
 #' @export
-aabb_piece <- function(df,
-                       cfg = getOption("piecepackr.cfg", pp_cfg()),
-                       envir = getOption("piecepackr.envir"),
-                       op_scale = getOption("piecepackr.op_scale", 0),
-                       op_angle = getOption("piecepackr.op_angle", 45),
-                       ...) {
-    rlang::local_options(affiner_angular_unit = "degrees")
-    if (nrow(df) == 0) {
-        return(list(x = c(NA_real_, NA_real_),
-                    y = c(NA_real_, NA_real_),
-                    z = c(NA_real_, NA_real_),
-                    x_op = c(NA_real_, NA_real_),
-                    y_op = c(NA_real_, NA_real_)))
-    }
+aabb_piece <- function(
+	df,
+	cfg = getOption("piecepackr.cfg", pp_cfg()),
+	envir = getOption("piecepackr.envir"),
+	op_scale = getOption("piecepackr.op_scale", 0),
+	op_angle = getOption("piecepackr.op_angle", 45),
+	...
+) {
+	rlang::local_options(affiner_angular_unit = "degrees")
+	if (nrow(df) == 0) {
+		return(list(
+			x = c(NA_real_, NA_real_),
+			y = c(NA_real_, NA_real_),
+			z = c(NA_real_, NA_real_),
+			x_op = c(NA_real_, NA_real_),
+			y_op = c(NA_real_, NA_real_)
+		))
+	}
 
-    df <- add_3d_info(df, cfg = cfg, envir = envir)
-    x <- c(df$xl, df$xr)
-    y <- c(df$yb, df$yt)
-    z <- c(df$zb, df$zt)
+	df <- add_3d_info(df, cfg = cfg, envir = envir)
+	x <- c(df$xl, df$xr)
+	y <- c(df$yb, df$yt)
+	z <- c(df$zb, df$zt)
 
-    llb <- as_coord2d(as_coord3d(df$xll, df$yll, df$zb), alpha = op_angle, scale = op_scale)
-    llt <- as_coord2d(as_coord3d(df$xll, df$yll, df$zt), alpha = op_angle, scale = op_scale)
-    ulb <- as_coord2d(as_coord3d(df$xul, df$yul, df$zb), alpha = op_angle, scale = op_scale)
-    ult <- as_coord2d(as_coord3d(df$xul, df$yul, df$zt), alpha = op_angle, scale = op_scale)
-    lrb <- as_coord2d(as_coord3d(df$xlr, df$ylr, df$zb), alpha = op_angle, scale = op_scale)
-    lrt <- as_coord2d(as_coord3d(df$xlr, df$ylr, df$zt), alpha = op_angle, scale = op_scale)
-    urb <- as_coord2d(as_coord3d(df$xur, df$yur, df$zb), alpha = op_angle, scale = op_scale)
-    urt <- as_coord2d(as_coord3d(df$xur, df$yur, df$zt), alpha = op_angle, scale = op_scale)
-    x_op <- c(llb$x, llt$x, ulb$x, ult$x, lrb$x, lrt$x, urb$x, urt$x)
-    y_op <- c(llb$y, llt$y, ulb$y, ult$y, lrb$y, lrt$y, urb$y, urt$y)
+	llb <- as_coord2d(as_coord3d(df$xll, df$yll, df$zb), alpha = op_angle, scale = op_scale)
+	llt <- as_coord2d(as_coord3d(df$xll, df$yll, df$zt), alpha = op_angle, scale = op_scale)
+	ulb <- as_coord2d(as_coord3d(df$xul, df$yul, df$zb), alpha = op_angle, scale = op_scale)
+	ult <- as_coord2d(as_coord3d(df$xul, df$yul, df$zt), alpha = op_angle, scale = op_scale)
+	lrb <- as_coord2d(as_coord3d(df$xlr, df$ylr, df$zb), alpha = op_angle, scale = op_scale)
+	lrt <- as_coord2d(as_coord3d(df$xlr, df$ylr, df$zt), alpha = op_angle, scale = op_scale)
+	urb <- as_coord2d(as_coord3d(df$xur, df$yur, df$zb), alpha = op_angle, scale = op_scale)
+	urt <- as_coord2d(as_coord3d(df$xur, df$yur, df$zt), alpha = op_angle, scale = op_scale)
+	x_op <- c(llb$x, llt$x, ulb$x, ult$x, lrb$x, lrt$x, urb$x, urt$x)
+	y_op <- c(llb$y, llt$y, ulb$y, ult$y, lrb$y, lrt$y, urb$y, urt$y)
 
-    list(x = range(x), y = range(y), z = range(z),
-         x_op = range(x_op), y_op = range(y_op))
+	list(x = range(x), y = range(y), z = range(z), x_op = range(x_op), y_op = range(y_op))
 }

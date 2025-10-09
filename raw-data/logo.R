@@ -46,50 +46,65 @@ w <- 4.5
 
 fill <- pp$get_suit_color(3)
 draw_logo <- function(border = TRUE, cut = FALSE) {
-    # make hex
-    hex <- pp_shape("convex6")
-    grid.draw(hex$shape(gp = gpar(fill=fill, col="transparent")))
-    if (border)
-        grid.draw(hex$mat(mat_width=0.015, gp = gpar(fill="black")))
-    if (cut) {
-        pushViewport(viewport(width=unit(8/9, "npc"), height=unit(8/9, "npc")))
-        grid.draw(hex$shape(gp = gpar(fill="transparent", col="white")))
-        popViewport()
-        pushViewport(viewport(width=unit(5/6, "npc"), height=unit(5/6, "npc")))
-        grid.draw(hex$shape(gp = gpar(fill="transparent", col="white")))
-        popViewport()
-    }
+	# make hex
+	hex <- pp_shape("convex6")
+	grid.draw(hex$shape(gp = gpar(fill = fill, col = "transparent")))
+	if (border) {
+		grid.draw(hex$mat(mat_width = 0.015, gp = gpar(fill = "black")))
+	}
+	if (cut) {
+		pushViewport(viewport(width = unit(8 / 9, "npc"), height = unit(8 / 9, "npc")))
+		grid.draw(hex$shape(gp = gpar(fill = "transparent", col = "white")))
+		popViewport()
+		pushViewport(viewport(width = unit(5 / 6, "npc"), height = unit(5 / 6, "npc")))
+		grid.draw(hex$shape(gp = gpar(fill = "transparent", col = "white")))
+		popViewport()
+	}
 
-    pushViewport(viewport(width=unit(w, "in"), height=unit(w, "in")))
-    # logo with pieces
-    x0 <- 0.48 * w
-    y0 <- 0.59 * w
-    df <- tibble(piece_side = c("tile_face", "die_face", "pawn_face", "coin_back"),
-                 x = c(x0, x0 + 0.45, x0 + 0.5, x0 - 0.5),
-                 y = c(y0, y0 + 0.45, y0 - 0.5, y0 - 0.5),
-                 suit = 1:4, rank = c(1, 2, NA, 4))
-    pmap_piece(df, default.units="in", trans=op_transform, op_scale = 0.5, cfg=cfg)
+	pushViewport(viewport(width = unit(w, "in"), height = unit(w, "in")))
+	# logo with pieces
+	x0 <- 0.48 * w
+	y0 <- 0.59 * w
+	df <- tibble(
+		piece_side = c("tile_face", "die_face", "pawn_face", "coin_back"),
+		x = c(x0, x0 + 0.45, x0 + 0.5, x0 - 0.5),
+		y = c(y0, y0 + 0.45, y0 - 0.5, y0 - 0.5),
+		suit = 1:4,
+		rank = c(1, 2, NA, 4)
+	)
+	pmap_piece(df, default.units = "in", trans = op_transform, op_scale = 0.5, cfg = cfg)
 
-    # name
-    grid.text("piecepackr", x = 0.51 * w, y = 0.32 * w, default.units = "in",
-              gp = gpar(fontsize = 42, fontfamily = "Dejavu Sans",
-                        col = "white", fontface = 2))
-    popViewport()
+	# name
+	grid.text(
+		"piecepackr",
+		x = 0.51 * w,
+		y = 0.32 * w,
+		default.units = "in",
+		gp = gpar(fontsize = 42, fontfamily = "Dejavu Sans", col = "white", fontface = 2)
+	)
+	popViewport()
 }
 svg("man/figures/logo.svg", width = w, height = w, bg = "transparent")
-draw_logo(border=TRUE)
+draw_logo(border = TRUE)
 dev.off()
 
 png("man/figures/logo.png", width = w, height = w, units = "in", res = 72, bg = "transparent")
-draw_logo(border=TRUE)
+draw_logo(border = TRUE)
 dev.off()
 
 # https://www.stickermule.com/support/full-bleed
-png("raw-data/sticker_with_cutline.png", width = 5.125, height = 5.125, units = "in", res = 150, bg = fill)
-draw_logo(border=FALSE, cut = TRUE)
+png(
+	"raw-data/sticker_with_cutline.png",
+	width = 5.125,
+	height = 5.125,
+	units = "in",
+	res = 150,
+	bg = fill
+)
+draw_logo(border = FALSE, cut = TRUE)
 dev.off()
 
 # https://www.stickermule.com/support/full-bleed
 png("raw-data/sticker.png", width = 5.125, height = 5.125, units = "in", res = 150, bg = fill)
-draw_logo(border=FALSE, cut = FALSE)
+draw_logo(border = FALSE, cut = FALSE)
 dev.off()

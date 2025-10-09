@@ -7,11 +7,14 @@
 ^LICENSE.md$
 ^Rakefile$
 
+^\.air.toml$
 ^.appveyor.yml$
 ^codecov.yml$
+^\.editorconfig$
 ^.lintr$
 ^_pkgdown.yml$
 ^pkgdown$
+^\.pre-commit-config.yaml$
 ^.travis.yml$
 ^cran-comments.md$
 
@@ -27,4 +30,5 @@
 ^svg$
 ^txt$
 ^tmp$
+^\.git$
 ^\.github$

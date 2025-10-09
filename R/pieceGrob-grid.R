@@ -95,199 +95,345 @@
 #' @name grid.piece
 NULL
 
-pieceGrobHelper <- function(piece_side="tile_back", suit=NA, rank=NA, cfg=pp_cfg(),
-                            x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                            angle=0, width=NA, height=NA, depth=NA,
-                            op_scale=0, op_angle=45,
-                            default.units = "npc",
-                            scale=1, alpha=1, type="normal", name="",
-                            bleed=FALSE) {
-    stopifnot(isFALSE(bleed) || op_scale < 0.0001)
-    if (scale == 0 || alpha == 0) return(nullGrob())
-    cfg <- as_pp_cfg(cfg)
-    rank <- impute_rank(piece_side, rank, cfg)
-    suit <- impute_suit(piece_side, suit, cfg)
-    if (is.na(angle)) angle <- 0
+pieceGrobHelper <- function(
+	piece_side = "tile_back",
+	suit = NA,
+	rank = NA,
+	cfg = pp_cfg(),
+	x = unit(0.5, "npc"),
+	y = unit(0.5, "npc"),
+	z = NA,
+	angle = 0,
+	width = NA,
+	height = NA,
+	depth = NA,
+	op_scale = 0,
+	op_angle = 45,
+	default.units = "npc",
+	scale = 1,
+	alpha = 1,
+	type = "normal",
+	name = "",
+	bleed = FALSE
+) {
+	stopifnot(isFALSE(bleed) || op_scale < 0.0001)
+	if (scale == 0 || alpha == 0) {
+		return(nullGrob())
+	}
+	cfg <- as_pp_cfg(cfg)
+	rank <- impute_rank(piece_side, rank, cfg)
+	suit <- impute_suit(piece_side, suit, cfg)
+	if (is.na(angle)) {
+		angle <- 0
+	}
 
-    has_bleed <- !isFALSE(bleed)
+	has_bleed <- !isFALSE(bleed)
 
-    if (isTRUE(bleed)) bleed <- unit(0.125, "in")
-    if (isFALSE(bleed)) bleed <- unit(0, "in")
-    if (!is.unit(bleed)) bleed <- unit(bleed, default.units)
+	if (isTRUE(bleed)) {
+		bleed <- unit(0.125, "in")
+	}
+	if (isFALSE(bleed)) {
+		bleed <- unit(0, "in")
+	}
+	if (!is.unit(bleed)) {
+		bleed <- unit(bleed, default.units)
+	}
 
-    if (is.na(width)) width <- inch(cfg$get_width(piece_side, suit, rank))
-    if (is.na(height)) height <- inch(cfg$get_height(piece_side, suit, rank))
-    if (is.na(depth)) depth <- inch(cfg$get_depth(piece_side, suit, rank))
-    if (is.na(z)) z <- 0.5 * depth
-    if (!is.unit(x)) x <- unit(x, default.units)
-    if (!is.unit(y)) y <- unit(y, default.units)
-    if (!is.unit(z)) z <- unit(z, default.units)
-    if (!is.unit(width)) width <- unit(width, default.units)
-    if (!is.unit(height)) height <- unit(height, default.units)
-    if (!is.unit(depth)) depth <- unit(depth, default.units)
-    width <- scale * width + 2 * bleed
-    height <- scale * height + 2 * bleed
-    depth <- scale * depth
-    angle <- angle %% 360
-    op_angle <- op_angle %% 360
+	if (is.na(width)) {
+		width <- inch(cfg$get_width(piece_side, suit, rank))
+	}
+	if (is.na(height)) {
+		height <- inch(cfg$get_height(piece_side, suit, rank))
+	}
+	if (is.na(depth)) {
+		depth <- inch(cfg$get_depth(piece_side, suit, rank))
+	}
+	if (is.na(z)) {
+		z <- 0.5 * depth
+	}
+	if (!is.unit(x)) {
+		x <- unit(x, default.units)
+	}
+	if (!is.unit(y)) {
+		y <- unit(y, default.units)
+	}
+	if (!is.unit(z)) {
+		z <- unit(z, default.units)
+	}
+	if (!is.unit(width)) {
+		width <- unit(width, default.units)
+	}
+	if (!is.unit(height)) {
+		height <- unit(height, default.units)
+	}
+	if (!is.unit(depth)) {
+		depth <- unit(depth, default.units)
+	}
+	width <- scale * width + 2 * bleed
+	height <- scale * height + 2 * bleed
+	depth <- scale * depth
+	angle <- angle %% 360
+	op_angle <- op_angle %% 360
 
-    if (op_scale < 0.0001) {
-        if (has_bleed) {
-            grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
-            if (hasName(grob, "bleed"))
-                grob$bleed <- bleed
-        } else {
-            grob <- cfg$get_grob(piece_side, suit, rank, type)
-        }
-        cvp <- viewport(x, y, width, height, angle=angle)
-        name <- paste0("piece_side", name)
-        grob <- grid::editGrob(grob, vp=cvp)
-    } else {
-        grob <- cfg$get_op_grob(piece_side, suit, rank,
-                            x, y, z, angle, type,
-                            width, height, depth,
-                            op_scale, op_angle)
-        name <- paste0("projected_piece", name)
-    }
+	if (op_scale < 0.0001) {
+		if (has_bleed) {
+			grob <- cfg$get_grob_with_bleed(piece_side, suit, rank)
+			if (hasName(grob, "bleed")) {
+				grob$bleed <- bleed
+			}
+		} else {
+			grob <- cfg$get_grob(piece_side, suit, rank, type)
+		}
+		cvp <- viewport(x, y, width, height, angle = angle)
+		name <- paste0("piece_side", name)
+		grob <- grid::editGrob(grob, vp = cvp)
+	} else {
+		grob <- cfg$get_op_grob(
+			piece_side,
+			suit,
+			rank,
+			x,
+			y,
+			z,
+			angle,
+			type,
+			width,
+			height,
+			depth,
+			op_scale,
+			op_angle
+		)
+		name <- paste0("projected_piece", name)
+	}
 
-    # update name, cex, lex, alpha
-    grob <- grid::editGrob(grob, name=name)
-    if (hasName(grob, "scale"))
-        grob$scale <- scale
-    else
-        grob <- update_gp(grob, gp = gpar(cex = scale, lex = scale))
-    if (!nigh(alpha, 1))
-        grob <- update_gp(grob, gp = gpar(alpha = alpha))
-    grob
+	# update name, cex, lex, alpha
+	grob <- grid::editGrob(grob, name = name)
+	if (hasName(grob, "scale")) {
+		grob$scale <- scale
+	} else {
+		grob <- update_gp(grob, gp = gpar(cex = scale, lex = scale))
+	}
+	if (!nigh(alpha, 1)) {
+		grob <- update_gp(grob, gp = gpar(alpha = alpha))
+	}
+	grob
 }
 
 #' @rdname grid.piece
 #' @export
-pieceGrob <- function(piece_side="tile_back", suit=NA, rank=NA,
-                      cfg=getOption("piecepackr.cfg", pp_cfg()),
-                      x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                      angle=0, ...,
-                      width=NA, height=NA, depth=NA,
-                      op_scale = getOption("piecepackr.op_scale", 0),
-                      op_angle = getOption("piecepackr.op_angle", 45),
-                      default.units = getOption("piecepackr.default.units", "npc"),
-                      envir = getOption("piecepackr.envir"),
-                      name=NULL, gp=NULL, vp=NULL,
-                      scale=1, alpha=1, type="normal",
-                      bleed=FALSE) {
+pieceGrob <- function(
+	piece_side = "tile_back",
+	suit = NA,
+	rank = NA,
+	cfg = getOption("piecepackr.cfg", pp_cfg()),
+	x = unit(0.5, "npc"),
+	y = unit(0.5, "npc"),
+	z = NA,
+	angle = 0,
+	...,
+	width = NA,
+	height = NA,
+	depth = NA,
+	op_scale = getOption("piecepackr.op_scale", 0),
+	op_angle = getOption("piecepackr.op_angle", 45),
+	default.units = getOption("piecepackr.default.units", "npc"),
+	envir = getOption("piecepackr.envir"),
+	name = NULL,
+	gp = NULL,
+	vp = NULL,
+	scale = 1,
+	alpha = 1,
+	type = "normal",
+	bleed = FALSE
+) {
+	stopifnot(!(bleed && op_scale > 0))
+	if (is_angle(angle)) {
+		angle <- as.double(angle, "degrees")
+	}
+	if (is_angle(op_angle)) {
+		op_angle <- as.double(op_angle, "degrees")
+	}
 
-    stopifnot(!(bleed && op_scale > 0))
-    if (is_angle(angle))
-        angle <- as.double(angle, "degrees")
-    if (is_angle(op_angle))
-        op_angle <- as.double(op_angle, "degrees")
-
-    gTree(piece_side=piece_side, suit=suit, rank=rank, cfg=cfg,
-          x=x, y=y, z=z, angle=angle,
-          width=width, height=height, depth=depth,
-          op_scale=op_scale, op_angle=op_angle,
-          default.units=default.units, envir=envir,
-          scale=scale, alpha=alpha, type=type,
-          bleed=bleed,
-          name=name, gp=gp, vp=vp,
-          cl=c("piece", "pp_grobCoords"))
+	gTree(
+		piece_side = piece_side,
+		suit = suit,
+		rank = rank,
+		cfg = cfg,
+		x = x,
+		y = y,
+		z = z,
+		angle = angle,
+		width = width,
+		height = height,
+		depth = depth,
+		op_scale = op_scale,
+		op_angle = op_angle,
+		default.units = default.units,
+		envir = envir,
+		scale = scale,
+		alpha = alpha,
+		type = type,
+		bleed = bleed,
+		name = name,
+		gp = gp,
+		vp = vp,
+		cl = c("piece", "pp_grobCoords")
+	)
 }
 
 #' @export
 makeContent.piece <- function(x) {
-    nn <- max(lengths(list(x$piece_side, x$suit, x$rank, x$x, x$y, x$z, x$angle,
-                           x$width, x$height, x$depth,
-                           x$op_scale, x$op_angle,
-                           x$scale, x$alpha, x$type,
-                           x$bleed)))
-    piece_side <- rep(x$piece_side, length.out=nn)
-    suit <- rep(x$suit, length.out=nn)
-    rank <- rep(x$rank, length.out=nn)
-    xc <- rep(x$x, length.out=nn)
-    yc <- rep(x$y, length.out=nn)
-    zc <- rep(x$z, length.out=nn)
-    angle <- rep(x$angle, length.out=nn)
+	nn <- max(lengths(list(
+		x$piece_side,
+		x$suit,
+		x$rank,
+		x$x,
+		x$y,
+		x$z,
+		x$angle,
+		x$width,
+		x$height,
+		x$depth,
+		x$op_scale,
+		x$op_angle,
+		x$scale,
+		x$alpha,
+		x$type,
+		x$bleed
+	)))
+	piece_side <- rep(x$piece_side, length.out = nn)
+	suit <- rep(x$suit, length.out = nn)
+	rank <- rep(x$rank, length.out = nn)
+	xc <- rep(x$x, length.out = nn)
+	yc <- rep(x$y, length.out = nn)
+	zc <- rep(x$z, length.out = nn)
+	angle <- rep(x$angle, length.out = nn)
 
-    width <- rep(x$width, length.out=nn)
-    height <- rep(x$height, length.out=nn)
-    depth <- rep(x$depth, length.out=nn)
+	width <- rep(x$width, length.out = nn)
+	height <- rep(x$height, length.out = nn)
+	depth <- rep(x$depth, length.out = nn)
 
-    op_scale <- rep(x$op_scale, length.out=nn)
-    op_angle <- rep(x$op_angle, length.out=nn)
+	op_scale <- rep(x$op_scale, length.out = nn)
+	op_angle <- rep(x$op_angle, length.out = nn)
 
-    scale <- rep(x$scale, length.out=nn)
-    alpha <- rep(x$alpha, length.out=nn)
-    type <- rep(x$type, length.out=nn)
+	scale <- rep(x$scale, length.out = nn)
+	alpha <- rep(x$alpha, length.out = nn)
+	type <- rep(x$type, length.out = nn)
 
-    bleed <- rep(x$bleed, length.out=nn)
+	bleed <- rep(x$bleed, length.out = nn)
 
-    cfg <- get_cfg(x$cfg, x$envir)
-    cfg <- rep(c(cfg), length.out=nn)
+	cfg <- get_cfg(x$cfg, x$envir)
+	cfg <- rep(c(cfg), length.out = nn)
 
-    gl <- gList()
-    for (i in seq(nn)) {
-        name <- paste0(".", i)
-        gl[[i]] <- pieceGrobHelper(piece_side[i], suit[i], rank[i], cfg[[i]],
-                                   xc[i], yc[i], zc[i], angle[i],
-                                   width[i], height[i], depth[i],
-                                   op_scale[i], op_angle[i], x$default.units,
-                                   scale[i], alpha[i], type[i],
-                                   name,
-                                   bleed[i])
-    }
-    setChildren(x, gl)
+	gl <- gList()
+	for (i in seq(nn)) {
+		name <- paste0(".", i)
+		gl[[i]] <- pieceGrobHelper(
+			piece_side[i],
+			suit[i],
+			rank[i],
+			cfg[[i]],
+			xc[i],
+			yc[i],
+			zc[i],
+			angle[i],
+			width[i],
+			height[i],
+			depth[i],
+			op_scale[i],
+			op_angle[i],
+			x$default.units,
+			scale[i],
+			alpha[i],
+			type[i],
+			name,
+			bleed[i]
+		)
+	}
+	setChildren(x, gl)
 }
 
-get_cfg <- function(cfg=pp_cfg(), envir=NULL) {
-    if (is_pp_cfg(cfg)) {
-        cfg <- cfg
-    } else if (is.character(cfg)) {
-        if (!is.null(envir)) {
-            envir <- as.environment(envir)
-            cfg <- lapply(cfg, function(cc) as_pp_cfg(envir[[cc]]))
-        } else {
-            cfg <- lapply(cfg, function(cc) as_pp_cfg(dynGet(cc)))
-        }
-        if (length(cfg) == 1) {
-            cfg <- cfg[[1]]
-        }
-    } else {
-        if (is.list(cfg)) {
-            if (!all(sapply(cfg, inherits, "pp_cfg")))
-                cfg <- pp_cfg(cfg)
-        } else {
-            abort("Don't know how to parse cfg argument") # nocov
-        }
-    }
-    cfg
+get_cfg <- function(cfg = pp_cfg(), envir = NULL) {
+	if (is_pp_cfg(cfg)) {
+		cfg <- cfg
+	} else if (is.character(cfg)) {
+		if (!is.null(envir)) {
+			envir <- as.environment(envir)
+			cfg <- lapply(cfg, function(cc) as_pp_cfg(envir[[cc]]))
+		} else {
+			cfg <- lapply(cfg, function(cc) as_pp_cfg(dynGet(cc)))
+		}
+		if (length(cfg) == 1) {
+			cfg <- cfg[[1]]
+		}
+	} else {
+		if (is.list(cfg)) {
+			if (!all(sapply(cfg, inherits, "pp_cfg"))) {
+				cfg <- pp_cfg(cfg)
+			}
+		} else {
+			abort("Don't know how to parse cfg argument") # nocov
+		}
+	}
+	cfg
 }
 
 #' @rdname grid.piece
 #' @export
-grid.piece <- function(piece_side="tile_back", suit=NA, rank=NA,
-                       cfg=getOption("piecepackr.cfg", pp_cfg()),
-                       x=unit(0.5, "npc"), y=unit(0.5, "npc"), z=NA,
-                       angle=0, ...,
-                       width=NA, height=NA, depth=NA,
-                       op_scale = getOption("piecepackr.op_scale", 0),
-                       op_angle = getOption("piecepackr.op_angle", 45),
-                       default.units = getOption("piecepackr.default.units", "npc"),
-                       envir = getOption("piecepackr.envir"),
-                       name=NULL, gp=NULL, draw=TRUE, vp=NULL,
-                       scale=1, alpha=1, type="normal",
-                       bleed=FALSE) {
-    grob <- pieceGrob(piece_side, suit, rank, cfg,
-                      x, y, z, angle,
-                      width = width, height = height, depth = depth,
-                      op_scale = op_scale, op_angle = op_angle,
-                      default.units = default.units,
-                      envir = envir, name = name, gp = gp, vp =vp,
-                      scale = scale, alpha = alpha, type = type,
-                      bleed = bleed)
-    if (draw) {
-        grid.draw(grob)
-        invisible(grob)
-    } else {
-        grob
-    }
+grid.piece <- function(
+	piece_side = "tile_back",
+	suit = NA,
+	rank = NA,
+	cfg = getOption("piecepackr.cfg", pp_cfg()),
+	x = unit(0.5, "npc"),
+	y = unit(0.5, "npc"),
+	z = NA,
+	angle = 0,
+	...,
+	width = NA,
+	height = NA,
+	depth = NA,
+	op_scale = getOption("piecepackr.op_scale", 0),
+	op_angle = getOption("piecepackr.op_angle", 45),
+	default.units = getOption("piecepackr.default.units", "npc"),
+	envir = getOption("piecepackr.envir"),
+	name = NULL,
+	gp = NULL,
+	draw = TRUE,
+	vp = NULL,
+	scale = 1,
+	alpha = 1,
+	type = "normal",
+	bleed = FALSE
+) {
+	grob <- pieceGrob(
+		piece_side,
+		suit,
+		rank,
+		cfg,
+		x,
+		y,
+		z,
+		angle,
+		width = width,
+		height = height,
+		depth = depth,
+		op_scale = op_scale,
+		op_angle = op_angle,
+		default.units = default.units,
+		envir = envir,
+		name = name,
+		gp = gp,
+		vp = vp,
+		scale = scale,
+		alpha = alpha,
+		type = type,
+		bleed = bleed
+	)
+	if (draw) {
+		grid.draw(grob)
+		invisible(grob)
+	} else {
+		grob
+	}
 }

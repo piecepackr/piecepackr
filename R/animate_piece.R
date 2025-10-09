@@ -69,221 +69,302 @@
 #'   }
 #'
 #' @export
-animate_piece <- function(dfs, file = "animation.gif", ...,
-                          .f = piecepackr::grid.piece,
-                          cfg = getOption("piecepackr.cfg", NULL),
-                          envir = getOption("piecepackr.envir", game_systems("sans")),
-                          width = NULL, height = NULL, ppi = NULL,
-                          annotate = TRUE, annotation_scale = NULL,
-                          open_device = new_device,
-                          n_transitions = 0L, n_pauses = 1L, fps = n_transitions + n_pauses,
-                          xbreaks = NULL, ybreaks = NULL,
-                          new_device = TRUE) {
-    if (!missing(new_device)) {
-        warn("The argument `new_device` is deprecated.  Use `open_device` instead.",
-             class = "deprecatedWarning")
-    }
-    if (n_transitions > 0L)
-        assert_suggested("tweenr")
+animate_piece <- function(
+	dfs,
+	file = "animation.gif",
+	...,
+	.f = piecepackr::grid.piece,
+	cfg = getOption("piecepackr.cfg", NULL),
+	envir = getOption("piecepackr.envir", game_systems("sans")),
+	width = NULL,
+	height = NULL,
+	ppi = NULL,
+	annotate = TRUE,
+	annotation_scale = NULL,
+	open_device = new_device,
+	n_transitions = 0L,
+	n_pauses = 1L,
+	fps = n_transitions + n_pauses,
+	xbreaks = NULL,
+	ybreaks = NULL,
+	new_device = TRUE
+) {
+	if (!missing(new_device)) {
+		warn(
+			"The argument `new_device` is deprecated.  Use `open_device` instead.",
+			class = "deprecatedWarning"
+		)
+	}
+	if (n_transitions > 0L) {
+		assert_suggested("tweenr")
+	}
 
-    ce <- default_cfg_envir(cfg, envir)
-    cfg <- ce$cfg
-    envir <- ce$envir
+	ce <- default_cfg_envir(cfg, envir)
+	cfg <- ce$cfg
+	envir <- ce$envir
 
-    ranges <- lapply(dfs, aabb_piece, cfg = cfg, envir = envir, ...)
-    if (n_transitions > 0L) {
-        dfs <- get_tweened_dfs(dfs, n_transitions, n_pauses, ..., cfg = cfg, envir = envir)
-    } else if (n_pauses != 1) {
-        dfs <- rep(dfs, each = n_pauses)
-    }
+	ranges <- lapply(dfs, aabb_piece, cfg = cfg, envir = envir, ...)
+	if (n_transitions > 0L) {
+		dfs <- get_tweened_dfs(dfs, n_transitions, n_pauses, ..., cfg = cfg, envir = envir)
+	} else if (n_pauses != 1) {
+		dfs <- rep(dfs, each = n_pauses)
+	}
 
-    #### Add grid and comment annotations
-    xmax_op <- max(sapply(ranges, function(r) r$x_op[2]), na.rm = TRUE)
-    ymax_op <- max(sapply(ranges, function(r) r$y_op[2]), na.rm = TRUE)
-    xmin_op <- min(sapply(ranges, function(r) r$x_op[1]), na.rm = TRUE)
-    ymin_op <- min(sapply(ranges, function(r) r$y_op[1]), na.rm = TRUE)
-    xmax <- max(sapply(ranges, function(r) r$x[2]), na.rm = TRUE)
-    ymax <- max(sapply(ranges, function(r) r$y[2]), na.rm = TRUE)
-    xoffset <- min2offset(xmin_op)
-    yoffset <- min2offset(ymin_op)
-    if (is.null(width)) width <- xmax_op + xoffset + 0.50
-    if (is.null(height)) height <- ymax_op + yoffset + 0.50
-    m <- max(width, height)
-    if (is.null(ppi)) ppi <- round(600 / m, 0)
-    # mp4 needs even height / weight
-    height <- ceiling(ppi * height)
-    width <- ceiling(ppi * width)
-    height <- height + (height %% 2)
-    width <- width + (width %% 2)
-    plot_fn <- plot_fn_helper(.f, xmax, ymax, xoffset, yoffset, width, height, m, ppi, envir,
-                              annotate, annotation_scale, xbreaks, ybreaks)
-    animation_fn(file, open_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, ppi)
-    invisible(NULL)
+	#### Add grid and comment annotations
+	xmax_op <- max(sapply(ranges, function(r) r$x_op[2]), na.rm = TRUE)
+	ymax_op <- max(sapply(ranges, function(r) r$y_op[2]), na.rm = TRUE)
+	xmin_op <- min(sapply(ranges, function(r) r$x_op[1]), na.rm = TRUE)
+	ymin_op <- min(sapply(ranges, function(r) r$y_op[1]), na.rm = TRUE)
+	xmax <- max(sapply(ranges, function(r) r$x[2]), na.rm = TRUE)
+	ymax <- max(sapply(ranges, function(r) r$y[2]), na.rm = TRUE)
+	xoffset <- min2offset(xmin_op)
+	yoffset <- min2offset(ymin_op)
+	if (is.null(width)) {
+		width <- xmax_op + xoffset + 0.50
+	}
+	if (is.null(height)) {
+		height <- ymax_op + yoffset + 0.50
+	}
+	m <- max(width, height)
+	if (is.null(ppi)) {
+		ppi <- round(600 / m, 0)
+	}
+	# mp4 needs even height / weight
+	height <- ceiling(ppi * height)
+	width <- ceiling(ppi * width)
+	height <- height + (height %% 2)
+	width <- width + (width %% 2)
+	plot_fn <- plot_fn_helper(
+		.f,
+		xmax,
+		ymax,
+		xoffset,
+		yoffset,
+		width,
+		height,
+		m,
+		ppi,
+		envir,
+		annotate,
+		annotation_scale,
+		xbreaks,
+		ybreaks
+	)
+	animation_fn(file, open_device)(lapply(dfs, plot_fn, ...), file, width, height, 1 / fps, ppi)
+	invisible(NULL)
 }
 #### How to handle empty tibbles??
 animation_fn <- function(file, open_device = TRUE) {
-    if (is.null(file)) {
-        function(expr, file, width, height, delay, res) {
-            if (open_device) dev.new(width = width / res, height = height / res, unit = "in", noRstudioGD = TRUE)
-            devAskNewPage(TRUE)
-            eval(expr)
-            devAskNewPage(getOption("device.ask.default"))
-        }
-    } else if (grepl(".html$", file)) {
-        assert_suggested("animation")
-        function(expr, file, width, height, delay, res) {
-            animation::saveHTML(expr, htmlfile = file, interval = delay, img.name = file,
-                                ani.height = height, ani.width = width, ani.res = res,
-                                ani.dev = "png", ani.type = "png",
-                                title = "Animated game", verbose = FALSE)
-        }
-    } else if (grepl(".gif$", file)) {
-        if (requireNamespace("gifski", quietly = TRUE)) {
-            function(expr, file, width, height, delay, res) {
-                gifski::save_gif(expr, file, width, height, delay, res = res, progress = FALSE)
-            }
-        } else if (requireNamespace("animation", quietly = TRUE)) {
-            function(expr, file, width, height, delay, res) {
-                animation::saveGIF(expr, movie.name = file, interval = delay, img.name = file,
-                                   ani.height = height, ani.width = width, ani.res = res,
-                                   ani.dev = "png", ani.type = "png")
-            }
-        } else {
-            abort(c("At least one the suggested packages 'gifski' or 'animation' is required to use 'animate_game()'.",
-                    i = "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")' to install them."),
-                  class = "piecepackr_suggested_package")
-        }
-    } else if (grepl(".bmp$|.jpg$|.jpeg$|.png$|.tiff$", file)) {
-        stopifnot(has_c_integer_format(file))
-        function(expr, file, width, height, delay, res) {
-            pp_device(file, width = width / res, height = height / res, res=res)
-            eval(expr)
-            grDevices::dev.off()
-        }
-    } else {
-        assert_suggested("animation")
-        function(expr, file, width, height, delay, res) {
-            animation::saveVideo(expr, video.name = file, interval = delay, img.name = file,
-                                ani.height = height, ani.width = width, ani.res = res,
-                                ani.dev = "png", ani.type = "png",
-                                title = "Animated game", verbose = FALSE)
-        }
-    }
+	if (is.null(file)) {
+		function(expr, file, width, height, delay, res) {
+			if (open_device) {
+				dev.new(width = width / res, height = height / res, unit = "in", noRstudioGD = TRUE)
+			}
+			devAskNewPage(TRUE)
+			eval(expr)
+			devAskNewPage(getOption("device.ask.default"))
+		}
+	} else if (grepl(".html$", file)) {
+		assert_suggested("animation")
+		function(expr, file, width, height, delay, res) {
+			animation::saveHTML(
+				expr,
+				htmlfile = file,
+				interval = delay,
+				img.name = file,
+				ani.height = height,
+				ani.width = width,
+				ani.res = res,
+				ani.dev = "png",
+				ani.type = "png",
+				title = "Animated game",
+				verbose = FALSE
+			)
+		}
+	} else if (grepl(".gif$", file)) {
+		if (requireNamespace("gifski", quietly = TRUE)) {
+			function(expr, file, width, height, delay, res) {
+				gifski::save_gif(expr, file, width, height, delay, res = res, progress = FALSE)
+			}
+		} else if (requireNamespace("animation", quietly = TRUE)) {
+			function(expr, file, width, height, delay, res) {
+				animation::saveGIF(
+					expr,
+					movie.name = file,
+					interval = delay,
+					img.name = file,
+					ani.height = height,
+					ani.width = width,
+					ani.res = res,
+					ani.dev = "png",
+					ani.type = "png"
+				)
+			}
+		} else {
+			abort(
+				c(
+					"At least one the suggested packages 'gifski' or 'animation' is required to use 'animate_game()'.",
+					i = "Use 'install.packages(\"gifski\")' and/or 'install.packages(\"animation\")' to install them."
+				),
+				class = "piecepackr_suggested_package"
+			)
+		}
+	} else if (grepl(".bmp$|.jpg$|.jpeg$|.png$|.tiff$", file)) {
+		stopifnot(has_c_integer_format(file))
+		function(expr, file, width, height, delay, res) {
+			pp_device(file, width = width / res, height = height / res, res = res)
+			eval(expr)
+			grDevices::dev.off()
+		}
+	} else {
+		assert_suggested("animation")
+		function(expr, file, width, height, delay, res) {
+			animation::saveVideo(
+				expr,
+				video.name = file,
+				interval = delay,
+				img.name = file,
+				ani.height = height,
+				ani.width = width,
+				ani.res = res,
+				ani.dev = "png",
+				ani.type = "png",
+				title = "Animated game",
+				verbose = FALSE
+			)
+		}
+	}
 }
 
 get_tweened_dfs <- function(dfs, n_transitions = 0L, n_pauses = 1L, ...) {
-    n <- length(dfs)
-    if (n < 2) return(rep(dfs, n_pauses))
-    new_dfs <- list()
-    for (i in seq_len(n - 1)) {
-        new_dfs <- append(new_dfs, rep(dfs[i], n_pauses))
-        new_dfs <- append(new_dfs, tween_dfs(dfs[[i]], dfs[[i+1]], n_transitions))
-    }
-    new_dfs <- append(new_dfs, rep(dfs[n], n_pauses))
-    for (i in seq_along(new_dfs))
-        attr(new_dfs[[i]], "scale_factor") <- attr(dfs[[1]], "scale_factor")
-    new_dfs
+	n <- length(dfs)
+	if (n < 2) {
+		return(rep(dfs, n_pauses))
+	}
+	new_dfs <- list()
+	for (i in seq_len(n - 1)) {
+		new_dfs <- append(new_dfs, rep(dfs[i], n_pauses))
+		new_dfs <- append(new_dfs, tween_dfs(dfs[[i]], dfs[[i + 1]], n_transitions))
+	}
+	new_dfs <- append(new_dfs, rep(dfs[n], n_pauses))
+	for (i in seq_along(new_dfs)) {
+		attr(new_dfs[[i]], "scale_factor") <- attr(dfs[[1]], "scale_factor")
+	}
+	new_dfs
 }
 
 tween_dfs <- function(df1, df2, n_transitions = 0L) {
-    stopifnot(names(df1) == names(df2))
-    df_id_cfg <- get_id_cfg(df1, df2)
-    if (nrow(df1) == 0 && nrow(df2) == 0) return(rep(list(df1), n_transitions))
-    dfs <- init_dfs(df1, df2)
-    df <- tweenr::tween_state(dfs[[1]], dfs[[2]], ease = "cubic-in-out",
-                              nframes = n_transitions + 2L, id = .data$id)
-    df <- merge(df, df_id_cfg, by = "id", all.x = TRUE, sort = FALSE)
-    id_frames <- as.list(seq.int(max(df$.frame)))
-    l <- lapply(id_frames, function(id_frame) df[which(df$.frame == id_frame), , drop = FALSE])
-    l <- head(l, -1L)
-    l <- tail(l, -1L)
-    l
+	stopifnot(names(df1) == names(df2))
+	df_id_cfg <- get_id_cfg(df1, df2)
+	if (nrow(df1) == 0 && nrow(df2) == 0) {
+		return(rep(list(df1), n_transitions))
+	}
+	dfs <- init_dfs(df1, df2)
+	df <- tweenr::tween_state(
+		dfs[[1]],
+		dfs[[2]],
+		ease = "cubic-in-out",
+		nframes = n_transitions + 2L,
+		id = .data$id
+	)
+	df <- merge(df, df_id_cfg, by = "id", all.x = TRUE, sort = FALSE)
+	id_frames <- as.list(seq.int(max(df$.frame)))
+	l <- lapply(id_frames, function(id_frame) df[which(df$.frame == id_frame), , drop = FALSE])
+	l <- head(l, -1L)
+	l <- tail(l, -1L)
+	l
 }
 
 init_dfs <- function(df1, df2) {
-    if (nrow(df1) == 0L) {
-        df1 <- df2 <- get_tweenr_df(df2)
-        df1$scale <- 0
-        return(df1, df2)
-    }
-    if (nrow(df2) == 0L) {
-        df1 <- df2 <- get_tweenr_df(df1)
-        df2$scale <- 0
-        return(df1, df2)
-    }
-    df1i <- get_tweenr_df(df1)
-    df2i <- get_tweenr_df(df2)
-    # try to insert pieces 'removed' from `df1` back in order in `df2`
-    # with a scale of 0
-    df2 <- df2i
-    df1_anti <- df1i[which(match(df1i$id, df2i$id, 0L) == 0L), , drop = FALSE]
-    df1_anti$scale <- rep_len(0, nrow(df1_anti))
-    while (nrow(df1_anti)) {
-        row <- df1_anti[1L, ]
-        df1_anti <- df1_anti[-1L, ]
-        prev_id <- find_good_prev_id(row, df1i, df2i)
-        df2 <- insert_df(df2, row, prev_id)
-    }
-    # for now add `df2`'s 'new' pieces to `df1` with a scale of 0
-    # and re-sort `df1` to match `df2` (after insertion of the 'removed' pieces)
-    df2_anti <- df2i[which(match(df2i$id, df1i$id, 0L) == 0L), , drop = FALSE]
-    df2_anti$scale <- rep_len(0, nrow(df2_anti))
-    df1 <- rbind(df1i, df2_anti)
-    df1 <- df1[match(df2$id, df1$id), ] # re-sort
-    list(df1, df2)
+	if (nrow(df1) == 0L) {
+		df1 <- df2 <- get_tweenr_df(df2)
+		df1$scale <- 0
+		return(df1, df2)
+	}
+	if (nrow(df2) == 0L) {
+		df1 <- df2 <- get_tweenr_df(df1)
+		df2$scale <- 0
+		return(df1, df2)
+	}
+	df1i <- get_tweenr_df(df1)
+	df2i <- get_tweenr_df(df2)
+	# try to insert pieces 'removed' from `df1` back in order in `df2`
+	# with a scale of 0
+	df2 <- df2i
+	df1_anti <- df1i[which(match(df1i$id, df2i$id, 0L) == 0L), , drop = FALSE]
+	df1_anti$scale <- rep_len(0, nrow(df1_anti))
+	while (nrow(df1_anti)) {
+		row <- df1_anti[1L, ]
+		df1_anti <- df1_anti[-1L, ]
+		prev_id <- find_good_prev_id(row, df1i, df2i)
+		df2 <- insert_df(df2, row, prev_id)
+	}
+	# for now add `df2`'s 'new' pieces to `df1` with a scale of 0
+	# and re-sort `df1` to match `df2` (after insertion of the 'removed' pieces)
+	df2_anti <- df2i[which(match(df2i$id, df1i$id, 0L) == 0L), , drop = FALSE]
+	df2_anti$scale <- rep_len(0, nrow(df2_anti))
+	df1 <- rbind(df1i, df2_anti)
+	df1 <- df1[match(df2$id, df1$id), ] # re-sort
+	list(df1, df2)
 }
 
 # If can't find good previous id return `NA_integer_`
 find_good_prev_id <- function(row, df1i, df2i) {
-    prev_id <- Inf
-    index <- which(df1i$id == row$id)
-    while (is.infinite(prev_id)) {
-        index <- index - 1
-        if (index == 0) {
-            prev_id <- NA_integer_
-        } else {
-            prev <- df1i[index, ]
-            index2 <- which(df2i$id == prev$id)
-            if (length(index2)) {
-                prev2 <- df2i[index2, ]
-                if (nigh(prev$x, prev2$x) && nigh(prev$y, prev2$y)) {
-                    prev_id <- df2i$id[index2]
-                }
-            }
-        }
-    }
-    prev_id
+	prev_id <- Inf
+	index <- which(df1i$id == row$id)
+	while (is.infinite(prev_id)) {
+		index <- index - 1
+		if (index == 0) {
+			prev_id <- NA_integer_
+		} else {
+			prev <- df1i[index, ]
+			index2 <- which(df2i$id == prev$id)
+			if (length(index2)) {
+				prev2 <- df2i[index2, ]
+				if (nigh(prev$x, prev2$x) && nigh(prev$y, prev2$y)) {
+					prev_id <- df2i$id[index2]
+				}
+			}
+		}
+	}
+	prev_id
 }
 
 # Insert `df2` into `df1` after `index`
 # index = 0 means instead at beginning
 insert_df <- function(df1, df2, id = tail(df1$id, 1L)) {
-    if (is.na(id)) {
-        rbind(df2, df1)
-    } else if (id == tail(df1$id, 1L)) {
-        rbind(df1, df2)
-    } else {
-        index <- which(df1$id == id)
-        rbind(df1[seq.int(index), ], df2, df1[-seq.int(index), ])
-    }
+	if (is.na(id)) {
+		rbind(df2, df1)
+	} else if (id == tail(df1$id, 1L)) {
+		rbind(df1, df2)
+	} else {
+		index <- which(df1$id == id)
+		rbind(df1[seq.int(index), ], df2, df1[-seq.int(index), ])
+	}
 }
 
 get_id_cfg <- function(df1, df2) {
-    df <- rbind(df1[, c("id", "cfg")],
-                df2[, c("id", "cfg")])
-    unique(df)
+	df <- rbind(df1[, c("id", "cfg")], df2[, c("id", "cfg")])
+	unique(df)
 }
 
 get_tweenr_df <- function(df, ...) {
-    stopifnot(all(hasName(df, c("id", "piece_side", "rank", "suit", "x", "y"))))
-    if (!hasName(df, "alpha")) df$alpha <- 1
-    if (!hasName(df, "angle")) df$angle <- 0
-    if (!hasName(df, "scale")) df$scale <- 1
+	stopifnot(all(hasName(df, c("id", "piece_side", "rank", "suit", "x", "y"))))
+	if (!hasName(df, "alpha")) {
+		df$alpha <- 1
+	}
+	if (!hasName(df, "angle")) {
+		df$angle <- 0
+	}
+	if (!hasName(df, "scale")) {
+		df$scale <- 1
+	}
 
-    if (hasName(df, "z"))
-        columns <- c("id", "piece_side", "suit", "rank", "x", "y", "z", "angle", "scale", "alpha")
-    else
-        columns <- c("id", "piece_side", "suit", "rank", "x", "y", "angle", "scale", "alpha")
+	if (hasName(df, "z")) {
+		columns <- c("id", "piece_side", "suit", "rank", "x", "y", "z", "angle", "scale", "alpha")
+	} else {
+		columns <- c("id", "piece_side", "suit", "rank", "x", "y", "angle", "scale", "alpha")
+	}
 
-    as.data.frame(df[, columns])
+	as.data.frame(df[, columns])
 }
