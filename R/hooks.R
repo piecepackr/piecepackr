@@ -5,8 +5,8 @@
 GeomPiece <- NULL
 
 .onLoad <- function(libname, pkgname) {
-  if (requireNamespace("ggplot2", quietly = TRUE)) {
-      # Modify object at load time
-      GeomPiece <<- create_GeomPiece()
-  }
+	if (requireNamespace("ggplot2", quietly = TRUE)) {
+		# Modify object at load time
+		GeomPiece <<- create_GeomPiece()
+	}
 }

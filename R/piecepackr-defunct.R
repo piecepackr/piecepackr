@@ -20,50 +20,50 @@ NULL
 
 #' @rdname piecepackr-defunct
 halmaGrob <- function(...) {
-    .Defunct('pp_shape("halma")$shape()')
+	.Defunct('pp_shape("halma")$shape()')
 }
 
 #' @rdname piecepackr-defunct
 kiteGrob <- function(...) {
-    .Defunct('pp_shape("kite")$shape()')
+	.Defunct('pp_shape("kite")$shape()')
 }
 
 #' @rdname piecepackr-defunct
 pyramidGrob <- function(...) {
-    .Defunct('pp_shape("pyramid")$shape()')
+	.Defunct('pp_shape("pyramid")$shape()')
 }
 
 #' @rdname piecepackr-defunct
 convexGrobFn <- function(...) {
-    .Defunct('pp_shape("convexN", t)$shape')
+	.Defunct('pp_shape("convexN", t)$shape')
 }
 
 #' @rdname piecepackr-defunct
 concaveGrobFn <- function(...) {
-    .Defunct('pp_shape("concaveN", t, r)$shape')
+	.Defunct('pp_shape("concaveN", t, r)$shape')
 }
 
 #' @rdname piecepackr-defunct
 gridlinesGrob <- function(...) {
-    .Defunct("pp_shape()$gridlines()")
+	.Defunct("pp_shape()$gridlines()")
 }
 
 #' @rdname piecepackr-defunct
 matGrob <- function(...) {
-    .Defunct("pp_shape()$mat()")
+	.Defunct("pp_shape()$mat()")
 }
 
 #' @rdname piecepackr-defunct
 checkersGrob <- function(...) {
-    .Defunct("pp_shape()$checkers()")
+	.Defunct("pp_shape()$checkers()")
 }
 
 #' @rdname piecepackr-defunct
 hexlinesGrob <- function(...) {
-    .Defunct("pp_shape()$hexlines()")
+	.Defunct("pp_shape()$hexlines()")
 }
 
 #' @rdname piecepackr-defunct
 get_shape_grob_fn <- function(...) {
-    .Defunct("pp_shape()$shape")
+	.Defunct("pp_shape()$shape")
 }

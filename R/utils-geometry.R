@@ -1,80 +1,91 @@
-npc_to_in <- function(xy, x=0.5, y=0.5, w=1, h=1, t=0) {
-    xy$translate(as_coord2d(-0.5, -0.5))$
-       scale(w, h)$
-       rotate(degrees(t))$
-       translate(as_coord2d(x, y))
-    invisible(xy)
+npc_to_in <- function(xy, x = 0.5, y = 0.5, w = 1, h = 1, t = 0) {
+	xy$translate(as_coord2d(-0.5, -0.5))$scale(w, h)$rotate(degrees(t))$translate(as_coord2d(x, y))
+	invisible(xy)
 }
 
 radius <- function(x) max(abs(x - mean(x)))
 
-Circle <- R6Class("circle",
-    public = list(c=NULL, r=NULL,
-                  initialize = function(x=0.5, y=0.5, r=0.5) {
-                      self$c <- as_coord2d(x = x, y = y)
-                      self$r <- r
-                  },
-                  project = function(v) {
-                      center <- v * self$c
-                      c(center - self$r, center + self$r)
-                  }))
+Circle <- R6Class(
+	"circle",
+	public = list(
+		c = NULL,
+		r = NULL,
+		initialize = function(x = 0.5, y = 0.5, r = 0.5) {
+			self$c <- as_coord2d(x = x, y = y)
+			self$r <- r
+		},
+		project = function(v) {
+			center <- v * self$c
+			c(center - self$r, center + self$r)
+		}
+	)
+)
 
-Polygon <- R6Class("polygon",
-    public = list(vertices=NULL, edges=NULL, normals=NULL,
-               initialize = function(x=c(0, 0.5, 1, 0.5), y=c(0.5, 1, 0.5, 0)) {
-                   self$vertices <- as_coord2d(x = x, y = y)
-                   n <- length(self$vertices)
-                   # edges
-                   p <- self$vertices[c(seq(2, n), 1)]
-                   self$edges <- LineSegment$new(self$vertices, p)
-                   self$normals <- self$edges$orthogonal
-               },
-               plot = function(gp = gpar()) {
-                   grid.polygon(x=self$x, y=self$y, default.units="in", gp = gp)
-               },
-               project = function(v) {
-                   projections <- v * self$vertices
-                   range(projections)
-               },
-               op_edge_order = function(angle) {
-                   op_ref <- as_coord2d(self$c)$translate(degrees(angle + 180), 10 * self$width)
-                   dists <- abs(self$edges$mid_point - op_ref)
-                   order(dists, decreasing = TRUE)
-               },
-               op_edges = function(angle) {
-                   self$edges[self$op_edge_order(angle)]
-               }),
-    private = list(center = NULL),
-    active = list(x = function() self$vertices$x,
-                  y = function() self$vertices$y,
-                  c = function() {
-                      if (is.null(private$center)) {
-                          private$center <- mean(self$vertices)
-                      }
-                      private$center
-                  },
-                  width = function() {
-                      dx <- diff(range(self$vertices$x))
-                      dy <- diff(range(self$vertices$y))
-                      max(dx, dy)
-                  })
-    )
+Polygon <- R6Class(
+	"polygon",
+	public = list(
+		vertices = NULL,
+		edges = NULL,
+		normals = NULL,
+		initialize = function(x = c(0, 0.5, 1, 0.5), y = c(0.5, 1, 0.5, 0)) {
+			self$vertices <- as_coord2d(x = x, y = y)
+			n <- length(self$vertices)
+			# edges
+			p <- self$vertices[c(seq(2, n), 1)]
+			self$edges <- LineSegment$new(self$vertices, p)
+			self$normals <- self$edges$orthogonal
+		},
+		plot = function(gp = gpar()) {
+			grid.polygon(x = self$x, y = self$y, default.units = "in", gp = gp)
+		},
+		project = function(v) {
+			projections <- v * self$vertices
+			range(projections)
+		},
+		op_edge_order = function(angle) {
+			op_ref <- as_coord2d(self$c)$translate(degrees(angle + 180), 10 * self$width)
+			dists <- abs(self$edges$mid_point - op_ref)
+			order(dists, decreasing = TRUE)
+		},
+		op_edges = function(angle) {
+			self$edges[self$op_edge_order(angle)]
+		}
+	),
+	private = list(center = NULL),
+	active = list(
+		x = function() self$vertices$x,
+		y = function() self$vertices$y,
+		c = function() {
+			if (is.null(private$center)) {
+				private$center <- mean(self$vertices)
+			}
+			private$center
+		},
+		width = function() {
+			dx <- diff(range(self$vertices$x))
+			dy <- diff(range(self$vertices$y))
+			max(dx, dy)
+		}
+	)
+)
 
-LineSegment <- R6Class("line_segment",
-    public = list(p1=NULL, p2=NULL,
-                  initialize = function(p1, p2) {
-                      self$p1 <- p1
-                      self$p2 <- p2
-                  }),
-   active = list(mid_point = function() {
-                     x <- (self$p1$x + self$p2$x) / 2
-                     y <- (self$p1$y + self$p2$y) / 2
-                     as_coord2d(x, y)
-                  },
-                  orthogonal = function() {
-                      affiner::normal2d(self$p1 - self$p2)
-                  })
-    )
+LineSegment <- R6Class(
+	"line_segment",
+	public = list(p1 = NULL, p2 = NULL, initialize = function(p1, p2) {
+		self$p1 <- p1
+		self$p2 <- p2
+	}),
+	active = list(
+		mid_point = function() {
+			x <- (self$p1$x + self$p2$x) / 2
+			y <- (self$p1$y + self$p2$y) / 2
+			as_coord2d(x, y)
+		},
+		orthogonal = function() {
+			affiner::normal2d(self$p1 - self$p2)
+		}
+	)
+)
 #' @export
 `[.line_segment` <- function(x, i) LineSegment$new(x$p1[i], x$p2[i])
 
@@ -84,57 +95,62 @@ ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
 
 # "collision detection" via Separating Axis Theorem
 do_projections_overlap <- function(r1, r2) {
-    do_ranges_overlap(r1[1], r1[2], r2[1], r2[2])
+	do_ranges_overlap(r1[1], r1[2], r2[1], r2[2])
 }
 
 do_convex_polygons_overlap <- function(s1, s2) {
-    normals <- c(s1$normals, s2$normals)
-    for (i in seq_along(normals)) {
-        n <- normals[i]
-        if (!do_projections_overlap(s1$project(n), s2$project(n))) {
-            return(FALSE)
-        }
-    }
-    TRUE
+	normals <- c(s1$normals, s2$normals)
+	for (i in seq_along(normals)) {
+		n <- normals[i]
+		if (!do_projections_overlap(s1$project(n), s2$project(n))) {
+			return(FALSE)
+		}
+	}
+	TRUE
 }
 
-does_convex_polygon_overlap_circle <- function(p, c) { # nolint
-    c_normals <- affiner::normal2d(p$vertices - c$c)
-    if (any(is.nan(c_normals))) # happens if center of circle same as vertex
-        return(TRUE)
-    normals <- c(p$normals, c_normals)
-    for (i in seq_along(normals)) {
-        n <- normals[i]
-        if (!do_projections_overlap(p$project(n), c$project(n))) {
-            return(FALSE)
-        }
-    }
-    TRUE
+does_convex_polygon_overlap_circle <- function(p, c) {
+	# nolint
+	c_normals <- affiner::normal2d(p$vertices - c$c)
+	if (any(is.nan(c_normals))) {
+		# happens if center of circle same as vertex
+		return(TRUE)
+	}
+	normals <- c(p$normals, c_normals)
+	for (i in seq_along(normals)) {
+		n <- normals[i]
+		if (!do_projections_overlap(p$project(n), c$project(n))) {
+			return(FALSE)
+		}
+	}
+	TRUE
 }
 
 do_shapes_overlap <- function(s1, s2) {
-    if (inherits(s1, "circle") && inherits(s2, "circle")) {
-        less_than(abs(s1$c - s2$c), s1$r + s2$r)
-    } else if (inherits(s1, "convex_polygon") && inherits(s2, "convex_polygon")) {
-        do_convex_polygons_overlap(s1, s2)
-    } else if (inherits(s1, "convex_polygon") && inherits(s2, "circle")) {
-        does_convex_polygon_overlap_circle(s1, s2)
-    } else if (inherits(s1, "circle") && inherits(s2, "convex_polygon")) {
-        does_convex_polygon_overlap_circle(s2, s1)
-    } else {
-        TRUE
-    }
+	if (inherits(s1, "circle") && inherits(s2, "circle")) {
+		less_than(abs(s1$c - s2$c), s1$r + s2$r)
+	} else if (inherits(s1, "convex_polygon") && inherits(s2, "convex_polygon")) {
+		do_convex_polygons_overlap(s1, s2)
+	} else if (inherits(s1, "convex_polygon") && inherits(s2, "circle")) {
+		does_convex_polygon_overlap_circle(s1, s2)
+	} else if (inherits(s1, "circle") && inherits(s2, "convex_polygon")) {
+		does_convex_polygon_overlap_circle(s2, s1)
+	} else {
+		TRUE
+	}
 }
 
 # Name 'nigh' to avoid potential conflict with 'dplyr::near()'
 nigh <- function(x, y, tolerance = 1e-6) {
-    if (length(y) < length(x)) y <- rep(y, length.out=length(x))
-    isTRUE(all.equal(x, y, tolerance = tolerance))
+	if (length(y) < length(x)) {
+		y <- rep(y, length.out = length(x))
+	}
+	isTRUE(all.equal(x, y, tolerance = tolerance))
 }
 
 # robust version of `acos()` that returns in degrees
 arccos <- function(x) {
-    affiner::arccosine(x, "degrees")
+	affiner::arccosine(x, "degrees")
 }
 
 # Axis-angle representation to rotation matrix
@@ -149,16 +165,16 @@ arccos <- function(x) {
 #' @param ... Ignored
 #' @export
 AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
-    if (is.na(axis_z)) {
-        inner <- 1 - axis_x^2 - axis_y^2
-        if (nigh(inner, 0)) {
-            axis_z <- 0
-        } else {
-            axis_z <- sqrt(inner)
-        }
-    }
-    axis <- as_coord3d(axis_x, axis_y, axis_z)
-    affiner::rotate3d(axis, degrees(angle))[1:3, 1:3]
+	if (is.na(axis_z)) {
+		inner <- 1 - axis_x^2 - axis_y^2
+		if (nigh(inner, 0)) {
+			axis_z <- 0
+		} else {
+			axis_z <- sqrt(inner)
+		}
+	}
+	axis <- as_coord3d(axis_x, axis_y, axis_z)
+	affiner::rotate3d(axis, degrees(angle))[1:3, 1:3]
 }
 
 # Rotation matrix to Axis-angle representation
@@ -167,11 +183,8 @@ AA_to_R <- function(angle = 0, axis_x = 0, axis_y = 0, axis_z = NA, ...) {
 #' @rdname geometry_utils
 #' @export
 R_to_AA <- function(R = diag(3)) {
-    l <- affiner::rotate3d_to_AA(R, unit = "degrees")
-    list(angle = as.numeric(l$theta),
-         axis_x = l$axis$x,
-         axis_y = l$axis$y,
-         axis_z = l$axis$z)
+	l <- affiner::rotate3d_to_AA(R, unit = "degrees")
+	list(angle = as.numeric(l$theta), axis_x = l$axis$x, axis_y = l$axis$y, axis_z = l$axis$z)
 }
 
 # Basic 3D rotation matrices
@@ -231,34 +244,25 @@ NULL
 #' @rdname geometry_utils
 #' @export
 R_x <- function(angle = 0) {
-    c <- affiner::cosine(degrees(-angle))
-    s <- affiner::sine(degrees(-angle))
-    matrix(c(1, 0, 0,
-             0, c, -s,
-             0, s, c),
-           ncol = 3, byrow = TRUE)
+	c <- affiner::cosine(degrees(-angle))
+	s <- affiner::sine(degrees(-angle))
+	matrix(c(1, 0, 0, 0, c, -s, 0, s, c), ncol = 3, byrow = TRUE)
 }
 
 #' @rdname geometry_utils
 #' @export
 R_y <- function(angle = 0) {
-    c <- affiner::cosine(degrees(-angle))
-    s <- affiner::sine(degrees(-angle))
-    matrix(c(c, 0, s,
-             0, 1, 0,
-             -s, 0, c),
-           ncol = 3, byrow = TRUE)
+	c <- affiner::cosine(degrees(-angle))
+	s <- affiner::sine(degrees(-angle))
+	matrix(c(c, 0, s, 0, 1, 0, -s, 0, c), ncol = 3, byrow = TRUE)
 }
 
 #' @rdname geometry_utils
 #' @export
 R_z <- function(angle = 0) {
-    c <- affiner::cosine(degrees(-angle))
-    s <- affiner::sine(degrees(-angle))
-    matrix(c(c, -s, 0,
-             s, c, 0,
-             0, 0, 1),
-           ncol = 3, byrow = TRUE)
+	c <- affiner::cosine(degrees(-angle))
+	s <- affiner::sine(degrees(-angle))
+	matrix(c(c, -s, 0, s, c, 0, 0, 0, 1), ncol = 3, byrow = TRUE)
 }
 
 #' @rdname geometry_utils
@@ -274,13 +278,13 @@ to_degrees <- function(t) as.numeric(degrees(affiner::radians(t)))
 #' @param r Radial distance
 #' @export
 to_x <- function(t, r) {
-    r * affiner::cosine(degrees(t))
+	r * affiner::cosine(degrees(t))
 }
 
 #' @rdname geometry_utils
 #' @export
 to_y <- function(t, r) {
-    r * affiner::sine(degrees(t))
+	r * affiner::sine(degrees(t))
 }
 
 #' @rdname geometry_utils
@@ -288,11 +292,11 @@ to_y <- function(t, r) {
 #' @param y Cartesian y coordinate
 #' @export
 to_r <- function(x, y) {
-    sqrt(x^2 + y^2)
+	sqrt(x^2 + y^2)
 }
 
 #' @rdname geometry_utils
 #' @export
 to_t <- function(x, y) {
-    180 * atan2(y, x) / pi
+	180 * atan2(y, x) / pi
 }
