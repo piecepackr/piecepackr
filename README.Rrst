@@ -41,7 +41,7 @@ piecepackr: Board Game Graphics
 
 .. _oblique projection: https://trevorldavis.com/piecepackr/3d-projections.html
 
-.. _Tak: https://en.wikipedia.org/wiki/Tak_(game)
+.. _Tak: https://crabfragmentlabs.com/tak
 
 .. contents::
 
@@ -83,7 +83,7 @@ Dice
 * The ``dice`` configuration makes standard 6-sided dice with pips.
 * The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations have Asian-style pipped dice.
 * The ``dice_d4``, ``dice_numeral``, ``dice_d8``, ``dice_d10``, ``dice_d10_percentile``, ``dice_d12``, and ``dice_d20`` configurations provide the seven `polyhedral dice <https://en.wikipedia.org/wiki/Dice#Polyhedral_dice>`_ most commonly used by wargames, roleplaying games, and trading card games.
-* The ``dice_fudge`` configuration make the six-sided `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`_ with two plus, two minus, and two blank faces most commonly used in the `Fudge <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)>`_ and `Fate <https://en.wikipedia.org/wiki/Fate_(role-playing_game_system)>`_ roleplaying games.
+* The ``dice_fudge`` configuration make the six-sided `Fudge dice <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)#Fudge_dice>`_ with two plus, two minus, and two blank faces most commonly used in the `Fudge <https://en.wikipedia.org/wiki/Fudge_(role-playing_game_system)>`_ and `Fate <https://fate-srd.com/>`_ roleplaying games.
 
 .. {r polyhedral, fig.width=8, fig.height=2, fig.cap="Polyhedral dice"}
 library("piecepackr")
@@ -91,7 +91,7 @@ envir <- game_systems()
 dice <-  c("d4", "numeral", "d8", "d10_percentile", "d10", "d12", "d20")
 cfg <- paste0("dice_", dice)
 grid.piece("die_face", suit = c(1:6, 1), rank = 1:7,
-           cfg = cfg, envir = envir, x = 1:7, y = 1, 
+           cfg = cfg, envir = envir, x = 1:7, y = 1,
            default.units = "in", op_scale = 0.5)
 .. ..
 
@@ -127,7 +127,7 @@ pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform
 Go
 ~~
 
-``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes.  Here are is `an example diagram <https://trevorldavis.com/piecepackr/go.html>`_ for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted using rgl_: 
+``game_systems()`` returns a ``go`` configuration for `Go <https://en.wikipedia.org/wiki/Go_(game)>`_ boards and stones in a variety of colors and sizes.  Here are is `an example diagram <https://trevorldavis.com/piecepackr/go.html>`_ for a game of `Multi-player go <https://en.wikipedia.org/wiki/Go_variants#Multi-player_Go>`_ plotted using rgl_:
 
 .. {r go, fig.width=20, fig.height=20, fig.cap='Multi-player Go diagram'}
 library("ppdf")
@@ -191,7 +191,7 @@ dfm <- marble_bits(
 df <- rbind(dfb, dfm)
 
 envir <- game_systems(round = TRUE, shading = TRUE)
-pmap_piece(df, default.units = "in", envir = envir, 
+pmap_piece(df, default.units = "in", envir = envir,
            trans = marbles_transform, op_scale = 0.5)
 .. ..
 
@@ -218,8 +218,8 @@ Playing Cards
 library("piecepackr")
 library("tibble")
 
-df <- tibble(piece_side = "card_face", 
-             x=1.25 + 2.5 * 0:3, y=2, 
+df <- tibble(piece_side = "card_face",
+             x=1.25 + 2.5 * 0:3, y=2,
              suit=1:4, rank=c(1,6,9,12),
              cfg = "playing_cards")
 
@@ -341,13 +341,13 @@ oblique 3D projection
 
 .. {r proj, fig.width=5, fig.height=5, fig.cap="Piecepack diagram in an oblique projection"}
 library("piecepackr")
-cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1, 
-              dm_text.pawn="", shape.pawn="convex6", 
+cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,
+              dm_text.pawn="", shape.pawn="convex6",
               invert_colors.pawn=TRUE,
               edge_color.coin="tan", edge_color.tile="tan")
 cfg <- pp_cfg(c(cfg, cfg3d))
-g.p <- function(...) { 
-  grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in") 
+g.p <- function(...) {
+  grid.piece(..., op_scale=0.5, op_angle=45, cfg=cfg, default.units="in")
 }
 g.p("tile_back", x=0.5+c(3,1,3,1), y=0.5+c(3,3,1,1))
 g.p("tile_back", x=0.5+3, y=0.5+1, z=1/4+1/8)
@@ -378,17 +378,17 @@ If you are comfortable using R data frames there is also ``pmap_piece()`` that p
 library("dplyr", warn.conflicts=FALSE)
 library("piecepackr")
 library("tibble")
-df_tiles <- tibble(piece_side="tile_back", 
-                   x=0.5+c(3,1,3,1,1,1), 
+df_tiles <- tibble(piece_side="tile_back",
+                   x=0.5+c(3,1,3,1,1,1),
                    y=0.5+c(3,3,1,1,1,1))
-df_coins <- tibble(piece_side="coin_back", 
-                   x=rep(1:4, 4), 
+df_coins <- tibble(piece_side="coin_back",
+                   x=rep(1:4, 4),
                    y=rep(c(4,1), each=8),
                    suit=1:16%%2+rep(c(1,3), each=8),
                    angle=rep(c(180,0), each=8))
 df <- bind_rows(df_tiles, df_coins)
 cfg <- game_systems("dejavu")$piecepack
-pmap_piece(df, cfg=cfg, default.units="in", trans=op_transform, 
+pmap_piece(df, cfg=cfg, default.units="in", trans=op_transform,
            op_scale=0.5, op_angle=135)
 .. ..
 
@@ -430,9 +430,9 @@ new <- list(piecepackr.cfg = "piecepack",
 dfc <- ppdf::piecepack_fujisan(seed = 42)
 withr::with_options(new, {
   dft <- op_transform(dfc, as_top = "pawn_face", cfg_class = "character")
-  ggplot(dft, aes_piece(dft)) + 
-      geom_piece() + 
-      coord_fixed() + 
+  ggplot(dft, aes_piece(dft)) +
+      geom_piece() +
+      coord_fixed() +
       theme_void()
 })
 .. ..
@@ -456,7 +456,7 @@ pmap_piece(df, piece3d, envir = envir, trans=op_transform,
            scale = 0.98, res = 150, lit = TRUE)
 .. ..
 .. {r rgl_save, echo=FALSE, warning=FALSE}
-if (nzchar(Sys.which("wmctrl"))) system("wmctrl -r RGL -e 0,-1,-1,600,600") 
+if (nzchar(Sys.which("wmctrl"))) system("wmctrl -r RGL -e 0,-1,-1,600,600")
 Sys.sleep(3)
 snapshot3d("man/figures/README-rgl_snapshot.png", top = FALSE)
 .. ..
@@ -478,14 +478,14 @@ library("rayrender", warn.conflicts = FALSE)
 df <- ppdf::piecepack_xiangqi() |>
     transform(cfg = "dual_piecepacks_expansion")
 envir <- game_systems("dejavu", border = FALSE, round = TRUE, pawn = "peg-doll")
-l <- pmap_piece(df, piece, envir = envir, trans=op_transform, 
+l <- pmap_piece(df, piece, envir = envir, trans=op_transform,
                 scale = 0.98, res = 150, as_top="pawn_face")
 light <- sphere(x=5,y=-4, z=30, material=light(intensity=420))
 table <- sphere(z=-1e3, radius=1e3, material=diffuse(color="green")) |>
          add_object(light)
 scene <- Reduce(rayrender::add_object, l, init=table)
 rayrender::render_scene(scene, preview = FALSE,
-                        lookat = c(5, 5, 0), lookfrom = c(5, -7, 25), 
+                        lookat = c(5, 5, 0), lookfrom = c(5, -7, 25),
                         sample_method = "sobol", clamp_value = 12,
                         width = 480, height = 480, samples = 200)
 .. ..
@@ -502,14 +502,14 @@ library("rayvertex", warn.conflicts = FALSE)
 df <- ppdf::piecepack_international_chess() |>
     transform(cfg = "dual_piecepacks_expansion")
 envir <- game_systems("dejavu", border = FALSE, round = TRUE, pawn = "joystick")
-l <- pmap_piece(df, piece_mesh, envir = envir, trans=op_transform, 
+l <- pmap_piece(df, piece_mesh, envir = envir, trans=op_transform,
                 scale = 0.98, res = 150, as_top="pawn_face")
-table <- sphere_mesh(c(0, 0, -1e3), radius=1e3, 
+table <- sphere_mesh(c(0, 0, -1e3), radius=1e3,
                      material = material_list(diffuse="grey40"))
 scene <- rayvertex::scene_from_list(l) |> add_shape(table)
 light_info <- directional_light(c(5, -7, 7), intensity = 2.5)
-rayvertex::rasterize_scene(scene, 
-                           lookat = c(4.5, 4, 0), 
+rayvertex::rasterize_scene(scene,
+                           lookat = c(4.5, 4, 0),
                            lookfrom=c(4.5, -16, 20),
                            light_info = light_info)
 .. ..
@@ -538,9 +538,9 @@ envir$piecepack <- pp_cfg(cfg)
 
 ppn_file <- system.file("ppn/relativity.ppn", package = "ppn")
 game <- read_ppn(ppn_file)[[1]]
-animate_piece(game$dfs, file = "man/figures/README-relativity.gif", 
+animate_piece(game$dfs, file = "man/figures/README-relativity.gif",
               annotate = FALSE,
-              envir = envir, trans = op_transform, op_scale = 0.5, 
+              envir = envir, trans = op_transform, op_scale = 0.5,
               n_transitions = 3, n_pauses = 2, fps = 7)
 .. ..
 
@@ -572,14 +572,14 @@ grobTakBoard <- function(...) {
               rep(c(g, rep(w, 3), g),3),
               rep(g, 5))
     inner <- rectGrob(x = rep(1:5, 5), y = rep(5:1, each=5),
-                 width=1, height=1, default.units="in", 
+                 width=1, height=1, default.units="in",
                  gp=gpar(col="gold", fill=fill, lwd=3))
     outer <- rectGrob(gp=gpar(col="black", fill="grey", gp=gpar(lex=2)))
-    circles <- circleGrob(x=0.5+rep(1:4, 4), 
-                          y=0.5+rep(4:1, each=4), 
-                          r=0.1, default.units="in", 
+    circles <- circleGrob(x=0.5+rep(1:4, 4),
+                          y=0.5+rep(4:1, each=4),
+                          r=0.1, default.units="in",
                           gp=gpar(col=NA, fill="gold"))
-    rects <- rectGrob(x=0.5+c(0:5, rep(c(0,5), 4), 0:5), 
+    rects <- rectGrob(x=0.5+c(0:5, rep(c(0,5), 4), 0:5),
                       y=0.5+c(rep(5,6), rep(c(4:1), each=2), rep(0, 6)),
                       width=0.2, height=0.2,
                       gp=gpar(col=NA, fill="orange"), default.units="in")
@@ -592,30 +592,30 @@ Then we'll configure a Tak set and write some helper functions to draw Tak piece
 .. {r configure_tak}
 cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
                    ps_text="", dm_text="",
-                   width.board=6, height.board=6, 
+                   width.board=6, height.board=6,
                    depth.board=1/4, grob_fn.board=grobTakBoard,
-                   width.r1.bit=0.6, height.r1.bit=0.6, 
+                   width.r1.bit=0.6, height.r1.bit=0.6,
                    depth.r1.bit=1/4, shape.r1.bit="rect",
-                   width.r2.bit=0.6, height.r2.bit=1/4, 
-                   depth.r2.bit=0.6, shape.r2.bit="rect", 
-                   width.pawn=0.5, height.pawn=0.5, 
+                   width.r2.bit=0.6, height.r2.bit=1/4,
+                   depth.r2.bit=0.6, shape.r2.bit="rect",
+                   width.pawn=0.5, height.pawn=0.5,
                    depth.pawn=0.8, shape.pawn="circle",
                    edge_color="white,tan4", edge_color.board="tan",
                    border_lex=3, border_color="black"))
-g.p <- function(...) { 
+g.p <- function(...) {
     grid.piece(..., cfg=cfg, default.units="in",
                op_scale=0.7, op_angle=45)
 }
-draw_tak_board <- function(x, y) { 
-    g.p("board_back", x=x+0.5, y=y+0.5) 
+draw_tak_board <- function(x, y) {
+    g.p("board_back", x=x+0.5, y=y+0.5)
 }
-draw_flat_stone <- function(x, y, suit=1) { 
+draw_flat_stone <- function(x, y, suit=1) {
     z <- 1/4*seq(along=suit)+1/8
     g.p("bit_back", x=x+0.5, y=y+0.5, z=z, suit=suit, rank=1)
 }
 draw_standing_stone <- function(x, y, suit=1, n_beneath=0, angle=0) {
     z <- (n_beneath+1)*1/4+0.3
-    g.p("bit_back", suit=suit, rank=2, 
+    g.p("bit_back", suit=suit, rank=2,
         x=x+0.5, y=y+0.5, z=z, angle=angle)
 }
 draw_capstone <- function(x, y, suit=1, n_beneath=0) {
@@ -687,7 +687,7 @@ Suggested R packages:
     ``animate_piece()`` uses the ``{animation}`` package to save "html" and "video" (e.g. mp4 and avi) animations.  Additionally, if the ``{gifski}`` package is not installed ``animate_piece()`` will fall back to using ``{animation}`` to make "gif" animations.
 
 **ggplot2**
-    Required by the ``{ggplot2}`` bindings ``geom_piece()`` and its helper functions ``aes_piece()``, ``scale_x_piece()``, and ``scale_y_piece()``.  
+    Required by the ``{ggplot2}`` bindings ``geom_piece()`` and its helper functions ``aes_piece()``, ``scale_x_piece()``, and ``scale_y_piece()``.
 
 **gifski**
     ``animate_piece()`` preferably uses the ``{gifski}`` package to save "gif" animations.
@@ -700,9 +700,9 @@ Suggested R packages:
     ``file2grob()`` uses ``magick::image_read()`` to import images that are not "png", "jpg/jpeg", or "svg/svgz".
 
 **pdftools**
-   ``get_embedded_font()`` uses ``pdftools::pdf_fonts()``.  
+   ``get_embedded_font()`` uses ``pdftools::pdf_fonts()``.
    It also requires R compiled with Cairo support (i.e. ``capabilities("cairo") == TRUE``).
-   If the suggested R package ``{systemfonts}`` is not installed then ``has_font()`` 
+   If the suggested R package ``{systemfonts}`` is not installed then ``has_font()``
    can also fall back on using ``get_embedded_font()``.
 
 **rayrender**
@@ -719,7 +719,7 @@ Suggested R packages:
     Consider also installing ``{readobj}`` which allows the ``{rgl}`` bindings to support more game piece shapes; in particular the "meeple", "halma", and "roundrect" shaped token game pieces.
 
 **systemfonts**
-    ``has_font()`` preferably uses ``{systemfonts}`` to determine if a given font is available.  
+    ``has_font()`` preferably uses ``{systemfonts}`` to determine if a given font is available.
     If ``{systemfonts}`` is not available then ``has_font()`` can fall back on ``{pdftools}`` if ``capabilities("cairo") == TRUE``.
 
 **tweenr**
@@ -759,7 +759,7 @@ For more advanced ``piecepackr`` configurations you'll want to install additiona
 
 .. code:: bash
 
-    sudo apt install fonts-dejavu fonts-noto 
+    sudo apt install fonts-dejavu fonts-noto
     fonts_dir=${XDG_DATA_HOME:="$HOME/.local/share"}/fonts
     curl -O http://www.quivira-font.com/files/Quivira.otf
     mv Quivira.otf $fonts_dir/
@@ -771,12 +771,12 @@ For more advanced ``piecepackr`` configurations you'll want to install additiona
 Certain ``piecepackr`` features works best if the version of R installed was compiled with support for Cairo:
 
 * A subset of game system configurations use Unicode glyphs.  The "cairo" graphics devices support Unicode glyphs.
-* 3D grid_ renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.  
+* 3D grid_ renderings for certain pieces like dice and pyramids are enhanced if the graphic device supports the "affine transformation" feature.
   In recent versions of R the "cairo" graphics devices support the "affine transformation" feature.
 * The function ``get_embedded_font()`` needs support for the ``cairo_pdf()`` function (which embeds fonts in the pdf)
   and by default ``render_piece()`` and ``save_print_and_play()`` may try to use "cairo" graphics devices.
 
-Fortunately R is typically compiled with support for Cairo.  
+Fortunately R is typically compiled with support for Cairo.
 One can confirm that R was compiled with support for Cairo via R's ``capabilities()`` function:
 
 .. code:: r

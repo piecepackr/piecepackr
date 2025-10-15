@@ -1,10 +1,11 @@
-The `donttest` "Additional issue" example ERROR
-did not replicate locally or
-in R-hub's `donttest` docker container.
+* {piecepackr} was archived on 2025-10-15 since
+  the 2025-10-09 submission that eliminated the **donttest** example
+  ERROR was not processed by CRAN in six days.
 
-However we now wrap the `\donttest` `piece_mesh()` examples
-with `try()` so they should theoretically not throw an
-ERROR on that CRAN machine.
+* Further changes in this submission to try to reduce false positive NOTES in auto-check:
+
+  + Fewer URL links to Wikipedia in the README
+  + Skip running `piece()` and `piece_mesh()` examples on CRAN
 
 **Test environments**
 

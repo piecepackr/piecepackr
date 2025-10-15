@@ -1,5 +1,5 @@
-piecepackr 1.15.2 (development)
-===============================
+piecepackr 1.15.3
+=================
 
 Bug fixes and minor improvements
 --------------------------------

@@ -4,20 +4,24 @@
 #' @inheritParams piece3d
 #' @return A rayrender object.
 #' @examples
-#'   \donttest{# May take more than 5 seconds on CRAN servers
-#'   opt <- options(cores = getOption("Ncpus"))
-#'   cfg <- game_systems("sans", border = FALSE)$piecepack
-#'   if (requireNamespace("rayrender", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-#'       rayrender::render_scene(piece("tile_face", suit = 3, rank = 3, cfg = cfg))
-#'   }
-#'   if (requireNamespace("rayrender", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-#'       rayrender::render_scene(piece("coin_back", suit = 4, rank = 2, cfg = cfg))
-#'   }
-#'   if (requireNamespace("rayrender", quietly = TRUE) && all(capabilities(c("cairo", "png")))) {
-#'       rayrender::render_scene(piece("pawn_face", suit = 2, cfg = cfg))
-#'   }
-#'   options(opt)
-#'   }
+#' opt <- options(cores = getOption("Ncpus"))
+#' cfg <- game_systems("sans", border = FALSE)$piecepack
+#' should_run_piece_example <- piecepackr:::donttest() &&
+#'   requireNamespace("rayrender", quietly = TRUE) &&
+#'   all(capabilities(c("cairo", "png")))
+#' if (should_run_piece_example) {
+#'   scene <- piece("tile_face", suit = 3, rank = 3, cfg = cfg)
+#'   rayrender::render_scene(scene)
+#' }
+#' if (should_run_piece_example) {
+#'   scene <- piece("coin_back", suit = 4, rank = 2, cfg = cfg)
+#'   rayrender::render_scene(scene)
+#' }
+#' if (should_run_piece_example) {
+#'   scene <- piece("pawn_face", suit = 2, cfg = cfg)
+#'   rayrender::render_scene(scene)
+#' }
+#' options(opt)
 #' @export
 #' @seealso See \url{https://www.rayrender.net} for more information about the `rayrender` package.
 #'          See \code{\link{geometry_utils}} for a discussion of the 3D rotation parameterization.

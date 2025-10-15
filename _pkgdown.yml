@@ -65,3 +65,6 @@ figures:
   dev.args:
     type: "cairo"
   fig.asp: 0.800
+  other.parameters:
+    rgl:
+      fig.asp: 1
