@@ -120,7 +120,7 @@ Dominoes
 6) ``dominoes_white`` (identical to ``dominoes``)
 7) ``dominoes_yellow``
 
-The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://en.wikipedia.org/wiki/Chinese_dominoes>`__.
+The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://www.pagat.com/class/domino.html#chinese>`__.
 
 
 .. sourcecode:: r
@@ -274,7 +274,7 @@ Other included games and components
 * ``chess1`` and ``chess2`` configurations with checkered "boards" and matching chess "bits" (currently "disc" pieces instead of "Staunton" pieces).
 * A ``meeples`` configuration that produces "meeple" bits in a variety of colors.
 * A ``morris`` configuration that can produce `Three/Six/Seven/Nine/Twelve men's morris <https://en.wikipedia.org/wiki/Nine_men%27s_morris>`_ "board"/"bits" in a variety of colors.
-* A ``reversi`` configuration that can produce "boards"/"bits" for `Reversi <https://en.wikipedia.org/wiki/Reversi>`__ in a variety of colors.
+* A ``reversi`` configuration that can produce "boards"/"bits" for `Reversi <http://www.cyningstan.com/game/73/reversi>`__ in a variety of colors.
 
 Looney Pyramids
 ---------------
@@ -546,12 +546,6 @@ piece3d() ({rgl})
                game_systems(border = FALSE))
     pmap_piece(df, piece3d, envir = envir, trans=op_transform,
                scale = 0.98, res = 150, lit = TRUE)
-
-
-
-::
-
-    ## file:////tmp/RtmpIQIKEA/fileb3f96235ee866.html screenshot completed
 
 
 

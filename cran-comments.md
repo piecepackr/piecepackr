@@ -1,11 +1,12 @@
 * {piecepackr} was archived on 2025-10-15 since
   the 2025-10-09 submission that eliminated the **donttest** example
-  ERROR was not processed by CRAN in six days.
+  ERROR was not processed by CRAN in time.
 
-* Further changes in this submission to try to reduce false positive NOTES in auto-check:
+* Further changes in this submission to try to reduce "false positive" NOTES in auto-check:
 
-  + Fewer URL links to Wikipedia in the README
+  + Fewer URL links to Wikipedia in the README.
   + Skip running `piece()` and `piece_mesh()` examples on CRAN
+    instead of wrapping them with `\donttest{}`.
 
 **Test environments**
 
