@@ -91,18 +91,18 @@ update_name <- function(.l) {
 		if (!is.character(.l$name)) {
 			.l$name <- as.character(.l$name)
 		}
-		if (sum(duplicated(.l$name)) == 0) {
-			return(.l)
-		} else {
+		if (anyDuplicated(.l$name)) {
 			warn("the name column in .l is not unique, generating new name column")
+		} else {
+			return(.l)
 		}
 	}
 	if (hasName(.l, "id")) {
 		.l$name <- paste0("piece.", as.character(.l$id))
-		if (sum(duplicated(.l$name)) == 0) {
-			return(.l)
-		} else {
+		if (anyDuplicated(.l$name)) {
 			warn("the id column in .l is not unique, generating new name column")
+		} else {
+			return(.l)
 		}
 	}
 	.l$name <- paste0("piece.", as.character(seq(length(.l[[1]]))))

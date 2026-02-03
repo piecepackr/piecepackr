@@ -74,7 +74,7 @@ CompositePiece <- R6Class(
 				filename <- gsub(paste0("\\.", ext, "$"), paste0("_%03d.", ext), filename)
 				filename <- rep(filename, length.out = nrow(df))
 				filename <- sprintf(filename, seq_along(filename))
-				stopifnot(!any(duplicated(filename)))
+				stopifnot(!anyDuplicated(filename))
 				df$filename <- filename
 				l <- pmap_piece(
 					df,

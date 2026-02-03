@@ -77,7 +77,7 @@ save_piece_obj <- function(
 		filename <- sprintf(filename, seq_along(filename))
 	}
 	filename <- normalizePath(filename, mustWork = FALSE)
-	stopifnot(!any(duplicated(filename)))
+	stopifnot(!anyDuplicated(filename))
 
 	l <- lapply(seq.int(nn), function(i) {
 		df <- save_piece_obj_helper(

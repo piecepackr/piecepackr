@@ -1,3 +1,8 @@
+piecepackr 1.15.4 (development)
+===============================
+
+* No user-facing changes.
+
 piecepackr 1.15.3
 =================
 
