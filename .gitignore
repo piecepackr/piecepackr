@@ -1,3 +1,4 @@
+.claude/
 .rake_tasks~
 README.html
 README.md
@@ -13,7 +14,7 @@ svg
 tmp
 TODO.rst
 bookmarks.txt
-raw-data/meeple[23].svg
-raw-data/cc-assets/
-raw-data/spdx_license_list.html
-raw-data/spdx.json
+data-raw/meeple[23].svg
+data-raw/cc-assets/
+data-raw/spdx_license_list.html
+data-raw/spdx.json

@@ -24,11 +24,12 @@
 
 ^collections$
 ^configurations$
+^data-raw$
 ^pdf$
 ^png$
-^raw-data$
 ^svg$
 ^txt$
 ^tmp$
 ^\.git$
 ^\.github$
+^\.claude$
