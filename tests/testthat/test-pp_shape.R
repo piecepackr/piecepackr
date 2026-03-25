@@ -64,6 +64,22 @@ test_that("pp_shape() works as expected", {
 		g <- pieceGrob("coin_face", op_scale = 1, default.units = "npc")
 		grid.draw(circle$polyclip(g, "minus", gp = gpar(fill = "blue")))
 	})
+	expect_doppelganger("polyclip.holed_board", function() {
+		rect <- pp_shape("rect")
+		g <- pieceGrob("board_face", cfg = game_systems()$marbles, default.units = "npc")
+		grid.draw(rect$polyclip(g, "minus", gp = gpar(col = NA, fill = "red")))
+	})
+	expect_doppelganger("polyclip.holed_board.op", function() {
+		rect <- pp_shape("rect")
+		g <- pieceGrob(
+			"board_face",
+			cfg = game_systems()$marbles,
+			op_scale = 0.5,
+			default.units = "npc"
+		)
+		grid.draw(g)
+		grid.draw(rect$polyclip(g, "minus", gp = gpar(col = NA, fill = "red")))
+	})
 	skip_if_not_installed("gridpattern")
 	expect_doppelganger("hex_pattern", function() {
 		hex <- pp_shape("convex6")
