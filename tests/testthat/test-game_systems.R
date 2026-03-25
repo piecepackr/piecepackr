@@ -605,4 +605,19 @@ test_that("no regressions in `game_systems()`", {
 	expect_doppelganger("marbles_op", function() {
 		marbles_test(op_scale = 0.5, trans = marbles_transform)
 	})
+
+	skip_if_not_installed("svglite", "2.2.2")
+	skip_if_not(getRversion() >= "4.2.0")
+	write_svg_bleeding_edge <- function(plot, file, title = "") {
+		svglite::svglite(file)
+		plot()
+		invisible(grDevices::dev.off())
+	}
+	expect_doppelganger(
+		"marbles_shading",
+		function() {
+			marbles_test(op_scale = 0.5, shading = TRUE, trans = marbles_transform)
+		},
+		writer = write_svg_bleeding_edge
+	)
 })
