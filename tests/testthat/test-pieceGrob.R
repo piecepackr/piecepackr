@@ -472,6 +472,9 @@ test_that("oblique projection works", {
 		g.p("pawn_face", x = 1, y = 3, cfg = cfg, op_angle = 135)
 		g.p("coin_face", x = 2, y = 2, cfg = cfg, op_angle = 0, angle = 190)
 	})
+	expect_doppelganger("pawn_top_meeple_op", function() {
+		g.p("pawn_top", cfg = cfg)
+	})
 })
 
 test_that("alpha and scale works", {
