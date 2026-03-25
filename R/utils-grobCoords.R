@@ -1,13 +1,15 @@
 # Simplify 'grobCoords' methods
 
-#### Undoes holes? #368
 coords_to_xylist <- function(coords) {
 	if (inherits(coords, "GridGTreeCoords")) {
 		xyl <- lapply(coords, coords_to_xylist)
+		f <- function(x, y) gridGeometry::polyclip(x, y, "union")
 	} else {
 		xyl <- lapply(coords, identity)
+		# Use "xor" to preserve holes (e.g. marbles board) #368
+		# For non-overlapping shapes xor == union
+		f <- function(x, y) gridGeometry::polyclip(x, y, "xor")
 	}
-	f <- function(x, y) gridGeometry::polyclip(x, y, "union")
 	xyl <- Filter(function(x) length(x) > 0, xyl)
 	Reduce(f, xyl)
 }

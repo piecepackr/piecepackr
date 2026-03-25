@@ -1,7 +1,7 @@
 piecepackr 1.15.4 (development)
 ===============================
 
-* No user-facing changes.
+* `grobCoords()` for a holed board (e.g. the marbles board) now correctly preserves holes so that `pp_shape()$polyclip()` subtracts the holed board correctly (#368).
 
 piecepackr 1.15.3
 =================
