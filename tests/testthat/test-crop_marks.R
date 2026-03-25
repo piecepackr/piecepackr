@@ -12,7 +12,7 @@ test_that("crop_marks work as expected", {
 		angle = 0,
 		stringsAsFactors = FALSE
 	)
-	expect_doppelganger("crop_mark_outside", {
+	expect_doppelganger("crop-mark-outside", {
 		pmap_piece(df, grid.cropmark, cfg = cfg, default.units = "in")
 		pmap_piece(df, grid.piece, cfg = cfg, default.units = "in", bleed = TRUE)
 	})
@@ -26,7 +26,7 @@ test_that("crop_marks work as expected", {
 		angle = 0,
 		stringsAsFactors = FALSE
 	)
-	expect_doppelganger("crop_mark_outside_x2", {
+	expect_doppelganger("crop-mark-outside-x2", {
 		pmap_piece(
 			df,
 			grid.cropmark,

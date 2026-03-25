@@ -31,13 +31,13 @@ test_that("render_piece() works", {
 	library("vdiffr")
 
 	envir <- game_systems("sans")
-	expect_doppelganger("render_piece", function() {
+	expect_doppelganger("render-piece", function() {
 		render_piece(df, envir = envir, open_device = FALSE)
 	})
-	expect_doppelganger("render_piece_cartesian", function() {
+	expect_doppelganger("render-piece-cartesian", function() {
 		render_piece(df, envir = envir, annotate = TRUE, open_device = FALSE)
 	})
-	expect_doppelganger("render_piece_algebraic", function() {
+	expect_doppelganger("render-piece-algebraic", function() {
 		render_piece(
 			df,
 			envir = envir,

@@ -1,6 +1,14 @@
 test_that("no regressions in `game_systems()`", {
 	expect_error(game_systems("boobear"), "Don't have a customized configuration for font")
+})
 
+test_that("deprecated `style` argument warnings", {
+	skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu" font
+	skip_if_not(has_font("Dejavu Sans"))
+	expect_snapshot(invisible(game_systems(style = "dejavu3d")))
+})
+
+test_that("no regressions in `game_systems()` figures", {
 	skip_on_ci()
 	skip_if_not_installed("vdiffr")
 	library("vdiffr")
@@ -8,7 +16,7 @@ test_that("no regressions in `game_systems()`", {
 	envir <- game_systems()
 	suppressMessages(
 		{
-			expect_doppelganger("dice_d6", function() {
+			expect_doppelganger("dice-d6", function() {
 				grid.piece(
 					"die_face",
 					x = 1:6,
@@ -44,146 +52,6 @@ test_that("no regressions in `game_systems()`", {
 		classes = "piecepackr_affine_transformation"
 	)
 
-	# standard d4 dice
-	cfg <- envir$dice_d4
-	suppressMessages(
-		{
-			expect_doppelganger("dice_d4", function() {
-				grid.piece(
-					"die_face",
-					x = 1:4,
-					y = 1,
-					default.units = "in",
-					rank = 1:4,
-					suit = 1:4,
-					op_scale = 0.0,
-					cfg = cfg
-				)
-				grid.piece(
-					"die_face",
-					x = 1:4,
-					y = 2,
-					default.units = "in",
-					rank = 1:4,
-					suit = 1:4,
-					op_scale = 0.5,
-					cfg = cfg
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
-
-	# standard d8 dice
-	cfg <- envir$dice_d8
-	suppressMessages(
-		{
-			expect_doppelganger("dice_d8", function() {
-				grid.piece(
-					"die_face",
-					x = 1:8,
-					y = 1,
-					default.units = "in",
-					rank = 1:8,
-					suit = c(1:6, 1:2),
-					op_scale = 0.0,
-					cfg = cfg
-				)
-				grid.piece(
-					"die_face",
-					x = 1:8,
-					y = 2,
-					default.units = "in",
-					rank = 1:8,
-					suit = c(1:6, 1:2),
-					op_scale = 0.5,
-					cfg = cfg
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
-
-	# standard d10 dice
-	cfg <- envir$dice_d10
-	suppressMessages(
-		{
-			expect_doppelganger("dice_d10", function() {
-				grid.piece(
-					"die_face",
-					x = rep(1:5, 2),
-					y = rep(1:2, each = 5),
-					default.units = "in",
-					rank = 1:10,
-					suit = rep(1:5, 2),
-					op_scale = 0.5,
-					cfg = cfg
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
-
-	# percentile d10 dice
-	cfg <- envir$dice_d10_percentile
-	suppressMessages(
-		{
-			expect_doppelganger("dice_d10_percentile", function() {
-				grid.piece(
-					"die_face",
-					x = rep(1:5, 2),
-					y = rep(1:2, each = 5),
-					default.units = "in",
-					rank = 1:10,
-					suit = rep(1:5, 2),
-					op_scale = 0.5,
-					cfg = cfg
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
-
-	# standard d12 dice
-	cfg <- envir$dice_d12
-	suppressMessages(
-		{
-			expect_doppelganger("dice_d12", function() {
-				grid.piece(
-					"die_face",
-					x = rep(1:6, 2),
-					y = rep(1:2, each = 6),
-					default.units = "in",
-					rank = 1:12,
-					suit = rep(1:6, 2),
-					op_scale = 0.5,
-					cfg = cfg
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
-
-	# standard d20 dice
-	cfg <- envir$dice_d20
-	suppressMessages(
-		{
-			expect_doppelganger("dice_d20", function() {
-				grid.piece(
-					"die_face",
-					x = rep(1:5, 4),
-					y = rep(1:4, each = 5),
-					default.units = "in",
-					rank = 1:20,
-					suit = rep(1:6, length.out = 20),
-					op_scale = 0.5,
-					cfg = cfg
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
-
 	# dominoes
 	skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu" style
 	envir <- game_systems("dejavu")
@@ -208,45 +76,6 @@ test_that("no regressions in `game_systems()`", {
 	for (i in 0:10) {
 		expect_equal(nrow(xya_pips_cards(i)), i)
 	}
-
-	# Chinese dominoes
-	suppressMessages(
-		{
-			expect_doppelganger("dominoes_chinese", function() {
-				df1 <- tibble(
-					piece_side = "tile_face",
-					suit = c(rep(1, 6L), 2L, rep(2, 4L), rep(3, 3L), 3, rep(4, 3), 5, 5, 6),
-					rank = c(1:6, 2L, 3:6, 3:5, 6, 4:6, 5:6, 6),
-					cfg = c(rep(
-						c("dominoes_chinese", "dominoes_chinese_black", "dominoes_chinese"),
-						each = 7L
-					)),
-					x = rep(1:7, 3L),
-					y = c(rep(c(1.5, 4.0, 6.5), each = 7L))
-				)
-				df2 <- tibble(
-					piece_side = "die_face",
-					suit = 1,
-					rank = 1:6,
-					cfg = rep(
-						c("dominoes_chinese", "dominoes_chinese_black", "dominoes_chinese"),
-						each = 2L
-					),
-					x = 8.5,
-					y = c(1, 2.25, 3.5, 4.75, 6.0, 7.25)
-				)
-				df <- rbind(df1, df2)
-				pmap_piece(
-					df,
-					envir = game_systems(),
-					default.units = "in",
-					trans = op_transform,
-					op_scale = 0.5
-				)
-			})
-		},
-		classes = "piecepackr_affine_transformation"
-	)
 
 	# checkers
 	expect_doppelganger("checkers", function() {
@@ -487,10 +316,10 @@ test_that("no regressions in `game_systems()`", {
 
 	# playing cards
 	cfg <- game_systems("sans", border = FALSE)$playing_cards_colored
-	expect_doppelganger("ten_of_clubs", function() {
+	expect_doppelganger("ten-of-clubs", function() {
 		grid.piece("card_face", suit = 3, rank = 10, cfg = cfg, default.units = "npc")
 	})
-	expect_doppelganger("king_of_stars", function() {
+	expect_doppelganger("king-of-stars", function() {
 		suppressMessages(
 			{
 				grid.piece("card_face", suit = 5, rank = 13, cfg = cfg, default.units = "npc")
@@ -498,40 +327,40 @@ test_that("no regressions in `game_systems()`", {
 			classes = "piecepackr_fill_stroke"
 		)
 	})
-	expect_doppelganger("red_joker", function() {
+	expect_doppelganger("red-joker", function() {
 		grid.piece("card_face", suit = 1, rank = 14, cfg = cfg, default.units = "npc")
 	})
 	cfg <- game_systems("sans", border = FALSE)$playing_cards_tarot
-	expect_doppelganger("black_joker_no_star", function() {
+	expect_doppelganger("black-joker-no-star", function() {
 		grid.piece("card_face", suit = 3, rank = 15, cfg = cfg, default.units = "npc")
 	})
-	expect_doppelganger("knight_of_diamonds", function() {
+	expect_doppelganger("knight-of-diamonds", function() {
 		grid.piece("card_face", suit = 4, rank = 12, cfg = cfg, default.units = "npc")
 	})
 
 	# morris
 	cfg <- envir$morris
-	expect_doppelganger("two_morris", function() {
+	expect_doppelganger("two-morris", function() {
 		grid.piece("board_face", x = 4, y = 4, suit = 3, rank = 2, cfg = cfg, default.units = "in")
 		grid.piece("bit_back", x = 0:5, y = 0:5, suit = 1:6, cfg = cfg, default.units = "in")
 	})
-	expect_doppelganger("three_morris", function() {
+	expect_doppelganger("three-morris", function() {
 		grid.piece("board_face", x = 4, y = 4, suit = 3, rank = 3, cfg = cfg, default.units = "in")
 		grid.piece("bit_back", x = 0:5, y = 0:5, suit = 1:6, cfg = cfg, default.units = "in")
 	})
-	expect_doppelganger("six_morris", function() {
+	expect_doppelganger("six-morris", function() {
 		grid.piece("board_face", x = 4, y = 4, suit = 3, rank = 6, cfg = cfg, default.units = "in")
 		grid.piece("bit_back", x = 0:5, y = 0:5, suit = 1:6, cfg = cfg, default.units = "in")
 	})
-	expect_doppelganger("seven_morris", function() {
+	expect_doppelganger("seven-morris", function() {
 		grid.piece("board_face", x = 4, y = 4, suit = 3, rank = 7, cfg = cfg, default.units = "in")
 		grid.piece("bit_back", x = 0:5, y = 0:5, suit = 1:6, cfg = cfg, default.units = "in")
 	})
-	expect_doppelganger("nine_morris", function() {
+	expect_doppelganger("nine-morris", function() {
 		grid.piece("board_face", x = 4, y = 4, suit = 3, rank = 9, cfg = cfg, default.units = "in")
 		grid.piece("bit_back", x = 0:5, y = 0:5, suit = 1:6, cfg = cfg, default.units = "in")
 	})
-	expect_doppelganger("twelve_morris", function() {
+	expect_doppelganger("twelve-morris", function() {
 		grid.piece("board_face", x = 4, y = 4, suit = 3, rank = 12, cfg = cfg, default.units = "in")
 		grid.piece("bit_back", x = 0:5, y = 0:5, suit = 1:6, cfg = cfg, default.units = "in")
 	})
@@ -602,7 +431,7 @@ test_that("no regressions in `game_systems()`", {
 	expect_doppelganger("marbles", function() {
 		marbles_test()
 	})
-	expect_doppelganger("marbles_op", function() {
+	expect_doppelganger("marbles-op", function() {
 		marbles_test(op_scale = 0.5, trans = marbles_transform)
 	})
 
@@ -613,8 +442,191 @@ test_that("no regressions in `game_systems()`", {
 		plot()
 		invisible(grDevices::dev.off())
 	}
+
+	# standard d4 dice
+	cfg <- envir$dice_d4
 	expect_doppelganger(
-		"marbles_shading",
+		"dice-d4",
+		function() {
+			grid.piece(
+				"die_face",
+				x = 1:4,
+				y = 1,
+				default.units = "in",
+				rank = 1:4,
+				suit = 1:4,
+				op_scale = 0.0,
+				cfg = cfg
+			)
+			grid.piece(
+				"die_face",
+				x = 1:4,
+				y = 2,
+				default.units = "in",
+				rank = 1:4,
+				suit = 1:4,
+				op_scale = 0.5,
+				cfg = cfg
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# standard d8 dice
+	cfg <- envir$dice_d8
+	expect_doppelganger(
+		"dice-d8",
+		function() {
+			grid.piece(
+				"die_face",
+				x = 1:8,
+				y = 1,
+				default.units = "in",
+				rank = 1:8,
+				suit = c(1:6, 1:2),
+				op_scale = 0.0,
+				cfg = cfg
+			)
+			grid.piece(
+				"die_face",
+				x = 1:8,
+				y = 2,
+				default.units = "in",
+				rank = 1:8,
+				suit = c(1:6, 1:2),
+				op_scale = 0.5,
+				cfg = cfg
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# standard d10 dice
+	cfg <- envir$dice_d10
+	expect_doppelganger(
+		"dice-d10",
+		function() {
+			grid.piece(
+				"die_face",
+				x = rep(1:5, 2),
+				y = rep(1:2, each = 5),
+				default.units = "in",
+				rank = 1:10,
+				suit = rep(1:5, 2),
+				op_scale = 0.5,
+				cfg = cfg
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# percentile d10 dice
+	cfg <- envir$dice_d10_percentile
+	expect_doppelganger(
+		"dice-d10-percentile",
+		function() {
+			grid.piece(
+				"die_face",
+				x = rep(1:5, 2),
+				y = rep(1:2, each = 5),
+				default.units = "in",
+				rank = 1:10,
+				suit = rep(1:5, 2),
+				op_scale = 0.5,
+				cfg = cfg
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# standard d12 dice
+	cfg <- envir$dice_d12
+	expect_doppelganger(
+		"dice-d12",
+		function() {
+			grid.piece(
+				"die_face",
+				x = rep(1:6, 2),
+				y = rep(1:2, each = 6),
+				default.units = "in",
+				rank = 1:12,
+				suit = rep(1:6, 2),
+				op_scale = 0.5,
+				cfg = cfg
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# standard d20 dice
+	cfg <- envir$dice_d20
+	expect_doppelganger(
+		"dice-d20",
+		function() {
+			grid.piece(
+				"die_face",
+				x = rep(1:5, 4),
+				y = rep(1:4, each = 5),
+				default.units = "in",
+				rank = 1:20,
+				suit = rep(1:6, length.out = 20),
+				op_scale = 0.5,
+				cfg = cfg
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# Chinese dominoes
+	expect_doppelganger(
+		"dominoes-chinese",
+		function() {
+			df1 <- tibble(
+				piece_side = "tile_face",
+				suit = c(rep(1, 6L), 2L, rep(2, 4L), rep(3, 3L), 3, rep(4, 3), 5, 5, 6),
+				rank = c(1:6, 2L, 3:6, 3:5, 6, 4:6, 5:6, 6),
+				cfg = c(rep(
+					c("dominoes_chinese", "dominoes_chinese_black", "dominoes_chinese"),
+					each = 7L
+				)),
+				x = rep(1:7, 3L),
+				y = c(rep(c(1.5, 4.0, 6.5), each = 7L))
+			)
+			df2 <- tibble(
+				piece_side = "die_face",
+				suit = 1,
+				rank = 1:6,
+				cfg = rep(
+					c("dominoes_chinese", "dominoes_chinese_black", "dominoes_chinese"),
+					each = 2L
+				),
+				x = 8.5,
+				y = c(1, 2.25, 3.5, 4.75, 6.0, 7.25)
+			)
+			df <- rbind(df1, df2)
+			pmap_piece(
+				df,
+				envir = game_systems(),
+				default.units = "in",
+				trans = op_transform,
+				op_scale = 0.5
+			)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	# king of stars (fill + stroke)
+	cfg <- game_systems("sans", border = FALSE)$playing_cards_colored
+	expect_doppelganger(
+		"king-of-stars-fill-stroke",
+		function() {
+			grid.piece("card_face", suit = 5, rank = 13, cfg = cfg, default.units = "npc")
+		},
+		writer = write_svg_bleeding_edge
+	)
+
+	expect_doppelganger(
+		"marbles-shading",
 		function() {
 			marbles_test(op_scale = 0.5, shading = TRUE, trans = marbles_transform)
 		},

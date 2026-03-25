@@ -15,7 +15,7 @@ test_that("pp_shape() works as expected", {
 	skip_on_ci()
 	skip_if_not_installed("vdiffr")
 	library("vdiffr")
-	expect_doppelganger("add_checkers", function() {
+	expect_doppelganger("add-checkers", function() {
 		rect <- pp_shape("rect")
 		pushViewport(viewport(width = 0.9, height = 0.9))
 		grid.draw(rect$shape(gp = gpar(fill = "grey", col = "NA")))
@@ -25,12 +25,12 @@ test_that("pp_shape() works as expected", {
 		grid.draw(rect$hexlines(gp = gpar(col = "yellow")))
 		grid.draw(rect$shape(gp = gpar(col = "black", fill = "NA", lex = 4)))
 	})
-	expect_doppelganger("add_checkers.transparent", function() {
+	expect_doppelganger("add-checkers-transparent", function() {
 		rect <- pp_shape("rect")
 		grid.draw(rect$checkers(gp = gpar(fill = "transparent")))
 		grid.draw(rect$hexlines(gp = gpar(col = "transparent")))
 	})
-	expect_doppelganger("add_checkers.convex8", function() {
+	expect_doppelganger("add-checkers-convex8", function() {
 		convex8 <- pp_shape("convex8", back = TRUE)
 		pushViewport(viewport(width = 0.9, height = 0.9))
 		grid.draw(convex8$shape(gp = gpar(fill = "grey", col = "NA")))
@@ -59,17 +59,17 @@ test_that("pp_shape() works as expected", {
 		# grid.draw(circle$gridlines(gp=gpar(col="black"))) # nolint
 		grid.draw(circle$shape(gp = gpar(col = "black", fill = "NA", lex = 4)))
 	})
-	expect_doppelganger("polyclip.circle", function() {
+	expect_doppelganger("polyclip-circle", function() {
 		circle <- pp_shape("circle")
 		g <- pieceGrob("coin_face", op_scale = 1, default.units = "npc")
 		grid.draw(circle$polyclip(g, "minus", gp = gpar(fill = "blue")))
 	})
-	expect_doppelganger("polyclip.holed_board", function() {
+	expect_doppelganger("polyclip-holed-board", function() {
 		rect <- pp_shape("rect")
 		g <- pieceGrob("board_face", cfg = game_systems()$marbles, default.units = "npc")
 		grid.draw(rect$polyclip(g, "minus", gp = gpar(col = NA, fill = "red")))
 	})
-	expect_doppelganger("polyclip.holed_board.op", function() {
+	expect_doppelganger("polyclip-holed-board-op", function() {
 		rect <- pp_shape("rect")
 		g <- pieceGrob(
 			"board_face",
@@ -81,7 +81,7 @@ test_that("pp_shape() works as expected", {
 		grid.draw(rect$polyclip(g, "minus", gp = gpar(col = NA, fill = "red")))
 	})
 	skip_if_not_installed("gridpattern")
-	expect_doppelganger("hex_pattern", function() {
+	expect_doppelganger("hex-pattern", function() {
 		hex <- pp_shape("convex6")
 		gp <- gpar(fill = c("blue", "yellow", "red"), col = "black")
 		grid.draw(hex$pattern(
