@@ -1,5 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' data-engine-version='2.0' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='720.00pt' height='576.00pt' viewBox='0 0 720.00 576.00'>
+<g class='svglite'>
 <defs>
   <style type='text/css'><![CDATA[
     .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
@@ -8,6 +9,13 @@
       stroke-linecap: round;
       stroke-linejoin: round;
       stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
     }
   ]]></style>
 </defs>
@@ -19,36 +27,193 @@
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polygon points='72.00,469.63 42.24,521.18 101.76,521.18 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
-<text x='72.00' y='497.13' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>1</text>
-<text transform='translate(66.05,507.43) rotate(-120)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>2</text>
-<text transform='translate(77.95,507.43) rotate(-240)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
-<polygon points='72.00,469.63 42.24,521.18 101.76,521.18 ' style='stroke-width: 3.00; fill: none;' />
+<text x='72.00' y='497.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text transform='translate(66.41,507.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(77.59,507.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<polygon points='72.00,469.63 42.24,521.18 101.76,521.18 ' style='stroke-width: 3.00;' />
 <polygon points='144.00,469.63 114.24,521.18 173.76,521.18 ' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
-<text x='144.00' y='497.13' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>2</text>
-<text transform='translate(138.05,507.43) rotate(-120)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text transform='translate(149.95,507.43) rotate(-240)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
-<polygon points='144.00,469.63 114.24,521.18 173.76,521.18 ' style='stroke-width: 3.00; fill: none;' />
+<text x='144.00' y='497.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(138.41,507.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(149.59,507.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<polygon points='144.00,469.63 114.24,521.18 173.76,521.18 ' style='stroke-width: 3.00;' />
 <polygon points='216.00,469.63 186.24,521.18 245.76,521.18 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
-<text x='216.00' y='497.13' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text transform='translate(210.05,507.43) rotate(-120)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text transform='translate(221.95,507.43) rotate(-240)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>1</text>
-<polygon points='216.00,469.63 186.24,521.18 245.76,521.18 ' style='stroke-width: 3.00; fill: none;' />
+<text x='216.00' y='497.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text transform='translate(210.41,507.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(221.59,507.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<polygon points='216.00,469.63 186.24,521.18 245.76,521.18 ' style='stroke-width: 3.00;' />
 <polygon points='288.00,469.63 258.24,521.18 317.76,521.18 ' style='stroke-width: 0.75; stroke: none; fill: #0072B2;' />
-<text x='288.00' y='497.13' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>4</text>
-<text transform='translate(282.05,507.43) rotate(-120)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>2</text>
-<text transform='translate(293.95,507.43) rotate(-240)' text-anchor='middle' style='font-size: 20.00px; fill: #FFFFFF; font-family: sans;' textLength='11.12px' lengthAdjust='spacingAndGlyphs'>1</text>
-<polygon points='288.00,469.63 258.24,521.18 317.76,521.18 ' style='stroke-width: 3.00; fill: none;' />
-<polygon points='101.76,449.18 72.00,397.63 89.18,414.82 ' style='stroke-width: 3.00; fill: #D55E00;' />
-<polygon points='72.00,397.63 42.24,449.18 89.18,414.82 ' style='stroke-width: 3.00; fill: #D55E00;' />
-<polygon points='89.18,414.82 42.24,449.18 101.76,449.18 ' style='stroke-width: 3.00; fill: #D55E00;' />
-<polygon points='144.00,397.63 161.18,414.82 173.76,449.18 ' style='stroke-width: 3.00; fill: #4D4D4D;' />
-<polygon points='114.24,449.18 161.18,414.82 144.00,397.63 ' style='stroke-width: 3.00; fill: #4D4D4D;' />
-<polygon points='161.18,414.82 114.24,449.18 173.76,449.18 ' style='stroke-width: 3.00; fill: #4D4D4D;' />
-<polygon points='245.76,449.18 216.00,397.63 233.18,414.82 ' style='stroke-width: 3.00; fill: #009E73;' />
-<polygon points='216.00,397.63 186.24,449.18 233.18,414.82 ' style='stroke-width: 3.00; fill: #009E73;' />
-<polygon points='233.18,414.82 186.24,449.18 245.76,449.18 ' style='stroke-width: 3.00; fill: #009E73;' />
-<polygon points='288.00,397.63 305.18,414.82 317.76,449.18 ' style='stroke-width: 3.00; fill: #0072B2;' />
-<polygon points='258.24,449.18 305.18,414.82 288.00,397.63 ' style='stroke-width: 3.00; fill: #0072B2;' />
-<polygon points='305.18,414.82 258.24,449.18 317.76,449.18 ' style='stroke-width: 3.00; fill: #0072B2;' />
+<text x='288.00' y='497.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(282.41,507.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(293.59,507.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<polygon points='288.00,469.63 258.24,521.18 317.76,521.18 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-0'>
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.29,0.29,-0.41,-0.83,102.00,556.62);'>
+  <use href='#group-0' />
+  </g>
+<polygon points='101.76,449.18 72.00,397.63 89.18,414.82 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-1'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.79,-0.58,-0.12,0.67,-180.98,436.39);'>
+  <use href='#group-1' />
+  </g>
+<polygon points='72.00,397.63 42.24,449.18 89.18,414.82 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-2'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #D55E00;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(1.00,0.00,-0.33,0.67,-186.27,245.73);'>
+  <use href='#group-2' />
+  </g>
+<polygon points='89.18,414.82 42.24,449.18 101.76,449.18 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-3'>
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.21,0.58,0.46,0.67,-47.57,20.70);'>
+  <use href='#group-3' />
+  </g>
+<polygon points='144.00,397.63 161.18,414.82 173.76,449.18 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-4'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(-0.29,-0.29,0.74,-0.83,29.45,764.47);'>
+  <use href='#group-4' />
+  </g>
+<polygon points='114.24,449.18 161.18,414.82 144.00,397.63 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-5'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #4D4D4D;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(1.00,0.00,-0.33,0.67,-114.27,245.73);'>
+  <use href='#group-5' />
+  </g>
+<polygon points='161.18,414.82 114.24,449.18 173.76,449.18 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-6'>
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.29,0.29,-0.41,-0.83,246.00,556.62);'>
+  <use href='#group-6' />
+  </g>
+<polygon points='245.76,449.18 216.00,397.63 233.18,414.82 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-7'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.79,-0.58,-0.12,0.67,-36.98,436.39);'>
+  <use href='#group-7' />
+  </g>
+<polygon points='216.00,397.63 186.24,449.18 233.18,414.82 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-8'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #009E73;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(1.00,0.00,-0.33,0.67,-42.27,245.73);'>
+  <use href='#group-8' />
+  </g>
+<polygon points='233.18,414.82 186.24,449.18 245.76,449.18 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-9'>
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #0072B2;' />
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.21,0.58,0.46,0.67,96.43,20.70);'>
+  <use href='#group-9' />
+  </g>
+<polygon points='288.00,397.63 305.18,414.82 317.76,449.18 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-10'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #0072B2;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>3</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(-0.29,-0.29,0.74,-0.83,173.45,764.47);'>
+  <use href='#group-10' />
+  </g>
+<polygon points='258.24,449.18 305.18,414.82 288.00,397.63 ' style='stroke-width: 3.00;' />
+</g>
+<defs>
+  <g id='group-11'>
+<polygon points='360.00,253.63 330.24,305.18 389.76,305.18 ' style='stroke-width: 0.75; stroke: none; fill: #0072B2;' />
+<text x='360.00' y='281.54' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>4</text>
+<text transform='translate(354.41,291.23) rotate(-120)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>2</text>
+<text transform='translate(365.59,291.23) rotate(-240)' text-anchor='middle' style='font-size: 20.00px;fill: #FFFFFF; font-family: "DejaVu Sans";' textLength='12.72px' lengthAdjust='spacingAndGlyphs'>1</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(1.00,0.00,-0.33,0.67,29.73,245.73);'>
+  <use href='#group-11' />
+  </g>
+<polygon points='305.18,414.82 258.24,449.18 317.76,449.18 ' style='stroke-width: 3.00;' />
+</g>
 </g>
 </svg>

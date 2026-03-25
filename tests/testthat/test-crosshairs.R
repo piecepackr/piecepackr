@@ -13,12 +13,12 @@ test_that("crosshairs work as expected", {
 		stringsAsFactors = FALSE
 	)
 
-	expect_doppelganger("crosshairs_squares", {
+	expect_doppelganger("crosshairs-squares", {
 		pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
 		pmap_piece(df, grid.crosshair, cfg = cfg, default.units = "in")
 	})
 
-	expect_doppelganger("crosshairs_segments", {
+	expect_doppelganger("crosshairs-segments", {
 		pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
 		pmap_piece(
 			df,
