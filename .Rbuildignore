@@ -29,6 +29,7 @@
 ^png$
 ^svg$
 ^txt$
+^tests/testthat/Rplots.pdf$
 ^tmp$
 ^\.git$
 ^\.github$

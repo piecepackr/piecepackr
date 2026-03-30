@@ -127,6 +127,30 @@ test_that("3d helper functions work", {
 	)[-5, ]
 	df <- rbind(dft, dfp1, dfp2)
 	expect_doppelganger("oblique-pyramids", opf(045, cfg = cfg), writer = write_svg_bleeding_edge)
+
+	# pawns far from origin with op_angle=135 (#376)
+	df <- tibble(
+		piece_side = "pawn_top",
+		x = c(4, 6, 7, 8),
+		y = 2,
+		suit = c(2, 1, 3, 4),
+		z = c(1.4375, 2.1875, 2.6875, 2.6875)
+	)
+	opf_pawn <- function(op_angle = 135) {
+		function() {
+			pmap_piece(
+				df,
+				op_scale = 1,
+				op_angle = op_angle,
+				default.units = "in"
+			)
+		}
+	}
+	expect_doppelganger(
+		"pawns-far-from-origin-135",
+		opf_pawn(135),
+		writer = write_svg_bleeding_edge
+	)
 })
 
 test_that("SAT functions work", {
