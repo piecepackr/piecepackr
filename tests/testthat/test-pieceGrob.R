@@ -473,7 +473,7 @@ test_that("oblique projection works", {
 		g.p("coin_face", x = 2, y = 2, cfg = cfg, op_angle = 0, angle = 190)
 	})
 	expect_doppelganger("pawn-top-meeple-op", function() {
-		g.p("pawn_top", cfg = cfg)
+		suppressMessages(g.p("pawn_top", cfg = cfg), classes = "piecepackr_affine_transformation")
 	})
 })
 
