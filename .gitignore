@@ -18,3 +18,4 @@ data-raw/meeple[23].svg
 data-raw/cc-assets/
 data-raw/spdx_license_list.html
 data-raw/spdx.json
+tests/testthat/Rplots.pdf

@@ -21,8 +21,8 @@
 <polygon points='504.00,216.00 504.00,360.00 360.00,360.00 360.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='504.00,216.00 504.00,360.00 510.36,353.64 510.36,209.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='360.00,216.00 504.00,216.00 510.36,209.64 366.36,209.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='504.00,360.00 360.00,360.00 366.36,353.64 510.36,353.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='360.00,360.00 360.00,216.00 366.36,209.64 366.36,353.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='504.00,360.00 360.00,360.00 366.36,353.64 510.36,353.64 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='366.36,209.64 366.36,353.64 510.36,353.64 510.36,209.64 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <line x1='438.36' y1='353.64' x2='438.36' y2='209.64' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <line x1='366.36' y1='281.64' x2='510.36' y2='281.64' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />

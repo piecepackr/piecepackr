@@ -1,6 +1,10 @@
 piecepackr 1.15.4 (development)
 ===============================
 
+Bug fixes and minor improvements
+--------------------------------
+
+* Fixed a family of related bugs in oblique projection rendering where a reference point used to determine face visibility and edge draw order was placed relative to the origin instead of the piece centroid. This caused incorrect rendering when pieces were far from the origin.
 * `grobCoords()` for a holed board (e.g. the marbles board) now correctly preserves holes so that `pp_shape()$polyclip()` subtracts the holed board correctly (#368).
 
 piecepackr 1.15.3
