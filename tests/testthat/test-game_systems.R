@@ -2,6 +2,7 @@ test_that("no regressions in `game_systems()`", {
 	expect_error(game_systems("boobear"), "Don't have a customized configuration for font")
 })
 
+
 test_that("deprecated `style` argument warnings", {
 	skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu" font
 	skip_if_not(has_font("Dejavu Sans"))
@@ -632,4 +633,18 @@ test_that("no regressions in `game_systems()` figures", {
 		},
 		writer = write_svg_bleeding_edge
 	)
+
+	# cubes
+	expect_doppelganger("cubes", function() {
+		grid.piece(
+			"bit_face",
+			x = rep(6:1, 6),
+			y = rep(6:1, each = 6),
+			suit = rep(1:6, each = 6),
+			rank = rep(6:1, 6),
+			default.units = "in",
+			op_scale = 0.5,
+			cfg = envir$cubes
+		)
+	})
 })
