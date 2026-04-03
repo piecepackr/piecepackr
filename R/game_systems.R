@@ -6,37 +6,40 @@
 #'      subpack and (piecepack) hexpack [pp_cfg()] R6 objects respectively given a piecepack configuration.
 #'
 #' Contains the following game systems:\describe{
-#' \item{alquerque}{Boards and pieces in six color schemes for Alquerque}
-#' \item{checkers1, checkers2}{Checkers and checkered boards in six color schemes.
+#' \item{alquerque}{Boards and pieces in nine color schemes for Alquerque}
+#' \item{checkers1, checkers2}{Checkers and checkered boards in nine color schemes.
 #'       Checkers are represented by a piecepackr \dQuote{bit}.
 #'       The \dQuote{board} \dQuote{face} is a checkered board and the \dQuote{back} is a lined board.
 #'       Color is controlled by suit and number of rows/columns by rank.
 #'       `checkers1` has one inch squares and `checkers2` has two inch squares.}
-#' \item{chess1, chess2}{Chess pieces, boards, and dice in six color schemes.
+#' \item{chess1, chess2}{Chess pieces, boards, and dice in nine color schemes.
 #'       Chess pieces are represented by a \dQuote{bit} (face).
 #'       The \dQuote{board} \dQuote{face} is a checkered board and the \dQuote{back} is a lined board.
 #'       Color is controlled by suit and number of rows/columns by rank.
 #'       `chess1` has one inch squares and `chess2` has two inch squares.
 #'       Currently uses print-and-play style discs instead of 3D Staunton chess pieces.}
-#' \item{dice}{Traditional six-sided pipped dice in six color schemes (color controlled by their suit).}
+#' \item{cubes}{Cubes in six sizes and nine colors represented by a \dQuote{bit}.
+#'              Color is controlled by suit and size of cube by rank.
+#'              Sizes go from 8mm (rank 1) to 25mm (rank 6): 8mm, 10mm, 12mm, 15mm, 20mm, 25mm.}
+#' \item{dice}{Traditional six-sided pipped dice in nine color schemes (color controlled by their suit).}
 #' \item{dice_d4, dice_numeral, dice_d8, dice_d10, dice_d10_percentile, dice_d12, dice_d20}{
 #'       Polyhedral dice most commonly used to play wargames, roleplaying games, and trading card games:\describe{
-#'   \item{dice_d4}{Four-sided dice in six color schemes (color controlled by their suit).
+#'   \item{dice_d4}{Four-sided dice in nine color schemes (color controlled by their suit).
 #'                  Tetrahedrons with the rank as a numeral at the top point.}
-#'   \item{dice_numeral}{Six-sided dice with numerals instead of pips in six color schemes (color controlled by their suit).}
-#'   \item{dice_d8}{Eight-sided dice in six color schemes (color controlled by their suit).
+#'   \item{dice_numeral}{Six-sided dice with numerals instead of pips in nine color schemes (color controlled by their suit).}
+#'   \item{dice_d8}{Eight-sided dice in nine color schemes (color controlled by their suit).
 #'                  Octahedrons with the rank as a numeral at the top face.}
-#'   \item{dice_d10}{Ten-sided dice in six color schemes (color controlled by their suit).
+#'   \item{dice_d10}{Ten-sided dice in nine color schemes (color controlled by their suit).
 #'                  Pentagonal trapezohedrons with the rank as a numeral at the top face.
 #'                  The rank of ten is represented by a zero.}
-#'   \item{dice_d10_percentile}{Ten-sided dice in six color schemes (color controlled by their suit).
+#'   \item{dice_d10_percentile}{Ten-sided dice in nine color schemes (color controlled by their suit).
 #'                  Pentagonal trapezohedrons with the rank as a numeral followed by a zero at the top face.
 #'                  The rank of ten is represented by a zero.}
-#'   \item{dice_d12}{Twelve-sided dice in six color schemes (color controlled by their suit).
+#'   \item{dice_d12}{Twelve-sided dice in nine color schemes (color controlled by their suit).
 #'                  Dodecahedrons with the rank as a numeral at the top face.}
-#'   \item{dice_d20}{Twenty-sided dice in six color schemes (color controlled by their suit).
+#'   \item{dice_d20}{Twenty-sided dice in nine color schemes (color controlled by their suit).
 #'                   Icosahedrons with the rank as a numeral at the top face.}}}
-#' \item{dice_fudge}{\dQuote{Fudge} dice in six color schemes (color controlled by their suit).
+#' \item{dice_fudge}{\dQuote{Fudge} dice in nine color schemes (color controlled by their suit).
 #'                   \dQuote{Fudge} dice have three ranks "+", " ", and "-" repeated twice.}
 #' \item{dominoes, dominoes_black, dominoes_blue, dominoes_green, dominoes_red, dominoes_white, dominoes_yellow}{
 #'      Traditional pipped dominoes in six color schemes (`dominoes` and `dominoes_white` are the same).
@@ -48,16 +51,16 @@
 #'       The \dQuote{tile}'s are Chinese dominoes (1" x 2.5") whose number of pips are controlled
 #'       by both their \dQuote{rank} and their \dQuote{suit}. `dominoes_chinese_black` are like `dominoes_chinese` but the
 #'       dice and dominoes have a black background and white and red pips.}
-#' \item{go}{Go stones and lined boards in six color schemes.
+#' \item{go}{Go stones and lined boards in nine color schemes.
 #'           Go stones are represented by a \dQuote{bit} and the board is a \dQuote{board}.
 #'           Color is controlled by suit and number of rows/columns by rank.}
-#' \item{marbles}{Marbles in nine sizes and six colors represented by a \dQuote{bit}.
+#' \item{marbles}{Marbles in nine sizes and nine colors represented by a \dQuote{bit}.
 #'                Color is controlled by suit and size of marble by rank.
 #'                Sizes go from 1/2" (rank 1) to 1" (rank 9) in 1/16" increments.
 #'                There are also square holed boards spaced for 1" marbles: their color
 #'                is controlled by suit and number of holes per row/column by rank.}
-#' \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in six colors represented by a \dQuote{bit}.}
-#' \item{morris}{Various morris aka mills aka merels games in six colors.
+#' \item{meeples}{Standard 16mm x 16mm x 10mm \dQuote{meeples} in nine colors represented by a \dQuote{bit}.}
+#' \item{morris}{Various morris aka mills aka merels games in nine colors.
 #'               Color is controlled by suit and \dQuote{size} of morris board
 #'               is controlled by rank e.g. \dQuote{Six men's morris} corresponds to a rank of 6 and
 #'               \dQuote{Nine men's morris} corresponds to a rank of 9.
@@ -224,6 +227,7 @@ game_systems <- function(
 		checkers2 = checkers(font, 2, color_list),
 		chess1 = chess(font, 1, color_list),
 		chess2 = chess(font, 2, color_list),
+		cubes = cubes(color_list),
 		dice = dice(color_list, rect_shape),
 		dice_d4 = dice_d4(font, color_list),
 		dice_d8 = dice_d8(font, color_list),
@@ -622,6 +626,29 @@ dice_numeral <- function(font = "sans", color_list = color_list_fn(), rect_shape
 	dice$has_piecepack <- FALSE
 	dice$has_dice <- TRUE
 	dice
+}
+
+cubes <- function(color_list = color_list_fn()) {
+	sizes_mm <- c(8, 10, 12, 15, 20, 25)
+	cubes_list <- list(
+		shape.bit = "rect",
+		n_suits = N_SUITS_COLOR,
+		n_ranks = 6L,
+		ps_text.bit = "",
+		dm_text.bit = "",
+		invert_colors.bit = TRUE,
+		background_color = "white"
+	)
+	for (i in seq_along(sizes_mm)) {
+		size_in <- sizes_mm[i] / 25.4
+		cubes_list[[str_glue("width.r{i}.bit")]] <- size_in
+		cubes_list[[str_glue("height.r{i}.bit")]] <- size_in
+		cubes_list[[str_glue("depth.r{i}.bit")]] <- size_in
+	}
+	cubes <- pp_cfg(c(cubes_list, color_list))
+	cubes$has_piecepack <- FALSE
+	cubes$has_bits <- TRUE
+	cubes
 }
 
 meeples <- function(color_list = color_list_fn()) {

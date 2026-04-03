@@ -1,5 +1,13 @@
-piecepackr 1.15.4 (development)
+piecepackr 1.16.0 (development)
 ===============================
+
+New features
+------------
+
+* `game_systems()` now includes a `cubes` configuration which provides cubes in nine colors and six sizes represented by a "bit" (#376).
+
+  + Color is controlled by suit and size of cube by rank.
+  + Sizes go from 8mm (rank 1) to 25mm (rank 6): 8mm, 10mm, 12mm, 15mm, 20mm, 25mm.
 
 Bug fixes and minor improvements
 --------------------------------
@@ -42,7 +50,7 @@ New features
 
 * The following enhancements to the configurations returned by `game_systems()`:
 
-  + New configuration `marbles` which provides marbles in nine sizes and six colors represented by a "bit" (#363).
+  + New configuration `marbles` which provides marbles in nine sizes and nine colors represented by a "bit" (#363).
 
     - Color is controlled by suit and size of marble by rank.
     - Sizes go from 1/2" (rank 1) to 1" (rank 9) in 1/16" increments.
