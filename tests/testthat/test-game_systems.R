@@ -405,9 +405,9 @@ test_that("no regressions in `game_systems()` figures", {
 
 	marbles_test <- function(..., round = FALSE, shading = FALSE, f = grid.piece) {
 		cur_seed <- .Random.seed
-		on.exit(.Random.seed <<- cur_seed)
-		set.seed(42)
 		envir <- game_systems(round = round, shading = shading)
+		on.exit(.Random.seed <<- cur_seed, add = TRUE)
+		set.seed(42)
 		dfb <- data.frame(
 			piece_side = "board_face",
 			x = 2.5,
