@@ -431,7 +431,7 @@ dice_d4 <- function(font = "sans", color_list = color_list_fn()) {
 		height.die = (21 / 25.4) / 0.8660254, # if 21 mm vertex to vertex
 		depth.die = (sqrt(6) / 3) * (21 / 25.4),
 		background_color = DICE_PIP_COLORS,
-		shape.die = "convex3",
+		shape.die_face = "convex3",
 		shape_t.die = 90,
 		invert_colors = TRUE
 	)
@@ -461,7 +461,7 @@ dice_d8 <- function(font = "sans", color_list = color_list_fn()) {
 		height.die = (18 / 25.4) / 0.8660254, # if 18 mm vertex to vertex
 		depth.die = (sqrt(6) / 3) * (18 / 25.4), # inradius = sqrt(6) * a / 6
 		background_color = DICE_PIP_COLORS,
-		shape.die = "convex3",
+		shape.die_face = "convex3",
 		shape_t.die = 90,
 		invert_colors = TRUE
 	)
@@ -494,7 +494,7 @@ dice_d10 <- function(font = "sans", color_list = color_list_fn()) {
 		height.die = 5 / 8,
 		depth.die = 0.5621585749837085810299,
 		background_color = DICE_PIP_COLORS,
-		shape.die = "kite",
+		shape.die_face = "kite",
 		shape_r.die = 0.5 - 0.1909830056250526320039,
 		invert_colors = TRUE
 	)
@@ -523,7 +523,7 @@ dice_d10_percentile <- function(font = "sans", color_list = color_list_fn()) {
 		height.die = 0.4913446110983896164548,
 		depth.die = 0.5621585749837085810299,
 		background_color = DICE_PIP_COLORS,
-		shape.die = "kite",
+		shape.die_face = "kite",
 		shape_r.die = 0.5 - 0.1909830056250526320039,
 		shape_t.die = 0,
 		invert_colors = TRUE
@@ -555,7 +555,7 @@ dice_d12 <- function(font = "sans", color_list = color_list_fn()) {
 		height.die = (5 / 16) / 0.5877853, # if 5/16" vertex to vertex
 		depth.die = 2 * 1.113516364 * (5 / 16), # inradius = 1.113516364 * a
 		background_color = DICE_PIP_COLORS,
-		shape.die = "convex5",
+		shape.die_face = "convex5",
 		shape_t.die = 90,
 		invert_colors = TRUE
 	)
@@ -590,7 +590,7 @@ dice_d20 <- function(font = "sans", color_list = color_list_fn()) {
 		height.die = 0.5 / 0.8660254, # if 1/2" vertex to vertex
 		depth.die = 2 * 0.5 * (3 * sqrt(3) + sqrt(15)) / 12,
 		background_color = DICE_PIP_COLORS,
-		shape.die = "convex3",
+		shape.die_face = "convex3",
 		shape_t.die = 90,
 		invert_colors = TRUE
 	)
@@ -653,7 +653,8 @@ cubes <- function(color_list = color_list_fn()) {
 
 meeples <- function(color_list = color_list_fn()) {
 	meeples_list <- list(
-		shape.bit = "meeple",
+		shape.bit_face = "meeple",
+		shape.bit_back = "meeple",
 		n_suits = N_SUITS_COLOR,
 		width.bit = 16 / 25.4,
 		height.bit = 16 / 25.4,
@@ -1047,13 +1048,15 @@ piecepack <- function(
 	hexpack <- c(
 		piecepack,
 		list(
-			shape.tile = "convex6",
+			shape.tile_face = "convex6",
+			shape.tile_back = "convex6",
 			border_lex = 3,
 			shape_t.tile = "60",
 			dm_t.tile_face = -90,
 			width.tile = 4 / sqrt(3),
 			height.tile = 4 / sqrt(3),
-			shape.coin = "convex3"
+			shape.coin_face = "convex3",
+			shape.coin_back = "convex3"
 		)
 	)
 
@@ -1246,14 +1249,13 @@ shapes_cfg <- function(color_list = color_list_fn()) {
 		width = 1,
 		height = 1,
 		depth = 1,
-		shape.r1.bit = "circle",
+		shape.r1.bit_face = "circle",
+		shape.r1.bit_back = "circle",
 		shape.r2.bit = "circle",
 		# don't shade joystick sphere at top if rest of joystick isn't shaded?
 		grob_fn.r2.bit = ellipsoidGrobFn(FALSE),
 		op_grob_fn.r2.bit = basicEllipsoidFn(FALSE),
-		obj_fn.r2.bit = function(...) save_ellipsoid_obj(..., subdivide = 4),
-		shape.r3.bit = "pyramid",
-		shape.r4.bit = "rect"
+		obj_fn.r2.bit = function(...) save_ellipsoid_obj(..., subdivide = 4)
 	)
 	pp_cfg(c(shapes, color_list))
 }
@@ -1350,13 +1352,15 @@ joystick_pawn <- function(shapes) {
 to_hexpack <- function(cfg = getOption("piecepackr.cfg", pp_cfg())) {
 	cfg <- as_pp_cfg(cfg)
 	hexpack <- as.list(cfg)
-	hexpack$shape.tile <- "convex6"
+	hexpack$shape.tile_face <- "convex6"
+	hexpack$shape.tile_back <- "convex6"
 	hexpack$border_lex <- 3
 	hexpack$shape_t.tile <- 60
 	hexpack$dm_t.tile_face <- -90
 	hexpack$width.tile <- 4 / sqrt(3)
 	hexpack$height.tile <- 4 / sqrt(3)
-	hexpack$shape.coin <- "convex3"
+	hexpack$shape.coin_face <- "convex3"
+	hexpack$shape.coin_back <- "convex3"
 	pp_cfg(hexpack)
 }
 
