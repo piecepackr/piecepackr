@@ -12,6 +12,7 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
+* Fixed a bug where `meeples` "bit_top", `hexpack` "tile_top", and `hexpack` "coin_top" were the wrong shape (as well as left/right/bottom sides)  (#385).
 * Fixed a family of related bugs in oblique projection rendering where a reference point used to determine face visibility and edge draw order was placed relative to the origin instead of the piece centroid. This caused incorrect rendering when pieces were far from the origin.
 * `grobCoords()` for a holed board (e.g. the marbles board) now correctly preserves holes so that `pp_shape()$polyclip()` subtracts the holed board correctly (#368).
 
