@@ -4,6 +4,7 @@ piecepackr 1.16.0 (development)
 New features
 ------------
 
+* `grid.piece()` and `pieceGrob()` now support oblique projection rendering of rounded corners for six-sided dice when `shape.die_face = "roundrect"` (controlled by `shape_r.die_face`) (#298).
 * `game_systems()` now includes a `cubes` configuration which provides cubes in nine colors and six sizes represented by a "bit" (#376).
 
   + Color is controlled by suit and size of cube by rank.

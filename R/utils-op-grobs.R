@@ -370,19 +370,25 @@ grobCoords.coords_xyl <- function(x, closed, ...) {
 
 #' @export
 makeContent.basic_projected_die <- function(x) {
-	x$children$other_faces$children[[1]]$scale <- x$scale
-	x$children$other_faces$children[[2]]$scale <- x$scale
-
+	gp <- gpar(cex = x$scale, lex = x$scale)
+	for (i in seq_along(x$children$other_faces$children)) {
+		if (hasName(x$children$other_faces$children[[i]], "scale")) {
+			x$children$other_faces$children[[i]]$scale <- x$scale
+		} else {
+			x$children$other_faces$children[[i]] <- update_gp(
+				x$children$other_faces$children[[i]],
+				gp
+			)
+		}
+	}
 	if (hasName(x$children$top_face, "scale")) {
 		x$children$top_face$scale <- x$scale
 	} else if (x$type == "normal") {
-		gp <- gpar(cex = x$scale, lex = x$scale)
 		x$children$top_face <- update_gp(x$children$top_face, gp)
 	}
 	x
 }
 
-#### What if shape is "roundrect"?
 die_grobcoords_xyl <- function(
 	suit,
 	rank,
@@ -399,8 +405,62 @@ die_grobcoords_xyl <- function(
 	op_scale,
 	op_angle
 ) {
-	xyz <- die_xyz(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth)
+	opt <- cfg$get_piece_opt("die_face", suit, rank)
+	if (opt$shape == "roundrect") {
+		xyz <- rounded_die_xyz(
+			suit,
+			rank,
+			cfg,
+			x,
+			y,
+			z,
+			angle,
+			axis_x,
+			axis_y,
+			width,
+			height,
+			depth
+		)
+	} else {
+		xyz <- die_xyz(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth)
+	}
 	as.list(convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)))
+}
+
+die_face_polygon_3d <- function(f_xyz, shape_r, width, height) {
+	npc <- pp_shape("roundrect", radius = shape_r, width = width, height = height)$npc_coords
+	# affine_settings expects corners as: upper-left, lower-left, lower-right, upper-right
+	ul <- f_xyz[1L]
+	ll <- f_xyz[2L]
+	lr <- f_xyz[3L]
+	as_coord3d(
+		ll$x + npc$x * (lr$x - ll$x) + npc$y * (ul$x - ll$x),
+		ll$y + npc$x * (lr$y - ll$y) + npc$y * (ul$y - ll$y),
+		ll$z + npc$x * (lr$z - ll$z) + npc$y * (ul$z - ll$z)
+	)
+}
+
+die_roundrect_hull_grob <- function(
+	suit,
+	rank,
+	cfg,
+	opt,
+	x,
+	y,
+	z,
+	angle,
+	axis_x,
+	axis_y,
+	width,
+	height,
+	depth,
+	op_angle,
+	op_scale
+) {
+	xyz <- rounded_die_xyz(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth)
+	hull <- convex_hull2d(as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale))
+	gp <- gpar(col = opt$border_color, fill = opt$edge_color, lex = opt$border_lex)
+	polygonGrob(x = hull$x, y = hull$y, default.units = "in", gp = gp, name = "convex_hull")
 }
 
 basicDieEdge <- function(
@@ -425,18 +485,52 @@ basicDieEdge <- function(
 
 	lf <- get_die_faces(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth)
 
-	gl <- gList()
-
 	indices_visible <- visible_die_faces(lf, op_angle)
 
-	#### For "round" dice add a grob for corners #298
+	if (opt$shape == "roundrect") {
+		hull_grob <- die_roundrect_hull_grob(
+			suit,
+			rank,
+			cfg,
+			opt,
+			x,
+			y,
+			z,
+			angle,
+			axis_x,
+			axis_y,
+			width,
+			height,
+			depth,
+			op_angle,
+			op_scale
+		)
+		gl <- gList(hull_grob)
+	} else {
+		gl <- gList()
+	}
+
 	for (i in indices_visible) {
 		xy <- as_coord2d(lf$f_xyz[[i]], alpha = degrees(op_angle), scale = op_scale)
-		#### For "round" dice figure out coordinates for border lines #298
 		rank <- lf$die_face_info$rank[i]
 		name <- paste0("die_side", i)
-		gl[[i]] <- at_ps_grob(piece_side, suit, rank, cfg, xy, xy, name = name)
+		if (opt$shape == "roundrect") {
+			pts3d <- die_face_polygon_3d(lf$f_xyz[[i]], opt$shape_r, width, height)
+			xy_polygon <- as_coord2d(pts3d, alpha = degrees(op_angle), scale = op_scale)
+		} else {
+			xy_polygon <- xy
+		}
+		gl[[length(gl) + 1L]] <- at_ps_grob(
+			piece_side,
+			suit,
+			rank,
+			cfg,
+			xy,
+			xy_polygon,
+			name = name
+		)
 	}
+
 	gTree(children = gl, name = "die_sides", cl = "basic_projected_die_edge")
 }
 
@@ -530,22 +624,6 @@ makeContent.projected_ellipsoid <- function(x) {
 		rgr_inform()
 	}
 	x
-}
-
-ellipse_xyz <- function() {
-	xy <- expand.grid(x = seq(0.0, 1.0, 0.05), y = seq(0.0, 1.0, 0.05))
-	xy <- xy[which(xy$x^2 + xy$y^2 <= 1), ]
-	z <- sqrt(1 - xy$x^2 - xy$y^2)
-	ppp <- data.frame(x = xy$x, y = xy$y, z = z)
-	ppn <- data.frame(x = xy$x, y = xy$y, z = -z)
-	pnp <- data.frame(x = xy$x, y = -xy$y, z = z)
-	pnn <- data.frame(x = xy$x, y = -xy$y, z = -z)
-	nnp <- data.frame(x = -xy$x, y = -xy$y, z = z)
-	npp <- data.frame(x = -xy$x, y = xy$y, z = z)
-	npn <- data.frame(x = -xy$x, y = xy$y, z = -z)
-	nnn <- data.frame(x = -xy$x, y = -xy$y, z = -z)
-	df <- 0.5 * rbind(ppp, ppn, pnp, pnn, nnp, npp, npn, nnn)
-	as_coord3d(df)
 }
 
 ## Pyramid Top

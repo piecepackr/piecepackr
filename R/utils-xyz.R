@@ -12,6 +12,50 @@ die_xyz <- function(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, heig
 	as_coord3d(xs, ys, zs)$scale(width, height, depth)$transform(R)$translate(x, y, z)
 }
 
+rounded_die_xyz <- function(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth) {
+	stopifnot(width == height, width == depth)
+	opt <- cfg$get_piece_opt("die_face", suit, rank)
+	# Sphere radius
+	# 3D Euclidean distance to (0.5 - opt$shape_r, 0.5, 0.5)
+	s <- sqrt((0.5 - opt$shape_r)^2 + 0.50)
+	xy <- expand.grid(x = seq(0.0, 1.0, 0.05), y = seq(0.0, 1.0, 0.05))
+	xy <- xy[which(xy$x^2 + xy$y^2 <= 1), ]
+	nz <- sqrt(1 - xy$x^2 - xy$y^2)
+	ppp <- data.frame(x = s * xy$x, y = s * xy$y, z = s * nz)
+	ppn <- data.frame(x = s * xy$x, y = s * xy$y, z = -s * nz)
+	pnp <- data.frame(x = s * xy$x, y = -s * xy$y, z = s * nz)
+	pnn <- data.frame(x = s * xy$x, y = -s * xy$y, z = -s * nz)
+	nnp <- data.frame(x = -s * xy$x, y = -s * xy$y, z = s * nz)
+	npp <- data.frame(x = -s * xy$x, y = s * xy$y, z = s * nz)
+	npn <- data.frame(x = -s * xy$x, y = s * xy$y, z = -s * nz)
+	nnn <- data.frame(x = -s * xy$x, y = -s * xy$y, z = -s * nz)
+	df <- rbind(ppp, ppn, pnp, pnn, nnp, npp, npn, nnn)
+	# Flatten: clamp coords beyond each die face to the face boundary
+	df$x <- pmin(pmax(df$x, -0.5), 0.5)
+	df$y <- pmin(pmax(df$y, -0.5), 0.5)
+	df$z <- pmin(pmax(df$z, -0.5), 0.5)
+	dR <- get_die_rotation(suit, rank, cfg)
+	R <- dR %*% AA_to_R(angle, axis_x, axis_y)
+	as_coord3d(df)$scale(width, height, depth)$transform(R)$translate(x, y, z)
+}
+
+ellipse_xyz <- function() {
+	xy <- expand.grid(x = seq(0.0, 1.0, 0.05), y = seq(0.0, 1.0, 0.05))
+	xy <- xy[which(xy$x^2 + xy$y^2 <= 1), ]
+	z <- sqrt(1 - xy$x^2 - xy$y^2)
+	ppp <- data.frame(x = xy$x, y = xy$y, z = z)
+	ppn <- data.frame(x = xy$x, y = xy$y, z = -z)
+	pnp <- data.frame(x = xy$x, y = -xy$y, z = z)
+	pnn <- data.frame(x = xy$x, y = -xy$y, z = -z)
+	nnp <- data.frame(x = -xy$x, y = -xy$y, z = z)
+	npp <- data.frame(x = -xy$x, y = xy$y, z = z)
+	npn <- data.frame(x = -xy$x, y = xy$y, z = -z)
+	nnn <- data.frame(x = -xy$x, y = -xy$y, z = -z)
+	df <- 0.5 * rbind(ppp, ppn, pnp, pnn, nnp, npp, npn, nnn)
+	as_coord3d(df)
+}
+
+
 # pyramid top
 pt_xyz <- function(x, y, z, angle, axis_x, axis_y, width, height, depth) {
 	xy <- as_coord2d(rect_xy)$translate(-0.5, -0.5)
