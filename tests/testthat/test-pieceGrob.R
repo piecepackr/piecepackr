@@ -428,6 +428,9 @@ test_that("oblique projection works", {
 	suppressMessages(
 		{
 			expect_doppelganger("die-face-op", function() dc("die_face"))
+			expect_doppelganger("die-face-op-roundrect", function() {
+				dc("die_face", cfg = list(shape.die_face = "roundrect", shape_r.die_face = 0.3))
+			})
 			g.p <- function(...) {
 				grid.piece(..., op_scale = 0.5, default.units = "in")
 			}
