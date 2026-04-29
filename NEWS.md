@@ -1,6 +1,12 @@
 piecepackr 1.16.0 (development)
 ===============================
 
+Deprecated features
+-------------------
+
+* The `"preview_layout"` component of `grid.piece()` / `pieceGrob()` is now deprecated.
+  Use `ppdf::piecepack_preview() |> pmap_piece(cfg = cfg, default.units = "in")` instead (#164).
+
 New features
 ------------
 

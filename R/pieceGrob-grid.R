@@ -247,6 +247,15 @@ pieceGrob <- function(
 	bleed = FALSE
 ) {
 	stopifnot(!(bleed && op_scale > 0))
+	if (any(piece_side == "preview_layout")) {
+		warn(
+			paste0(
+				'The "preview_layout" component is deprecated. ',
+				'Use `ppdf::piecepack_preview() |> pmap_piece(cfg = cfg, default.units = "in")` instead.'
+			),
+			class = "deprecatedWarning"
+		)
+	}
 	if (is_angle(angle)) {
 		angle <- as.double(angle, "degrees")
 	}
