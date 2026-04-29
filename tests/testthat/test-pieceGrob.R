@@ -278,12 +278,15 @@ test_that("no regressions in figures", {
 		dc("matchstick_back", cfg = cfg, suit = 3, rank = 6)
 	})
 
-	expect_doppelganger("preview", function() dc("preview_layout"))
+	expect_doppelganger("preview", function() suppressWarnings(dc("preview_layout")))
 	expect_doppelganger("preview-5s", function() {
-		dc("preview_layout", cfg = list(suit_text = "A,B,C,D,E,", die_arrangement = "counter_up"))
+		suppressWarnings(dc(
+			"preview_layout",
+			cfg = list(suit_text = "A,B,C,D,E,", die_arrangement = "counter_up")
+		))
 	})
 	expect_doppelganger("preview-6s", function() {
-		dc("preview_layout", cfg = list(suit_text = "I,II,III,IV,V,VI,"))
+		suppressWarnings(dc("preview_layout", cfg = list(suit_text = "I,II,III,IV,V,VI,")))
 	})
 
 	# dice
@@ -407,6 +410,14 @@ test_that("no regressions in figures", {
 		},
 		classes = "piecepackr_affine_transformation"
 	)
+})
+
+test_that("deprecated 'preview_layout' component warning", {
+	expect_snapshot(invisible(pieceGrob(
+		"preview_layout",
+		cfg = cfg_default,
+		default.units = "npc"
+	)))
 })
 
 test_that("oblique projection works", {
