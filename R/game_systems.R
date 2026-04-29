@@ -122,7 +122,6 @@
 #'               drawing with `{grid}` graphics and `FALSE` when drawing with 3D graphic systems.
 #' @param background_color Background color to use for certain pieces like boards and piecepack tiles.
 #' @param edge_color Edge color to use for certain pieces like boards and piecepack tiles.
-#' @param style Deprecated argument.
 #' @examples
 #' cfgs <- game_systems(pawn = "joystick")
 #' names(cfgs)
@@ -179,40 +178,16 @@
 #' @seealso [pp_cfg()] for information about the [pp_cfg()] objects returned by `game_systems()`.
 #' @export
 game_systems <- function(
-	font = style,
+	font = NULL,
 	round = FALSE,
 	pawn = "token",
 	...,
 	shading = FALSE,
 	border = TRUE,
 	background_color = ifelse(border, "white", "burlywood"),
-	edge_color = ifelse(border, "white", "black"),
-	style = NULL
+	edge_color = ifelse(border, "white", "black")
 ) {
 	check_dots_empty()
-	if (!missing(style)) {
-		warn(
-			"The argument `style` is deprecated.  Use the `font`, `border`, `background_color`, and/or `edge_color` arguments instead.",
-			class = "deprecatedWarning"
-		)
-	}
-	if (is.character(font) && grepl("3d$", font)) {
-		warn(
-			"Including a '3d' at the end of the `font` or `style` argument is deprecated.  Use the `border`, `background_color`, and/or `edge_color` arguments instead.",
-			class = "deprecatedWarning"
-		)
-
-		if (missing(border)) {
-			border <- FALSE
-		}
-		if (missing(background_color)) {
-			background_color <- ifelse(border, "white", "burlywood")
-		}
-		if (missing(edge_color)) {
-			edge_color <- ifelse(border, "white", "black")
-		}
-		font <- gsub("3d$", "", font)
-	}
 	font <- game_systems_font(font)
 
 	rect_shape <- ifelse(round, "roundrect", "rect")

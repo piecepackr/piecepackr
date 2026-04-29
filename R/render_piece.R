@@ -35,7 +35,6 @@
 #'              using [grDevices::dev.capture()] or `as.raster(magick::image_read())`.
 #' @param xbreaks,ybreaks Subset (of integers) to provide axis labels for if `annotate` is `TRUE`.
 #'                        If `NULL` infer a reasonable choice.
-#' @param new_device If `FALSE` draw in the active graphics device instead of opening a new graphics device.  This argument is deprecated.  Use the `open_device` argument instead.
 #' @return An invisible list of the dimensions of the image and
 #'         possibly an image object specified by `image`.
 #'         As a side effect may save a file and/or open/close a graphics device.
@@ -87,19 +86,12 @@ render_piece <- function(
 	annotation_scale = NULL,
 	dev = NULL,
 	dev.args = list(res = ppi, bg = bg, units = "in"),
-	open_device = new_device,
+	open_device = TRUE,
 	close_device = open_device && (!is.null(file) || !is.null(dev)),
 	image = c("NULL", "raster", "nativeRaster"),
 	xbreaks = NULL,
-	ybreaks = NULL,
-	new_device = TRUE
+	ybreaks = NULL
 ) {
-	if (!missing(new_device)) {
-		warn(
-			"The argument `new_device` is deprecated.  Use `open_device` instead.",
-			class = "deprecatedWarning"
-		)
-	}
 	stopifnot(is.null(dev) || is.function(dev))
 	image <- match.arg(image)
 	if (image == "NULL") {

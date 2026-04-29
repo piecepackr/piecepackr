@@ -16,13 +16,12 @@ animate_piece(
   ppi = NULL,
   annotate = TRUE,
   annotation_scale = NULL,
-  open_device = new_device,
+  open_device = TRUE,
   n_transitions = 0L,
   n_pauses = 1L,
   fps = n_transitions + n_pauses,
   xbreaks = NULL,
-  ybreaks = NULL,
-  new_device = TRUE
+  ybreaks = NULL
 )
 }
 \arguments{
@@ -65,9 +64,6 @@ how many transition frames to add between moves.}
 
 \item{xbreaks, ybreaks}{Subset (of integers) to provide axis labels for if \code{annotate} is \code{TRUE}.
 If \code{NULL} infer a reasonable choice.}
-
-\item{new_device}{If \code{file} is \code{NULL} should we open up a new graphics device?
-This argument is deprecated.  Use the \code{open_device} argument instead.}
 }
 \value{
 Nothing, as a side effect creates an animation.
