@@ -1,6 +1,14 @@
 piecepackr 1.16.0 (development)
 ===============================
 
+Breaking changes
+----------------
+
+* The `new_device` argument of `animate_piece()` and `render_piece()` has been removed.
+  Use the `open_device` argument instead.
+* The `style` argument of `game_systems()` and the (undocumented) use of a `"3d"` suffix in the `font` argument have been removed.
+  Use the `font`, `border`, `background_color`, and/or `edge_color` arguments instead.
+
 Deprecated features
 -------------------
 

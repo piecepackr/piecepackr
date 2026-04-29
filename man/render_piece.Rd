@@ -21,12 +21,11 @@ render_piece(
   annotation_scale = NULL,
   dev = NULL,
   dev.args = list(res = ppi, bg = bg, units = "in"),
-  open_device = new_device,
+  open_device = TRUE,
   close_device = open_device && (!is.null(file) || !is.null(dev)),
   image = c("NULL", "raster", "nativeRaster"),
   xbreaks = NULL,
-  ybreaks = NULL,
-  new_device = TRUE
+  ybreaks = NULL
 )
 }
 \arguments{
@@ -81,8 +80,6 @@ If \code{"raster"} or \verb{"nativeRaster" try to return a raster object of the 
 
 \item{xbreaks, ybreaks}{Subset (of integers) to provide axis labels for if \code{annotate} is \code{TRUE}.
 If \code{NULL} infer a reasonable choice.}
-
-\item{new_device}{If \code{FALSE} draw in the active graphics device instead of opening a new graphics device.  This argument is deprecated.  Use the \code{open_device} argument instead.}
 }
 \value{
 An invisible list of the dimensions of the image and

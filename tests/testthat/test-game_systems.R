@@ -3,10 +3,8 @@ test_that("no regressions in `game_systems()`", {
 })
 
 
-test_that("deprecated `style` argument warnings", {
-	skip_if_not_installed("systemfonts") # prevent buggy cairo interaction with "dejavu" font
-	skip_if_not(has_font("Dejavu Sans"))
-	expect_snapshot(invisible(game_systems(style = "dejavu3d")))
+test_that("removed `style` argument errors", {
+	expect_snapshot(error = TRUE, game_systems(style = "dejavu3d"))
 })
 
 test_that("no regressions in `game_systems()` figures", {

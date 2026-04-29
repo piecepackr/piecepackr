@@ -7,15 +7,14 @@
 \title{Standard game systems}
 \usage{
 game_systems(
-  font = style,
+  font = NULL,
   round = FALSE,
   pawn = "token",
   ...,
   shading = FALSE,
   border = TRUE,
   background_color = ifelse(border, "white", "burlywood"),
-  edge_color = ifelse(border, "white", "black"),
-  style = NULL
+  edge_color = ifelse(border, "white", "black")
 )
 
 to_hexpack(cfg = getOption("piecepackr.cfg", pp_cfg()))
@@ -45,8 +44,6 @@ drawing with \code{{grid}} graphics and \code{FALSE} when drawing with 3D graphi
 \item{background_color}{Background color to use for certain pieces like boards and piecepack tiles.}
 
 \item{edge_color}{Edge color to use for certain pieces like boards and piecepack tiles.}
-
-\item{style}{Deprecated argument.}
 
 \item{cfg}{List of configuration options}
 }

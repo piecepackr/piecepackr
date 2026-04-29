@@ -25,8 +25,6 @@
 #' @param fps Double, frames per second.
 #' @param xbreaks,ybreaks Subset (of integers) to provide axis labels for if `annotate` is `TRUE`.
 #'                        If `NULL` infer a reasonable choice.
-#' @param new_device If `file` is `NULL` should we open up a new graphics device?
-#'                   This argument is deprecated.  Use the `open_device` argument instead.
 #' @return Nothing, as a side effect creates an animation.
 #' @examples
 #'   # Basic tic-tac-toe animation
@@ -81,20 +79,13 @@ animate_piece <- function(
 	ppi = NULL,
 	annotate = TRUE,
 	annotation_scale = NULL,
-	open_device = new_device,
+	open_device = TRUE,
 	n_transitions = 0L,
 	n_pauses = 1L,
 	fps = n_transitions + n_pauses,
 	xbreaks = NULL,
-	ybreaks = NULL,
-	new_device = TRUE
+	ybreaks = NULL
 ) {
-	if (!missing(new_device)) {
-		warn(
-			"The argument `new_device` is deprecated.  Use `open_device` instead.",
-			class = "deprecatedWarning"
-		)
-	}
 	if (n_transitions > 0L) {
 		assert_suggested("tweenr")
 	}
