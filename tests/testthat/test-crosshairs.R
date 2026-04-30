@@ -13,9 +13,15 @@ test_that("crosshairs work as expected", {
 		stringsAsFactors = FALSE
 	)
 
-	expect_doppelganger("crosshairs-squares", {
+	expect_doppelganger("crosshairs-circled-segments", {
 		pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
-		pmap_piece(df, grid.crosshair, cfg = cfg, default.units = "in")
+		pmap_piece(
+			df,
+			grid.crosshair,
+			cfg = cfg,
+			default.units = "in",
+			ch_grob = circledSegmentsCrosshairGrob()
+		)
 	})
 
 	expect_doppelganger("crosshairs-segments", {
@@ -27,5 +33,21 @@ test_that("crosshairs work as expected", {
 			default.units = "in",
 			ch_grob = segmentsCrosshairGrob()
 		)
+	})
+
+	expect_doppelganger("crosshairs-squared-segments", {
+		pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
+		pmap_piece(
+			df,
+			grid.crosshair,
+			cfg = cfg,
+			default.units = "in",
+			ch_grob = squaredSegmentsCrosshairGrob()
+		)
+	})
+
+	expect_doppelganger("crosshairs-squares", {
+		pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
+		pmap_piece(df, grid.crosshair, cfg = cfg, default.units = "in")
 	})
 })

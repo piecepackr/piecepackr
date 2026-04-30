@@ -18,6 +18,7 @@ Deprecated features
 New features
 ------------
 
+* `circledSegmentsCrosshairGrob()` and `squaredSegmentsCrosshairGrob()` are new crosshair grobs (e.g. for use as registration marks) (#331).
 * `grid.piece()` and `pieceGrob()` now support oblique projection rendering of rounded corners for six-sided dice when `shape.die_face = "roundrect"` (controlled by `shape_r.die_face`) (#298).
 * `game_systems()` now includes a `cubes` configuration which provides cubes in nine colors and six sizes represented by a "bit" (#376).
 

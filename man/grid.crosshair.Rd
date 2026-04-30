@@ -4,6 +4,8 @@
 \alias{grid.crosshair}
 \alias{crosshairGrob}
 \alias{segmentsCrosshairGrob}
+\alias{circledSegmentsCrosshairGrob}
+\alias{squaredSegmentsCrosshairGrob}
 \alias{squaresCrosshairGrob}
 \title{Draw crosshairs with grid}
 \usage{
@@ -31,6 +33,30 @@ crosshairGrob(
 grid.crosshair(..., draw = TRUE)
 
 segmentsCrosshairGrob(
+  ...,
+  x = unit(0.5, "npc"),
+  y = unit(0.5, "npc"),
+  width = unit(1, "snpc"),
+  height = unit(1, "snpc"),
+  default.units = "npc",
+  name = NULL,
+  gp = gpar(),
+  vp = NULL
+)
+
+circledSegmentsCrosshairGrob(
+  ...,
+  x = unit(0.5, "npc"),
+  y = unit(0.5, "npc"),
+  width = unit(1, "snpc"),
+  height = unit(1, "snpc"),
+  default.units = "npc",
+  name = NULL,
+  gp = gpar(),
+  vp = NULL
+)
+
+squaredSegmentsCrosshairGrob(
   ...,
   x = unit(0.5, "npc"),
   y = unit(0.5, "npc"),
@@ -95,7 +121,9 @@ can be retrieved by \code{base::dynGet()}.}
 \item{ch_width}{Width/height of \code{ch_grob}'s viewport.}
 
 \item{ch_grob}{Crosshair grob.  Will be drawn in each corner of the piece in a viewport with \code{ch_width} width and \code{ch_width} height.
-\code{segmentsCrosshairGrob()} simply wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}} while
+\code{segmentsCrosshairGrob()} simply wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}}.
+\code{circledSegmentsCrosshairGrob()} wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}} and \code{\link[grid:grid.circle]{grid::circleGrob()}}.
+\code{squaredSegmentsCrosshairGrob()} wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}} and \code{\link[grid:grid.rect]{grid::rectGrob()}}.
 \code{squaresCrosshairGrob()} wraps \code{\link[grid:grid.rect]{grid::rectGrob()}} and alternates
 black/white squares for visibility on both light and dark backgrounds.}
 
@@ -109,11 +137,10 @@ A grid grob.
 \code{crosshairGrob()} is its grid grob counterpart.
 They are intended for use in adding crosshairs at the corners of
 game pieces in print-and-play layouts.
-}
-\details{
-One can use the lower level \code{segmentsCrosshairGrob()} and \code{squaresCrosshairGrob()}
+One can also use the lower level
+\code{circledSegmentsCrosshairGrob()}, \code{segmentsCrosshairGrob()}, \code{squaredSegmentsCrosshairGrob()}, and \code{squaresCrosshairGrob()}
 (which can be drawn with \code{\link[grid:grid.draw]{grid::grid.draw()}})
-to add individual crosshairs to specified (x,y) locations.
+to add individual crosshairs to specified (x,y) locations (e.g. for use as registration marks).
 }
 \examples{
 if (requireNamespace("grid", quietly = TRUE) &&
@@ -132,5 +159,22 @@ if (requireNamespace("grid", quietly = TRUE) &&
   pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
   pmap_piece(df, grid.crosshair, cfg = cfg, default.units = "in",
              ch_grob = segmentsCrosshairGrob())
+}
+if (requireNamespace("grid", quietly = TRUE)) {
+  grid::grid.newpage()
+  fns <- list(squaresCrosshairGrob, segmentsCrosshairGrob,
+              circledSegmentsCrosshairGrob, squaredSegmentsCrosshairGrob)
+  labels <- c("squaresCrosshairGrob()", "segmentsCrosshairGrob()",
+              "circledSegmentsCrosshairGrob()", "squaredSegmentsCrosshairGrob()")
+  xs <- c(0.25, 0.75, 0.25, 0.75)
+  ys <- c(0.70, 0.70, 0.30, 0.30)
+  label_ys <- c(0.55, 0.55, 0.15, 0.15)
+  for (i in seq_along(fns)) {
+    grid::grid.draw(fns[[i]](x = grid::unit(xs[i], "npc"),
+                             y = grid::unit(ys[i], "npc"),
+                             width = grid::unit(0.15, "npc"),
+                             height = grid::unit(0.15, "npc")))
+    grid::grid.text(labels[i], x = xs[i], y = label_ys[i], gp = grid::gpar(cex = 0.7))
+  }
 }
 }
