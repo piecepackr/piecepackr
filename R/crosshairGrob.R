@@ -4,15 +4,16 @@
 #' `crosshairGrob()` is its grid grob counterpart.
 #' They are intended for use in adding crosshairs at the corners of
 #' game pieces in print-and-play layouts.
-#'
-#' One can use the lower level `segmentsCrosshairGrob()` and `squaresCrosshairGrob()`
+#' One can also use the lower level
+#' `circledSegmentsCrosshairGrob()`, `segmentsCrosshairGrob()`, `squaredSegmentsCrosshairGrob()`, and `squaresCrosshairGrob()`
 #' (which can be drawn with [grid::grid.draw()])
-#' to add individual crosshairs to specified (x,y) locations.
-#'
+#' to add individual crosshairs to specified (x,y) locations (e.g. for use as registration marks).
 #' @inheritParams pieceGrob
 #' @param ch_width Width/height of `ch_grob`'s viewport.
 #' @param ch_grob Crosshair grob.  Will be drawn in each corner of the piece in a viewport with `ch_width` width and `ch_width` height.
-#'                `segmentsCrosshairGrob()` simply wraps [grid::segmentsGrob()] while
+#'                `segmentsCrosshairGrob()` simply wraps [grid::segmentsGrob()].
+#'                `circledSegmentsCrosshairGrob()` wraps [grid::segmentsGrob()] and [grid::circleGrob()].
+#'                `squaredSegmentsCrosshairGrob()` wraps [grid::segmentsGrob()] and [grid::rectGrob()].
 #'                `squaresCrosshairGrob()` wraps [grid::rectGrob()] and alternates
 #'                 black/white squares for visibility on both light and dark backgrounds.
 #' @return A grid grob.
@@ -33,6 +34,23 @@
 #'   pmap_piece(df, grid.piece, cfg = cfg, default.units = "in")
 #'   pmap_piece(df, grid.crosshair, cfg = cfg, default.units = "in",
 #'              ch_grob = segmentsCrosshairGrob())
+#' }
+#' if (requireNamespace("grid", quietly = TRUE)) {
+#'   grid::grid.newpage()
+#'   fns <- list(squaresCrosshairGrob, segmentsCrosshairGrob,
+#'               circledSegmentsCrosshairGrob, squaredSegmentsCrosshairGrob)
+#'   labels <- c("squaresCrosshairGrob()", "segmentsCrosshairGrob()",
+#'               "circledSegmentsCrosshairGrob()", "squaredSegmentsCrosshairGrob()")
+#'   xs <- c(0.25, 0.75, 0.25, 0.75)
+#'   ys <- c(0.70, 0.70, 0.30, 0.30)
+#'   label_ys <- c(0.55, 0.55, 0.15, 0.15)
+#'   for (i in seq_along(fns)) {
+#'     grid::grid.draw(fns[[i]](x = grid::unit(xs[i], "npc"),
+#'                              y = grid::unit(ys[i], "npc"),
+#'                              width = grid::unit(0.15, "npc"),
+#'                              height = grid::unit(0.15, "npc")))
+#'     grid::grid.text(labels[i], x = xs[i], y = label_ys[i], gp = grid::gpar(cex = 0.7))
+#'   }
 #' }
 #' @name grid.crosshair
 NULL
@@ -298,6 +316,108 @@ segmentsCrosshairGrob <- function(
 		)
 	}
 	gTree(name = name, gp = gp, vp = vp, children = gl, cl = "pp_segments_crosshair")
+}
+
+#' @rdname grid.crosshair
+#' @export
+circledSegmentsCrosshairGrob <- function(
+	...,
+	x = unit(0.5, "npc"),
+	y = unit(0.5, "npc"),
+	width = unit(1, "snpc"),
+	height = unit(1, "snpc"),
+	default.units = "npc",
+	name = NULL,
+	gp = gpar(),
+	vp = NULL
+) {
+	col <- gp$col %||% gp$fill %||% "black"
+	lwd <- gp$lwd %||% 1
+	lty <- gp$lty %||% "solid"
+
+	gp <- gpar(col = col, lwd = lwd, lty = lty)
+
+	nn <- max(lengths(list(x, y, width, height)))
+	x <- rep(x, length.out = nn)
+	y <- rep(y, length.out = nn)
+	width <- rep(width, length.out = nn)
+	height <- rep(height, length.out = nn)
+	if (!is.unit(x)) {
+		x <- unit(x, default.units)
+	}
+	if (!is.unit(y)) {
+		y <- unit(y, default.units)
+	}
+	if (!is.unit(width)) {
+		width <- unit(width, default.units)
+	}
+	if (!is.unit(height)) {
+		height <- unit(height, default.units)
+	}
+
+	gl <- gList()
+	for (i in seq(nn)) {
+		vpi <- viewport(x = x[i], y = y[i], width = width[i], height = height[i])
+		gl[[i]] <- grobTree(
+			segmentsGrob(x0 = 0.5, x1 = 0.5, y0 = 0, y1 = 1, default.units = "snpc"),
+			segmentsGrob(x0 = 0, x1 = 1, y0 = 0.5, y1 = 0.5, default.units = "snpc"),
+			circleGrob(r = unit(0.25, "snpc"), gp = gpar(fill = NA)),
+			name = paste0("crosshair.", i),
+			vp = vpi
+		)
+	}
+	gTree(name = name, gp = gp, vp = vp, children = gl, cl = "pp_circled_segments_crosshair")
+}
+
+#' @rdname grid.crosshair
+#' @export
+squaredSegmentsCrosshairGrob <- function(
+	...,
+	x = unit(0.5, "npc"),
+	y = unit(0.5, "npc"),
+	width = unit(1, "snpc"),
+	height = unit(1, "snpc"),
+	default.units = "npc",
+	name = NULL,
+	gp = gpar(),
+	vp = NULL
+) {
+	col <- gp$col %||% gp$fill %||% "black"
+	lwd <- gp$lwd %||% 1
+	lty <- gp$lty %||% "solid"
+
+	gp <- gpar(col = col, lwd = lwd, lty = lty)
+
+	nn <- max(lengths(list(x, y, width, height)))
+	x <- rep(x, length.out = nn)
+	y <- rep(y, length.out = nn)
+	width <- rep(width, length.out = nn)
+	height <- rep(height, length.out = nn)
+	if (!is.unit(x)) {
+		x <- unit(x, default.units)
+	}
+	if (!is.unit(y)) {
+		y <- unit(y, default.units)
+	}
+	if (!is.unit(width)) {
+		width <- unit(width, default.units)
+	}
+	if (!is.unit(height)) {
+		height <- unit(height, default.units)
+	}
+
+	gl <- gList()
+	for (i in seq(nn)) {
+		vpi <- viewport(x = x[i], y = y[i], width = width[i], height = height[i])
+		gl[[i]] <- grobTree(
+			segmentsGrob(x0 = 0.5, x1 = 0.5, y0 = 0, y1 = 1, default.units = "snpc"),
+			segmentsGrob(x0 = 0, x1 = 1, y0 = 0.5, y1 = 0.5, default.units = "snpc"),
+			rectGrob(width = unit(0.5, "snpc"), height = unit(0.5, "snpc"), gp = gpar(fill = NA)),
+			name = paste0("crosshair.", i),
+			vp = vpi
+		)
+	}
+	gTree(name = name, gp = gp, vp = vp, children = gl, cl = "pp_squared_segments_crosshair")
 }
 
 #' @rdname grid.crosshair
