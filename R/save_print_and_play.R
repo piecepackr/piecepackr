@@ -21,9 +21,12 @@ A4_HEIGHT <- 11.69
 #' @param quietly Whether to hide messages about missing metadata
 #'                in the provided configuration.
 #' @param ... Currently ignored.
-#' @param bleed If `TRUE` produce a variant print-and-play file with "bleed" zones
-#'              and "crop marks" around game pieces.
-#'              Currently only supports `pieces = "piecepack"`.
+#' @param bleed Controls bleed zones and crop marks around game pieces.
+#'              `FALSE` or `"none"` produces a compact layout with no bleed.
+#'              `TRUE` or `"individual"` gives each piece its own 1/8" bleed zone and crop marks.
+#'              `"grouped"` gives same-type pieces a shared 1/8" bleed so adjacent same-type pieces share a cut line.
+#'              `"individual"` currently only supports `pieces = "piecepack"` and doesn't support `size = "4x6"`.
+#'              `"grouped"` only supports `pieces = "piecepack"` and doesn't support `size = "4x6"` or `size = "A5"`.
 #' @param size_bleed A list with names "top", "right", "bottom", "left"
 #'                   containing numeric values indicating the inches "bleed" to add to
 #'                   the `size` of the print-and-play layout.
@@ -71,6 +74,7 @@ save_print_and_play <- function(
 	opt <- options(piecepackr.op_scale = 0)
 	on.exit(options(opt), add = TRUE)
 
+	bleed <- normalize_pnp_bleed(bleed)
 	stopifnot("`dev` must be NULL or a function" = is.null(dev) || is.function(dev))
 	size <- match.arg(size)
 	if (size == "4x6") {
@@ -81,7 +85,7 @@ save_print_and_play <- function(
 	}
 	arrangement <- match.arg(arrangement)
 	if (is.null(pieces)) {
-		if (size == "4x6" || bleed) {
+		if (size == "4x6" || bleed != "none") {
 			pieces <- "piecepack"
 		} else {
 			pieces <- c("piecepack", "pyramids", "matchsticks")
@@ -134,7 +138,7 @@ save_print_and_play <- function(
 
 	pl <- switch(
 		size,
-		`4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed, size_bleed),
+		`4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed == "individual", size_bleed),
 		print_and_play_paper(cfg, size, pieces, arrangement, quietly, bleed, size_bleed)
 	)
 
@@ -216,10 +220,28 @@ add_pdf_metadata <- function(output_filename, cfg = pp_cfg(), pl = list()) {
 	}
 }
 
-print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly, bleed, size_bleed) {
-	if (bleed) {
-		print_and_play_paper_bleed(cfg, size, pieces, arrangement, quietly, size_bleed)
-	} else {
-		print_and_play_paper_compact(cfg, size, pieces, arrangement, quietly, size_bleed)
+normalize_pnp_bleed <- function(bleed) {
+	if (isTRUE(bleed)) {
+		return("individual")
 	}
+	if (isFALSE(bleed)) {
+		return("none")
+	}
+	match.arg(bleed, c("none", "grouped", "individual"))
+}
+
+print_and_play_paper <- function(cfg, size, pieces, arrangement, quietly, bleed, size_bleed) {
+	switch(
+		bleed,
+		individual = print_and_play_paper_bleed(
+			cfg,
+			size,
+			pieces,
+			arrangement,
+			quietly,
+			size_bleed
+		),
+		grouped = print_and_play_paper_grouped(cfg, size, pieces, arrangement, quietly, size_bleed),
+		print_and_play_paper_compact(cfg, size, pieces, arrangement, quietly, size_bleed)
+	)
 }

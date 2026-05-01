@@ -1,3 +1,11 @@
+# `save_print_and_play()` errors for unsupported `bleed = "grouped"` combinations
+
+    Code
+      save_print_and_play(cfg_default, f, size = "A5", bleed = "grouped", quietly = TRUE)
+    Condition
+      Error in `print_and_play_paper_grouped()`:
+      ! `size = "A5"` not supported for `bleed = "grouped"`
+
 # `save_print_and_play(size = "4x6")` is deprecated
 
     Code
