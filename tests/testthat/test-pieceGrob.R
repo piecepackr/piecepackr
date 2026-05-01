@@ -40,6 +40,9 @@ test_that("`save_print_and_play()` works as expected", {
 	pdf_deck_filename_4x6 <- file.path(pdf_deck_dir, "piecepack_deck_4x6.pdf")
 	on.exit(unlink(pdf_deck_filename_4x6), add = TRUE)
 	pdf_deck_filename_bleed <- file.path(pdf_deck_dir, "piecepack_deck_bleed.pdf")
+	on.exit(unlink(pdf_deck_filename_bleed), add = TRUE)
+	pdf_deck_filename_shared <- file.path(pdf_deck_dir, "piecepack_deck_shared.pdf")
+	on.exit(unlink(pdf_deck_filename_shared), add = TRUE)
 	cfg_5s <- list(
 		suit_text = "♥,★,♣,♦,♠,꩜",
 		suit_color = "darkred,gold,darkgreen,darkblue,black,grey"
@@ -72,6 +75,7 @@ test_that("`save_print_and_play()` works as expected", {
 	)
 
 	save_print_and_play(cfg_default, pdf_deck_filename_bleed, bleed = TRUE, quietly = TRUE)
+	save_print_and_play(cfg_default, pdf_deck_filename_shared, bleed = "grouped", quietly = TRUE)
 
 	expect_true(file.exists(pdf_deck_filename))
 
@@ -82,6 +86,17 @@ test_that("`save_print_and_play()` works as expected", {
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_a5), 14, ignore_attr = "names")
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_4x6), 13, ignore_attr = "names")
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_bleed), 7, ignore_attr = "names")
+	expect_equal(xmpdf::n_pages(pdf_deck_filename_shared), 5, ignore_attr = "names")
+})
+
+test_that('`save_print_and_play()` errors for unsupported `bleed = "grouped"` combinations', {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(cfg_default, f, size = "A5", bleed = "grouped", quietly = TRUE)
+	)
 })
 
 test_that('`save_print_and_play(size = "4x6")` is deprecated', {

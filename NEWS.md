@@ -61,6 +61,8 @@ New features
   + Sizes go from 8mm (rank 1) to 25mm (rank 6): 8mm, 10mm, 12mm, 15mm, 20mm, 25mm.
 
 * `save_print_and_play()` with `bleed = TRUE` now adds registration marks to tiles, coins, and pawns to assist in aligning double-sided printing (#331).
+* `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone so adjacent same-type pieces share a cut line (#336).
+  Supported for `size = "letter"` and `size = "A4"` with `pieces = "piecepack"`.
 
 Bug fixes and minor improvements
 --------------------------------
