@@ -25,6 +25,8 @@ New features
   + Color is controlled by suit and size of cube by rank.
   + Sizes go from 8mm (rank 1) to 25mm (rank 6): 8mm, 10mm, 12mm, 15mm, 20mm, 25mm.
 
+* `save_print_and_play()` with `bleed = TRUE` now adds registration marks to tiles, coins, and pawns to assist in aligning double-sided printing (#331).
+
 Bug fixes and minor improvements
 --------------------------------
 

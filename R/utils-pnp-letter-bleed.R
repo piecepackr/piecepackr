@@ -227,7 +227,8 @@ a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {
 	xtr <- 0.5 * tile_width + 1 / 8 + 1 / 8
 	xtl <- xtr + tile_width + 1 / 4
 
-	ytb <- 0.5 * tile_width + 1 / 8 + 1 / 8
+	content_height <- 3 * tile_width + 3 / 4
+	ytb <- 0.5 * tile_width + 1 / 8 + (A5H - content_height) / 2
 	ytm <- ytb + tile_width + 1 / 4
 	ytt <- ytm + tile_width + 1 / 4
 
@@ -267,7 +268,27 @@ a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {
 		bleed = TRUE,
 		draw = FALSE
 	)
-	gList(cm_grob, ps_grob, vline)
+
+	ch_size <- 1 / 4
+	side_x <- if (front) xtr - tile_width / 2 else A5W - xtr + tile_width / 2
+	top_y <- ytt + tile_width / 2 + 1 / 4
+	bottom_y <- ytb - tile_width / 2 - 1 / 4
+	reg_grob <- gList(
+		circledSegmentsCrosshairGrob(
+			x = inch(side_x),
+			y = inch(top_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		),
+		squaredSegmentsCrosshairGrob(
+			x = inch(side_x),
+			y = inch(bottom_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		)
+	)
+
+	gList(cm_grob, ps_grob, vline, reg_grob)
 }
 
 a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
@@ -277,7 +298,8 @@ a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
 	xt3 <- xt2 + coin_width + 1 / 4 + 1 / 8
 	xt4 <- xt3 + coin_width + 1 / 4 + 1 / 8
 
-	yt1 <- 0.5 * coin_width + 1 / 8 + 1 / 8
+	content_height <- 5 * (coin_width + 1 / 4 + 1 / 8) + coin_width + 1 / 4
+	yt1 <- 0.5 * coin_width + 1 / 8 + (A5H - content_height) / 2
 	yt2 <- yt1 + coin_width + 1 / 4 + 1 / 8
 	yt3 <- yt2 + coin_width + 1 / 4 + 1 / 8
 	yt4 <- yt3 + coin_width + 1 / 4 + 1 / 8
@@ -321,7 +343,27 @@ a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
 		bleed = TRUE,
 		draw = FALSE
 	)
-	gList(cm_grob, ps_grob, vline)
+
+	ch_size <- 1 / 4
+	side_x <- if (front) xt1 - coin_width / 2 - 1 / 8 else A5W - xt1 + coin_width / 2 + 1 / 8
+	top_y <- yt6 + coin_width / 2 + 1 / 4
+	bottom_y <- yt1 - coin_width / 2 - 1 / 4
+	reg_grob <- gList(
+		circledSegmentsCrosshairGrob(
+			x = inch(side_x),
+			y = inch(top_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		),
+		squaredSegmentsCrosshairGrob(
+			x = inch(side_x),
+			y = inch(bottom_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		)
+	)
+
+	gList(cm_grob, ps_grob, vline, reg_grob)
 }
 
 a5_die_grob <- function(suit, cfg, front, arrangement) {
@@ -331,7 +373,8 @@ a5_die_grob <- function(suit, cfg, front, arrangement) {
 	xt3 <- xt2 + 3 / 4 + 1 / 4 + 1 / 8
 	xt4 <- xt3 + 3 / 4 + 1 / 4 + 1 / 8
 
-	yt1 <- 0.5 * 3 / 4 + 1 / 8 + 1 / 8
+	content_height <- 5 * (3 / 4 + 1 / 4 + 1 / 8) + 3 / 4 + 1 / 4
+	yt1 <- 0.5 * 3 / 4 + 1 / 8 + (A5H - content_height) / 2
 	yt2 <- yt1 + 3 / 4 + 1 / 4 + 1 / 8
 	yt3 <- yt2 + 3 / 4 + 1 / 4 + 1 / 8
 	yt4 <- yt3 + 3 / 4 + 1 / 4 + 1 / 8
@@ -383,6 +426,7 @@ a5_die_grob <- function(suit, cfg, front, arrangement) {
 
 a5_pawn_grob <- function(suit, cfg, front, arrangement) {
 	belt_width <- cfg$get_width("belt_face")
+	pawn_width <- cfg$get_width("pawn_face")
 	pawn_height <- cfg$get_height("pawn_face")
 
 	x <- A5W * (1:4 / 4 - 1 / 8)
@@ -392,7 +436,9 @@ a5_pawn_grob <- function(suit, cfg, front, arrangement) {
 
 	df_b <- tibble::tibble(piece_side = "belt_face", x = x, suit = suit, y = yb, angle = 90)
 
-	ypb <- 0.5 * pawn_height + 1 / 8 + 1 / 8
+	# Center token group in space below belt, leaving equal margin for registration marks
+	avail <- yb - belt_width / 2 - 1 / 8
+	ypb <- avail / 2 - pawn_height / 2 - 3 / 8
 	ypt <- (ypb + 0.5 * pawn_height + 1 / 8) + 1 / 2 + (1 / 8 + 0.5 * pawn_height) # 1/2" gutter = jumbo domino
 
 	if (!front) {
@@ -431,5 +477,38 @@ a5_pawn_grob <- function(suit, cfg, front, arrangement) {
 		bleed = TRUE,
 		draw = FALSE
 	)
-	gList(cm_grob, ps_grob, hline)
+
+	ch_size <- 1 / 4
+	left_x <- x[1] - pawn_width / 2
+	right_x <- x[length(x)] + pawn_width / 2
+	top_y <- ypt + pawn_height / 2 + 1 / 4
+	bottom_y <- ypb - pawn_height / 2 - 1 / 4
+	reg_grob <- gList(
+		circledSegmentsCrosshairGrob(
+			x = inch(left_x),
+			y = inch(top_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		),
+		squaredSegmentsCrosshairGrob(
+			x = inch(right_x),
+			y = inch(top_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		),
+		circledSegmentsCrosshairGrob(
+			x = inch(left_x),
+			y = inch(bottom_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		),
+		squaredSegmentsCrosshairGrob(
+			x = inch(right_x),
+			y = inch(bottom_y),
+			width = inch(ch_size),
+			height = inch(ch_size)
+		)
+	)
+
+	gList(cm_grob, ps_grob, hline, reg_grob)
 }
