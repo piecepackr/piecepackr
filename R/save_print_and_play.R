@@ -9,31 +9,26 @@ A4_HEIGHT <- 11.69
 #'
 #' @param cfg Piecepack configuration list or `pp_cfg` object
 #' @param output_filename Filename for print-and-play file
-#' @param size PnP output size (currently supports either "letter", "A4", "A5", or "4x6").
+#' @param size PnP output size (currently supports either "letter", "A4", or "A5").
 #'             This is the targeted \dQuote{trim} size of the print-and-play file
 #'             (`size_bleed` can be used to make the print-and-play file larger than this).
-#'             Size "4x6" currently only supports `pieces = "piecepack"`
-#'             and doesn't support `bleed = TRUE`.
 #'             "A5" is in \dQuote{portrait} mode whereas the other sizes are in \dQuote{landscape} mode.
 #' @param pieces Character vector of desired PnP pieces.
 #'        Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
 #'        If `NULL` and combination of `size` / `bleed` values supports "matchsticks" and "pyramids"
 #'        then defaults to `c("piecepack", "pyramids", "matchsticks")` else just "piecepack".
 #' @param arrangement Either "single-sided" or "double-sided".
-#'                    Ignored if `size = "4x6"`.
 #' @param quietly Whether to hide messages about missing metadata
 #'                in the provided configuration.
 #' @param ... Currently ignored.
 #' @param bleed If `TRUE` produce a variant print-and-play file with "bleed" zones
 #'              and "crop marks" around game pieces.
-#'              Currently only supports `pieces = "piecepack"` and doesn't
-#'              support `size = "4x6"`.
+#'              Currently only supports `pieces = "piecepack"`.
 #' @param size_bleed A list with names "top", "right", "bottom", "left"
 #'                   containing numeric values indicating the inches "bleed" to add to
 #'                   the `size` of the print-and-play layout.
-#'                   The default `NULL` means no such bleed added to "letter", "A4", "A5"
-#'                   layouts and a small bleed added to "4x6" layouts
-#'                   (1/16" to top/bottom and 3/32" to left/right).
+#'                   The default `NULL` means no such bleed added to "letter", "A4", and "A5"
+#'                   layouts.
 #'                   NB. multiply millimeters by `0.0393700787` to convert to inches.
 #'                   We currently don't support an asymmetric left/right bleed combined with
 #'                   `arrangement = "double-sided"`.
@@ -78,6 +73,12 @@ save_print_and_play <- function(
 
 	stopifnot(is.null(dev) || is.function(dev))
 	size <- match.arg(size)
+	if (size == "4x6") {
+		warn(
+			'`size = "4x6"` is deprecated.',
+			class = "deprecatedWarning"
+		)
+	}
 	arrangement <- match.arg(arrangement)
 	if (is.null(pieces)) {
 		if (size == "4x6" || bleed) {

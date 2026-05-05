@@ -12,8 +12,10 @@ Breaking changes
 Deprecated features
 -------------------
 
-* The `"preview_layout"` component of `grid.piece()` / `pieceGrob()` is now deprecated.
-  Use `ppdf::piecepack_preview() |> pmap_piece(cfg = cfg, default.units = "in")` instead (#164).
+* The `"preview_layout"` component of `grid.piece()` / `pieceGrob()` is now deprecated (#164).
+  Use `ppdf::piecepack_preview() |> pmap_piece(cfg = cfg, default.units = "in")` instead.
+* `save_print_and_play(size = "4x6")` is now deprecated (#300).
+  Due to scaling and trimming issues with photo printing services this experimental format never worked that well in practice.
 
 New features
 ------------

@@ -24,11 +24,9 @@ save_print_and_play(
 
 \item{output_filename}{Filename for print-and-play file}
 
-\item{size}{PnP output size (currently supports either "letter", "A4", "A5", or "4x6").
+\item{size}{PnP output size (currently supports either "letter", "A4", or "A5").
 This is the targeted \dQuote{trim} size of the print-and-play file
 (\code{size_bleed} can be used to make the print-and-play file larger than this).
-Size "4x6" currently only supports \code{pieces = "piecepack"}
-and doesn't support \code{bleed = TRUE}.
 "A5" is in \dQuote{portrait} mode whereas the other sizes are in \dQuote{landscape} mode.}
 
 \item{pieces}{Character vector of desired PnP pieces.
@@ -36,8 +34,7 @@ Supports "piecepack", "matchsticks", "pyramids", "subpack", or "all".
 If \code{NULL} and combination of \code{size} / \code{bleed} values supports "matchsticks" and "pyramids"
 then defaults to \code{c("piecepack", "pyramids", "matchsticks")} else just "piecepack".}
 
-\item{arrangement}{Either "single-sided" or "double-sided".
-Ignored if \code{size = "4x6"}.}
+\item{arrangement}{Either "single-sided" or "double-sided".}
 
 \item{dev}{Graphics device function to use if \code{open_device} is \code{FALSE}.
 If \code{NULL} infer a reasonable choice from \code{file}.}
@@ -52,15 +49,13 @@ in the provided configuration.}
 
 \item{bleed}{If \code{TRUE} produce a variant print-and-play file with "bleed" zones
 and "crop marks" around game pieces.
-Currently only supports \code{pieces = "piecepack"} and doesn't
-support \code{size = "4x6"}.}
+Currently only supports \code{pieces = "piecepack"}.}
 
 \item{size_bleed}{A list with names "top", "right", "bottom", "left"
 containing numeric values indicating the inches "bleed" to add to
 the \code{size} of the print-and-play layout.
-The default \code{NULL} means no such bleed added to "letter", "A4", "A5"
-layouts and a small bleed added to "4x6" layouts
-(1/16" to top/bottom and 3/32" to left/right).
+The default \code{NULL} means no such bleed added to "letter", "A4", and "A5"
+layouts.
 NB. multiply millimeters by \code{0.0393700787} to convert to inches.
 We currently don't support an asymmetric left/right bleed combined with
 \code{arrangement = "double-sided"}.}
