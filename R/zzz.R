@@ -1,5 +1,5 @@
 #' @import grid
-#' @importFrom affiner as_coord2d as_coord3d as_plane3d convex_hull2d distance2d distance3d degrees is_angle
+#' @importFrom affiner as_coord2d as_coord3d as_ellipse2d as_plane3d as_polygon2d convex_hull2d distance2d distance3d degrees has_overlap2d is_angle
 #' @importFrom grDevices col2rgb dev.capabilities dev.list dev.new devAskNewPage rgb
 #' @importFrom R6 R6Class
 #' @importFrom rlang .data abort inform warn %||% check_dots_empty

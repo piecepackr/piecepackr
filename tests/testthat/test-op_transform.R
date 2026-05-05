@@ -154,29 +154,31 @@ test_that("3d helper functions work", {
 })
 
 test_that("SAT functions work", {
-	r1 <- ConvexPolygon$new(x = c(0, 0, 1, 1), y = c(0, 1, 1, 0))
-	r2 <- ConvexPolygon$new(x = 0.5 + c(0, 0, 1, 1), y = 0.5 + c(0, 1, 1, 0))
-	r3 <- ConvexPolygon$new(x = 1 + c(0, 0, 1, 1), y = 1 + c(0, 1, 1, 0))
-	r4 <- ConvexPolygon$new(x = c(0.25, 0.25, 0.75, 0.75), y = c(0.25, 0.75, 0.75, 0.25))
+	r1 <- as_polygon2d(as_coord2d(x = c(0, 0, 1, 1), y = c(0, 1, 1, 0)), convex = TRUE)
+	r2 <- as_polygon2d(as_coord2d(x = 0.5 + c(0, 0, 1, 1), y = 0.5 + c(0, 1, 1, 0)), convex = TRUE)
+	r3 <- as_polygon2d(as_coord2d(x = 1 + c(0, 0, 1, 1), y = 1 + c(0, 1, 1, 0)), convex = TRUE)
+	r4 <- as_polygon2d(
+		as_coord2d(x = c(0.25, 0.25, 0.75, 0.75), y = c(0.25, 0.75, 0.75, 0.25)),
+		convex = TRUE
+	)
 
-	c1 <- Circle$new(x = 0.5, y = 0.5, r = 0.5)
-	c2 <- Circle$new(x = 1.0, y = 1.0, r = 0.5)
-	c3 <- Circle$new(as_coord2d(x = 2.0, y = 2.0), r = 0.5)
+	c1 <- as_ellipse2d(as_coord2d(0.5, 0.5), r = 0.5)
+	c2 <- as_ellipse2d(as_coord2d(1.0, 1.0), r = 0.5)
+	c3 <- as_ellipse2d(as_coord2d(2.0, 2.0), r = 0.5)
 
-	expect_true(do_shapes_overlap("boo", "bar"))
-	expect_true(do_shapes_overlap(r1, r2))
-	expect_true(do_shapes_overlap(r2, r3))
-	expect_false(do_shapes_overlap(r1, r3))
-	expect_true(do_shapes_overlap(r1, r4))
+	expect_true(has_overlap2d(r1, r2))
+	expect_true(has_overlap2d(r2, r3))
+	expect_false(has_overlap2d(r1, r3))
+	expect_true(has_overlap2d(r1, r4))
 
-	expect_true(do_shapes_overlap(c1, c2))
-	expect_false(do_shapes_overlap(c2, c3))
-	expect_false(do_shapes_overlap(c1, c3))
+	expect_true(has_overlap2d(c1, c2))
+	expect_false(has_overlap2d(c2, c3))
+	expect_false(has_overlap2d(c1, c3))
 
-	expect_true(do_shapes_overlap(r1, c1))
-	expect_false(do_shapes_overlap(r1, c3))
-	expect_true(do_shapes_overlap(c1, r1))
-	expect_false(do_shapes_overlap(c3, r1))
+	expect_true(has_overlap2d(r1, c1))
+	expect_false(has_overlap2d(r1, c3))
+	expect_true(has_overlap2d(c1, r1))
+	expect_false(has_overlap2d(c3, r1))
 })
 
 test_that("3D rotation functions work", {
