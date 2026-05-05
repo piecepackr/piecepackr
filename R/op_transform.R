@@ -230,7 +230,7 @@ add_z <- function(df, pt_thickness = 0.01) {
 		dfs <- df[seq_len(i - 1L), ]
 		zc <- zp[i]
 		for (j in which_AABB_overlap(dfi, dfs)) {
-			if (do_shapes_overlap(shapes[[i]], shapes[[j]])) {
+			if (has_overlap2d(shapes[[i]], shapes[[j]])) {
 				zc0 <- compute_z(df, zp, i, j, pt_thickness)
 				if (zc0 > zc) zc <- zc0
 			}
@@ -271,12 +271,18 @@ get_shapes <- function(df) {
 		if (
 			inherits(opt, "try-error") || opt$shape %in% c("rect", "halma", "meeple", "roundrect")
 		) {
-			shapes[[ii]] <- ConvexPolygon$new(
-				x = c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
-				y = c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr)
+			shapes[[ii]] <- as_polygon2d(
+				as_coord2d(
+					x = c(dfi$xll, dfi$xul, dfi$xur, dfi$xlr),
+					y = c(dfi$yll, dfi$yul, dfi$yur, dfi$ylr)
+				),
+				convex = TRUE
 			)
 		} else if (opt$shape == "circle") {
-			shapes[[ii]] <- Circle$new(x = dfi$x, y = dfi$y, r = min(dfi$width / 2, dfi$height / 2))
+			shapes[[ii]] <- as_ellipse2d(
+				as_coord2d(dfi$x, dfi$y),
+				r = min(dfi$width / 2, dfi$height / 2)
+			)
 		} else {
 			label <- opt$shape
 			if (grepl("^concave", label)) {
@@ -298,7 +304,7 @@ get_shapes <- function(df) {
 				dfi$height,
 				dfi$angle
 			)
-			shapes[[ii]] <- ConvexPolygon$new(xy_c$x, xy_c$y)
+			shapes[[ii]] <- as_polygon2d(xy_c, convex = TRUE)
 		}
 	}
 	shapes

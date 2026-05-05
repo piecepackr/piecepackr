@@ -5,22 +5,6 @@ npc_to_in <- function(xy, x = 0.5, y = 0.5, w = 1, h = 1, t = 0) {
 
 radius <- function(x) max(abs(x - mean(x)))
 
-Circle <- R6Class(
-	"circle",
-	public = list(
-		c = NULL,
-		r = NULL,
-		initialize = function(x = 0.5, y = 0.5, r = 0.5) {
-			self$c <- as_coord2d(x = x, y = y)
-			self$r <- r
-		},
-		project = function(v) {
-			center <- v * self$c
-			c(center - self$r, center + self$r)
-		}
-	)
-)
-
 Polygon <- R6Class(
 	"polygon",
 	public = list(
@@ -88,57 +72,6 @@ LineSegment <- R6Class(
 )
 #' @export
 `[.line_segment` <- function(x, i) LineSegment$new(x$p1[i], x$p2[i])
-
-ConvexPolygon <- R6Class("convex_polygon", inherit = Polygon)
-#### ConcavePolygon, add a list of convex polygons that cover it to test SAT
-#### Most value adding if adding something like megahexes but could be used for stars as well
-
-# "collision detection" via Separating Axis Theorem
-do_projections_overlap <- function(r1, r2) {
-	do_ranges_overlap(r1[1], r1[2], r2[1], r2[2])
-}
-
-do_convex_polygons_overlap <- function(s1, s2) {
-	normals <- c(s1$normals, s2$normals)
-	for (i in seq_along(normals)) {
-		n <- normals[i]
-		if (!do_projections_overlap(s1$project(n), s2$project(n))) {
-			return(FALSE)
-		}
-	}
-	TRUE
-}
-
-does_convex_polygon_overlap_circle <- function(p, c) {
-	# nolint
-	c_normals <- affiner::normal2d(p$vertices - c$c)
-	if (any(is.nan(c_normals))) {
-		# happens if center of circle same as vertex
-		return(TRUE)
-	}
-	normals <- c(p$normals, c_normals)
-	for (i in seq_along(normals)) {
-		n <- normals[i]
-		if (!do_projections_overlap(p$project(n), c$project(n))) {
-			return(FALSE)
-		}
-	}
-	TRUE
-}
-
-do_shapes_overlap <- function(s1, s2) {
-	if (inherits(s1, "circle") && inherits(s2, "circle")) {
-		less_than(abs(s1$c - s2$c), s1$r + s2$r)
-	} else if (inherits(s1, "convex_polygon") && inherits(s2, "convex_polygon")) {
-		do_convex_polygons_overlap(s1, s2)
-	} else if (inherits(s1, "convex_polygon") && inherits(s2, "circle")) {
-		does_convex_polygon_overlap_circle(s1, s2)
-	} else if (inherits(s1, "circle") && inherits(s2, "convex_polygon")) {
-		does_convex_polygon_overlap_circle(s2, s1)
-	} else {
-		TRUE
-	}
-}
 
 # Name 'nigh' to avoid potential conflict with 'dplyr::near()'
 nigh <- function(x, y, tolerance = 1e-6) {
