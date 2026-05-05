@@ -48,7 +48,7 @@ print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly
 	)
 	gl <- gappend(
 		gl,
-		gTree(children = gList(a5_inst_grob_bleed(cfg, pieces, arrangement, size)), vp = vpr)
+		gTree(children = gList(a5_inst_grob_grouped(cfg, pieces, arrangement, size)), vp = vpr)
 	)
 	if (arrangement == "double-sided") {
 		gl <- gappend(gl, gTree(children = gList(blank_grob), vp = vpl))
@@ -316,5 +316,76 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, arrangement, x_off, y_off
 		ps_other,
 		ps_saucer,
 		vline
+	)
+}
+
+a5_inst_grob_grouped <- function(cfg, pieces, arrangement, size) {
+	y_inst <- unit(1, "npc") - unit(0.2, "in")
+	inst <- c("● See https://www.ludism.org/ppwiki/MakingPiecepacks for general advice")
+
+	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
+	inst <- c(
+		inst,
+		"● This print-and-play layout was generated for:",
+		sprintf('\t○ %s components', components),
+		sprintf('\t○ "%s" arrangement with grouped bleed zones', arrangement),
+		sprintf('\t○ "%s" paper size', size)
+	)
+
+	inst <- c(
+		inst,
+		"● We have one page per suit. Each page has tile faces on the left half",
+		"\t and tile backs on the right half, plus coins, dice, and (standee) pawns:",
+		'\t○ Bottom-left: 2×3 tile faces (front) / tile backs (back, mirrored)',
+		'\t○ Right of front / left of back: column of 6 coin backs / coin faces',
+		'\t○ Above coin column: pawn saucer face (front) / saucer back (back)',
+		'\t○ Top-left: 2×3 dice faces',
+		'\t○ Top-right: pawn standee and pawn belt',
+		if (arrangement == "double-sided") {
+			'\t○ Dice, standee, and belt appear on the front (left) half only'
+		}
+	)
+
+	inst <- c(
+		inst,
+		"● Tiles and coins each share a bleed zone — adjacent pieces share a cut line:",
+		'\t○ Use crop marks at the outer edges of each group as a cutting guide',
+		'\t○ Central "gutter" line may help place sheet on both sides of target material:',
+		'\t\t  Line up "gutter" line on the center of edge of target material, fold,',
+		'\t\t  and cut out.',
+		'\t○ Alternatively place whole sheet on one side and another on the opposite side',
+		'\t○ For coins lacking circular cutting tools use crop marks to cut (inferior) square coins',
+		'\t○ Otherwise use crop marks to help center placement of circular cutting tool'
+	)
+
+	inst <- c(
+		inst,
+		"● Dice share a bleed zone — adjacent dice share a cut line:",
+		'\t○ Use crop marks at the outer edges of the dice group as a cutting guide',
+		'\t○ Use "crop" marks to cut out pawn belts',
+		'\t○ Use "crop" marks to cut out pawn tokens',
+		'\t○ The "gutter" line can help place pawn tokens on both sides of target material'
+	)
+
+	inst <- paste(inst, collapse = "\n")
+
+	gTree(
+		name = "instructions",
+		children = gList(
+			textGrob(
+				"Instructions",
+				x = unit(0.5, "cm"),
+				y = y_inst,
+				just = "left",
+				gp = gp_header
+			),
+			textGrob(
+				inst,
+				x = unit(0.5, "cm"),
+				y = y_inst - unit(0.2, "in"),
+				just = c(0, 1),
+				gp = gp_text
+			)
+		)
 	)
 }
