@@ -60,12 +60,15 @@ test_that("`save_print_and_play()` works as expected", {
 	)
 	save_print_and_play(cfg_default, pdf_deck_filename_a5, "A5", quietly = TRUE)
 
-	save_print_and_play(
-		cfg_default,
-		pdf_deck_filename_4x6,
-		"4x6",
-		pieces = "piecepack",
-		quietly = TRUE
+	suppressWarnings(
+		save_print_and_play(
+			cfg_default,
+			pdf_deck_filename_4x6,
+			"4x6",
+			pieces = "piecepack",
+			quietly = TRUE
+		),
+		classes = "deprecatedWarning"
 	)
 
 	save_print_and_play(cfg_default, pdf_deck_filename_bleed, bleed = TRUE, quietly = TRUE)
@@ -79,6 +82,15 @@ test_that("`save_print_and_play()` works as expected", {
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_a5), 14, ignore_attr = "names")
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_4x6), 13, ignore_attr = "names")
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_bleed), 7, ignore_attr = "names")
+})
+
+test_that('`save_print_and_play(size = "4x6")` is deprecated', {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	expect_snapshot(
+		save_print_and_play(pp_cfg(), f, size = "4x6", pieces = "piecepack", quietly = TRUE)
+	)
 })
 
 test_that("`save_piece_images()` works as expected", {
