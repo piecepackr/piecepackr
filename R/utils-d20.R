@@ -41,11 +41,10 @@ d20TopGrob <- function(
 		dfc <- rbind(dfc, as.data.frame(mean(xyz[idx])))
 	}
 
-	op_ref <- as_coord2d(mean(xyz))$translate(degrees(op_angle + 180), radius = 10 * radius(xyz))
-	xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z, ...) abs(as_coord2d(x, y) - op_ref))
+	xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z, ...) op_depth(x, y, op_angle))
 	dfc$rank <- 1:20
 	dfc$xy_dists <- xy_dists
-	dfc <- dfc[order(round(dfc$z, 2), -xy_dists), ]
+	dfc <- dfc[order(round(dfc$z, 2), xy_dists), ]
 
 	gl <- gList()
 	for (i in 1:nrow(dfc)) {
