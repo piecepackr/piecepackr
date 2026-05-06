@@ -318,18 +318,6 @@
 </g>
 <defs>
   <g id='group-17'>
-<text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px;fill: #D55E00; font-family: "Arimo";' textLength='18.17px' lengthAdjust='spacingAndGlyphs'>♥</text>
-<polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #FF0000;' />
-  </g>
-</defs>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-  <g style='transform:matrix(-0.56,0.56,-0.29,0.75,668.72,-208.83);'>
-  <use href='#group-17' />
-  </g>
-<polygon points='391.34,184.66 383.51,224.94 357.62,250.84 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-</g>
-<defs>
-  <g id='group-18'>
 <text x='360.00' y='283.57' text-anchor='middle' style='font-size: 7.65px;fill: #D55E00; font-family: "Arimo";' textLength='11.88px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
 <text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px;fill: #D55E00; font-family: "Arimo";' textLength='18.17px' lengthAdjust='spacingAndGlyphs'>♥</text>
 <polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #0000FF;' />
@@ -337,9 +325,21 @@
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
   <g style='transform:matrix(0.56,-0.56,-0.75,0.29,378.67,313.44);'>
-  <use href='#group-18' />
+  <use href='#group-17' />
   </g>
 <polygon points='391.34,184.66 325.16,218.38 351.06,192.49 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+</g>
+<defs>
+  <g id='group-18'>
+<text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px;fill: #D55E00; font-family: "Arimo";' textLength='18.17px' lengthAdjust='spacingAndGlyphs'>♥</text>
+<polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #FF0000;' />
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(-0.56,0.56,-0.29,0.75,668.72,-208.83);'>
+  <use href='#group-18' />
+  </g>
+<polygon points='391.34,184.66 383.51,224.94 357.62,250.84 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </g>
 <defs>
   <g id='group-19'>
@@ -502,6 +502,18 @@
 </g>
 <defs>
   <g id='group-32'>
+<text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px; font-family: "Arimo";' textLength='17.02px' lengthAdjust='spacingAndGlyphs'>2</text>
+<polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(-0.000000000000000061,-1.00,-0.0095,0.33,248.37,605.53);'>
+  <use href='#group-32' />
+  </g>
+<polygon points='245.98,330.02 245.31,376.59 245.31,330.69 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+</g>
+<defs>
+  <g id='group-33'>
 <text x='360.00' y='283.57' text-anchor='middle' style='font-size: 7.65px; font-family: "Arimo";' textLength='11.88px' lengthAdjust='spacingAndGlyphs'>ʘʘ</text>
 <text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px; font-family: "Arimo";' textLength='16.25px' lengthAdjust='spacingAndGlyphs'>♠</text>
 <polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #0000FF;' />
@@ -509,45 +521,33 @@
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
   <g style='transform:matrix(-1.00,0.00,-0.33,0.0095,690.47,327.63);'>
-  <use href='#group-32' />
+  <use href='#group-33' />
   </g>
 <polygon points='245.98,330.02 245.31,330.69 199.41,330.69 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </g>
 <defs>
-  <g id='group-33'>
-<text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px; font-family: "Arimo";' textLength='17.02px' lengthAdjust='spacingAndGlyphs'>2</text>
-<polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #BEBEBE;' />
-  </g>
-</defs>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-  <g style='transform:matrix(-0.000000000000000061,-1.00,-0.0095,0.33,248.37,605.53);'>
-  <use href='#group-33' />
-  </g>
-<polygon points='245.98,330.02 245.31,376.59 245.31,330.69 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-</g>
-<defs>
   <g id='group-34'>
-<polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #00FF00;' />
-<text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px; font-family: "Arimo";' textLength='17.02px' lengthAdjust='spacingAndGlyphs'>2</text>
-  </g>
-</defs>
-<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
-  <g style='transform:matrix(0.000000000000000061,1.00,-0.66,0.33,412.57,-114.47);'>
-  <use href='#group-34' />
-  </g>
-<polygon points='245.98,330.02 199.41,330.69 199.41,376.59 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
-</g>
-<defs>
-  <g id='group-35'>
 <polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #FF0000;' />
 <text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px; font-family: "Arimo";' textLength='16.25px' lengthAdjust='spacingAndGlyphs'>♠</text>
   </g>
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
   <g style='transform:matrix(1.00,0.00,-0.33,0.66,-29.53,163.43);'>
-  <use href='#group-35' />
+  <use href='#group-34' />
   </g>
 <polygon points='245.98,330.02 199.41,376.59 245.31,376.59 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
+</g>
+<defs>
+  <g id='group-35'>
+<polygon points='360.00,252.68 337.05,323.32 382.95,323.32 ' style='stroke-width: 0.75; stroke: none; fill: #00FF00;' />
+<text x='360.00' y='316.18' text-anchor='middle' style='font-size: 30.60px; font-family: "Arimo";' textLength='17.02px' lengthAdjust='spacingAndGlyphs'>2</text>
+  </g>
+</defs>
+<g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
+  <g style='transform:matrix(0.000000000000000061,1.00,-0.66,0.33,412.57,-114.47);'>
+  <use href='#group-35' />
+  </g>
+<polygon points='245.98,330.02 199.41,330.69 199.41,376.59 ' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </g>
 </g>
 </svg>

@@ -5,6 +5,8 @@ npc_to_in <- function(xy, x = 0.5, y = 0.5, w = 1, h = 1, t = 0) {
 
 radius <- function(x) max(abs(x - mean(x)))
 
+op_depth <- function(x, y, angle) -(cos(degrees(angle)) * x + sin(degrees(angle)) * y)
+
 Polygon <- R6Class(
 	"polygon",
 	public = list(
@@ -27,9 +29,8 @@ Polygon <- R6Class(
 			range(projections)
 		},
 		op_edge_order = function(angle) {
-			op_ref <- as_coord2d(self$c)$translate(degrees(angle + 180), 10 * self$width)
-			dists <- abs(self$edges$mid_point - op_ref)
-			order(dists, decreasing = TRUE)
+			depths <- op_depth(self$edges$mid_point$x, self$edges$mid_point$y, angle)
+			order(depths)
 		},
 		op_edges = function(angle) {
 			self$edges[self$op_edge_order(angle)]

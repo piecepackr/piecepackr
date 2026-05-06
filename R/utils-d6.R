@@ -85,17 +85,11 @@ visible_die_faces <- function(die_faces, op_angle = 45) {
 	i_bot <- which.min(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$z))
 	indices <- setdiff(indices, c(i_top, i_bot))
 
-	r <- 10 * radius(die_faces$f_xyz[[1]])
-	op_diff <- as_coord3d(degrees(180 + op_angle), radius = r, z = 0)
-	die_center <- as_coord3d(
-		mean(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$x)),
-		mean(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$y)),
-		mean(sapply(1:6, function(i) mean(die_faces$f_xyz[[i]])$z))
-	)
-	op_ref <- die_center$translate(op_diff)
-	op_plane <- as_plane3d(normal = op_diff, p1 = op_ref)
-	depths <- sapply(indices, function(i) mean(die_faces$f_xyz[[i]])$z)
-	dists <- sapply(indices, function(i) distance3d(op_plane, mean(die_faces$f_xyz[[i]])))
-	indices <- indices[order(round(depths, 6), -dists)] # `round()` avoids weird sorting errors
+	z_depths <- sapply(indices, function(i) mean(die_faces$f_xyz[[i]])$z)
+	xy_depths <- sapply(indices, function(i) {
+		m <- mean(die_faces$f_xyz[[i]])
+		op_depth(m$x, m$y, op_angle)
+	})
+	indices <- indices[order(round(z_depths, 6), xy_depths)] # `round()` avoids weird sorting errors
 	utils::tail(indices, 2L)
 }

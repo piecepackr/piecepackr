@@ -19,8 +19,8 @@
 </defs>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polygon points='504.00,360.00 504.00,504.00 360.00,504.00 360.00,360.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='504.00,504.00 360.00,504.00 366.36,510.36 510.36,510.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='504.00,360.00 504.00,504.00 510.36,510.36 510.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='504.00,504.00 360.00,504.00 366.36,510.36 510.36,510.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='360.00,504.00 360.00,360.00 366.36,366.36 366.36,510.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='360.00,360.00 504.00,360.00 510.36,366.36 366.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='366.36,366.36 366.36,510.36 510.36,510.36 510.36,366.36 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
@@ -37,8 +37,8 @@
 <line x1='222.36' y1='438.36' x2='366.36' y2='438.36' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='222.36,366.36 222.36,510.36 366.36,510.36 366.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='216.00,360.00 216.00,504.00 72.00,504.00 72.00,360.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='216.00,360.00 216.00,504.00 222.36,510.36 222.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='216.00,504.00 72.00,504.00 78.36,510.36 222.36,510.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='216.00,360.00 216.00,504.00 222.36,510.36 222.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='72.00,504.00 72.00,360.00 78.36,366.36 78.36,510.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='72.00,360.00 216.00,360.00 222.36,366.36 78.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='78.36,366.36 78.36,510.36 222.36,510.36 222.36,366.36 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
@@ -64,8 +64,8 @@
 <line x1='222.36' y1='294.36' x2='366.36' y2='294.36' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='222.36,222.36 222.36,366.36 366.36,366.36 366.36,222.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='216.00,216.00 216.00,360.00 72.00,360.00 72.00,216.00 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='216.00,216.00 216.00,360.00 222.36,366.36 222.36,222.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='216.00,360.00 72.00,360.00 78.36,366.36 222.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='216.00,216.00 216.00,360.00 222.36,366.36 222.36,222.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='72.00,360.00 72.00,216.00 78.36,222.36 78.36,366.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='72.00,216.00 216.00,216.00 222.36,222.36 78.36,222.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='78.36,222.36 78.36,366.36 222.36,366.36 222.36,222.36 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
@@ -73,8 +73,8 @@
 <line x1='78.36' y1='294.36' x2='222.36' y2='294.36' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='78.36,222.36 78.36,366.36 222.36,366.36 222.36,222.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='438.36,294.36 438.36,438.36 294.36,438.36 294.36,294.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='438.36,294.36 438.36,438.36 444.73,444.73 444.73,300.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='438.36,438.36 294.36,438.36 300.73,444.73 444.73,444.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='438.36,294.36 438.36,438.36 444.73,444.73 444.73,300.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='294.36,438.36 294.36,294.36 300.73,300.73 300.73,444.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='294.36,294.36 438.36,294.36 444.73,300.73 300.73,300.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='300.73,300.73 300.73,444.73 444.73,444.73 444.73,300.73 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
@@ -82,8 +82,8 @@
 <line x1='300.73' y1='372.73' x2='444.73' y2='372.73' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='300.73,300.73 300.73,444.73 444.73,444.73 444.73,300.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='222.36,222.36 222.36,366.36 78.36,366.36 78.36,222.36 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='222.36,222.36 222.36,366.36 228.73,372.73 228.73,228.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='222.36,366.36 78.36,366.36 84.73,372.73 228.73,372.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='222.36,222.36 222.36,366.36 228.73,372.73 228.73,228.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='78.36,366.36 78.36,222.36 84.73,228.73 84.73,372.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='78.36,222.36 222.36,222.36 228.73,228.73 84.73,228.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='84.73,228.73 84.73,372.73 228.73,372.73 228.73,228.73 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
@@ -91,8 +91,8 @@
 <line x1='84.73' y1='300.73' x2='228.73' y2='300.73' style='stroke-width: 6.00; stroke: #E69F00; stroke-linecap: butt;' />
 <polygon points='84.73,228.73 84.73,372.73 228.73,372.73 228.73,228.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: none;' />
 <polygon points='228.73,228.73 228.73,372.73 84.73,372.73 84.73,228.73 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
-<polygon points='228.73,228.73 228.73,372.73 235.09,379.09 235.09,235.09 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='228.73,372.73 84.73,372.73 91.09,379.09 235.09,379.09 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
+<polygon points='228.73,228.73 228.73,372.73 235.09,379.09 235.09,235.09 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='84.73,372.73 84.73,228.73 91.09,235.09 91.09,379.09 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='84.73,228.73 228.73,228.73 235.09,235.09 91.09,235.09 ' style='stroke-width: 0.75; stroke: #BEBEBE; fill: #FFFFFF;' />
 <polygon points='91.09,235.09 91.09,379.09 235.09,379.09 235.09,235.09 ' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
