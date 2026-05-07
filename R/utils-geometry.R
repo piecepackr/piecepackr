@@ -3,8 +3,6 @@ npc_to_in <- function(xy, x = 0.5, y = 0.5, w = 1, h = 1, t = 0) {
 	invisible(xy)
 }
 
-radius <- function(x) max(abs(x - mean(x)))
-
 
 # Name 'nigh' to avoid potential conflict with 'dplyr::near()'
 nigh <- function(x, y, tolerance = 1e-6) {
