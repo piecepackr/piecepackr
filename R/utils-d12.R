@@ -42,10 +42,10 @@ d12TopGrob <- function(
 		dfc <- rbind(dfc, as.data.frame(mean(xyz[idx])))
 	}
 
-	xy_dists <- purrr::pmap_dbl(dfc, function(x, y, z, ...) op_depth(x, y, op_angle))
 	dfc$rank <- 1:12
-	dfc$xy_dists <- xy_dists
-	dfc <- dfc[order(round(dfc$z, 2), xy_dists), ]
+	dfc <- dfc[
+		painter_order(as_coord3d(dfc$x, dfc$y, dfc$z), scale = op_scale, alpha = degrees(op_angle)),
+	]
 
 	gl <- gList()
 	for (i in 1:nrow(dfc)) {

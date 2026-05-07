@@ -119,9 +119,9 @@ d4TopGrob <- function(
 	height <- convertY(height, "in", valueOnly = TRUE)
 	depth <- convertX(depth, "in", valueOnly = TRUE)
 	xy_b <- npc_to_in(as_coord2d(convex_xy(3, 90)), x, y, width, height, angle)
-	p <- Polygon$new(xy_b$x, xy_b$y)
+	p <- as_polygon2d(xy_b)
 	edge_types <- paste0("d4_", c("left", "face", "right"))
-	order <- p$op_edge_order(op_angle)
+	order <- painter_order(p, alpha = degrees(op_angle))
 	df <- tibble(index = 1:3, edge = edge_types)[order, ]
 	gl <- gList()
 	for (i in 1:3) {
