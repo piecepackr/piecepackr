@@ -31,12 +31,12 @@ d8TopGrob <- function(
 	axis_y <- 0
 	####
 	xyz <- d8t_xyz(x, y, z, angle, axis_x, axis_y, width, height, depth)
-	p <- Polygon$new(convex_xy(6, 0))
+	p <- as_polygon2d(as_coord2d(convex_xy(6, 0)))
 	edge_types <- paste0(
 		"d8_",
 		c("right", "back", "left", "opposite_left", "opposite_back", "opposite_right")
 	)
-	order <- p$op_edge_order(op_angle)
+	order <- painter_order(p, alpha = degrees(op_angle))
 	df <- tibble(index = 1:6, edge = edge_types, level = c(2, 1, 2, 1, 2, 1))[order, ]
 	df <- df[order(df$level), ]
 	gl <- gList()

@@ -652,9 +652,9 @@ basicPyramidTop <- function(
 	height <- convertY(height, "in", valueOnly = TRUE)
 	depth <- convertX(depth, "in", valueOnly = TRUE)
 	xy_b <- npc_to_in(as_coord2d(rect_xy), x, y, width, height, angle)
-	p <- Polygon$new(xy_b$x, xy_b$y)
+	p <- as_polygon2d(xy_b)
 	edge_types <- paste0("pyramid_", c("left", "back", "right", "face"))
-	order <- p$op_edge_order(op_angle)
+	order <- painter_order(p, alpha = degrees(op_angle))
 	df <- tibble(index = 1:4, edge = edge_types)[order, ]
 	gl <- gList()
 	for (i in 1:4) {
@@ -757,7 +757,7 @@ basicPyramidSide <- function(
 	depth <- convertX(depth, "in", valueOnly = TRUE)
 
 	xy_b <- npc_to_in(as_coord2d(pyramid_xy), x, y, width, height, angle)
-	p <- Polygon$new(xy_b$x, xy_b$y)
+	p <- as_polygon2d(xy_b)
 	xy_tip <- xy_b[1]
 
 	theta <- 2 * asin(0.5 * width / height)
@@ -791,7 +791,7 @@ basicPyramidSide <- function(
 		)
 	)
 
-	order <- p$op_edge_order(op_angle)
+	order <- painter_order(p, alpha = degrees(op_angle))
 	df <- tibble(index = 1:3, edge = edge_types)[order, ]
 	gli <- 2
 
