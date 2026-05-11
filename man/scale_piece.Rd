@@ -31,7 +31,7 @@ label_counting()
 breaks_counting()
 }
 \arguments{
-\item{...}{Passed to \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} or \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}.}
+\item{...}{Passed to \code{\link[ggplot2:scale_x_continuous]{ggplot2::scale_x_continuous()}} or \code{\link[ggplot2:scale_y_continuous]{ggplot2::scale_y_continuous()}}.}
 
 \item{name}{The name of the scale. Used as the axis or legend title. If
 \code{waiver()}, the default, the name of the scale is taken from the first
@@ -83,8 +83,8 @@ notation.
 }
 \description{
 \code{scale_x_piece()} and \code{scale_y_piece()} are wrappers
-around \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} and
-\code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}} with "better"
+around \code{\link[ggplot2:scale_x_continuous]{ggplot2::scale_x_continuous()}} and
+\code{\link[ggplot2:scale_y_continuous]{ggplot2::scale_y_continuous()}} with "better"
 defaults for board game diagrams.
 \code{label_letter()} labels breaks with letters
 and \code{label_counting()} labels breaks with positive integers

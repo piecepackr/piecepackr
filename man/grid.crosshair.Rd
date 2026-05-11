@@ -121,10 +121,10 @@ can be retrieved by \code{base::dynGet()}.}
 \item{ch_width}{Width/height of \code{ch_grob}'s viewport.}
 
 \item{ch_grob}{Crosshair grob.  Will be drawn in each corner of the piece in a viewport with \code{ch_width} width and \code{ch_width} height.
-\code{segmentsCrosshairGrob()} simply wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}}.
-\code{circledSegmentsCrosshairGrob()} wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}} and \code{\link[grid:grid.circle]{grid::circleGrob()}}.
-\code{squaredSegmentsCrosshairGrob()} wraps \code{\link[grid:grid.segments]{grid::segmentsGrob()}} and \code{\link[grid:grid.rect]{grid::rectGrob()}}.
-\code{squaresCrosshairGrob()} wraps \code{\link[grid:grid.rect]{grid::rectGrob()}} and alternates
+\code{segmentsCrosshairGrob()} simply wraps \code{\link[grid:segmentsGrob]{grid::segmentsGrob()}}.
+\code{circledSegmentsCrosshairGrob()} wraps \code{\link[grid:segmentsGrob]{grid::segmentsGrob()}} and \code{\link[grid:circleGrob]{grid::circleGrob()}}.
+\code{squaredSegmentsCrosshairGrob()} wraps \code{\link[grid:segmentsGrob]{grid::segmentsGrob()}} and \code{\link[grid:rectGrob]{grid::rectGrob()}}.
+\code{squaresCrosshairGrob()} wraps \code{\link[grid:rectGrob]{grid::rectGrob()}} and alternates
 black/white squares for visibility on both light and dark backgrounds.}
 
 \item{draw}{A logical value indicating whether graphics output should be produced.}
