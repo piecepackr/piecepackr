@@ -221,11 +221,11 @@ xyi_holed_board <- function(opt, nrows, ncols, margin) {
 	yc <- npc2snpc(yc)
 	r <- RADIUS_BOARD_HOLES / (min(nrows, ncols) + 2 * margin)
 
-	circle_offsets <- convex_xy(n_vertices = 36L, t = 0, r = r)
-	circle_offsets$x <- rev_shift(circle_offsets$x) - 0.5
-	circle_offsets$y <- rev_shift(circle_offsets$y) - 0.5
+	p <- regular_ngon_polygon2d(36L, x = 0, y = 0, radius = r, theta = degrees(0))
+	x_offsets <- rev_shift(p$x)
+	y_offsets <- rev_shift(p$y)
 	l <- purrr::pmap(list(xc = xc, yc = yc, r = r, id = seq_along(xc)), function(xc, yc, r, id) {
-		data.frame(x = circle_offsets$x + xc, y = circle_offsets$y + yc, id = id)
+		data.frame(x = x_offsets + xc, y = y_offsets + yc, id = id)
 	})
 	dfc <- do.call(rbind, l)
 	rbind(dfs, dfc)

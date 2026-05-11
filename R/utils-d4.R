@@ -118,7 +118,14 @@ d4TopGrob <- function(
 	width <- convertX(width, "in", valueOnly = TRUE)
 	height <- convertY(height, "in", valueOnly = TRUE)
 	depth <- convertX(depth, "in", valueOnly = TRUE)
-	xy_b <- npc_to_in(as_coord2d(convex_xy(3, 90)), x, y, width, height, angle)
+	xy_b <- npc_to_in(
+		regular_ngon_polygon2d(3, x = 0.5, y = 0.5, theta = degrees(90)),
+		x,
+		y,
+		width,
+		height,
+		angle
+	)
 	p <- as_polygon2d(xy_b)
 	edge_types <- paste0("d4_", c("left", "face", "right"))
 	order <- painter_order(p, alpha = degrees(op_angle))
@@ -188,7 +195,7 @@ makeContent.projected_rpg_die <- function(x) {
 xy_vp_convex <- function(xyz_polygon, op_scale, op_angle) {
 	n <- length(xyz_polygon)
 
-	xy <- convex_xy(n, 90)
+	xy <- regular_ngon_polygon2d(n, x = 0.5, y = 0.5, theta = degrees(90))
 
 	# widen viewport since "convex" shape doesn't reach edges of viewport
 	i_left <- which.min(xy$x)
@@ -235,7 +242,7 @@ d4t_grobcoords_xyl <- function(
 }
 
 d4t_xyz <- function(x, y, z, angle, axis_x, axis_y, width, height, depth) {
-	xy <- as_coord2d(convex_xy(3, 90))$translate(x = -0.5, y = -0.5)
+	xy <- regular_ngon_polygon2d(3, x = 0, y = 0, theta = degrees(90))
 	xyz_t <- as_coord3d(x = 0.0, y = 0.0, z = 0.5)
 	xyz_b <- as_coord3d(xy, z = -0.5)
 	xs <- c(xyz_t$x, xyz_b$x)
@@ -270,10 +277,10 @@ save_d4_obj <- function(
 	opt <- cfg$get_piece_opt(piece_side, suit, rank)
 	xyz <- d4_xyz(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth)
 
-	cxy <- convex_xy(3, 90)
+	p <- regular_ngon_polygon2d(3, x = 0.5, y = 0.5, theta = degrees(90))
 	xy_vt <- list(
-		x = rep(c(0.5 * cxy$x, 0.5 * cxy$x + 0.5), 2),
-		y = c(rep(0.5 * cxy$y + 0.5, 2), rep(0.5 * cxy$y, 2))
+		x = rep(c(0.5 * p$x, 0.5 * p$x + 0.5), 2),
+		y = c(rep(0.5 * p$y + 0.5, 2), rep(0.5 * p$y, 2))
 	)
 
 	# textured face elements: face, left, right, bottom
@@ -327,7 +334,7 @@ cycle_d4 <- function(x, vp_rot) {
 }
 
 d4_xyz <- function(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth) {
-	xyz_b <- as_coord3d(convex_xy(3, 90), z = 0)$translate(-0.5, -0.5, -0.5)
+	xyz_b <- as_coord3d(regular_ngon_polygon2d(3, x = 0, y = 0, theta = degrees(90)), z = -0.5)
 	top <- as_coord3d(0, 0, 0.5)
 
 	edge_types <- paste0("d4_", c("left", "face", "right"))
