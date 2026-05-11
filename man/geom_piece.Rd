@@ -154,6 +154,6 @@ if (require("ggplot2", quietly = TRUE) && require("tibble", quietly = TRUE)) {
 \seealso{
 \code{geom_piece()} is a wrapper around \code{\link[=pieceGrob]{pieceGrob()}}.
 \code{\link[=scale_x_piece]{scale_x_piece()}} and \code{\link[=scale_y_piece]{scale_y_piece()}} are wrappers
-around \code{\link[ggplot2:scale_continuous]{ggplot2::scale_x_continuous()}} and \code{\link[ggplot2:scale_continuous]{ggplot2::scale_y_continuous()}}
+around \code{\link[ggplot2:scale_x_continuous]{ggplot2::scale_x_continuous()}} and \code{\link[ggplot2:scale_y_continuous]{ggplot2::scale_y_continuous()}}
 with better defaults for board game diagrams.
 }

@@ -6,7 +6,7 @@
 \alias{piecepackr-package}
 \title{piecepackr: Board Game Graphics}
 \description{
-\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+\if{html}{\figure{logo.svg}{options: style='float: right' alt='logo' width='120'}}
 
 Functions to make board game graphics with the 'ggplot2', 'grid', 'rayrender', 'rayvertex', and 'rgl' packages. Specializes in game diagrams, animations, and "Print & Play" layouts for the 'piecepack' \url{https://www.ludism.org/ppwiki} but can make graphics for other board game systems. Includes configurations for several public domain game systems such as checkers, (double-18) dominoes, go, 'piecepack', playing cards, etc.
 }
@@ -39,6 +39,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Trevor L. Davis \email{trevor.l.davis@gmail.com} (\href{https://orcid.org/0000-0001-6341-4639}{ORCID})
+
+Authors:
+\itemize{
+  \item Trevor L. Davis \email{trevor.l.davis@gmail.com} (\href{https://orcid.org/0000-0001-6341-4639}{ORCID})
+}
 
 Other contributors:
 \itemize{

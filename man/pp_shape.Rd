@@ -63,7 +63,7 @@ See \code{\link[gridGeometry:grid.polyclip]{gridGeometry::grid.polyclip()}} for 
 \item{\code{op}}{Polyclip operation to perform.
 See \code{\link[gridGeometry:grid.polyclip]{gridGeometry::grid.polyclip()}} for more info.}
 \item{\code{pattern}}{Pattern to fill in shape with.
-See \code{\link[gridpattern:grid.pattern]{gridpattern::patternGrob()}} for more info.}
+See \code{\link[gridpattern:patternGrob]{gridpattern::patternGrob()}} for more info.}
 \item{\code{...}}{Passed to \code{gridpattern::patternGrob()}.}
 \item{\code{name}}{Grid grob \code{name} value.}
 \item{\code{gp}}{Grid \code{gpar} list.  See \code{\link[grid:gpar]{grid::gpar()}} for more info.}
@@ -80,7 +80,7 @@ See \code{\link[gridpattern:grid.pattern]{gridpattern::patternGrob()}} for more 
 Returns a grob for a matting \dQuote{mat} for that shape.}
 \item{\code{pattern(pattern = "stripe", ..., name = NULL, gp = gpar(), vp = NULL)}}{
 Fills in the shape's \code{npc_coords} with a pattern.
-See \code{\link[gridpattern:grid.pattern]{gridpattern::patternGrob()}} for more information.
+See \code{\link[gridpattern:patternGrob]{gridpattern::patternGrob()}} for more information.
 }
 \item{\code{polyclip(clip, op = "intersection", name = NULL, gp = gpar(), vp = NULL)}}{
 Returns a grob that is an \dQuote{intersection}, \dQuote{minus}, \dQuote{union}, or \dQuote{xor} of another grob.
