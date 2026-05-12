@@ -227,8 +227,10 @@ plot_fn_helper <- function(
 	} else if (identical(.f, piece3d)) {
 		assert_suggested("rgl")
 		if (Sys.which("wmctrl") != "") {
-			cmd <- paste0("wmctrl -r RGL -e 0,-1,-1,", ceiling(width), ",", ceiling(height))
-			system(cmd)
+			system2(
+				"wmctrl",
+				c("-r", "RGL", "-e", paste0("0,-1,-1,", ceiling(width), ",", ceiling(height)))
+			)
 		}
 		f <- tempfile(fileext = ".png")
 		function(df, ..., scale = 1) {
