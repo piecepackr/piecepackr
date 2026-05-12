@@ -8,7 +8,7 @@ test_that("pp_shape() works as expected", {
 		grid.draw(circle$hexlines(gp = gpar(col = "yellow")))
 	})
 	unlink(pdf_file)
-	dev.off()
+	suppressWarnings(grDevices::dev.off())
 	if (current_dev > 1) {
 		grDevices::dev.set(current_dev)
 	}
