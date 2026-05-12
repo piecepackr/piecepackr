@@ -20,7 +20,7 @@
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <circle cx='360.00' cy='288.00' r='27.00' style='stroke-width: 0.75; stroke: none; fill: #FFFFFF;' />
 <text x='360.00' y='297.63' text-anchor='middle' style='font-size: 28.00px; font-style: italic; fill: #E69F00; font-family: sans;' textLength='15.57px' lengthAdjust='spacingAndGlyphs'>3</text>
-<text x='360.00' y='273.04' text-anchor='middle' style='font-size: 12.00px; font-style: italic; fill: #E69F00; font-family: sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
+<text x='360.00' y='273.04' text-anchor='middle' style='font-size: 12.00px; fill: #E69F00; font-family: sans;' textLength='7.25px' lengthAdjust='spacingAndGlyphs'>●</text>
 <circle cx='360.00' cy='288.00' r='27.00' style='stroke-width: 0.75; stroke: #BEBEBE;' />
 </g>
 </svg>

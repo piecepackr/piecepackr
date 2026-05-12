@@ -1,3 +1,11 @@
+piecepackr 1.16.2
+=================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
+
 piecepackr 1.16.1
 =================
 
