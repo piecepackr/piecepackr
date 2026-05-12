@@ -876,7 +876,6 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
 		grob_fn.s7.die_face = basicPieceGrobFn(fill_stroke = TRUE),
 		grob_fn.s8.bit_face = basicPieceGrobFn(fill_stroke = TRUE),
 		grob_fn.s8.die_face = basicPieceGrobFn(fill_stroke = TRUE),
-		# grob_fn.s6.bit_face = basicPieceGrob,
 		gridline_color.board_face = cb_suit_colors_impure,
 		gridline_color.board_back = cb_suit_colors_pure,
 		gridline_lex.board = 4,
@@ -1237,6 +1236,8 @@ shapes_cfg <- function(color_list = color_list_fn()) {
 
 reversi_piece <- function(cell_width = 1, color_list = color_list_fn()) {
 	shapes_top <- shapes_cfg(color_list)
+	# Reorder suit colors to their CMYK/RGB complements so each reversi piece has opposite-colored sides
+	# e.g. vermillion(1)<->cyan(7), black(2)<->white(6), green(3)<->magenta(8), blue(4)<->yellow(5)
 	color_list$suit_color <- color_list$suit_color[c(7L, 6L, 8L, 5L, 4L, 2L, 1L, 3L)]
 	shapes_bot <- shapes_cfg(color_list)
 	envir <- list(shapes_top = shapes_top, shapes_bot = shapes_bot)
