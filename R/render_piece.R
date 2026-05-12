@@ -18,7 +18,7 @@
 #' @param xoffset Number to add to the `x` column in `df`.  Inferred by default.
 #' @param yoffset Number to add to the `y` column in `df`.  Inferred by default.
 #' @param annotate If `TRUE` or `"algebraic"` annotate the plot
-#'                 with \dQuote{algrebraic} coordinates,
+#'                 with \dQuote{algebraic} coordinates,
 #'                 if `FALSE` or `"none"` don't annotate,
 #'                 if `"cartesian"` annotate the plot with \dQuote{cartesian} coordinates.
 #' @param annotation_scale Multiplicative factor that scales (stretches) any annotation coordinates.
@@ -58,7 +58,7 @@
 #'    grid::grid.newpage()
 #'    render_piece(df, open_device = FALSE,
 #'                 op_scale = 0.5, trans = op_transform,
-#'                 annotate = "algrebraic")
+#'                 annotate = "algebraic")
 #'  }
 #'  \dontrun{# May take more than 5 seconds on CRAN servers
 #'  if (require(rayvertex)) {
