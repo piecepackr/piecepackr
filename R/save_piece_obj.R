@@ -172,7 +172,7 @@ write_mtl <- function(mtl_filename, png_filename) {
 	writeLines(c("newmtl material_0", paste("map_Kd", png_filename)), mtl_filename)
 }
 
-# 1,2,3,4 -> 1,4,3,2
+# 1,2,3,4 -> 1,4,3,2: reverses winding order so the face normal points away from viewer (required for back-face culling)
 rev_shift <- function(x) c(x[1], rev(x[-1]))
 
 # (2-sided token) rotation matrix to move from "face" to `side`
@@ -256,6 +256,7 @@ save_2s_obj <- function(
 	)
 	xy_npc <- as_coord2d(shape$npc_coords)
 	xy_npc_back <- as_coord2d(back$npc_coords)
+	# Texture atlas: [face 2.5%-42.5%] [edge 48%-52%] [back 57.5%-97.5%]
 	xy_vt_f <- xy_npc$scale(0.4, 1)$translate(as_coord2d(0.025, 0))
 	xy_vt_b <- xy_npc_back$scale(0.4, 1)$translate(as_coord2d(0.575, 0))
 	xy_vt_e <- list(x = c(0.52, 0.48, 0.48, 0.52), y = c(0, 0, 1, 1))
@@ -265,7 +266,7 @@ save_2s_obj <- function(
 	nv <- length(xyz) / 2
 	f <- list()
 	f[[1]] <- list(v = seq(nv), vt = seq(nv)) # top
-	#### #217 "coin_arrangement"
+	#### #217: respect coin_arrangement config when orienting the back face
 	f[[2]] <- list(v = rev_shift(nv + seq(nv)), vt = rev_shift(nv + seq(nv))) # bottom
 	# sides
 	for (i in seq(nv)) {
@@ -980,7 +981,7 @@ save_holed_board_obj_fn <- function(nrows = 4L, ncols = 4L, margin = 0) {
 	force(nrows)
 	force(ncols)
 	force(margin)
-	stopifnot(nrows == ncols)
+	stopifnot("nrows must equal ncols for holed board geometry" = nrows == ncols)
 	function(
 		piece_side = "tile_face",
 		suit = 1,
