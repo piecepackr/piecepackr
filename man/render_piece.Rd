@@ -57,7 +57,7 @@ in which case it either uses the current graphics device or opens a new device
 \item{yoffset}{Number to add to the \code{y} column in \code{df}.  Inferred by default.}
 
 \item{annotate}{If \code{TRUE} or \code{"algebraic"} annotate the plot
-with \dQuote{algrebraic} coordinates,
+with \dQuote{algebraic} coordinates,
 if \code{FALSE} or \code{"none"} don't annotate,
 if \code{"cartesian"} annotate the plot with \dQuote{cartesian} coordinates.}
 
@@ -110,7 +110,7 @@ apply axes offsets, annotate coordinates, and set up \code{rayrender} / \code{ra
    grid::grid.newpage()
    render_piece(df, open_device = FALSE,
                 op_scale = 0.5, trans = op_transform,
-                annotate = "algrebraic")
+                annotate = "algebraic")
  }
  \dontrun{# May take more than 5 seconds on CRAN servers
  if (require(rayvertex)) {
