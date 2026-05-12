@@ -174,7 +174,7 @@ test_that("pp_cfg querying variables work as expected", {
 	expect_false(cfg$has_saucers)
 	expect_false(cfg$has_pyramids)
 	expect_false(cfg$has_matchsticks)
-	expect_error(cfg$has_piecepack <- 3, "is.logical\\(value)\\ is not TRUE")
+	expect_snapshot(error = TRUE, cfg$has_piecepack <- 3)
 
 	expect_true(cfg$cache_grob)
 	cfg$cache_grob <- FALSE
