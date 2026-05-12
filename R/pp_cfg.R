@@ -712,7 +712,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$annotation_color %||% "black"
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`annotation_color` must be a character string" = is.character(value))
 				private$cfg$annotation_color <- value
 			}
 		},
@@ -762,7 +762,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$copyright
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`copyright` must be a character string" = is.character(value))
 				private$cfg$copyright <- value
 			}
 		},
@@ -770,7 +770,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$credit
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`credit` must be a character string" = is.character(value))
 				private$cfg$credit <- value
 			}
 		},
@@ -778,7 +778,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$description
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`description` must be a character string" = is.character(value))
 				private$cfg$description <- value
 			}
 		},
@@ -786,7 +786,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$die_arrangement %||% "counter_down"
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`die_arrangement` must be a character string" = is.character(value))
 				private$cfg$die_arrangement <- value
 			}
 		},
@@ -801,7 +801,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				self$has_coins && self$has_tiles && self$has_pawns && self$has_dice
 			} else {
-				stopifnot(is.logical(value))
+				stopifnot("`has_piecepack` must be a logical value" = is.logical(value))
 				self$has_coins <- value
 				self$has_tiles <- value
 				self$has_pawns <- value
@@ -840,7 +840,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$spdx_id
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`spdx_id` must be a character string" = is.character(value))
 				check_spdx_id(value)
 				private$cfg$spdx_id <- value
 			}
@@ -849,7 +849,7 @@ Config <- R6Class(
 			if (missing(value)) {
 				private$cfg$title
 			} else {
-				stopifnot(is.character(value))
+				stopifnot("`title` must be a character string" = is.character(value))
 				private$cfg$title <- value
 			}
 		}
