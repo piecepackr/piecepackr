@@ -106,7 +106,7 @@ test_that("`save_piece_images()` works as expected", {
 	current_dev <- grDevices::dev.cur()
 	expect_error(save_piece_images(cfg_default, directory), "dir.exists\\(directory\\) is not TRUE")
 	expect_error(grid.piece("tile_back", cfg = cfg), "Couldn't find suitable")
-	grDevices::dev.off()
+	suppressWarnings(grDevices::dev.off())
 	if (current_dev > 1) {
 		grDevices::dev.set(current_dev)
 	}
@@ -147,7 +147,7 @@ test_that("no regressions in figures", {
 		tmpfile <- tempfile(fileext = ".svg")
 		on.exit(unlink(tmpfile))
 		svg(tmpfile)
-		on.exit(dev.off(), add = TRUE)
+		on.exit(suppressWarnings(dev.off()), add = TRUE)
 		grid.piece(..., default.units = "npc")
 	}
 	# tile back
