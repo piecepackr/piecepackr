@@ -86,6 +86,7 @@ test_that("`save_print_and_play()` works as expected", {
 
 test_that('`save_print_and_play(size = "4x6")` is deprecated', {
 	skip_if_not(capabilities("cairo"))
+	rlang::local_options(piecepackr.metadata.inform = FALSE)
 	f <- tempfile(fileext = ".pdf")
 	on.exit(unlink(f))
 	expect_snapshot(
