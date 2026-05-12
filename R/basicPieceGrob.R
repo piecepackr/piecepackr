@@ -165,7 +165,7 @@ makeContent.basic_piece_side <- function(x) {
 		col = opt$dm_color,
 		fontsize = opt$dm_fontsize,
 		fontfamily = opt$dm_fontfamily,
-		fontface = opt$ps_fontface
+		fontface = opt$dm_fontface
 	)
 	dm_grob <- textGrob(
 		opt$dm_text,
