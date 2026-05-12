@@ -4,10 +4,12 @@ piecepackr 1.16.0 (development)
 Breaking changes
 ----------------
 
-* The `new_device` argument of `animate_piece()` and `render_piece()` has been removed.
-  Use the `open_device` argument instead.
-* The `style` argument of `game_systems()` and the (undocumented) use of a `"3d"` suffix in the `font` argument have been removed.
-  Use the `font`, `border`, `background_color`, and/or `edge_color` arguments instead.
+* Some features which were deprecated by v1.15.1 (2025-05-08) have been removed:
+
+  + The `new_device` argument of `animate_piece()` and `render_piece()` has been removed.
+    Use the `open_device` argument instead.
+  + The `style` argument of `game_systems()` and the (undocumented) use of a `"3d"` suffix in the `font` argument have been removed.
+    Use the `font`, `border`, `background_color`, and/or `edge_color` arguments instead.
 
 Deprecated features
 -------------------
@@ -33,7 +35,9 @@ Bug fixes and minor improvements
 --------------------------------
 
 * Fixed a bug where `meeples` "bit_top", `hexpack` "tile_top", and `hexpack` "coin_top" were the wrong shape (as well as left/right/bottom sides)  (#385).
-* Fixed a family of related bugs in oblique projection rendering where a reference point used to determine face visibility and edge draw order was placed relative to the origin instead of the piece centroid. This caused incorrect rendering when pieces were far from the origin.
+* Fixed a family of related bugs in oblique projection rendering where previously a reference point used to determine face visibility and edge draw order was placed relative to the origin instead of the piece centroid.
+  This caused incorrect rendering when pieces were far from the origin.
+  We now sort these faces according to their oblique projection "painter's depth".
 * `grobCoords()` for a holed board (e.g. the marbles board) now correctly preserves holes so that `pp_shape()$polyclip()` subtracts the holed board correctly (#368).
 
 piecepackr 1.15.3
