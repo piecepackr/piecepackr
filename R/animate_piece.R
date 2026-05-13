@@ -201,7 +201,11 @@ animation_fn <- function(file, open_device = TRUE) {
 			)
 		}
 	} else if (grepl(".bmp$|.jpg$|.jpeg$|.png$|.tiff$", file)) {
-		stopifnot(has_c_integer_format(file))
+		stopifnot(
+			'`file` must contain a C integer format like "%03d" (e.g. "frame%03d.png")' = has_c_integer_format(
+				file
+			)
+		)
 		function(expr, file, width, height, delay, res) {
 			pp_device(file, width = width / res, height = height / res, res = res)
 			eval(expr)
@@ -340,7 +344,12 @@ get_id_cfg <- function(df1, df2) {
 }
 
 get_tweenr_df <- function(df, ...) {
-	stopifnot(all(hasName(df, c("id", "piece_side", "rank", "suit", "x", "y"))))
+	stopifnot(
+		'`df` must have columns: "id", "piece_side", "rank", "suit", "x", "y"' = all(hasName(
+			df,
+			c("id", "piece_side", "rank", "suit", "x", "y")
+		))
+	)
 	if (!hasName(df, "alpha")) {
 		df$alpha <- 1
 	}

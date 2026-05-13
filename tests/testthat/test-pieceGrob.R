@@ -104,7 +104,7 @@ test_that("`save_piece_images()` works as expected", {
 	}
 
 	current_dev <- grDevices::dev.cur()
-	expect_error(save_piece_images(cfg_default, directory), "dir.exists\\(directory\\) is not TRUE")
+	expect_snapshot(error = TRUE, save_piece_images(cfg_default, directory))
 	expect_error(grid.piece("tile_back", cfg = cfg), "Couldn't find suitable")
 	suppressWarnings(grDevices::dev.off())
 	if (current_dev > 1) {

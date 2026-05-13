@@ -116,7 +116,10 @@ pieceGrobHelper <- function(
 	name = "",
 	bleed = FALSE
 ) {
-	stopifnot(isFALSE(bleed) || op_scale < 0.0001)
+	stopifnot(
+		'"bleed" and oblique projection ("op_scale") cannot be used together' = isFALSE(bleed) ||
+			op_scale < 0.0001
+	)
 	if (scale == 0 || alpha == 0) {
 		return(nullGrob())
 	}
@@ -246,7 +249,10 @@ pieceGrob <- function(
 	type = "normal",
 	bleed = FALSE
 ) {
-	stopifnot(!(bleed && op_scale > 0))
+	stopifnot(
+		'"bleed" and oblique projection ("op_scale") cannot be used together' = !(bleed &&
+			op_scale > 0)
+	)
 	if (any(piece_side == "preview_layout")) {
 		warn(
 			paste0(

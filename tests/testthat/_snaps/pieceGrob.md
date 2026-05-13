@@ -6,6 +6,14 @@
       Warning:
       `size = "4x6"` is deprecated.
 
+# `save_piece_images()` works as expected
+
+    Code
+      save_piece_images(cfg_default, directory)
+    Condition
+      Error in `save_piece_images()`:
+      ! `directory` must be an existing directory
+
 # deprecated 'preview_layout' component warning
 
     Code

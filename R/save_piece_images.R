@@ -119,7 +119,7 @@ save_piece_images <- function(
 	opt <- options(piecepackr.op_scale = 0)
 	on.exit(options(opt), add = TRUE)
 
-	stopifnot(dir.exists(directory))
+	stopifnot("`directory` must be an existing directory" = dir.exists(directory))
 
 	for (f in format) {
 		for (a in angle) {
