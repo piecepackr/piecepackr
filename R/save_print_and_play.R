@@ -71,7 +71,7 @@ save_print_and_play <- function(
 	opt <- options(piecepackr.op_scale = 0)
 	on.exit(options(opt), add = TRUE)
 
-	stopifnot(is.null(dev) || is.function(dev))
+	stopifnot("`dev` must be NULL or a function" = is.null(dev) || is.function(dev))
 	size <- match.arg(size)
 	if (size == "4x6") {
 		warn(

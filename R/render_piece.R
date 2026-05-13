@@ -92,7 +92,7 @@ render_piece <- function(
 	xbreaks = NULL,
 	ybreaks = NULL
 ) {
-	stopifnot(is.null(dev) || is.function(dev))
+	stopifnot("`dev` must be NULL or a function" = is.null(dev) || is.function(dev))
 	image <- match.arg(image)
 	if (image == "NULL") {
 		image <- NULL
