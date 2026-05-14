@@ -6,6 +6,12 @@ test_that("save_piece_obj works", {
 	expect_length(files, 3)
 	files <- save_piece_obj("die_face", cfg = cfg)
 	expect_length(files, 3)
+	cfg_rd <- pp_cfg(utils::modifyList(
+		as.list(cfg),
+		list(shape.die_face = "roundrect", shape_r.die_face = 0.25)
+	))
+	files <- save_piece_obj("die_face", cfg = cfg_rd)
+	expect_length(files, 3)
 	files <- save_piece_obj("pyramid_top", cfg = cfg)
 	expect_length(files, 3)
 	files <- save_piece_obj("pyramid_left", cfg = cfg)

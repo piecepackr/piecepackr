@@ -662,7 +662,12 @@ Config <- R6Class(
 				if (grepl("tile|coin|pawn|matchstick|bit|board|card|saucer", piece_side)) {
 					default_fn <- save_2s_obj
 				} else if (grepl("die", piece_side)) {
-					default_fn <- save_die_obj
+					opt <- self$get_piece_opt(piece_side, suit, rank)
+					default_fn <- if (opt$shape == "roundrect") {
+						save_rounded_die_obj
+					} else {
+						save_die_obj
+					}
 				} else if (piece_side == "pyramid_top") {
 					default_fn <- save_pt_obj
 				} else if (grepl("pyramid", piece_side)) {

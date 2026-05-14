@@ -657,22 +657,155 @@ save_die_obj <- function(
 	opt <- cfg$get_piece_opt(piece_side, suit, rank)
 	xyz <- die_xyz(suit, rank, cfg, x, y, z, angle, axis_x, axis_y, width, height, depth)
 
-	xy_vt <- list(x = rep(c(0, 0.5, 1), 4), y = rep(c(1, 2 / 3, 1 / 3, 0), each = 3))
+	# Texture atlas: [faces left 0-10/21] [edge 10/21-11/21] [faces right 11/21-1]
+	xy_vt <- list(
+		x = rep(c(0, 10 / 21, 11 / 21, 1), 4),
+		y = rep(c(1, 2 / 3, 1 / 3, 0), each = 4)
+	)
 
 	# textured face elements
 	f <- list()
-	f[[1]] <- list(v = 1:4, vt = c(1, 4, 5, 2))
-	f[[2]] <- list(v = c(8, 4, 3, 7), vt = c(2, 5, 6, 3))
-	f[[3]] <- list(v = c(1, 4, 8, 5), vt = c(4, 7, 8, 5))
-	f[[4]] <- list(v = c(6, 5, 8, 7), vt = c(5, 8, 9, 6))
-	f[[5]] <- list(v = c(1, 5, 6, 2), vt = c(7, 10, 11, 8))
-	f[[6]] <- list(v = c(3, 2, 6, 7), vt = c(8, 11, 12, 9))
+	f[[1]] <- list(v = 1:4, vt = c(1, 5, 6, 2))
+	f[[2]] <- list(v = c(8, 4, 3, 7), vt = c(3, 7, 8, 4))
+	f[[3]] <- list(v = c(1, 4, 8, 5), vt = c(5, 9, 10, 6))
+	f[[4]] <- list(v = c(6, 5, 8, 7), vt = c(7, 11, 12, 8))
+	f[[5]] <- list(v = c(1, 5, 6, 2), vt = c(9, 13, 14, 10))
+	f[[6]] <- list(v = c(3, 2, 6, 7), vt = c(11, 15, 16, 12))
 
 	ext <- tools::file_ext(filename)
 	mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
 	png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
 
 	write_obj(filename, v = xyz, vt = xy_vt, f = f)
+	write_die_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
+
+	invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
+}
+
+save_rounded_die_obj <- function(
+	piece_side = "die_face",
+	suit = 1,
+	rank = 1,
+	cfg = pp_cfg(),
+	...,
+	x = 0,
+	y = 0,
+	z = 0,
+	angle = 0,
+	axis_x = 0,
+	axis_y = 0,
+	width = NA,
+	height = NA,
+	depth = NA,
+	filename = tempfile(fileext = ".obj"),
+	res = 72
+) {
+	assert_suggested("rgl")
+	cfg <- as_pp_cfg(cfg)
+	opt <- cfg$get_piece_opt(piece_side, suit, rank)
+	shape_r <- opt$shape_r
+	stopifnot(
+		"`width`, `height`, `depth` must be equal for a rounded die" = nigh(width, height) &&
+			nigh(width, depth)
+	)
+
+	# Sphere radius tangent to the rounded die's face edge arc (same as rounded_die_xyz)
+	s <- sqrt((0.5 - shape_r)^2 + 0.5)
+
+	e <- rgl::ellipse3d(diag(3), t = s, subdivide = 3, smooth = FALSE)
+	v_mat <- t(e$vb)[, 1:3] # n_v × 3
+
+	# Flatten sphere to cube: clamp each coordinate to [-0.5, 0.5]
+	v_mat <- pmin(pmax(v_mat, -0.5), 0.5)
+
+	# Remove quads whose 4 clamped vertices all lie on the same cube face plane;
+	# those flat regions are replaced below by the roundrect face polygons.
+	ib <- e$ib
+	keep <- apply(ib, 2, function(fi) {
+		verts <- v_mat[fi, ]
+		!any(sapply(seq_len(3), function(k) {
+			all(abs(verts[, k] - 0.5) < 1e-9) || all(abs(verts[, k] + 0.5) < 1e-9)
+		}))
+	})
+	ib <- ib[, keep, drop = FALSE]
+
+	# Rotate, scale, translate edge/corner vertices
+	dR <- get_die_rotation(suit, rank, cfg)
+	R <- dR %*% AA_to_R(angle, axis_x, axis_y)
+	n_edge_v <- nrow(v_mat)
+	xyz_edge <- as_coord3d(v_mat[, 1], v_mat[, 2], v_mat[, 3])$scale(
+		width,
+		height,
+		depth
+	)$transform(R)$translate(x, y, z)
+
+	# Roundrect face polygons: NPC coords drive both 3D positions and UV mapping
+	die_faces <- get_die_faces(
+		suit,
+		rank,
+		cfg,
+		x,
+		y,
+		z,
+		angle,
+		axis_x,
+		axis_y,
+		width,
+		height,
+		depth
+	)
+	npc <- pp_shape("roundrect", radius = shape_r, width = width, height = height)$npc_coords
+	n_npc <- length(npc$x)
+
+	# Offset each face polygon slightly outward (along its normal) to prevent
+	# z-fighting with the edge/corner quads that share the same face plane.
+	eps <- 1e-4 * width
+	face_xyz_list <- lapply(seq_len(6), function(i) {
+		fxyz <- die_face_polygon_3d(die_faces$f_xyz[[i]], shape_r, width, height)
+		ul <- die_faces$f_xyz[[i]][1L]
+		ll <- die_faces$f_xyz[[i]][2L]
+		lr <- die_faces$f_xyz[[i]][3L]
+		n <- normal3d(lr - ll, cross = ul - ll)
+		fxyz$translate(eps * n)
+	})
+
+	all_xyz <- as_coord3d(
+		x = c(xyz_edge$x, unlist(lapply(face_xyz_list, `[[`, "x"))),
+		y = c(xyz_edge$y, unlist(lapply(face_xyz_list, `[[`, "y"))),
+		z = c(xyz_edge$z, unlist(lapply(face_xyz_list, `[[`, "z")))
+	)
+
+	# Texture atlas: [faces left 0-10/21] [edge 10/21-11/21] [faces right 11/21-1]
+	# vt 1:4     = edge strip corners (shared by all edge/corner quads)
+	# vt 5:end   = face polygon UVs (n_npc points × 6 faces)
+	face_x_min <- c(0, 11 / 21, 0, 11 / 21, 0, 11 / 21)
+	face_y_min <- c(2 / 3, 2 / 3, 1 / 3, 1 / 3, 0, 0)
+
+	vt_x <- c(0.51, 0.49, 0.49, 0.51)
+	vt_y <- c(0.4, 0.4, 0.6, 0.6)
+	for (i in seq_len(6)) {
+		vt_x <- c(vt_x, face_x_min[i] + npc$x * 10 / 21)
+		vt_y <- c(vt_y, face_y_min[i] + npc$y / 3)
+	}
+	xy_vt <- list(x = vt_x, y = vt_y)
+
+	# Face elements: edge/corner quads then 6 roundrect face polygons
+	n_ec <- ncol(ib)
+	f <- vector("list", n_ec + 6L)
+	for (j in seq_len(n_ec)) {
+		f[[j]] <- list(v = ib[, j], vt = 1:4)
+	}
+	for (i in seq_len(6)) {
+		v_off <- n_edge_v + (i - 1L) * n_npc
+		vt_off <- 4L + (i - 1L) * n_npc
+		f[[n_ec + i]] <- list(v = v_off + seq_len(n_npc), vt = vt_off + seq_len(n_npc))
+	}
+
+	ext <- tools::file_ext(filename)
+	mtl_filename <- gsub(paste0("\\.", ext, "$"), ".mtl", filename)
+	png_filename <- gsub(paste0("\\.", ext, "$"), ".png", filename)
+
+	write_obj(filename, v = all_xyz, vt = xy_vt, f = f)
 	write_die_texture(piece_side, suit, rank, cfg, filename = png_filename, res = res)
 
 	invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
@@ -741,11 +874,14 @@ write_die_texture <- function(
 		on.exit(grDevices::dev.set(current_dev), add = TRUE)
 	}
 	width <- cfg$get_width("die_face", suit, rank)
+	edge_color <- cfg$get_piece_opt("die_face", suit, rank)$edge_color
 
+	# Texture atlas: [faces left 0-10/21] [edge 10/21-11/21] [faces right 11/21-1]
+	# Total width = 2.1*width so face cells are exactly width×width (square) with no margin.
 	args <- list(
 		filename = filename,
 		height = 3 * width,
-		width = 2 * width,
+		width = 2.1 * width,
 		units = "in",
 		res = res,
 		bg = "transparent"
@@ -756,7 +892,8 @@ write_die_texture <- function(
 	do.call(grDevices::png, args)
 
 	rs <- get_die_face_info(suit, cfg$die_arrangement)
-	pushViewport(viewport(x = 0.25, width = 0.5, y = 5 / 6, height = 1 / 3))
+	pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	grid.piece(
 		"die_face",
 		suit = rs$suit[1],
@@ -766,7 +903,8 @@ write_die_texture <- function(
 		op_scale = 0
 	)
 	popViewport()
-	pushViewport(viewport(x = 0.75, width = 0.5, y = 5 / 6, height = 1 / 3))
+	pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	grid.piece(
 		"die_face",
 		suit = rs$suit[2],
@@ -776,7 +914,8 @@ write_die_texture <- function(
 		op_scale = 0
 	)
 	popViewport()
-	pushViewport(viewport(x = 0.25, width = 0.5, y = 3 / 6, height = 1 / 3))
+	pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 3 / 6, height = 1 / 3))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	grid.piece(
 		"die_face",
 		suit = rs$suit[3],
@@ -786,7 +925,8 @@ write_die_texture <- function(
 		op_scale = 0
 	)
 	popViewport()
-	pushViewport(viewport(x = 0.75, width = 0.5, y = 3 / 6, height = 1 / 3))
+	pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 3 / 6, height = 1 / 3))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	grid.piece(
 		"die_face",
 		suit = rs$suit[4],
@@ -796,7 +936,8 @@ write_die_texture <- function(
 		op_scale = 0
 	)
 	popViewport()
-	pushViewport(viewport(x = 0.25, width = 0.5, y = 1 / 6, height = 1 / 3))
+	pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 1 / 6, height = 1 / 3))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	grid.piece(
 		"die_face",
 		suit = rs$suit[5],
@@ -806,7 +947,8 @@ write_die_texture <- function(
 		op_scale = 0
 	)
 	popViewport()
-	pushViewport(viewport(x = 0.75, width = 0.5, y = 1 / 6, height = 1 / 3))
+	pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 1 / 6, height = 1 / 3))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	grid.piece(
 		"die_face",
 		suit = rs$suit[6],
@@ -815,6 +957,11 @@ write_die_texture <- function(
 		angle = rs$angle[6],
 		op_scale = 0
 	)
+	popViewport()
+
+	# edge strip drawn last so face border anti-aliasing cannot overwrite it
+	pushViewport(viewport(x = 0.5, width = 1 / 21))
+	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
 	popViewport()
 
 	grDevices::dev.off()
