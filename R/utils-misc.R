@@ -215,7 +215,7 @@ as_fill_stroke_grob <- function(grob, fill, col = "black", lwd = 1.5) {
 }
 
 has_alpha_masks <- function() {
-	getRversion() >= '4.1.0' && isTRUE("alpha" %in% dev.capabilities("masks")$masks)
+	isTRUE("alpha" %in% dev.capabilities("masks")$masks)
 }
 
 has_transformations <- function() {
@@ -227,8 +227,7 @@ has_fill_strokes <- function() {
 }
 
 has_radial_gradients <- function() {
-	getRversion() >= '4.1.0' &&
-		isTRUE("RadialGradient" %in% dev.capabilities("patterns")$patterns)
+	isTRUE("RadialGradient" %in% dev.capabilities("patterns")$patterns)
 }
 
 at_inform <- function(fallback = "picture") {
@@ -305,19 +304,11 @@ am_inform <- function() {
 		"Alpha mask support not detected in the active graphics device.",
 		"Falling back to rendering the peg-doll belt with several `grid::polygonGrob()`."
 	)
-	if (getRversion() < '4.1.0') {
-		msg <- c(
-			msg,
-			i = paste("Current R is version `%s`", getRversion()),
-			i = "Alpha mask support requires R version 4.1 or greater."
-		)
-	} else {
-		msg <- c(
-			msg,
-			i = '`"alpha"` not in `dev.capabilities()$masks`.',
-			i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`."
-		)
-	}
+	msg <- c(
+		msg,
+		i = '`"alpha"` not in `dev.capabilities()$masks`.',
+		i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`."
+	)
 	msg <- c(
 		msg,
 		i = "These messages can be disabled via `options(piecepackr.am.inform = FALSE)`.",
@@ -335,19 +326,11 @@ rgr_inform <- function() {
 		"Radial gradient support not detected in the active graphics device.",
 		"Falling back to rendering without a gradient."
 	)
-	if (getRversion() < '4.1.0') {
-		msg <- c(
-			msg,
-			i = paste("Current R is version `%s`", getRversion()),
-			i = "Radial gradient support requires R version 4.1 or greater."
-		)
-	} else {
-		msg <- c(
-			msg,
-			i = '`"RadialGradient" not in `dev.capabilities()$patterns`.',
-			i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`."
-		)
-	}
+	msg <- c(
+		msg,
+		i = '`"RadialGradient" not in `dev.capabilities()$patterns`.',
+		i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`."
+	)
 	msg <- c(
 		msg,
 		i = "These messages can be disabled via `options(piecepackr.rgr.inform = FALSE)`.",

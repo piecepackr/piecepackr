@@ -730,7 +730,7 @@ basicEllipsoidFn <- function(shading = FALSE) {
 		gp_gb <- gpar(col = opt$border_color, fill = NA, lex = opt$border_lex)
 		gb <- polygonGrob(x = xyh$x, y = xyh$y, default.units = "in", gp = gp_gb, name = "border")
 
-		if (shading && getRversion() >= "4.1") {
+		if (shading) {
 			# Get top of ellipsoid in npc units for gradient fill
 			idm <- which.max(xyz$z)
 			cx <- (xy$x[idm] - range(xyh)$x[1L]) / diff(range(xyh)$x)
