@@ -1281,6 +1281,68 @@ peg_doll_pawn <- function(shapes) {
 	)
 
 	pegdoll <- CompositePiece$new(df_pegdoll, envir = list(shapes = shapes))
+	body_head_op_grob_fn <- pegdoll$op_grob_fn
+
+	peg_doll_op_grob_fn <- function(
+		piece_side,
+		suit,
+		rank,
+		cfg,
+		x,
+		y,
+		z,
+		angle,
+		type,
+		width,
+		height,
+		depth,
+		op_scale,
+		op_angle,
+		scale = 1
+	) {
+		body_head <- body_head_op_grob_fn(
+			piece_side,
+			suit,
+			rank,
+			cfg,
+			x,
+			y,
+			z,
+			angle,
+			type,
+			width,
+			height,
+			depth,
+			op_scale,
+			op_angle,
+			scale
+		)
+		belt <- peg_doll_belt_op_grob(
+			piece_side,
+			suit,
+			rank,
+			cfg,
+			x,
+			y,
+			z,
+			angle,
+			width,
+			height,
+			depth,
+			op_scale,
+			op_angle
+		)
+		gTree(
+			children = gList(
+				body_head$children[[1L]],
+				belt,
+				body_head$children[[2L]]
+			),
+			scale = 1,
+			type = type,
+			cl = "projected_peg_doll"
+		)
+	}
 
 	list(
 		width.pawn = 0.75,
@@ -1292,7 +1354,7 @@ peg_doll_pawn <- function(shapes) {
 		suit_cex.belt_face = 1.5,
 		obj_fn.pawn = save_peg_doll_obj,
 		grob_fn.pawn = pegdoll$grob_fn,
-		op_grob_fn.pawn = pegdoll$op_grob_fn
+		op_grob_fn.pawn = peg_doll_op_grob_fn
 	)
 }
 

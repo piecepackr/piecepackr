@@ -534,6 +534,158 @@ basicDieEdge <- function(
 	gTree(children = gl, name = "die_sides", cl = "basic_projected_die_edge")
 }
 
+# xy_vp has corners UL=1, LL=2, LR=3, UR=4.
+# Positive 2D cross product (LR-LL) x (UL-LL) means the projected quad
+# has counter-clockwise winding, i.e., is facing toward the viewer.
+is_front_facing <- function(xy_vp) {
+	#### cross_product2d(xy_vp[3L] - xy_vp[2L], xy_vp[1L] - xy_vp[2L]) > 0
+	(xy_vp$x[3L] - xy_vp$x[2L]) * (xy_vp$y[1L] - xy_vp$y[2L]) >
+		(xy_vp$y[3L] - xy_vp$y[2L]) * (xy_vp$x[1L] - xy_vp$x[2L])
+}
+
+peg_doll_proportions <- function(cfg, suit, rank, width, height) {
+	belt_h <- cfg$get_height("belt_face", suit, rank) / height
+	head_h <- width / height
+	neck_h <- 0.1 * head_h
+	y_below <- (1 - head_h - neck_h - belt_h) / 2
+	list(z_bot = y_below, z_top = y_below + belt_h)
+}
+
+peg_doll_belt_op_grob <- function(
+	piece_side,
+	suit,
+	rank,
+	cfg = pp_cfg(),
+	x = unit(0.5, "npc"),
+	y = unit(0.5, "npc"),
+	z = unit(0, "npc"),
+	angle = 0,
+	width = NA,
+	height = NA,
+	depth = NA,
+	op_scale = 0,
+	op_angle = 45,
+	n_quads = 48L
+) {
+	cfg <- as_pp_cfg(cfg)
+	x <- convertX(x, "in", valueOnly = TRUE)
+	y <- convertY(y, "in", valueOnly = TRUE)
+	z <- convertX(z, "in", valueOnly = TRUE)
+	width <- convertX(width, "in", valueOnly = TRUE)
+	height <- convertY(height, "in", valueOnly = TRUE)
+	depth <- convertX(depth, "in", valueOnly = TRUE)
+
+	prop <- peg_doll_proportions(
+		cfg,
+		suit,
+		rank,
+		cfg$get_width(piece_side, suit, rank),
+		cfg$get_height(piece_side, suit, rank)
+	)
+	z_bot <- z + height * (prop$z_bot - 0.5)
+	z_top <- z + height * (prop$z_top - 0.5)
+	r <- width / 2
+
+	n <- as.integer(n_quads)
+	dtheta <- degrees(360 / n)
+	bw <- cfg$get_width("belt_face", suit, rank)
+	bh <- cfg$get_height("belt_face", suit, rank)
+
+	gl <- gList()
+	for (i in seq_len(n)) {
+		# Expand each quad by a small epsilon to prevent Cairo antialiasing
+		# artifacts (thin background lines at shared edges between quads).
+		# UV strip selection is driven by i, not the angles, so texture is unaffected.
+		epsilon <- degrees(1.2)
+		theta_l <- (i - 1L) * dtheta + degrees(angle - 90) - epsilon
+		theta_r <- i * dtheta + degrees(angle - 90) + epsilon
+
+		# UL, LL, LR, UR (viewed from outside cylinder; left = smaller theta)
+		xy <- as_coord2d(rep(c(theta_l, theta_r), each = 2L), radius = r)$translate(x, y)
+		xyz <- as_coord3d(x = xy, z = c(z_top, z_bot, z_bot, z_top))
+		xy_vp <- as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)
+
+		if (!is_front_facing(xy_vp)) {
+			next
+		}
+
+		at_settings <- affiner::affine_settings(as.data.frame(xy_vp))
+		if (nigh(at_settings$width, 0) || nigh(at_settings$height, 0)) {
+			next
+		}
+
+		if (has_transformations() && has_alpha_masks()) {
+			belt_grob <- cfg$get_grob("belt_face", suit, rank)
+			if (hasName(belt_grob, "border")) {
+				belt_grob$border <- FALSE
+			}
+			# Position full belt_face (width bw) so that strip i fills vp_define (width bw/n)
+			x_center_npc <- (n - 2L * i + 2L) / 2
+			inner_vp <- viewport(
+				x = unit(x_center_npc, "npc"),
+				y = 0.5,
+				width = unit(n, "npc"),
+				height = 1,
+				just = c("center", "center")
+			)
+			strip_grob <- gTree(children = gList(belt_grob), vp = inner_vp)
+			vp_define <- viewport(width = inch(bw / n), height = inch(bh))
+			# Clip the quad output via an alpha mask on the vp argument rather
+			# than clip=TRUE on vp_define: the latter is unreliable in {ragg}
+			# and {svglite} with affine transforms.  The mask polygon matches
+			# xy_vp so adjacent-strip content that falls outside the
+			# parallelogram is masked away.  White fill prevents viewers from
+			# treating it as a luminance mask.
+			quad_mask <- as.mask(
+				polygonGrob(
+					x = xy_vp$x,
+					y = xy_vp$y,
+					default.units = "in",
+					gp = gpar(col = NA, fill = "white")
+				),
+				type = "alpha"
+			)
+			gl[[length(gl) + 1L]] <- affiner::affineGrob(
+				strip_grob,
+				vp_define = vp_define,
+				vp_use = at_settings$vp,
+				transform = at_settings$transform,
+				vp = viewport(mask = quad_mask)
+			)
+		} else {
+			if (!has_transformations()) {
+				at_inform(fallback = "polygon")
+			} else {
+				am_inform()
+			}
+			opt <- cfg$get_piece_opt("belt_face", suit, rank)
+			gp <- gpar(col = NA, fill = opt$background_color)
+			gl[[length(gl) + 1L]] <- polygonGrob(
+				x = xy_vp$x,
+				y = xy_vp$y,
+				default.units = "in",
+				gp = gp
+			)
+		}
+	}
+	gTree(children = gl, name = "peg_doll_belt")
+}
+
+#' @export
+makeContent.projected_peg_doll <- function(x) {
+	gp <- gpar(cex = x$scale, lex = x$scale)
+	# Apply scale to body (1) and head (3); belt (2) geometry is already
+	# scaled via projected coordinates so cex must not be applied to it.
+	for (i in c(1L, 3L)) {
+		if (hasName(x$children[[i]], "scale")) {
+			x$children[[i]]$scale <- x$scale
+		} else if (x$type == "normal") {
+			x$children[[i]] <- update_gp(x$children[[i]], gp)
+		}
+	}
+	x
+}
+
 basicEllipsoidFn <- function(shading = FALSE) {
 	force(shading)
 	function(
