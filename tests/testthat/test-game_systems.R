@@ -632,6 +632,18 @@ test_that("no regressions in `game_systems()` figures", {
 		writer = write_svg_bleeding_edge
 	)
 
+	# peg-doll pawns with belt (requires svglite alpha mask fix)
+	skip_if_not_installed("svglite", "2.2.2.9000")
+	cfg <- game_systems(font = "dejavu", pawn = "peg-doll")$piecepack
+	df <- tibble(piece_side = "pawn_top", x = 4:1, y = 1, suit = 4:1, angle = 180)
+	expect_doppelganger(
+		"peg-doll-op",
+		function() {
+			pmap_piece(df, default.units = "in", cfg = cfg, op_scale = 0.5)
+		},
+		writer = write_svg_bleeding_edge
+	)
+
 	# cubes
 	expect_doppelganger("cubes", function() {
 		grid.piece(

@@ -4,6 +4,8 @@ piecepackr 1.16.2
 New features
 ------------
 
+* `game_systems(pawn = "peg-doll")` now renders the peg-doll with a belt (#391).
+
 * `save_piece_obj()` (and by extension `piece3d()`, `piece()`, and `piece_mesh()`) now supports six-sided dice with rounded corners when `shape.die_face = "roundrect"` (curvature controlled by `shape_r.die_face`) (#298).
 
 Bug fixes and minor improvements

@@ -214,12 +214,16 @@ as_fill_stroke_grob <- function(grob, fill, col = "black", lwd = 1.5) {
 	}
 }
 
+has_alpha_masks <- function() {
+	getRversion() >= '4.1.0' && isTRUE("alpha" %in% dev.capabilities("masks")$masks)
+}
+
 has_transformations <- function() {
-	getRversion() >= '4.2.0' && isTRUE(dev.capabilities()$transformations)
+	getRversion() >= '4.2.0' && isTRUE(dev.capabilities("transformations")$transformations)
 }
 
 has_fill_strokes <- function() {
-	getRversion() >= '4.2.0' && isTRUE(dev.capabilities()$paths)
+	getRversion() >= '4.2.0' && isTRUE(dev.capabilities("paths")$paths)
 }
 
 has_radial_gradients <- function() {
@@ -290,6 +294,36 @@ fs_inform <- function() {
 		i = 'These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_fill_stroke")`.'
 	)
 	inform(msg, class = "piecepackr_fill_stroke")
+}
+
+am_inform <- function() {
+	if (isFALSE(getOption("piecepackr.am.inform"))) {
+		return(invisible(NULL))
+	}
+
+	msg <- paste(
+		"Alpha mask support not detected in the active graphics device.",
+		"Falling back to rendering the peg-doll belt with several `grid::polygonGrob()`."
+	)
+	if (getRversion() < '4.1.0') {
+		msg <- c(
+			msg,
+			i = paste("Current R is version `%s`", getRversion()),
+			i = "Alpha mask support requires R version 4.1 or greater."
+		)
+	} else {
+		msg <- c(
+			msg,
+			i = '`"alpha"` not in `dev.capabilities()$masks`.',
+			i = "Perhaps try one of the cairo devices like `png(..., type='cairo')` or `cairo_pdf()`."
+		)
+	}
+	msg <- c(
+		msg,
+		i = "These messages can be disabled via `options(piecepackr.am.inform = FALSE)`.",
+		i = 'These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_alpha_mask")`.'
+	)
+	inform(msg, class = "piecepackr_alpha_mask")
 }
 
 rgr_inform <- function() {
