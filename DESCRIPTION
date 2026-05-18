@@ -18,6 +18,8 @@ URL: https://trevorldavis.com/piecepackr/ (blog), https://trevorldavis.com/R/pie
 BugReports: https://github.com/piecepackr/piecepackr/issues
 LazyData: true
 LazyLoad: yes
+Depends:
+	R (>= 4.1)
 Imports:
 	affiner (>= 0.3.1),
 	grid,
