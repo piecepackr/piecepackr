@@ -140,6 +140,10 @@ CompositePiece <- R6Class(
 				side,
 				face = private$df,
 				back = back_df(private$df),
+				right = right_df(private$df),
+				left = left_df(private$df),
+				top = top_df(private$df),
+				base = base_df(private$df),
 				abort(paste("`CompositePiece()$relative_df()` can't handle relative side", side))
 			)
 		},
@@ -285,13 +289,18 @@ adjust_scale_df <- function(df, scale = 1) {
 	df
 }
 
-back_df = function(df) {
+map_piece_side <- function(piece_side, map) {
+	pieces <- sapply(strsplit(piece_side, "_"), function(x) x[1])
+	sides <- sapply(strsplit(piece_side, "_"), function(x) x[2])
+	new_sides <- sapply(sides, function(s) map[[s]])
+	paste(pieces, new_sides, sep = "_")
+}
+
+back_df <- function(df) {
 	df$z <- 1 - df$z
-	pieces <- sapply(strsplit(df$piece_side, "_"), function(x) x[1])
-	sides <- sapply(strsplit(df$piece_side, "_"), function(x) x[2])
-	opposites <- sapply(sides, function(side) {
-		switch(
-			side,
+	df$piece_side <- map_piece_side(
+		df$piece_side,
+		list(
 			face = "back",
 			back = "face",
 			left = "right",
@@ -299,10 +308,120 @@ back_df = function(df) {
 			top = "base",
 			base = "top"
 		)
-	})
-	df$piece_side <- paste(pieces, opposites, sep = "_")
-	rev_df(df)
+	)
+	sort_df(df)
 }
+
+# new_x=x, new_y=z, new_z=1-y; new_width=w, new_height=d, new_depth=h
+top_df <- function(df) {
+	old_y <- df$y
+	old_z <- df$z
+	old_height <- df$height
+	old_depth <- df$depth
+	df$y <- old_z
+	df$z <- 1 - old_y
+	df$height <- old_depth
+	df$depth <- old_height
+	df$piece_side <- map_piece_side(
+		df$piece_side,
+		list(
+			face = "top",
+			back = "base",
+			left = "left",
+			right = "right",
+			top = "back",
+			base = "face"
+		)
+	)
+	sort_df(df)
+}
+
+# new_x=1-x, new_y=z, new_z=y; new_width=w, new_height=d, new_depth=h
+base_df <- function(df) {
+	old_x <- df$x
+	old_y <- df$y
+	old_z <- df$z
+	old_height <- df$height
+	old_depth <- df$depth
+	df$x <- 1 - old_x
+	df$y <- old_z
+	df$z <- old_y
+	df$height <- old_depth
+	df$depth <- old_height
+	df$piece_side <- map_piece_side(
+		df$piece_side,
+		list(
+			face = "base",
+			back = "top",
+			left = "right",
+			right = "left",
+			top = "face",
+			base = "back"
+		)
+	)
+	sort_df(df)
+}
+
+# new_x=1-y, new_y=z, new_z=x; new_width=h, new_height=d, new_depth=w
+right_df <- function(df) {
+	old_x <- df$x
+	old_y <- df$y
+	old_z <- df$z
+	old_width <- df$width
+	old_height <- df$height
+	old_depth <- df$depth
+	df$x <- 1 - old_y
+	df$y <- old_z
+	df$z <- old_x
+	df$width <- old_height
+	df$height <- old_depth
+	df$depth <- old_width
+	df$piece_side <- map_piece_side(
+		df$piece_side,
+		list(
+			face = "right",
+			back = "left",
+			left = "face",
+			right = "back",
+			top = "top",
+			base = "base"
+		)
+	)
+	sort_df(df)
+}
+
+# new_x=y, new_y=z, new_z=1-x; new_width=h, new_height=d, new_depth=w
+left_df <- function(df) {
+	old_x <- df$x
+	old_y <- df$y
+	old_z <- df$z
+	old_width <- df$width
+	old_height <- df$height
+	old_depth <- df$depth
+	df$x <- old_y
+	df$y <- old_z
+	df$z <- 1 - old_x
+	df$width <- old_height
+	df$height <- old_depth
+	df$depth <- old_width
+	df$piece_side <- map_piece_side(
+		df$piece_side,
+		list(
+			face = "left",
+			back = "right",
+			left = "back",
+			right = "face",
+			top = "top",
+			base = "base"
+		)
+	)
+	sort_df(df)
+}
+
+sort_df <- function(df) {
+	df[order(df$z), ]
+}
+
 rev_df <- function(df) {
 	if (nrow(df) > 1L) {
 		df[nrow(df):1, ]
