@@ -15,6 +15,8 @@ Bug fixes and minor improvements
 
 * `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
 
+* `"pawn_left"` and `"pawn_right"` are now drawn in "portrait" mode instead of "landscape" mode.
+
 piecepackr 1.16.1
 =================
 

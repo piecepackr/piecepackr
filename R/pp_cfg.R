@@ -266,7 +266,11 @@ Config <- R6Class(
 			piece <- get_piece(piece_side)
 			if (grepl("_left$|_right$", piece_side) && piece != "pyramid") {
 				ps <- paste0(piece, "_face")
-				return(self$get_height(ps, suit = suit, rank = rank))
+				if (piece == "pawn") {
+					return(self$get_depth(ps, suit = suit, rank = rank))
+				} else {
+					return(self$get_height(ps, suit = suit, rank = rank))
+				}
 			}
 			default <- switch(
 				piece,
@@ -304,7 +308,7 @@ Config <- R6Class(
 				pyramid_diagonal <- sqrt(pyramid_height^2 + (0.5 * pyramid_width)^2)
 				return(2 * pyramid_diagonal)
 			}
-			if (grepl("pyramid_top", piece_side)) {
+			if (piece_side == "pyramid_top") {
 				pyramid_width <- self$get_width("pyramid_face", rank = rank)
 				return(pyramid_width)
 			}
@@ -319,7 +323,11 @@ Config <- R6Class(
 			piece <- get_piece(piece_side)
 			if (grepl("_top$|_base$|_left$|_right$", piece_side) && piece != "pyramid") {
 				ps <- paste0(piece, "_face")
-				return(self$get_depth(ps, suit = suit, rank = rank))
+				if (piece_side %in% c("pawn_left", "pawn_right")) {
+					return(self$get_height(ps, suit = suit, rank = rank))
+				} else {
+					return(self$get_depth(ps, suit = suit, rank = rank))
+				}
 			}
 			width <- self$get_width(piece_side, suit, rank)
 			if (piece == "matchstick") {
