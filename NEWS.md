@@ -11,6 +11,8 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
+* `game_systems()$reversi` disc "bits" are now circular instead of (slightly) oval.
+
 * `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
 
 piecepackr 1.16.1

@@ -1258,7 +1258,7 @@ reversi_piece <- function(cell_width = 1, color_list = color_list_fn()) {
 
 	list(
 		width.bit = 0.75 * cell_width,
-		height.bit = 0.70 * cell_width,
+		height.bit = 0.75 * cell_width,
 		depth.bit = 0.25 * cell_width,
 		grob_fn.bit = reversi_piece$grob_fn,
 		obj_fn.bit = reversi_piece$obj_fn,
