@@ -2,6 +2,16 @@ test_that("no regressions in `game_systems()`", {
 	expect_error(game_systems("boobear"), "Don't have a customized configuration for font")
 })
 
+test_that("CompositePiece grob_fn works for all 6 sides", {
+	cfg_peg <- game_systems(pawn = "peg-doll")$piecepack
+	cfg_joy <- game_systems(pawn = "joystick")$piecepack
+	sides <- c("pawn_top", "pawn_face", "pawn_right", "pawn_left", "pawn_back", "pawn_base")
+	for (side in sides) {
+		expect_no_error(pieceGrob(side, suit = 2, rank = 1, cfg = cfg_peg))
+		expect_no_error(pieceGrob(side, suit = 2, rank = 1, cfg = cfg_joy))
+	}
+})
+
 
 test_that("removed `style` argument errors", {
 	expect_snapshot(error = TRUE, game_systems(style = "dejavu3d"))
@@ -640,6 +650,14 @@ test_that("no regressions in `game_systems()` figures", {
 		"peg-doll-op",
 		function() {
 			pmap_piece(df, default.units = "in", cfg = cfg, op_scale = 0.5)
+		},
+		writer = write_svg_bleeding_edge
+	)
+	df_face <- tibble(piece_side = "pawn_face", x = 4:1, y = 1, suit = 4:1)
+	expect_doppelganger(
+		"peg-doll-face",
+		function() {
+			pmap_piece(df_face, default.units = "in", cfg = cfg)
 		},
 		writer = write_svg_bleeding_edge
 	)
