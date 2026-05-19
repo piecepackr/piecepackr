@@ -419,7 +419,11 @@ left_df <- function(df) {
 }
 
 sort_df <- function(df) {
-	df[order(df$z), ]
+	if (hasName(df, "order")) {
+		df[order(df$z, df$order), ]
+	} else {
+		df[order(df$z), ]
+	}
 }
 
 rev_df <- function(df) {
