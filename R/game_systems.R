@@ -1268,6 +1268,7 @@ reversi_piece <- function(cell_width = 1, color_list = color_list_fn()) {
 
 peg_doll_pawn <- function(shapes) {
 	pegdoll_depth <- c(0.55, 1.0 * 0.75 / 1.5)
+	pegdoll_head_depth <- pegdoll_depth[2L]
 	df_pegdoll <- tibble(
 		piece_side = "bit_back",
 		rank = c(1, 2),
@@ -1276,7 +1277,8 @@ peg_doll_pawn <- function(shapes) {
 		depth = pegdoll_depth,
 		x = 0.5,
 		y = 0.5,
-		z = c(0.5 * pegdoll_depth[1], 1 - 0.5 * pegdoll_depth[2]),
+		z = c(0.5 * pegdoll_depth[1L], 1 - 0.5 * pegdoll_depth[2L]),
+		order = c(2L, 1L),
 		cfg = "shapes"
 	)
 
@@ -1330,7 +1332,8 @@ peg_doll_pawn <- function(shapes) {
 			height,
 			depth,
 			op_scale,
-			op_angle
+			op_angle,
+			head_depth = pegdoll_head_depth
 		)
 		gTree(
 			children = gList(

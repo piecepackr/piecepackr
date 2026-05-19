@@ -543,11 +543,11 @@ is_front_facing <- function(xy_vp) {
 		(xy_vp$y[3L] - xy_vp$y[2L]) * (xy_vp$x[1L] - xy_vp$x[2L])
 }
 
-peg_doll_proportions <- function(cfg, suit, rank, width, height) {
+peg_doll_proportions <- function(cfg, suit, rank, height, head_depth) {
 	belt_h <- cfg$get_height("belt_face", suit, rank) / height
-	head_h <- width / height
-	neck_h <- 0.1 * head_h
-	y_below <- (1 - head_h - neck_h - belt_h) / 2
+	neck_h <- 0.1 * head_depth
+	head_bottom <- 1 - head_depth
+	y_below <- (head_bottom - neck_h - belt_h) / 2
 	list(z_bot = y_below, z_top = y_below + belt_h)
 }
 
@@ -565,6 +565,7 @@ peg_doll_belt_op_grob <- function(
 	depth = NA,
 	op_scale = 0,
 	op_angle = 45,
+	head_depth,
 	n_quads = 48L
 ) {
 	cfg <- as_pp_cfg(cfg)
@@ -575,15 +576,10 @@ peg_doll_belt_op_grob <- function(
 	height <- convertY(height, "in", valueOnly = TRUE)
 	depth <- convertX(depth, "in", valueOnly = TRUE)
 
-	prop <- peg_doll_proportions(
-		cfg,
-		suit,
-		rank,
-		cfg$get_width(piece_side, suit, rank),
-		cfg$get_height(piece_side, suit, rank)
-	)
-	z_bot <- z + height * (prop$z_bot - 0.5)
-	z_top <- z + height * (prop$z_top - 0.5)
+	pawn_height <- cfg$get_height("pawn_face", suit, rank)
+	prop <- peg_doll_proportions(cfg, suit, rank, pawn_height, head_depth = head_depth)
+	z_bot <- z + pawn_height * (prop$z_bot - 0.5)
+	z_top <- z + pawn_height * (prop$z_top - 0.5)
 	r <- width / 2
 
 	n <- as.integer(n_quads)
