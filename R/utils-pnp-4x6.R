@@ -74,7 +74,7 @@ draw_4x6_tiles <- function(cfg, i_suit, vp) {
 	pmap_piece(df, cfg = cfg, default.units = "npc")
 	popViewport()
 
-	df$piece_side = "tile_back"
+	df$piece_side <- "tile_back"
 	# Rotate tile backs to partially hide direction of face if tile back are not fully symmetric
 	df$angle <- 90 * ((df$suit + df$rank) %% 4)
 	grid.newpage()
@@ -97,7 +97,7 @@ draw_4x6_coins <- function(cfg, suits, vp) {
 	pmap_piece(df, cfg = cfg, default.units = "npc")
 	popViewport()
 
-	df$piece_side = "coin_face"
+	df$piece_side <- "coin_face"
 	grid.newpage()
 	pushViewport(vp)
 	pmap_piece(df, cfg = cfg, default.units = "npc")

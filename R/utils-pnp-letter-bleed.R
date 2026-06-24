@@ -241,7 +241,7 @@ a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {
 	)
 
 	if (!front) {
-		df$piece_side = "tile_back"
+		df$piece_side <- "tile_back"
 		df$x <- A5W - df$x
 		# Rotate tile backs to partially hide direction of face if tile back are not fully symmetric
 		df$angle <- 90 * ((df$suit + df$rank) %% 4)
@@ -315,7 +315,7 @@ a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
 	)
 
 	if (!front) {
-		df$piece_side = "coin_face"
+		df$piece_side <- "coin_face"
 		df$x <- A5W - df$x
 	} else {
 		# Rotate coin faces to desired direction

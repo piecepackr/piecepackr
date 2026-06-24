@@ -135,7 +135,7 @@ CompositePiece <- R6Class(
 		envir = NULL,
 		ref_side = NULL,
 		relative_df = function(piece_side) {
-			side = get_relative_side(piece_side, private$ref_side)
+			side <- get_relative_side(piece_side, private$ref_side)
 			switch(
 				side,
 				face = private$df,

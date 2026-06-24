@@ -8,38 +8,38 @@ cfg <- as.list(pp)
 # cfgi <- as.list(ppi)
 
 # adjust colors
-cfg$invert_colors = TRUE
-cfg$invert_colors.tile_face = FALSE
-cfg$edge_color = ppi$get_suit_color(2)
-cfg$invert_colors.die_face = TRUE
-cfg$suit_color.s2 = ppi$get_suit_color(2)
-cfg$suit_color.s3 = pp$get_suit_color(5)
+cfg$invert_colors <- TRUE
+cfg$invert_colors.tile_face <- FALSE
+cfg$edge_color <- ppi$get_suit_color(2)
+cfg$invert_colors.die_face <- TRUE
+cfg$suit_color.s2 <- ppi$get_suit_color(2)
+cfg$suit_color.s3 <- pp$get_suit_color(5)
 
 # adjust symbol sizes
-cfg$suit_cex.tile_face = 1.8
-cfg$suit_cex.die_face = 1.5
-cfg$suit_cex.pawn_face = 1.08
-cfg$suit_cex.coin_back = 1.3
-cfg$dm_cex.coin_back = 0.8
+cfg$suit_cex.tile_face <- 1.8
+cfg$suit_cex.die_face <- 1.5
+cfg$suit_cex.pawn_face <- 1.08
+cfg$suit_cex.coin_back <- 1.3
+cfg$dm_cex.coin_back <- 0.8
 
 # adjust shapes/sizes
-cfg$shape.pawn_face = "meeple"
-cfg$width.pawn_face = 0.70
-cfg$height.pawn_face = 0.70
-cfg$width.die_face = 0.53
-cfg$dm_text.pawn_face = ""
-cfg$dm_text.die_face = ""
+cfg$shape.pawn_face <- "meeple"
+cfg$width.pawn_face <- 0.70
+cfg$height.pawn_face <- 0.70
+cfg$width.die_face <- 0.53
+cfg$dm_text.pawn_face <- ""
+cfg$dm_text.die_face <- ""
 
 # adjust location of suits
-cfg$dm_t.tile_face = 132
-cfg$dm_r.tile_face = 0.33
-cfg$ps_t.r2.die_face = 90
-cfg$ps_r.r2.die_face = 0.1
-cfg$die_arrangement = "6,5,4,2,3,1"
-cfg$ps_t.coin_back = 90
-cfg$ps_r.coin_back = -0.1
-cfg$ps_t.pawn_face = 90
-cfg$ps_r.pawn_face = 0.03
+cfg$dm_t.tile_face <- 132
+cfg$dm_r.tile_face <- 0.33
+cfg$ps_t.r2.die_face <- 90
+cfg$ps_r.r2.die_face <- 0.1
+cfg$die_arrangement <- "6,5,4,2,3,1"
+cfg$ps_t.coin_back <- 90
+cfg$ps_r.coin_back <- -0.1
+cfg$ps_t.pawn_face <- 90
+cfg$ps_r.pawn_face <- 0.03
 cfg <- pp_cfg(cfg)
 
 w <- 4.5
