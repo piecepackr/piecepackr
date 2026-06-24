@@ -7,8 +7,8 @@ if (FALSE) {
 	svg_file <- tempfile(fileext = ".svg")
 	rsvg::rsvg_svg("raw-data/meeple.svg", file = svg_file)
 
-	p = grImport2::readPicture(svg_file)
-	xy = grobCoords(grImport2::pictureGrob(p), closed = T)[[2]]
+	p <- grImport2::readPicture(svg_file)
+	xy <- grobCoords(grImport2::pictureGrob(p), closed = T)[[2]]
 
 	x <- xy$x
 	x <- (x - min(x)) / (max(x) - min(x))
