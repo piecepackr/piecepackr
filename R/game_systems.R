@@ -1302,6 +1302,23 @@ peg_doll_pawn <- function(shapes) {
 		op_angle,
 		scale = 1
 	) {
+		# `pp_cfg()` gives `pawn_left`/`pawn_right` a "portrait" convention:
+		# * height = pawn_face height (pawn still stands tall)
+		# * rather than the generic token convention where height = pawn_face depth
+		# but CompositePiece$op_grob_fn doesn't know about it get_scaling_factors reads h_sc:
+		# * from `depth` for "top"/"base" relative sides
+		# * from `width` for "left"/"right" relative sides
+		# So we rearrange w/h/d before passing to body_head_op_grob_fn
+		side <- get_side(piece_side)
+		bh_args <- if (side %in% c("face", "back")) {
+			# relative_side = "top"/"base": h_sc reads `depth`, d_sc reads `height`
+			list(width, depth, height)
+		} else if (side %in% c("left", "right")) {
+			# relative_side = "left"/"right": h_sc reads `width`, d_sc reads `height`
+			list(height, width, depth)
+		} else {
+			list(width, height, depth)
+		}
 		body_head <- body_head_op_grob_fn(
 			piece_side,
 			suit,
@@ -1312,9 +1329,9 @@ peg_doll_pawn <- function(shapes) {
 			z,
 			angle,
 			type,
-			width,
-			height,
-			depth,
+			bh_args[[1L]],
+			bh_args[[2L]],
+			bh_args[[3L]],
 			op_scale,
 			op_angle,
 			scale
@@ -1335,16 +1352,57 @@ peg_doll_pawn <- function(shapes) {
 			op_angle,
 			head_depth = pegdoll_head_depth
 		)
+		# For face/back/left/right, head is in front when sin(angle-op_angle)>=0;
+		# reverse the natural order (c(2L,1L)) to draw children[[1]]=head last.
+		gl_order <- if (
+			side %in% c("face", "back", "left", "right") && sin(degrees(angle - op_angle)) >= 0
+		) {
+			c(2L, 1L)
+		} else {
+			c(1L, 2L)
+		}
 		gTree(
 			children = gList(
-				body_head$children[[1L]],
-				belt,
-				body_head$children[[2L]]
+				body_head$children[[gl_order[[1L]]]],
+				body_head$children[[gl_order[[2L]]]],
+				belt
 			),
 			scale = 1,
 			type = type,
 			cl = "projected_peg_doll"
 		)
+	}
+
+	# For face/back/left/right orthographic rendering
+	# grob_fn is called before the piece viewport is pushed,
+	# so npc units would resolve against the wrong viewport.
+	# Use absolute inch values from cfg instead;
+	# unit(v,"in") always converts to v regardless of the active viewport.
+	peg_doll_grob_fn <- function(piece_side, suit, rank, cfg) {
+		side <- get_side(piece_side)
+		if (side %in% c("face", "back", "left", "right")) {
+			w <- cfg$get_width(piece_side, suit, rank)
+			h <- cfg$get_height(piece_side, suit, rank)
+			d <- cfg$get_depth(piece_side, suit, rank)
+			peg_doll_op_grob_fn(
+				piece_side,
+				suit,
+				rank,
+				cfg,
+				x = unit(w / 2, "in"),
+				y = unit(h / 2, "in"),
+				z = unit(0, "in"),
+				angle = 0,
+				type = "normal",
+				width = unit(w, "in"),
+				height = unit(h, "in"),
+				depth = unit(d, "in"),
+				op_scale = 0,
+				op_angle = 45
+			)
+		} else {
+			pegdoll$grob_fn(piece_side, suit, rank, cfg)
+		}
 	}
 
 	list(
@@ -1356,7 +1414,7 @@ peg_doll_pawn <- function(shapes) {
 		mat_color.belt_face = "transparent",
 		suit_cex.belt_face = 1.5,
 		obj_fn.pawn = save_peg_doll_obj,
-		grob_fn.pawn = pegdoll$grob_fn,
+		grob_fn.pawn = peg_doll_grob_fn,
 		op_grob_fn.pawn = peg_doll_op_grob_fn
 	)
 }

@@ -578,45 +578,150 @@ peg_doll_belt_op_grob <- function(
 
 	pawn_height <- cfg$get_height("pawn_face", suit, rank)
 	prop <- peg_doll_proportions(cfg, suit, rank, pawn_height, head_depth = head_depth)
-	z_bot <- z + pawn_height * (prop$z_bot - 0.5)
-	z_top <- z + pawn_height * (prop$z_top - 0.5)
-	r <- width / 2
 
+	side <- get_side(piece_side)
+	# face/back/left/right: pawn major axis = world Y; belt ring lies in XZ plane
+	# top/base: pawn major axis = world Z; belt ring lies in XY plane
+	y_axis <- side %in% c("face", "back", "left", "right")
+
+	# Angle offset so that the correct portion of the belt texture is shown for each piece_side:
+	# * For face: suit sign (texture centre) faces viewer.
+	# * back is rotated 180° (seam at centre of view)
+	# * left/right rotated ±90°.
+	side_angle_offset <- if (y_axis) {
+		switch(side, face = 0, back = 180, left = 90, right = -90, 0)
+	} else {
+		0
+	}
+
+	r <- width / 2
 	n <- as.integer(n_quads)
 	dtheta <- degrees(360 / n)
 	bw <- cfg$get_width("belt_face", suit, rank)
 	bh <- cfg$get_height("belt_face", suit, rank)
 
-	gl <- gList()
+	if (y_axis) {
+		# Offset from pawn centre to belt bottom/top along the pawn axis.
+		# R_z(angle) maps the Y-axis to (-sin(angle), cos(angle), 0), so an
+		# offset of a along the axis contributes a*(-sin,cos,0) in world space.
+		a_bot <- height * (prop$z_bot - 0.5)
+		a_top <- height * (prop$z_top - 0.5)
+		# When cos(angle) < 0 (upside-down pawn), the z_top edge of the belt
+		# maps to a lower screen-y than z_bot, so the texture must be flipped.
+		y_flipped <- cos(degrees(angle)) < 0
+	} else {
+		z_sign <- if (side == "base") -1 else 1
+		z_bot <- z + z_sign * depth * (prop$z_bot - 0.5)
+		z_top <- z + z_sign * depth * (prop$z_top - 0.5)
+	}
+
+	# First pass: build all visible quads and collect centroids for painter sort
+	quads <- list()
+	cx_v <- numeric(0)
+	cy_v <- numeric(0)
+	cz_v <- numeric(0)
+
+	# With the rotated ring formula, theta is fixed in the peg-doll's local frame:
+	# theta=90 is always +Z (visible top), theta=0 is always the pawn's right
+	# direction, theta=180 is the pawn's left.  So theta_base is angle-independent
+	# for all y_axis sides.  The non-y_axis (top/base) branch still needs angle.
+	theta_base <- if (y_axis) {
+		degrees(side_angle_offset - 90)
+	} else {
+		degrees(angle + side_angle_offset - 90)
+	}
+
 	for (i in seq_len(n)) {
 		# Expand each quad by a small epsilon to prevent Cairo antialiasing
 		# artifacts (thin background lines at shared edges between quads).
 		# UV strip selection is driven by i, not the angles, so texture is unaffected.
 		epsilon <- degrees(1.2)
-		theta_l <- (i - 1L) * dtheta + degrees(angle - 90) - epsilon
-		theta_r <- i * dtheta + degrees(angle - 90) + epsilon
+		theta_l <- (i - 1L) * dtheta + theta_base - epsilon
+		theta_r <- i * dtheta + theta_base + epsilon
 
-		# UL, LL, LR, UR (viewed from outside cylinder; left = smaller theta)
-		xy <- as_coord2d(rep(c(theta_l, theta_r), each = 2L), radius = r)$translate(x, y)
-		xyz <- as_coord3d(x = xy, z = c(z_top, z_bot, z_bot, z_top))
+		if (y_axis) {
+			xz <- as_coord2d(rep(c(theta_l, theta_r), each = 2L), radius = r)
+			# Axis offsets for corners [LL, UL, UR, LR].
+			a_v <- c(a_bot, a_top, a_top, a_bot)
+			# Ring vertices rotate with the pawn: at angle A the pawn axis is
+			# (-sin(A), cos(A), 0), so the ring lies in the perpendicular plane.
+			xyz <- as_coord3d(
+				x = x + xz$x * cos(degrees(angle)) + a_v * (-sin(degrees(angle))),
+				y = y + xz$x * sin(degrees(angle)) + a_v * cos(degrees(angle)),
+				z = z + xz$y
+			)
+		} else {
+			xy <- as_coord2d(rep(c(theta_l, theta_r), each = 2L), radius = r)$translate(x, y)
+			# UL, LL, LR, UR (viewed from outside cylinder; left = smaller theta).
+			# For pawn_base (z_sign = -1), z_top < z_bot so swap to restore CCW winding.
+			if (z_sign == -1L) {
+				xyz <- as_coord3d(x = xy, z = c(z_bot, z_top, z_top, z_bot))
+			} else {
+				xyz <- as_coord3d(x = xy, z = c(z_top, z_bot, z_bot, z_top))
+			}
+		}
+
 		xy_vp <- as_coord2d(xyz, alpha = degrees(op_angle), scale = op_scale)
-
 		if (!is_front_facing(xy_vp)) {
 			next
 		}
 
-		at_settings <- affiner::affine_settings(as.data.frame(xy_vp))
+		df_vp <- as.data.frame(xy_vp)
+		if (y_axis) {
+			if (y_flipped) {
+				# Upside-down pawn: pass LL,UL,UR,LR so affine_settings maps
+				# texture top to y_bot (= z_top in pawn frame), flipping the texture.
+				df_vp_af <- df_vp
+			} else {
+				# Reorder LL,UL,UR,LR -> UL,LL,LR,UR for affine_settings
+				df_vp_af <- df_vp[c(2L, 1L, 4L, 3L), ]
+			}
+		} else {
+			if (z_sign == -1L && cos(degrees(angle)) < 0) {
+				# pawn_base upside-down: swap UL/LL so texture top maps to lower
+				# screen position, flipping the suit symbol to match other sides.
+				df_vp_af <- df_vp[c(2L, 1L, 4L, 3L), ]
+			} else {
+				df_vp_af <- df_vp
+			}
+		}
+		at_settings <- affiner::affine_settings(df_vp_af)
 		if (nigh(at_settings$width, 0) || nigh(at_settings$height, 0)) {
 			next
 		}
+
+		quads[[length(quads) + 1L]] <- list(i = i, df_vp = df_vp, at_settings = at_settings)
+		cx_v <- c(cx_v, mean(xyz$x))
+		cy_v <- c(cy_v, mean(xyz$y))
+		cz_v <- c(cz_v, mean(xyz$z))
+	}
+
+	if (length(quads) == 0L) {
+		return(gTree(children = gList(), name = "peg_doll_belt"))
+	}
+
+	centroids <- as_coord3d(x = cx_v, y = cy_v, z = cz_v)
+	draw_order <- painter_order(
+		centroids,
+		plane = "xy-plane",
+		scale = op_scale,
+		alpha = degrees(op_angle)
+	)
+
+	gl <- gList()
+	for (j in draw_order) {
+		q <- quads[[j]]
+		i <- q$i
+		df_vp <- q$df_vp
+		at_settings <- q$at_settings
+		# Position full belt_face (width bw) so that strip i fills vp_define (width bw/n)
+		x_center_npc <- (n - 2L * i + 2L) / 2
 
 		if (has_transformations() && has_alpha_masks()) {
 			belt_grob <- cfg$get_grob("belt_face", suit, rank)
 			if (hasName(belt_grob, "border")) {
 				belt_grob$border <- FALSE
 			}
-			# Position full belt_face (width bw) so that strip i fills vp_define (width bw/n)
-			x_center_npc <- (n - 2L * i + 2L) / 2
 			inner_vp <- viewport(
 				x = unit(x_center_npc, "npc"),
 				y = 0.5,
@@ -626,16 +731,13 @@ peg_doll_belt_op_grob <- function(
 			)
 			strip_grob <- gTree(children = gList(belt_grob), vp = inner_vp)
 			vp_define <- viewport(width = inch(bw / n), height = inch(bh))
-			# Clip the quad output via an alpha mask on the vp argument rather
-			# than clip=TRUE on vp_define: the latter is unreliable in {ragg}
-			# and {svglite} with affine transforms.  The mask polygon matches
-			# xy_vp so adjacent-strip content that falls outside the
-			# parallelogram is masked away.  White fill prevents viewers from
-			# treating it as a luminance mask.
+			# Clip the quad output via an alpha mask on the vp argument.
+			# The mask polygon matches df_vp so adjacent-strip content that falls outside the parallelogram is masked away.
+			# White fill works with viewers that incorrectly treat as a luminance mask.
 			quad_mask <- as.mask(
 				polygonGrob(
-					x = xy_vp$x,
-					y = xy_vp$y,
+					x = df_vp$x,
+					y = df_vp$y,
 					default.units = "in",
 					gp = gpar(col = NA, fill = "white")
 				),
@@ -657,8 +759,8 @@ peg_doll_belt_op_grob <- function(
 			opt <- cfg$get_piece_opt("belt_face", suit, rank)
 			gp <- gpar(col = NA, fill = opt$background_color)
 			gl[[length(gl) + 1L]] <- polygonGrob(
-				x = xy_vp$x,
-				y = xy_vp$y,
+				x = df_vp$x,
+				y = df_vp$y,
 				default.units = "in",
 				gp = gp
 			)
@@ -670,12 +772,18 @@ peg_doll_belt_op_grob <- function(
 #' @export
 makeContent.projected_peg_doll <- function(x) {
 	gp <- gpar(cex = x$scale, lex = x$scale)
-	# Apply scale to body (1) and head (3); belt (2) geometry is already
-	# scaled via projected coordinates so cex must not be applied to it.
-	for (i in c(1L, 3L)) {
-		if (hasName(x$children[[i]], "scale")) {
-			x$children[[i]]$scale <- x$scale
-		} else if (x$type == "normal") {
+	# Body/head children are lazy `piece` gTrees whose `makeContent` re-calls
+	# pieceGrobHelper with their stored `scale`.
+	# Their geometry is already pre-scaled by outer `scale` factor.
+	# Setting child$scale here would double-scale the geometry (scale^2).
+	# Instead, apply only gpar(cex, lex) via update_gp;
+	# `cex` is multiplicative in grid so inner gpar(cex=1) will combine with our outer gpar(cex=scale).
+	# The belt is skipped: its geometry is already in projected coordinates.
+	for (i in seq_along(x$children)) {
+		if (isTRUE(x$children[[i]]$name == "peg_doll_belt")) {
+			next
+		}
+		if (x$type == "normal") {
 			x$children[[i]] <- update_gp(x$children[[i]], gp)
 		}
 	}
