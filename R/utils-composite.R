@@ -3,10 +3,11 @@
 CompositePiece <- R6Class(
 	"pp_composite",
 	public = list(
-		initialize = function(df = tibble(), envir = list(), ref_side = "top") {
+		initialize = function(df = tibble(), envir = list(), ref_side = "top", portrait = FALSE) {
 			private$df <- df
 			private$envir <- envir
 			private$ref_side <- ref_side
+			private$portrait <- portrait
 		}
 	),
 	active = list(
@@ -110,13 +111,37 @@ CompositePiece <- R6Class(
 				width <- convertX(width, "in", valueOnly = TRUE)
 				height <- convertY(height, "in", valueOnly = TRUE)
 				depth <- convertX(depth, "in", valueOnly = TRUE)
+				# pp_cfg() uses a "portrait" convention for pawn_face/back/left/right:
+				# height = pawn physical height (tall), not the generic token convention
+				# where height = piece depth. get_scaling_factors() reads h_sc from
+				# `depth` for top/base relative sides and from `width` for left/right,
+				# so we swap dimensions to put pawn height where h_sc is read.
+				if (private$portrait) {
+					side <- get_side(piece_side)
+					if (side %in% c("face", "back")) {
+						tmp <- height
+						height <- depth
+						depth <- tmp
+					} else if (side %in% c("left", "right")) {
+						tmp <- width
+						width <- height
+						height <- tmp
+					}
+				}
 				df <- private$relative_df(piece_side)
 				relative_side <- get_relative_side(piece_side, private$ref_side)
 				df <- scale_df(df, relative_side, width, height, depth)
 				df <- translate_df(df, relative_side, x, y, z, angle, width, height, depth)
+				# For portrait pieces viewed from the side (face/back/left/right),
+				# sort by world y: when sin(op_angle) >= 0 the viewer is "below" and
+				# larger y is further away (sort DESCENDING); when sin(op_angle) < 0
+				# the viewer is "above" and smaller y is further away (sort ASCENDING).
+				if (private$portrait && side %in% c("face", "back", "left", "right")) {
+					decreasing <- sin(op_angle * pi / 180) >= 0
+					df <- df[order(df$y, decreasing = decreasing), ]
+				}
 				# adjust scale for proper adjustment of `cex` / `lex`
 				df <- adjust_scale_df(df, scale = scale)
-				#### in future need to re-order elements using `op_sort()`?
 				pmap_piece(
 					df,
 					suit = suit,
@@ -134,6 +159,7 @@ CompositePiece <- R6Class(
 		df = NULL,
 		envir = NULL,
 		ref_side = NULL,
+		portrait = NULL,
 		relative_df = function(piece_side) {
 			side <- get_relative_side(piece_side, private$ref_side)
 			switch(

@@ -1282,7 +1282,7 @@ peg_doll_pawn <- function(shapes) {
 		cfg = "shapes"
 	)
 
-	pegdoll <- CompositePiece$new(df_pegdoll, envir = list(shapes = shapes))
+	pegdoll <- CompositePiece$new(df_pegdoll, envir = list(shapes = shapes), portrait = TRUE)
 	body_head_op_grob_fn <- pegdoll$op_grob_fn
 
 	peg_doll_op_grob_fn <- function(
@@ -1302,23 +1302,6 @@ peg_doll_pawn <- function(shapes) {
 		op_angle,
 		scale = 1
 	) {
-		# `pp_cfg()` gives `pawn_left`/`pawn_right` a "portrait" convention:
-		# * height = pawn_face height (pawn still stands tall)
-		# * rather than the generic token convention where height = pawn_face depth
-		# but CompositePiece$op_grob_fn doesn't know about it get_scaling_factors reads h_sc:
-		# * from `depth` for "top"/"base" relative sides
-		# * from `width` for "left"/"right" relative sides
-		# So we rearrange w/h/d before passing to body_head_op_grob_fn
-		side <- get_side(piece_side)
-		bh_args <- if (side %in% c("face", "back")) {
-			# relative_side = "top"/"base": h_sc reads `depth`, d_sc reads `height`
-			list(width, depth, height)
-		} else if (side %in% c("left", "right")) {
-			# relative_side = "left"/"right": h_sc reads `width`, d_sc reads `height`
-			list(height, width, depth)
-		} else {
-			list(width, height, depth)
-		}
 		body_head <- body_head_op_grob_fn(
 			piece_side,
 			suit,
@@ -1329,9 +1312,9 @@ peg_doll_pawn <- function(shapes) {
 			z,
 			angle,
 			type,
-			bh_args[[1L]],
-			bh_args[[2L]],
-			bh_args[[3L]],
+			width,
+			height,
+			depth,
 			op_scale,
 			op_angle,
 			scale
@@ -1352,19 +1335,12 @@ peg_doll_pawn <- function(shapes) {
 			op_angle,
 			head_depth = pegdoll_head_depth
 		)
-		# For face/back/left/right, head is in front when sin(angle-op_angle)>=0;
-		# reverse the natural order (c(2L,1L)) to draw children[[1]]=head last.
-		gl_order <- if (
-			side %in% c("face", "back", "left", "right") && sin(degrees(angle - op_angle)) >= 0
-		) {
-			c(2L, 1L)
-		} else {
-			c(1L, 2L)
-		}
+		# body_head children are already y-sorted (far first, near last) by
+		# CompositePiece$op_grob_fn (portrait=TRUE), so just draw in that order.
 		gTree(
 			children = gList(
-				body_head$children[[gl_order[[1L]]]],
-				body_head$children[[gl_order[[2L]]]],
+				body_head$children[[1L]],
+				body_head$children[[2L]],
 				belt
 			),
 			scale = 1,
@@ -1433,7 +1409,7 @@ joystick_pawn <- function(shapes) {
 		cfg = "shapes"
 	)
 
-	joystick <- CompositePiece$new(df_joystick, envir = list(shapes = shapes))
+	joystick <- CompositePiece$new(df_joystick, envir = list(shapes = shapes), portrait = TRUE)
 
 	list(
 		grob_fn.pawn = joystick$grob_fn,
