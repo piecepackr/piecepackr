@@ -316,9 +316,9 @@ adjust_scale_df <- function(df, scale = 1) {
 }
 
 map_piece_side <- function(piece_side, map) {
-	pieces <- sapply(strsplit(piece_side, "_"), function(x) x[1])
-	sides <- sapply(strsplit(piece_side, "_"), function(x) x[2])
-	new_sides <- sapply(sides, function(s) map[[s]])
+	pieces <- vapply(piece_side, get_piece, character(1))
+	sides <- vapply(piece_side, get_side, character(1))
+	new_sides <- vapply(sides, function(s) map[[s]], character(1))
 	paste(pieces, new_sides, sep = "_")
 }
 
