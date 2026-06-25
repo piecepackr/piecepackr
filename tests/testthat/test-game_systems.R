@@ -642,6 +642,20 @@ test_that("no regressions in `game_systems()` figures", {
 		writer = write_svg_bleeding_edge
 	)
 
+	# cubes
+	expect_doppelganger("cubes", function() {
+		grid.piece(
+			"bit_face",
+			x = rep(6:1, 6),
+			y = rep(6:1, each = 6),
+			suit = rep(1:6, each = 6),
+			rank = rep(6:1, 6),
+			default.units = "in",
+			op_scale = 0.5,
+			cfg = envir$cubes
+		)
+	})
+
 	# peg-doll pawns with belt (requires svglite alpha mask fix)
 	skip_if_not_installed("svglite", "2.2.2.9000")
 	cfg <- game_systems(font = "dejavu", pawn = "peg-doll")$piecepack
@@ -661,18 +675,17 @@ test_that("no regressions in `game_systems()` figures", {
 		},
 		writer = write_svg_bleeding_edge
 	)
-
-	# cubes
-	expect_doppelganger("cubes", function() {
-		grid.piece(
-			"bit_face",
-			x = rep(6:1, 6),
-			y = rep(6:1, each = 6),
-			suit = rep(1:6, each = 6),
-			rank = rep(6:1, 6),
-			default.units = "in",
-			op_scale = 0.5,
-			cfg = envir$cubes
-		)
-	})
+	df_sides <- tibble(
+		piece_side = c("pawn_face", "pawn_back", "pawn_left", "pawn_right", "pawn_base"),
+		x = 1:5,
+		y = 1,
+		suit = 1:5
+	)
+	expect_doppelganger(
+		"peg-doll-op-sides",
+		function() {
+			pmap_piece(df_sides, default.units = "in", cfg = cfg, op_scale = 0.5)
+		},
+		writer = write_svg_bleeding_edge
+	)
 })

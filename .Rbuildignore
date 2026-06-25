@@ -6,6 +6,7 @@
 ^TODO.rst$
 ^LICENSE.md$
 ^Rakefile$
+^Rplots.pdf$
 
 ^\.air.toml$
 ^.appveyor.yml$
