@@ -1335,14 +1335,8 @@ peg_doll_pawn <- function(shapes) {
 			op_angle,
 			head_depth = pegdoll_head_depth
 		)
-		# body_head children are already y-sorted (far first, near last) by
-		# CompositePiece$op_grob_fn (portrait=TRUE), so just draw in that order.
 		gTree(
-			children = gList(
-				body_head$children[[1L]],
-				body_head$children[[2L]],
-				belt
-			),
+			children = gList(body_head, belt),
 			scale = 1,
 			type = type,
 			cl = "projected_peg_doll"
