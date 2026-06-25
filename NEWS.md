@@ -4,8 +4,8 @@ piecepackr 1.16.2
 New features
 ------------
 
-* `CompositePiece()` grid methods (`grob_fn` and `op_grob_fn`) now support all six sides, not just the face and back (#263).
-  In particular the peg-doll and joystick pawns can now be drawn from any side in 2D orthographic or 3D oblique projection.
+* Can now draw all six sides of "composite" pieces with `grid.piece()` / `pieceGrob()` (#263).
+  In particular a peg-doll "pawn", joystick "pawn", and reversi disc "bit" from `game_systems()` can now be drawn from any side in 2D orthographic or 3D oblique projection.
 
 * `game_systems(pawn = "peg-doll")` now renders the peg-doll with a belt (#391).
 
