@@ -600,6 +600,9 @@ peg_doll_belt_op_grob <- function(
 	bw <- cfg$get_width("belt_face", suit, rank)
 	bh <- cfg$get_height("belt_face", suit, rank)
 
+	cos_angle <- cos(degrees(angle))
+	sin_angle <- sin(degrees(angle))
+
 	if (y_axis) {
 		# Offset from pawn centre to belt bottom/top along the pawn axis.
 		# R_z(angle) maps the Y-axis to (-sin(angle), cos(angle), 0), so an
@@ -608,7 +611,7 @@ peg_doll_belt_op_grob <- function(
 		a_top <- height * (prop$z_top - 0.5)
 		# When cos(angle) < 0 (upside-down pawn), the z_top edge of the belt
 		# maps to a lower screen-y than z_bot, so the texture must be flipped.
-		y_flipped <- cos(degrees(angle)) < 0
+		y_flipped <- cos_angle < 0
 	} else {
 		z_sign <- if (side == "base") -1 else 1
 		z_bot <- z + z_sign * depth * (prop$z_bot - 0.5)
@@ -646,8 +649,8 @@ peg_doll_belt_op_grob <- function(
 			# Ring vertices rotate with the pawn: at angle A the pawn axis is
 			# (-sin(A), cos(A), 0), so the ring lies in the perpendicular plane.
 			xyz <- as_coord3d(
-				x = x + xz$x * cos(degrees(angle)) + a_v * (-sin(degrees(angle))),
-				y = y + xz$x * sin(degrees(angle)) + a_v * cos(degrees(angle)),
+				x = x + xz$x * cos_angle + a_v * (-sin_angle),
+				y = y + xz$x * sin_angle + a_v * cos_angle,
 				z = z + xz$y
 			)
 		} else {
@@ -677,7 +680,7 @@ peg_doll_belt_op_grob <- function(
 				df_vp_af <- df_vp[c(2L, 1L, 4L, 3L), ]
 			}
 		} else {
-			if (z_sign == -1L && cos(degrees(angle)) < 0) {
+			if (z_sign == -1L && cos_angle < 0) {
 				# pawn_base upside-down: swap UL/LL so texture top maps to lower
 				# screen position, flipping the suit symbol to match other sides.
 				df_vp_af <- df_vp[c(2L, 1L, 4L, 3L), ]
@@ -708,6 +711,23 @@ peg_doll_belt_op_grob <- function(
 		alpha = degrees(op_angle)
 	)
 
+	use_at <- has_transformations() && has_alpha_masks()
+	if (use_at) {
+		belt_grob <- cfg$get_grob("belt_face", suit, rank)
+		if (hasName(belt_grob, "border")) {
+			belt_grob$border <- FALSE
+		}
+		vp_define <- viewport(width = inch(bw / n), height = inch(bh))
+	} else {
+		if (!has_transformations()) {
+			at_inform(fallback = "polygon")
+		} else {
+			am_inform()
+		}
+		opt <- cfg$get_piece_opt("belt_face", suit, rank)
+		gp <- gpar(col = NA, fill = opt$background_color)
+	}
+
 	gl <- gList()
 	for (j in draw_order) {
 		q <- quads[[j]]
@@ -717,11 +737,7 @@ peg_doll_belt_op_grob <- function(
 		# Position full belt_face (width bw) so that strip i fills vp_define (width bw/n)
 		x_center_npc <- (n - 2L * i + 2L) / 2
 
-		if (has_transformations() && has_alpha_masks()) {
-			belt_grob <- cfg$get_grob("belt_face", suit, rank)
-			if (hasName(belt_grob, "border")) {
-				belt_grob$border <- FALSE
-			}
+		if (use_at) {
 			inner_vp <- viewport(
 				x = unit(x_center_npc, "npc"),
 				y = 0.5,
@@ -730,7 +746,6 @@ peg_doll_belt_op_grob <- function(
 				just = c("center", "center")
 			)
 			strip_grob <- gTree(children = gList(belt_grob), vp = inner_vp)
-			vp_define <- viewport(width = inch(bw / n), height = inch(bh))
 			# Clip the quad output via an alpha mask on the vp argument.
 			# The mask polygon matches df_vp so adjacent-strip content that falls outside the parallelogram is masked away.
 			# White fill works with viewers that incorrectly treat as a luminance mask.
@@ -751,13 +766,6 @@ peg_doll_belt_op_grob <- function(
 				vp = viewport(mask = quad_mask)
 			)
 		} else {
-			if (!has_transformations()) {
-				at_inform(fallback = "polygon")
-			} else {
-				am_inform()
-			}
-			opt <- cfg$get_piece_opt("belt_face", suit, rank)
-			gp <- gpar(col = NA, fill = opt$background_color)
 			gl[[length(gl) + 1L]] <- polygonGrob(
 				x = df_vp$x,
 				y = df_vp$y,
