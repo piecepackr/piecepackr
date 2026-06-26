@@ -133,12 +133,18 @@ CompositePiece <- R6Class(
 				df <- scale_df(df, relative_side, width, height, depth)
 				df <- translate_df(df, relative_side, x, y, z, angle, width, height, depth)
 				# For portrait pieces viewed from the side (face/back/left/right),
-				# sort by world y: when sin(op_angle) >= 0 the viewer is "below" and
-				# larger y is further away (sort DESCENDING); when sin(op_angle) < 0
-				# the viewer is "above" and smaller y is further away (sort ASCENDING).
+				# sort farthest-first using the oblique projection depth.  This is
+				# equivalent to projecting world (x, y) onto (cos, sin) of op_angle:
+				# larger projection = further from viewer = drawn first.  Adding the
+				# x·cos term breaks ties when rotation moves depth differences from y
+				# into x (e.g. angle=90° gives both pieces the same world y).
 				if (private$portrait && side %in% c("face", "back", "left", "right")) {
-					decreasing <- sin(op_angle * pi / 180) >= 0
-					df <- df[order(df$y, decreasing = decreasing), ]
+					idx <- painter_order(
+						as_coord2d(x = df$x, y = df$y),
+						scale = 1,
+						alpha = degrees(op_angle)
+					)
+					df <- df[idx, ]
 				}
 				# adjust scale for proper adjustment of `cex` / `lex`
 				df <- adjust_scale_df(df, scale = scale)
