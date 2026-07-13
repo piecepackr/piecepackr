@@ -6,6 +6,8 @@ expect_equal(to_r(0, 1), 1)
 f <- function(x) assert_suggested("imaginaryPackage")
 expect_error(f(), "You need to install the suggested package")
 
+expect_true(grepl(simplify_font("Dotaro Ranks"), simplify_font("dotaro-ranks.ttf")))
+
 skip_on_cran()
 skip_if_not_installed("pdftools")
 skip_if(!capabilities("cairo"))

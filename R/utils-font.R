@@ -107,7 +107,7 @@ has_font <- function(font) {
 }
 
 simplify_font <- function(font) {
-	tolower(gsub(" ", "", font))
+	tolower(gsub("[^[:alnum:]]", "", font))
 }
 
 
