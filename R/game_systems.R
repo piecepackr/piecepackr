@@ -193,7 +193,7 @@ game_systems <- function(
 	rect_shape <- ifelse(round, "roundrect", "rect")
 	color_list <- color_list_fn(border, background_color, edge_color)
 
-	cards <- playing_cards(font, rect_shape)
+	cards <- playing_cards(font, rect_shape, color_list)
 	packs <- piecepack(font, color_list, rect_shape, pawn, background_color, edge_color)
 
 	list(
@@ -1094,7 +1094,7 @@ piecepack <- function(
 	)
 }
 
-playing_cards <- function(font = "sans", rect_shape = "rect") {
+playing_cards <- function(font = "sans", rect_shape = "rect", color_list = color_list_fn()) {
 	if (font == "sans") {
 		face_labels <- c("", "\u050a", "\u046a", "\u0238")
 		fool_text <- "*"
@@ -1114,8 +1114,8 @@ playing_cards <- function(font = "sans", rect_shape = "rect") {
 		grob_fn.r13.card_face = faceCardGrobFn(face_labels[4]),
 		grob_fn.r14.card_face = jokerCardGrobFn(TRUE),
 		shape.card = rect_shape,
-		border_color = "black",
-		border_lex = 4
+		border_color = color_list$border_color,
+		border_lex = color_list$border_lex
 	)
 	playing_cards_list$n_suits <- 4
 	playing_cards_list$suit_color <- "#D55E00,#000000,#000000,#D55E00"
@@ -1423,7 +1423,6 @@ to_hexpack <- function(cfg = getOption("piecepackr.cfg", pp_cfg())) {
 	hexpack <- as.list(cfg)
 	hexpack$shape.tile_face <- "convex6"
 	hexpack$shape.tile_back <- "convex6"
-	hexpack$border_lex <- 3
 	hexpack$shape_t.tile <- 60
 	hexpack$dm_t.tile_face <- -90
 	hexpack$width.tile <- 4 / sqrt(3)

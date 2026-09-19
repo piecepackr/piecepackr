@@ -14,11 +14,18 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
+* `game_systems(border = FALSE)` now also removes the border line from the
+  `playing_cards`, `playing_cards_colored`, and `playing_cards_tarot` configurations (#400).
+  Previously these three systems ignored `border` and always drew a black border line.
+
 * `game_systems()$reversi` disc "bits" are now circular instead of (slightly) oval.
 
 * `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
+
+* `to_hexpack()` now inherits the border line width of `cfg` instead of always setting `border_lex = 3`.
+  In particular `game_systems()$hexpack` now uses the same border line width as `game_systems()$piecepack`.
 
 * `"pawn_left"` and `"pawn_right"` are now drawn in "portrait" mode instead of "landscape" mode.
 

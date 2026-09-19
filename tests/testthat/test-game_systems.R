@@ -2,6 +2,20 @@ test_that("no regressions in `game_systems()`", {
 	expect_error(game_systems("boobear"), "Don't have a customized configuration for font")
 })
 
+test_that("`game_systems(border = FALSE)` affects every system", {
+	cfgs <- game_systems(border = FALSE)
+	expect_all_equal(
+		vapply(cfgs, function(cfg) as.list(cfg)$border_color, character(1)),
+		"transparent"
+	)
+	expect_all_equal(vapply(cfgs, function(cfg) as.list(cfg)$border_lex, double(1)), 0)
+})
+
+test_that("`to_hexpack()` inherits the border width of `cfg`", {
+	expect_equal(as.list(to_hexpack(game_systems()$piecepack))$border_lex, 4)
+	expect_equal(as.list(to_hexpack(game_systems(border = FALSE)$piecepack))$border_lex, 0)
+})
+
 test_that("CompositePiece grob_fn works for all 6 sides", {
 	cfg_peg <- game_systems(pawn = "peg-doll")$piecepack
 	cfg_joy <- game_systems(pawn = "joystick")$piecepack

@@ -29,6 +29,6 @@
 <text transform='translate(432.00,379.17) rotate(-180)' text-anchor='middle' style='font-size: 28.00px; fill: #D55E00; font-family: sans;' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>C</text>
 <text x='288.00' y='223.41' text-anchor='middle' style='font-size: 32.00px; fill: #D55E00; font-family: sans;' textLength='16.34px' lengthAdjust='spacingAndGlyphs'>♦</text>
 <text transform='translate(432.00,352.59) rotate(-180)' text-anchor='middle' style='font-size: 32.00px; fill: #D55E00; font-family: sans;' textLength='16.34px' lengthAdjust='spacingAndGlyphs'>♦</text>
-<polygon points='270.00,162.00 270.00,414.00 450.00,414.00 450.00,162.00 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='270.00,162.00 270.00,414.00 450.00,414.00 450.00,162.00 ' style='stroke-width: 0.00; stroke: none; fill: none;' />
 </g>
 </svg>

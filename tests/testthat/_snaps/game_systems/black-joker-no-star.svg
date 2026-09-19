@@ -40,6 +40,6 @@
 <text transform='translate(432.00,325.41) rotate(-180)' text-anchor='middle' style='font-size: 28.00px; font-family: sans;' textLength='18.68px' lengthAdjust='spacingAndGlyphs'>K</text>
 <text transform='translate(432.00,298.53) rotate(-180)' text-anchor='middle' style='font-size: 28.00px; font-family: sans;' textLength='18.68px' lengthAdjust='spacingAndGlyphs'>E</text>
 <text transform='translate(432.00,271.65) rotate(-180)' text-anchor='middle' style='font-size: 28.00px; font-family: sans;' textLength='20.23px' lengthAdjust='spacingAndGlyphs'>R</text>
-<polygon points='270.00,162.00 270.00,414.00 450.00,414.00 450.00,162.00 ' style='stroke-width: 3.00; fill: none;' />
+<polygon points='270.00,162.00 270.00,414.00 450.00,414.00 450.00,162.00 ' style='stroke-width: 0.00; stroke: none; fill: none;' />
 </g>
 </svg>
