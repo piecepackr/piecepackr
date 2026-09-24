@@ -4,6 +4,9 @@ piecepackr 1.16.2
 New features
 ------------
 
+* `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone so adjacent same-type pieces share a cut line (#336).
+  Supported for `size = "letter"` and `size = "A4"` with `pieces = "piecepack"` and `arrangement = "single-sided"`.
+
 * Can now draw all six sides of "composite" pieces with `grid.piece()` / `pieceGrob()` (#263).
   In particular a peg-doll "pawn", joystick "pawn", and reversi disc "bit" from `game_systems()` can now be drawn from any side in 2D orthographic or 3D oblique projection.
 
@@ -27,6 +30,10 @@ Bug fixes and minor improvements
 * `save_print_and_play(bleed = TRUE, size = "A5")` now prints the A5 cutting instructions.
   Previously it described the letter/A4 layout instead, telling the reader to fold along a
   central "gutter" line that an A5 page doesn't have.
+
+* `save_print_and_play(arrangement = "double-sided")` now embeds correct pdf bookmark pages for the
+  "Pyramids" and "Subpack" sections when `pieces` includes "matchsticks" and/or "pyramids".
+  Previously the "Matchsticks" and "Pyramids" sections each reported half their true page count.
 
 * `to_hexpack()` now inherits the border line width of `cfg` instead of always setting `border_lex = 3`.
   In particular `game_systems()$hexpack` now uses the same border line width as `game_systems()$piecepack`.
@@ -65,8 +72,6 @@ New features
   + Sizes go from 8mm (rank 1) to 25mm (rank 6): 8mm, 10mm, 12mm, 15mm, 20mm, 25mm.
 
 * `save_print_and_play()` with `bleed = TRUE` now adds registration marks to tiles, coins, and pawns to assist in aligning double-sided printing (#331).
-* `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone so adjacent same-type pieces share a cut line (#336).
-  Supported for `size = "letter"` and `size = "A4"` with `pieces = "piecepack"` and `arrangement = "single-sided"`.
 
 Bug fixes and minor improvements
 --------------------------------
