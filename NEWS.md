@@ -24,6 +24,10 @@ Bug fixes and minor improvements
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
 
+* `save_print_and_play(bleed = TRUE, size = "A5")` now prints the A5 cutting instructions.
+  Previously it described the letter/A4 layout instead, telling the reader to fold along a
+  central "gutter" line that an A5 page doesn't have.
+
 * `to_hexpack()` now inherits the border line width of `cfg` instead of always setting `border_lex = 3`.
   In particular `game_systems()$hexpack` now uses the same border line width as `game_systems()$piecepack`.
 
@@ -62,7 +66,7 @@ New features
 
 * `save_print_and_play()` with `bleed = TRUE` now adds registration marks to tiles, coins, and pawns to assist in aligning double-sided printing (#331).
 * `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone so adjacent same-type pieces share a cut line (#336).
-  Supported for `size = "letter"` and `size = "A4"` with `pieces = "piecepack"`.
+  Supported for `size = "letter"` and `size = "A4"` with `pieces = "piecepack"` and `arrangement = "single-sided"`.
 
 Bug fixes and minor improvements
 --------------------------------

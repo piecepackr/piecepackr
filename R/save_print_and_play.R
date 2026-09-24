@@ -26,7 +26,8 @@ A4_HEIGHT <- 11.69
 #'              `TRUE` or `"individual"` gives each piece its own 1/8" bleed zone and crop marks.
 #'              `"grouped"` gives same-type pieces a shared 1/8" bleed so adjacent same-type pieces share a cut line.
 #'              `"individual"` currently only supports `pieces = "piecepack"` and doesn't support `size = "4x6"`.
-#'              `"grouped"` only supports `pieces = "piecepack"` and doesn't support `size = "4x6"` or `size = "A5"`.
+#'              `"grouped"` only supports `pieces = "piecepack"` and
+#'              `arrangement = "single-sided"`, and doesn't support `size = "4x6"` or `size = "A5"`.
 #' @param size_bleed A list with names "top", "right", "bottom", "left"
 #'                   containing numeric values indicating the inches "bleed" to add to
 #'                   the `size` of the print-and-play layout.

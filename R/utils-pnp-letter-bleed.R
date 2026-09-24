@@ -116,9 +116,7 @@ a5_inst_grob_bleed <- function(cfg, pieces, arrangement, size) {
 
 	# Settings
 	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
-	if (TRUE) {
-		arrangement <- sprintf('\t\u25cb "%s" arrangement with "bleed" zones', arrangement)
-	}
+	arrangement <- sprintf('\t\u25cb "%s" arrangement with "bleed" zones', arrangement)
 	inst <- c(
 		inst,
 		"\u25cf This print-and-play layout was generated for:",
@@ -129,7 +127,7 @@ a5_inst_grob_bleed <- function(cfg, pieces, arrangement, size) {
 
 	# Tiles
 	tile_crop <- c('\t\u25cb Use "crop" marks as guide to where to cut them out')
-	if (size == "a5") {
+	if (size == "A5") {
 		inst <- c(
 			inst,
 			'\u25cf For each suit we have a page of tile "faces" then a page of tile "backs"',
@@ -155,7 +153,7 @@ a5_inst_grob_bleed <- function(cfg, pieces, arrangement, size) {
 		'\t\t as guide to cut out (inferior) square coins',
 		'\t\u25cb Otherwise use "crop" marks to help center placement of circular cutting tool'
 	)
-	if (size == "a5") {
+	if (size == "A5") {
 		inst <- c(
 			inst,
 			"\u25cf We have a page of coin faces then a page of coin backs (per 4 suits)",
@@ -183,7 +181,7 @@ a5_inst_grob_bleed <- function(cfg, pieces, arrangement, size) {
 		'\t\t "gutter" line can be used to help place pawn "tokens" on both sides',
 		'\t\t  of target material ("gutter" line on center of edge of target material)'
 	)
-	if (size == "a5") {
+	if (size == "A5") {
 		inst <- c(
 			inst,
 			"\u25cf We have a page of dice faces then a page of pawn belts and pawn tokens (per 4 suits)",
