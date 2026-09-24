@@ -52,7 +52,8 @@ in the provided configuration.}
 \code{TRUE} or \code{"individual"} gives each piece its own 1/8" bleed zone and crop marks.
 \code{"grouped"} gives same-type pieces a shared 1/8" bleed so adjacent same-type pieces share a cut line.
 \code{"individual"} currently only supports \code{pieces = "piecepack"} and doesn't support \code{size = "4x6"}.
-\code{"grouped"} only supports \code{pieces = "piecepack"} and doesn't support \code{size = "4x6"} or \code{size = "A5"}.}
+\code{"grouped"} only supports \code{pieces = "piecepack"} and
+\code{arrangement = "single-sided"}, and doesn't support \code{size = "4x6"} or \code{size = "A5"}.}
 
 \item{size_bleed}{A list with names "top", "right", "bottom", "left"
 containing numeric values indicating the inches "bleed" to add to

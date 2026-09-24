@@ -89,6 +89,31 @@ test_that("`save_print_and_play()` works as expected", {
 	expect_equal(xmpdf::n_pages(pdf_deck_filename_shared), 5, ignore_attr = "names")
 })
 
+test_that("`save_print_and_play()` bookmarks match the double-sided page counts", {
+	skip_on_cran()
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	save_print_and_play(
+		cfg_default,
+		f,
+		pieces = "all",
+		arrangement = "double-sided",
+		quietly = TRUE
+	)
+
+	skip_if_not_installed("qpdf")
+	skip_if_not_installed("xmpdf")
+	skip_if_not(xmpdf::supports_get_bookmarks())
+	expect_equal(xmpdf::n_pages(f), 12, ignore_attr = "names")
+	bookmarks <- xmpdf::get_bookmarks(f)[[1]]
+	expect_equal(
+		bookmarks$title,
+		c("Front Matter", "Piecepack", "Matchsticks", "Pyramids", "Subpack")
+	)
+	expect_equal(bookmarks$page, c(1, 3, 7, 9, 11))
+})
+
 test_that('`save_print_and_play()` errors for unsupported `bleed = "grouped"` combinations', {
 	skip_if_not(capabilities("cairo"))
 	f <- tempfile(fileext = ".pdf")
@@ -97,6 +122,48 @@ test_that('`save_print_and_play()` errors for unsupported `bleed = "grouped"` co
 		error = TRUE,
 		save_print_and_play(cfg_default, f, size = "A5", bleed = "grouped", quietly = TRUE)
 	)
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(
+			cfg_default,
+			f,
+			arrangement = "double-sided",
+			bleed = "grouped",
+			quietly = TRUE
+		)
+	)
+})
+
+test_that('`save_print_and_play(bleed = "grouped")` fits larger dice in the shared band', {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	cfg <- pp_cfg(list(width.die_face = 0.75))
+	save_print_and_play(cfg, f, bleed = "grouped", quietly = TRUE)
+
+	skip_if_not_installed("qpdf")
+	skip_if_not_installed("xmpdf")
+	expect_equal(xmpdf::n_pages(f), 5, ignore_attr = "names")
+})
+
+test_that('`save_print_and_play(bleed = "grouped")` errors if the shared band overflows', {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	cfg <- pp_cfg(list(width.die_face = 1))
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(cfg, f, bleed = "grouped", quietly = TRUE)
+	)
+})
+
+test_that('`save_print_and_play(bleed = TRUE)` wording follows `size`', {
+	label <- function(size) {
+		a5_inst_grob_bleed(cfg_default, "piecepack", "single-sided", size)$children[[2]]$label
+	}
+	expect_match(label("A5"), 'a page of tile "faces" then a page of tile "backs"')
+	expect_no_match(label("A5"), 'Central "gutter" line')
+	expect_match(label("letter"), '"faces" on left and "backs" on right')
 })
 
 test_that('`save_print_and_play(size = "4x6")` is deprecated', {
