@@ -68,8 +68,8 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 	#### Fine-tune between pyramids, matchsticks, and misc.?
 	#### Add misc, cards, dominoes accessories?
 	if ("matchsticks" %in% pieces) {
-		n_pages <- (n_suits - 1) %/% 4 + 1
-		for (ii in seq(n_pages)) {
+		n_groups <- (n_suits - 1) %/% 4 + 1
+		for (ii in seq(n_groups)) {
 			ss <- seq(4 * ii - 3, 4 * ii)
 			if (arrangement == "double-sided" && size == "A5") {
 				gl <- gappend(gl, a5_matchsticks_grob(ss, cfg, TRUE))
@@ -85,11 +85,11 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 				}
 			}
 		}
-		pl$Matchsticks <- n_pages
+		pl$Matchsticks <- if (arrangement == "double-sided") 2 * n_groups else n_groups
 	}
 	if ("pyramids" %in% pieces) {
-		n_pages <- (n_suits - 1) %/% 4 + 1
-		for (ii in seq(n_pages)) {
+		n_groups <- (n_suits - 1) %/% 4 + 1
+		for (ii in seq(n_groups)) {
 			ss <- seq(4 * ii - 3, 4 * ii)
 			s1 <- ss[1:2]
 			s2 <- ss[3:4]
@@ -107,7 +107,7 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 				}
 			}
 		}
-		pl$Pyramids <- n_pages
+		pl$Pyramids <- if (arrangement == "double-sided") 2 * n_groups else n_groups
 	}
 	if ("subpack" %in% pieces) {
 		vpul <- viewport(x = 0.25, y = 0.75, width = inch(A5W / 2), height = inch(A5H / 2))

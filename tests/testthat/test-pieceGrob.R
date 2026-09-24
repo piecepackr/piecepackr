@@ -166,6 +166,38 @@ test_that('`save_print_and_play(bleed = TRUE)` wording follows `size`', {
 	expect_match(label("letter"), '"faces" on left and "backs" on right')
 })
 
+test_that("`save_print_and_play()` bookmark pages sum to the page count", {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	page_list <- function(arrangement) {
+		grDevices::cairo_pdf(f, width = 11, height = 8.5, onefile = TRUE)
+		on.exit(invisible(grDevices::dev.off()), add = TRUE)
+		print_and_play_paper_compact(
+			cfg_default,
+			"letter",
+			c("piecepack", "pyramids", "matchsticks"),
+			arrangement,
+			TRUE,
+			list(top = 0, right = 0, bottom = 0, left = 0)
+		)
+	}
+
+	expect_equal(
+		unlist(page_list("single-sided")),
+		c(`Front Matter` = 1, Piecepack = 4, Matchsticks = 1, Pyramids = 1)
+	)
+	# each group of suits takes two pages when double-sided
+	expect_equal(
+		unlist(page_list("double-sided")),
+		c(`Front Matter` = 2, Piecepack = 4, Matchsticks = 2, Pyramids = 2)
+	)
+
+	skip_if_not_installed("qpdf")
+	skip_if_not_installed("xmpdf")
+	expect_equal(sum(unlist(page_list("double-sided"))), xmpdf::n_pages(f), ignore_attr = "names")
+})
+
 test_that('`save_print_and_play(size = "4x6")` is deprecated', {
 	skip_if_not(capabilities("cairo"))
 	rlang::local_options(piecepackr.metadata.inform = FALSE)
