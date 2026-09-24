@@ -61,17 +61,17 @@ Checkers
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
     stopifnot(packageVersion("ppdf") >= "0.2.0-13")
-    
+
     df_board <- checker_board()
     df_w <- checker_bits(suit = "white", x = rep(1:8, 2), y = rep(1:2, each=8))
     df_b <- checker_bits(suit = "red", x = rep(1:8, 2), y = rep(7:8, each=8))
     df <- rbind(df_board, df_w, df_b)
-    
+
     envir <- game_systems()
     pmap_piece(df, envir=envir, default.units="in", trans=op_transform, op_scale=0.5)
 
@@ -92,7 +92,7 @@ Dice
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     envir <- game_systems()
@@ -124,24 +124,24 @@ The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     library("tibble")
-    
+
     colors <- rep(c("black", "red", "green", "blue", "yellow", "white"), 2L)
     df <- tibble(piece_side = "tile_face",
                  suit=1:12, rank=7:18+1,
                  cfg = paste0("dominoes_", colors),
                  x=rep(4:1, 3), y=rep(2*3:1, each=4) - 0.5)
-    
+
     envir <- game_systems(round = TRUE)
     pmap_piece(df, default.units="in", envir=envir, op_scale=0.5, trans=op_transform)
 
 .. figure:: man/figures/README-dominoes-1.png
-    :alt: Double-18 dominoes and standard dice in a variety of colors
+    :alt: Double-18 dominoes in a variety of colors
 
-    Double-18 dominoes and standard dice in a variety of colors
+    Double-18 dominoes in a variety of colors
 
 Go
 ~~
@@ -150,12 +150,12 @@ Go
 
 
 .. sourcecode:: r
-    
+
 
     library("ppdf")
     library("piecepackr")
     stopifnot(packageVersion("ppdf") >= "0.2.0-13")
-    
+
     dfb <- go_board()
     dfB <- go_bits(suit = "blue",
                    x = c(2,2,2, 3,3, 4,4, 5,5, 6,6,6, 7,7, 8),
@@ -186,7 +186,7 @@ Go
               9,11,13:14, 7:8,12:13, 7,10, 11)
     )
     df <- rbind(dfb, dfB, dfR, dfY, dfG, dfK, dfW)
-    
+
     envir <- game_systems(shading = TRUE, background_color = "burlywood")
     pmap_piece(df, envir = envir, default.units = "in")
 
@@ -204,12 +204,12 @@ along with holed square boards sized for the 1" diameter marbles.
 
 
 .. sourcecode:: r
-    
+
 
     library("ppdf")
     library("piecepackr")
     stopifnot(packageVersion("ppdf") >= "0.2.0-13")
-    
+
     set.seed(42)
     dfb <- marble_board(suit = "green", nrows = 4L, ncol = 4L, x0 = 1, y0 = 1)
     dfm <- marble_bits(
@@ -218,7 +218,7 @@ along with holed square boards sized for the 1" diameter marbles.
         y = c(rep(1:4, each = 4L), rep(0.5 + rep(1:3, each = 3L)), rep(2:3, each = 2L), 2.5)
     )
     df <- rbind(dfb, dfm)
-    
+
     envir <- game_systems(round = TRUE, shading = TRUE)
     pmap_piece(df, default.units = "in", envir = envir,
                trans = marbles_transform, op_scale = 0.5)
@@ -249,16 +249,16 @@ Playing Cards
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     library("tibble")
-    
+
     df <- tibble(piece_side = "card_face",
                  x=1.25 + 2.5 * 0:3, y=2,
                  suit=1:4, rank=c(1,6,9,12),
                  cfg = "playing_cards")
-    
+
     envir <- game_systems("dejavu", round=TRUE)
     pmap_piece(df, default.units="in", envir=envir)
 
@@ -291,7 +291,7 @@ grid.piece() ({grid})
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     g.p <- function(...) { grid.piece(..., default.units="in") }
@@ -316,7 +316,7 @@ One can use `lists to configure <https://trevorldavis.com/piecepackr/configurati
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     dark_colorscheme <- list(
@@ -354,14 +354,14 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
 
 
 .. sourcecode:: r
-    
+
 
     library("grid")
     library("gridpattern")
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
     stopifnot(packageVersion("ppdf") >= "0.2.0-13")
-    
+
     tilings <- c("hexagonal", "snub_square", "pythagorean",
                  "truncated_square", "triangular", "trihexagonal")
     patternedCheckerGrobFn <- function(piece_side, suit, rank, cfg) {
@@ -379,7 +379,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
     checkers1 <- as.list(envir$checkers1)
     checkers1$grob_fn.bit <- patternedCheckerGrobFn
     envir$checkers1 <- pp_cfg(checkers1)
-    
+
     x1 <- c(1:3, 1:2, 1)
     x2 <- c(6:8, 7:8, 8)
     df_board <- checker_board(suit = 6L)
@@ -387,7 +387,7 @@ One can even specify `custom grob functions <https://trevorldavis.com/piecepackr
                                 x = c(x1, rev(x1), x2, rev(x2)),
                                 y = rep(c(1,1,1, 2,2, 3, 6, 7,7, 8,8,8), 2))
     df <- rbind(df_board, df_checkers)
-    
+
     pmap_piece(df, envir=envir, default.units="in")
 
 .. figure:: man/figures/README-pattern-1.png
@@ -402,7 +402,7 @@ oblique 3D projection
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     cfg3d <- list(width.pawn=0.75, height.pawn=0.75, depth.pawn=1,
@@ -444,7 +444,7 @@ If you are comfortable using R data frames there is also ``pmap_piece()`` that p
 
 
 .. sourcecode:: r
-    
+
 
     library("dplyr", warn.conflicts=FALSE)
     library("piecepackr")
@@ -474,7 +474,7 @@ geom_piece() ({ggplot2})
 
 
 .. sourcecode:: r
-    
+
 
     library("ggplot2")
     library("piecepackr")
@@ -486,7 +486,7 @@ geom_piece() ({ggplot2})
     df_w <- tibble(piece_side = "bit_back", suit = 1, rank = 1,
                    x = c(2, 2, 3, 4, 5, 5), y = c(4, 3, 6, 5, 4, 6))
     df <- rbind(df_board, df_w, df_b)
-    
+
     ggplot(df, aes_piece(df)) +
         geom_piece(cfg = "morris", envir = envir) +
         coord_fixed() +
@@ -502,7 +502,7 @@ geom_piece() ({ggplot2})
 
 
 .. sourcecode:: r
-    
+
 
     library("ggplot2")
     library("piecepackr")
@@ -533,14 +533,14 @@ piece3d() ({rgl})
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     library("piecenikr") # remotes::install_github("piecepackr/piecenikr")
     library("rgl")
     invisible(rgl::open3d())
     rgl::view3d(phi=-45, zoom = 0.9)
-    
+
     df <- icehouse_martian_chess()
     envir <- c(looney_pyramid_game_system(border = FALSE),
                game_systems(border = FALSE))
@@ -561,7 +561,7 @@ piece() ({rayrender})
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
@@ -592,7 +592,7 @@ piece_mesh() ({rayvertex})
 
 
 .. sourcecode:: r
-    
+
 
     library("piecepackr")
     library("ppdf") # remotes::install_github("piecepackr/ppdf")
@@ -623,13 +623,13 @@ animate_piece()
 
 
 .. sourcecode:: r
-    
+
 
     library("gifski")
     library("piecepackr")
     library("ppn") # remotes::install_github("piecepackr/ppn")
     library("tweenr")
-    
+
     envir <- game_systems("dejavu")
     cfg <- as.list(envir$piecepack)
     cfg$suit_color <- "black"
@@ -640,7 +640,7 @@ animate_piece()
     cfg$background_color.r5 <- "#D55E00"
     cfg$background_color.r6 <- "#F079A7"
     envir$piecepack <- pp_cfg(cfg)
-    
+
     ppn_file <- system.file("ppn/relativity.ppn", package = "ppn")
     game <- read_ppn(ppn_file)[[1]]
     animate_piece(game$dfs, file = "man/figures/README-relativity.gif",
@@ -669,7 +669,7 @@ Since one often plays Tak on differently sized boards one common Tak board desig
 
 
 .. sourcecode:: r
-    
+
 
     library("grid", warn.conflicts=FALSE)
     library("piecepackr")
@@ -699,7 +699,7 @@ Then we'll configure a Tak set and write some helper functions to draw Tak piece
 
 
 .. sourcecode:: r
-    
+
 
     cfg <- pp_cfg(list(suit_text=",,,", suit_color="white,tan4,", invert_colors=TRUE,
                        ps_text="", dm_text="",
@@ -739,7 +739,7 @@ Then we'll draw an example Tak game diagram:
 
 
 .. sourcecode:: r
-    
+
 
     pushViewport(viewport(width=inch(6), height=inch(6)))
     draw_tak_board(3, 3)

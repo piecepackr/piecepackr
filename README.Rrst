@@ -110,7 +110,7 @@ Dominoes
 
 The ``dominoes_chinese`` and ``dominoes_chinese_black`` configurations support `Chinese dominoes <https://www.pagat.com/class/domino.html#chinese>`__.
 
-.. {r dominoes, fig.width=5, fig.height=7, fig.cap="Double-18 dominoes and standard dice in a variety of colors"}
+.. {r dominoes, fig.width=5, fig.height=7, fig.cap="Double-18 dominoes in a variety of colors"}
 library("piecepackr")
 library("tibble")
 
