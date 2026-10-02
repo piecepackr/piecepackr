@@ -173,9 +173,7 @@ test_that('`save_print_and_play(bleed = "grouped")` errors if the shared band ov
 })
 
 test_that('`save_print_and_play(bleed = TRUE)` wording follows `size`', {
-	label <- function(size) {
-		a5_inst_grob_bleed(cfg_default, "piecepack", "single-sided", size)$children[[2]]$label
-	}
+	label <- function(size) a5_inst_md_bleed("piecepack", "single-sided", size)
 	expect_match(label("A5"), 'a page of tile "faces" then a page of tile "backs"')
 	expect_no_match(label("A5"), 'Central "gutter" line')
 	expect_match(label("letter"), '"faces" on left and "backs" on right')
@@ -211,6 +209,54 @@ test_that("`save_print_and_play()` bookmark pages sum to the page count", {
 	skip_if_not_installed("qpdf")
 	skip_if_not_installed("xmpdf")
 	expect_equal(sum(unlist(page_list("double-sided"))), xmpdf::n_pages(f), ignore_attr = "names")
+})
+
+test_that("`save_print_and_play()` omits credits and instructions without {marquee}", {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	cfg <- pp_cfg(list(
+		title = "",
+		description = "",
+		spdx_id = "CC-BY-4.0",
+		copyright = "",
+		credit = ""
+	))
+	local_mocked_bindings(has_marquee = function() FALSE)
+	rlang::local_options(piecepackr.metadata.inform = FALSE)
+	expect_snapshot(save_print_and_play(cfg, f, bleed = "grouped"))
+	rlang::local_options(piecepackr.marquee.inform = FALSE)
+	expect_no_message(save_print_and_play(cfg, f, bleed = "grouped"))
+})
+
+test_that("`save_print_and_play()` omits credits and instructions without glyph support", {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	cfg <- pp_cfg(list(
+		title = "",
+		description = "",
+		spdx_id = "CC-BY-4.0",
+		copyright = "",
+		credit = ""
+	))
+	local_mocked_bindings(device_supports_glyphs = function() FALSE)
+	rlang::local_options(piecepackr.metadata.inform = FALSE)
+	expect_snapshot(save_print_and_play(cfg, f, bleed = TRUE))
+})
+
+test_that("`legacy_credit_to_md()` converts the pre-markdown credit layout", {
+	expect_equal(
+		legacy_credit_to_md(c("\u25cf A", "\thttps://a", "\u25cf B")),
+		c("* A\\", "  https://a", "* B")
+	)
+	expect_equal(legacy_credit_to_md("* A\n\n*B*"), c("* A", "", "*B*"))
+	expect_equal(legacy_credit_to_md(""), character(0L))
+	expect_equal(legacy_credit_to_md(NULL), character(0L))
+})
+
+test_that("`trim_multistring()` removes common indentation", {
+	expect_equal(trim_multistring("\n\t\ta\n\t\t\tb\n\t\tc\n\t"), "a\n\tb\nc")
 })
 
 test_that('`save_print_and_play(size = "4x6")` is deprecated', {

@@ -71,7 +71,7 @@ implements the cache API used by the \code{cachem} package}
 \item{\code{cache_op_fn}}{Whether we should cache the oblique projection functions}
 \item{\code{cache_obj_fn}}{Whether we should cache any 3D rendering functions}
 \item{\code{copyright}}{Design copyright information}
-\item{\code{credit}}{Design credits}
+\item{\code{credit}}{Design credits (markdown) shown by \code{save_print_and_play()}}
 \item{\code{description}}{Design description}
 \item{\code{fontfamily}}{Main font family}
 \item{\code{has_bits}}{Whether we should assume this supports "bit" pieces}
