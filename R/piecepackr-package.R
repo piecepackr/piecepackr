@@ -7,6 +7,7 @@
 #'    \item{piecepackr.default.units}{Sets a new default for the `default.units` argument}
 #'    \item{piecepackr.envir}{Sets a new default for the `envir` argument}
 #'    \item{piecepackr.fs.inform}{If `FALSE` turns off messages when stroking and filling path support not detected in active graphics device.}
+#'    \item{piecepackr.marquee.inform}{If `FALSE` turns off messages when [save_print_and_play()] omits its credits and instructions because `{marquee}` isn't installed or the graphics device doesn't support glyph rendering.}
 #'    \item{piecepackr.metadata.inform}{If `FALSE` turns off messages when support for embedding metadata not detected.}
 #'    \item{piecepackr.op_angle}{Sets a new default for the `op_angle` argument}
 #'    \item{piecepackr.op_scale}{Sets a new default for the `op_scale` argument}

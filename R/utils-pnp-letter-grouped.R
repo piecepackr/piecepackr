@@ -90,7 +90,10 @@ print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly
 	)
 	gl <- gappend(
 		gl,
-		gTree(children = gList(a5_inst_grob_grouped(cfg, pieces, arrangement, size)), vp = vpr)
+		gTree(
+			children = gList(a5_inst_grob_grouped(cfg, pieces, arrangement, size)),
+			vp = vpr
+		)
 	)
 	pl[["Front Matter"]] <- 1
 
@@ -516,74 +519,54 @@ band_grob_grouped <- function(suit, cfg, y_off, dx = 0, dy = 0) {
 }
 
 a5_inst_grob_grouped <- function(cfg, pieces, arrangement, size) {
-	y_inst <- unit(1, "npc") - unit(0.2, "in")
-	inst <- c("\u25cf See https://www.ludism.org/ppwiki/MakingPiecepacks for general advice")
-
 	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
-	inst <- c(
-		inst,
-		"\u25cf This print-and-play layout was generated for:",
-		sprintf('\t\u25cb %s components', components),
-		sprintf('\t\u25cb "%s" arrangement with grouped bleed zones', arrangement),
-		sprintf('\t\u25cb "%s" paper size', size)
-	)
+	md <- trim_multistring(str_glue(
+		'
+		## Instructions
 
-	inst <- c(
-		inst,
-		"● One page per suit, split in two by a solid rule:",
-		'\t○ Above: 6 dice faces, a pawn belt, and a pawn face / back pair',
-		'\t○ Below: tile faces (left) and backs (right) mirrored about the "gutter",',
-		'\t\t  with coin and saucer backs / faces on either side of it'
-	)
+		* See <https://www.ludism.org/ppwiki/MakingPiecepacks> for general advice
+		* This print-and-play layout was generated for:
 
-	inst <- c(
-		inst,
-		"● 1. Cut along the solid rule to take off the top row",
-		"● 2. Put the lower part on both sides of the target material:",
-		'\t○ Fold along the "gutter" over the target material\'s edge, or',
-		'\t○ Cut the "gutter" too and line up the registration marks (circled',
-		'\t\t  above, squared below); this also pairs any two halves back to back'
-	)
+		  * {components} components
+		  * "{arrangement}" arrangement with grouped bleed zones
+		  * "{size}" paper size
 
-	inst <- c(
-		inst,
-		"● 3. Cut out tiles, coins and saucers:",
-		'\t○ Adjacent tiles share a cut line: use the "crop" marks around the block',
-		'\t○ Coins and saucers are spaced so a circular punch clears its neighbor;',
-		'\t\t  their crosshairs center the punch or guide (inferior) square cuts'
-	)
+		* One page per suit, split in two by a solid rule:
 
-	inst <- c(
-		inst,
-		"● 4. Cut out dice, belt and pawn from the top row:",
-		'\t○ Crosshairs mark each die and belt corner; "crop" marks at the ends',
-		'\t\t  of the dice row mark its top and bottom edges',
-		'\t○ Cut dice wider or narrower, or punch rounded dice: the face symbols',
-		'\t\t  are placed to suit a range of target dice',
-		'\t○ Mount the faces on a cube and wrap the belt around a cylinder',
-		'\t○ Cut around the pawn pair but not between the heads; fold there',
-		'\t\t  around a core for a two-sided pawn'
-	)
+		  * Above: 6 dice faces, a pawn belt, and a pawn face / back pair
+		  * Below: tile faces (left) and backs (right) mirrored about the "gutter",
+		    with coin and saucer backs / faces on either side of it
 
-	inst <- paste(inst, collapse = "\n")
+		1. Cut along the solid rule to take off the top row
+		2. Put the lower part on both sides of the target material:
 
-	gTree(
-		name = "instructions",
-		children = gList(
-			textGrob(
-				"Instructions",
-				x = unit(0.5, "cm"),
-				y = y_inst,
-				just = "left",
-				gp = gp_header
-			),
-			textGrob(
-				inst,
-				x = unit(0.5, "cm"),
-				y = y_inst - unit(0.2, "in"),
-				just = c(0, 1),
-				gp = gp_text
-			)
-		)
+		   * Fold along the "gutter" over the target material\'s edge, or
+		   * Cut the "gutter" too and line up the registration marks (circled above,
+		     squared below); this also pairs any two halves back to back
+
+		3. Cut out tiles, coins and saucers:
+
+		   * Adjacent tiles share a cut line: use the "crop" marks around the block
+		   * Coins and saucers are spaced so a circular punch clears its neighbor;
+		     their crosshairs center the punch or guide (inferior) square cuts
+
+		4. Cut out dice, belt and pawn from the top row:
+
+		   * Crosshairs mark each die and belt corner; "crop" marks at the ends of
+		     the dice row mark its top and bottom edges
+		   * Cut dice wider or narrower, or punch rounded dice: the face symbols are
+		     placed to suit a range of target dice
+		   * Mount the faces on a cube and wrap the belt around a cylinder
+		   * Cut around the pawn pair but not between the heads; fold there around a
+		     core for a two-sided pawn
+		',
+		.trim = FALSE
+	))
+	pnp_md_grob(
+		md,
+		"instructions",
+		x = unit(0.5, "cm"),
+		y = unit(1, "npc") - unit(0.1, "in"),
+		width = unit(1, "npc") - unit(1, "cm")
 	)
 }

@@ -39,6 +39,7 @@ Suggests:
 	animation (>= 2.7),
 	ggplot2,
 	gifski,
+	marquee,
 	gridpattern,
 	magick,
 	pdftools,

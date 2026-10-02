@@ -47,7 +47,7 @@
 #'   \item{`cache_op_fn`}{Whether we should cache the oblique projection functions}
 #'   \item{`cache_obj_fn`}{Whether we should cache any 3D rendering functions}
 #'   \item{`copyright`}{Design copyright information}
-#'   \item{`credit`}{Design credits}
+#'   \item{`credit`}{Design credits (markdown) shown by `save_print_and_play()`}
 #'   \item{`description`}{Design description}
 #'   \item{`fontfamily`}{Main font family}
 #'   \item{`has_bits`}{Whether we should assume this supports "bit" pieces}

@@ -28,6 +28,13 @@ Bug fixes and minor improvements
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
 
+* `save_print_and_play()` now renders its credits and cutting instructions from markdown with `marquee::marquee_grob()`,
+  which wraps them to the page width.
+  `cfg$credit` is now interpreted as markdown;
+  credits in the previous layout (a `"\u25cf "` bullet line followed by tab-indented lines) are converted automatically.
+  If the suggested package `{marquee}` isn't installed, or the graphics device doesn't support glyph rendering,
+  the credits and instructions are omitted with a message (which can be disabled with `options(piecepackr.marquee.inform = FALSE)`).
+
 * `save_print_and_play(bleed = TRUE, size = "A5")` now prints the A5 cutting instructions.
   Previously it described the letter/A4 layout instead, telling the reader to fold along a
   central "gutter" line that an A5 page doesn't have.

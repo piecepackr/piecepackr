@@ -35,6 +35,26 @@
       Error in `band_grob_grouped()`:
       ! band row is too wide for the page
 
+# `save_print_and_play()` omits credits and instructions without {marquee}
+
+    Code
+      save_print_and_play(cfg, f, bleed = "grouped")
+    Message
+      x Omitting credits since {marquee} is not installed
+      i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      x Omitting instructions since {marquee} is not installed
+      i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+
+# `save_print_and_play()` omits credits and instructions without glyph support
+
+    Code
+      save_print_and_play(cfg, f, bleed = TRUE)
+    Message
+      x Omitting credits since the graphics device doesn't support {marquee} glyph rendering
+      i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      x Omitting instructions since the graphics device doesn't support {marquee} glyph rendering
+      i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+
 # `save_print_and_play(size = "4x6")` is deprecated
 
     Code

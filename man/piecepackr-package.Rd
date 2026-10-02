@@ -20,6 +20,7 @@ The following piecepackr function arguments may be set globally via \code{\link[
 \item{piecepackr.default.units}{Sets a new default for the \code{default.units} argument}
 \item{piecepackr.envir}{Sets a new default for the \code{envir} argument}
 \item{piecepackr.fs.inform}{If \code{FALSE} turns off messages when stroking and filling path support not detected in active graphics device.}
+\item{piecepackr.marquee.inform}{If \code{FALSE} turns off messages when \code{\link[=save_print_and_play]{save_print_and_play()}} omits its credits and instructions because \code{{marquee}} isn't installed or the graphics device doesn't support glyph rendering.}
 \item{piecepackr.metadata.inform}{If \code{FALSE} turns off messages when support for embedding metadata not detected.}
 \item{piecepackr.op_angle}{Sets a new default for the \code{op_angle} argument}
 \item{piecepackr.op_scale}{Sets a new default for the \code{op_scale} argument}
