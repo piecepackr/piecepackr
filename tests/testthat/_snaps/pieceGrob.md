@@ -3,7 +3,7 @@
     Code
       save_print_and_play(cfg_default, f, size = "A5", bleed = "grouped", quietly = TRUE)
     Condition
-      Error in `print_and_play_paper_grouped()`:
+      Error in `save_print_and_play()`:
       ! `size = "A5"` not supported for `bleed = "grouped"`
 
 ---
@@ -12,7 +12,7 @@
       save_print_and_play(cfg_default, f, arrangement = "double-sided", bleed = "grouped",
         quietly = TRUE)
     Condition
-      Error in `print_and_play_paper_grouped()`:
+      Error in `save_print_and_play()`:
       ! `arrangement = "double-sided"` not supported for `bleed = "grouped"`
       i The dice, belt, and pawns are printed once across the full width, so duplex printing would land them back to back.
       i To mount the two halves on opposite sides of the target material, cut the sheet apart along the "gutter" line instead.
@@ -26,6 +26,22 @@
       `size = "4x6"` is deprecated.
       Error in `save_print_and_play()`:
       ! `size = "4x6"` not supported for `bleed = "grouped"`
+
+# `save_print_and_play()` doesn't leave its device open on error
+
+    Code
+      save_print_and_play(cfg_default, f, size = "A5", bleed = "grouped")
+    Condition
+      Error in `save_print_and_play()`:
+      ! `size = "A5"` not supported for `bleed = "grouped"`
+
+---
+
+    Code
+      save_print_and_play(cfg_default, f, quietly = TRUE)
+    Condition
+      Error in `print_and_play_paper()`:
+      ! mid-draw
 
 # `save_print_and_play()` errors if dice are wider than 3/4" with bleed
 

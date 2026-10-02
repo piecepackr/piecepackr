@@ -138,6 +138,32 @@ test_that('`save_print_and_play()` errors for unsupported `bleed = "grouped"` co
 	)
 })
 
+test_that("`save_print_and_play()` doesn't leave its device open on error", {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	devs <- grDevices::dev.list()
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(cfg_default, f, size = "A5", bleed = "grouped")
+	)
+	expect_equal(grDevices::dev.list(), devs)
+	expect_equal(file.exists(f), FALSE)
+	local_mocked_bindings(print_and_play_paper = function(...) abort("mid-draw"))
+	expect_snapshot(error = TRUE, save_print_and_play(cfg_default, f, quietly = TRUE))
+	expect_equal(grDevices::dev.list(), devs)
+})
+
+test_that("`a5_title_grob()` credits pawn saucers only when they're printed", {
+	local_mocked_bindings(pnp_md_grob = function(md, name, ...) textGrob(md, name = name))
+	credits <- function(...) {
+		g <- a5_title_grob(cfg_default, "piecepack", quietly = TRUE, ...)
+		g$children$credits$label
+	}
+	expect_match(credits(), "Pawn saucers")
+	expect_no_match(credits(saucers = FALSE), "Pawn saucers")
+})
+
 test_that('`save_print_and_play(bleed = "grouped")` band follows `size_bleed`', {
 	sep_x <- function(dx, dy) {
 		y_off <- (8.27 - A5H) / 2 + dy + REG_SHIFT
