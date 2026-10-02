@@ -248,6 +248,22 @@ test_that("`save_print_and_play()` omits credits and instructions without glyph 
 	expect_snapshot(save_print_and_play(cfg, f, bleed = TRUE))
 })
 
+test_that("`save_print_and_play()` omits credits and instructions on R < 4.3", {
+	skip_if_not(capabilities("cairo"))
+	f <- tempfile(fileext = ".pdf")
+	on.exit(unlink(f))
+	cfg <- pp_cfg(list(
+		title = "",
+		description = "",
+		spdx_id = "CC-BY-4.0",
+		copyright = "",
+		credit = ""
+	))
+	local_mocked_bindings(r_supports_glyphs = function() FALSE)
+	rlang::local_options(piecepackr.metadata.inform = FALSE)
+	expect_snapshot(save_print_and_play(cfg, f, bleed = TRUE))
+})
+
 test_that("`legacy_credit_to_md()` converts the pre-markdown credit layout", {
 	expect_equal(
 		legacy_credit_to_md(c("\u25cf A", "\thttps://a", "\u25cf B")),

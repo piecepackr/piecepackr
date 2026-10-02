@@ -54,6 +54,11 @@ has_marquee <- function() {
 	requireNamespace("marquee", quietly = TRUE)
 }
 
+# Wrapped so tests can mock an older R
+r_supports_glyphs <- function() {
+	getRversion() >= "4.3.0"
+}
+
 device_supports_glyphs <- function() {
 	isTRUE(dev.capabilities()$glyphs)
 }
@@ -96,6 +101,8 @@ pnp_marquee_style <- function() {
 pnp_md_grob <- function(md, name, x, y, width) {
 	if (!has_marquee()) {
 		reason <- "{marquee} is not installed"
+	} else if (!r_supports_glyphs()) {
+		reason <- "R >= 4.3 is required for {marquee} glyph rendering"
 	} else if (!device_supports_glyphs()) {
 		reason <- "the graphics device doesn't support {marquee} glyph rendering"
 	} else {
