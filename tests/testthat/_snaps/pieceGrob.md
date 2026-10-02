@@ -63,6 +63,16 @@
       x Omitting instructions since the graphics device doesn't support {marquee} glyph rendering
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
 
+# `save_print_and_play()` omits credits and instructions on R < 4.3
+
+    Code
+      save_print_and_play(cfg, f, bleed = TRUE)
+    Message
+      x Omitting credits since R >= 4.3 is required for {marquee} glyph rendering
+      i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      x Omitting instructions since R >= 4.3 is required for {marquee} glyph rendering
+      i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+
 # `save_print_and_play(size = "4x6")` is deprecated
 
     Code
