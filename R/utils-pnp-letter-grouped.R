@@ -12,6 +12,7 @@ REG_SIZE <- 1 / 8
 # and back coin and saucer edges sit 2 * BLEED apart with their bleeds meeting
 # at the fold.
 PAWN_GUTTER <- 2 * (1 / 8)
+DIE_SLOT <- 3 / 4 # die faces are centered in a slot this wide
 
 # Top of the tile bleed; the upper registration mark just above it; and the
 # solid rule above them both.  Everything the gutter fold needs -- the tiles'
@@ -379,8 +380,10 @@ band_grob_grouped <- function(suit, cfg, y_off, dx = 0, dy = 0) {
 	x_left <- MARGIN + dx
 	x_right <- INTER_W - MARGIN + dx
 
+	# Like `a5_die_grob()` each die face is centered in a 3/4" slot whose extra
+	# space is bleed, so the dice can be cut to either size.
 	# Spare width is split into four equal gaps: two ends and two between groups.
-	w_dice <- 6 * die_width + 2 * BLEED
+	w_dice <- 6 * DIE_SLOT + 2 * BLEED
 	w_belt <- belt_width + 2 * BLEED
 	w_pawn <- 2 * pawn_height + 2 * BLEED + PAWN_GUTTER
 	gap <- (x_right - x_left - w_dice - w_belt - w_pawn) / 4
@@ -388,7 +391,7 @@ band_grob_grouped <- function(suit, cfg, y_off, dx = 0, dy = 0) {
 	x_belt <- x_dice + w_dice + gap
 	x_pawn <- x_belt + w_belt + gap
 
-	row_height <- max(die_width, belt_height, pawn_width)
+	row_height <- max(DIE_SLOT, belt_height, pawn_width)
 	y_row <- band_top - BLEED - 0.5 * row_height
 	row_bottom <- band_top - row_height - 2 * BLEED
 
@@ -399,7 +402,7 @@ band_grob_grouped <- function(suit, cfg, y_off, dx = 0, dy = 0) {
 
 	dfd <- tibble(
 		piece_side = "die_face",
-		x = x_dice + BLEED + (seq(0, 5) + 0.5) * die_width,
+		x = x_dice + BLEED + (seq(0, 5) + 0.5) * DIE_SLOT,
 		y = y_row,
 		suit,
 		rank = 1:6,
@@ -435,46 +438,57 @@ band_grob_grouped <- function(suit, cfg, y_off, dx = 0, dy = 0) {
 		)
 	}
 	bleeds <- gList(
-		bleed_rect(x_dice, w_dice, die_width + 2 * BLEED, "die_face"),
+		bleed_rect(x_dice, w_dice, DIE_SLOT + 2 * BLEED, "die_face"),
 		bleed_rect(x_belt, w_belt, belt_height + 2 * BLEED, "belt_face"),
 		bleed_rect(x_pawn, w_pawn, pawn_width + 2 * BLEED, "pawn_face")
 	)
 
-	# The two heads meet at a fold, not a cut.  "2" and "7" sit beside the piece
-	# at its top edge and so mark that edge as a cut line; "1" and "8" sit above
-	# it and would print inside the gutter.  Drop all four, leaving "3456" to
-	# mark the outer end and the two long sides.
+	# The two heads meet across the gutter, which may be folded or cut.  "2" and
+	# "7" sit beside the piece at its top edge and mark it as a cut line, for
+	# cutting each half out on its own (e.g. to mount on a pre-cut standee).
+	# "1" and "8" sit above it and would print inside the gutter, so drop them.
 	cm_pawns <- pmap_piece(
 		dfp,
 		cropmarkGrob,
 		cfg = cfg,
 		default.units = "in",
 		bleed = TRUE,
-		cm_select = "3456",
+		cm_select = "234567",
 		draw = FALSE
 	)
-	# Dice needn't be cut on the shared lines -- a larger or smaller target die,
-	# or an arch punch for rounded dice, is equally fine, and the face symbols are
-	# placed to tolerate either.  So mark the row's top and bottom cut lines with
-	# crop marks clear of the artwork: excluding the page top and bottom edges
-	# leaves only the horizontal marks, and those only on the end dice.
+	# As in `a5_die_grob()` mark both the die's own size and its 3/4" slot.  The
+	# dice share a bleed zone, so only the marks outside the row are drawn: above
+	# and below every die, and beside the end dice.
 	dfd_cm <- dfd
-	dfd_cm$cm_select <- cm_select_outer(dfd, exclude = c(0L, 2L))
-	cm_dice <- pmap_piece(
-		dfd_cm,
-		cropmarkGrob,
-		cfg = cfg,
-		default.units = "in",
-		bleed = TRUE,
-		draw = FALSE
+	dfd_cm$cm_select <- cm_select_outer(dfd)
+	cm_dice <- gList(
+		pmap_piece(
+			dfd_cm,
+			cropmarkGrob,
+			cfg = cfg,
+			default.units = "in",
+			width = die_width,
+			height = die_width,
+			bleed = (DIE_SLOT - die_width) / 2 + BLEED,
+			draw = FALSE
+		),
+		pmap_piece(
+			dfd_cm,
+			cropmarkGrob,
+			cfg = cfg,
+			default.units = "in",
+			width = DIE_SLOT,
+			height = DIE_SLOT,
+			bleed = BLEED,
+			draw = FALSE
+		)
 	)
 	ps <- pmap_piece(rbind(dfd, dfb, dfp), pieceGrob, cfg = cfg, default.units = "in", draw = FALSE)
 
-	# Crosshairs sit on the corner itself, so where two dice share a cut line one
-	# mark serves both.  They straddle the corner, so draw them over the pieces.
-	df_ch <- rbind(dfd, dfb)
-	df_ch$ch_width <- ch_width_for(df_ch, cfg)
-	ch <- pmap_piece(df_ch, crosshairGrob, cfg = cfg, default.units = "in", draw = FALSE)
+	# Crosshairs straddle the belt's corners, so draw them over the pieces.
+	dfb_ch <- dfb
+	dfb_ch$ch_width <- ch_width_for(dfb_ch, cfg)
+	ch <- pmap_piece(dfb_ch, crosshairGrob, cfg = cfg, default.units = "in", draw = FALSE)
 
 	# Solid rule dividing the row from the blocks below: cut here first, then fold
 	# the lower sheet along the (dashed) gutter, which stops at this line.
@@ -521,8 +535,8 @@ band_grob_grouped <- function(suit, cfg, y_off, dx = 0, dy = 0) {
 a5_inst_grob_grouped <- function(cfg, pieces, arrangement, size) {
 	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
 	md <- trim_multistring(str_glue(
-		'
-		## Instructions
+		r'(
+		## Overview
 
 		* See <https://www.ludism.org/ppwiki/MakingPiecepacks> for general advice
 		* This print-and-play layout was generated for:
@@ -533,33 +547,35 @@ a5_inst_grob_grouped <- function(cfg, pieces, arrangement, size) {
 
 		* One page per suit, split in two by a solid rule:
 
-		  * Above: 6 dice faces, a pawn belt, and a pawn face / back pair
+		  * Above: dice faces, a (pawn) belt, and a (standee) pawn face / back.
 		  * Below: tile faces (left) and backs (right) mirrored about the "gutter",
-		    with coin and saucer backs / faces on either side of it
+		    with coin and saucer backs / faces in between.
+		  * Depending on your preferences you may only need one of the (standee) pawn, (pawn) belt, or (pawn) saucer.
 
-		1. Cut along the solid rule to take off the top row
-		2. Put the lower part on both sides of the target material:
+		## Instructions
 
-		   * Fold along the "gutter" over the target material\'s edge, or
-		   * Cut the "gutter" too and line up the registration marks (circled above,
-		     squared below); this also pairs any two halves back to back
+		1. Print single-sided on full-sheet label paper.
+		1. Cut along the solid rule to take off the top row.
+		1. (optional) Put the lower part on both sides of the target material you'll be making your pieces from (if not using pre-cut pieces):
 
-		3. Cut out tiles, coins and saucers:
+		   * Fold along the "gutter" over the target material\'s edge or
+		     Cut the "gutter" too and line up the registration marks (circled above,
+		     squared below).
 
-		   * Adjacent tiles share a cut line: use the "crop" marks around the block
+		1. Cut out tiles, coins and saucers:
+
+		   * Adjacent tiles share a cut line: use the "crop" marks around the block.
 		   * Coins and saucers are spaced so a circular punch clears its neighbor;
-		     their crosshairs center the punch or guide (inferior) square cuts
+		     use the crosshairs to center the punch.
+		   * (optional) Round the corners of the tile.
 
-		4. Cut out dice, belt and pawn from the top row:
+		1. Cut out dice, belt and pawn from the top row:
 
-		   * Crosshairs mark each die and belt corner; "crop" marks at the ends of
-		     the dice row mark its top and bottom edges
-		   * Cut dice wider or narrower, or punch rounded dice: the face symbols are
-		     placed to suit a range of target dice
-		   * Mount the faces on a cube and wrap the belt around a cylinder
-		   * Cut around the pawn pair but not between the heads; fold there around a
-		     core for a two-sided pawn
-		',
+		   * Depending on size of target dice use inner or outer "crop" marks as
+		     guide to cut or punch out dice and then mount the faces on a cube.
+		   * Cut out and wrap the belt around a pawn / cylinder.
+		   * Cut out the (standee) pawn optionally folding along the "gutter" over the target material.
+		)',
 		.trim = FALSE
 	))
 	pnp_md_grob(

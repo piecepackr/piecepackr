@@ -35,6 +35,9 @@ Bug fixes and minor improvements
   If the suggested package `{marquee}` isn't installed, or the graphics device doesn't support glyph rendering,
   the credits and instructions are omitted with a message (which can be disabled with `options(piecepackr.marquee.inform = FALSE)`).
 
+* `save_print_and_play(bleed = TRUE)` now errors if the die faces are wider than 3/4".
+  Previously they overflowed their 3/4" slots.
+
 * `save_print_and_play(bleed = TRUE, size = "A5")` now prints the A5 cutting instructions.
   Previously it described the letter/A4 layout instead, telling the reader to fold along a
   central "gutter" line that an A5 page doesn't have.

@@ -161,14 +161,17 @@ test_that('`save_print_and_play(bleed = "grouped")` fits larger dice in the shar
 	expect_equal(xmpdf::n_pages(f), 5, ignore_attr = "names")
 })
 
-test_that('`save_print_and_play(bleed = "grouped")` errors if the shared band overflows', {
-	skip_if_not(capabilities("cairo"))
+test_that("`save_print_and_play()` errors if dice are wider than 3/4\" with bleed", {
 	f <- tempfile(fileext = ".pdf")
 	on.exit(unlink(f))
-	cfg <- pp_cfg(list(width.die_face = 1))
+	cfg <- pp_cfg(list(width.die_face = 0.8))
 	expect_snapshot(
 		error = TRUE,
 		save_print_and_play(cfg, f, bleed = "grouped", quietly = TRUE)
+	)
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(cfg, f, bleed = TRUE, quietly = TRUE)
 	)
 })
 

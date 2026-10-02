@@ -114,6 +114,18 @@ save_print_and_play <- function(
 	)
 
 	cfg <- as_pp_cfg(cfg)
+	if (
+		bleed != "none" &&
+			size != "4x6" &&
+			"piecepack" %in% pieces &&
+			cfg$get_width("die_face") > 3 / 4 + 1e-8
+	) {
+		abort(sprintf(
+			'`cfg$get_width("die_face")` must be at most 3/4" for `bleed = "%s"`, not %s"',
+			bleed,
+			format(cfg$get_width("die_face"))
+		))
+	}
 	current_dev <- grDevices::dev.cur()
 	if (current_dev > 1) {
 		on.exit(grDevices::dev.set(current_dev), add = TRUE)

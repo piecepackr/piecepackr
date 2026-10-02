@@ -27,13 +27,21 @@
       Error in `save_print_and_play()`:
       ! `size = "4x6"` not supported for `bleed = "grouped"`
 
-# `save_print_and_play(bleed = "grouped")` errors if the shared band overflows
+# `save_print_and_play()` errors if dice are wider than 3/4" with bleed
 
     Code
       save_print_and_play(cfg, f, bleed = "grouped", quietly = TRUE)
     Condition
-      Error in `band_grob_grouped()`:
-      ! band row is too wide for the page
+      Error in `save_print_and_play()`:
+      ! `cfg$get_width("die_face")` must be at most 3/4" for `bleed = "grouped"`, not 0.8"
+
+---
+
+    Code
+      save_print_and_play(cfg, f, bleed = TRUE, quietly = TRUE)
+    Condition
+      Error in `save_print_and_play()`:
+      ! `cfg$get_width("die_face")` must be at most 3/4" for `bleed = "individual"`, not 0.8"
 
 # `save_print_and_play()` omits credits and instructions without {marquee}
 
