@@ -3,15 +3,6 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly, 
 	n_ranks <- cfg$n_ranks
 
 	stopifnot(n_ranks <= 6)
-	if ("matchsticks" %in% pieces) {
-		abort('"matchsticks" `pieces` not currently supported for `bleed = TRUE`')
-	}
-	if ("pyramids" %in% pieces) {
-		abort('"pyramids" `pieces` not currently supported for `bleed = TRUE`')
-	}
-	if ("subpack" %in% pieces) {
-		abort('"subpack" `pieces` not currently supported for `bleed = TRUE`')
-	}
 
 	if (size == "letter") {
 		xl <- inch(LETTER_HEIGHT / 2 - A5W / 2 + size_bleed$left)
@@ -34,7 +25,7 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly, 
 	pl <- list()
 
 	## Front Matter
-	gl <- gappend(gl, a5_title_grob(cfg, pieces, quietly, bleed = TRUE))
+	gl <- gappend(gl, a5_title_grob(cfg, pieces, quietly, saucers = FALSE))
 	gl <- gappend(gl, a5_inst_grob_bleed(cfg, pieces, arrangement, size))
 	if (arrangement == "double-sided" && size != "A5") {
 		gl <- gappend(gl, blank_grob)

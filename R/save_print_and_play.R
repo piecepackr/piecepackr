@@ -86,9 +86,6 @@ save_print_and_play <- function(
 			class = "deprecatedWarning"
 		)
 	}
-	if (size == "4x6" && bleed == "grouped") {
-		abort('`size = "4x6"` not supported for `bleed = "grouped"`')
-	}
 	arrangement <- match.arg(arrangement)
 	if (is.null(pieces)) {
 		if (size == "4x6" || bleed != "none") {
@@ -100,6 +97,7 @@ save_print_and_play <- function(
 	if ("all" %in% pieces) {
 		pieces <- c("piecepack", "pyramids", "matchsticks", "subpack")
 	}
+	check_pnp_args(bleed, size, pieces, arrangement)
 	if (is.null(size_bleed)) {
 		if (size == "4x6") {
 			size_bleed <- list(top = 1 / 16, right = 3 / 32, bottom = 1 / 16, left = 3 / 32)
@@ -153,6 +151,13 @@ save_print_and_play <- function(
 		))
 	}
 	do.call(dev, args)
+	# Close the device if drawing fails partway so it isn't left open
+	pnp_dev <- grDevices::dev.cur()
+	on.exit(
+		if (pnp_dev %in% grDevices::dev.list()) grDevices::dev.off(pnp_dev),
+		add = TRUE,
+		after = FALSE
+	)
 
 	pl <- switch(
 		size,
@@ -172,6 +177,54 @@ save_print_and_play <- function(
 				i = "These messages can be disabled via `options(piecepackr.metadata.inform = FALSE)`."
 			)
 			inform(msg, class = "piecepackr_embed_metadata")
+		}
+	}
+	invisible(NULL)
+}
+
+# Checked before opening the graphics device so an unsupported combination
+# doesn't leave it open
+check_pnp_args <- function(bleed, size, pieces, arrangement, call = rlang::caller_env()) {
+	if (size == "4x6") {
+		if (bleed == "grouped") {
+			abort('`size = "4x6"` not supported for `bleed = "grouped"`', call = call)
+		}
+		return(invisible(NULL))
+	}
+	if (bleed != "none") {
+		bleed_arg <- if (bleed == "individual") "`bleed = TRUE`" else '`bleed = "grouped"`'
+		for (piece in c("matchsticks", "pyramids", "subpack")) {
+			if (piece %in% pieces) {
+				abort(
+					sprintf('"%s" `pieces` not currently supported for %s', piece, bleed_arg),
+					call = call
+				)
+			}
+		}
+	}
+	if (bleed == "grouped") {
+		if (size == "A5") {
+			abort('`size = "A5"` not supported for `bleed = "grouped"`', call = call)
+		}
+		# The two halves can be gutter-folded around the material, or cut apart and
+		# laid on opposite sides of it -- but they cannot be printed on opposite
+		# sides of the paper, since the dice, belt and pawns are printed once across
+		# the full width and would land back to back.
+		if (arrangement == "double-sided") {
+			abort(
+				c(
+					'`arrangement = "double-sided"` not supported for `bleed = "grouped"`',
+					i = paste(
+						"The dice, belt, and pawns are printed once across the full width,",
+						"so duplex printing would land them back to back."
+					),
+					i = paste(
+						"To mount the two halves on opposite sides of the target material,",
+						'cut the sheet apart along the "gutter" line instead.'
+					)
+				),
+				call = call
+			)
 		}
 	}
 	invisible(NULL)

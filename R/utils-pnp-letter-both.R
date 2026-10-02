@@ -128,7 +128,7 @@ pnp_md_grob <- function(md, name, x, y, width) {
 	)
 }
 
-a5_title_grob <- function(cfg, pieces, quietly, extra_credit = TRUE, bleed = FALSE) {
+a5_title_grob <- function(cfg, pieces, quietly, extra_credit = TRUE, saucers = TRUE) {
 	# Title
 	y_title <- unit(1, "npc") - unit(0.2, "in")
 	if (is.null(cfg$title)) {
@@ -256,7 +256,7 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit = TRUE, bleed = FAL
 		if ("piecepack" %in% pieces) {
 			credits <- c(credits, piecepack_credit)
 		}
-		if (!bleed && "piecepack" %in% pieces) {
+		if (saucers && "piecepack" %in% pieces) {
 			credits <- c(
 				credits,
 				credit_item(

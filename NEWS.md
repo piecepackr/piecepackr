@@ -27,6 +27,9 @@ Bug fixes and minor improvements
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
 
+* `save_print_and_play()` no longer leaves its graphics device open when it errors.
+  Unsupported `bleed` combinations (e.g. `pieces` not supported by `bleed = TRUE`) are now caught before the output file is created.
+
 * `save_print_and_play()` now renders its credits and cutting instructions from markdown with `marquee::marquee_grob()`,
   which wraps them to the page width.
   `cfg$credit` is now interpreted as markdown;

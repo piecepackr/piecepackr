@@ -32,36 +32,6 @@ print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly
 	n_ranks <- cfg$n_ranks
 
 	stopifnot(n_ranks <= 6)
-	if ("matchsticks" %in% pieces) {
-		abort('"matchsticks" `pieces` not currently supported for `bleed = "grouped"`')
-	}
-	if ("pyramids" %in% pieces) {
-		abort('"pyramids" `pieces` not currently supported for `bleed = "grouped"`')
-	}
-	if ("subpack" %in% pieces) {
-		abort('"subpack" `pieces` not currently supported for `bleed = "grouped"`')
-	}
-	if (size == "A5") {
-		abort('`size = "A5"` not supported for `bleed = "grouped"`')
-	}
-	# The two halves can be gutter-folded around the material, or cut apart and
-	# laid on opposite sides of it -- but they cannot be printed on opposite
-	# sides of the paper, since the dice, belt and pawns are printed once across
-	# the full width and would land back to back.
-	if (arrangement == "double-sided") {
-		abort(c(
-			'`arrangement = "double-sided"` not supported for `bleed = "grouped"`',
-			i = paste(
-				"The dice, belt, and pawns are printed once across the full width,",
-				"so duplex printing would land them back to back."
-			),
-			i = paste(
-				"To mount the two halves on opposite sides of the target material,",
-				'cut the sheet apart along the "gutter" line instead.'
-			)
-		))
-	}
-
 	# Draw within a viewport equal to the intersection of the letter and A4
 	# paper sizes (11" x 8.27"), centered on the page -- both paper sizes then
 	# share the same piece coordinates.
@@ -87,7 +57,7 @@ print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly
 	## the piecepack grobs (plain grid.draw in the loop below).
 	gl <- gappend(
 		gl,
-		gTree(children = gList(a5_title_grob(cfg, pieces, quietly, bleed = TRUE)), vp = vpl)
+		gTree(children = gList(a5_title_grob(cfg, pieces, quietly)), vp = vpl)
 	)
 	gl <- gappend(
 		gl,
