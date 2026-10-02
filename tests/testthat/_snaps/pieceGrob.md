@@ -17,6 +17,16 @@
       i The dice, belt, and pawns are printed once across the full width, so duplex printing would land them back to back.
       i To mount the two halves on opposite sides of the target material, cut the sheet apart along the "gutter" line instead.
 
+---
+
+    Code
+      save_print_and_play(cfg_default, f, size = "4x6", bleed = "grouped", quietly = TRUE)
+    Condition
+      Warning:
+      `size = "4x6"` is deprecated.
+      Error in `save_print_and_play()`:
+      ! `size = "4x6"` not supported for `bleed = "grouped"`
+
 # `save_print_and_play(bleed = "grouped")` errors if the shared band overflows
 
     Code

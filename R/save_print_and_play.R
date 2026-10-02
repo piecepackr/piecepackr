@@ -24,7 +24,9 @@ A4_HEIGHT <- 11.69
 #' @param bleed Controls bleed zones and crop marks around game pieces.
 #'              `FALSE` or `"none"` produces a compact layout with no bleed.
 #'              `TRUE` or `"individual"` gives each piece its own 1/8" bleed zone and crop marks.
-#'              `"grouped"` gives same-type pieces a shared 1/8" bleed so adjacent same-type pieces share a cut line.
+#'              `"grouped"` gives same-type pieces a shared 1/8" bleed zone:
+#'              adjacent tiles share a cut line while coins and dice keep a gap
+#'              so each can be punched out or cut to size.
 #'              `"individual"` currently only supports `pieces = "piecepack"` and doesn't support `size = "4x6"`.
 #'              `"grouped"` only supports `pieces = "piecepack"` and
 #'              `arrangement = "single-sided"`, and doesn't support `size = "4x6"` or `size = "A5"`.
@@ -83,6 +85,9 @@ save_print_and_play <- function(
 			'`size = "4x6"` is deprecated.',
 			class = "deprecatedWarning"
 		)
+	}
+	if (size == "4x6" && bleed == "grouped") {
+		abort('`size = "4x6"` not supported for `bleed = "grouped"`')
 	}
 	arrangement <- match.arg(arrangement)
 	if (is.null(pieces)) {

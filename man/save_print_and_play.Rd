@@ -50,7 +50,9 @@ in the provided configuration.}
 \item{bleed}{Controls bleed zones and crop marks around game pieces.
 \code{FALSE} or \code{"none"} produces a compact layout with no bleed.
 \code{TRUE} or \code{"individual"} gives each piece its own 1/8" bleed zone and crop marks.
-\code{"grouped"} gives same-type pieces a shared 1/8" bleed so adjacent same-type pieces share a cut line.
+\code{"grouped"} gives same-type pieces a shared 1/8" bleed zone:
+adjacent tiles share a cut line while coins and dice keep a gap
+so each can be punched out or cut to size.
 \code{"individual"} currently only supports \code{pieces = "piecepack"} and doesn't support \code{size = "4x6"}.
 \code{"grouped"} only supports \code{pieces = "piecepack"} and
 \code{arrangement = "single-sided"}, and doesn't support \code{size = "4x6"} or \code{size = "A5"}.}

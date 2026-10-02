@@ -132,6 +132,21 @@ test_that('`save_print_and_play()` errors for unsupported `bleed = "grouped"` co
 			quietly = TRUE
 		)
 	)
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(cfg_default, f, size = "4x6", bleed = "grouped", quietly = TRUE)
+	)
+})
+
+test_that('`save_print_and_play(bleed = "grouped")` band follows `size_bleed`', {
+	sep_x <- function(dx, dy) {
+		y_off <- (8.27 - A5H) / 2 + dy + REG_SHIFT
+		band <- band_grob_grouped(1L, cfg_default, y_off, dx, dy)
+		sep <- Filter(function(g) identical(g$name, "pnp_separator"), band)[[1]]
+		as.numeric(sep$x)
+	}
+	expect_equal(sep_x(0, 0), c(0.25, 10.75))
+	expect_equal(sep_x(0.25, 0.25), c(0.50, 11.00))
 })
 
 test_that('`save_print_and_play(bleed = "grouped")` fits larger dice in the shared band', {
