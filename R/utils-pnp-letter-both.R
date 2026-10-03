@@ -109,13 +109,7 @@ pnp_md_grob <- function(md, name, x, y, width) {
 		reason <- NULL
 	}
 	if (!is.null(reason)) {
-		if (!isFALSE(getOption("piecepackr.marquee.inform"))) {
-			msg <- c(
-				x = sprintf("Omitting %s since %s", name, reason),
-				i = "These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`."
-			)
-			inform(msg, class = "piecepackr_missing_dependency")
-		}
+		marquee_inform(name, reason)
 		return(nullGrob(name = name))
 	}
 	marquee::marquee_grob(

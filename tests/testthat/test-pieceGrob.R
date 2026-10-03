@@ -254,6 +254,10 @@ test_that("`save_print_and_play()` omits credits and instructions without {marqu
 	local_mocked_bindings(has_marquee = function() FALSE)
 	rlang::local_options(piecepackr.metadata.inform = FALSE)
 	expect_snapshot(save_print_and_play(cfg, f, bleed = "grouped"))
+	expect_no_message(suppressMessages(
+		save_print_and_play(cfg, f, bleed = "grouped"),
+		classes = "piecepackr_marquee"
+	))
 	rlang::local_options(piecepackr.marquee.inform = FALSE)
 	expect_no_message(save_print_and_play(cfg, f, bleed = "grouped"))
 })

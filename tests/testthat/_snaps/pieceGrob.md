@@ -66,8 +66,10 @@
     Message
       x Omitting credits since {marquee} is not installed
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      i These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.
       x Omitting instructions since {marquee} is not installed
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      i These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.
 
 # `save_print_and_play()` omits credits and instructions without glyph support
 
@@ -76,8 +78,10 @@
     Message
       x Omitting credits since the graphics device doesn't support {marquee} glyph rendering
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      i These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.
       x Omitting instructions since the graphics device doesn't support {marquee} glyph rendering
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      i These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.
 
 # `save_print_and_play()` omits credits and instructions on R < 4.3
 
@@ -86,8 +90,10 @@
     Message
       x Omitting credits since R >= 4.3 is required for {marquee} glyph rendering
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      i These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.
       x Omitting instructions since R >= 4.3 is required for {marquee} glyph rendering
       i These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.
+      i These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.
 
 # `save_print_and_play(size = "4x6")` is deprecated
 

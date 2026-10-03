@@ -338,3 +338,16 @@ rgr_inform <- function() {
 	)
 	inform(msg, class = "piecepackr_radial_gradient")
 }
+
+marquee_inform <- function(name, reason) {
+	if (isFALSE(getOption("piecepackr.marquee.inform"))) {
+		return(invisible(NULL))
+	}
+
+	msg <- c(
+		x = sprintf("Omitting %s since %s", name, reason),
+		i = "These messages can be disabled via `options(piecepackr.marquee.inform = FALSE)`.",
+		i = 'These messages can be suppressed via `suppressMessages(expr, classes = "piecepackr_marquee")`.'
+	)
+	inform(msg, class = "piecepackr_marquee")
+}
