@@ -26,7 +26,7 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly, 
 
 	## Front Matter
 	gl <- gappend(gl, a5_title_grob(cfg, pieces, quietly, saucers = FALSE))
-	gl <- gappend(gl, a5_inst_grob_bleed(cfg, pieces, arrangement, size))
+	gl <- gappend(gl, pnp_inst_grob(a5_inst_md_bleed(pieces, arrangement, size)))
 	if (arrangement == "double-sided" && size != "A5") {
 		gl <- gappend(gl, blank_grob)
 		gl <- gappend(gl, blank_grob)
@@ -178,24 +178,9 @@ a5_inst_md_bleed <- function(pieces, arrangement, size) {
 	}
 
 	# {marquee} needs a blank line around each sub-list to nest its bullets
-	is_sub <- startsWith(inst, "  ")
-	before <- !is_sub & c(is_sub[-1L], FALSE)
-	after <- is_sub & !c(is_sub[-1L], FALSE)
-	inst <- unlist(
-		Map(function(x, b, a) c(x, if (b || a) ""), inst, before, after),
-		use.names = FALSE
-	)
-	paste(c("## Instructions", "", inst), collapse = "\n")
-}
-
-a5_inst_grob_bleed <- function(cfg, pieces, arrangement, size) {
-	pnp_md_grob(
-		a5_inst_md_bleed(pieces, arrangement, size),
-		"instructions",
-		x = unit(0.5, "cm"),
-		y = unit(1, "npc") - unit(0.1, "in"),
-		width = unit(1, "npc") - unit(1, "cm")
-	)
+	run <- cumsum(c(TRUE, diff(startsWith(inst, "  ")) != 0))
+	inst <- vapply(split(inst, run), paste, character(1L), collapse = "\n")
+	paste(c("## Instructions", inst), collapse = "\n\n")
 }
 
 a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {
@@ -344,18 +329,18 @@ a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
 
 a5_die_grob <- function(suit, cfg, front, arrangement) {
 	die_width <- cfg$get_width("die_face")
-	xt1 <- 0.5 * 3 / 4 + 1 / 8 + 1 / 8
-	xt2 <- xt1 + 3 / 4 + 1 / 4 + 1 / 8
-	xt3 <- xt2 + 3 / 4 + 1 / 4 + 1 / 8
-	xt4 <- xt3 + 3 / 4 + 1 / 4 + 1 / 8
+	xt1 <- 0.5 * DIE_SLOT + 1 / 8 + 1 / 8
+	xt2 <- xt1 + DIE_SLOT + 1 / 4 + 1 / 8
+	xt3 <- xt2 + DIE_SLOT + 1 / 4 + 1 / 8
+	xt4 <- xt3 + DIE_SLOT + 1 / 4 + 1 / 8
 
-	content_height <- 5 * (3 / 4 + 1 / 4 + 1 / 8) + 3 / 4 + 1 / 4
-	yt1 <- 0.5 * 3 / 4 + 1 / 8 + (A5H - content_height) / 2
-	yt2 <- yt1 + 3 / 4 + 1 / 4 + 1 / 8
-	yt3 <- yt2 + 3 / 4 + 1 / 4 + 1 / 8
-	yt4 <- yt3 + 3 / 4 + 1 / 4 + 1 / 8
-	yt5 <- yt4 + 3 / 4 + 1 / 4 + 1 / 8
-	yt6 <- yt5 + 3 / 4 + 1 / 4 + 1 / 8
+	content_height <- 5 * (DIE_SLOT + 1 / 4 + 1 / 8) + DIE_SLOT + 1 / 4
+	yt1 <- 0.5 * DIE_SLOT + 1 / 8 + (A5H - content_height) / 2
+	yt2 <- yt1 + DIE_SLOT + 1 / 4 + 1 / 8
+	yt3 <- yt2 + DIE_SLOT + 1 / 4 + 1 / 8
+	yt4 <- yt3 + DIE_SLOT + 1 / 4 + 1 / 8
+	yt5 <- yt4 + DIE_SLOT + 1 / 4 + 1 / 8
+	yt6 <- yt5 + DIE_SLOT + 1 / 4 + 1 / 8
 
 	df <- tibble::tibble(
 		piece_side = "die_face",
@@ -376,7 +361,7 @@ a5_die_grob <- function(suit, cfg, front, arrangement) {
 		default.units = "in",
 		width = die_width,
 		height = die_width,
-		bleed = (3 / 4 - die_width) / 2 + 1 / 8,
+		bleed = (DIE_SLOT - die_width) / 2 + 1 / 8,
 		draw = FALSE
 	)
 	cm_grob2 <- pmap_piece(
@@ -384,8 +369,8 @@ a5_die_grob <- function(suit, cfg, front, arrangement) {
 		cropmarkGrob,
 		cfg = cfg,
 		default.units = "in",
-		width = 3 / 4,
-		height = 3 / 4,
+		width = DIE_SLOT,
+		height = DIE_SLOT,
 		bleed = 1 / 8,
 		draw = FALSE
 	)
@@ -394,7 +379,7 @@ a5_die_grob <- function(suit, cfg, front, arrangement) {
 		pieceGrob,
 		cfg = cfg,
 		default.units = "in",
-		bleed = (3 / 4 - die_width) / 2 + 1 / 8,
+		bleed = (DIE_SLOT - die_width) / 2 + 1 / 8,
 		draw = FALSE
 	)
 	gList(cm_grob1, cm_grob2, ps_grob)
