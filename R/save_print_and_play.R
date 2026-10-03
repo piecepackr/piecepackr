@@ -97,7 +97,6 @@ save_print_and_play <- function(
 	if ("all" %in% pieces) {
 		pieces <- c("piecepack", "pyramids", "matchsticks", "subpack")
 	}
-	check_pnp_args(bleed, size, pieces, arrangement)
 	if (is.null(size_bleed)) {
 		if (size == "4x6") {
 			size_bleed <- list(top = 1 / 16, right = 3 / 32, bottom = 1 / 16, left = 3 / 32)
@@ -112,18 +111,7 @@ save_print_and_play <- function(
 	)
 
 	cfg <- as_pp_cfg(cfg)
-	if (
-		bleed != "none" &&
-			size != "4x6" &&
-			"piecepack" %in% pieces &&
-			cfg$get_width("die_face") > 3 / 4 + 1e-8
-	) {
-		abort(sprintf(
-			'`cfg$get_width("die_face")` must be at most 3/4" for `bleed = "%s"`, not %s"',
-			bleed,
-			format(cfg$get_width("die_face"))
-		))
-	}
+	check_pnp_args(cfg, bleed, size, pieces, arrangement)
 	current_dev <- grDevices::dev.cur()
 	if (current_dev > 1) {
 		on.exit(grDevices::dev.set(current_dev), add = TRUE)
@@ -184,23 +172,37 @@ save_print_and_play <- function(
 
 # Checked before opening the graphics device so an unsupported combination
 # doesn't leave it open
-check_pnp_args <- function(bleed, size, pieces, arrangement, call = rlang::caller_env()) {
-	if (size == "4x6") {
-		if (bleed == "grouped") {
-			abort('`size = "4x6"` not supported for `bleed = "grouped"`', call = call)
+check_pnp_args <- function(cfg, bleed, size, pieces, arrangement, call = rlang::caller_env()) {
+	bleed_arg <- if (bleed == "individual") "`bleed = TRUE`" else '`bleed = "grouped"`'
+	if (size == "4x6" && bleed != "none") {
+		abort(sprintf('`size = "4x6"` not supported for %s', bleed_arg), call = call)
+	}
+	if (size == "4x6" || bleed != "none") {
+		unsupported <- intersect(c("matchsticks", "pyramids", "subpack"), pieces)
+		if (length(unsupported) > 0L) {
+			abort(
+				sprintf(
+					'"%s" `pieces` not currently supported for %s',
+					unsupported[1L],
+					if (size == "4x6") '`size = "4x6"`' else bleed_arg
+				),
+				call = call
+			)
 		}
+	}
+	if (size == "4x6") {
 		return(invisible(NULL))
 	}
-	if (bleed != "none") {
-		bleed_arg <- if (bleed == "individual") "`bleed = TRUE`" else '`bleed = "grouped"`'
-		for (piece in c("matchsticks", "pyramids", "subpack")) {
-			if (piece %in% pieces) {
-				abort(
-					sprintf('"%s" `pieces` not currently supported for %s', piece, bleed_arg),
-					call = call
-				)
-			}
-		}
+	die_width <- cfg$get_width("die_face")
+	if (bleed != "none" && "piecepack" %in% pieces && die_width > DIE_SLOT + 1e-8) {
+		abort(
+			sprintf(
+				'`cfg$get_width("die_face")` must be at most 3/4" for `bleed = "%s"`, not %s"',
+				bleed,
+				format(die_width)
+			),
+			call = call
+		)
 	}
 	if (bleed == "grouped") {
 		if (size == "A5") {

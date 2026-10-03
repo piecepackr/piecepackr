@@ -2,6 +2,7 @@
 
 A5W <- 5 # 5.83"
 A5H <- 7.5 # 8.27"
+DIE_SLOT <- 3 / 4 # the bleed layouts center each die face in a slot this wide
 a5_vp <- function() viewport(width = unit(A5W, "in"), height = unit(A5H, "in"))
 
 draw_a5_page <- function(grob, vp) {
@@ -93,6 +94,16 @@ pnp_marquee_style <- function() {
 		margin = marquee::trbl(0, 0, marquee::em(0.4)),
 		padding = marquee::trbl(0),
 		border_width = marquee::trbl(0)
+	)
+}
+
+pnp_inst_grob <- function(md) {
+	pnp_md_grob(
+		md,
+		"instructions",
+		x = unit(0.5, "cm"),
+		y = unit(1, "npc") - unit(0.1, "in"),
+		width = unit(1, "npc") - unit(1, "cm")
 	)
 }
 

@@ -27,6 +27,16 @@
       Error in `save_print_and_play()`:
       ! `size = "4x6"` not supported for `bleed = "grouped"`
 
+---
+
+    Code
+      save_print_and_play(cfg_default, f, size = "4x6", bleed = TRUE, quietly = TRUE)
+    Condition
+      Warning:
+      `size = "4x6"` is deprecated.
+      Error in `save_print_and_play()`:
+      ! `size = "4x6"` not supported for `bleed = TRUE`
+
 # `save_print_and_play()` doesn't leave its device open on error
 
     Code

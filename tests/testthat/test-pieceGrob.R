@@ -136,6 +136,10 @@ test_that('`save_print_and_play()` errors for unsupported `bleed = "grouped"` co
 		error = TRUE,
 		save_print_and_play(cfg_default, f, size = "4x6", bleed = "grouped", quietly = TRUE)
 	)
+	expect_snapshot(
+		error = TRUE,
+		save_print_and_play(cfg_default, f, size = "4x6", bleed = TRUE, quietly = TRUE)
+	)
 })
 
 test_that("`save_print_and_play()` doesn't leave its device open on error", {

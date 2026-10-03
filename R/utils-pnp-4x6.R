@@ -5,16 +5,6 @@ print_and_play_4x6 <- function(cfg, pieces, quietly, bleed, size_bleed) {
 	stopifnot(n_ranks <= 6)
 	stopifnot(!bleed)
 
-	if ("matchsticks" %in% pieces) {
-		abort('"matchsticks" `pieces` not currently supported for `size = "4x6"`')
-	}
-	if ("pyramids" %in% pieces) {
-		abort('"pyramids" `pieces` not currently supported for `size = "4x6"`')
-	}
-	if ("subpack" %in% pieces) {
-		abort('"subpack" `pieces` not currently supported for `size = "4x6"`')
-	}
-
 	pl <- list()
 
 	vp <- viewport(
