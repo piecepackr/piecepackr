@@ -168,15 +168,10 @@ test_that("`a5_title_grob()` credits pawn saucers only when they're printed", {
 	expect_no_match(credits(saucers = FALSE), "Pawn saucers")
 })
 
-test_that('`save_print_and_play(bleed = "grouped")` band follows `size_bleed`', {
-	sep_x <- function(dx, dy) {
-		y_off <- (8.27 - A5H) / 2 + dy + REG_SHIFT
-		band <- band_grob_grouped(1L, cfg_default, y_off, dx, dy)
-		sep <- Filter(function(g) identical(g$name, "pnp_separator"), band)[[1]]
-		as.numeric(sep$x)
-	}
-	expect_equal(sep_x(0, 0), c(0.25, 10.75))
-	expect_equal(sep_x(0.25, 0.25), c(0.50, 11.00))
+test_that('`save_print_and_play(bleed = "grouped")` band spans the printer safe zone', {
+	band <- band_grob_grouped(1L, cfg_default)
+	sep <- Filter(function(g) identical(g$name, "pnp_separator"), band)[[1]]
+	expect_equal(as.numeric(sep$x), c(0.25, 10.75))
 })
 
 test_that('`save_print_and_play(bleed = "grouped")` fits larger dice in the shared band', {
