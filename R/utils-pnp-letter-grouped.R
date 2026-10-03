@@ -7,6 +7,8 @@ MARGIN <- 1 / 4 # printer safe zone
 # zone.  Lift them slightly so a registration mark fits underneath.
 REG_SHIFT <- 1 / 8
 REG_SIZE <- 1 / 8
+# Bottom of the A5 halves in the intersection frame
+Y_OFF <- (INTER_H - A5H) / 2 + REG_SHIFT
 
 # Gutter between the two pawn tops so the pair can be folded around the edge of
 # a core, the way the sheet folds around the tile material.  Measured between
@@ -19,14 +21,14 @@ PAWN_GUTTER <- 2 * BLEED
 # solid rule above them both.  Everything the gutter fold needs -- the tiles'
 # own crop marks and both registration marks -- therefore stays below the rule,
 # so cutting along it frees the top row without taking any of them.
-band_bottom_y <- function(cfg, y_off) y_off + 3 * cfg$get_width("tile_back") + BLEED
+band_bottom_y <- function(cfg) Y_OFF + 3 * cfg$get_width("tile_back") + BLEED
 # Registration marks sit on the tiles' own crop marks, as in `bleed = TRUE`
 # where `a5_tile_grob()` centres them on the outer cut line so the crop mark
 # falls inside the crosshair.  Overlapping costs nothing and keeps both marks
 # as far into the corners, and the rule as low, as the sheet allows.
-reg_top_y <- function(cfg, y_off) band_bottom_y(cfg, y_off) + REG_SIZE / 2
-reg_bot_y <- function(cfg, y_off) y_off - BLEED - REG_SIZE / 2
-sep_line_y <- function(cfg, y_off) reg_top_y(cfg, y_off) + REG_SIZE / 2 + 1 / 16
+reg_top_y <- function(cfg) band_bottom_y(cfg) + REG_SIZE / 2
+reg_bot_y <- function(cfg) Y_OFF - BLEED - REG_SIZE / 2
+sep_line_y <- function(cfg) reg_top_y(cfg) + REG_SIZE / 2 + 1 / 16
 
 print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly, size_bleed) {
 	n_suits <- cfg$n_suits
@@ -34,20 +36,21 @@ print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly
 
 	stopifnot(n_ranks <= 6)
 	# Draw within a viewport equal to the intersection of the letter and A4
-	# paper sizes (11" x 8.27"), centered on the page -- both paper sizes then
-	# share the same piece coordinates.
-	xl_off <- INTER_W / 2 - A5W + size_bleed$left
-	xr_off <- INTER_W / 2 + size_bleed$left
-	y_off <- (INTER_H - A5H) / 2 + size_bleed$bottom + REG_SHIFT
+	# paper sizes (11" x 8.27"), centered on the page within `size_bleed` -- both
+	# paper sizes then share the same piece coordinates.
+	xl_off <- INTER_W / 2 - A5W
+	xr_off <- INTER_W / 2
 	vp_draw <- viewport(
-		width = inch(INTER_W + size_bleed$left + size_bleed$right),
-		height = inch(INTER_H + size_bleed$top + size_bleed$bottom)
+		x = unit(0.5, "npc") + inch((size_bleed$left - size_bleed$right) / 2),
+		y = unit(0.5, "npc") + inch((size_bleed$bottom - size_bleed$top) / 2),
+		width = inch(INTER_W),
+		height = inch(INTER_H)
 	)
 
 	# A5 viewport centers (for front-matter grobs that use A5 coordinates)
 	xl_ctr <- xl_off + A5W / 2
 	xr_ctr <- xr_off + A5W / 2
-	y_ctr <- y_off + A5H / 2
+	y_ctr <- Y_OFF + A5H / 2
 	vpl <- viewport(x = inch(xl_ctr), y = inch(y_ctr), width = inch(A5W), height = inch(A5H))
 	vpr <- viewport(x = inch(xr_ctr), y = inch(y_ctr), width = inch(A5W), height = inch(A5H))
 
@@ -76,21 +79,13 @@ print_and_play_paper_grouped <- function(cfg, size, pieces, arrangement, quietly
 			gl <- gappend(
 				gl,
 				gList(
-					gTree(children = a5_piecepack_grob_shared(suit, cfg, TRUE, xl_off, y_off)),
-					gTree(
-						children = band_grob_grouped(
-							suit,
-							cfg,
-							y_off,
-							size_bleed$left,
-							size_bleed$bottom
-						)
-					)
+					gTree(children = a5_piecepack_grob_shared(suit, cfg, TRUE, xl_off)),
+					gTree(children = band_grob_grouped(suit, cfg))
 				)
 			)
 			gl <- gappend(
 				gl,
-				a5_piecepack_grob_shared(suit, cfg, FALSE, xr_off, y_off)
+				a5_piecepack_grob_shared(suit, cfg, FALSE, xr_off)
 			)
 		}
 		pl$Piecepack <- n_suits
@@ -147,7 +142,7 @@ cm_select_outer <- function(df, exclude = integer()) {
 	)
 }
 
-a5_piecepack_grob_shared <- function(suit, cfg, front, x_off, y_off) {
+a5_piecepack_grob_shared <- function(suit, cfg, front, x_off) {
 	tile_width <- cfg$get_width("tile_back")
 	coin_diam <- cfg$get_width("coin_face")
 
@@ -210,7 +205,7 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off, y_off) {
 	# Shift from A5-local coordinates to page/intersection coordinates
 	offset <- function(df) {
 		df$x <- df$x + x_off
-		df$y <- df$y + y_off
+		df$y <- df$y + Y_OFF
 		df
 	}
 	dft <- offset(dft)
@@ -229,7 +224,7 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off, y_off) {
 	}
 	bleed_tiles <- rectGrob(
 		x = unit(tile_br_cx, "in"),
-		y = unit(y_off + 1.5 * tile_width, "in"),
+		y = unit(Y_OFF + 1.5 * tile_width, "in"),
 		width = unit(2 * tile_width + 2 * BLEED, "in"),
 		height = unit(3 * tile_width + 2 * BLEED, "in"),
 		just = "center",
@@ -248,7 +243,7 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off, y_off) {
 	}
 	bleed_coins <- rectGrob(
 		x = unit(x_off + (coin_br_xl + coin_br_xr) / 2, "in"),
-		y = unit(y_off + (ycs[6] + ycs[1]) / 2, "in"),
+		y = unit(Y_OFF + (ycs[6] + ycs[1]) / 2, "in"),
 		width = unit(coin_br_xr - coin_br_xl, "in"),
 		height = unit((ycs[1] - ycs[6] + coin_diam) + 2 * BLEED, "in"),
 		just = "center",
@@ -294,7 +289,7 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off, y_off) {
 	if (!front) {
 		vline <- linesGrob(
 			x = unit(c(x_off, x_off), "in"),
-			y = unit(c(0, sep_line_y(cfg, y_off)), "in"),
+			y = unit(c(0, sep_line_y(cfg)), "in"),
 			gp = gpar(lty = "dashed")
 		)
 	} else {
@@ -319,21 +314,17 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off, y_off) {
 # gutter fold, so none needs to line up with it and they all fit in one
 # full-width row above the tile and coin blocks: six dice, the belt, then a
 # pawn face / back pair whose tops touch so the pair folds into one token.
-# `dx` / `dy` are the `size_bleed` left / bottom offsets.  `y_off` already
-# carries `dy`, so only the page-frame coordinates below need shifting --
-# without them the band would stay put while the tile and coin blocks moved,
-# pulling the registration marks off the tile cut lines they sit on.
-band_grob_grouped <- function(suit, cfg, y_off, dx, dy) {
+band_grob_grouped <- function(suit, cfg) {
 	die_width <- cfg$get_width("die_face")
 	pawn_width <- cfg$get_width("pawn_face")
 	pawn_height <- cfg$get_height("pawn_face")
 	belt_width <- cfg$get_width("belt_face")
 	belt_height <- cfg$get_height("belt_face")
 
-	band_bottom <- sep_line_y(cfg, y_off)
-	band_top <- INTER_H - MARGIN + dy
-	x_left <- MARGIN + dx
-	x_right <- INTER_W - MARGIN + dx
+	band_bottom <- sep_line_y(cfg)
+	band_top <- INTER_H - MARGIN
+	x_left <- MARGIN
+	x_right <- INTER_W - MARGIN
 
 	# Like `a5_die_grob()` each die face is centered in a 3/4" slot whose extra
 	# space is bleed, so the dice can be cut to either size.
@@ -468,17 +459,17 @@ band_grob_grouped <- function(suit, cfg, y_off, dx, dy) {
 	# to pair any two halves back to back).  Circled above, squared below, so the
 	# sheet's orientation is never ambiguous.
 	# Centred on the outermost tile cut line on each half.
-	x_reg <- c(MARGIN + BLEED + dx, INTER_W - MARGIN - BLEED + dx)
+	x_reg <- c(MARGIN + BLEED, INTER_W - MARGIN - BLEED)
 	reg <- gList(
 		circledSegmentsCrosshairGrob(
 			x = inch(x_reg),
-			y = inch(rep(reg_top_y(cfg, y_off), 2)),
+			y = inch(rep(reg_top_y(cfg), 2)),
 			width = inch(REG_SIZE),
 			height = inch(REG_SIZE)
 		),
 		squaredSegmentsCrosshairGrob(
 			x = inch(x_reg),
-			y = inch(rep(reg_bot_y(cfg, y_off), 2)),
+			y = inch(rep(reg_bot_y(cfg), 2)),
 			width = inch(REG_SIZE),
 			height = inch(REG_SIZE)
 		)
