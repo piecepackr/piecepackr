@@ -111,6 +111,8 @@ test_that("`save_print_and_play()` bookmarks match the double-sided page counts"
 		bookmarks$title,
 		c("Front Matter", "Piecepack", "Matchsticks", "Pyramids", "Subpack")
 	)
+	# The {pdftools} fallback doesn't report bookmark page numbers
+	skip_if_not(xmpdf::supports_pdftk())
 	expect_equal(bookmarks$page, c(1, 3, 7, 9, 11))
 })
 
