@@ -5,6 +5,26 @@ A5H <- 7.5 # 8.27"
 DIE_SLOT <- 3 / 4 # the bleed layouts center each die face in a slot this wide
 a5_vp <- function() viewport(width = unit(A5W, "in"), height = unit(A5H, "in"))
 
+# Registration marks are circled on one side and squared on the other so the
+# sheet's orientation is never ambiguous.
+reg_marks_grob <- function(circled_x, circled_y, squared_x, squared_y, size, name = NULL) {
+	children <- gList(
+		circledSegmentsCrosshairGrob(
+			x = inch(circled_x),
+			y = inch(circled_y),
+			width = inch(size),
+			height = inch(size)
+		),
+		squaredSegmentsCrosshairGrob(
+			x = inch(squared_x),
+			y = inch(squared_y),
+			width = inch(size),
+			height = inch(size)
+		)
+	)
+	gTree(children = children, name = name)
+}
+
 draw_a5_page <- function(grob, vp) {
 	pushViewport(vp)
 	grid.draw(grob)

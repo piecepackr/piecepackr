@@ -234,19 +234,13 @@ a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {
 	side_x <- if (front) xtr - tile_width / 2 else A5W - xtr + tile_width / 2
 	top_y <- ytt + tile_width / 2 + 1 / 4
 	bottom_y <- ytb - tile_width / 2 - 1 / 4
-	reg_grob <- gList(
-		circledSegmentsCrosshairGrob(
-			x = inch(side_x),
-			y = inch(top_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		),
-		squaredSegmentsCrosshairGrob(
-			x = inch(side_x),
-			y = inch(bottom_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		)
+	reg_grob <- reg_marks_grob(
+		side_x,
+		top_y,
+		side_x,
+		bottom_y,
+		ch_size,
+		name = "tile_registration_marks"
 	)
 
 	gList(cm_grob, ps_grob, vline, reg_grob)
@@ -309,19 +303,13 @@ a5_coin_grob <- function(suit, cfg, front, arrangement, size) {
 	side_x <- if (front) xt1 - coin_width / 2 - 1 / 8 else A5W - xt1 + coin_width / 2 + 1 / 8
 	top_y <- yt6 + coin_width / 2 + 1 / 4
 	bottom_y <- yt1 - coin_width / 2 - 1 / 4
-	reg_grob <- gList(
-		circledSegmentsCrosshairGrob(
-			x = inch(side_x),
-			y = inch(top_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		),
-		squaredSegmentsCrosshairGrob(
-			x = inch(side_x),
-			y = inch(bottom_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		)
+	reg_grob <- reg_marks_grob(
+		side_x,
+		top_y,
+		side_x,
+		bottom_y,
+		ch_size,
+		name = "coin_registration_marks"
 	)
 
 	gList(cm_grob, ps_grob, vline, reg_grob)
@@ -444,31 +432,13 @@ a5_pawn_grob <- function(suit, cfg, front, arrangement) {
 	right_x <- x[length(x)] + pawn_width / 2
 	top_y <- ypt + pawn_height / 2 + 1 / 4
 	bottom_y <- ypb - pawn_height / 2 - 1 / 4
-	reg_grob <- gList(
-		circledSegmentsCrosshairGrob(
-			x = inch(left_x),
-			y = inch(top_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		),
-		squaredSegmentsCrosshairGrob(
-			x = inch(right_x),
-			y = inch(top_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		),
-		circledSegmentsCrosshairGrob(
-			x = inch(left_x),
-			y = inch(bottom_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		),
-		squaredSegmentsCrosshairGrob(
-			x = inch(right_x),
-			y = inch(bottom_y),
-			width = inch(ch_size),
-			height = inch(ch_size)
-		)
+	reg_grob <- reg_marks_grob(
+		rep(left_x, 2),
+		c(top_y, bottom_y),
+		rep(right_x, 2),
+		c(top_y, bottom_y),
+		ch_size,
+		name = "pawn_registration_marks"
 	)
 
 	gList(cm_grob, ps_grob, hline, reg_grob)
