@@ -174,6 +174,12 @@ test_that('`save_print_and_play(bleed = "grouped")` band spans the printer safe 
 	expect_equal(as.numeric(sep$x), c(0.25, 10.75))
 })
 
+test_that("`bleed_rect()` fills each zone with its piece side's bleed color", {
+	cfg <- pp_cfg(list(border_color.die_face = "red", border_color.belt_face = "blue"))
+	g <- bleed_rect(1:2, 1, 1, 1, c("die_face", "belt_face"), 1L, cfg)
+	expect_equal(g$gp$fill, c("red", "blue"))
+})
+
 test_that('`save_print_and_play(bleed = "grouped")` pawn registration marks mirror about the gutter', {
 	band <- band_grob_grouped(1L, cfg_default)
 	named <- function(name) Filter(function(g) identical(g$name, name), band)[[1]]
