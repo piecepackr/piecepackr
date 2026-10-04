@@ -232,16 +232,13 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off) {
 
 	# Shared bleed rect covering the 2x3 tile grid plus 1/8" on each outer edge.
 	# The inner edge (shared cut with coins) falls at exactly 2*tile_width (A5-local).
-	if (front) {
-		tile_br_cx <- x_off + tile_width - BLEED
-	} else {
-		tile_br_cx <- x_off + A5W - tile_width + BLEED
-	}
+	tile_x <- range(dft$x)
+	tile_y <- range(dft$y)
 	bleed_tiles <- bleed_rect(
-		tile_br_cx,
-		Y_OFF + 1.5 * tile_width,
-		2 * tile_width + 2 * BLEED,
-		3 * tile_width + 2 * BLEED,
+		mean(tile_x),
+		mean(tile_y),
+		diff(tile_x) + tile_width + 2 * BLEED,
+		diff(tile_y) + tile_width + 2 * BLEED,
 		dft$piece_side[1],
 		suit,
 		cfg
