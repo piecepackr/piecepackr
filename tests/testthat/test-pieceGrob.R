@@ -174,6 +174,17 @@ test_that('`save_print_and_play(bleed = "grouped")` band spans the printer safe 
 	expect_equal(as.numeric(sep$x), c(0.25, 10.75))
 })
 
+test_that('`save_print_and_play(bleed = "grouped")` pawn registration marks mirror about the gutter', {
+	band <- band_grob_grouped(1L, cfg_default)
+	named <- function(name) Filter(function(g) identical(g$name, name), band)[[1]]
+	x_gutter <- as.numeric(named("pnp_pawn_gutter")$x[1])
+	circled <- named("pawn_registration_marks")$children[[1]]$children
+	x_reg <- vapply(circled, function(g) as.numeric(g$vp$x), numeric(1), USE.NAMES = FALSE)
+	expect_equal(x_reg - x_gutter, c(-1, 1) * (x_gutter - x_reg[1]))
+	expect_gt(x_reg[1], 0.25)
+	expect_lt(x_reg[2], 10.75)
+})
+
 test_that('`save_print_and_play(bleed = "grouped")` fits larger dice in the shared band', {
 	skip_if_not(capabilities("cairo"))
 	f <- tempfile(fileext = ".pdf")

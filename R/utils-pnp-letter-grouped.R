@@ -329,13 +329,14 @@ band_grob_grouped <- function(suit, cfg) {
 	# Like `a5_die_grob()` each die face is centered in a 3/4" slot whose extra
 	# space is bleed, so the dice can be cut to either size.
 	# Spare width is split into four equal gaps: two ends and two between groups.
+	# The pawn pair also keeps room for a registration mark beside each end.
 	w_dice <- 6 * DIE_SLOT + 2 * BLEED
 	w_belt <- belt_width + 2 * BLEED
 	w_pawn <- 2 * pawn_height + 2 * BLEED + PAWN_GUTTER
-	gap <- (x_right - x_left - w_dice - w_belt - w_pawn) / 4
+	gap <- (x_right - x_left - w_dice - w_belt - w_pawn - 2 * REG_SIZE) / 4
 	x_dice <- x_left + gap
 	x_belt <- x_dice + w_dice + gap
-	x_pawn <- x_belt + w_belt + gap
+	x_pawn <- x_belt + w_belt + gap + REG_SIZE
 
 	row_height <- max(DIE_SLOT, belt_height, pawn_width)
 	y_row <- band_top - BLEED - 0.5 * row_height
@@ -450,7 +451,8 @@ band_grob_grouped <- function(suit, cfg) {
 	pawn_gutter_line <- linesGrob(
 		x = unit(rep(x_pawn_gutter, 2), "in"),
 		y = unit(y_row + c(-1, 1) * (0.5 * pawn_width + 2 * BLEED), "in"),
-		gp = gpar(lty = "dashed")
+		gp = gpar(lty = "dashed"),
+		name = "pnp_pawn_gutter"
 	)
 
 	# Registration marks mirrored about the gutter, so a pair lands on top of
@@ -460,22 +462,30 @@ band_grob_grouped <- function(suit, cfg) {
 	# sheet's orientation is never ambiguous.
 	# Centred on the outermost tile cut line on each half.
 	x_reg <- c(MARGIN + BLEED, INTER_W - MARGIN - BLEED)
-	reg <- gList(
-		circledSegmentsCrosshairGrob(
-			x = inch(x_reg),
-			y = inch(rep(reg_top_y(cfg), 2)),
-			width = inch(REG_SIZE),
-			height = inch(REG_SIZE)
-		),
-		squaredSegmentsCrosshairGrob(
-			x = inch(x_reg),
-			y = inch(rep(reg_bot_y(cfg), 2)),
-			width = inch(REG_SIZE),
-			height = inch(REG_SIZE)
-		)
+	reg <- reg_marks_grob(
+		x_reg,
+		rep(reg_top_y(cfg), 2),
+		x_reg,
+		rep(reg_bot_y(cfg), 2),
+		REG_SIZE,
+		name = "tile_registration_marks"
 	)
 
-	gList(bleeds, cm_pawns, cm_dice, ps, ch, pawn_gutter_line, sep, reg)
+	# Pawn registration marks, likewise mirrored about the pawn gutter, sit just
+	# past each end of the pair on its top and bottom cut lines, which they also
+	# mark.  Fold the pair over a core, or cut it apart and mount the halves back
+	# to back, and line these up.
+	x_pawn_reg <- x_pawn + c(-0.5, 0.5) * REG_SIZE + c(0, w_pawn)
+	reg_pawns <- reg_marks_grob(
+		x_pawn_reg,
+		rep(y_row + 0.5 * pawn_width, 2),
+		x_pawn_reg,
+		rep(y_row - 0.5 * pawn_width, 2),
+		REG_SIZE,
+		name = "pawn_registration_marks"
+	)
+
+	gList(bleeds, cm_pawns, cm_dice, ps, ch, pawn_gutter_line, sep, reg, reg_pawns)
 }
 
 a5_inst_md_grouped <- function(pieces, arrangement, size) {
@@ -520,7 +530,8 @@ a5_inst_md_grouped <- function(pieces, arrangement, size) {
 		   * Depending on size of target dice use inner or outer "crop" marks as
 		     guide to cut or punch out dice and then mount the faces on a cube.
 		   * Cut out and wrap the belt around a pawn / cylinder.
-		   * Cut out the (standee) pawn optionally folding along the "gutter" over the target material.
+		   * Cut out the (standee) pawn optionally folding along the "gutter" over the target material
+		     (or cut the "gutter" too and line up the registration marks).
 		)',
 		.trim = FALSE
 	))
