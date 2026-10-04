@@ -120,6 +120,24 @@ ch_width_for <- function(piece_side, cfg) {
 # and rotate back into the piece frame.
 EDGE_MARKS <- c("18", "67", "45", "23") # page top, left, bottom, right (counter-clockwise)
 
+# Shared bleed zones for groups of pieces, centered at (`x`, `y`) inches and
+# filled with the bleed color of `piece_side`.  Vectorized over its arguments.
+bleed_rect <- function(x, y, width, height, piece_side, suit, cfg) {
+	fill <- vapply(
+		piece_side,
+		function(ps) cfg$get_piece_opt(ps, suit, 1)$bleed_color,
+		character(1L),
+		USE.NAMES = FALSE
+	)
+	rectGrob(
+		x = inch(x),
+		y = inch(y),
+		width = inch(width),
+		height = inch(height),
+		gp = gpar(fill = fill, col = NA)
+	)
+}
+
 cm_select_outer <- function(df, exclude = integer()) {
 	tol <- 1e-8
 	edges <- cbind(
@@ -212,9 +230,6 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off) {
 	dfc <- offset(dfc)
 	dfs <- offset(dfs)
 
-	tile_bc <- cfg$get_piece_opt(dft$piece_side[1], suit, 1)$bleed_color
-	coin_bc <- cfg$get_piece_opt(dfc$piece_side[1], suit, 1)$bleed_color
-
 	# Shared bleed rect covering the 2x3 tile grid plus 1/8" on each outer edge.
 	# The inner edge (shared cut with coins) falls at exactly 2*tile_width (A5-local).
 	if (front) {
@@ -222,13 +237,14 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off) {
 	} else {
 		tile_br_cx <- x_off + A5W - tile_width + BLEED
 	}
-	bleed_tiles <- rectGrob(
-		x = unit(tile_br_cx, "in"),
-		y = unit(Y_OFF + 1.5 * tile_width, "in"),
-		width = unit(2 * tile_width + 2 * BLEED, "in"),
-		height = unit(3 * tile_width + 2 * BLEED, "in"),
-		just = "center",
-		gp = gpar(fill = tile_bc, col = NA)
+	bleed_tiles <- bleed_rect(
+		tile_br_cx,
+		Y_OFF + 1.5 * tile_width,
+		2 * tile_width + 2 * BLEED,
+		3 * tile_width + 2 * BLEED,
+		dft$piece_side[1],
+		suit,
+		cfg
 	)
 
 	# Shared bleed rect for the column of 6 coins.
@@ -241,13 +257,14 @@ a5_piecepack_grob_shared <- function(suit, cfg, front, x_off) {
 		coin_br_xl <- A5W - xc - coin_diam / 2 - BLEED
 		coin_br_xr <- A5W - 2 * tile_width
 	}
-	bleed_coins <- rectGrob(
-		x = unit(x_off + (coin_br_xl + coin_br_xr) / 2, "in"),
-		y = unit(Y_OFF + (ycs[6] + ycs[1]) / 2, "in"),
-		width = unit(coin_br_xr - coin_br_xl, "in"),
-		height = unit((ycs[1] - ycs[6] + coin_diam) + 2 * BLEED, "in"),
-		just = "center",
-		gp = gpar(fill = coin_bc, col = NA)
+	bleed_coins <- bleed_rect(
+		x_off + (coin_br_xl + coin_br_xr) / 2,
+		Y_OFF + (ycs[6] + ycs[1]) / 2,
+		coin_br_xr - coin_br_xl,
+		(ycs[1] - ycs[6] + coin_diam) + 2 * BLEED,
+		dfc$piece_side[1],
+		suit,
+		cfg
 	)
 
 	# Skip the tile edge facing the coins: only 1/4" of waste separates the two
@@ -374,20 +391,15 @@ band_grob_grouped <- function(suit, cfg) {
 		angle = c(270, 90)
 	)
 
-	bleed_rect <- function(xl, w, h, piece_side) {
-		rectGrob(
-			x = unit(xl + 0.5 * w, "in"),
-			y = unit(y_row, "in"),
-			width = unit(w, "in"),
-			height = unit(h, "in"),
-			just = "center",
-			gp = gpar(fill = cfg$get_piece_opt(piece_side, suit, 1)$bleed_color, col = NA)
-		)
-	}
-	bleeds <- gList(
-		bleed_rect(x_dice, w_dice, DIE_SLOT + 2 * BLEED, "die_face"),
-		bleed_rect(x_belt, w_belt, belt_height + 2 * BLEED, "belt_face"),
-		bleed_rect(x_pawn, w_pawn, pawn_width + 2 * BLEED, "pawn_face")
+	w_bleeds <- c(w_dice, w_belt, w_pawn)
+	bleeds <- bleed_rect(
+		c(x_dice, x_belt, x_pawn) + 0.5 * w_bleeds,
+		y_row,
+		w_bleeds,
+		c(DIE_SLOT, belt_height, pawn_width) + 2 * BLEED,
+		c("die_face", "belt_face", "pawn_face"),
+		suit,
+		cfg
 	)
 
 	# The two heads meet across the gutter, which may be folded or cut.  "2" and
