@@ -3,14 +3,16 @@
 A5W <- 5 # 5.83"
 A5H <- 7.5 # 8.27"
 DIE_SLOT <- 3 / 4 # the bleed layouts center each die face in a slot this wide
+REG_SIZE <- 1 / 8 # registration mark (crosshair) size
 a5_vp <- function() viewport(width = unit(A5W, "in"), height = unit(A5H, "in"))
 
 # Viewports for the two A5 panels of a page (`vpl` and `vpr`; the same viewport
 # for `size = "A5"`, which has one panel per page).  The panels are centered on
 # the trim size of the page, so each panel's mirror image about the page's
 # vertical center line is the other panel (or, on A5, itself).  The back pages
-# mirror their pieces within the panel, so they land on their fronts after a
-# long-edge duplex flip.
+# mirror their pieces within the panel, so they land on their fronts when the
+# sheet is flipped about a vertical edge: a long-edge duplex flip for the
+# portrait A5 page but a short-edge flip for the landscape letter and A4 pages.
 a5_panel_viewports <- function(size, size_bleed) {
 	page <- switch(
 		size,

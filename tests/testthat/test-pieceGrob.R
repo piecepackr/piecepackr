@@ -239,6 +239,18 @@ test_that("`save_print_and_play()` A5 panels mirror about the page center", {
 	expect_gte(as.numeric(vp$y) - A5H / 2, 0.25)
 })
 
+test_that("`save_print_and_play(bleed = FALSE)` registration marks flank the tiles", {
+	marks <- function(front) {
+		reg <- a5_piecepack_reg_grob(cfg_default, front)
+		unname(lapply(reg$children, function(crosshair) {
+			vp <- crosshair$children[[1]]$vp
+			as.numeric(c(vp$x, vp$y))
+		}))
+	}
+	expect_equal(marks(TRUE), list(c(-1 / 8, 6), c(-1 / 8, 0)))
+	expect_equal(marks(FALSE), list(c(A5W + 1 / 8, 6), c(A5W + 1 / 8, 0)))
+})
+
 test_that("`save_print_and_play()` bookmark pages sum to the page count", {
 	skip_if_not(capabilities("cairo"))
 	f <- tempfile(fileext = ".pdf")
