@@ -6,6 +6,17 @@ A4_HEIGHT <- 11.69
 A5_WIDTH <- A4_HEIGHT / 2
 A5_HEIGHT <- A4_WIDTH
 
+# Trim size `c(width, height)` in inches of a print-and-play page
+pnp_page_size <- function(size) {
+	switch(
+		size,
+		letter = c(LETTER_HEIGHT, LETTER_WIDTH),
+		A4 = c(A4_HEIGHT, A4_WIDTH),
+		A5 = c(A5_WIDTH, A5_HEIGHT),
+		`4x6` = c(6, 4)
+	)
+}
+
 #' Save piecepack print-and-play (PnP) file
 #'
 #' Save piecepack print-and-play (PnP) file
@@ -119,12 +130,9 @@ save_print_and_play <- function(
 	if (current_dev > 1) {
 		on.exit(grDevices::dev.set(current_dev), add = TRUE)
 	}
-	height <- switch(size, letter = LETTER_WIDTH, A4 = A4_WIDTH, A5 = A5_HEIGHT, `4x6` = 4) +
-		size_bleed$top +
-		size_bleed$bottom
-	width <- switch(size, letter = LETTER_HEIGHT, A4 = A4_HEIGHT, A5 = A5_WIDTH, `4x6` = 6) +
-		size_bleed$right +
-		size_bleed$left
+	page <- pnp_page_size(size)
+	width <- page[1L] + size_bleed$left + size_bleed$right
+	height <- page[2L] + size_bleed$top + size_bleed$bottom
 
 	if (is.null(dev)) {
 		dev <- pp_device_fn(output_filename)

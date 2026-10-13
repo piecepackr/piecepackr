@@ -228,7 +228,8 @@ test_that('`save_print_and_play(bleed = TRUE)` wording follows `size`', {
 
 test_that("`save_print_and_play()` A5 panels mirror about the page center", {
 	size_bleed <- list(top = 0, right = 0, bottom = 0, left = 0)
-	page_width <- c(letter = LETTER_HEIGHT, A4 = A4_HEIGHT, A5 = A5_WIDTH)
+	sizes <- c("letter", "A4", "A5")
+	page_width <- vapply(sizes, function(size) pnp_page_size(size)[1L], numeric(1))
 	x <- function(size, panel) as.numeric(a5_panel_viewports(size, size_bleed)[[panel]]$x)
 	xl <- vapply(names(page_width), x, numeric(1), panel = "vpl")
 	xr <- vapply(names(page_width), x, numeric(1), panel = "vpr")

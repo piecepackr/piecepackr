@@ -44,7 +44,7 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 		if (is_odd(n_suits) && arrangement == "double-sided" && size != "A5") {
 			n_pages <- n_pages + 1
 		}
-		# The registration marks sit in the page margin, which an A5 page lacks
+		# The registration marks sit in the page margin, which is too narrow on A5
 		reg_f <- if (size == "A5") NULL else a5_piecepack_reg_grob(cfg, front = TRUE)
 		reg_b <- if (size == "A5") NULL else a5_piecepack_reg_grob(cfg, front = FALSE)
 		for (suit in seq(n_pages)) {
