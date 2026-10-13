@@ -44,6 +44,8 @@ Bug fixes and minor improvements
   Previously it described the letter/A4 layout instead, telling the reader to fold along a
   central "gutter" line that an A5 page doesn't have.
 
+* `save_print_and_play(size = "A5")` now centers its layout on the A5 page.
+
 * `save_print_and_play(arrangement = "double-sided")` now embeds correct pdf bookmark pages for the
   "Pyramids" and "Subpack" sections when `pieces` includes "matchsticks" and/or "pyramids".
   Previously the "Matchsticks" and "Pyramids" sections each reported half their true page count.

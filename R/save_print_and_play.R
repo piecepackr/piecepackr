@@ -2,6 +2,9 @@ LETTER_WIDTH <- 8.5
 LETTER_HEIGHT <- 11
 A4_WIDTH <- 8.27
 A4_HEIGHT <- 11.69
+# A5 pages are used in portrait mode, so the short side is their width
+A5_WIDTH <- A4_HEIGHT / 2
+A5_HEIGHT <- A4_WIDTH
 
 #' Save piecepack print-and-play (PnP) file
 #'
@@ -116,10 +119,10 @@ save_print_and_play <- function(
 	if (current_dev > 1) {
 		on.exit(grDevices::dev.set(current_dev), add = TRUE)
 	}
-	height <- switch(size, letter = LETTER_WIDTH, A4 = A4_WIDTH, A5 = A4_WIDTH, `4x6` = 4) +
+	height <- switch(size, letter = LETTER_WIDTH, A4 = A4_WIDTH, A5 = A5_HEIGHT, `4x6` = 4) +
 		size_bleed$top +
 		size_bleed$bottom
-	width <- switch(size, letter = LETTER_HEIGHT, A4 = A4_HEIGHT, A5 = A4_HEIGHT / 2, `4x6` = 6) +
+	width <- switch(size, letter = LETTER_HEIGHT, A4 = A4_HEIGHT, A5 = A5_WIDTH, `4x6` = 6) +
 		size_bleed$right +
 		size_bleed$left
 
