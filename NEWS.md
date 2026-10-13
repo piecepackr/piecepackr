@@ -30,6 +30,11 @@ Bug fixes and minor improvements
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
 
+* `pmap_piece()` no longer builds a default `envir` with `game_systems()`
+  unless `.l` has a `cfg` column naming configurations other than the given `cfg`.
+  Otherwise the default `envir` is now just `list(piecepack = cfg)`.
+  This saves about 0.1 seconds per call and speeds up functions built on top of it such as `save_print_and_play()`.
+
 * `save_print_and_play()` no longer leaves its graphics device open when it errors.
   Unsupported `bleed` combinations (e.g. `pieces` not supported by `bleed = TRUE`) are now caught before the output file is created.
 
