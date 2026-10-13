@@ -14,19 +14,12 @@ a5_vp <- function() viewport(width = unit(A5W, "in"), height = unit(A5H, "in"))
 # sheet is flipped about a vertical edge: a long-edge duplex flip for the
 # portrait A5 page but a short-edge flip for the landscape letter and A4 pages.
 a5_panel_viewports <- function(size, size_bleed) {
-	page <- switch(
-		size,
-		letter = c(LETTER_HEIGHT, LETTER_WIDTH),
-		A4 = c(A4_HEIGHT, A4_WIDTH),
-		A5 = c(A5_WIDTH, A5_HEIGHT)
-	)
+	page <- pnp_page_size(size)
 	x <- page[1L] / 2 + size_bleed$left
 	y <- inch(page[2L] / 2 + size_bleed$bottom)
 	dx <- if (size == "A5") 0 else A5W / 2
-	list(
-		vpl = viewport(x = inch(x - dx), y = y, width = inch(A5W), height = inch(A5H)),
-		vpr = viewport(x = inch(x + dx), y = y, width = inch(A5W), height = inch(A5H))
-	)
+	vp <- function(x) viewport(x = inch(x), y = y, width = inch(A5W), height = inch(A5H))
+	list(vpl = vp(x - dx), vpr = vp(x + dx))
 }
 
 # Registration marks are circled on one side and squared on the other so the
