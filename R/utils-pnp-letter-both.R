@@ -5,6 +5,28 @@ A5H <- 7.5 # 8.27"
 DIE_SLOT <- 3 / 4 # the bleed layouts center each die face in a slot this wide
 a5_vp <- function() viewport(width = unit(A5W, "in"), height = unit(A5H, "in"))
 
+# Viewports for the two A5 panels of a page (`vpl` and `vpr`; the same viewport
+# for `size = "A5"`, which has one panel per page).  The panels are centered on
+# the trim size of the page, so each panel's mirror image about the page's
+# vertical center line is the other panel (or, on A5, itself).  The back pages
+# mirror their pieces within the panel, so they land on their fronts after a
+# long-edge duplex flip.
+a5_panel_viewports <- function(size, size_bleed) {
+	page <- switch(
+		size,
+		letter = c(LETTER_HEIGHT, LETTER_WIDTH),
+		A4 = c(A4_HEIGHT, A4_WIDTH),
+		A5 = c(A5_WIDTH, A5_HEIGHT)
+	)
+	x <- page[1L] / 2 + size_bleed$left
+	y <- inch(page[2L] / 2 + size_bleed$bottom)
+	dx <- if (size == "A5") 0 else A5W / 2
+	list(
+		vpl = viewport(x = inch(x - dx), y = y, width = inch(A5W), height = inch(A5H)),
+		vpr = viewport(x = inch(x + dx), y = y, width = inch(A5W), height = inch(A5H))
+	)
+}
+
 # Registration marks are circled on one side and squared on the other so the
 # sheet's orientation is never ambiguous.
 reg_marks_grob <- function(circled_x, circled_y, squared_x, squared_y, size, name = NULL) {
