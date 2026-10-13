@@ -7,6 +7,9 @@ New features
 * `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone (#336).
   Adjacent tiles share a cut line; coins and dice keep a gap within their shared zone so each can be punched out or cut to size without touching its neighbor.
 
+* `save_print_and_play()` with `bleed = FALSE` now adds registration marks in the outer page margin
+  beside the tiles on letter and A4 pages to assist in aligning double-sided printing (#331).
+
 * Can now draw all six sides of "composite" pieces with `grid.piece()` / `pieceGrob()` (#263).
   In particular a peg-doll "pawn", joystick "pawn", and reversi disc "bit" from `game_systems()` can now be drawn from any side in 2D orthographic or 3D oblique projection.
 

@@ -6,7 +6,6 @@ MARGIN <- 1 / 4 # printer safe zone
 # The tile and coin blocks otherwise run to within 0.01" of the printer safe
 # zone.  Lift them slightly so a registration mark fits underneath.
 REG_SHIFT <- 1 / 8
-REG_SIZE <- 1 / 8
 # Bottom of the A5 halves in the intersection frame
 Y_OFF <- (INTER_H - A5H) / 2 + REG_SHIFT
 

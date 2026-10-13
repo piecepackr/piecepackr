@@ -44,9 +44,12 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 		if (is_odd(n_suits) && arrangement == "double-sided" && size != "A5") {
 			n_pages <- n_pages + 1
 		}
+		# The registration marks sit in the page margin, which an A5 page lacks
+		reg_f <- if (size == "A5") NULL else a5_piecepack_reg_grob(cfg, front = TRUE)
+		reg_b <- if (size == "A5") NULL else a5_piecepack_reg_grob(cfg, front = FALSE)
 		for (suit in seq(n_pages)) {
-			gl <- gappend(gl, lpgf[[suit]])
-			gl <- gappend(gl, lpgb[[suit]])
+			gl <- gappend(gl, gList(lpgf[[suit]], reg_f))
+			gl <- gappend(gl, gList(lpgb[[suit]], reg_b))
 		}
 		pl$Piecepack <- n_pages
 	}
@@ -488,6 +491,25 @@ a5_piecepack_grob <- function(suit, cfg = pp_cfg(), front = TRUE, arrangement = 
 		}
 	}
 	pmap_piece(df, cfg = cfg, default.units = "inches", draw = FALSE)
+}
+
+# Registration marks in the page margin beside the tile block's outer edge,
+# centered on its top and bottom edges so their crosshairs extend the tiles'
+# cut lines: circled above and squared below, as in the bleed layouts.  Two
+# marks three tile widths apart pin down the translation and rotation of a
+# duplex print, and the margin keeps them clear of the pieces whatever their
+# size.
+a5_piecepack_reg_grob <- function(cfg = pp_cfg(), front = TRUE) {
+	tile_width <- cfg$get_width("tile_back")
+	side_x <- if (front) -REG_SIZE else A5W + REG_SIZE
+	reg_marks_grob(
+		side_x,
+		3 * tile_width,
+		side_x,
+		0,
+		REG_SIZE,
+		name = "tile_registration_marks"
+	)
 }
 
 a5_pyramids_grob <- function(suit = 1:2, cfg = pp_cfg(), front = TRUE) {
