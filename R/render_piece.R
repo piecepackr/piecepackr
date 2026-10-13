@@ -113,7 +113,7 @@ render_piece <- function(
 		}
 	}
 
-	ce <- default_cfg_envir(cfg, envir)
+	ce <- default_cfg_envir(cfg, envir, cfg_lookups(df))
 	cfg <- ce$cfg
 	envir <- ce$envir
 

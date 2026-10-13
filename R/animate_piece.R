@@ -90,7 +90,7 @@ animate_piece <- function(
 		assert_suggested("tweenr")
 	}
 
-	ce <- default_cfg_envir(cfg, envir)
+	ce <- default_cfg_envir(cfg, envir, unlist(lapply(dfs, cfg_lookups)))
 	cfg <- ce$cfg
 	envir <- ce$envir
 
