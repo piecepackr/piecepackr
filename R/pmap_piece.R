@@ -172,7 +172,7 @@ add_game_systems <- function(envir, lookups) {
 
 # If `systems` is `TRUE` a defaulted `cfg` is `game_systems()$piecepack`,
 # the look preferred for game diagrams, instead of `pp_cfg()`.
-default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups, systems = FALSE) {
+default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups = character(), systems = FALSE) {
 	if (is.null(cfg) && is.null(envir)) {
 		if (systems) {
 			envir <- default_envir(NULL, c("piecepack", lookups))

@@ -56,7 +56,7 @@ cleave <- function(s, sep = ",", float = FALSE, color = FALSE) {
 # `str_split()`, `strsplit()` drops a trailing empty string and splits "" into
 # nothing so we put those back (e.g. `col_cleave("red,")` is still transparent).
 str_split_sep <- function(s, sep) {
-	if (grepl("[][\\\\^$.|?*+(){}]", sep)) {
+	if (!nzchar(sep) || grepl("[][\\\\^$.|?*+(){}]", sep)) {
 		return(str_split(s, sep))
 	}
 	s <- as.character(s)

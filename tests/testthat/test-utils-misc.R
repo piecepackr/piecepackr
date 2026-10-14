@@ -29,4 +29,5 @@ test_that("`cleave()` keeps empty elements", {
 	expect_equal(numeric_cleave(135), 135)
 	expect_equal(numeric_cleave(c(1, 2.5)), c(1, 2.5))
 	expect_equal(cleave("a.b", sep = "\\."), c("a", "b"))
+	expect_equal(cleave("abc", sep = ""), c("a", "b", "c"))
 })

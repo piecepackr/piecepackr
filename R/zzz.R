@@ -3,7 +3,8 @@
 #' @importFrom grDevices col2rgb dev.capabilities dev.list dev.new devAskNewPage rgb
 #' @importFrom R6 R6Class
 #' @importFrom rlang .data abort inform warn %||% check_dots_empty
-#' @importFrom stringr fixed str_count str_flatten str_glue str_pad str_replace str_split str_split_fixed str_trim
+#' @importFrom stringr fixed str_count str_flatten str_glue str_pad str_replace
+#' @importFrom stringr str_split str_split_fixed str_trim
 #' @importFrom tibble tibble
 #' @importFrom utils hasName head packageDescription packageVersion tail
 NULL
