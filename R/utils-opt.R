@@ -100,8 +100,10 @@ get_style_element <- function(
 	rank = 0
 ) {
 	suited <- is_suited(piece_side, suit, rank, cfg) %||% FALSE
-	for (affix in style_affixes(piece_side, suit, rank, suited)) {
-		value <- cfg[[paste0(style, affix)]]
+	keys <- paste0(style, style_affixes(piece_side, suit, rank, suited))
+	# `[[` scans every name for each key so first find the few keys that are set
+	for (key in keys[keys %in% names(cfg)]) {
+		value <- cfg[[key]] # a list can hold an explicit `NULL` for a key
 		if (!is.null(value)) return(value)
 	}
 	default
