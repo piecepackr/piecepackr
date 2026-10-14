@@ -246,4 +246,7 @@ test_that("`get_style_element()` tries the affixes in priority order", {
 	expect_equal(get_style_element("cex", "tile_back", cfg, suit = 2, rank = 3), 3)
 	expect_equal(get_style_element("cex", "coin_face", cfg, suit = 2, rank = 3), 1)
 	expect_null(get_style_element("ps_r", "tile_face", cfg))
+	cfg$cex.s2.r3.tile_face <- NULL
+	cfg["cex.suited.tile"] <- list(NULL)
+	expect_equal(get_style_element("cex", "tile_face", cfg, suit = 2, rank = 3), 2)
 })
