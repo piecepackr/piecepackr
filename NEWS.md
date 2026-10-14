@@ -45,6 +45,9 @@ Bug fixes and minor improvements
   and computes a piece's drawing options about three times as fast the first time they are needed
   (they were already cached afterwards), so the first draw with a new configuration is faster.
 
+* `pp_cfg()` now warns about configuration names whose suit or rank part has extra characters,
+  e.g. `cex.s1x` or `cex.tiles1`, which it previously accepted silently and then ignored when drawing.
+
 * `render_piece()` and `animate_piece()` now draw the pieces with the `cfg` argument (or `piecepackr.cfg` option) when given.
   Previously only the image size was computed from it while the pieces themselves were drawn with `envir$piecepack`.
   Their default `envir` is now `NULL` instead of `game_systems("sans")`, which is now only built when needed;

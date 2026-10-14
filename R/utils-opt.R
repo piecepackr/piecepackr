@@ -195,10 +195,10 @@ is_legit_style <- function(style) {
 	style %in% styles
 }
 is_legit_rank <- function(rank) {
-	grepl("r[[:digit:]]+", rank)
+	grepl("^r[[:digit:]]+$", rank)
 }
 is_legit_suit <- function(suit) {
-	(suit %in% c("suited", "unsuited")) | grepl("s[[:digit:]]", suit)
+	(suit %in% c("suited", "unsuited")) | grepl("^s[[:digit:]]+$", suit)
 }
 pieces <- c(
 	paste0(
