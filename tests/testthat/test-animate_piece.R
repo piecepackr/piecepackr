@@ -36,3 +36,21 @@ test_that("animate_piece()", {
 	animate_piece(dfs, file = gif_filename, n_transitions = 1L, n_pauses = 1L)
 	expect_true(file.exists(gif_filename))
 })
+
+test_that("animate_piece() draws with `cfg` and tweens without a `cfg` column", {
+	skip_if_not_installed("tweenr")
+	local_mocked_bindings(
+		animation_fn = function(...) function(expr, ...) invisible(expr),
+		game_systems = function(...) stop("`game_systems()` was called")
+	)
+	df <- data.frame(id = 1L, piece_side = "tile_face", suit = 1L, rank = 2L, x = 1, y = 1)
+	cfg <- pp_cfg(list(suit_color = "red"))
+	drawn_cfg <- function() {
+		grDevices::pdf(NULL)
+		on.exit(invisible(grDevices::dev.off()))
+		animate_piece(list(df, transform(df, x = 2)), file = NULL, cfg = cfg, n_transitions = 1L)
+		pieces <- Filter(function(g) inherits(g, "pmap_piece"), grid::grid.grab()$children)
+		pieces[[1]]$children[[1]]$cfg
+	}
+	expect_identical(drawn_cfg(), cfg)
+})

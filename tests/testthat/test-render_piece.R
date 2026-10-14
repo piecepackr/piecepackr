@@ -98,3 +98,24 @@ test_that("render_piece() works", {
 	unlink(f)
 	close3d()
 })
+
+test_that("render_piece() draws with `cfg` and defaults to the game systems' piecepack", {
+	df <- data.frame(piece_side = "tile_face", x = 1, y = 1, suit = 1, rank = 2)
+	drawn <- function(...) {
+		grDevices::pdf(NULL)
+		on.exit(invisible(grDevices::dev.off()))
+		render_piece(df, open_device = FALSE, ...)
+		pieces <- Filter(function(g) inherits(g, "pmap_piece"), grid::grid.grab()$children)
+		pieces[[1]]$children[[1]]
+	}
+	opts <- function(cfg) Filter(Negate(is.function), cfg$as_list())
+	expect_identical(opts(drawn()$cfg), opts(game_systems()$piecepack))
+	cfg <- pp_cfg(list(suit_color = "red"))
+	add_dice <- function(df, ...) {
+		df$cfg <- "dice"
+		df
+	}
+	expect_named(drawn(cfg = cfg, trans = add_dice)$envir, names(game_systems()))
+	local_mocked_bindings(game_systems = function(...) stop("`game_systems()` was called"))
+	expect_identical(drawn(cfg = cfg)$cfg, cfg)
+})

@@ -10,7 +10,7 @@ render_piece(
   ...,
   .f = piecepackr::grid.piece,
   cfg = getOption("piecepackr.cfg", NULL),
-  envir = getOption("piecepackr.envir", game_systems("sans")),
+  envir = getOption("piecepackr.envir"),
   width = NULL,
   height = NULL,
   ppi = 72,
@@ -40,9 +40,13 @@ in which case it either uses the current graphics device or opens a new device
 
 \item{.f}{Low level graphics function to use e.g. \code{\link[=grid.piece]{grid.piece()}}, \code{\link[=piece3d]{piece3d()}}, \code{\link[=piece_mesh]{piece_mesh()}}, or \code{\link[=piece]{piece()}}.}
 
-\item{cfg}{A piecepackr configuration list}
+\item{cfg}{A piecepackr configuration list.  If \code{NULL} (the default) and
+\code{envir} is also \code{NULL} then the pieces are drawn with the
+"piecepack" configuration from \code{\link[=game_systems]{game_systems()}}.}
 
-\item{envir}{Environment (or named list) of piecepackr configuration lists}
+\item{envir}{Environment (or named list) of piecepackr configuration lists.
+If \code{NULL} (the default) one is built from \code{cfg} and, when a
+\code{cfg} column names other configurations, \code{\link[=game_systems]{game_systems()}}.}
 
 \item{width}{Width of image (in inches).  Inferred by default.}
 
