@@ -16,6 +16,16 @@
       Warning:
       cex.s1.r1.tile.x is not a recognized configuration
 
+---
+
+    Code
+      cfg <- pp_cfg(list(cex.s1x = 1, cex.tiles1 = 2, cex.s10.r12.tile = 3))
+    Condition
+      Warning:
+      cex.s1x is not a recognized configuration
+      Warning:
+      cex.tiles1 is not a recognized configuration
+
 # `get_style_element()` tries the affixes in priority order
 
     Code

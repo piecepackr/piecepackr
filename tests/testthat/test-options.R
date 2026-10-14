@@ -209,12 +209,18 @@ test_that("`pp_cfg()` warns about unrecognized configuration names", {
 			"cex.s1.r1.tile.x",
 			"cex.",
 			"",
-			NA
+			NA,
+			"cex.s1x",
+			"cex.tiles1",
+			"cex.border1",
+			"cex.sr1",
+			"cex.s1.r1x.tile"
 		)),
 		FALSE
 	)
 	expect_equal(is_legit_cfg_style(NULL), logical(0))
 	expect_snapshot(cfg <- pp_cfg(list(bogus = 1, cex.s1.r1.tile.x = 2, suit_color = "red")))
+	expect_snapshot(cfg <- pp_cfg(list(cex.s1x = 1, cex.tiles1 = 2, cex.s10.r12.tile = 3)))
 })
 
 test_that("`get_style_element()` tries the affixes in priority order", {
