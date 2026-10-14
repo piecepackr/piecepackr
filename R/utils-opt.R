@@ -99,6 +99,11 @@ get_style_element <- function(
 	suit = 0,
 	rank = 0
 ) {
+	stopifnot(
+		"`piece_side`, `suit`, and `rank` must each be a single value" = length(piece_side) == 1L &&
+			length(suit) == 1L &&
+			length(rank) == 1L
+	)
 	suited <- is_suited(piece_side, suit, rank, cfg) %||% FALSE
 	keys <- paste0(style, style_affixes(piece_side, suit, rank, suited))
 	# `[[` scans every name for each key so first find the few keys that are set

@@ -16,3 +16,11 @@
       Warning:
       cex.s1.r1.tile.x is not a recognized configuration
 
+# `get_style_element()` tries the affixes in priority order
+
+    Code
+      get_style_element("cex", "tile_face", cfg, suit = 1:2)
+    Condition
+      Error in `get_style_element()`:
+      ! `piece_side`, `suit`, and `rank` must each be a single value
+
