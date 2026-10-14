@@ -216,3 +216,34 @@ test_that("`pp_cfg()` warns about unrecognized configuration names", {
 	expect_equal(is_legit_cfg_style(NULL), logical(0))
 	expect_snapshot(cfg <- pp_cfg(list(bogus = 1, cex.s1.r1.tile.x = 2, suit_color = "red")))
 })
+
+test_that("`get_style_element()` tries the affixes in priority order", {
+	expect_equal(
+		style_affixes("tile_face", 2, 3, TRUE),
+		c(
+			".s2.r3.tile_face",
+			".suited.r3.tile_face",
+			".r3.tile_face",
+			".s2.tile_face",
+			".suited.tile_face",
+			".tile_face",
+			".s2.r3.tile",
+			".suited.r3.tile",
+			".r3.tile",
+			".s2.tile",
+			".suited.tile",
+			".tile",
+			".s2.r3",
+			".suited.r3",
+			".r3",
+			".s2",
+			".suited",
+			""
+		)
+	)
+	cfg <- list(cex = 1, cex.tile = 2, cex.suited.tile = 3, cex.s2.r3.tile_face = 4, n_suits = 4)
+	expect_equal(get_style_element("cex", "tile_face", cfg, suit = 2, rank = 3), 4)
+	expect_equal(get_style_element("cex", "tile_back", cfg, suit = 2, rank = 3), 3)
+	expect_equal(get_style_element("cex", "coin_face", cfg, suit = 2, rank = 3), 1)
+	expect_null(get_style_element("ps_r", "tile_face", cfg))
+})
