@@ -1262,7 +1262,7 @@ basicHoledBoardFn <- function(nrows = 4L, ncols = 4L, margin = 0) {
 		for (i in seq_along(lc)) {
 			edges <- lc[[i]]$op_edges(op_angle)
 			for (j in seq_along(edges)) {
-				name <- str_glue("hole{i}_edge{j}")
+				name <- paste0("hole", i, "_edge", j)
 				gl[[length(gl) + 1L]] <- edges[[j]]$op_grob(op_angle, op_scale, name = name)
 			}
 		}
