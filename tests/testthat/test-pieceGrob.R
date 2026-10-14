@@ -252,6 +252,36 @@ test_that("`save_print_and_play(bleed = FALSE)` registration marks flank the til
 	expect_equal(marks(FALSE), list(c(A5W + 1 / 8, 6), c(A5W + 1 / 8, 0)))
 })
 
+test_that("`save_print_and_play(bleed = FALSE)` marks the piecepack pages of letter and A4 only", {
+	size_bleed <- list(top = 0, right = 0, bottom = 0, left = 0)
+	pages <- function(size) {
+		drawn <- list()
+		local_mocked_bindings(draw_a5_page = function(grob, vp) {
+			drawn[[length(drawn) + 1L]] <<- grob
+		})
+		grDevices::pdf(NULL)
+		on.exit(invisible(grDevices::dev.off()), add = TRUE)
+		print_and_play_paper_compact(
+			cfg_default,
+			size,
+			"piecepack",
+			"single-sided",
+			TRUE,
+			size_bleed
+		)
+		drawn[-(1:2)] # drop the front matter
+	}
+	mark_x <- function(page) {
+		reg <- Filter(function(g) identical(g$name, "tile_registration_marks"), page)
+		vapply(reg, function(g) as.numeric(g$children[[1]]$children[[1]]$vp$x), numeric(1))
+	}
+	letter <- lapply(pages("letter"), mark_x)
+	expect_all_equal(unlist(letter[c(TRUE, FALSE)]), -1 / 8)
+	expect_all_equal(unlist(letter[c(FALSE, TRUE)]), A5W + 1 / 8)
+	expect_length(unlist(lapply(pages("A4"), mark_x)), 8L)
+	expect_length(unlist(lapply(pages("A5"), mark_x)), 0L)
+})
+
 test_that("`save_print_and_play()` bookmark pages sum to the page count", {
 	skip_if_not(capabilities("cairo"))
 	f <- tempfile(fileext = ".pdf")

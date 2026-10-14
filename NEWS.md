@@ -20,15 +20,15 @@ New features
 Bug fixes and minor improvements
 --------------------------------
 
+* `animate_piece()` no longer errors when `n_transitions` is positive and the data frames lack a `cfg` column.
+
+* `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
+
 * `game_systems(border = FALSE)` now also removes the border line from the
   `playing_cards`, `playing_cards_colored`, and `playing_cards_tarot` configurations (#400).
   Previously these three systems ignored `border` and always drew a black border line.
 
 * `game_systems()$reversi` disc "bits" are now circular instead of (slightly) oval.
-
-* `animate_piece()` no longer errors when `n_transitions` is positive and the data frames lack a `cfg` column.
-
-* `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
 
