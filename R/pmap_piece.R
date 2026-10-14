@@ -70,10 +70,10 @@ pmap_piece <- function(
 	if (is.function(trans)) {
 		.l <- trans(.l, ..., cfg = ce$cfg, envir = ce$envir)
 		.l <- update_name(.l)
-		# `trans` may add configuration names that a default `envir` lacks
+		# `trans` may add configuration names that a stand-in `envir` lacks
 		lookups <- cfg_lookups(.l)
-		if (is.null(envir) && !all(lookups %in% names(ce$envir))) {
-			ce <- default_cfg_envir(cfg, envir, lookups)
+		if (is_standin_envir(ce$envir) && needs_game_systems(cfg, lookups)) {
+			ce <- default_cfg_envir(cfg, NULL, lookups)
 		}
 	}
 	cfg <- ce$cfg
@@ -149,14 +149,36 @@ cfg_lookups <- function(.l) {
 	unique(cfgs[!is.na(cfgs)])
 }
 
-# Building a default `envir` with `game_systems()` takes about 0.1 seconds,
-# so only do so when `lookups` (see `cfg_lookups()`) needs more than `cfg`.
-# A defaulted `cfg` is `pp_cfg()` rather than `game_systems()$piecepack`, so
-# without `cfg` any lookup, even "piecepack", needs `game_systems()`.
-default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups) {
+# Must a defaulted `envir` be built with `game_systems()` to resolve `lookups`
+# (see `cfg_lookups()`)?  A defaulted `cfg` is `pp_cfg()` rather than
+# `game_systems()$piecepack`, so without `cfg` any lookup, even "piecepack",
+# needs `game_systems()`.
+needs_game_systems <- function(cfg, lookups) {
+	length(lookups) > 0L && (is.null(cfg) || !all(lookups == "piecepack"))
+}
+
+# Building `game_systems()` takes about 0.1 seconds, so when `lookups` needs
+# nothing but `cfg` a defaulted `envir` is this cheap stand-in instead.
+# `pmap_piece()` replaces it with `game_systems()` if `trans` adds lookups.
+standin_envir <- function(cfg) {
+	structure(list(piecepack = cfg), standin = TRUE)
+}
+
+is_standin_envir <- function(envir) {
+	isTRUE(attr(envir, "standin"))
+}
+
+# If `systems` is `TRUE` a defaulted `cfg` is `game_systems()$piecepack`,
+# the look preferred for game diagrams, instead of `pp_cfg()`.
+default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups, systems = FALSE) {
 	if (is.null(cfg) && is.null(envir)) {
-		cfg <- pp_cfg()
-		envir <- if (length(lookups)) game_systems() else list(piecepack = cfg)
+		if (systems) {
+			envir <- game_systems()
+			cfg <- envir[["piecepack"]]
+		} else {
+			cfg <- pp_cfg()
+			envir <- if (needs_game_systems(NULL, lookups)) game_systems() else standin_envir(cfg)
+		}
 	} else if (is.null(cfg)) {
 		# and !is.null(envir)
 		if (hasName(envir, "piecepack")) {
@@ -167,8 +189,12 @@ default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups) {
 	} else if (is.null(envir)) {
 		# and !is.null(cfg)
 		cfg <- get_cfg(cfg)
-		envir <- if (all(lookups == "piecepack")) list() else game_systems()
-		envir[["piecepack"]] <- cfg
+		if (needs_game_systems(cfg, lookups)) {
+			envir <- game_systems()
+			envir[["piecepack"]] <- cfg
+		} else {
+			envir <- standin_envir(cfg)
+		}
 	}
 	list(cfg = cfg, envir = envir)
 }
