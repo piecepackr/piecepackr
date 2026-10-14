@@ -98,6 +98,7 @@ get_style_element <- function(
 	return(default)
 }
 
+# Vectorized over `cfg_style` since `pp_cfg()` checks every name of its input
 is_legit_cfg_style <- function(cfg_style) {
 	# style
 	# style.suit
@@ -107,26 +108,24 @@ is_legit_cfg_style <- function(cfg_style) {
 	# style.suit.piece
 	# style.rank.piece
 	# style.suit.rank.piece
-	ss <- cleave2(cfg_style, sep = "\\.")
-	if (!is_legit_style(ss[1])) {
-		return(FALSE)
+	cfg_style <- as.character(cfg_style)
+	if (!length(cfg_style)) {
+		return(logical(0))
 	}
-	if (length(ss) == 2) {
-		return(is_legit_suit(ss[2]) || is_legit_rank(ss[2]) || is_legit_piece(ss[2]))
-	}
-	if (length(ss) == 3) {
-		return(
-			(is_legit_suit(ss[2]) && (is_legit_rank(ss[3]) || is_legit_piece(ss[3]))) ||
-				(is_legit_rank(ss[2]) && is_legit_piece(ss[3]))
-		)
-	}
-	if (length(ss) == 4) {
-		return(is_legit_suit(ss[2]) && is_legit_rank(ss[3]) && is_legit_piece(ss[4]))
-	}
-	if (length(ss) > 4) {
-		return(FALSE)
-	}
-	TRUE
+	n <- str_count(cfg_style, fixed(".")) + 1L
+	ss <- str_split_fixed(cfg_style, fixed("."), 4L)
+	suit2 <- is_legit_suit(ss[, 2L])
+	rank2 <- is_legit_rank(ss[, 2L])
+	piece2 <- is_legit_piece(ss[, 2L])
+	rank3 <- is_legit_rank(ss[, 3L])
+	piece3 <- is_legit_piece(ss[, 3L])
+	piece4 <- is_legit_piece(ss[, 4L])
+	legit <- is_legit_style(ss[, 1L]) &
+		((n == 1L) |
+			(n == 2L & (suit2 | rank2 | piece2)) |
+			(n == 3L & ((suit2 & (rank3 | piece3)) | (rank2 & piece3))) |
+			(n == 4L & suit2 & rank3 & piece4))
+	legit & !is.na(legit)
 }
 
 styles <- c(
@@ -183,7 +182,7 @@ is_legit_rank <- function(rank) {
 	grepl("r[[:digit:]]+", rank)
 }
 is_legit_suit <- function(suit) {
-	(suit %in% c("suited", "unsuited")) || grepl("s[[:digit:]]", suit)
+	(suit %in% c("suited", "unsuited")) | grepl("s[[:digit:]]", suit)
 }
 pieces <- c(
 	paste0(
@@ -204,10 +203,9 @@ is_legit_piece <- function(piece) {
 	piece %in% pieces
 }
 warn_cfg <- function(cfg) {
-	for (nn in names(cfg)) {
-		if (!is_legit_cfg_style(nn)) {
-			warn(paste(nn, "is not a recognized configuration"))
-		}
+	nn <- names(cfg)
+	for (bad in nn[!is_legit_cfg_style(nn)]) {
+		warn(paste(bad, "is not a recognized configuration"))
 	}
 	if (!is.null(cfg$spdx_id)) {
 		check_spdx_id(cfg$spdx_id)

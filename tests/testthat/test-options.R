@@ -188,3 +188,31 @@ test_that("pp_cfg querying variables work as expected", {
 	cfg$cache_op_fn <- FALSE
 	expect_false(cfg$cache_op_fn)
 })
+
+test_that("`pp_cfg()` warns about unrecognized configuration names", {
+	expect_all_true(is_legit_cfg_style(c(
+		"cex",
+		"cex.s1",
+		"cex.r1",
+		"cex.tile",
+		"cex.suited.r1",
+		"cex.s1.tile",
+		"cex.r1.tile",
+		"cex.s1.r1.tile",
+		"grob_fn.s5.card_face"
+	)))
+	expect_all_equal(
+		is_legit_cfg_style(c(
+			"bogus",
+			"cex.foo",
+			"cex.tile.s1",
+			"cex.s1.r1.tile.x",
+			"cex.",
+			"",
+			NA
+		)),
+		FALSE
+	)
+	expect_equal(is_legit_cfg_style(NULL), logical(0))
+	expect_snapshot(cfg <- pp_cfg(list(bogus = 1, cex.s1.r1.tile.x = 2, suit_color = "red")))
+})
