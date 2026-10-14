@@ -6,10 +6,9 @@
 #' `pmap_piece()` differs from `purrr::pmap()` in a few ways:
 #' \enumerate{
 #'    \item{If `cfg` and/or `envir` are missing attempts to set reasonable
-#'          defaults.  A missing `envir` is built with [game_systems()] only if
-#'          `.l` has a `cfg` column of configuration names to look up (other
-#'          than `"piecepack"` when `cfg` is given); otherwise it is just
-#'          `list(piecepack = cfg)`.}
+#'          defaults.  A missing `envir` holds `cfg` (if given) under the name
+#'          `"piecepack"` plus just the game systems from [game_systems()]
+#'          that a `cfg` column of `.l` names.}
 #'    \item{If not `NULL` will first apply function `trans` to `.l`.}
 #'    \item{If the output of `.f` is a grid grob object then `pmap_piece`
 #'          will return a `gTree` object with
@@ -70,10 +69,9 @@ pmap_piece <- function(
 	if (is.function(trans)) {
 		.l <- trans(.l, ..., cfg = ce$cfg, envir = ce$envir)
 		.l <- update_name(.l)
-		# `trans` may add configuration names that a stand-in `envir` lacks
-		lookups <- cfg_lookups(.l)
-		if (is_standin_envir(ce$envir) && needs_game_systems(cfg, lookups)) {
-			ce <- default_cfg_envir(cfg, NULL, lookups)
+		# `trans` may add configuration names that a default `envir` lacks
+		if (is_default_envir(ce$envir)) {
+			ce$envir <- add_game_systems(ce$envir, cfg_lookups(.l))
 		}
 	}
 	cfg <- ce$cfg
@@ -149,23 +147,27 @@ cfg_lookups <- function(.l) {
 	unique(cfgs[!is.na(cfgs)])
 }
 
-# Must a defaulted `envir` be built with `game_systems()` to resolve `lookups`
-# (see `cfg_lookups()`)?  A defaulted `cfg` is `pp_cfg()` rather than
-# `game_systems()$piecepack`, so without `cfg` any lookup, even "piecepack",
-# needs `game_systems()`.
-needs_game_systems <- function(cfg, lookups) {
-	length(lookups) > 0L && (is.null(cfg) || !all(lookups == "piecepack"))
+# A default `envir` holds `cfg` (if any) under the name "piecepack" plus the
+# game systems that `lookups` (see `cfg_lookups()`) name.  Building all of
+# `game_systems()` takes tens of milliseconds so we only build the ones named.
+# It is marked so that `pmap_piece()` can add any more that `trans` names.
+default_envir <- function(cfg = NULL, lookups = character()) {
+	envir <- if (is.null(cfg)) list() else list(piecepack = cfg)
+	add_game_systems(structure(envir, default = TRUE), lookups)
 }
 
-# Building `game_systems()` takes about 0.1 seconds, so when `lookups` needs
-# nothing but `cfg` a defaulted `envir` is this cheap stand-in instead.
-# `pmap_piece()` replaces it with `game_systems()` if `trans` adds lookups.
-standin_envir <- function(cfg) {
-	structure(list(piecepack = cfg), standin = TRUE)
+is_default_envir <- function(envir) {
+	isTRUE(attr(envir, "default"))
 }
 
-is_standin_envir <- function(envir) {
-	isTRUE(attr(envir, "standin"))
+# Add the game systems that `lookups` name but a default `envir` lacks.
+# Unknown names are left for `get_cfg()` to fall back to a default `pp_cfg()`.
+add_game_systems <- function(envir, lookups) {
+	systems <- setdiff(intersect(lookups, names(game_systems_exprs)), names(envir))
+	if (length(systems)) {
+		envir <- structure(c(envir, game_systems(systems = systems)), default = TRUE)
+	}
+	envir
 }
 
 # If `systems` is `TRUE` a defaulted `cfg` is `game_systems()$piecepack`,
@@ -173,11 +175,11 @@ is_standin_envir <- function(envir) {
 default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups, systems = FALSE) {
 	if (is.null(cfg) && is.null(envir)) {
 		if (systems) {
-			envir <- game_systems()
+			envir <- default_envir(NULL, c("piecepack", lookups))
 			cfg <- envir[["piecepack"]]
 		} else {
 			cfg <- pp_cfg()
-			envir <- if (needs_game_systems(NULL, lookups)) game_systems() else standin_envir(cfg)
+			envir <- default_envir(NULL, lookups)
 		}
 	} else if (is.null(cfg)) {
 		# and !is.null(envir)
@@ -189,12 +191,7 @@ default_cfg_envir <- function(cfg = NULL, envir = NULL, lookups, systems = FALSE
 	} else if (is.null(envir)) {
 		# and !is.null(cfg)
 		cfg <- get_cfg(cfg)
-		if (needs_game_systems(cfg, lookups)) {
-			envir <- game_systems()
-			envir[["piecepack"]] <- cfg
-		} else {
-			envir <- standin_envir(cfg)
-		}
+		envir <- default_envir(cfg, lookups)
 	}
 	list(cfg = cfg, envir = envir)
 }

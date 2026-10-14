@@ -4,6 +4,9 @@ piecepackr 1.17.0
 New features
 ------------
 
+* `game_systems()` gains a `systems` argument to build just the named game systems,
+  e.g. `game_systems(systems = c("checkers1", "dice"))`, instead of all of them.
+
 * `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone (#336).
   Adjacent tiles share a cut line; coins and dice keep a gap within their shared zone so each can be punched out or cut to size without touching its neighbor.
 
@@ -34,10 +37,9 @@ Bug fixes and minor improvements
 
 * `has_font()` no longer returns `FALSE` for installed fonts whose family name contains characters (such as hyphens) that don't appear in its resolved font file's basename.
 
-* `pmap_piece()` no longer builds a default `envir` with `game_systems()`
-  unless `.l` has a `cfg` column naming configurations other than the given `cfg`.
-  Otherwise the default `envir` is now just `list(piecepack = cfg)`.
-  This saves about 0.1 seconds per call and speeds up functions built on top of it such as `save_print_and_play()`.
+* `pmap_piece()` no longer builds a default `envir` with all of `game_systems()`.
+  It now holds just `cfg` (if given, as `"piecepack"`) plus the game systems named by a `cfg` column of `.l`.
+  This saves tens of milliseconds per call and speeds up functions built on top of it such as `save_print_and_play()`.
 
 * `pp_cfg()` now validates the names of its configuration list about three times faster.
 

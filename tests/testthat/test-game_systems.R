@@ -2,6 +2,14 @@ test_that("no regressions in `game_systems()`", {
 	expect_error(game_systems("boobear"), "Don't have a customized configuration for font")
 })
 
+test_that("`game_systems(systems = )` builds just the named systems", {
+	expect_named(game_systems(systems = c("dice", "checkers1")), c("dice", "checkers1"))
+	expect_named(game_systems(systems = factor(c("dice", "dice"))), "dice")
+	opts <- function(cfg) Filter(Negate(is.function), cfg$as_list())
+	expect_identical(opts(game_systems(systems = "subpack")$subpack), opts(game_systems()$subpack))
+	expect_snapshot(error = TRUE, game_systems(systems = c("piecepack", "boobear")))
+})
+
 test_that("`game_systems(border = FALSE)` affects every system", {
 	cfgs <- game_systems(border = FALSE)
 	expect_all_equal(
