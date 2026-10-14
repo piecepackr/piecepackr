@@ -535,8 +535,8 @@ dice_d12 <- function(font = "sans", color_list = color_list_fn()) {
 		invert_colors = TRUE
 	)
 	for (i in 10:12) {
-		dice_list[[str_glue("ps_cex.r{i}.die")]] <- 1.00
-		# dice_list[[str_glue("ps_r.r{i}.die")]] <- 0.02
+		dice_list[[paste0("ps_cex.r", i, ".die")]] <- 1.00
+		# dice_list[[paste0("ps_r.r", i, ".die")]] <- 0.02
 	}
 	dice <- pp_cfg(c(dice_list, color_list))
 	dice$has_piecepack <- FALSE
@@ -570,8 +570,8 @@ dice_d20 <- function(font = "sans", color_list = color_list_fn()) {
 		invert_colors = TRUE
 	)
 	for (i in 1:9) {
-		dice_list[[str_glue("ps_cex.r{i}.die")]] <- 0.72
-		dice_list[[str_glue("ps_r.r{i}.die")]] <- 0.02
+		dice_list[[paste0("ps_cex.r", i, ".die")]] <- 0.72
+		dice_list[[paste0("ps_r.r", i, ".die")]] <- 0.02
 	}
 	dice <- pp_cfg(c(dice_list, color_list))
 	dice$has_piecepack <- FALSE
@@ -616,9 +616,9 @@ cubes <- function(color_list = color_list_fn()) {
 	)
 	for (i in seq_along(sizes_mm)) {
 		size_in <- sizes_mm[i] / 25.4
-		cubes_list[[str_glue("width.r{i}.bit")]] <- size_in
-		cubes_list[[str_glue("height.r{i}.bit")]] <- size_in
-		cubes_list[[str_glue("depth.r{i}.bit")]] <- size_in
+		cubes_list[[paste0("width.r", i, ".bit")]] <- size_in
+		cubes_list[[paste0("height.r", i, ".bit")]] <- size_in
+		cubes_list[[paste0("depth.r", i, ".bit")]] <- size_in
 	}
 	cubes <- pp_cfg(c(cubes_list, color_list))
 	cubes$has_piecepack <- FALSE
@@ -695,15 +695,15 @@ marbles <- function(color_list = color_list_fn(), rect_shape = "rect", shading =
 		marbles[["edge_color.board"]] <- cb_suit_colors_impure
 	}
 	for (i in seq.int(9L)) {
-		marbles[[str_glue("depth.r{i}.bit")]] <- (7 + i) / 16
-		marbles[[str_glue("width.r{i}.bit")]] <- (7 + i) / 16
+		marbles[[paste0("depth.r", i, ".bit")]] <- (7 + i) / 16
+		marbles[[paste0("width.r", i, ".bit")]] <- (7 + i) / 16
 	}
 	for (i in seq.int(2L, 12L)) {
-		marbles[[str_glue("width.r{i}.board")]] <- i + 2 * margin
-		marbles[[str_glue("height.r{i}.board")]] <- i + 2 * margin
-		marbles[[str_glue("grob_fn.r{i}.board")]] <- holedBoardGrobFn(i, i, margin)
-		marbles[[str_glue("op_grob_fn.r{i}.board")]] <- basicHoledBoardFn(i, i, margin)
-		marbles[[str_glue("obj_fn.r{i}.board")]] <- save_holed_board_obj_fn(i, i, margin)
+		marbles[[paste0("width.r", i, ".board")]] <- i + 2 * margin
+		marbles[[paste0("height.r", i, ".board")]] <- i + 2 * margin
+		marbles[[paste0("grob_fn.r", i, ".board")]] <- holedBoardGrobFn(i, i, margin)
+		marbles[[paste0("op_grob_fn.r", i, ".board")]] <- basicHoledBoardFn(i, i, margin)
+		marbles[[paste0("obj_fn.r", i, ".board")]] <- save_holed_board_obj_fn(i, i, margin)
 	}
 	marbles <- pp_cfg(c(marbles, color_list))
 	marbles$has_piecepack <- FALSE
@@ -728,16 +728,16 @@ morris <- function(cell_width = 1, color_list = color_list_fn(), shading = FALSE
 	)
 	for (i in seq.int(2L, 15L)) {
 		if (i < 5) {
-			morris[[str_glue("width.r{i}.board")]] <- 3 * cell_width
-			morris[[str_glue("height.r{i}.board")]] <- 3 * cell_width
+			morris[[paste0("width.r", i, ".board")]] <- 3 * cell_width
+			morris[[paste0("height.r", i, ".board")]] <- 3 * cell_width
 		} else if (i < 8) {
-			morris[[str_glue("width.r{i}.board")]] <- 5 * cell_width
-			morris[[str_glue("height.r{i}.board")]] <- 5 * cell_width
+			morris[[paste0("width.r", i, ".board")]] <- 5 * cell_width
+			morris[[paste0("height.r", i, ".board")]] <- 5 * cell_width
 		} else {
-			morris[[str_glue("width.r{i}.board")]] <- 7 * cell_width
-			morris[[str_glue("height.r{i}.board")]] <- 7 * cell_width
+			morris[[paste0("width.r", i, ".board")]] <- 7 * cell_width
+			morris[[paste0("height.r", i, ".board")]] <- 7 * cell_width
 		}
-		morris[[str_glue("grob_fn.r{i}.board_face")]] <- morrisBoardGrobFn(i)
+		morris[[paste0("grob_fn.r", i, ".board_face")]] <- morrisBoardGrobFn(i)
 	}
 	if (shading) {
 		morris[["edge_color.board"]] <- cheap_darken(color_list$background_color, 0.3)
@@ -830,10 +830,10 @@ checkers <- function(font = "sans", cell_width = 1, color_list = color_list_fn()
 		gridline_color.s6.board_back = "grey80"
 	)
 	for (i in seq.int(2L, 12L)) {
-		checkers[[str_glue("width.r{i}.board")]] <- i * cell_width
-		checkers[[str_glue("height.r{i}.board")]] <- i * cell_width
-		checkers[[str_glue("grob_fn.r{i}.board_face")]] <- checkeredBoardGrobFn(i, i)
-		checkers[[str_glue("grob_fn.r{i}.board_back")]] <- linedBoardGrobFn(i, i)
+		checkers[[paste0("width.r", i, ".board")]] <- i * cell_width
+		checkers[[paste0("height.r", i, ".board")]] <- i * cell_width
+		checkers[[paste0("grob_fn.r", i, ".board_face")]] <- checkeredBoardGrobFn(i, i)
+		checkers[[paste0("grob_fn.r", i, ".board_back")]] <- linedBoardGrobFn(i, i)
 	}
 	# \u25cb white circle \u25cf black circle \u265b black queen \u2605 black star
 	# \u272a circled white star
@@ -892,10 +892,10 @@ chess <- function(font = "sans", cell_width = 1, color_list = color_list_fn()) {
 		gridline_color.s6.board_back = "grey80"
 	)
 	for (i in seq.int(2L, 12L)) {
-		chess[[str_glue("width.r{i}.board")]] <- i * cell_width
-		chess[[str_glue("height.r{i}.board")]] <- i * cell_width
-		chess[[str_glue("grob_fn.r{i}.board_face")]] <- checkeredBoardGrobFn(i, i)
-		chess[[str_glue("grob_fn.r{i}.board_back")]] <- linedBoardGrobFn(i, i)
+		chess[[paste0("width.r", i, ".board")]] <- i * cell_width
+		chess[[paste0("height.r", i, ".board")]] <- i * cell_width
+		chess[[paste0("grob_fn.r", i, ".board_face")]] <- checkeredBoardGrobFn(i, i)
+		chess[[paste0("grob_fn.r", i, ".board_back")]] <- linedBoardGrobFn(i, i)
 	}
 	chess <- pp_cfg(c(chess, color_list))
 	chess$has_piecepack <- FALSE
@@ -924,9 +924,9 @@ go <- function(cell_width = 1, color_list = color_list_fn(), shading = FALSE) {
 		go[["edge_color.board"]] <- cheap_darken(color_list$background_color, 0.3)
 	}
 	for (i in seq.int(2L, 19L)) {
-		go[[str_glue("width.r{i}.board")]] <- i * cell_width
-		go[[str_glue("height.r{i}.board")]] <- i * cell_width
-		go[[str_glue("grob_fn.r{i}.board_face")]] <- linedBoardGrobFn(i - 1L, i - 1L, 0.5)
+		go[[paste0("width.r", i, ".board")]] <- i * cell_width
+		go[[paste0("height.r", i, ".board")]] <- i * cell_width
+		go[[paste0("grob_fn.r", i, ".board_face")]] <- linedBoardGrobFn(i - 1L, i - 1L, 0.5)
 	}
 	go <- pp_cfg(c(go, go_stone(cell_width, shading), color_list))
 	go$has_piecepack <- FALSE
@@ -1173,7 +1173,7 @@ playing_cards <- function(font = "sans", rect_shape = "rect", color_list = color
 	playing_cards_tarot$rank_text.s5 <- c(1:21, fool_text)
 	playing_cards_tarot$grob_fn.s5.card_face <- cardGrobFn(has_pips = FALSE, fill_stroke = FALSE)
 	for (i in 11:15) {
-		name <- str_glue("grob_fn.s5.r{i}.card_face")
+		name <- paste0("grob_fn.s5.r", i, ".card_face")
 		playing_cards_tarot[[name]] <- cardGrobFn(has_pips = FALSE, fill_stroke = FALSE)
 	}
 
@@ -1200,10 +1200,10 @@ reversi <- function(cell_width = 1, color_list = color_list_fn()) {
 		gridline_color.s6.board_back = "grey80"
 	)
 	for (i in seq.int(2L, 12L)) {
-		reversi[[str_glue("width.r{i}.board")]] <- i * cell_width
-		reversi[[str_glue("height.r{i}.board")]] <- i * cell_width
-		reversi[[str_glue("grob_fn.r{i}.board_face")]] <- linedBoardGrobFn(i, i)
-		reversi[[str_glue("grob_fn.r{i}.board_back")]] <- checkeredBoardGrobFn(i, i)
+		reversi[[paste0("width.r", i, ".board")]] <- i * cell_width
+		reversi[[paste0("height.r", i, ".board")]] <- i * cell_width
+		reversi[[paste0("grob_fn.r", i, ".board_face")]] <- linedBoardGrobFn(i, i)
+		reversi[[paste0("grob_fn.r", i, ".board_back")]] <- checkeredBoardGrobFn(i, i)
 	}
 	reversi <- pp_cfg(c(reversi, reversi_piece(cell_width, color_list), color_list))
 	reversi$has_piecepack <- FALSE

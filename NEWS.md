@@ -24,6 +24,8 @@ Bug fixes and minor improvements
 
 * `basicPieceGrob()` now correctly uses `dm_fontface` (instead of `ps_fontface`) when drawing the directional mark grob.
 
+* `game_systems()` now builds its configurations about four times faster.
+
 * `game_systems(border = FALSE)` now also removes the border line from the
   `playing_cards`, `playing_cards_colored`, and `playing_cards_tarot` configurations (#400).
   Previously these three systems ignored `border` and always drew a black border line.
