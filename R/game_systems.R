@@ -122,9 +122,14 @@
 #'               drawing with `{grid}` graphics and `FALSE` when drawing with 3D graphic systems.
 #' @param background_color Background color to use for certain pieces like boards and piecepack tiles.
 #' @param edge_color Edge color to use for certain pieces like boards and piecepack tiles.
+#' @param systems Character vector of the names of the game systems to build
+#'                (see the list above).  If `NULL` (the default) builds all of
+#'                them, which takes tens of milliseconds.
 #' @examples
 #' cfgs <- game_systems(pawn = "joystick")
 #' names(cfgs)
+#' # or just the ones you need
+#' names(game_systems(systems = c("checkers1", "dice")))
 #'
 #' \donttest{# May take more than 5 seconds on CRAN servers
 #' # standard dice, meeples, and joystick pawns
@@ -185,88 +190,106 @@ game_systems <- function(
 	shading = FALSE,
 	border = TRUE,
 	background_color = ifelse(border, "white", "burlywood"),
-	edge_color = ifelse(border, "white", "black")
+	edge_color = ifelse(border, "white", "black"),
+	systems = NULL
 ) {
 	check_dots_empty()
 	font <- game_systems_font(font)
+	if (is.null(systems)) {
+		systems <- names(game_systems_exprs)
+	} else {
+		systems <- unique(as.character(systems))
+		unknown <- setdiff(systems, names(game_systems_exprs))
+		if (length(unknown)) {
+			abort(paste("Don't have a game system named", paste(dQuote(unknown), collapse = ", ")))
+		}
+	}
 
 	rect_shape <- ifelse(round, "roundrect", "rect")
 	color_list <- color_list_fn(border, background_color, edge_color)
 
-	cards <- playing_cards(font, rect_shape, color_list)
-	packs <- piecepack(font, color_list, rect_shape, pawn, background_color, edge_color)
-
-	list(
-		alquerque = alquerque(1, color_list, shading),
-		checkers1 = checkers(font, 1, color_list),
-		checkers2 = checkers(font, 2, color_list),
-		chess1 = chess(font, 1, color_list),
-		chess2 = chess(font, 2, color_list),
-		cubes = cubes(color_list),
-		dice = dice(color_list, rect_shape),
-		dice_d4 = dice_d4(font, color_list),
-		dice_d8 = dice_d8(font, color_list),
-		dice_d10 = dice_d10(font, color_list),
-		dice_d10_percentile = dice_d10_percentile(font, color_list),
-		dice_d12 = dice_d12(font, color_list),
-		dice_d20 = dice_d20(font, color_list),
-		dice_fudge = dice_fudge(color_list, rect_shape),
-		dice_numeral = dice_numeral(font, color_list, rect_shape),
-		dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
-		dominoes_black = dominoes(
-			color_list$suit_color[2],
-			"white",
-			color_list$border_color,
-			rect_shape
-		),
-		dominoes_blue = dominoes(
-			color_list$suit_color[4],
-			"white",
-			color_list$border_color,
-			rect_shape
-		),
-		dominoes_green = dominoes(
-			color_list$suit_color[3],
-			"white",
-			color_list$border_color,
-			rect_shape
-		),
-		dominoes_red = dominoes(
-			color_list$suit_color[1],
-			"white",
-			color_list$border_color,
-			rect_shape
-		),
-		dominoes_white = dominoes(
-			color_list$suit_color[6],
-			"black",
-			color_list$border_color,
-			rect_shape
-		),
-		dominoes_yellow = dominoes(
-			color_list$suit_color[5],
-			"black",
-			color_list$border_color,
-			rect_shape
-		),
-		dominoes_chinese = dominoes_chinese(color_list, rect_shape),
-		dominoes_chinese_black = dominoes_chinese(color_list, rect_shape, invert = TRUE),
-		dual_piecepacks_expansion = packs$dpe,
-		go = go(1, color_list, shading),
-		hexpack = packs$hexpack,
-		marbles = marbles(color_list, rect_shape, shading),
-		meeples = meeples(color_list),
-		morris = morris(1, color_list, shading),
-		piecepack = packs$base,
-		piecepack_inverted = packs$inverted,
-		playing_cards = cards$base,
-		playing_cards_colored = cards$color,
-		playing_cards_tarot = cards$tarot,
-		playing_cards_expansion = packs$pce,
-		reversi = reversi(1, color_list),
-		subpack = packs$subpack
+	# Several systems share these option lists so only build them if one is asked for
+	delayedAssign("cards", playing_cards(font, rect_shape, color_list))
+	delayedAssign(
+		"packs",
+		piecepack(font, color_list, rect_shape, pawn, background_color, edge_color)
 	)
+
+	lapply(game_systems_exprs[systems], eval, envir = environment())
 }
+
+# The game systems `game_systems()` can build, as unevaluated calls so that
+# `game_systems(systems = )` only builds the ones asked for.
+game_systems_exprs <- alist(
+	alquerque = alquerque(1, color_list, shading),
+	checkers1 = checkers(font, 1, color_list),
+	checkers2 = checkers(font, 2, color_list),
+	chess1 = chess(font, 1, color_list),
+	chess2 = chess(font, 2, color_list),
+	cubes = cubes(color_list),
+	dice = dice(color_list, rect_shape),
+	dice_d4 = dice_d4(font, color_list),
+	dice_d8 = dice_d8(font, color_list),
+	dice_d10 = dice_d10(font, color_list),
+	dice_d10_percentile = dice_d10_percentile(font, color_list),
+	dice_d12 = dice_d12(font, color_list),
+	dice_d20 = dice_d20(font, color_list),
+	dice_fudge = dice_fudge(color_list, rect_shape),
+	dice_numeral = dice_numeral(font, color_list, rect_shape),
+	dominoes = dominoes(color_list$suit_color[6], "black", color_list$border_color, rect_shape),
+	dominoes_black = dominoes(
+		color_list$suit_color[2],
+		"white",
+		color_list$border_color,
+		rect_shape
+	),
+	dominoes_blue = dominoes(
+		color_list$suit_color[4],
+		"white",
+		color_list$border_color,
+		rect_shape
+	),
+	dominoes_green = dominoes(
+		color_list$suit_color[3],
+		"white",
+		color_list$border_color,
+		rect_shape
+	),
+	dominoes_red = dominoes(
+		color_list$suit_color[1],
+		"white",
+		color_list$border_color,
+		rect_shape
+	),
+	dominoes_white = dominoes(
+		color_list$suit_color[6],
+		"black",
+		color_list$border_color,
+		rect_shape
+	),
+	dominoes_yellow = dominoes(
+		color_list$suit_color[5],
+		"black",
+		color_list$border_color,
+		rect_shape
+	),
+	dominoes_chinese = dominoes_chinese(color_list, rect_shape),
+	dominoes_chinese_black = dominoes_chinese(color_list, rect_shape, invert = TRUE),
+	dual_piecepacks_expansion = piecepack_cfg(packs$dual_piecepacks_expansion),
+	go = go(1, color_list, shading),
+	hexpack = to_hexpack(packs$piecepack),
+	marbles = marbles(color_list, rect_shape, shading),
+	meeples = meeples(color_list),
+	morris = morris(1, color_list, shading),
+	piecepack = piecepack_cfg(packs$piecepack),
+	piecepack_inverted = piecepack_cfg(packs$piecepack_inverted),
+	playing_cards = playing_cards_cfg(cards$playing_cards),
+	playing_cards_colored = playing_cards_cfg(cards$playing_cards_colored),
+	playing_cards_tarot = playing_cards_cfg(cards$playing_cards_tarot),
+	playing_cards_expansion = piecepack_cfg(packs$playing_cards_expansion),
+	reversi = reversi(1, color_list),
+	subpack = to_subpack(packs$piecepack)
+)
 
 color_list_fn <- function(border = TRUE, background_color = "white", edge_color = "white") {
 	if (border) {
@@ -1005,11 +1028,10 @@ piecepack <- function(
 		shape.tile = rect_shape,
 		shape.card = rect_shape
 	)
-	shapes <- shapes_cfg(color_list)
 	pawn <- switch(
 		pawn,
-		"peg-doll" = peg_doll_pawn(shapes),
-		"joystick" = joystick_pawn(shapes),
+		"peg-doll" = peg_doll_pawn(shapes_cfg(color_list)),
+		"joystick" = joystick_pawn(shapes_cfg(color_list)),
 		NULL
 	)
 	piecepack <- c(pawn, piecepack_suit_text, color_list, piecepack_base)
@@ -1018,21 +1040,6 @@ piecepack <- function(
 	playing_cards_expansion$suit_color <- "#D55E00,#000000,#000000,#D55E00,#F0E442"
 	playing_cards_expansion$suit_color.s3.matchstick <- "grey30"
 	playing_cards_expansion$suit_color.s3.bit <- "grey30"
-
-	hexpack <- c(
-		piecepack,
-		list(
-			shape.tile_face = "convex6",
-			shape.tile_back = "convex6",
-			border_lex = 3,
-			shape_t.tile = "60",
-			dm_t.tile_face = -90,
-			width.tile = 4 / sqrt(3),
-			height.tile = 4 / sqrt(3),
-			shape.coin_face = "convex3",
-			shape.coin_back = "convex3"
-		)
-	)
 
 	dpe_base <- list(
 		invert_colors.suited = TRUE,
@@ -1057,41 +1064,22 @@ piecepack <- function(
 
 	piecepack <- c(list(suit_color = cb_suit_colors_pure), piecepack)
 
-	base <- pp_cfg(piecepack)
-	dpe <- pp_cfg(dual_piecepacks_expansion)
-	hexpack <- to_hexpack(piecepack)
-	inverted <- pp_cfg(piecepack_inverted)
-	pce <- pp_cfg(playing_cards_expansion)
-	subpack <- to_subpack(piecepack)
-
-	base$has_cards <- TRUE
-	dpe$has_cards <- TRUE
-	inverted$has_cards <- TRUE
-	pce$has_cards <- TRUE
-
-	base$has_matchsticks <- TRUE
-	dpe$has_matchsticks <- TRUE
-	inverted$has_matchsticks <- TRUE
-	pce$has_matchsticks <- TRUE
-
-	base$has_pyramids <- TRUE
-	dpe$has_pyramids <- TRUE
-	inverted$has_pyramids <- TRUE
-	pce$has_pyramids <- TRUE
-
-	base$has_saucers <- TRUE
-	dpe$has_saucers <- TRUE
-	inverted$has_saucers <- TRUE
-	pce$has_saucers <- TRUE
-
 	list(
-		base = base,
-		dpe = dpe,
-		hexpack = hexpack,
-		inverted = inverted,
-		pce = pce,
-		subpack = subpack
+		piecepack = piecepack,
+		dual_piecepacks_expansion = dual_piecepacks_expansion,
+		piecepack_inverted = piecepack_inverted,
+		playing_cards_expansion = playing_cards_expansion
 	)
+}
+
+# Finish a `piecepack()` option list into a configuration
+piecepack_cfg <- function(ll) {
+	cfg <- pp_cfg(ll)
+	cfg$has_cards <- TRUE
+	cfg$has_matchsticks <- TRUE
+	cfg$has_pyramids <- TRUE
+	cfg$has_saucers <- TRUE
+	cfg
 }
 
 playing_cards <- function(font = "sans", rect_shape = "rect", color_list = color_list_fn()) {
@@ -1129,10 +1117,6 @@ playing_cards <- function(font = "sans", rect_shape = "rect", color_list = color
 	playing_cards$grob_fn.s5.r13.card_face <- faceCardGrobFn(face_labels[4], fill_stroke = TRUE)
 	playing_cards$grob_fn.s5.r14.card_face <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
 
-	playing_cards <- pp_cfg(playing_cards)
-	playing_cards$has_piecepack <- FALSE
-	playing_cards$has_cards <- TRUE
-
 	playing_cards_colored <- c(playing_cards_list, pc_suit_text)
 	playing_cards_colored$n_suits <- 5
 	playing_cards_colored$suit_color <- cb_suit_colors_pure
@@ -1150,10 +1134,6 @@ playing_cards <- function(font = "sans", rect_shape = "rect", color_list = color
 		fill_stroke = TRUE
 	)
 	playing_cards_colored$grob_fn.s5.r14.card_face <- jokerCardGrobFn(TRUE, fill_stroke = TRUE)
-
-	playing_cards_colored <- pp_cfg(playing_cards_colored)
-	playing_cards_colored$has_piecepack <- FALSE
-	playing_cards_colored$has_cards <- TRUE
 
 	playing_cards_tarot <- playing_cards_list
 	playing_cards_tarot$rank_text <- "A,2,3,4,5,6,7,8,9,10,J,C,Q,K,\n\n\n\nJ\nO\nK\nE\nR"
@@ -1177,11 +1157,19 @@ playing_cards <- function(font = "sans", rect_shape = "rect", color_list = color
 		playing_cards_tarot[[name]] <- cardGrobFn(has_pips = FALSE, fill_stroke = FALSE)
 	}
 
-	playing_cards_tarot <- pp_cfg(playing_cards_tarot)
-	playing_cards_tarot$has_piecepack <- FALSE
-	playing_cards_tarot$has_cards <- TRUE
+	list(
+		playing_cards = playing_cards,
+		playing_cards_colored = playing_cards_colored,
+		playing_cards_tarot = playing_cards_tarot
+	)
+}
 
-	list(base = playing_cards, color = playing_cards_colored, tarot = playing_cards_tarot)
+# Finish a `playing_cards()` option list into a configuration
+playing_cards_cfg <- function(ll) {
+	cfg <- pp_cfg(ll)
+	cfg$has_piecepack <- FALSE
+	cfg$has_cards <- TRUE
+	cfg
 }
 
 reversi <- function(cell_width = 1, color_list = color_list_fn()) {

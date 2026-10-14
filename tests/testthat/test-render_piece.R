@@ -115,7 +115,7 @@ test_that("render_piece() draws with `cfg` and defaults to the game systems' pie
 		df$cfg <- "dice"
 		df
 	}
-	expect_named(drawn(cfg = cfg, trans = add_dice)$envir, names(game_systems()))
+	expect_named(drawn(cfg = cfg, trans = add_dice)$envir, c("piecepack", "dice"))
 	local_mocked_bindings(game_systems = function(...) stop("`game_systems()` was called"))
 	expect_identical(drawn(cfg = cfg)$cfg, cfg)
 })
