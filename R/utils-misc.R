@@ -38,7 +38,7 @@ inch <- function(inches) unit(inches, "in")
 #' @param color if `TRUE` convert empty strings to `"transparent"`
 #' @export
 cleave <- function(s, sep = ",", float = FALSE, color = FALSE) {
-	vec <- str_split(s, sep)
+	vec <- str_split_sep(s, sep)
 	if (length(vec)) {
 		vec <- vec[[1]]
 	}
@@ -49,6 +49,21 @@ cleave <- function(s, sep = ",", float = FALSE, color = FALSE) {
 	} else {
 		vec
 	}
+}
+
+# Split on `sep` as a fixed string when it is a plain one (as it always is
+# internally) since the regex engine costs about ten times more.  Unlike
+# `str_split()`, `strsplit()` drops a trailing empty string and splits "" into
+# nothing so we put those back (e.g. `col_cleave("red,")` is still transparent).
+str_split_sep <- function(s, sep) {
+	if (grepl("[][\\\\^$.|?*+(){}]", sep)) {
+		return(str_split(s, sep))
+	}
+	s <- as.character(s)
+	vec <- strsplit(s, sep, fixed = TRUE)
+	trailing <- which(!is.na(s) & (s == "" | endsWith(s, sep)))
+	vec[trailing] <- lapply(vec[trailing], c, "")
+	vec
 }
 
 cleave2 <- function(s, sep = ",", ...) {

@@ -68,6 +68,29 @@ MATCHSTICK_HEIGHTS <- c(
 
 style_ordering <- c(1, 7, 13, 4, 10, 16, 2, 8, 14, 5, 11, 17, 3, 9, 15, 6, 12, 18)
 
+# The suffixes to try, in priority order, when looking up a style for a piece.
+# They depend only on the piece, suit, rank, and whether the piece is suited
+# (not on the configuration's values) so we memoize them across configurations:
+# `get_piece_opt()` looks up about 77 styles and each entry is 18 short strings.
+style_affixes_cache <- new.env(parent = emptyenv())
+
+style_affixes <- function(piece_side, suit, rank, suited) {
+	key <- paste(piece_side, suit, rank, suited)
+	affixes <- style_affixes_cache[[key]]
+	if (is.null(affixes)) {
+		piece <- if (is.na(piece_side)) NULL else get_piece(piece_side)
+		piece_affixes <- c(paste0(".", piece_side), paste0(".", piece), "")
+		rank_affixes <- c(paste0(".r", rank), "")
+		suit_affixes <- c(paste0(".s", suit), ifelse(suited, ".suited", ".unsuited"), "")
+		# every combination, with the piece affix varying fastest and then the rank
+		suit_rank <- paste0(rep(suit_affixes, each = length(rank_affixes)), rank_affixes)
+		affixes <- paste0(rep(suit_rank, each = length(piece_affixes)), piece_affixes)
+		affixes <- affixes[style_ordering]
+		style_affixes_cache[[key]] <- affixes
+	}
+	affixes
+}
+
 get_style_element <- function(
 	style,
 	piece_side = NA,
@@ -76,26 +99,12 @@ get_style_element <- function(
 	suit = 0,
 	rank = 0
 ) {
-	if (is.na(piece_side)) {
-		piece <- NULL
-	} else {
-		piece <- get_piece(piece_side)
-	}
 	suited <- is_suited(piece_side, suit, rank, cfg) %||% FALSE
-
-	piece_affixes <- c(paste0(".", piece_side), paste0(".", piece), "")
-	rank_affixes <- c(paste0(".r", rank), "")
-	suit_affixes <- c(paste0(".s", suit), ifelse(suited, ".suited", ".unsuited"), "")
-	dfs <- expand.grid(piece_affixes, rank_affixes, suit_affixes, stringsAsFactors = FALSE)
-	names(dfs) <- c("piece", "rank", "suit")
-	affixes <- paste0(dfs$suit, dfs$rank, dfs$piece)[style_ordering]
-
-	for (affix in affixes) {
-		string <- paste0(style, affix)
-		value <- cfg[[string]]
+	for (affix in style_affixes(piece_side, suit, rank, suited)) {
+		value <- cfg[[paste0(style, affix)]]
 		if (!is.null(value)) return(value)
 	}
-	return(default)
+	default
 }
 
 # Vectorized over `cfg_style` since `pp_cfg()` checks every name of its input

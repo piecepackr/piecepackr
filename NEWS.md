@@ -41,7 +41,9 @@ Bug fixes and minor improvements
   It now holds just `cfg` (if given, as `"piecepack"`) plus the game systems named by a `cfg` column of `.l`.
   This saves tens of milliseconds per call and speeds up functions built on top of it such as `save_print_and_play()`.
 
-* `pp_cfg()` now validates the names of its configuration list about three times faster.
+* `pp_cfg()` now validates the names of its configuration list about three times faster
+  and computes a piece's drawing options about twice as fast the first time they are needed
+  (they were already cached afterwards), so the first draw with a new configuration is faster.
 
 * `render_piece()` and `animate_piece()` now draw the pieces with the `cfg` argument (or `piecepackr.cfg` option) when given.
   Previously only the image size was computed from it while the pieces themselves were drawn with `envir$piecepack`.
