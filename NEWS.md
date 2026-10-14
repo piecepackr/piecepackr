@@ -37,6 +37,8 @@ Bug fixes and minor improvements
   Otherwise the default `envir` is now just `list(piecepack = cfg)`.
   This saves about 0.1 seconds per call and speeds up functions built on top of it such as `save_print_and_play()`.
 
+* `pp_cfg()` now validates the names of its configuration list about three times faster.
+
 * `render_piece()` and `animate_piece()` now draw the pieces with the `cfg` argument (or `piecepackr.cfg` option) when given.
   Previously only the image size was computed from it while the pieces themselves were drawn with `envir$piecepack`.
   Their default `envir` is now `NULL` instead of `game_systems("sans")`, which is now only built when needed;
