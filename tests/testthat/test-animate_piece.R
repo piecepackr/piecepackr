@@ -43,7 +43,8 @@ test_that("animate_piece() draws with `cfg` and tweens without a `cfg` column", 
 		animation_fn = function(...) function(expr, ...) invisible(expr),
 		game_systems = function(...) stop("`game_systems()` was called")
 	)
-	df <- data.frame(id = 1L, piece_side = "tile_face", suit = 1L, rank = 2L, x = 1, y = 1)
+	# a tile back draws no glyphs that the pdf device cannot encode
+	df <- data.frame(id = 1L, piece_side = "tile_back", suit = 1L, rank = 2L, x = 1, y = 1)
 	cfg <- pp_cfg(list(suit_color = "red"))
 	drawn_cfg <- function() {
 		grDevices::pdf(NULL)

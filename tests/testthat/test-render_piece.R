@@ -100,7 +100,8 @@ test_that("render_piece() works", {
 })
 
 test_that("render_piece() draws with `cfg` and defaults to the game systems' piecepack", {
-	df <- data.frame(piece_side = "tile_face", x = 1, y = 1, suit = 1, rank = 2)
+	# a tile back draws no glyphs that the pdf device cannot encode
+	df <- data.frame(piece_side = "tile_back", x = 1, y = 1, suit = 1, rank = 2)
 	drawn <- function(...) {
 		grDevices::pdf(NULL)
 		on.exit(invisible(grDevices::dev.off()))
@@ -112,6 +113,7 @@ test_that("render_piece() draws with `cfg` and defaults to the game systems' pie
 	expect_identical(opts(drawn()$cfg), opts(game_systems()$piecepack))
 	cfg <- pp_cfg(list(suit_color = "red"))
 	add_dice <- function(df, ...) {
+		df$piece_side <- "die_face" # pipped, so no glyphs either
 		df$cfg <- "dice"
 		df
 	}
