@@ -10,9 +10,6 @@ New features
 * `save_print_and_play()` now supports `bleed = "grouped"` which gives same-type pieces a shared bleed zone (#336).
   Adjacent tiles share a cut line; coins and dice keep a gap within their shared zone so each can be punched out or cut to size without touching its neighbor.
 
-* `save_print_and_play()` with `bleed = FALSE` now adds registration marks in the outer page margin
-  beside the tiles on letter and A4 pages to assist in aligning double-sided printing (#331).
-
 * Can now draw all six sides of "composite" pieces with `grid.piece()` / `pieceGrob()` (#263).
   In particular a peg-doll "pawn", joystick "pawn", and reversi disc "bit" from `game_systems()` can now be drawn from any side in 2D orthographic or 3D oblique projection.
 
@@ -69,6 +66,14 @@ Bug fixes and minor improvements
 * `save_print_and_play(bleed = TRUE, size = "A5")` now prints the A5 cutting instructions.
   Previously it described the letter/A4 layout instead, telling the reader to fold along a
   central "gutter" line that an A5 page doesn't have.
+
+* `save_print_and_play(bleed = FALSE)` now adds registration marks in the outer page margin
+  beside the tiles on letter and A4 pages to assist in aligning double-sided printing (#331).
+
+* `save_print_and_play(bleed = FALSE)` now replaces its "Piece Anatomy" page with cutting and assembly instructions.
+
+* `save_print_and_play(bleed = FALSE)` now draws a solid rule on each piecepack page between the top row (dice, pawn, and belt) and the tiles, coins, and saucer below it
+  plus a dashed "gutter" line between the two halves of letter and A4 pages that stops at that rule.
 
 * `save_print_and_play(size = "A5")` now centers its layout on the A5 page.
 
