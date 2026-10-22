@@ -497,17 +497,13 @@ band_grob_grouped <- function(suit, cfg) {
 }
 
 a5_inst_md_grouped <- function(pieces, arrangement, size) {
-	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
+	generated_for <- pnp_generated_for_md(pieces, arrangement, size, "grouped")
 	trim_multistring(str_glue(
 		r'(
 		## Overview
 
-		* See <https://www.ludism.org/ppwiki/MakingPiecepacks> for general advice
-		* This print-and-play layout was generated for:
-
-		  * {components} components
-		  * "{arrangement}" arrangement with grouped bleed zones
-		  * "{size}" paper size
+		* For general advice: <https://www.ludism.org/ppwiki/MakingPiecepacks>
+		{generated_for}
 
 		* One page per suit, split in two by a solid rule:
 

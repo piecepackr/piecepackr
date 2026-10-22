@@ -61,13 +61,6 @@ gp_title <- gpar(fontsize = 15, fontfamily = "sans", fontface = "bold")
 gp_header <- gpar(fontsize = 12, fontfamily = "sans", fontface = "bold")
 gp_text <- gpar(fontsize = 9, fontfamily = "sans")
 
-htg <- function(label, x, y, just = "center", ...) {
-	textGrob(label, x = inch(x), y = inch(y), just = just, gp = gp_header, ...)
-}
-tg <- function(label, x, y, just = "center", ...) {
-	textGrob(label, x = inch(x), y = inch(y), just = just, gp = gp_text, ...)
-}
-
 n_indents <- function(x) {
 	lines <- str_split(x, "\n")[[1L]]
 	n_tabs <- str_count(lines, "\t")
@@ -131,6 +124,23 @@ pnp_marquee_style <- function() {
 		margin = marquee::trbl(0, 0, marquee::em(0.4)),
 		padding = marquee::trbl(0),
 		border_width = marquee::trbl(0)
+	)
+}
+
+# The settings a print-and-play layout was generated for, as a markdown list
+# item with a nested list, for the instructions page.  `bleed` is the
+# normalized `save_print_and_play()` argument.
+pnp_generated_for_md <- function(pieces, arrangement, size, bleed) {
+	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
+	bleed <- if (bleed == "none") "no bleed zones" else sprintf('"%s" bleed zones', bleed)
+	paste(
+		"* This print-and-play layout was generated for:",
+		"",
+		sprintf("  * %s components", components),
+		sprintf('  * "%s" arrangement', arrangement),
+		sprintf('  * "%s" paper size', size),
+		sprintf("  * %s", bleed),
+		sep = "\n"
 	)
 }
 
@@ -287,7 +297,7 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit = TRUE, saucers = T
 	}
 	credit_item <- function(text, url) sprintf("* %s\\\n  <%s>", text, url)
 	piecepack_credit <- credit_item(
-		'The piecepack was invented by James "Kyle" Droscha. Public Domain.',
+		'The piecepack was invented by James "Kyle" Droscha.\n\n  Public Domain.',
 		"https://ludism.org/ppwiki/AnatomyOfAPiecepack"
 	)
 	credits <- credit_item(
@@ -320,7 +330,7 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit = TRUE, saucers = T
 			credits <- c(
 				credits,
 				credit_item(
-					"Piecepack matchsticks were invented by Dan Burkey. Public Domain.",
+					"Piecepack matchsticks were invented by Dan Burkey.\n\n  Public Domain.",
 					"https://www.ludism.org/ppwiki/PiecepackMatchsticks"
 				)
 			)

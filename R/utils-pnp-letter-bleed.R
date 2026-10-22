@@ -88,31 +88,16 @@ print_and_play_paper_bleed <- function(cfg, size, pieces, arrangement, quietly, 
 }
 
 a5_inst_md_bleed <- function(pieces, arrangement, size) {
-	inst <- c("* See <https://www.ludism.org/ppwiki/MakingPiecepacks> for general advice")
-
-	# Settings
-	components <- paste(paste0('"', pieces, '"'), collapse = ", ")
-	arrangement <- sprintf('  * "%s" arrangement with "bleed" zones', arrangement)
-	inst <- c(
-		inst,
-		"* This print-and-play layout was generated for:",
-		sprintf('  * %s components', components),
-		arrangement,
-		sprintf('  * "%s" paper size', size)
-	)
-
 	# Tiles
 	tile_crop <- c('  * Use "crop" marks as guide to where to cut them out')
 	if (size == "A5") {
 		inst <- c(
-			inst,
 			'* For each suit we have a page of tile "faces" then a page of tile "backs"',
 			tile_crop,
 			'  * May place whole sheet on one side and next sheet on the opposite side of target material before cutting out'
 		)
 	} else {
 		inst <- c(
-			inst,
 			'* We have a page of tiles for each suit: "faces" on left and "backs" on right',
 			tile_crop,
 			'  * Central "gutter" line may help place sheet on both sides of target material: line up "gutter" line on the center of edge of target material, fold, and cut tiles out',
@@ -166,7 +151,15 @@ a5_inst_md_bleed <- function(pieces, arrangement, size) {
 	# {marquee} needs a blank line around each sub-list to nest its bullets
 	run <- cumsum(c(TRUE, diff(startsWith(inst, "  ")) != 0))
 	inst <- vapply(split(inst, run), paste, character(1L), collapse = "\n")
-	paste(c("## Instructions", inst), collapse = "\n\n")
+	paste(
+		c(
+			"## Instructions",
+			"* For general advice: <https://www.ludism.org/ppwiki/MakingPiecepacks> ",
+			pnp_generated_for_md(pieces, arrangement, size, "individual"),
+			inst
+		),
+		collapse = "\n\n"
+	)
 }
 
 a5_tile_grob <- function(i_suit, cfg, front, arrangement, size) {

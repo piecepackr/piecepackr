@@ -30,7 +30,7 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 
 	## Front Matter
 	gl <- gappend(gl, a5_title_grob(cfg, pieces, quietly))
-	gl <- gappend(gl, a5_inst_grob(cfg, pieces))
+	gl <- gappend(gl, pnp_inst_grob(a5_inst_md_compact(cfg, pieces, arrangement, size)))
 	if (arrangement == "double-sided" && size != "A5") {
 		gl <- gappend(gl, blank_grob)
 		gl <- gappend(gl, blank_grob)
@@ -47,9 +47,12 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 		# The registration marks sit in the page margin, which is too narrow on A5
 		reg_f <- if (size == "A5") NULL else a5_piecepack_reg_grob(cfg, front = TRUE)
 		reg_b <- if (size == "A5") NULL else a5_piecepack_reg_grob(cfg, front = FALSE)
+		# The gutter line divides the two halves of a page; an A5 page has one half
+		gutter <- if (size == "A5") NULL else a5_piecepack_gutter_grob(cfg)
+		rule <- a5_piecepack_rule_grob(cfg)
 		for (suit in seq(n_pages)) {
-			gl <- gappend(gl, gList(lpgf[[suit]], reg_f))
-			gl <- gappend(gl, gList(lpgb[[suit]], reg_b))
+			gl <- gappend(gl, gList(lpgf[[suit]], reg_f, rule))
+			gl <- gappend(gl, gList(lpgb[[suit]], reg_b, rule, gutter))
 		}
 		pl$Piecepack <- n_pages
 	}
@@ -147,205 +150,203 @@ print_and_play_paper_compact <- function(cfg, size, pieces, arrangement, quietly
 	pl
 }
 
-a5_inst_grob <- function(cfg = pp_cfg(), pieces) {
-	grob_title <- textGrob(
-		"Piece Anatomy",
-		y = 0.97,
-		just = "center",
-		gp = gp_title,
-		name = "title"
-	)
-	# Tile
-	yt <- A5H - 1.3
-	xt <- 1.5
-	df <- tibble(
-		piece_side = c("tile_face", "tile_back"),
-		suit = 1,
-		x = xt + c(-0.5, 0.5),
-		y = yt,
-		width = 1,
-		height = 1
-	)
-	grob_tile <- grobTree(
-		htg("Tile", xt, yt + 0.7),
-		tg("Face", xt - 0.5, y = yt + 0.6),
-		tg("Back", xt + 0.5, y = yt + 0.6),
-		pmap_piece(
-			df,
-			default.units = "in",
-			draw = FALSE,
-			cfg = cfg,
-			gp = gpar(cex = 0.5, lex = 0.5)
-		)
-	)
-	# curveGrob(x1=xt[1]-0.8, y1=yt-1.1, x2=xt[2]+0.8, y2=yt-1.1,
-	#           curvature=0.2, square=FALSE, arrow=arrow(),
-	#           default.units="in"))
-	# Coin
-	cwr <- 0.75 / cfg$get_width("coin_face")
-	cw <- 0.75
-	yc <- yt - 0.5 - cw
-	xc <- 0.5 + 2 * cw
-	df <- tibble(
-		piece_side = rep(c("coin_back", "coin_face"), 2),
-		x = xc + c(1.7, 0.7, -0.7, -1.7) * cw,
-		y = rep(yc, 4),
-		width = 0.75,
-		height = 0.75,
-		angle = c(0, 180, 0, 0)
-	)
-	grob_coin <- grobTree(
-		htg("Coin", xc, yc + 0.5 * cw + 0.2),
-		tg("Back", xc + c(1.7, -0.7) * cw, yc + 0.5 * cw + 0.1),
-		tg("Face", xc + c(0.7, -1.7) * cw, yc + 0.5 * cw + 0.1),
-		pmap_piece(
-			df,
-			default.units = "in",
-			cfg = cfg,
-			draw = FALSE,
-			gp = gpar(lex = cwr, cex = cwr)
-		),
-		textGrob("or", x = xc, y = yc, default.units = "in")
-	)
-	# Saucer
-	swr <- 0.75 / cfg$get_width("saucer_face")
-	sw <- 0.75
-	ys <- yt - 1.6 - sw
-	xs <- 0.5 + 2 * cw
-	df <- tibble(
-		piece_side = rep(c("saucer_back", "saucer_face"), 2),
-		x = xs + c(1.7, 0.7, -0.7, -1.7) * sw,
-		y = rep(ys, 4),
-		width = 0.75,
-		height = 0.75,
-		angle = c(0, 180, 0, 0)
-	)
-	grob_saucer <- grobTree(
-		htg("(Pawn) Saucer", xs, ys + 0.5 * sw + 0.25),
-		tg("Back", xs + c(1.7, -0.7) * sw, ys + 0.5 * sw + 0.1),
-		tg("Face", xs + c(0.7, -1.7) * sw, ys + 0.5 * sw + 0.1),
-		pmap_piece(
-			df,
-			default.units = "in",
-			cfg = cfg,
-			draw = FALSE,
-			gp = gpar(lex = swr, cex = swr)
-		),
-		textGrob("or", x = xs, y = ys, default.units = "in")
+a5_inst_md_compact <- function(cfg, pieces, arrangement, size) {
+	a5 <- size == "A5"
+	ds <- arrangement == "double-sided"
+	piecepack <- "piecepack" %in% pieces
+	subpack <- "subpack" %in% pieces
+	matchsticks <- "matchsticks" %in% pieces
+	pyramids <- "pyramids" %in% pieces
+	# `a5_matchsticks_grob2()` fills the room beside the fourth rank of
+	# matchsticks with fold-up die layouts when the dice are small enough
+	die_layouts <- matchsticks && cfg$get_width("die_face") <= 0.6
+
+	# A list item followed by a nested list of `items`; {marquee} needs the
+	# blank line between them to nest the bullets
+	nested <- function(item, items, indent = "  ") {
+		paste0(item, "\n\n", paste0(indent, "* ", items, collapse = "\n"))
+	}
+	reg_marks <- "the registration marks (circled above, squared below)"
+	pawn_fold <- paste(
+		"in half along its dashed line so the face and back meet,",
+		"glue, and fold out the two ends as a stand."
 	)
 
-	# Dice
-	dwr <- 0.5 / cfg$get_width("die_face")
-	dw <- 0.5
-	yd <- 1.4
-	d1 <- grobTree(
-		piecepackDieGrob(1, cfg, arrangement = "counter_down"),
-		vp = viewport(
-			x = 0.2,
-			y = inch(yd),
-			width = inch(4 * dw),
-			height = inch(3 * dw),
-			gp = gpar(lex = dwr, cex = dwr)
+	## Overview
+	overview <- c(
+		"* For general advice: <https://www.ludism.org/ppwiki/MakingPiecepacks>",
+		pnp_generated_for_md(pieces, arrangement, size, "none")
+	)
+	if (piecepack) {
+		top_row <- if (ds) {
+			sprintf("on the %s only", if (a5) "page of fronts" else "left half")
+		} else {
+			sprintf("a copy on each %s", if (a5) "page" else "half")
+		}
+		below <- if (a5) {
+			paste(
+				"Below: tile faces, coin backs, and a (pawn) saucer face,",
+				"with their backs mirrored on the page of backs."
+			)
+		} else {
+			paste(
+				'Below: tile faces (left) and backs (right) mirrored about the dashed "gutter" line,',
+				"with coin and saucer backs / faces in between."
+			)
+		}
+		overview <- c(
+			overview,
+			nested(
+				if (a5) {
+					"* For each suit a page of piecepack fronts then a page of backs, each split in two by a solid rule:"
+				} else {
+					"* One piecepack page per suit, split in two by a solid rule:"
+				},
+				c(
+					sprintf(
+						"Above: dice faces, a (standee) pawn layout, and a (pawn) belt (%s).",
+						top_row
+					),
+					below,
+					paste0(
+						"Depending on your preferences you may only need one of the",
+						" (standee) pawn, (pawn) belt, or (pawn) saucer."
+					)
+				)
+			)
 		)
-	)
-	d2 <- grobTree(
-		piecepackDieGrob(1, cfg, arrangement = "counter_up"),
-		vp = viewport(
-			x = 0.5,
-			y = inch(yd),
-			width = inch(4 * dw),
-			height = inch(3 * dw),
-			gp = gpar(lex = dwr, cex = dwr)
+	}
+	if (matchsticks) {
+		overview <- c(
+			overview,
+			paste0(
+				if (a5) {
+					"* Two pages of matchstick faces per four suits"
+				} else {
+					"* One page of matchstick faces per four suits"
+				},
+				if (die_layouts) ", beside spare fold-up dice layouts",
+				if (ds && a5) ", each followed by a page of backs",
+				if (ds && !a5) "; their backs are on the next page",
+				"."
+			)
 		)
-	)
-	d3 <- grobTree(
-		piecepackDieGrob(1, cfg, arrangement = "opposites_sum_to_5"),
-		vp = viewport(
-			x = 0.8,
-			y = inch(yd),
-			width = inch(4 * dw),
-			height = inch(3 * dw),
-			gp = gpar(lex = dwr, cex = dwr)
+	}
+	if (pyramids) {
+		overview <- c(
+			overview,
+			paste0(
+				"* One page of pyramid layouts per ",
+				if (a5) "two suits" else "four suits (two per half)",
+				", each suit topped by a spare pawn layout",
+				if (ds) "; the back is left blank",
+				"."
+			)
 		)
-	)
-	grob_die <- grobTree(
-		htg("Die", A5W / 2, yd + 1.2),
-		tg('"counter_down"\narrangement', 0.3 * A5W, yd + 0.9),
-		tg('"counter_up"\narrangement', 0.6 * A5W, yd + 0.9),
-		tg('"opposites_sum_to_5"\narrangement', 0.85 * A5W, yd + 0.9),
-		d1,
-		d2,
-		d3
-	)
-	# Pawn
-	y_pawn <- 4.0
-	grob_pawn <- grobTree(
-		htg("Pawn", A5W - 0.5, y_pawn + 1.4),
-		tg("Back", A5W - 0.85, y_pawn + 0.5, rot = 90),
-		tg("Face", A5W - 0.85, y_pawn - 0.5, rot = 90),
-		tg("Stand", A5W - 0.85, y_pawn - 1.1, rot = 90),
-		tg("Stand", A5W - 0.85, y_pawn + 1.0, rot = 90),
-		pieceGrob("pawn_layout", 1, cfg = cfg, x = inch(A5W - 0.5), y = inch(y_pawn))
-	)
-	# Belt
-	yb <- yt - 2.0 - sw - 0.5
-	xb <- 2
-	grob_belt <- grobTree(
-		htg("(Pawn) Belt (Face)", xb, yb + 0.4),
-		pieceGrob("belt_face", x = xb, y = yb, cfg = cfg, default.units = "in")
-	)
-	# Pyramids
-	yy <- yt + 0.10
-	xy <- A5W - 1.2
-	df <- tibble(
-		piece_side = c("pyramid_layout", "pyramid_top"),
-		suit = 1,
-		rank = 1,
-		x = xy + c(-0.5, 0.6),
-		y = yy
-	)
-	grob_pyramid <- grobTree(
-		htg("Pyramid", xy, yy + 0.8),
-		htg("Top (View)", xy + 0.7, yy + 0.50),
-		tg("Face", xy + 0.6, yy + 0.33),
-		tg("Back", xy + 0.6, yy - 0.33),
-		tg("Left", xy + 0.25, yy, rot = 90),
-		tg("Right", xy + 0.95, yy, rot = -90),
-		tg("Back", xy - 0.0, yy, rot = -90),
-		tg("Face", xy - 1.0, yy + 0.60, rot = 90),
-		tg("Face", xy - 1.0, yy - 0.60, rot = 90),
-		tg("Right", xy - 0.05, yy + 0.45),
-		tg("Left", xy - 0.05, yy - 0.45),
-		pmap_piece(df, default.units = "in", cfg = cfg, draw = FALSE)
-	)
-	# Matchsticks
-	df <- tibble(
-		piece_side = c("matchstick_face", "matchstick_back"),
-		x = 2.5,
-		y = c(0.4, 0.2),
-		rank = 3,
-		angle = 90
-	)
-	grob_matchsticks <- grobTree(
-		htg("Matchstick", 1, 0.3),
-		tg("Face", 1.7, 0.4),
-		tg("Back", 1.7, 0.2),
-		pmap_piece(df, default.units = "in", cfg = cfg, draw = FALSE)
-	)
+	}
+	if (subpack) {
+		overview <- c(
+			overview,
+			paste0(
+				'* One "subpack" (half-size piecepack) page per ',
+				if (a5) "two" else "four",
+				" suits: each suit's fronts beside its backs, mirrored about the center of ",
+				if (a5) "the page" else "each half",
+				"."
+			)
+		)
+	}
 
-	grobTree(
-		grob_title,
-		grob_tile,
-		grob_coin,
-		grob_saucer,
-		grob_die,
-		grob_pawn,
-		grob_belt,
-		grob_pyramid,
-		grob_matchsticks,
-		name = "instructions",
-		vp = a5_vp()
+	## Instructions
+	steps <- paste0(
+		"1. Print ",
+		if (ds) sprintf("double-sided (flip on the %s edge)", if (a5) "long" else "short"),
+		if (!ds) "single-sided",
+		" on cardstock or full-sheet label paper",
+		if (ds && piecepack && !a5) {
+			"; the registration marks beside the tiles should line up on both sides"
+		},
+		"."
 	)
+	material <- "the target material you'll be making your pieces from (if not using pre-cut pieces)"
+	if (piecepack) {
+		steps <- c(
+			steps,
+			"1. Cut along the solid rule to take off the top row.",
+			if (ds) {
+				sprintf("1. (optional) Mount the lower part of each page on %s.", material)
+			} else if (a5) {
+				sprintf(
+					"1. (optional) Put the lower parts of each page of fronts and the page of backs after it on opposite sides of %s.",
+					material
+				)
+			} else {
+				paste0(
+					"1. (optional) Put the lower part of each page on both sides of ",
+					material,
+					': fold it along the "gutter" over the material\'s edge,',
+					' or cut the "gutter" too and line up ',
+					reg_marks,
+					"."
+				)
+			}
+		)
+	}
+	if (subpack) {
+		steps <- c(
+			steps,
+			paste0(
+				"1. ",
+				if (a5) "Fold each subpack page",
+				if (!a5) 'Cut each subpack page along the "gutter" and fold each half',
+				" in half so each suit's fronts land on its backs;",
+				" then make its pieces like the full-size ones."
+			)
+		)
+	}
+	if (piecepack || subpack) {
+		steps <- c(
+			steps,
+			nested(
+				"1. Cut out tiles, coins, and saucers:",
+				c(
+					"Adjacent tiles share a cut line; (optional) round their corners.",
+					"Cut out the coins and saucers with a circle punch (or scissors)."
+				),
+				indent = "   "
+			),
+			nested(
+				paste0("1. Cut out dice, belt, and pawn", if (piecepack) " from the top row", ":"),
+				c(
+					"Affix the six dice faces onto a cube.",
+					"Wrap the belt around a pawn / cylinder.",
+					paste("Fold the pawn layout", pawn_fold)
+				),
+				indent = "   "
+			)
+		)
+	}
+	if (matchsticks) {
+		steps <- c(
+			steps,
+			paste0(
+				"1. Cut out the matchsticks",
+				if (die_layouts) " and fold up the spare dice layouts into dice",
+				"."
+			)
+		)
+	}
+	if (pyramids) {
+		steps <- c(
+			steps,
+			paste0(
+				"1. Cut out each pyramid layout, fold it up, and glue the overlapping faces.",
+				if (!piecepack && !subpack) paste(" Fold each spare pawn layout", pawn_fold)
+			)
+		)
+	}
+
+	paste(c("## Overview", overview, "## Instructions", steps), collapse = "\n\n")
 }
 
 a5_matchsticks_grob <- function(suits = 1:4, cfg = pp_cfg(), front = TRUE) {
@@ -509,6 +510,41 @@ a5_piecepack_reg_grob <- function(cfg = pp_cfg(), front = TRUE) {
 		0,
 		REG_SIZE,
 		name = "tile_registration_marks"
+	)
+}
+
+# Bottom of the top row -- dice, (standee) pawn, and (pawn) belt -- which is
+# printed on one side only.  The belt is the lowest piece on the right; large
+# dice may come lower on the left.
+a5_piecepack_band_bottom <- function(cfg) {
+	die_width <- cfg$get_width("die_width")
+	pawn_width <- cfg$get_width("pawn_width")
+	belt_height <- cfg$get_height("belt_face")
+	min(A5H - 2 * die_width, A5H - pawn_width - belt_height - 0.25)
+}
+
+# Solid rule between the top row and the tiles, coins, and saucer below it,
+# which may be mounted on both sides of the material: cut along it first to
+# take off the top row.  Midway between them, but never crossing the upper
+# registration mark, which is centered on the tiles' top edge.
+a5_piecepack_rule_y <- function(cfg) {
+	tile_top <- 3 * cfg$get_width("tile_back")
+	max(tile_top + REG_SIZE / 2, (tile_top + a5_piecepack_band_bottom(cfg)) / 2)
+}
+
+a5_piecepack_rule_grob <- function(cfg) {
+	linesGrob(y = inch(rep(a5_piecepack_rule_y(cfg), 2)), name = "pnp_separator")
+}
+
+# Dashed gutter line between the two halves of a letter or A4 page, drawn on
+# the back (right) half as in the bleed layouts.  It stops at the rule since
+# only the part below it is folded around the material.
+a5_piecepack_gutter_grob <- function(cfg) {
+	linesGrob(
+		x = unit(c(0, 0), "npc"),
+		y = inch(c(0, a5_piecepack_rule_y(cfg))),
+		gp = gpar(lty = "dashed"),
+		name = "pnp_gutter"
 	)
 }
 

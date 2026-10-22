@@ -69,6 +69,55 @@
       Error in `save_print_and_play()`:
       ! `cfg$get_width("die_face")` must be at most 3/4" for `bleed = "individual"`, not 0.8"
 
+# `a5_inst_md_compact()` only describes the requested pieces
+
+    Code
+      cat(md(c("piecepack", "pyramids", "matchsticks")))
+    Output
+      ## Overview
+      
+      * For general advice: <https://www.ludism.org/ppwiki/MakingPiecepacks>
+      
+      * This print-and-play layout was generated for:
+      
+        * "piecepack", "pyramids", "matchsticks" components
+        * "single-sided" arrangement
+        * "letter" paper size
+        * no bleed zones
+      
+      * One piecepack page per suit, split in two by a solid rule:
+      
+        * Above: dice faces, a (standee) pawn layout, and a (pawn) belt (a copy on each half).
+        * Below: tile faces (left) and backs (right) mirrored about the dashed "gutter" line, with coin and saucer backs / faces in between.
+        * Depending on your preferences you may only need one of the (standee) pawn, (pawn) belt, or (pawn) saucer.
+      
+      * One page of matchstick faces per four suits, beside spare fold-up dice layouts.
+      
+      * One page of pyramid layouts per four suits (two per half), each suit topped by a spare pawn layout.
+      
+      ## Instructions
+      
+      1. Print single-sided on cardstock or full-sheet label paper.
+      
+      1. Cut along the solid rule to take off the top row.
+      
+      1. (optional) Put the lower part of each page on both sides of the target material you'll be making your pieces from (if not using pre-cut pieces): fold it along the "gutter" over the material's edge, or cut the "gutter" too and line up the registration marks (circled above, squared below).
+      
+      1. Cut out tiles, coins, and saucers:
+      
+         * Adjacent tiles share a cut line; (optional) round their corners.
+         * Cut out the coins and saucers with a circle punch (or scissors).
+      
+      1. Cut out dice, belt, and pawn from the top row:
+      
+         * Affix the six dice faces onto a cube.
+         * Wrap the belt around a pawn / cylinder.
+         * Fold the pawn layout in half along its dashed line so the face and back meet, glue, and fold out the two ends as a stand.
+      
+      1. Cut out the matchsticks and fold up the spare dice layouts into dice.
+      
+      1. Cut out each pyramid layout, fold it up, and glue the overlapping faces.
+
 # `save_print_and_play()` omits credits and instructions without {marquee}
 
     Code

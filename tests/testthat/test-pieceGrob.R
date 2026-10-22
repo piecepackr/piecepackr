@@ -226,6 +226,43 @@ test_that('`save_print_and_play(bleed = TRUE)` wording follows `size`', {
 	expect_match(label("letter"), '"faces" on left and "backs" on right')
 })
 
+test_that("`a5_inst_md_compact()` only describes the requested pieces", {
+	md <- function(pieces, cfg = cfg_default) {
+		a5_inst_md_compact(cfg, pieces, "single-sided", "letter")
+	}
+	expect_snapshot(cat(md(c("piecepack", "pyramids", "matchsticks"))))
+	expect_no_match(md("piecepack"), "pyramid|matchstick|subpack")
+	expect_match(md("pyramids"), "spare pawn layout in half")
+	expect_no_match(md("pyramids"), "tiles, coins, and saucers")
+	expect_match(md("subpack"), "tiles, coins, and saucers")
+	expect_match(md("matchsticks"), "spare fold-up dice layouts")
+	expect_no_match(md("matchsticks", pp_cfg(list(width.die_face = 0.7))), "dice layouts")
+})
+
+test_that("`a5_inst_md_compact()` wording follows `size` and `arrangement`", {
+	md <- function(arrangement, size) {
+		a5_inst_md_compact(cfg_default, "piecepack", arrangement, size)
+	}
+	expect_match(md("single-sided", "letter"), 'fold it along the "gutter"')
+	expect_match(md("double-sided", "letter"), "flip on the short edge")
+	expect_match(md("double-sided", "A5"), "flip on the long edge")
+	expect_no_match(md("double-sided", "A5"), "registration marks")
+	expect_match(md("single-sided", "A5"), "page of fronts and the page of backs after it")
+})
+
+test_that("`pnp_generated_for_md()` names the bleed setting", {
+	md <- function(bleed) {
+		pnp_generated_for_md(c("piecepack", "pyramids"), "single-sided", "A4", bleed)
+	}
+	expect_match(md("none"), '"piecepack", "pyramids" components', fixed = TRUE)
+	expect_match(md("none"), "no bleed zones")
+	expect_match(md("grouped"), '"grouped" bleed zones', fixed = TRUE)
+	grouped <- a5_inst_md_grouped("piecepack", "single-sided", "letter")
+	expect_match(grouped, '"grouped" bleed zones', fixed = TRUE)
+	bleed <- a5_inst_md_bleed("piecepack", "single-sided", "letter")
+	expect_match(bleed, '"individual" bleed zones', fixed = TRUE)
+})
+
 test_that("`save_print_and_play()` A5 panels mirror about the page center", {
 	size_bleed <- list(top = 0, right = 0, bottom = 0, left = 0)
 	sizes <- c("letter", "A4", "A5")
@@ -252,34 +289,54 @@ test_that("`save_print_and_play(bleed = FALSE)` registration marks flank the til
 	expect_equal(marks(FALSE), list(c(A5W + 1 / 8, 6), c(A5W + 1 / 8, 0)))
 })
 
+# The grobs drawn on each piecepack page of the compact layout
+compact_pages <- function(size) {
+	drawn <- list()
+	local_mocked_bindings(draw_a5_page = function(grob, vp) {
+		drawn[[length(drawn) + 1L]] <<- grob
+	})
+	grDevices::pdf(NULL)
+	on.exit(invisible(grDevices::dev.off()), add = TRUE)
+	print_and_play_paper_compact(
+		cfg_default,
+		size,
+		"piecepack",
+		"single-sided",
+		TRUE,
+		list(top = 0, right = 0, bottom = 0, left = 0)
+	)
+	drawn[-(1:2)] # drop the front matter
+}
+
 test_that("`save_print_and_play(bleed = FALSE)` marks the piecepack pages of letter and A4 only", {
-	size_bleed <- list(top = 0, right = 0, bottom = 0, left = 0)
-	pages <- function(size) {
-		drawn <- list()
-		local_mocked_bindings(draw_a5_page = function(grob, vp) {
-			drawn[[length(drawn) + 1L]] <<- grob
-		})
-		grDevices::pdf(NULL)
-		on.exit(invisible(grDevices::dev.off()), add = TRUE)
-		print_and_play_paper_compact(
-			cfg_default,
-			size,
-			"piecepack",
-			"single-sided",
-			TRUE,
-			size_bleed
-		)
-		drawn[-(1:2)] # drop the front matter
-	}
 	mark_x <- function(page) {
 		reg <- Filter(function(g) identical(g$name, "tile_registration_marks"), page)
 		vapply(reg, function(g) as.numeric(g$children[[1]]$children[[1]]$vp$x), numeric(1))
 	}
-	letter <- lapply(pages("letter"), mark_x)
+	letter <- lapply(compact_pages("letter"), mark_x)
 	expect_all_equal(unlist(letter[c(TRUE, FALSE)]), -1 / 8)
 	expect_all_equal(unlist(letter[c(FALSE, TRUE)]), A5W + 1 / 8)
-	expect_length(unlist(lapply(pages("A4"), mark_x)), 8L)
-	expect_length(unlist(lapply(pages("A5"), mark_x)), 0L)
+	expect_length(unlist(lapply(compact_pages("A4"), mark_x)), 8L)
+	expect_length(unlist(lapply(compact_pages("A5"), mark_x)), 0L)
+})
+
+test_that("`save_print_and_play(bleed = FALSE)` rules off the top row and stops the gutter there", {
+	expect_equal(a5_piecepack_rule_y(cfg_default), 6 + 1 / 8)
+	# Larger dice come down to the tiles, so the rule only just clears the registration mark
+	expect_equal(a5_piecepack_rule_y(pp_cfg(list(width.die = 0.7))), 6 + 1 / 16)
+
+	count <- function(pages, name) {
+		lengths(lapply(pages, function(page) Filter(function(g) identical(g$name, name), page)))
+	}
+	letter <- compact_pages("letter")
+	expect_all_equal(count(letter, "pnp_separator"), 1L)
+	expect_equal(count(letter, "pnp_gutter"), rep(0:1, 4))
+	gutter <- Filter(function(g) identical(g$name, "pnp_gutter"), letter[[2]])[[1]]
+	expect_equal(as.numeric(gutter$x), c(0, 0))
+	expect_equal(as.numeric(gutter$y), c(0, 6 + 1 / 8))
+	a5 <- compact_pages("A5")
+	expect_all_equal(count(a5, "pnp_separator"), 1L)
+	expect_all_equal(count(a5, "pnp_gutter"), 0L)
 })
 
 test_that("`save_print_and_play()` bookmark pages sum to the page count", {
