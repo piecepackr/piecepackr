@@ -301,18 +301,7 @@ write_2s_texture <- function(
 	width <- cfg$get_width(piece_face, suit, rank)
 	edge_color <- cfg$get_piece_opt(piece_face, suit, rank)$edge_color
 
-	args <- list(
-		filename = filename,
-		height = height,
-		width = 2.5 * width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, 2.5 * width, height, res), {
 		# front
 		pushViewport(viewport(x = 0.225, width = 0.45))
 		draw_piece_and_bleed(piece_face, suit, rank, cfg)
@@ -597,18 +586,7 @@ write_peg_doll_texture <- function(
 	width <- cfg$get_width("belt_face", suit, rank)
 	piece <- get_piece(piece_side)
 	opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
-	args <- list(
-		filename = filename,
-		height = 2 * height,
-		width = width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, width, 2 * height, res), {
 		pushViewport(viewport(y = 0.875, height = 0.25))
 		grid.rect(gp = gpar(col = NA_character_, fill = opt$edge_color))
 		popViewport()
@@ -810,18 +788,7 @@ write_pyramid_texture <- function(
 	height <- cfg$get_height("pyramid_face", suit, rank)
 	width <- cfg$get_width("pyramid_face", suit, rank)
 
-	args <- list(
-		filename = filename,
-		height = height,
-		width = 4 * width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, 4 * width, height, res), {
 		pushViewport(viewport(x = 0.125, width = 0.25))
 		draw_piece_and_bleed("pyramid_face", suit, rank, cfg)
 		popViewport()
@@ -855,18 +822,7 @@ write_die_texture <- function(
 
 	# Texture atlas: [faces left 0-10/21] [edge 10/21-11/21] [faces right 11/21-1]
 	# Total width = 2.1*width so face cells are exactly width×width (square) with no margin.
-	args <- list(
-		filename = filename,
-		height = 3 * width,
-		width = 2.1 * width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, 2.1 * width, 3 * width, res), {
 		rs <- get_die_face_info(suit, cfg$die_arrangement)
 		pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
 		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))

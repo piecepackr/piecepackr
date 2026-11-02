@@ -379,29 +379,14 @@ write_d10_texture <- function(
 	width <- cfg$get_width("die_face", suit, rank)
 
 	if (nigh(opt$shape_t, 90) || nigh(opt$shape_t, 270)) {
-		args <- list(
-			filename = filename,
-			height = 5 * height,
-			width = 2 * width,
-			units = "in",
-			res = res,
-			bg = "transparent"
-		)
+		png_width <- 2 * width
+		png_height <- 5 * height
 	} else {
-		args <- list(
-			filename = filename,
-			height = 5 * width,
-			width = 2 * height,
-			units = "in",
-			res = res,
-			bg = "transparent"
-		)
+		png_width <- 2 * height
+		png_height <- 5 * width
 	}
 	angle <- 90 - opt$shape_t
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, png_width, png_height, res), {
 		xs <- rep(1:2 / 2 - 1 / 4, 5)
 		ys <- rep(5:1 / 5 - 1 / 10, each = 2)
 		for (i in 1:10) {

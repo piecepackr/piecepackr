@@ -199,18 +199,7 @@ write_d12_texture <- function(
 ) {
 	width <- cfg$get_width("die_face", suit, rank)
 
-	args <- list(
-		filename = filename,
-		height = 3 * width,
-		width = 4 * width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, 4 * width, 3 * width, res), {
 		xs <- rep(1:4 / 4 - 1 / 8, 3)
 		ys <- rep(3:1 / 3 - 1 / 6, each = 4)
 		for (i in 1:12) {

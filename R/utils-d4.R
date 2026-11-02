@@ -384,18 +384,7 @@ write_d4_texture <- function(
 ) {
 	width <- cfg$get_width("die_face", suit, rank)
 
-	args <- list(
-		filename = filename,
-		height = 2 * width,
-		width = 2 * width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, 2 * width, 2 * width, res), {
 		pushViewport(viewport(x = 0.25, width = 0.5, y = 0.75, height = 0.5))
 		draw_piece_and_bleed("die_face", suit, 1, cfg)
 		popViewport()

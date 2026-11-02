@@ -476,18 +476,7 @@ Config <- R6Class(
 			height <- self$get_height(piece_side, suit, rank)
 			png_file <- tempfile(fileext = ".png")
 			on.exit(unlink(png_file), add = TRUE)
-			args <- list(
-				filename = png_file,
-				width = width,
-				height = height,
-				units = "in",
-				res = res,
-				bg = "transparent"
-			)
-			if (capabilities("cairo")) {
-				args$type <- "cairo"
-			}
-			with_temp_dev(function() do.call(png, args), grid.draw(grob))
+			with_temp_dev(function() png_device(png_file, width, height, res), grid.draw(grob))
 			as.raster(png::readPNG(png_file))
 		},
 		rayrender = function(

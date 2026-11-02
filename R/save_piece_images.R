@@ -42,6 +42,22 @@ piece_device <- function(
 	pushViewport(viewport(angle = angle, name = "main"))
 }
 
+# Open a PNG device (sized in inches), preferring the cairo backend
+png_device <- function(filename, width, height, res = 72, bg = "transparent") {
+	args <- list(
+		filename = filename,
+		width = width,
+		height = height,
+		units = "in",
+		res = res,
+		bg = bg
+	)
+	if (capabilities("cairo")) {
+		args$type <- "cairo"
+	}
+	do.call(grDevices::png, args)
+}
+
 pp_device <- function(filename, width, height, res = 72, bg = "transparent") {
 	args <- list(
 		filename = filename,
