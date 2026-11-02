@@ -15,3 +15,10 @@ skip_if(is_cairo_maybe_buggy())
 
 df <- get_embedded_font("sans", c("♥", "♠", "♣", "♦", "🌞", "🌜", "꩜"))
 expect_false(has_font("thisshouldnotexist"))
+
+test_that("`get_embedded_font()` restores the graphics device", {
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	get_embedded_font("sans", "A")
+	expect_devs(devs)
+})

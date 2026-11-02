@@ -1,3 +1,11 @@
+piecepackr 1.17.2 (development)
+===============================
+
+Bug fixes and minor improvements
+--------------------------------
+
+* `animate_piece()`, `get_embedded_font()`, `render_piece()`, `save_piece_images()`, `save_piece_obj()`, and `save_print_and_play()` now reselect the previously active graphics device *before* closing their own (so no other open device is briefly activated) and close their own device if drawing throws an error.
+
 piecepackr 1.17.1
 =================
 

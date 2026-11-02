@@ -197,10 +197,6 @@ write_d12_texture <- function(
 	filename = tempfile(fileext = ".png"),
 	res = 72
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	width <- cfg$get_width("die_face", suit, rank)
 
 	args <- list(
@@ -214,16 +210,14 @@ write_d12_texture <- function(
 	if (capabilities("cairo")) {
 		args$type <- "cairo"
 	}
-	do.call(grDevices::png, args)
-
-	xs <- rep(1:4 / 4 - 1 / 8, 3)
-	ys <- rep(3:1 / 3 - 1 / 6, each = 4)
-	for (i in 1:12) {
-		pushViewport(viewport(x = xs[i], width = 1 / 4, y = ys[i], height = 1 / 3))
-		draw_piece_and_bleed("die_face", suit, i, cfg)
-		popViewport()
-	}
-
-	grDevices::dev.off()
+	with_temp_dev(function() do.call(grDevices::png, args), {
+		xs <- rep(1:4 / 4 - 1 / 8, 3)
+		ys <- rep(3:1 / 3 - 1 / 6, each = 4)
+		for (i in 1:12) {
+			pushViewport(viewport(x = xs[i], width = 1 / 4, y = ys[i], height = 1 / 3))
+			draw_piece_and_bleed("die_face", suit, i, cfg)
+			popViewport()
+		}
+	})
 	invisible(filename)
 }

@@ -246,9 +246,7 @@ a5_title_grob <- function(cfg, pieces, quietly, extra_credit = TRUE, saucers = T
 			cc_file <- system.file(paste0("extdata/badges/", badge), package = "piecepackr")
 			current_dev <- grDevices::dev.cur() # Workaround for {grImport2} v0.2-0 bug
 			cc_picture <- grImport2::readPicture(cc_file)
-			if (current_dev > 1) {
-				grDevices::dev.set(current_dev)
-			}
+			restore_dev(current_dev)
 			grob_cc <- grImport2::symbolsGrob(cc_picture, x = 0.50, y = 0.05, size = inch(0.9))
 		}
 		grob_l <- textGrob(

@@ -126,10 +126,6 @@ save_print_and_play <- function(
 
 	cfg <- as_pp_cfg(cfg)
 	check_pnp_args(cfg, bleed, size, pieces, arrangement)
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	page <- pnp_page_size(size)
 	width <- page[1L] + size_bleed$left + size_bleed$right
 	height <- page[2L] + size_bleed$top + size_bleed$bottom
@@ -149,22 +145,14 @@ save_print_and_play <- function(
 			"or else `output_filename` needs a C integer format in the string."
 		))
 	}
-	do.call(dev, args)
-	# Close the device if drawing fails partway so it isn't left open
-	pnp_dev <- grDevices::dev.cur()
-	on.exit(
-		if (pnp_dev %in% grDevices::dev.list()) grDevices::dev.off(pnp_dev),
-		add = TRUE,
-		after = FALSE
+	pl <- with_temp_dev(
+		function() do.call(dev, args),
+		switch(
+			size,
+			`4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed == "individual", size_bleed),
+			print_and_play_paper(cfg, size, pieces, arrangement, quietly, bleed, size_bleed)
+		)
 	)
-
-	pl <- switch(
-		size,
-		`4x6` = print_and_play_4x6(cfg, pieces, quietly, bleed == "individual", size_bleed),
-		print_and_play_paper(cfg, size, pieces, arrangement, quietly, bleed, size_bleed)
-	)
-
-	invisible(grDevices::dev.off())
 
 	if (onefile && tools::file_ext(output_filename) == "pdf") {
 		if (requireNamespace("xmpdf", quietly = TRUE)) {
