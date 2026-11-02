@@ -37,6 +37,19 @@ test_that("animate_piece()", {
 	expect_true(file.exists(gif_filename))
 })
 
+test_that("`animate_piece()` png frames restore the graphics device", {
+	skip_if_not(capabilities("png"))
+	skip_if_not_installed("tweenr")
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	directory <- withr::local_tempdir()
+	df <- data.frame(id = 1L, piece_side = "tile_back", suit = 1L, rank = 2L, x = 1, y = 1)
+	file <- file.path(directory, "frame%03d.png")
+	animate_piece(list(df, transform(df, x = 2)), file = file, n_transitions = 0L)
+	expect_length(list.files(directory), 2L)
+	expect_devs(devs)
+})
+
 test_that("animate_piece() draws with `cfg` and tweens without a `cfg` column", {
 	skip_if_not_installed("tweenr")
 	local_mocked_bindings(

@@ -65,9 +65,10 @@ get_embedded_font_helper <- function(font, char) {
 
 	file <- tempfile(fileext = ".pdf")
 	on.exit(unlink(file), add = TRUE)
-	grDevices::cairo_pdf(file)
-	grid::grid.text(char, gp = grid::gpar(fontsize = 72, fontfamily = font))
-	invisible(grDevices::dev.off())
+	with_temp_dev(
+		function() grDevices::cairo_pdf(file),
+		grid::grid.text(char, gp = grid::gpar(fontsize = 72, fontfamily = font))
+	)
 
 	df <- pdftools::pdf_fonts(file)
 	if (nrow(df) == 0L) {

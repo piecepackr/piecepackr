@@ -102,20 +102,8 @@ render_piece <- function(
 		image <- NULL
 	}
 
-	# Make sure if we close the graphics device we return to any previous device
-	if (close_device) {
-		if (open_device) {
-			current_dev <- grDevices::dev.cur()
-			if (current_dev > 1L) {
-				on.exit(grDevices::dev.set(current_dev), add = TRUE)
-			}
-		} else {
-			if (length(dev.list()) > 1L) {
-				prev_dev <- grDevices::dev.prev()
-				on.exit(grDevices::dev.set(prev_dev), add = TRUE)
-			}
-		}
-	}
+	# If we close the graphics device we return to the previous device
+	prev_dev <- grDevices::dev.cur()
 
 	ce <- default_cfg_envir(cfg, envir, cfg_lookups(df), systems = TRUE)
 	cfg <- ce$cfg
@@ -146,7 +134,20 @@ render_piece <- function(
 		}
 		args <- c(list(filename = file, width = width, height = height), dev.args)
 		args <- args[names(args) %in% names(formals(dev))]
-		do.call(dev, args)
+		withCallingHandlers(
+			do.call(dev, args),
+			error = function(e) if (close_device) close_temp_dev(grDevices::dev.cur(), prev_dev)
+		)
+	} else if (close_device) {
+		if (grDevices::dev.cur() == 1L) {
+			grDevices::dev.new() # drawing would open one anyway
+		}
+		prev_dev <- if (length(grDevices::dev.list()) > 1L) grDevices::dev.prev() else 1L
+	}
+	# Registered only now so an error in the arguments doesn't close the user's device
+	if (close_device) {
+		temp_dev <- grDevices::dev.cur()
+		on.exit(close_temp_dev(temp_dev, prev_dev), add = TRUE)
 	}
 
 	# plot_fn_helper expected width and height in pixels
@@ -183,7 +184,7 @@ render_piece <- function(
 	}
 
 	if (close_device) {
-		grDevices::dev.off()
+		close_temp_dev(temp_dev, prev_dev)
 	}
 
 	# Fallback to {magick} to capture an image if `dev.capture()` failed

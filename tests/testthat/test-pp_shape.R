@@ -104,6 +104,13 @@ test_that("npc_coords() works", {
 	expect_error(pp_shape("boobah")$npc_coords, "Don't recognize shape label boobah")
 })
 
+test_that("roundrect `npc_coords` restore the graphics device", {
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	pp_shape("roundrect")$npc_coords
+	expect_devs(devs)
+})
+
 test_that("partition_edges works", {
 	s <- pp_shape("kite")
 	expect_equal(partition_edges(s)$type, rep("flat", 4))

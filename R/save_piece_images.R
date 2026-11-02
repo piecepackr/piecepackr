@@ -112,10 +112,6 @@ save_piece_images <- function(
 	format = "svg",
 	angle = 0
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	opt <- options(piecepackr.op_scale = 0)
 	on.exit(options(opt), add = TRUE)
 
@@ -128,8 +124,12 @@ save_piece_images <- function(
 	}
 }
 
-pp_dev_off <- function(f, format) {
-	v <- grDevices::dev.off()
+# Draw `piece_side` into its own temporary device saving to `f`
+save_piece_image <- function(f, format, piece_side, suit, rank, cfg, angle, size_rank = 1) {
+	with_temp_dev(
+		function() piece_device(f, piece_side, cfg, angle, rank = size_rank),
+		grid.piece(piece_side, suit, rank, cfg)
+	)
 	if (format == "svgz") {
 		rcon <- file(f, "r")
 		svg <- readLines(rcon)
@@ -138,7 +138,7 @@ pp_dev_off <- function(f, format) {
 		writeLines(svg, wcon)
 		close(wcon)
 	}
-	invisible(v)
+	invisible(f)
 }
 
 #### Check if configuration has that piece?
@@ -157,33 +157,25 @@ make_images_helper <- function(directory, cfg, format, angle) {
 	suppressWarnings({
 		for (cs in lacks_rank_lacks_suit) {
 			f <- piece_filename(directory, cs, format, angle)
-			piece_device(f, cs, cfg, angle)
-			grid.piece(cs, NA, NA, cfg)
-			pp_dev_off(f, format)
+			save_piece_image(f, format, cs, NA, NA, cfg, angle)
 		}
 		for (cs in lacks_rank_has_suit) {
 			for (suit in 1:cfg$n_suits) {
 				f <- piece_filename(directory, cs, format, angle, suit)
-				piece_device(f, cs, cfg, angle)
-				grid.piece(cs, suit, NA, cfg)
-				pp_dev_off(f, format)
+				save_piece_image(f, format, cs, suit, NA, cfg, angle)
 			}
 		}
 		for (cs in has_rank_lacks_suit) {
 			for (rank in 1:cfg$n_ranks) {
 				f <- piece_filename(directory, cs, format, angle, rank = rank)
-				piece_device(f, cs, cfg, angle)
-				grid.piece(cs, NA, rank, cfg)
-				pp_dev_off(f, format)
+				save_piece_image(f, format, cs, NA, rank, cfg, angle)
 			}
 		}
 		for (cs in has_rank_has_suit) {
 			for (suit in 1:cfg$n_suits) {
 				for (rank in 1:cfg$n_ranks) {
 					f <- piece_filename(directory, cs, format, angle, suit, rank)
-					piece_device(f, cs, cfg, angle, rank = rank)
-					grid.piece(cs, suit, rank, cfg)
-					pp_dev_off(f, format)
+					save_piece_image(f, format, cs, suit, rank, cfg, angle, size_rank = rank)
 				}
 			}
 		}

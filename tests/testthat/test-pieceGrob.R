@@ -160,6 +160,46 @@ test_that("`save_print_and_play()` doesn't leave its device open on error", {
 	expect_equal(grDevices::dev.list(), devs)
 })
 
+test_that("`save_print_and_play()` restores the graphics device", {
+	skip_if_not(capabilities("cairo"))
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	f <- withr::local_tempfile(fileext = ".pdf")
+	save_print_and_play(cfg_default, f, pieces = "piecepack", quietly = TRUE)
+	expect_devs(devs)
+	local_mocked_bindings(print_and_play_paper = function(...) abort("mid-draw"))
+	expect_s3_class(
+		try(save_print_and_play(cfg_default, f, quietly = TRUE), silent = TRUE),
+		"try-error"
+	)
+	expect_devs(devs)
+
+	opens_then_errors <- function(filename, width, height, onefile = TRUE) {
+		grDevices::pdf(NULL)
+		stop("boom")
+	}
+	pnp <- function() {
+		save_print_and_play(
+			cfg_default,
+			f,
+			dev = opens_then_errors,
+			dev.args = list(onefile = TRUE)
+		)
+	}
+	expect_s3_class(try(pnp(), silent = TRUE), "try-error")
+	expect_devs(devs)
+})
+
+test_that("`pp_cfg()` raster and picture grobs restore the graphics device", {
+	skip_if_not(capabilities("cairo"))
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	cfg_default$get_grob("tile_back", 1, 1, type = "raster")
+	expect_devs(devs)
+	cfg_default$get_grob("tile_back", 1, 1, type = "picture")
+	expect_devs(devs)
+})
+
 test_that("`a5_title_grob()` credits pawn saucers only when they're printed", {
 	local_mocked_bindings(pnp_md_grob = function(md, name, ...) textGrob(md, name = name))
 	credits <- function(...) {
@@ -447,6 +487,19 @@ test_that('`save_print_and_play(size = "4x6")` is deprecated', {
 	expect_snapshot(
 		save_print_and_play(pp_cfg(), f, size = "4x6", pieces = "piecepack", quietly = TRUE)
 	)
+})
+
+test_that("`save_piece_images()` restores the graphics device", {
+	skip_if_not(capabilities("png"))
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	directory <- withr::local_tempdir()
+	local_mocked_bindings(grid.piece = function(...) stop("boom"))
+	expect_s3_class(
+		try(save_piece_images(cfg_default, directory, format = "png"), silent = TRUE),
+		"try-error"
+	)
+	expect_devs(devs)
 })
 
 test_that("`save_piece_images()` works as expected", {

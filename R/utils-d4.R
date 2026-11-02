@@ -382,10 +382,6 @@ write_d4_texture <- function(
 	filename = tempfile(fileext = ".png"),
 	res = 72
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	width <- cfg$get_width("die_face", suit, rank)
 
 	args <- list(
@@ -399,21 +395,19 @@ write_d4_texture <- function(
 	if (capabilities("cairo")) {
 		args$type <- "cairo"
 	}
-	do.call(grDevices::png, args)
-
-	pushViewport(viewport(x = 0.25, width = 0.5, y = 0.75, height = 0.5))
-	draw_piece_and_bleed("die_face", suit, 1, cfg)
-	popViewport()
-	pushViewport(viewport(x = 0.75, width = 0.5, y = 0.75, height = 0.5))
-	draw_piece_and_bleed("die_face", suit, 2, cfg)
-	popViewport()
-	pushViewport(viewport(x = 0.25, width = 0.5, y = 0.25, height = 0.5))
-	draw_piece_and_bleed("die_face", suit, 3, cfg)
-	popViewport()
-	pushViewport(viewport(x = 0.75, width = 0.5, y = 0.25, height = 0.5))
-	draw_piece_and_bleed("die_face", suit, 4, cfg)
-	popViewport()
-
-	grDevices::dev.off()
+	with_temp_dev(function() do.call(grDevices::png, args), {
+		pushViewport(viewport(x = 0.25, width = 0.5, y = 0.75, height = 0.5))
+		draw_piece_and_bleed("die_face", suit, 1, cfg)
+		popViewport()
+		pushViewport(viewport(x = 0.75, width = 0.5, y = 0.75, height = 0.5))
+		draw_piece_and_bleed("die_face", suit, 2, cfg)
+		popViewport()
+		pushViewport(viewport(x = 0.25, width = 0.5, y = 0.25, height = 0.5))
+		draw_piece_and_bleed("die_face", suit, 3, cfg)
+		popViewport()
+		pushViewport(viewport(x = 0.75, width = 0.5, y = 0.25, height = 0.5))
+		draw_piece_and_bleed("die_face", suit, 4, cfg)
+		popViewport()
+	})
 	invisible(filename)
 }

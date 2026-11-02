@@ -294,10 +294,6 @@ write_2s_texture <- function(
 	filename = tempfile(fileext = ".png"),
 	res = 72
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	piece <- get_piece(piece_side)
 	piece_face <- paste0(piece, "_face")
 	piece_back <- paste0(piece, "_back")
@@ -316,23 +312,22 @@ write_2s_texture <- function(
 	if (capabilities("cairo")) {
 		args$type <- "cairo"
 	}
-	do.call(grDevices::png, args)
+	with_temp_dev(function() do.call(grDevices::png, args), {
+		# front
+		pushViewport(viewport(x = 0.225, width = 0.45))
+		draw_piece_and_bleed(piece_face, suit, rank, cfg)
+		popViewport()
 
-	# front
-	pushViewport(viewport(x = 0.225, width = 0.45))
-	draw_piece_and_bleed(piece_face, suit, rank, cfg)
-	popViewport()
+		# edge
+		pushViewport(viewport(x = 0.5, width = 0.1))
+		grid.rect(gp = gpar(col = "transparent", fill = edge_color))
+		popViewport()
 
-	# edge
-	pushViewport(viewport(x = 0.5, width = 0.1))
-	grid.rect(gp = gpar(col = "transparent", fill = edge_color))
-	popViewport()
-
-	# back
-	pushViewport(viewport(x = 0.775, width = 0.45))
-	draw_piece_and_bleed(piece_back, suit, rank, cfg)
-	popViewport()
-	grDevices::dev.off()
+		# back
+		pushViewport(viewport(x = 0.775, width = 0.45))
+		draw_piece_and_bleed(piece_back, suit, rank, cfg)
+		popViewport()
+	})
 
 	invisible(filename)
 }
@@ -400,14 +395,11 @@ save_ellipsoid_obj <- function(
 
 	write_obj(filename, v = xyz, vt = xy_vt, f = f)
 
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	opt <- cfg$get_piece_opt(paste0(piece, "_face"), suit, rank)
-	grDevices::png(png_filename, bg = opt$background_color)
-	grid.newpage()
-	grDevices::dev.off()
+	with_temp_dev(
+		function() grDevices::png(png_filename, bg = opt$background_color),
+		grid.newpage()
+	)
 
 	invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 }
@@ -601,10 +593,6 @@ write_peg_doll_texture <- function(
 	filename = tempfile(fileext = ".png"),
 	res = 72
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	height <- cfg$get_height("belt_face", suit, rank)
 	width <- cfg$get_width("belt_face", suit, rank)
 	piece <- get_piece(piece_side)
@@ -620,18 +608,17 @@ write_peg_doll_texture <- function(
 	if (capabilities("cairo")) {
 		args$type <- "cairo"
 	}
-	do.call(grDevices::png, args)
-	pushViewport(viewport(y = 0.875, height = 0.25))
-	grid.rect(gp = gpar(col = NA_character_, fill = opt$edge_color))
-	popViewport()
-	pushViewport(viewport(y = 0.500, height = 0.50))
-	grid.piece("belt_face", suit = suit, rank = rank, cfg = cfg, op_scale = 0)
-	popViewport()
-	pushViewport(viewport(y = 0.125, height = 0.25))
-	grid.rect(gp = gpar(col = NA_character_, fill = opt$edge_color))
-	popViewport()
-
-	grDevices::dev.off()
+	with_temp_dev(function() do.call(grDevices::png, args), {
+		pushViewport(viewport(y = 0.875, height = 0.25))
+		grid.rect(gp = gpar(col = NA_character_, fill = opt$edge_color))
+		popViewport()
+		pushViewport(viewport(y = 0.500, height = 0.50))
+		grid.piece("belt_face", suit = suit, rank = rank, cfg = cfg, op_scale = 0)
+		popViewport()
+		pushViewport(viewport(y = 0.125, height = 0.25))
+		grid.rect(gp = gpar(col = NA_character_, fill = opt$edge_color))
+		popViewport()
+	})
 	invisible(filename)
 }
 
@@ -820,10 +807,6 @@ write_pyramid_texture <- function(
 	filename = tempfile(fileext = ".png"),
 	res = 72
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	height <- cfg$get_height("pyramid_face", suit, rank)
 	width <- cfg$get_width("pyramid_face", suit, rank)
 
@@ -838,25 +821,23 @@ write_pyramid_texture <- function(
 	if (capabilities("cairo")) {
 		args$type <- "cairo"
 	}
-	do.call(grDevices::png, args)
+	with_temp_dev(function() do.call(grDevices::png, args), {
+		pushViewport(viewport(x = 0.125, width = 0.25))
+		draw_piece_and_bleed("pyramid_face", suit, rank, cfg)
+		popViewport()
 
-	pushViewport(viewport(x = 0.125, width = 0.25))
-	draw_piece_and_bleed("pyramid_face", suit, rank, cfg)
-	popViewport()
+		pushViewport(viewport(x = 0.375, width = 0.25))
+		draw_piece_and_bleed("pyramid_left", suit, rank, cfg)
+		popViewport()
 
-	pushViewport(viewport(x = 0.375, width = 0.25))
-	draw_piece_and_bleed("pyramid_left", suit, rank, cfg)
-	popViewport()
+		pushViewport(viewport(x = 0.625, width = 0.25))
+		draw_piece_and_bleed("pyramid_back", suit, rank, cfg)
+		popViewport()
 
-	pushViewport(viewport(x = 0.625, width = 0.25))
-	draw_piece_and_bleed("pyramid_back", suit, rank, cfg)
-	popViewport()
-
-	pushViewport(viewport(x = 0.875, width = 0.25))
-	draw_piece_and_bleed("pyramid_right", suit, rank, cfg)
-	popViewport()
-
-	grDevices::dev.off()
+		pushViewport(viewport(x = 0.875, width = 0.25))
+		draw_piece_and_bleed("pyramid_right", suit, rank, cfg)
+		popViewport()
+	})
 	invisible(filename)
 }
 
@@ -869,10 +850,6 @@ write_die_texture <- function(
 	filename = tempfile(fileext = ".png"),
 	res = 72
 ) {
-	current_dev <- grDevices::dev.cur()
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
 	width <- cfg$get_width("die_face", suit, rank)
 	edge_color <- cfg$get_piece_opt("die_face", suit, rank)$edge_color
 
@@ -889,82 +866,80 @@ write_die_texture <- function(
 	if (capabilities("cairo")) {
 		args$type <- "cairo"
 	}
-	do.call(grDevices::png, args)
+	with_temp_dev(function() do.call(grDevices::png, args), {
+		rs <- get_die_face_info(suit, cfg$die_arrangement)
+		pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		grid.piece(
+			"die_face",
+			suit = rs$suit[1],
+			rank = rs$rank[1],
+			cfg = cfg,
+			angle = rs$angle[1],
+			op_scale = 0
+		)
+		popViewport()
+		pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		grid.piece(
+			"die_face",
+			suit = rs$suit[2],
+			rank = rs$rank[2],
+			cfg = cfg,
+			angle = rs$angle[2],
+			op_scale = 0
+		)
+		popViewport()
+		pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 3 / 6, height = 1 / 3))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		grid.piece(
+			"die_face",
+			suit = rs$suit[3],
+			rank = rs$rank[3],
+			cfg = cfg,
+			angle = rs$angle[3],
+			op_scale = 0
+		)
+		popViewport()
+		pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 3 / 6, height = 1 / 3))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		grid.piece(
+			"die_face",
+			suit = rs$suit[4],
+			rank = rs$rank[4],
+			cfg = cfg,
+			angle = rs$angle[4],
+			op_scale = 0
+		)
+		popViewport()
+		pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 1 / 6, height = 1 / 3))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		grid.piece(
+			"die_face",
+			suit = rs$suit[5],
+			rank = rs$rank[5],
+			cfg = cfg,
+			angle = rs$angle[5],
+			op_scale = 0
+		)
+		popViewport()
+		pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 1 / 6, height = 1 / 3))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		grid.piece(
+			"die_face",
+			suit = rs$suit[6],
+			rank = rs$rank[6],
+			cfg = cfg,
+			angle = rs$angle[6],
+			op_scale = 0
+		)
+		popViewport()
 
-	rs <- get_die_face_info(suit, cfg$die_arrangement)
-	pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	grid.piece(
-		"die_face",
-		suit = rs$suit[1],
-		rank = rs$rank[1],
-		cfg = cfg,
-		angle = rs$angle[1],
-		op_scale = 0
-	)
-	popViewport()
-	pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 5 / 6, height = 1 / 3))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	grid.piece(
-		"die_face",
-		suit = rs$suit[2],
-		rank = rs$rank[2],
-		cfg = cfg,
-		angle = rs$angle[2],
-		op_scale = 0
-	)
-	popViewport()
-	pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 3 / 6, height = 1 / 3))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	grid.piece(
-		"die_face",
-		suit = rs$suit[3],
-		rank = rs$rank[3],
-		cfg = cfg,
-		angle = rs$angle[3],
-		op_scale = 0
-	)
-	popViewport()
-	pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 3 / 6, height = 1 / 3))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	grid.piece(
-		"die_face",
-		suit = rs$suit[4],
-		rank = rs$rank[4],
-		cfg = cfg,
-		angle = rs$angle[4],
-		op_scale = 0
-	)
-	popViewport()
-	pushViewport(viewport(x = 5 / 21, width = 10 / 21, y = 1 / 6, height = 1 / 3))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	grid.piece(
-		"die_face",
-		suit = rs$suit[5],
-		rank = rs$rank[5],
-		cfg = cfg,
-		angle = rs$angle[5],
-		op_scale = 0
-	)
-	popViewport()
-	pushViewport(viewport(x = 16 / 21, width = 10 / 21, y = 1 / 6, height = 1 / 3))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	grid.piece(
-		"die_face",
-		suit = rs$suit[6],
-		rank = rs$rank[6],
-		cfg = cfg,
-		angle = rs$angle[6],
-		op_scale = 0
-	)
-	popViewport()
-
-	# edge strip drawn last so face border anti-aliasing cannot overwrite it
-	pushViewport(viewport(x = 0.5, width = 1 / 21))
-	grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
-	popViewport()
-
-	grDevices::dev.off()
+		# edge strip drawn last so face border anti-aliasing cannot overwrite it
+		pushViewport(viewport(x = 0.5, width = 1 / 21))
+		grid.rect(gp = gpar(col = NA_character_, fill = edge_color))
+		popViewport()
+	})
 	invisible(filename)
 }
 
@@ -1147,11 +1122,6 @@ save_holed_board_obj_fn <- function(nrows = 4L, ncols = 4L, margin = 0) {
 		filename = tempfile(fileext = ".obj"),
 		res = 72
 	) {
-		current_dev <- grDevices::dev.cur()
-		if (current_dev > 1) {
-			on.exit(grDevices::dev.set(current_dev), add = TRUE)
-		}
-
 		cfg <- as_pp_cfg(cfg)
 		piece <- get_piece(piece_side)
 		side <- get_side(piece_side)
@@ -1165,10 +1135,11 @@ save_holed_board_obj_fn <- function(nrows = 4L, ncols = 4L, margin = 0) {
 			height = opt$shape_h
 		)
 
-		grDevices::pdf(NULL, width = width, height = height)
 		# snpc coords are npc if square
-		xyi_npc <- xyi_holed_board(opt, nrows, ncols, margin)
-		grDevices::dev.off()
+		xyi_npc <- with_temp_dev(
+			function() grDevices::pdf(NULL, width = width, height = height),
+			xyi_holed_board(opt, nrows, ncols, margin)
+		)
 
 		# Interior holes as integers
 		xc <- rep(seq.int(ncols), times = nrows)
@@ -1319,9 +1290,10 @@ save_holed_board_obj_fn <- function(nrows = 4L, ncols = 4L, margin = 0) {
 
 		write_obj(filename, v = xyz, vt = vt, f = f)
 
-		grDevices::png(png_filename, bg = opt$background_color)
-		grid.newpage()
-		grDevices::dev.off()
+		with_temp_dev(
+			function() grDevices::png(png_filename, bg = opt$background_color),
+			grid.newpage()
+		)
 
 		invisible(list(obj = filename, mtl = mtl_filename, png = png_filename))
 	}

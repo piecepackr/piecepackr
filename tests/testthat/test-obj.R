@@ -25,6 +25,26 @@ test_that("save_piece_obj works", {
 	expect_error(save_piece_obj("belt_face"))
 })
 
+test_that("`save_piece_obj()` restores the graphics device", {
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	envir <- game_systems("sans")
+	save_piece_obj("board_face", cfg = envir$marbles)
+	expect_devs(devs)
+	save_piece_obj("bit_face", cfg = envir$marbles)
+	expect_devs(devs)
+	save_piece_obj("pyramid_face", cfg = cfg)
+	expect_devs(devs)
+	for (dice in c("dice_d4", "dice_d8", "dice_d10", "dice_d12", "dice_d20")) {
+		save_piece_obj("die_face", cfg = envir[[dice]])
+		expect_devs(devs)
+	}
+
+	local_mocked_bindings(draw_piece_and_bleed = function(...) stop("boom"))
+	expect_s3_class(try(save_piece_obj("tile_face", cfg = cfg), silent = TRUE), "try-error")
+	expect_devs(devs)
+})
+
 test_that("rgl works", {
 	skip_on_cran()
 	skip_if_not_installed("rgl")

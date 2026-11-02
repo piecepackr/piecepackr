@@ -212,9 +212,10 @@ animation_fn <- function(file, open_device = TRUE) {
 			)
 		)
 		function(expr, file, width, height, delay, res) {
-			pp_device(file, width = width / res, height = height / res, res = res)
-			eval(expr)
-			grDevices::dev.off()
+			with_temp_dev(
+				function() pp_device(file, width = width / res, height = height / res, res = res),
+				eval(expr)
+			)
 		}
 	} else {
 		assert_suggested("animation")

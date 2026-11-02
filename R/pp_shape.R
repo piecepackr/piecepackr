@@ -529,19 +529,15 @@ makeContent.pp_polyclip <- function(x) {
 # xy functions and/or constants
 roundrect_xy <- function(shape_r, width = 1, height = 1) {
 	# Always querying in square `pdf(NULL)` device fixes #254
-	current_dev <- grDevices::dev.cur()
-	grDevices::pdf(NULL, width = width, height = height)
-	on.exit(grDevices::dev.off(), add = TRUE)
-	if (current_dev > 1) {
-		on.exit(grDevices::dev.set(current_dev), add = TRUE)
-	}
-	coords <- grid::grobCoords(
-		grid::roundrectGrob(r = grid::unit(shape_r, "snpc")),
-		closed = TRUE
-	)[[1]]
-	x <- convertX(grid::unit(coords$x, "in"), "npc", valueOnly = TRUE)
-	y <- convertY(grid::unit(coords$y, "in"), "npc", valueOnly = TRUE)
-	list(x = x, y = y, c = rep("C1", length(x)))
+	with_temp_dev(function() grDevices::pdf(NULL, width = width, height = height), {
+		coords <- grid::grobCoords(
+			grid::roundrectGrob(r = grid::unit(shape_r, "snpc")),
+			closed = TRUE
+		)[[1]]
+		x <- convertX(grid::unit(coords$x, "in"), "npc", valueOnly = TRUE)
+		y <- convertY(grid::unit(coords$y, "in"), "npc", valueOnly = TRUE)
+		list(x = x, y = y, c = rep("C1", length(x)))
+	})
 }
 
 kite_xy <- function(t = 90, r = 0.25) {

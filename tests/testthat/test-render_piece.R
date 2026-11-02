@@ -99,6 +99,39 @@ test_that("render_piece() works", {
 	close3d()
 })
 
+test_that("`render_piece()` restores the graphics device", {
+	skip_if_not_installed("withr")
+	devs <- local_null_pdfs()
+	df <- data.frame(piece_side = "tile_back", x = 1, y = 1, suit = 1, rank = 2)
+	null_pdf <- function(width, height) grDevices::pdf(NULL, width = width, height = height)
+	render_piece(df, dev = null_pdf)
+	expect_devs(devs)
+
+	grDevices::pdf(NULL)
+	dev3 <- unname(grDevices::dev.cur())
+	withr::defer(if (dev3 %in% grDevices::dev.list()) grDevices::dev.off(dev3))
+	with_mocked_bindings(
+		expect_s3_class(
+			try(render_piece(df, open_device = FALSE, close_device = TRUE), silent = TRUE),
+			"try-error"
+		),
+		aabb_piece = function(...) stop("boom")
+	)
+	expect_equal(unname(grDevices::dev.list()), c(devs, dev3))
+	render_piece(df, open_device = FALSE, close_device = TRUE)
+	expect_equal(unname(grDevices::dev.cur()), devs[2L])
+	expect_equal(unname(grDevices::dev.list()), devs)
+
+	grDevices::dev.set(devs[1L])
+	local_mocked_bindings(plot_fn_helper = function(...) function(...) grDevices::dev.set(devs[2L]))
+	render_piece(df, dev = null_pdf)
+	expect_devs(devs)
+
+	local_mocked_bindings(plot_fn_helper = function(...) function(...) stop("boom"))
+	expect_s3_class(try(render_piece(df, dev = null_pdf), silent = TRUE), "try-error")
+	expect_devs(devs)
+})
+
 test_that("render_piece() draws with `cfg` and defaults to the game systems' piecepack", {
 	# a tile back draws no glyphs that the pdf device cannot encode
 	df <- data.frame(piece_side = "tile_back", x = 1, y = 1, suit = 1, rank = 2)
