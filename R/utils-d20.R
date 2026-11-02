@@ -217,18 +217,7 @@ write_d20_texture <- function(
 ) {
 	width <- cfg$get_width("die_face", suit, rank)
 
-	args <- list(
-		filename = filename,
-		height = 5 * width,
-		width = 4 * width,
-		units = "in",
-		res = res,
-		bg = "transparent"
-	)
-	if (capabilities("cairo")) {
-		args$type <- "cairo"
-	}
-	with_temp_dev(function() do.call(grDevices::png, args), {
+	with_temp_dev(function() png_device(filename, 4 * width, 5 * width, res), {
 		xs <- rep(1:4 / 4 - 1 / 8, 5)
 		ys <- rep(5:1 / 5 - 1 / 10, each = 4)
 		for (i in 1:20) {
